@@ -28,16 +28,35 @@ function setup_gravity_forms_pages() {
 	foreach ( $forms as $form ) {
 		GFFormsModel::update_form_active( $form['id'], true );
 		$page = array(
-			'post_type' => 'page',
+			'post_type'    => 'page',
 			'post_content' => '[gravityform id=' . $form['id'] . ']',
-			'post_name' => sanitize_title_with_dashes( $form['title'] ),
-			'post_parent' => 0,
-			'post_author' => 1,
-			'post_status' => 'publish',
-			'post_title' => $form['title'],
+			'post_name'    => sanitize_title_with_dashes( $form['title'] ),
+			'post_parent'  => 0,
+			'post_author'  => 1,
+			'post_status'  => 'publish',
+			'post_title'   => $form['title'],
 		);
 		wp_insert_post( $page );
 	}
 }
 
 setup_gravity_forms_pages();
+
+// add admins
+function wpr_create_testing_users( $userInfo ) {
+	$userData = array(
+		'user_login' => $userInfo,
+		'first_name' => 'First',
+		'last_name'  => $userInfo,
+		'user_pass'  => $userInfo,
+		'user_email' => $userInfo . '@mail.com',
+		'user_url'   => '',
+		'role'       => 'administrator'
+	);
+	wp_insert_user( $userData );
+}
+
+$users = array( 'admin1', 'admin2', 'admin3' );
+foreach ( $users as $user ) {
+	wpr_create_testing_users( $user );
+}

@@ -1,0 +1,178 @@
+{
+  "0": {
+    "title": "Schedule step",
+    "description": "",
+    "labelPlacement": "top_label",
+    "descriptionPlacement": "below",
+    "button": {
+      "type": "text",
+      "text": "Submit",
+      "imageUrl": ""
+    },
+    "fields": [
+      {
+        "type": "text",
+        "id": 1,
+        "label": "Input text",
+        "adminLabel": "",
+        "isRequired": false,
+        "size": "medium",
+        "errorMessage": "",
+        "inputs": null,
+        "formId": 9,
+        "description": "",
+        "allowsPrepopulate": false,
+        "inputMask": false,
+        "inputMaskValue": "",
+        "inputType": "",
+        "labelPlacement": "",
+        "descriptionPlacement": "",
+        "subLabelPlacement": "",
+        "placeholder": "",
+        "cssClass": "",
+        "inputName": "",
+        "adminOnly": false,
+        "noDuplicates": false,
+        "defaultValue": "",
+        "choices": "",
+        "conditionalLogic": "",
+        "failed_validation": "",
+        "productField": "",
+        "enablePasswordInput": "",
+        "maxLength": "",
+        "multipleFiles": false,
+        "maxFiles": "",
+        "calculationFormula": "",
+        "calculationRounding": "",
+        "enableCalculation": "",
+        "disableQuantity": false,
+        "displayAllCategories": false,
+        "useRichTextEditor": false
+      },
+      {
+        "type": "textarea",
+        "id": 2,
+        "label": "Text paragraph",
+        "adminLabel": "",
+        "isRequired": false,
+        "size": "medium",
+        "errorMessage": "",
+        "inputs": null,
+        "formId": 9,
+        "description": "",
+        "allowsPrepopulate": false,
+        "inputMask": false,
+        "inputMaskValue": "",
+        "inputType": "",
+        "labelPlacement": "",
+        "descriptionPlacement": "",
+        "subLabelPlacement": "",
+        "placeholder": "",
+        "cssClass": "",
+        "inputName": "",
+        "adminOnly": false,
+        "noDuplicates": false,
+        "defaultValue": "",
+        "choices": "",
+        "conditionalLogic": "",
+        "failed_validation": "",
+        "productField": "",
+        "form_id": "",
+        "useRichTextEditor": false,
+        "multipleFiles": false,
+        "maxFiles": "",
+        "calculationFormula": "",
+        "calculationRounding": "",
+        "enableCalculation": "",
+        "disableQuantity": false,
+        "displayAllCategories": false
+      }
+    ],
+    "version": "2.0.6.3",
+    "id": 9,
+    "useCurrentUserAsAuthor": true,
+    "postContentTemplateEnabled": false,
+    "postTitleTemplateEnabled": false,
+    "postTitleTemplate": "",
+    "postContentTemplate": "",
+    "lastPageButton": null,
+    "pagination": null,
+    "firstPageCssClass": null,
+    "confirmations": [
+      {
+        "id": "57badfe4e2cfe",
+        "name": "Default Confirmation",
+        "isDefault": true,
+        "type": "message",
+        "message": "Thanks for contacting us! We will get in touch with you shortly.",
+        "url": "",
+        "pageId": "",
+        "queryString": ""
+      }
+    ],
+    "notifications": [
+      {
+        "id": "57badfe4e29c2",
+        "to": "{admin_email}",
+        "name": "Admin Notification",
+        "event": "form_submission",
+        "toType": "email",
+        "subject": "New submission from {form_title}",
+        "message": "{all_fields}"
+      }
+    ],
+    "feeds": {
+      "gravityflow": [
+        {
+          "id": "19",
+          "form_id": "9",
+          "is_active": "1",
+          "feed_order": "0",
+          "meta": {
+            "step_name": "Send schedule notification",
+            "description": "",
+            "step_type": "notification",
+            "feed_condition_conditional_logic": "0",
+            "feed_condition_conditional_logic_object": [],
+            "scheduled": "1",
+            "schedule_type": "delay",
+            "schedule_date": "",
+            "schedule_delay_offset": "2",
+            "schedule_delay_unit": "minutes",
+            "schedule_date_field_offset": "0",
+            "schedule_date_field_offset_unit": "hours",
+            "schedule_date_field_before_after": "after",
+            "notification_id_57badfe4e29c2": "0",
+            "workflow_notification_enabled": "1",
+            "workflow_notification_type": "select",
+            "workflow_notification_users": [
+              "role|contributor",
+              "role|author",
+              "role|editor",
+              "role|administrator"
+            ],
+            "workflow_notification_routing": [
+              {
+                "assignee": "user_id|1",
+                "fieldId": "0",
+                "operator": "is",
+                "value": "",
+                "type": ""
+              }
+            ],
+            "workflow_notification_from_name": "{Input text:1}",
+            "workflow_notification_from_email": "{admin_email}",
+            "workflow_notification_reply_to": "",
+            "workflow_notification_bcc": "",
+            "workflow_notification_subject": "",
+            "workflow_notification_message": "",
+            "workflow_notification_disable_autoformat": "0",
+            "destination_complete": "complete"
+          },
+          "addon_slug": "gravityflow"
+        }
+      ]
+    }
+  },
+  "version": "2.0.6.3"
+}
