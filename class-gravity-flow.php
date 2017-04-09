@@ -1489,6 +1489,8 @@ PRIMARY KEY  (id)
 
 		public function settings_expiration( $field ) {
 
+			$form = $this->get_current_form();
+
 			$expiration = array(
 				'name' => 'expiration',
 				'type' => 'checkbox',
@@ -1515,6 +1517,28 @@ PRIMARY KEY  (id)
 						'value' => 'date',
 					),
 				),
+			);
+
+			$date_fields = GFFormsModel::get_fields_by_type( $form, 'date' );
+
+			$date_field_choices = array();
+
+			if ( ! empty( $date_fields ) ) {
+				$expiration_type['choices'][] = array(
+					'label' => esc_html__( 'Date Field' ),
+					'value' => 'date_field',
+				);
+
+
+				foreach ( $date_fields  as $date_field ) {
+					$date_field_choices[] = array( 'value' => $date_field->id, 'label' => GFFormsModel::get_label( $date_field ) );
+				}
+			}
+
+			$expiration_date_fields = array(
+				'name' => 'expiration_date_field',
+				'label' => esc_html__( 'Expiration Date Field', 'gravityflow' ),
+				'choices' => $date_field_choices,
 			);
 
 			$expiration_date = array(
@@ -1563,7 +1587,9 @@ PRIMARY KEY  (id)
 			$expiration_type_setting = $this->get_setting( 'expiration_type', 'delay' );
 			$expiration_style = $enabled ? '' : 'style="display:none;"';
 			$expiration_date_style = ( $expiration_type_setting == 'date' ) ? '' : 'style="display:none;"';
-			$expiration_delay_style = ( $expiration_type_setting !== 'date' ) ? '' : 'style="display:none;"';
+			$expiration_delay_style = ( $expiration_type_setting == 'delay' ) ? '' : 'style="display:none;"';
+			$expiration_date_fields_style = ( $expiration_type_setting == 'date_field' ) ? '' : 'style="display:none;"';
+
 			?>
 			<div class="gravityflow-expiration-settings" <?php echo $expiration_style ?> >
 				<div class="gravityflow-expiration-type-container" class="gravityflow-sub-setting">
@@ -1585,6 +1611,36 @@ PRIMARY KEY  (id)
 					$this->settings_select( $unit_field );
 					echo '&nbsp;';
 					esc_html_e( 'after the workflow step has started.' );
+					?>
+				</div>
+				<div class="gravityflow-expiration-date-field-container" <?php echo $expiration_date_fields_style ?>>
+					<?php
+					esc_html_e( 'Expire this step', 'gravityflow' );
+					echo '&nbsp;';
+					$delay_offset_field['name'] = 'expiration_date_field_offset';
+					$delay_offset_field['default_value'] = '0';
+					$this->settings_text( $delay_offset_field );
+					$unit_field['name'] = 'expiration_date_field_offset_unit';
+					$this->settings_select( $unit_field );
+					echo '&nbsp;';
+					$before_after_field = array(
+						'name' => 'expiration_date_field_before_after',
+						'label' => esc_html__( 'Expiration', 'gravityflow' ),
+						'default_value' => 'after',
+						'choices' => array(
+							array(
+								'label' => esc_html__( 'after', 'gravityflow' ),
+								'value' => 'after',
+							),
+							array(
+								'label' => esc_html__( 'before', 'gravityflow' ),
+								'value' => 'before',
+							),
+						),
+					);
+					$this->settings_select( $before_after_field );
+
+					$this->settings_select( $expiration_date_fields );
 					?>
 				</div>
 				<div class="gravityflow-sub-setting">
@@ -1625,15 +1681,21 @@ PRIMARY KEY  (id)
 					$( '#expiration_type0' ).click(function(){
 						$('.gravityflow-expiration-date-container').hide();
 						$('.gravityflow-expiration-delay-container').show();
+						$('.gravityflow-expiration-date-field-container').hide();
 					});
 					$( '#expiration_type1' ).click(function(){
 						$('.gravityflow-expiration-date-container').show();
 						$('.gravityflow-expiration-delay-container').hide();
+						$('.gravityflow-expiration-date-field-container').hide();
+					});
+					$( '#expiration_type2' ).click(function(){
+						$('.gravityflow-expiration-delay-container').hide();
+						$('.gravityflow-expiration-date-container').hide();
+						$('.gravityflow-expiration-date-field-container').show();
 					});
 				})(jQuery);
 			</script>
 			<?php
-
 		}
 
 		public function settings_tabs( $tabs_field ) {
@@ -1821,24 +1883,39 @@ PRIMARY KEY  (id)
 		 */
 		public function settings_checkbox_and_textarea( $field, $echo = true ) {
 
+			$field = $this->prepare_settings_checkbox_and_textarea( $field );
+
+			return $this->settings_checkbox_and_container( $field, $echo );
+		}
+
+		public function prepare_settings_checkbox_and_textarea( $field ) {
 			$textarea_input = rgars( $field, 'textarea' );
 
-			$text_field = array(
+			$textarea_field = array(
 				'name'    => $field['name'] . 'Value',
 				'type'    => 'textarea',
 				'class'   => '',
 				'tooltip' => false,
 			);
 
-			$text_field['class'] .= ' ' . $text_field['name'];
+			$textarea_field['class'] .= ' ' . $textarea_field['name'];
 
-			$text_field = wp_parse_args( $textarea_input, $text_field );
+			$textarea_field = wp_parse_args( $textarea_input, $textarea_field );
 
 			unset( $field['textarea'] );
 
-			$field['settings'] = array( $text_field );
+			$field['settings'] = array( 'textarea' => $textarea_field );
+			return $field;
+		}
 
-			return $this->settings_checkbox_and_container( $field, $echo );
+		public function validate_checkbox_and_textarea_settings( $field, $settings ) {
+			$field = $this->prepare_settings_checkbox_and_textarea( $field );
+
+			$checkbox_field = $field['checkbox'];
+			$textarea_field = $field['settings']['textarea'];
+
+			$this->validate_checkbox_settings( $checkbox_field, $settings );
+			$this->validate_textarea_settings( $textarea_field, $settings );
 		}
 
 		public function settings_visual_editor( $field ) {

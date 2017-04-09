@@ -353,7 +353,7 @@ class Gravity_Flow_Entry_Detail {
 			$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, $nl2br );
 			$instructions = $current_step->replace_variables( $instructions, null );
 			$instructions = do_shortcode( $instructions );
-			$instructions = wp_kses_post( $instructions );
+			$instructions = self::maybe_sanitize_instructions( $instructions );
 
 			?>
 			<div class="postbox gravityflow-instructions">
@@ -364,6 +364,35 @@ class Gravity_Flow_Entry_Detail {
 
 			<?php
 		}
+	}
+
+	/**
+	 * Sanitizes the instructions if sanitization is activated using the gravityflow_sanitize_instructions filter.
+	 *
+	 * @since 1.6.2
+	 *
+	 * @param $instructions
+	 *
+	 * @return string
+	 */
+	public static function maybe_sanitize_instructions( $instructions ) {
+		$sanitize_instructions = false;
+
+		/**
+		 * Allows sanitization to be turned on or off for the instructions.
+		 *
+		 * Adds an additional layer of security.
+		 *
+		 * @since 1.6.2
+		 *
+		 * @param bool $sanitize_instructions Whether to sanitize the confirmation message. default: false
+		 */
+		$sanitize_instructions = apply_filters( 'gravityflow_sanitize_instructions', $sanitize_instructions );
+		if ( $sanitize_instructions ) {
+			$instructions = wp_kses_post( $instructions );
+		}
+
+		return $instructions;
 	}
 
 	/**

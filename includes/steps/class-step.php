@@ -607,6 +607,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 			// Calculate offset
 			if ( $this->schedule_date_field_offset ) {
+				$offset = 0;
 				switch ( $this->schedule_date_field_offset_unit ) {
 					case 'minutes' :
 						$offset = ( MINUTE_IN_SECONDS * $this->schedule_date_field_offset );
@@ -699,6 +700,46 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$expiration_date     = date( 'Y-m-d H:i:s', $expiration_datetime );
 			$expiration_date_gmt = get_gmt_from_date( $expiration_date );
 			$expiration_datetime = strtotime( $expiration_date_gmt );
+
+			return $expiration_datetime;
+		}
+
+		$entry = $this->get_entry();
+
+		if ( $this->expiration_type == 'date_field' ) {
+
+			$this->log_debug( __METHOD__ . '() expiration_date_field: ' . $this->expiration_date_field );
+			$expiration_date = $entry[ (string) $this->schedule_date_field ];
+			$this->log_debug( __METHOD__ . '() expiration_date: ' . $expiration_date );
+
+			$expiration_datetime = strtotime( $expiration_date );
+			$expiration_date     = date( 'Y-m-d H:i:s', $expiration_datetime );
+			$schedule_date_gmt = get_gmt_from_date( $expiration_date );
+			$expiration_datetime = strtotime( $schedule_date_gmt );
+
+			// Calculate offset
+			if ( $this->expiration_date_field_offset ) {
+				$offset = 0;
+				switch ( $this->expiration_date_field_offset_unit ) {
+					case 'minutes' :
+						$offset = ( MINUTE_IN_SECONDS * $this->expiration_date_field_offset );
+						break;
+					case 'hours' :
+						$offset = ( HOUR_IN_SECONDS * $this->expiration_date_field_offset );
+						break;
+					case 'days' :
+						$offset = ( DAY_IN_SECONDS * $this->expiration_date_field_offset );
+						break;
+					case 'weeks' :
+						$offset = ( WEEK_IN_SECONDS * $this->sexpiration_date_field_offset );
+						break;
+				}
+				if ( $this->expiration_date_field_before_after == 'before' ) {
+					$expiration_datetime = $expiration_datetime - $offset;
+				} else {
+					$expiration_datetime += $offset;
+				}
+			}
 
 			return $expiration_datetime;
 		}
