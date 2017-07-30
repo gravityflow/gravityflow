@@ -38,16 +38,14 @@ $I->selectOption( 'select[name="input_7"]', 'Homemaker' );
 $I->selectOption( 'select[name="input_8"]', 'Seasonal' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 $I->click( 'Submit' );
-$I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
+$I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 // Login as admin2
 $I->loginAs( 'admin2', 'admin2' );
 $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
-$I->click( 'Workflow' );
-$I->click( 'Inbox' );
-$I->see( 'Workflow Inbox' );
+$I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Job apply agency' );
 
 // Approve
@@ -93,4 +91,4 @@ $I->fillField( 'textarea[name="gravityflow_note"]', 'Entry approved' );
 $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
 
-$I->see( 'Status: Approved' );
+$I->waitForText( 'Status: Approved', 3 );

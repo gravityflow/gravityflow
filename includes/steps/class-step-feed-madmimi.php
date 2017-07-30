@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_MadMimi extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFMadMimi';
 
 	public function get_label() {
-		return esc_html__( 'Mad Mimi', 'gravityflow' );
+		return 'Mad Mimi';
 	}
 
 	public function get_feed_label( $feed ) {

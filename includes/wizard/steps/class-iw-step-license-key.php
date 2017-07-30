@@ -70,7 +70,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 
 		$accept_terms = rgar( $posted_values,  'accept_terms' );
 		if ( ! $valid_key && ! $accept_terms ) {
-			$this->set_field_validation_result( 'accept_terms', __( 'Please accept the terms', 'gravityflow' ) );
+			$this->set_field_validation_result( 'accept_terms', __( 'Please accept the terms.', 'gravityflow' ) );
 			$terms_accepted = false;
 		}
 

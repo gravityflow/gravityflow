@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_Constant_Contact extends Gravity_Flow_Step_Feed_Add
 	protected $_slug = 'gravity-forms-constant-contact';
 
 	public function get_label() {
-		return esc_html__( 'Constant Contact', 'gravityflow' );
+		return 'Constant Contact';
 	}
 
 	public function get_feed_label( $feed ) {

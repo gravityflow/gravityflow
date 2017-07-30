@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_MailChimp extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFMailChimp';
 
 	public function get_label() {
-		return esc_html__( 'MailChimp', 'gravityflow' );
+		return 'MailChimp';
 	}
 
 	public function get_icon_url() {

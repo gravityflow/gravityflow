@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_Campaign_Monitor extends Gravity_Flow_Step_Feed_Add
 	protected $_class_name = 'GFCampaignMonitor';
 
 	public function get_label() {
-		return esc_html__( 'Campaign Monitor', 'gravityflow' );
+		return 'Campaign Monitor';
 	}
 }
 

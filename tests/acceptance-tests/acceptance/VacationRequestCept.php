@@ -38,5 +38,5 @@ $I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Vacation Request' );
 
 // Approve
-$I->seeElement( 'button[value=approved]' );
+$I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );

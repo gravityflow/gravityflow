@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_Emma extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFEmma';
 
 	public function get_label() {
-		return esc_html__( 'Emma', 'gravityflow' );
+		return 'Emma';
 	}
 
 	public function get_feed_label( $feed ) {

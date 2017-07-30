@@ -51,8 +51,8 @@ $I->click( 'Two pages rejected' );
 $I->click( 'Reject' );
 
 // Complete
-$I->see( 'Rejected request (Pending Input)' );
+$I->waitForText( 'Rejected request (Pending Input)', 3 );
 
 $I->click( 'Submit' );
 
-$I->see( 'Status: Rejected' );
+$I->waitForText( 'Status: Rejected', 3 );

@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_CapsuleCRM extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFCapsuleCRM';
 
 	public function get_label() {
-		return esc_html__( 'Capsule CRM', 'gravityflow' );
+		return 'Capsule CRM';
 	}
 
 	public function get_feed_label( $feed ) {

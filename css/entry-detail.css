@@ -301,3 +301,8 @@ span.gf_admin_page_formid {
     top: -3px;
     white-space: nowrap;
 }
+
+.gravityflow-box-title{
+    cursor:default;
+    border-bottom: 1px solid #eee;
+}

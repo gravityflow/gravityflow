@@ -41,7 +41,7 @@ $I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Test Revert User' );
 
 // Approve
-$I->seeElement( 'button[value=approved]' );
+$I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
 
 // Verify number
@@ -50,14 +50,14 @@ $I->fillField( 'input[name="input_4"]', '40' );
 $I->click( 'Submit' );
 
 // Revert
-$I->seeElement( 'button[value=revert]' );
+$I->waitForElement( 'button[value=revert]', 3 );
 $I->click( 'button[value=revert]' );
 
 // Update number
-$I->seeElement( 'input[name="input_4"]' );
+$I->waitForElement( 'input[name="input_4"]', 3 );
 $I->fillField( 'input[name="input_4"]', '41' );
 $I->click( 'Submit' );
 
 // Approve
-$I->seeElement( 'button[value=approved]' );
+$I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );

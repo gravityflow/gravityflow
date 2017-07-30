@@ -59,7 +59,7 @@ $I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Specific assign' );
 
 // Approve
-$I->seeElement( 'button[value=approved]' );
+$I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
 
 // Log out
@@ -74,7 +74,7 @@ $I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Specific assign' );
 
 // Approve
-$I->seeElement( 'button[value=approved]' );
+$I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
 
-$I->see( 'Status: Approved' );
+$I->waitForText( 'Status: Approved', 3 );

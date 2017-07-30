@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_ZohoCRM extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFZohoCRM';
 
 	public function get_label() {
-		return esc_html__( 'Zoho CRM', 'gravityflow' );
+		return 'Zoho CRM';
 	}
 
 }

@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_GetResponse extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFGetResponse';
 
 	public function get_label() {
-		return esc_html__( 'GetResponse', 'gravityflow' );
+		return 'GetResponse';
 	}
 
 	public function get_feed_label( $feed ) {

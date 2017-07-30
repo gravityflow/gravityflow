@@ -23,7 +23,7 @@ $I->amOnWorkflowPage( 'Inbox' );
 
 $I->click( 'Dynamic assignee routing' );
 
-$I->see( 'User: admin1 admin1 (Pending)' );
+$I->waitForText( 'User: admin1 admin1 (Pending)', 3 );
 $I->see( 'User: admin3 admin3 (Pending)' );
 $I->dontSee( 'User: admin2 admin2 (Pending)' );
 
@@ -32,6 +32,6 @@ $I->checkOption( 'Publisher 2' );
 
 $I->click( 'Update' );
 
-$I->see( 'User: admin1 admin1 (Pending)' );
+$I->waitForText( 'User: admin1 admin1 (Pending)', 3 );
 $I->see( 'User: admin2 admin2 (Pending)' );
 $I->see( 'User: admin3 admin3 (Pending)' );

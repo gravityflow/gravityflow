@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'gravityflow';
+    src: url('../fonts/gravityflow.eot');
+    src: url('../fonts/gravityflow.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/gravityflow.woff') format('woff'),
+    url('../fonts/gravityflow.ttf') format('truetype'),
+    url('../fonts/gravityflow.svg#gravityflow') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.dashicons-gravityflow:before {
+    display: inline-block;
+    font-family: 'gravityflow';
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: 'a';
+}

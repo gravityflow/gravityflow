@@ -52,27 +52,19 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 	}
 
 	public function get_choices( $value ) {
-		$choices = $this->get_roles_as_choices( $value );
-
-		return $choices;
-	}
-
-	public function get_roles_as_choices( $value ) {
-
-		$form_id = $this->formId;
-
-		$role_choices = Gravity_Flow_Common::get_roles_as_choices( false, false, true );
-
-		$role_choices = apply_filters( 'gravityflow_role_field', $role_choices, $form_id, $this );
-
-		if ( ! $this->is_form_editor() ) {
+		if ( $this->is_form_editor() ) {
 			// Prevent the choices from being stored in the form meta
-			$this->choices = $role_choices;
+			$this->choices = array();
 		}
 
-		$choices = GFCommon::get_select_choices( $this, $value );
+		return parent::get_choices( $value );
+	}
 
-		return $choices;
+	public function get_roles_as_choices() {
+		$role_choices = Gravity_Flow_Common::get_roles_as_choices( false, false, true );
+		$form_id      = $this->formId;
+
+		return apply_filters( 'gravityflow_role_field', $role_choices, $form_id, $this );
 	}
 
 	public function get_value_entry_list( $value, $entry, $field_id, $columns, $form ) {
@@ -118,6 +110,17 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 		}
 
 		return $this->get_display_name( rgar( $entry, $input_id ) );
+	}
+
+	/**
+	 * Add the roles as choices.
+	 *
+	 * @since 1.7.1-dev
+	 */
+	public function post_convert_field() {
+		if ( ! $this->is_form_editor() ) {
+			$this->choices = $this->get_roles_as_choices();
+		}
 	}
 }
 

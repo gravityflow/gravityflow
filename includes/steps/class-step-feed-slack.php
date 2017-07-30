@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_Slack extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFSlack';
 
 	public function get_label() {
-		return esc_html__( 'Slack', 'gravityflow' );
+		return 'Slack';
 	}
 
 	public function get_feed_label( $feed ) {

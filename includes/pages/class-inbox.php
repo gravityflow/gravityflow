@@ -342,7 +342,8 @@ class Gravity_Flow_Inbox {
 		$actions = $step->get_actions();
 		$entry_id      = $step->get_entry_id();
 		foreach ( $actions as $action ) {
-			$html .= sprintf( '<span id="gravityflow-action-%s-%d" data-entry_id="%d" data-action="%s" data-rest_base="%s" class="gravityflow-action" role="link">%s</span>', $action['key'], $entry_id, $entry_id, $action['key'], $step->get_rest_base(), $action['icon'] );
+			$show_workflow_note_field = (bool) $action['show_note_field'];
+			$html .= sprintf( '<span id="gravityflow-action-%s-%d" data-entry_id="%d" data-action="%s" data-rest_base="%s"  data-note_field="%d" class="gravityflow-action" role="link">%s</span>', $action['key'], $entry_id, $entry_id, $action['key'], $step->get_rest_base(), $show_workflow_note_field, $action['icon'] );
 		}
 		if ( ! empty( $html ) ) {
 			$html = sprintf( '<div id="gravityflow-actions-%d" class="gravityflow-actions gravityflow-actions-locked">
@@ -352,7 +353,15 @@ class Gravity_Flow_Inbox {
 									<span class="gravityflow-actions-spinner">
 										<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
 									</span>
-								</div>', $entry_id, $html );
+
+									<div class="gravityflow-actions-note-field-container" style="display:none;">
+										<label>%s:</label>
+										<div>
+											<textarea></textarea>
+										</div>
+									</div>
+								</div>
+								', $entry_id, $html, __( 'Note', 'gravityflow' ) );
 		}
 
 		return $html;

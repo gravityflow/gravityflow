@@ -19,7 +19,7 @@ $I->scrollTo( [ 'css' => '.gform_page_footer .gform_next_button' ], 20, 50 ); //
 // Next page
 $I->click( '.gform_page_footer .gform_next_button' );
 $I->click( 'input[type=submit]' );
-$I->see( 'Thanks for contacting us!' );
+$I->waitForText( 'Thanks for contacting us!', 3 );
 
 // Login to wp-admin
 $I->loginAsAdmin();
@@ -30,11 +30,11 @@ $I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'Conditional Logic' );
 
 // Approve
-$I->seeElement( 'button[value=approved]' );
+$I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
 
 // Check field conditional logic on the user input step
-$I->see( 'Some text' );
+$I->waitForText( 'Some text', 3 );
 $I->see( 'Second Section - Second Choice' );
 
 $I->seeElement( 'textarea[name=input_15]' );

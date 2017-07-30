@@ -116,7 +116,7 @@ install_db() {
 	fi
 
 	# create database
-    if ! mysql -u $DB_USER -e "use $DB_NAME"; then
+    if ! mysql -u"$DB_USER" --password="$DB_PASS" -e "use $DB_NAME"$EXTRA; then
       mysqladmin CREATE $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA;
     fi
 }

@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_FreshBooks extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFFreshBooks';
 
 	public function get_label() {
-		return esc_html__( 'FreshBooks', 'gravityflow' );
+		return 'FreshBooks';
 	}
 
 }

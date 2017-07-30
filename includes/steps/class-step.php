@@ -202,11 +202,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *      'key' => 'approve',
 	 *      'icon' => $this->get_approve_icon(),
 	 *      'label' => __( 'Approve', 'gravityflow' ),
+	 *      'show_note_field' => true
 	 *   ),
 	 * array(
 	 *      'key' => 'reject',
 	 *      'icon' => $this->get_reject_icon(),
 	 *      'label' => __( 'Reject', 'gravityflow' ),
+	 *      'show_note_field' => false
 	 *   ),
 	 * );
 	 *
@@ -229,6 +231,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Process the REST request for an entry.
 	 *
+	 * @deprecated 1.7.1
+	 *
 	 * @param WP_REST_Request $request
 	 *
 	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
@@ -240,7 +244,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Check if a given request has permission.
+	 * Check if a REST request has permission.
 	 *
 	 * @since  1.4.3
 	 * @access public
@@ -249,9 +253,60 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @return WP_Error|boolean
 	 */
-	public function rest_request_permissions_check( $request ) {
-		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+	public function rest_permission_callback( $request ) {
+		$assignee_key = gravity_flow()->get_current_user_assignee_key();
+
+		if ( empty( $assignee_key ) ) {
+			return false;
+		}
+
+		if ( ! is_user_logged_in() ) {
+
+			// Email assignee authentication & nonce check.
+
+			$nonce = $request->get_header( 'x_wp_nonce' );
+
+			if ( empty( $nonce ) ) {
+				if ( isset( $request['_wpnonce'] ) ) {
+					$nonce = $request['_wpnonce'];
+				} elseif ( isset( $request['HTTP_X_WP_NONCE'] ) ) {
+					$nonce = $request['HTTP_X_WP_NONCE'];
+				}
+			}
+
+			if ( empty( $nonce ) ) {
+				return false;
+			}
+
+			// Check the nonce.
+			$result = wp_verify_nonce( $nonce, 'wp_rest' );
+
+			if ( ! $result ) {
+				return new WP_Error( 'rest_cookie_invalid_nonce', __( 'Cookie nonce is invalid' ), array( 'status' => 403 ) );
+			}
+		}
+
+		if ( $this->is_assignee( $assignee_key ) ) {
+			return true;
+		}
+
+		return false;
 	}
+
+	/**
+	 * Process the REST request for an entry.
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
+	 *                                is already an instance, WP_HTTP_Response, otherwise
+	 *                                returns a new WP_REST_Response instance.
+	 */
+	public function rest_callback( $request ) {
+		return new WP_Error( 'not_implemented', __( ' Not implemented', 'gravityflow' ) );
+	}
+
+
 
 	/**
 	 * Returns the translated label for a status key.
@@ -793,8 +848,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$assignees = $this->get_assignees();
 
 		if ( empty( $assignees ) ) {
-			$note = sprintf( __( '%s: not required', 'gravityflow' ), $this->get_name() );
-			$this->add_note( $note, 0, 'gravityflow' );
+			$this->add_note( sprintf( __( '%s: No assignees', 'gravityflow' ), $this->get_name() ) );
 		} else {
 			foreach ( $assignees as $assignee ) {
 				$assignee->update_status( 'pending' );
@@ -934,11 +988,17 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$this->log_debug( __METHOD__ . sprintf( '() sending assignee notifications to %d users', count( $users ) ) );
 
+		$user_assignee_args = array(
+			'type' => $assignee_type,
+			'id'   => $assignee_id,
+		);
 		foreach ( $users as $user ) {
-			$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
-			$notification['name']    = $notification['id'];
-			$notification['to']      = $user->user_email;
-			$notification['message'] = $this->replace_variables( $message, $assignee );
+			$user_assignee_args['user'] = $user;
+			$user_assignee              = $this->get_assignee( $user_assignee_args );
+			$notification['id']         = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
+			$notification['name']       = $notification['id'];
+			$notification['to']         = $user->user_email;
+			$notification['message']    = $this->replace_variables( $message, $user_assignee );
 			$this->send_notification( $notification );
 		}
 	}
@@ -946,7 +1006,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Override this method to replace merge tags.
 	 * Important: call the parent method first.
-	 * $text = parent::replace_variables( $text, $user_id );
+	 * $text = parent::replace_variables( $text, $assignee );
 	 *
 	 * @param $text
 	 * @param Gravity_Flow_Assignee $assignee
@@ -955,50 +1015,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function replace_variables( $text, $assignee ) {
 
-		$text = $this->replace_workflow_url_variables( $text, $assignee );
-		$text = $this->replace_workflow_cancel_variables( $text, $assignee );
+		$args = array(
+			'assignee' => $assignee,
+			'step' => $this,
+		);
 
-		preg_match_all( '/{assignees(:(.*?))?}/', $text, $assignees_matches, PREG_SET_ORDER );
-		if ( is_array( $assignees_matches ) ) {
-			foreach ( $assignees_matches as $assignees_match ) {
-				$full_tag       = $assignees_match[0];
-				$options_string = isset( $assignees_match[2] ) ? $assignees_match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a                 = shortcode_atts(
-					array(
-						'status'       => true,
-						'user_email'   => true,
-						'display_name' => true,
-					), $options
-				);
-				$a['status']       = strtolower( $a['status'] ) == 'false' ? false : true;
-				$a['user_email']   = strtolower( $a['user_email'] ) == 'false' ? false : true;
-				$a['display_name'] = strtolower( $a['display_name'] ) == 'false' ? false : true;
-
-				$assignees_text_arr = array();
-				$assignees          = $this->get_assignees();
-				foreach ( $assignees as $step_assignee ) {
-					$assignee_line = '';
-					if ( $a['display_name'] ) {
-						$assignee_line .= $step_assignee->get_display_name();
-					}
-					if ( $a['user_email'] && $step_assignee->get_type() == 'user_id' ) {
-						if ( $assignee_line ) {
-							$assignee_line .= ', ';
-						}
-						$assignee_user = new WP_User( $step_assignee->get_id() );
-						$assignee_line .= $assignee_user->user_email;
-					}
-					if ( $a['status'] ) {
-						$assignee_line .= ' (' . $step_assignee->get_status() . ')';
-					}
-					$assignees_text_arr[] = $assignee_line;
-				}
-				$assignees_text = join( "\n", $assignees_text_arr );
-				$text           = str_replace( $full_tag, $assignees_text, $text );
-			}
-		}
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_url', $args )->replace( $text );
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_cancel', $args )->replace( $text );
 
 		return $text;
 	}
@@ -1012,38 +1035,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function replace_workflow_url_variables( $text, $assignee ) {
-		preg_match_all( '/{workflow_(entry|inbox)_(url|link)(:(.*?))?}/', $text, $workflow_url_matches, PREG_SET_ORDER );
-		if ( is_array( $workflow_url_matches ) ) {
-			foreach ( $workflow_url_matches as $match ) {
-				$full_tag       = $match[0];
-				$location       = $match[1];
-				$type           = $match[2];
-				$options_string = isset( $match[4] ) ? $match[4] : '';
-				$options        = shortcode_parse_atts( $options_string );
+		_deprecated_function( 'replace_workflow_url_variables', '1.7.2', 'Gravity_Flow_Merge_Tags::get( \'workflow_url\', $args )->replace()' );
 
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-						'text'    => $location == 'inbox' ? esc_html__( 'Inbox', 'gravityflow' ) : esc_html__( 'Entry', 'gravityflow' ),
-						'token'   => false,
-					), $options
-				);
+		$args = array(
+			'assignee' => $assignee,
+			'step' => $this,
+		);
 
-				$token = $this->get_workflow_url_access_token( $a, $assignee );
-
-				if ( $location == 'inbox' ) {
-					$url = $this->get_inbox_url( $a['page_id'], $assignee, $token );
-				} else {
-					$url = $this->get_entry_url( $a['page_id'], $assignee, $token );
-				}
-
-				if ( $type == 'link' ) {
-					$url = sprintf( '<a href="%s">%s</a>', $url, $a['text'] );
-				}
-
-				$text = str_replace( $full_tag, $url, $text );
-			}
-		}
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_url', $args )->replace( $text );
 
 		return $text;
 	}
@@ -1057,7 +1056,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function get_workflow_url_access_token( $a, $assignee ) {
-		$force_token = strtolower( $a['token'] ) == 'true' ? true : false;
+		_deprecated_function( 'get_workflow_url_access_token', '1.7.2', 'gravity_flow()->generate_access_token' );
+
+		$force_token = $a['token'];
 		$token       = '';
 
 		if ( $assignee && $force_token ) {
@@ -1073,48 +1074,20 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * Replace the {workflow_cancel_link} and {workflow_cancel_url} merge tags.
 	 *
 	 * @param string $text The text being processed.
-	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
+	 * @param Gravity_Flow_Assignee $assignee The assignee.
 	 *
 	 * @return string
 	 */
 	public function replace_workflow_cancel_variables( $text, $assignee ) {
+		_deprecated_function( 'replace_workflow_cancel_variables', '1.7.2', 'Gravity_Flow_Merge_Tags::get( \'workflow_cancel\', $args )->replace()' );
+
 		if ( $assignee ) {
-			preg_match_all( '/{workflow_cancel_(url|link)(:(.*?))?}/', $text, $cancel_matches, PREG_SET_ORDER );
-			if ( is_array( $cancel_matches ) ) {
-				$expiration_days      = apply_filters( 'gravityflow_cancel_token_expiration_days', 2, $assignee );
-				$expiration_str       = '+' . (int) $expiration_days . ' days';
-				$expiration_timestamp = strtotime( $expiration_str );
+			$args = array(
+				'assignee' => $assignee,
+				'step' => $this,
+			);
 
-				$scopes = array(
-					'pages'    => array( 'inbox' ),
-					'entry_id' => $this->get_entry_id(),
-					'action'   => 'cancel_workflow',
-				);
-
-				$cancel_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
-
-				foreach ( $cancel_matches as $match ) {
-					$full_tag       = $match[0];
-					$type           = $match[1];
-					$options_string = isset( $match[3] ) ? $match[3] : '';
-					$options        = shortcode_parse_atts( $options_string );
-
-					$a = shortcode_atts(
-						array(
-							'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-							'text'    => esc_html__( 'Cancel Workflow', 'gravityflow' ),
-						), $options
-					);
-
-					$url = $this->get_entry_url( $a['page_id'], $assignee, $cancel_token );
-
-					if ( $type == 'link' ) {
-						$url = sprintf( '<a href="%s">%s</a>', $url, $a['text'] );
-					}
-
-					$text = str_replace( $full_tag, $url, $text );
-				}
-			}
+			$text = Gravity_Flow_Merge_Tags::get( 'workflow_cancel', $args )->replace( $text );
 		}
 
 		return $text;
@@ -1130,6 +1103,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function get_entry_url( $page_id = null, $assignee = null, $access_token = '' ) {
+
+		_deprecated_function( 'get_entry_url', '1.7.2', 'Gravity_Flow_Common::get_workflow_url' );
 
 		$query_args = array(
 			'page' => 'gravityflow-inbox',
@@ -1151,6 +1126,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function get_inbox_url( $page_id = null, $assignee = null, $access_token = '' ) {
+		_deprecated_function( 'get_inbox_url', '1.7.2', 'Gravity_Flow_Common::get_workflow_url' );
 
 		$query_args = array(
 			'page' => 'gravityflow-inbox',
@@ -1305,7 +1281,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 		$entry = $this->get_entry();
 
-		return GFCommon::evaluate_conditional_logic( $logic, $form, $entry );
+		return gravity_flow()->evaluate_conditional_logic( $logic, $form, $entry );
 	}
 
 	/**
@@ -1470,16 +1446,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Get the assignee key for the current access token or user.
 	 *
-	 * @return string
+	 * @return string|bool
 	 */
 	public function get_current_assignee_key() {
-		if ( $token = gravity_flow()->decode_access_token() ) {
-			$assignee_key = sanitize_text_field( $token['sub'] );
-		} else {
-			$assignee_key = 'user_id|' . get_current_user_id();
-		}
 
-		return $assignee_key;
+		return gravity_flow()->get_current_user_assignee_key();
 	}
 
 	/**
@@ -1799,33 +1770,45 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Adds a note to the timeline. The timeline is a filtered subset of the Gravity Forms Entry notes.
 	 *
-	 * @param $note
-	 * @param bool|int $user_id
-	 * @param bool $user_name
+	 * @since 1.7.1-dev Updated to store notes in the entry meta.
+	 * @since unknown
+	 *
+	 * @param string $note          The note to be added.
+	 * @param bool   $is_user_event Formerly $user_id; as of 1.7.1-dev indicates if the current note is the result of an assignee action.
+	 * @param bool   $deprecated    Formerly $user_name; no longer used as of 1.7.1-dev.
 	 */
-	public function add_note( $note, $user_id = false, $user_name = false ) {
-		global $current_user;
+	public function add_note( $note, $is_user_event = false, $deprecated = false ) {
+		$user_id   = false;
+		$user_name = $this->get_type();
 
-		if ( $user_id === false ) {
-			$type = '';
-			if ( $token = gravity_flow()->decode_access_token() ) {
-				$assignee_key = sanitize_text_field( $token['sub'] );
-				list( $type, $user_id ) = rgexplode( '|', $assignee_key, 2 );
-			} elseif ( is_user_logged_in() ) {
-				$user_id = $current_user->ID;
-				$type    = 'user_id';
+		if ( $is_user_event ) {
+			$assignee_key = $this->get_current_assignee_key();
+			$assignee     = $this->get_assignee( $assignee_key );
+			if ( $assignee->get_type() === 'user_id' ) {
+				$user_id   = $assignee->get_id();
+				$user_name = $assignee->get_display_name();
 			}
-			if ( $type == 'user_id' ) {
-				$user      = get_user_by( 'id', $user_id );
-				$user_name = $user ? $user->display_name : '';
-			}
-		}
-
-		if ( empty( $user_name ) ) {
-			$user_name = 'gravityflow';
 		}
 
 		GFFormsModel::add_note( $this->get_entry_id(), $user_id, $user_name, $note, 'gravityflow' );
+	}
+
+	/**
+	 * Adds a user submitted note.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @return string The user note which was added or an empty string.
+	 */
+	public function maybe_add_user_note() {
+		$note = trim( rgpost( 'gravityflow_note' ) );
+
+		if ( $note ) {
+			Gravity_Flow_Common::add_workflow_note( $note, $this->get_entry_id(), $this->get_id() );
+			$note = sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $note );
+		}
+
+		return $note;
 	}
 
 	/**
@@ -1877,6 +1860,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$notification['subject'] = $this->replace_variables( $notification['subject'], null );
 		}
 
+		$message = $notification['message'];
+
 		foreach ( $assignees as $assignee ) {
 			/* @var Gravity_Flow_Assignee $assignee */
 			$assignee_type = $assignee->get_type();
@@ -1887,10 +1872,10 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$notification['to']      = $email;
 				$notification['id']      = 'workflow_step_' . $this->get_id() . '_email_' . $email;
 				$notification['name']    = $notification['id'];
-				$notification['message'] = $this->replace_variables( $notification['message'], $assignee );
+				$notification['message'] = $this->replace_variables( $message, $assignee );
 				$this->send_notification( $notification );
 
-				return;
+				continue;
 			}
 
 
@@ -1904,7 +1889,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
 				$notification['name']    = $notification['id'];
 				$notification['to']      = $user->user_email;
-				$notification['message'] = $this->replace_variables( $notification['message'], $assignee );
+				$notification['message'] = $this->replace_variables( $message, $assignee );
 				$this->send_notification( $notification );
 			}
 		}
@@ -2002,7 +1987,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	public function process_assignee_status( $assignee, $new_status, $form ) {
 		$assignee->update_status( $new_status );
 		$note = $this->get_name() . ': ' . esc_html__( 'Processed', 'gravityflow' );
-		$this->add_note( $note, 0, $this->get_type() );
+		$this->add_note( $note );
 
 		return $note;
 	}

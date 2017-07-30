@@ -23,7 +23,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 
 
 	public function get_label() {
-		return esc_html__( 'WP E-Signature', 'gravityflow' );
+		return 'WP E-Signature';
 	}
 
 	public function get_feed_label( $feed ) {
@@ -166,7 +166,7 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 				echo sprintf( '%s: %s<br><br>', esc_html__( 'Title', 'gravityflow' ), esc_html( $document->document_title ) );
 
 
-				echo sprintf( '%s: %s', esc_html__( 'Invite Status', 'gravityflow' ), $invite_api->is_invite_sent( $document_id ) ? esc_html__( 'Sent', 'gravityflow' ) : esc_html__( 'Error - Not Sent', 'gravityflow' ) );
+				echo sprintf( '%s: %s', esc_html__( 'Invite Status', 'gravityflow' ), $invite_api->is_invite_sent( $document_id ) ? esc_html__( 'Sent', 'gravityflow' ) : esc_html__( 'Error: Not Sent', 'gravityflow' ) );
 				echo '&nbsp;';
 				$params     = array(
 					'page'        => 'esign-resend_invite-document',
@@ -229,9 +229,8 @@ function gravity_flow_step_esign_signature_saved( $args ) {
 				if ( $step ) {
 					$feed  = gravity_flow()->get_feed( $feed_id );
 					$label = $step->get_feed_label( $feed );
-					$note  = sprintf( esc_html__( 'Document signed: %s', 'gravityflow' ), $label );
+					$step->add_note( sprintf( esc_html__( 'Document signed: %s', 'gravityflow' ), $label ) );
 					$step->log_debug( __METHOD__ . '() - Feed processing complete: ' . $label );
-					$step->add_note( $note, 0, $step->get_type() );
 
 					$add_on_feeds = $step->get_processed_add_on_feeds( $entry_id );
 					if ( ! in_array( $feed_id, $add_on_feeds ) ) {

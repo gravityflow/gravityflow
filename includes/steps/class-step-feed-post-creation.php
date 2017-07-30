@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_Post_Creation extends Gravity_Flow_Step_Feed_Add_On
 	protected $_class_name = 'GF_Post_Creation';
 
 	public function get_label() {
-		return esc_html__( 'Post Creation', 'gravityflow' );
+		return 'Post Creation';
 	}
 }
 

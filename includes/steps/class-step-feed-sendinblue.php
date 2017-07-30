@@ -19,9 +19,10 @@ class Gravity_Flow_Step_Feed_Sendinblue extends Gravity_Flow_Step_Feed_Add_On {
 	public $_step_type = 'sendinblue';
 
 	protected $_class_name = 'GFSIB_Manager';
+	protected $_slug = 'gravityformssendinblue';
 
 	public function get_label() {
-		return esc_html__( 'SendinBlue', 'gravityflow' );
+		return 'SendinBlue';
 	}
 
 	public function get_icon_url() {

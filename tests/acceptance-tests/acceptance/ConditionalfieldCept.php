@@ -35,18 +35,17 @@ $I->scrollTo( [ 'css' => 'input[type=submit]' ] ); // needed for chromedriver
 $I->click( 'Submit' );
 
 // trow number field error
-$I->seeElement( 'div.validation_error' );
+$I->waitForElement( 'div.validation_error', 3 );
 
 // fill number field with correct values
 $I->fillField( 'input[name=input_4]', '1234' );
 $I->click( 'Submit' );
-$I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
+$I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 // Login to wp-admin
 $I->loginAsAdmin();
-$I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Status
 $I->amOnWorkflowPage( 'Status' );
 $I->click( 'Conditional field' );
-$I->see( 'Status: Complete' );
+$I->waitForText( 'Status: Complete', 3 );

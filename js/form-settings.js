@@ -340,7 +340,7 @@
 
 	function toggleType(showType) {
 		var fields = {
-			select: ['assignees\\[\\]', 'editable_fields\\[\\]', 'conditional_logic_editable_fields_enabled', 'unanimous_approval', 'assignee_policy'],
+			select: ['assignees\\[\\]', 'editable_fields\\[\\]', 'conditional_logic_editable_fields_enabled'],
 			routing: ['routing', 'conditional_logic_editable_fields_enabled']
 		};
 
@@ -379,7 +379,6 @@
 		var subSettings = [
 			'routing',
 			'assignees\\[\\]',
-			'unanimous_approval',
 			'assignee_notification_from_name',
 			'assignee_notification_from_email',
 			'assignee_notification_reply_to',
@@ -416,10 +415,7 @@
 
 			'assignees\\[\\]',
 			'editable_fields\\[\\]',
-			'conditional_logic_editable_fields_enabled',
-			'highlight_editable_fields',
 			'routing',
-			'assignee_policy',
 			'assignee_notification_message',
 
 		];

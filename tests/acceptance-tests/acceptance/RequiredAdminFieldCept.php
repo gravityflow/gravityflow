@@ -16,7 +16,7 @@ $I->fillField( 'Paragraph', 'Some text' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 // Next page
 $I->click( 'Submit' );
-$I->see( 'Thanks for contacting us!' );
+$I->waitForText( 'Thanks for contacting us!', 3 );
 
 // Login to wp-admin
 $I->loginAsAdmin();
@@ -29,14 +29,13 @@ $I->click( 'User Input' );
 $I->selectOption( 'input[name=gravityflow_status]', 'complete' );
 $I->click( 'Update' );
 // Approve
-$I->seeElement( 'div.validation_message' );
+$I->waitForElement( 'div.validation_message', 3 );
 
 // Check field conditional logic on the user input step
 $I->see( 'This field is required' );
-
 $I->selectOption( 'input[name=input_13]', 'Second Choice' );
-
+$I->scrollTo( '#gravityflow-note' );
 $I->selectOption( 'input[name=gravityflow_status]', 'complete' );
 $I->click( 'Update' );
-$I->seeElement( 'div.notice-success');
-$I->see( 'Entry updated and marked complete' );
+$I->waitForElement( 'div.notice-success', 3 );
+$I->waitForText( 'Entry updated and marked complete', 3 );

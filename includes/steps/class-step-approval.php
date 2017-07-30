@@ -52,14 +52,26 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	public function get_actions() {
 		return array(
 			array(
-				'key' => 'approve',
-				'icon' => $this->get_approve_icon(),
-				'label' => __( 'Approve', 'gravityflow' ),
+				'key'             => 'approve',
+				'icon'            => $this->get_approve_icon(),
+				'label'           => __( 'Approve', 'gravityflow' ),
+				'show_note_field' => in_array( $this->note_mode, array(
+						'required_if_approved',
+						'required_if_reverted_or_rejected',
+						'required',
+					)
+				),
 			),
 			array(
-				'key' => 'reject',
-				'icon' => $this->get_reject_icon(),
-				'label' => __( 'Reject', 'gravityflow' ),
+				'key'             => 'reject',
+				'icon'            => $this->get_reject_icon(),
+				'label'           => __( 'Reject', 'gravityflow' ),
+				'show_note_field' => in_array( $this->note_mode, array(
+						'required_if_rejected',
+						'required_if_reverted_or_rejected',
+						'required',
+					)
+				),
 			),
 		);
 	}
@@ -67,13 +79,15 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * Process the REST request for an entry.
 	 *
+	 * @since 1.7.1
+	 *
 	 * @param WP_REST_Request $request
 	 *
 	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
 	 *                                is already an instance, WP_HTTP_Response, otherwise
 	 *                                returns a new WP_REST_Response instance.
 	 */
-	public function handle_rest_request( $request ) {
+	public function rest_callback( $request ) {
 		if ( $request->get_method() !== 'POST' ) {
 			return new WP_Error( 'invalid_request_method', __( 'Invalid request method' ) );
 		}
@@ -88,45 +102,34 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		if ( empty( $new_status ) ) {
-			return new WP_Error( 'invalid_action', __( 'Action not supported', 'gravityflow' ) );
+			return new WP_Error( 'invalid_action', __( 'Action not supported.', 'gravityflow' ) );
+		}
+
+		$note = $request['gravityflow_note'];
+
+		$valid_note = $this->validate_note_mode( $new_status, $note );
+
+		if ( ! $valid_note ) {
+			$response = array( 'status' => 'note_required', 'feedback' => __( 'A note is required.', 'gravityflow' ) );
+			$response = rest_ensure_response( $response );
+			return $response;
 		}
 
 		$assignee_key = isset( $request['assignee'] ) ? $request['assignee'] : gravity_flow()->get_current_user_assignee_key();
 
 		$assignee = new Gravity_Flow_Assignee( $assignee_key, $this );
 
-		$response = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
-
+		$feedback = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
 
 		if ( empty( $assignee ) ) {
 			return new WP_Error( 'not_supported', __( 'Action not supported.', 'gravityflow' ) );
 		}
 
+		$response = array( 'status' => 'success', 'feedback' => $feedback );
+
 		$response = rest_ensure_response( $response );
 
 		return $response;
-	}
-
-	/**
-	 * Check if a given request has permission.
-	 *
-	 * @since  1.4.3
-	 * @access public
-	 *
-	 * @param WP_REST_Request $request Full data about the request.
-	 *
-	 * @return WP_Error|boolean
-	 */
-	public function rest_request_permissions_check( $request ) {
-		if ( isset( $request['assignee'] ) && ! gravity_flow()->current_user_can_any( 'gravityflow_create_steps' ) ) {
-			return new WP_Error( 'not_allowed', __( "You're not authorized to perform this action.", 'gravityflow' ), array( 'status' => 403 ) );
-		}
-
-		$assignee = isset( $request['assignee'] ) ? $request['assignee'] : gravity_flow()->get_current_user_assignee_key();
-
-		if ( empty( $assignee ) ) {
-			return new WP_Error( 'not_allowed', __( 'Missing assignee.', 'gravityflow' ), array( 'status' => 403 ) );
-		}
 	}
 
 	public function supports_expiration() {
@@ -142,7 +145,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	public function get_settings() {
-        $settings_api = $this->get_common_settings_api();
+		$settings_api = $this->get_common_settings_api();
 
 		$settings = array(
 			'title'  => esc_html__( 'Approval', 'gravityflow' ),
@@ -151,19 +154,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$settings_api->get_setting_assignees(),
 				$settings_api->get_setting_assignee_routing(),
 				array(
-					'name'          => 'unanimous_approval',
+					'name'          => 'assignee_policy',
 					'label'         => __( 'Approval Policy', 'gravityflow' ),
 					'tooltip'       => __( 'Define how approvals should be processed. If all assignees must approve then the entry will require unanimous approval before the step can be completed. If the step is assigned to a role only one user in that role needs to approve.', 'gravityflow' ),
 					'type'          => 'radio',
-					'default_value' => false,
+					'default_value' => 'all',
 					'choices'       => array(
 						array(
-							'label' => __( 'At least one assignee must approve', 'gravityflow' ),
-							'value' => false,
+							'label' => __( 'Only one assignee is required to approve', 'gravityflow' ),
+							'value' => 'any',
 						),
 						array(
 							'label' => __( 'All assignees must approve', 'gravityflow' ),
-							'value' => true,
+							'value' => 'all',
 						),
 					),
 				),
@@ -211,7 +214,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$steps                   = gravity_flow()->get_steps( $form_id );
 		foreach ( $steps as $step ) {
 			if ( $step->get_type() === 'user_input' ) {
-				$user_input_step_choices[] = array( 'label' => $step->get_name(), 'value' => $step->get_id() );
+				$user_input_step_choices[] = array(
+					'label' => $step->get_name(),
+					'value' => $step->get_id(),
+				);
 			}
 		}
 
@@ -242,11 +248,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				array( 'value' => 'required', 'label' => esc_html__( 'Always required', 'gravityflow' ) ),
 				array(
 					'value' => 'required_if_approved',
-					'label' => esc_html__( 'Required if approved', 'gravityflow' )
+					'label' => esc_html__( 'Required if approved', 'gravityflow' ),
 				),
 				array(
 					'value' => 'required_if_rejected',
-					'label' => esc_html__( 'Required if rejected', 'gravityflow' )
+					'label' => esc_html__( 'Required if rejected', 'gravityflow' ),
 				),
 			),
 		);
@@ -316,7 +322,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$step_status = 'rejected';
 				break;
 			}
-			if ( $this->type == 'select' && ! $this->unanimous_approval ) {
+			if ( $this->assignee_policy == 'any' ) {
 				if ( $approver_status == 'approved' ) {
 					$step_status = 'approved';
 					break;
@@ -484,14 +490,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 			if ( $step ) {
 				$this->end();
-				$note      = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
-				$user_note = rgpost( 'gravityflow_note' );
 
-				if ( ! empty( $user_note ) ) {
-					$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
-				}
+				$note = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
+				$this->add_note( $note . $this->maybe_add_user_note(), true );
 
-				$this->add_note( $note );
 				$step->start();
 				$feedback = esc_html__( 'Reverted to step:', 'gravityflow' ) . ' ' . $step->get_label();
 			}
@@ -516,12 +518,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		if ( ! empty( $note ) ) {
-			$user_note = rgpost( 'gravityflow_note' );
-			if ( ! empty( $user_note ) ) {
-				$note .= sprintf( "\n%s: %s", __( 'Note', 'gravityflow' ), $user_note );
-			}
-			$user_id = ( $assignee->get_type() == 'user_id' ) ? $assignee->get_id() : 0;
-			$this->add_note( $note, $user_id, $assignee->get_display_name() );
+			$this->add_note( $note . $this->maybe_add_user_note(), true );
 		}
 	}
 
@@ -835,121 +832,17 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @return mixed
 	 */
 	public function replace_variables( $text, $assignee ) {
-		$text    = parent::replace_variables( $text, $assignee );
-		$comment = rgpost( 'gravityflow_note' );
-		$text    = str_replace( '{workflow_note}', $comment, $text );
+		$text = parent::replace_variables( $text, $assignee );
 
-		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 2, $assignee );
-
-		$expiration_str = '+' . (int) $expiration_days . ' days';
-
-		$expiration_timestamp = strtotime( $expiration_str );
-
-		$scopes = array(
-			'pages'           => array( 'inbox' ),
-			'step_id'         => $this->get_id(),
-			'entry_timestamp' => $this->get_entry_timestamp(),
-			'entry_id'        => $this->get_entry_id(),
-			'action'          => 'approve',
+		$args = array(
+			'assignee' => $assignee,
+			'step' => $this,
 		);
 
-		$approve_token = '';
-
-		if ( $assignee ) {
-			$approve_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
-
-			$text = str_replace( '{workflow_approve_token}', $approve_token, $text );
-		}
-
-		preg_match_all( '/{workflow_approve_url(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-					), $options
-				);
-
-				$approve_url = $this->get_entry_url( $a['page_id'], $assignee, $approve_token );
-				$approve_url = esc_url_raw( $approve_url );
-
-				$text = str_replace( $full_tag, $approve_url, $text );
-			}
-		}
-
-		preg_match_all( '/{workflow_approve_link(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-						'text'    => esc_html__( 'Approve', 'gravityflow' ),
-					), $options
-				);
-
-				$approve_url  = $this->get_entry_url( $a['page_id'], $assignee, $approve_token );
-				$approve_url  = esc_url_raw( $approve_url );
-				$approve_link = sprintf( '<a href="%s">%s</a>', $approve_url, esc_html( $a['text'] ) );
-				$text         = str_replace( $full_tag, $approve_link, $text );
-			}
-		}
-
-		$scopes['action'] = 'reject';
-
-		$reject_token = '';
-
-		if ( $assignee ) {
-			$reject_token = gravity_flow()->generate_access_token( $assignee, $scopes, $expiration_timestamp );
-			$text         = str_replace( '{workflow_reject_token}', $reject_token, $text );
-		}
-
-		preg_match_all( '/{workflow_reject_url(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-					), $options
-				);
-
-				$reject_url = $this->get_entry_url( $a['page_id'], $assignee, $reject_token );
-				$reject_url = esc_url_raw( $reject_url );
-				$text       = str_replace( $full_tag, $reject_url, $text );
-			}
-		}
-
-		preg_match_all( '/{workflow_reject_link(:(.*?))?}/', $text, $matches, PREG_SET_ORDER );
-		if ( is_array( $matches ) ) {
-			foreach ( $matches as $match ) {
-				$full_tag       = $match[0];
-				$options_string = isset( $match[2] ) ? $match[2] : '';
-				$options        = shortcode_parse_atts( $options_string );
-
-				$a = shortcode_atts(
-					array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-						'text'    => esc_html__( 'Reject', 'gravityflow' ),
-					), $options
-				);
-
-				$reject_url  = $this->get_entry_url( $a['page_id'], $assignee, $reject_token );
-				$reject_url  = esc_url_raw( $reject_url );
-				$reject_link = sprintf( '<a href="%s">%s</a>', $reject_url, esc_html( $a['text'] ) );
-				$text        = str_replace( $full_tag, $reject_link, $text );
-			}
-		}
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_approve_token', $args )->replace( $text );
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_approve', $args )->replace( $text );
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_reject_token', $args )->replace( $text );
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_reject', $args )->replace( $text );
 
 		return $text;
 	}
@@ -997,6 +890,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				break;
 		}
 		$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
+
+		/**
+		 * Allows the user feedback to be modified after processing the token action.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string                $feedback   The feedback to send to the browser.
+		 * @param array                 $entry      The current entry array.
+		 * @param Gravity_Flow_Assignee $assignee   The assignee object.
+		 * @param string                $new_status The new status
+		 * @param array                 $form       The current form array.
+		 */
+		$feedback = apply_filters( 'gravityflow_feedback_approval_token', $feedback, $entry, $assignee, $new_status, $form );
 
 		return $feedback;
 	}

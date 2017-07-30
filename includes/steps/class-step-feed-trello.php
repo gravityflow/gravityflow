@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_Trello extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFTrello';
 
 	public function get_label() {
-		return esc_html__( 'Trello', 'gravityflow' );
+		return 'Trello';
 	}
 
 	public function get_icon_url() {

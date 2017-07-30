@@ -3,9 +3,9 @@
 Plugin Name: Gravity Flow
 Plugin URI: https://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
-Version: 1.6.2-dev-1
-Author: Steven Henty
-Author URI: http://www.stevenhenty.com
+Version: 1.8.1-dev
+Author: Gravity Flow
+Author URI: http://www.gravityflow.io
 License: GPL-3.0+
 Text Domain: gravityflow
 Domain Path: /languages
@@ -27,7 +27,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses.
 */
 
-define( 'GRAVITY_FLOW_VERSION', '1.6.1-dev-2' );
+define( 'GRAVITY_FLOW_VERSION', '1.8.1-dev' );
 
 define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 
@@ -82,6 +82,7 @@ class Gravity_Flow_Bootstrap {
 
 		self::include_steps();
 		self::include_fields();
+		self::include_merge_tags();
 
 		GFAddOn::register( 'Gravity_Flow' );
 		do_action( 'gravityflow_loaded' );
@@ -101,6 +102,15 @@ class Gravity_Flow_Bootstrap {
 		require_once( dirname( __FILE__ ) . '/includes/fields/class-fields.php' );
 
 		foreach ( glob( dirname( __FILE__ ) . '/includes/fields/class-field-*.php' ) as $gravity_flow_filename ) {
+			require_once( $gravity_flow_filename );
+		}
+	}
+
+	public static function include_merge_tags() {
+		require_once( dirname( __FILE__ ) . '/includes/merge-tags/class-merge-tag.php' );
+		require_once( dirname( __FILE__ ) . '/includes/merge-tags/class-merge-tags.php' );
+
+		foreach ( glob( dirname( __FILE__ ) . '/includes/merge-tags/class-merge-tag-*.php' ) as $gravity_flow_filename ) {
 			require_once( $gravity_flow_filename );
 		}
 	}

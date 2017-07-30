@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_iContact extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFiContact';
 
 	public function get_label() {
-		return esc_html__( 'iContact', 'gravityflow' );
+		return 'iContact';
 	}
 
 	public function get_feed_label( $feed ) {

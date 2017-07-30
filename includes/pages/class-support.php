@@ -18,10 +18,47 @@ class Gravity_Flow_Support {
 
 	public static function display() {
 
+		$license_message = '';
+
+		$license_key = gravity_flow()->get_app_setting( 'license_key' );
+
+		if ( empty( $license_key ) ) {
+			$activate_url = admin_url( 'admin.php?page=gravityflow_settings' );
+			/* Translators: the placeholders are link tags pointing to the Gravity Flow settings page */
+			$license_message = sprintf( esc_html__( 'Please %1$sactivate%2$s your license to access this page.', 'gravityflow' ), "<a href=\"{$activate_url}\">", '</a>' );
+		} else {
+			$response = gravity_flow()->perform_edd_license_request( 'check_license', $license_key );
+			if ( is_wp_error( $response ) ) {
+				$license_message = esc_html__( 'A valid license key is required to access support but there was a problem validating your license key. Please log in to GravityFlow.io and open a support ticket.', 'gravityflow' );
+			} else {
+				$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+
+				$valid = null;
+				if ( empty( $license_data ) || $license_data->license == 'invalid' ) {
+					$license_message = esc_html__( 'Invalid license key. A valid license key is required to access support. Please check the status of your license key in your account area on GravityFlow.io.', 'gravityflow' );
+				}
+			}
+		}
+
+		if ( ! empty( $license_message ) ) {
+			GFCommon::add_message( $license_message, true );
+			?>
+			<div class="wrap gf_entry_wrap">
+				<h2 class="gf_admin_page_title">
+					<span><?php esc_html_e( 'Gravity Flow Support', 'gravityflow' ); ?></span>
+				</h2>
+			<?php
+			GFCommon::display_admin_message();
+			?>
+			</div>
+			<?php
+			return;
+		}
+
 		$message = '';
 
 		if ( isset( $_POST['gravityflow_send_feedback'] ) ) {
-			check_admin_referer( 'gravityflow_beta_feedback' );
+			check_admin_referer( 'gravityflow_feedback' );
 
 			$system_info = isset( $_POST['gravityflow_debug_info'] ) ? self::get_site_info() : '';
 
@@ -37,44 +74,43 @@ class Gravity_Flow_Support {
 			$body_json = json_encode( $body );
 
 			$options = array(
-				'method' => 'POST',
-				'timeout' => 30,
+				'method'      => 'POST',
+				'timeout'     => 30,
 				'redirection' => 5,
-				'blocking' => true,
-				'sslverify' => false,
-				'headers' => array(),
-				'body' => $body_json,
-				'cookies' => array(),
+				'blocking'    => true,
+				'sslverify'   => false,
+				'headers'     => array(),
+				'body'        => $body_json,
+				'cookies'     => array(),
 			);
 
 			$raw_response = wp_remote_post( 'https://gravityflow.io/gravityformsapi/forms/3/submissions/', $options );
 
 			if ( is_wp_error( $raw_response ) ) {
-				$message = '<div class="error notice notice-error is-dismissible below-h2"><p>There was a problem submitting your feedback. Please send it by email to stevehenty@gmail.com.</p></div>';
+				$message = '<div class="error notice notice-error is-dismissible below-h2"><p>' . esc_html__( 'There was a problem submitting your request. Please open a support ticket on GravityFlow.io', 'gravityflow' ) . '</p></div>';
 			}
 			$response_json = wp_remote_retrieve_body( $raw_response );
 
 			$response = json_decode( $response_json, true );
 
 			if ( rgar( $response, 'status' ) == '200' ) {
-				$message = '<div class="updated notice notice-success is-dismissible below-h2"><p>Thank you! I\'ll be in touch soon</p></div>';
+				$message = '<div class="updated notice notice-success is-dismissible below-h2"><p>' . esc_html__( 'Thank you! We\'ll be in touch soon.', 'gravityflow' ) . '</p></div>';
 			}
 		}
 
 		$user = wp_get_current_user();
 
 		?>
+		<style>
+			.gravityflow_feedback_form label {
+				padding: 20px 0 10px;
+				display: block;
+				font-weight: bold;
+			}
+		</style>
 		<div class="wrap gf_entry_wrap">
-			<style>
-				.beta_feedback_form  label{
-					padding: 20px 0 10px;
-					display:block;
-					font-weight: bold;
-				}
-			</style>
-
 			<h2 class="gf_admin_page_title">
-				<span><?php esc_html_e( 'Support', 'gravityflow' ); ?></span>
+				<span><?php esc_html_e( 'Gravity Flow Support', 'gravityflow' ); ?></span>
 
 			</h2>
 			<p>
@@ -88,9 +124,9 @@ class Gravity_Flow_Support {
 			<?php echo $message; ?>
 			<form action="" method="POST">
 				<?php
-				wp_nonce_field( 'gravityflow_beta_feedback' );
+				wp_nonce_field( 'gravityflow_feedback' );
 				?>
-				<div class="beta_feedback_form">
+				<div class="gravityflow_feedback_form">
 
 					<label for="gravityflow_name">
 						<?php esc_html_e( 'Name', 'gravityflow' ); ?>
@@ -129,7 +165,7 @@ class Gravity_Flow_Support {
 						<input type="checkbox" name="gravityflow_debug_info" value="1" checked="checked"/>
 						<?php esc_html_e( 'Send debugging information. (This includes some system information and a list of active plugins. No forms or entry data will be sent.)', 'gravityflow' ); ?>
 					</label>
-					</br /><br />
+					<br /><br />
 					<input id="gravityflow_send" type="submit" class="button button-primary button-large" name="gravityflow_send_feedback" value="<?php esc_html_e( 'Send', 'gravityflow' ); ?>" />
 
 				</div>
@@ -139,7 +175,21 @@ class Gravity_Flow_Support {
 
 	}
 
+	/**
+	 * Get the debug info which will appear as a note on the Help Scout ticket.
+	 *
+	 * @since 1.6.1-dev-2 Use the system report available with Gravity Forms 2.2+.
+	 *
+	 * @return string
+	 */
 	public static function get_site_info() {
+		if ( gravity_flow()->is_gravityforms_supported( '2.2' ) ) {
+			require_once( GFCommon::get_base_path() . '/includes/system-status/class-gf-system-report.php' );
+			$sections           = GF_System_Report::get_system_report();
+			$system_report_text = GF_System_Report::get_system_report_text( $sections );
+
+			return $system_report_text;
+		}
 
 		if ( ! function_exists( 'get_plugins' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );

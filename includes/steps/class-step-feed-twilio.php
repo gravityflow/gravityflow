@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_Twilio extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFTwilio';
 
 	public function get_label() {
-		return esc_html__( 'Twilio', 'gravityflow' );
+		return 'Twilio';
 	}
 
 	public function get_icon_url() {

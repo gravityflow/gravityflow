@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_Campfire extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFCampfire';
 
 	public function get_label() {
-		return esc_html__( 'Campfire', 'gravityflow' );
+		return 'Campfire';
 	}
 
 }

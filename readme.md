@@ -1,9 +1,9 @@
 Gravity Flow
 ==============================
 
-[![Build Status](https://travis-ci.org/gravityflow/gravityflow.svg?branch=master)](https://travis-ci.org/gravityflow/gravityflow)
+[![Build Status](https://travis-ci.org/gravityflow/gravityflow.svg?branch=master)](https://travis-ci.org/gravityflow/gravityflow)  [![CircleCI](https://circleci.com/gh/gravityflow/gravityflow.svg?style=svg)](https://circleci.com/gh/gravityflow/gravityflow)
 
-Gravity Flow is a commercial plugin for WordPress which provides a Workflow platform for forms created in Gravity Forms.
+Gravity Flow is a premium plugin for WordPress which provides Workflow automation for forms created in Gravity Forms.
 
 This repository is a development version of Gravity Flow intended to facilitate communication with developers. It is not stable and not intended for installation on production sites.
 
@@ -69,4 +69,4 @@ Thanks to [BrowserStack](https://www.browserstack.com) for automated browser tes
 
 Thank you to all my colleagues at Rocketgenius, Zack Katz (GravityView), Naomi C Bush (Gravity Plus) and Jake Jackson (Gravity PDF) for all their collaboration, advice, support and encouragement.
 
-Copyright 2015-2016 Steven Henty
+Copyright 2015-2017 Steven Henty, S.L.

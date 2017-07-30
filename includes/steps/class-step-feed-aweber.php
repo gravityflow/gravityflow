@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_AWeber extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFAWeber';
 
 	public function get_label() {
-		return esc_html__( 'AWeber', 'gravityflow' );
+		return 'AWeber';
 	}
 	
 }

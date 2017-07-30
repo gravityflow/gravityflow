@@ -1,7 +1,4 @@
-- Added support for unfiltered HTML in the instructions setting for users with the unfiltered_html capability.
-- Added the ability to configure emails to be sent when a User Input step updates the entry and remains in progress and when the step is completed.
-- Added the date field option to the step expiration setting.
-- Fixed an issue with the notification message when the Discussion field merge tag content exceeded the max line length.
-- Fixed an issue with the GravityView integration where the single view doesn't display if an assignee is defined the Advanced Filter criteria.
-- Renamed the User Input step 'Default Status Option' setting to 'Save Progress Option' and changed the setting type from radio buttons to drop down.
-
+Added support for Members version 2.0+; moved the capabilities to a new Gravity Flow group with human readable labels.
+Fixed an issue populating multi-select fields with the existing entry value on the user input step when the field uses the new json storageType.
+Fixed the $original_entry parameter not being passed when the gform_after_update_entry hook is triggered on entry update by the user input step.
+Fixed empty fields being displayed on the user input step when 'show empty fields' was not enabled.

@@ -76,13 +76,13 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 	}
 
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
-		$value = $this->format_discussion_value( $value );
+		$value = $this->format_discussion_value( $raw_value, $format );
 
 		return $value;
 	}
 
 	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
-		$value = $this->format_discussion_value( $value );
+		$value = $this->format_discussion_value( $value, $format );
 
 		return $value;
 	}
@@ -134,6 +134,25 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		$return     = '';
 		$discussion = json_decode( $value, ARRAY_A );
 		if ( is_array( $discussion ) ) {
+
+			if ( $modifiers = $this->get_modifiers() ) {
+				if ( in_array( 'first', $modifiers ) ) {
+					$item = rgar( $discussion, 0 );
+
+					return $this->format_discussion_item( $item, $format, $entry_id );
+				} elseif ( in_array( 'latest', $modifiers ) ) {
+					$item = end( $discussion );
+
+					return $this->format_discussion_item( $item, $format, $entry_id );
+				} else {
+					$limit     = $this->get_limit_modifier();
+					$has_limit = $limit > 0;
+				}
+			} else {
+				$limit     = 0;
+				$has_limit = false;
+			}
+
 			$reverse_comment_order = false;
 
 			/**
@@ -150,33 +169,74 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 				$discussion = array_reverse( $discussion );
 			}
 
-			$timestamp_format = empty( $this->gravityflowDiscussionTimestampFormat ) ? 'd M Y g:i a' : $this->gravityflowDiscussionTimestampFormat;
+			$count = 0;
 
 			foreach ( $discussion as $item ) {
-				$item_datetime = date( 'Y-m-d H:i:s', $item['timestamp'] );
-				$date          = esc_html( GFCommon::format_date( $item_datetime, false, $timestamp_format, false ) );
-				if ( $item['assignee_key'] ) {
-					$assignee     = new Gravity_Flow_Assignee( $item['assignee_key'] );
-					$display_name = $assignee->get_display_name();
-				} else {
-					$display_name = '';
+				if ( $has_limit && $count === $limit ) {
+					break;
 				}
 
-				$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
-				if ( $format == 'html' ) {
-					$content = sprintf( '<div class="gravityflow-dicussion-item-header">
+				$return .= $this->format_discussion_item( $item, $format, $entry_id );
+				$count ++;
+			}
+
+		}
+
+		return $return;
+	}
+
+	/**
+	 * Get the value of the limit modifier, if specified on the merge tag.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @return int The number of comments to return or 0 to return them all.
+	 */
+	public function get_limit_modifier() {
+		$modifiers = shortcode_parse_atts( implode( ' ', $this->get_modifiers() ) );
+		$limit     = rgar( $modifiers, 'limit', 0 );
+
+		return absint( $limit );
+	}
+
+	/**
+	 * Format a single discussion item for output.
+	 *
+	 * @param array    $item     The properties of the item to be processed.
+	 * @param string   $format   The requested format for the value; html or text.
+	 * @param int|null $entry_id The ID of the entry currently being edited or null in other locations.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @return string
+	 */
+	public function format_discussion_item( $item, $format, $entry_id ) {
+		$item_datetime    = date( 'Y-m-d H:i:s', $item['timestamp'] );
+		$timestamp_format = empty( $this->gravityflowDiscussionTimestampFormat ) ? 'd M Y g:i a' : $this->gravityflowDiscussionTimestampFormat;
+		$date             = esc_html( GFCommon::format_date( $item_datetime, false, $timestamp_format, false ) );
+
+		if ( $item['assignee_key'] ) {
+			$assignee     = new Gravity_Flow_Assignee( $item['assignee_key'] );
+			$display_name = $assignee->get_display_name();
+		} else {
+			$display_name = '';
+		}
+
+		$return = '';
+
+		$display_name = apply_filters( 'gravityflowdiscussion_display_name_discussion_field', $display_name, $item, $this );
+		if ( $format == 'html' ) {
+			$content = sprintf( '<div class="gravityflow-dicussion-item-header">
 <span class="gravityflow-dicussion-item-name">%s</span> <span class="gravityflow-dicussion-item-date">%s</span>
 %s</div>
 <div class="gravityflow-dicussion-item-value">
 %s
 </div>', $display_name, $date, $this->get_delete_button( $item['id'], $entry_id ), $this->format_comment_value( $item['value'] ) );
 
-					$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', sanitize_key( $item['id'] ), $content );
-				} elseif ( $format == 'text' ) {
-					$return = $date . ': ' . $display_name . "\n";
-					$return .= $item['value'];
-				}
-			}
+			$return .= sprintf( '<div id="gravityflow-discussion-item-%s" class="gravityflow-discussion-item">%s</div>', sanitize_key( $item['id'] ), $content );
+		} elseif ( $format == 'text' ) {
+			$return = $date . ': ' . $display_name . "\n";
+			$return .= $item['value'];
 		}
 
 		return $return;

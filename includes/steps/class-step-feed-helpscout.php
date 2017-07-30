@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_HelpScout extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFHelpScout';
 
 	public function get_label() {
-		return esc_html__( 'Help Scout', 'gravityflow' );
+		return 'Help Scout';
 	}
 
 	public function get_feed_label( $feed ) {

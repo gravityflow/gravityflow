@@ -33,7 +33,7 @@ $I->selectOption( 'input[name="input_7"]', 'Third Choice' );
 $I->see( '$24.00' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 $I->click( 'Submit' );
-$I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
+$I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 // Login to wp-admin
 $I->loginAsAdmin();
@@ -54,6 +54,6 @@ $I->fillField( 'input[name="input_6"]', '2' );
 $I->click( 'Submit' );
 
 // Approve
-$I->see( '$44.00' );
+$I->waitForText( '$44.00', 3 );
 $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );

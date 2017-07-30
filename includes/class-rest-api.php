@@ -25,10 +25,47 @@ class Gravity_Flow_REST_API {
 		register_rest_route( 'gf/v2', '/entries/(?P<id>\d+)/workflow/(?P<base>[\S]+)', array(
 			'methods' => 'POST',
 			'callback' => array( $this, 'handle_rest_request' ),
+			'permission_callback' => array( $this, 'post_items_permissions_check' ),
 		) );
 	}
 
 	public function handle_rest_request( $request ) {
+		$step = $this->get_current_step( $request );
+
+		if ( ! $step || is_wp_error( $step ) ) {
+			return $step;
+		}
+
+		$entry = $step->get_entry();
+
+		$entry_id = $entry['id'];
+
+		$api = new Gravity_Flow_API( $entry['form_id'] );
+
+		$response = $step->rest_callback( $request );
+
+		$api->process_workflow( $entry_id );
+
+		return $response;
+	}
+
+	/**
+	 * @param WP_REST_Request $request
+	 *
+	 * @return Gravity_Flow_Step|bool|WP_Error
+	 */
+	public function post_items_permissions_check( $request ) {
+
+		$step = $this->get_current_step( $request );
+
+		if ( ! $step || is_wp_error( $step ) ) {
+			return $step;
+		}
+
+		return $step->rest_permission_callback( $request );
+	}
+
+	public function get_current_step( $request ) {
 		$entry_id = $request['id'];
 
 		if ( empty( $entry_id ) ) {
@@ -59,11 +96,7 @@ class Gravity_Flow_REST_API {
 			return new WP_Error( 'base_incorrect', __( 'The entry is not on the expected step.', 'gravityflow' ) );
 		}
 
-		$response = $step->handle_rest_request( $request );
-
-		$api->process_workflow( $entry_id );
-
-		return $response;
+		return $step;
 	}
 }
 

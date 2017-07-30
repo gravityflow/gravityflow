@@ -20,7 +20,7 @@ class Gravity_Flow_Print_Entries {
 		$entry_ids = self::get_entry_ids();
 
 		if ( empty( $entry_ids ) ) {
-			die( esc_html__( 'Form Id and Lead Id are required parameters.', 'gravityflow' ) );
+			die( esc_html__( 'Form ID and Lead ID are required parameters.', 'gravityflow' ) );
 		}
 
 		self::get_header( $entry_ids );
@@ -149,7 +149,7 @@ class Gravity_Flow_Print_Entries {
 	 *
 	 * @param array $entry_ids The IDs of the entries to be included in this printout.
 	 */
-	public function get_header( $entry_ids ) {
+	public static function get_header( $entry_ids ) {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
 		?>

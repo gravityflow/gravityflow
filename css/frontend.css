@@ -186,8 +186,13 @@ table#gravityflow-inbox td a {
     filter: brightness(1.8) grayscale(1) opacity(.5);
 }
 
-.gravityflow-action{
+.gravityflow-action,
+.gravityflow-actions-unlock{
     cursor: pointer;
+    margin-right: 5px;
+}
+
+.gravityflow-actions-lock{
     margin-right: 5px;
 }
 
@@ -204,6 +209,20 @@ table#gravityflow-inbox td a {
 .gravityflow-action-processed{
     cursor: default;
 }
+
+.gravityflow-actions-note-field-container{
+    position:absolute;
+    z-index: 99;
+    text-align: left;
+    background-color: white;
+    border:1px solid silver;
+    padding: 5px;
+
+}
+.gravityflow-actions-note-field-container textarea {
+    width:200px;
+}
+
 
 #gravityflow-no-pending-tasks-container{
 

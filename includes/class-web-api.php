@@ -110,6 +110,8 @@ class Gravity_Flow_Web_API {
 		$capability = apply_filters( 'gravityflow_web_api_capability_post_entries_assignees', 'gravityflow_create_steps' );
 		$this->authorize( $capability );
 
+		$assignee_key = urldecode( $assignee_key );
+
 		if ( empty( $assignee_key ) ) {
 			$this->end( 400, 'Bad request' );
 		}

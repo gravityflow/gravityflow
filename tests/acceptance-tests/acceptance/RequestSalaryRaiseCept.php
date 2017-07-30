@@ -23,7 +23,7 @@ $I->wantTo( 'Test the approval steps' );
 // Submit the form
 $I->amOnPage( '/request-salary-raise' );
 
-$I->see( 'Request salary raise' );
+$I->waitForText( 'Request salary raise', 3 );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 $I->fillField( 'input[name=input_1]', '20%' );
 $I->selectOption( 'select[name=input_2]', 'Third Choice' );
@@ -37,18 +37,18 @@ $I->seeElement( 'div.validation_error' );
 $I->fillField( 'input[name=input_1]', '1234' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 $I->click( 'Submit' );
-$I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
+$I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 // Login to wp-admin
 $I->loginAsAdmin();
-$I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
+$I->waitForText( 'Request salary raise', 3 );
 $I->click( 'Request salary raise' );
 
 // Approve
-$I->seeElement( 'button[value=approved]' );
+$I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
 
 // Send to CEO
@@ -56,5 +56,5 @@ $I->selectOption( 'select[name=gravityflow_admin_action]', 'CEO approval' );
 $I->click( 'Apply' );
 
 // Approve
-$I->seeElement( 'button[value=approved]' );
+$I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );

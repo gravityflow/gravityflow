@@ -53,12 +53,15 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 	}
 
 	public function get_choices( $value ) {
-		$choices = $this->get_users_as_choices( $value );
+		if ( $this->is_form_editor() ) {
+			// Prevent the choices from being stored in the form meta
+			$this->choices = array();
+		}
 
-		return $choices;
+		return parent::get_choices( $value );
 	}
 
-	public function get_users_as_choices( $value ) {
+	public function get_users_as_choices() {
 		$form_id = $this->formId;
 
 		$args = array(
@@ -73,16 +76,7 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 			$account_choices[] = array( 'value' => $account->ID, 'text' => $account->display_name );
 		}
 
-		$account_choices = apply_filters( 'gravityflow_user_field', $account_choices, $form_id, $this );
-
-		if ( ! $this->is_form_editor() ) {
-			// Prevent the choices from being stored in the form meta
-			$this->choices = $account_choices;
-		}
-
-		$choices = GFCommon::get_select_choices( $this, $value );
-
-		return $choices;
+		return apply_filters( 'gravityflow_user_field', $account_choices, $form_id, $this );
 	}
 
 	public function get_value_entry_list( $value, $entry, $field_id, $columns, $form ) {
@@ -137,6 +131,17 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 		parent::sanitize_settings();
 		if ( ! empty( $this->gravityflowUsersRoleFilter ) ) {
 			$this->gravityflowUsersRoleFilter = wp_strip_all_tags( $this->gravityflowUsersRoleFilter );
+		}
+	}
+
+	/**
+	 * Add the users as choices.
+	 *
+	 * @since 1.7.1-dev
+	 */
+	public function post_convert_field() {
+		if ( ! $this->is_form_editor() ) {
+			$this->choices = $this->get_users_as_choices();
 		}
 	}
 }

@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_AgileCRM extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFAgileCRM';
 
 	public function get_label() {
-		return esc_html__( 'Agile CRM', 'gravityflow' );
+		return 'Agile CRM';
 	}
 
 	public function get_icon_url() {

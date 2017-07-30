@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_HipChat extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFHipChat';
 
 	public function get_label() {
-		return esc_html__( 'HipChat', 'gravityflow' );
+		return 'HipChat';
 	}
 
 	public function get_feed_label( $feed ) {

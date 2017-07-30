@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_Batchbook extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFBatchbook';
 
 	public function get_label() {
-		return esc_html__( 'Batchbook', 'gravityflow' );
+		return 'Batchbook';
 	}
 
 	public function get_feed_label( $feed ) {

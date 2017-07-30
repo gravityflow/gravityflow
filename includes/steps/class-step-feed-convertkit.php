@@ -21,7 +21,7 @@ class Gravity_Flow_Step_Feed_ConvertKit extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_slug = 'ckgf';
 
 	public function get_label() {
-		return esc_html__( 'ConvertKit', 'gravityflow' );
+		return 'ConvertKit';
 	}
 
 	public function get_feed_label( $feed ) {

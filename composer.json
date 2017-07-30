@@ -16,10 +16,8 @@
 		"issues": "https://gravityflow.io"
     },
     "require-dev": {
-      "apigen/apigen": "*",
-      "lucatume/wp-browser": "~1.11"
-    },
-	"require": {
-		"codeception/codeception": "^2.2"
-	}
+      "apigen/apigen": "~4.1.2",
+      "lucatume/wp-browser": "1.19.12",
+      "codeception/codeception": "2.2.12"
+    }
 }

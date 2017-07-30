@@ -303,7 +303,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$this->detail_base_url    = $args['detail_base_url'];
 		$this->constraint_filters = $args['constraint_filters'];
 		if ( ! is_array( $args['field_ids'] ) ) {
-			$args['field_ids'] = explode( ',', $args['field_ids'] );
+			$args['field_ids'] = empty( $args['field_ids'] ) ? array() : explode( ',', $args['field_ids'] );
 		}
 		$this->field_ids    = $args['field_ids'];
 		$this->display_all  = $args['display_all'];
@@ -637,6 +637,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$url_entry = esc_url( $url_entry );
 		$label = absint( $item['id'] );
 
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string 'id'
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'id', $item );
+
 		$link = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
 	}
@@ -657,6 +669,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$label = esc_html( $value );
 
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string $column_name
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], $column_name, $item );
+
 		$link = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
 	}
@@ -666,6 +690,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$final_status = rgar( $item, 'workflow_final_status' );
 		$label = empty( $final_status ) ? '' : gravity_flow()->translate_status_label( $final_status );
 		$label = esc_html( $label );
+
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string 'final_status'
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'final_status', $item );
 		$url_entry = esc_url( $url_entry );
 		$link = "<a href='{$url_entry}'>$label</a>";
 
@@ -787,6 +823,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		 */
 		$label = apply_filters( 'gravityflow_status_submitter_name', $label, $item, $form );
 
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string 'created_by'
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'created_by', $item );
+
 		$url_entry = esc_url( $url_entry );
 
 		$link  = "<a href='{$url_entry}'>$label</a>";
@@ -800,6 +848,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$form    = $this->get_form( $form_id );
 
 		$label = esc_html( $form['title'] );
+
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string 'form_id'
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'form_id', $item );
 
 		$url_entry = esc_url( $url_entry );
 
@@ -816,6 +876,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$url_entry = esc_url( $url_entry );
 
 			$label = $step ? esc_html( $step->get_name() ) : '';
+
+			/**
+			 * Allows the field value to be filtered in the status table.
+			 *
+			 * @since 1.7.1
+			 *
+			 * @param string $label The value to be displayed
+			 * @param int $item['form_id'] The Form ID
+			 * @param string 'workflow_step'
+			 * @param array $item The entry array.
+			 */
+			$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'workflow_step', $item );
 			$link  = "<a href='{$url_entry}'>$label</a>";
 			$output = $link;
 		} else {
@@ -836,6 +908,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 		$url_entry = esc_url( $url_entry );
 		$label = GFCommon::format_date( $item['date_created'] );
+
+		/**
+		 * Allows the field value to be filtered in the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param string $label The value to be displayed
+		 * @param int $item['form_id'] The Form ID
+		 * @param string 'date_created'
+		 * @param array $item The entry array.
+		 */
+		$label = apply_filters( 'gravityflow_field_value_status_table', $label, $item['form_id'], 'date_created', $item );
 		$link  = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
 	}
@@ -847,6 +931,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$last_updated = date( 'Y-m-d H:i:s', $item['workflow_timestamp'] );
 			$url_entry = $this->detail_base_url . sprintf( '&id=%d&lid=%d', $item['form_id'], $item['id'] );
 			$last_updated = esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
+
+			/**
+			 * Allows the field value to be filtered in the status table.
+			 *
+			 * @since 1.7.1
+			 *
+			 * @param string $label The value to be displayed
+			 * @param int $item['form_id'] The Form ID
+			 * @param string 'workflow_timestamp'
+			 * @param array $item The entry array.
+			 */
+			$last_updated = apply_filters( 'gravityflow_field_value_status_table', $last_updated, $item['form_id'], 'workflow_timestamp', $item );
 			$url_entry = esc_url( $url_entry );
 			$label  = "<a href='{$url_entry}'>$last_updated</a>";
 		}
@@ -952,6 +1048,17 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$columns['workflow_timestamp'] = esc_html__( 'Last Updated', 'gravityflow' );
 		}
 
+		/**
+		 * Allows the columns to be filtered for the status table.
+		 *
+		 * @since 1.7.1
+		 *
+		 * @param array $columns The columns to be filtered
+		 * @param array $args The array of args for this status table.
+		 * @param WP_List_Table $this The current WP_List_Table object.
+		 */
+		$columns = apply_filters( 'gravityflow_columns_status_table', $columns, $args, $this );
+
 		return $columns;
 	}
 
@@ -1051,15 +1158,28 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$end_clause     = $this->get_end_clause( $args );
 		$user_id_clause = $this->get_user_id_clause();
 
-		$lead_table = GFFormsModel::get_lead_table_name();
-		$meta_table = GFFormsModel::get_lead_meta_table_name();
+		if ( version_compare( $this->get_gravityforms_db_version(), '2.3-dev-1', '<' ) ) {
+			$lead_table = GFFormsModel::get_lead_table_name();
+			$meta_table = GFFormsModel::get_lead_meta_table_name();
 
-		$sql     = "SELECT
+			$sql     = "SELECT
 		(SELECT count(distinct(l.id)) FROM $lead_table l WHERE l.status='active' $form_clause $start_clause $end_clause $user_id_clause) as total,
 		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='pending' $form_clause $start_clause $end_clause $user_id_clause) as pending,
 		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value NOT IN('pending', 'cancelled') $form_clause $start_clause $end_clause $user_id_clause) as complete,
 		(SELECT count(distinct(l.id)) FROM $lead_table l INNER JOIN  $meta_table m ON l.id = m.lead_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='cancelled' $form_clause $start_clause $end_clause $user_id_clause) as cancelled
 		";
+		} else {
+			$entry_table = GFFormsModel::get_entry_table_name();
+			$meta_table = GFFormsModel::get_entry_meta_table_name();
+
+			$sql     = "SELECT
+		(SELECT count(distinct(l.id)) FROM $entry_table l WHERE l.status='active' $form_clause $start_clause $end_clause $user_id_clause) as total,
+		(SELECT count(distinct(l.id)) FROM $entry_table l INNER JOIN  $meta_table m ON l.id = m.entry_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='pending' $form_clause $start_clause $end_clause $user_id_clause) as pending,
+		(SELECT count(distinct(l.id)) FROM $entry_table l INNER JOIN  $meta_table m ON l.id = m.entry_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value NOT IN('pending', 'cancelled') $form_clause $start_clause $end_clause $user_id_clause) as complete,
+		(SELECT count(distinct(l.id)) FROM $entry_table l INNER JOIN  $meta_table m ON l.id = m.entry_id WHERE l.status='active' AND meta_key='workflow_final_status' AND meta_value='cancelled' $form_clause $start_clause $end_clause $user_id_clause) as cancelled
+		";
+		}
+
 		$results = $wpdb->get_results( $sql );
 
 		return $results[0];
@@ -1625,5 +1745,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$this->_forms[ $form_id ] = GFAPI::get_form( $form_id );
 		return $this->_forms[ $form_id ];
+	}
+
+	private function get_gravityforms_db_version() {
+		return Gravity_Flow_Common::get_gravityforms_db_version();
 	}
 } //class

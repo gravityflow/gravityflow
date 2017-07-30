@@ -196,8 +196,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$step_status = 'success';
 		}
 
-		$note = esc_html__( 'Webhook sent. Url: ' . $url );
-		$this->add_note( $note, 0, 'webhook' );
+		$this->add_note( sprintf( esc_html__( 'Webhook sent. URL: %s', 'gravityflow' ), $url ) );
 
 		do_action( 'gravityflow_post_webhook', $response, $args, $entry, $this );
 

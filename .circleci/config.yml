@@ -1,0 +1,23 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    parallelism: 4
+    working_directory: ~/gravityflow
+    steps:
+      - checkout
+      - run:
+          name: Split the tests
+          command: |
+            mkdir ~/gravityflow/tests/acceptance-tests/acceptance/ci-split-tests
+            TESTFILES=$(circleci tests glob ~/gravityflow/tests/acceptance-tests/acceptance/[^_]*.php | circleci tests split --split-by=timings)
+            echo ${TESTFILES} | xargs -n 1 echo
+            cp ${TESTFILES} ~/gravityflow/tests/acceptance-tests/acceptance/ci-split-tests
+      - run:
+          name: Run acceptance tests
+          command: |
+            docker-compose run --rm codeception run --html --xml -vvv -o "groups: ci-split-tests: [tests/acceptance-tests/acceptance/ci-split-tests]" -g ci-split-tests
+      - store_artifacts:
+          path: ~/gravityflow/tests/acceptance-tests/_output
+      - store_test_results:
+          path: ~/gravityflow/tests/acceptance-tests/_output

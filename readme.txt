@@ -2,7 +2,7 @@
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
 Requires at least: 4.2
-Tested up to: 4.7
+Tested up to: 4.8
 License: GPL-3.0+
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -54,6 +54,45 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 1.8.0 =
+- Added the workflow note field to the quick actions in the inbox. The note field is only displayed when required by the step settings.
+- Added support for editable fields on the User Input step with calculations based on non-editable and/or non-display fields.
+- Added the gravityflow_columns_status_table filter to allow the columns to be filtered on the status table.
+- Added the gravityflow_field_value_status_table filter to allow the field values to be filtered on the status table.
+- Added support for first, latest, and limit modifiers on the Discussion field merge tag e.g. {label:2:first}, {label:2:latest}, and {label:2:limit=3}.
+- Added a class name to the entry detail table for the current step.
+- Added support for using the {workflow_entry_link}, {workflow_entry_url}, {workflow_inbox_link}, {workflow_inbox_url}, {workflow_note} and {assignees} merge tags in Gravity Forms notifications.
+- Added "Cancelled" to the final status entry meta options available in entry filters.
+- Updated the note for expired steps to include the step name.
+- Updated step conditional logic to support rules based on entry meta and properties.
+- Updated the User and Role type fields so the step conditional logic rule value will use the choice drop down instead of text input.
+- Updated the {workflow_note} merge tag to support the optional step_id, display_name, and display_date modifiers e.g. {workflow_note: step_id=5 display_name=true display_date=true}.
+- Fixed an issue where the {workflow_note} merge tag would not return the note when the merge tag was not processed immediately after the note was added.
+- Fixed some strings for translation.
+- Fixed a php notice when printing entries.
+- Fixed Discussion field merge tag not returning content when used in the step instructions.
+- API: Fixed an issue with the add-on slug which prevents feed interception for third party add-ons.
+- Fixed a JS error on the entry detail page when a User Input step has an editable Chained Select field and conditional logic is not enabled.
+
+
+= 1.7 =
+- Added support for unfiltered HTML in the instructions setting for users with the unfiltered_html capability.
+- Added the ability to configure emails to be sent when a User Input step updates the entry and remains in progress and when the step is completed.
+- Added the date field option to the step expiration setting.
+- Added the $field->gravityflow_is_editable and $field->gravityflow_is_display_field properties to provide context to Gravity Forms add-ons that don't extend GF_Field for custom fields.
+- Added new functionality to the Sliced Invoices step:
+	- The Assign To, Assignee Email, Instructions, Display Fields, and Expiration settings.
+	- The Step Completion setting allowing completion of the step to be delayed until the invoice is paid.
+	- When the step is pending invoice payment the invoice details will be displayed in the workflow detail box on the inbox detail page.
+- Fixed an issue with the notification message when the Discussion field merge tag content exceeded the max line length.
+- Fixed an issue with the GravityView integration where the single view doesn't display if an assignee is defined the Advanced Filter criteria.
+- Updated the "no assignees" note from "not required" which could have been confusing in some situations.
+- Updated the feed configuration page for the Sliced Invoices & Gravity Forms Add-On:
+	- Added settings for the default status of the invoice/quote.
+	- Updated the choices for the Line Items map field to only include List type fields and the option to use the entry order summary.
+- Renamed the User Input step 'Default Status Option' setting to 'Save Progress Option' and changed the setting type from radio buttons to drop down.
+
 
 = 1.6.1 =
 

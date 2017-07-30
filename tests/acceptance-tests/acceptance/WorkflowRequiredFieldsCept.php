@@ -41,17 +41,17 @@ $I->see( 'Instructions: please review the values in the fields below and click o
 $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
 
-$I->see( 'A note is required' );
+$I->waitForText( 'A note is required', 3 );
 $I->fillField( 'textarea[name="gravityflow_note"]', 'First note added' );
 $I->click( 'button[value=approved]' );
 
-$I->see( 'Editable instructions.' );
+$I->waitForText( 'Editable instructions.', 3 );
 $I->seeElement( 'input[name=gravityflow_status]' );
 $I->click( 'Update' );
 
-$I->see( 'A note is required' );
+$I->waitForText( 'A note is required', 3 );
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Second note added' );
 $I->click( 'Update' );
 $I->selectOption( 'input[name="gravityflow_status"]', 'Complete' );
 $I->click( 'Update' );
-$I->see( 'Status: Approved' );
+$I->waitForText( 'Status: Approved', 3 );

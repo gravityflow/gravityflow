@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_ActiveCampaign extends Gravity_Flow_Step_Feed_Add_O
 	protected $_class_name = 'GFActiveCampaign';
 
 	public function get_label() {
-		return esc_html__( 'ActiveCampaign', 'gravityflow' );
+		return 'ActiveCampaign';
 	}
 
 	public function get_feed_label( $feed ) {

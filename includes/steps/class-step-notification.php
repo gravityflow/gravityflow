@@ -89,8 +89,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 				GFCommon::send_notification( $notification, $form, $entry );
 				$this->log_debug( __METHOD__ . "(): Notification sent (#{$notification_id} - {$notification['name']})." );
 
-				$note = sprintf( esc_html__( 'Sent Notification: %s', 'gravityflow' ), $notification['name'] );
-				$this->add_note( $note, 0, $this->get_type() );
+				$this->add_note( sprintf( esc_html__( 'Sent Notification: %s', 'gravityflow' ), $notification['name'] ) );
 			}
 		}
 
@@ -116,24 +115,8 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		$this->send_notifications( $assignees, $notification );
 
 		$note = esc_html__( 'Sent Notification: ', 'gravityflow' ) . $this->get_name();
-		$this->add_note( $note, 0, $this->get_type() );
+		$this->add_note( $note );
 
-	}
-
-	/**
-	 * Replace the workflow_note merge tag and the tags in the base step class.
-	 *
-	 * @param string $text The text with merge tags.
-	 * @param Gravity_Flow_Assignee $assignee
-	 *
-	 * @return mixed
-	 */
-	public function replace_variables( $text, $assignee ) {
-		$text    = parent::replace_variables( $text, $assignee );
-		$comment = rgpost( 'gravityflow_note' );
-		$text    = str_replace( '{workflow_note}', $comment, $text );
-
-		return $text;
 	}
 
 	/**

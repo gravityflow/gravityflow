@@ -19,9 +19,9 @@ class Gravity_Flow_Common {
 	/**
 	 * Returns a URl to a workflow page.
 	 *
-	 * @param int|null $page_id
+	 * @param int|null              $page_id
 	 * @param Gravity_Flow_Assignee $assignee
-	 * @param string $access_token
+	 * @param string                $access_token
 	 *
 	 * @return string
 	 */
@@ -51,8 +51,8 @@ class Gravity_Flow_Common {
 	/**
 	 * If form and field ids have bee specified for display on the inbox/status page add the columns.
 	 *
-	 * @param array $columns The inbox/status page columns.
-	 * @param int $form_id The form ID of the entries to be displayed or 0 to display entries from all forms.
+	 * @param array $columns   The inbox/status page columns.
+	 * @param int   $form_id   The form ID of the entries to be displayed or 0 to display entries from all forms.
 	 * @param array $field_ids The field IDs or entry properties/meta to be displayed.
 	 *
 	 * @return array
@@ -77,7 +77,7 @@ class Gravity_Flow_Common {
 					$columns[ $id ] = __( 'Payment Status', 'gravityflow' );
 					break;
 				case 'transaction_id' :
-					$columns[ $id ] = __( 'Transaction Id', 'gravityflow' );
+					$columns[ $id ] = __( 'Transaction ID', 'gravityflow' );
 					break;
 				case 'payment_date' :
 					$columns[ $id ] = __( 'Payment Date', 'gravityflow' );
@@ -135,4 +135,177 @@ class Gravity_Flow_Common {
 
 		return $choices;
 	}
+
+	/**
+	 * Format the date/time or timestamp for display.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param int|string $date_or_timestamp The unix timestamp or string in the Y-m-d H:i:s format to be formatted.
+	 * @param string     $format            The format the date/time should be returned in. Default is d M Y g:i a.
+	 * @param bool       $is_human          Indicates if the date/time should be returned in a human readable format such as "1 hour ago". Default is false.
+	 * @param bool       $include_time      Indicates if the time should be included in the returned string. Default is false.
+	 *
+	 * @return string
+	 */
+	public static function format_date( $date_or_timestamp, $format = 'd M Y g:i a', $is_human = false, $include_time = false ) {
+		$date_time = is_integer( $date_or_timestamp ) ? date( 'Y-m-d H:i:s', $date_or_timestamp ) : $date_or_timestamp;
+
+		return GFCommon::format_date( $date_time, $is_human, $format, $include_time );
+	}
+
+	/**
+	 * Get the 'workflow_notes' entry meta item.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param int  $entry_id   The ID of the entry the notes are to be retrieved for.
+	 * @param bool $for_output Should the notes be ordered newest to oldest? Default is false.
+	 *
+	 * @return array
+	 */
+	public static function get_workflow_notes( $entry_id, $for_output = false ) {
+		$notes_json  = gform_get_meta( $entry_id, 'workflow_notes' );
+		$notes_array = empty( $notes_json ) ? array() : json_decode( $notes_json, true );
+
+		if ( $for_output && ! empty( $notes_array ) ) {
+			$notes_array = array_reverse( $notes_array );
+		}
+
+		return $notes_array;
+	}
+
+	/**
+	 * Add a user submitted note to the 'workflow_notes' entry meta item.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param string $note     The note to be added.
+	 * @param int    $entry_id The ID of the entry the note is to be added to.
+	 * @param int    $step_id  The ID of the current step.
+	 */
+	public static function add_workflow_note( $note, $entry_id, $step_id ) {
+		$notes = self::get_workflow_notes( $entry_id );
+
+		$notes[] = array(
+			'id'           => uniqid( '', true ),
+			'step_id'      => $step_id,
+			'assignee_key' => gravity_flow()->get_current_user_assignee_key(),
+			'timestamp'    => time(),
+			'value'        => $note,
+		);
+
+		gform_update_meta( $entry_id, 'workflow_notes', json_encode( $notes ) );
+	}
+
+	/**
+	 * Get the timeline notes for the current entry.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param array $entry The current entry.
+	 *
+	 * @return array
+	 */
+	public static function get_timeline_notes( $entry ) {
+		$notes = RGFormsModel::get_lead_notes( $entry['id'] );
+
+		foreach ( $notes as $key => $note ) {
+			if ( $note->note_type !== 'gravityflow' ) {
+				unset( $notes[ $key ] );
+			}
+		}
+
+		reset( $notes );
+
+		array_unshift( $notes, self::get_initial_note( $entry ) );
+
+		$notes = array_reverse( $notes );
+
+		return $notes;
+	}
+
+	/**
+	 * Get the Workflow Submitted note.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param array $entry The current entry.
+	 *
+	 * @return object
+	 */
+	public static function get_initial_note( $entry ) {
+		$initial_note               = new stdClass();
+		$initial_note->id           = 0;
+		$initial_note->date_created = $entry['date_created'];
+		$initial_note->value        = esc_html__( 'Workflow Submitted', 'gravityflow' );
+		$initial_note->user_id      = $entry['created_by'];
+		$user                       = get_user_by( 'id', $entry['created_by'] );
+		$initial_note->user_name    = $user ? $user->display_name : $entry['ip'];
+
+		return $initial_note;
+	}
+
+	/**
+	 * Get the step for the current timeline note.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param object $note The note properties.
+	 *
+	 * @return bool|Gravity_Flow_Step
+	 */
+	public static function get_timeline_note_step( $note ) {
+		$step = empty( $note->user_id ) ? Gravity_Flow_Steps::get( $note->user_name ) : false;
+
+		return $step;
+	}
+
+	/**
+	 * Get the display name for the current timeline note.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param object                 $note The note properties.
+	 * @param bool|Gravity_Flow_Step $step The step or false if not available.
+	 *
+	 * @return string
+	 */
+	public static function get_timeline_note_display_name( $note, $step ) {
+		if ( empty( $note->user_id ) ) {
+			if ( $note->user_name !== 'gravityflow' && $step ) {
+				$display_name = $step->get_label();
+			} else {
+				$display_name = gravity_flow()->translate_navigation_label( 'Workflow' );
+			}
+		} else {
+			$display_name = $note->user_name;
+		}
+
+		return $display_name;
+	}
+
+	public static function get_gravityforms_db_version() {
+
+		if ( method_exists( 'GFFormsModel', 'get_database_version' ) ) {
+			$db_version = GFFormsModel::get_database_version();
+		} else {
+			$db_version = GFForms::$version;
+		}
+
+		return $db_version;
+	}
+
+	public static function get_entry_table_name() {
+		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_table_name() : GFFormsModel::get_entry_table_name();
+	}
+
+	public static function get_entry_meta_table_name() {
+		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_meta_table_name() : GFFormsModel::get_entry_meta_table_name();
+	}
+
+	public static function get_entry_id_column_name() {
+		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? 'lead_id' : 'entry_id';
+	}
+
 }

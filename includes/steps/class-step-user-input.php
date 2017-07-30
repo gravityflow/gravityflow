@@ -54,6 +54,24 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					'type'     => 'editable_fields',
 				),
 				$settings_api->get_setting_assignee_routing(),
+				array(
+					'id'            => 'assignee_policy',
+					'name'          => 'assignee_policy',
+					'label'         => __( 'Assignee Policy', 'gravityflow' ),
+					'tooltip'       => __( 'Define how this step should be processed. If all assignees must complete this step then the entry will require input from every assignee before the step can be completed. If the step is assigned to a role only one user in that role needs to complete the step.', 'gravityflow' ),
+					'type'          => 'radio',
+					'default_value' => 'all',
+					'choices'       => array(
+						array(
+							'label' => __( 'Only one assignee is required to complete the step', 'gravityflow' ),
+							'value' => 'any',
+						),
+						array(
+							'label' => __( 'All assignees must complete this step', 'gravityflow' ),
+							'value' => 'all',
+						),
+					),
+				),
 			),
 		);
 
@@ -123,24 +141,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 						),
 					),
 					'tooltip' => esc_html__( 'Fields and Sections support dynamic conditional logic. Pages do not support dynamic conditional logic so they will only be shown or hidden when the page loads.', 'gravityflow' ),
-				),
-			),
-			array(
-				'id'            => 'assignee_policy',
-				'name'          => 'assignee_policy',
-				'label'         => __( 'Assignee Policy', 'gravityflow' ),
-				'tooltip'       => __( 'Define how this step should be processed. If all assignees must complete this step then the entry will require input from every assignee before the step can be completed. If the step is assigned to a role only one user in that role needs to complete the step.', 'gravityflow' ),
-				'type'          => 'radio',
-				'default_value' => 'all',
-				'choices'       => array(
-					array(
-						'label' => __( 'At least one assignee must complete this step', 'gravityflow' ),
-						'value' => 'any',
-					),
-					array(
-						'label' => __( 'All assignees must complete this step', 'gravityflow' ),
-						'value' => 'all',
-					),
 				),
 			),
 			$settings_api->get_setting_instructions(),
@@ -238,7 +238,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		foreach ( $assignee_details as $assignee ) {
 			$user_status = $assignee->get_status();
 
-			if ( $this->type == 'select' && $this->assignee_policy == 'any' ) {
+			if ( $this->assignee_policy == 'any' ) {
 				if ( $user_status == 'complete' ) {
 					$step_status = 'complete';
 					break;
@@ -303,7 +303,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		$form_id = $form['id'];
 
-		if ( isset( $_POST['gforms_save_entry'] ) && check_admin_referer( 'gforms_save_entry', 'gforms_save_entry' ) ) {
+		if ( isset( $_POST['gforms_save_entry'] ) && rgpost( 'step_id' ) == $this->get_id() && check_admin_referer( 'gforms_save_entry', 'gforms_save_entry' ) ) {
 
 			$new_status = rgpost( 'gravityflow_status' );
 
@@ -333,12 +333,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			$previous_assignees = $this->get_assignees();
 
+			$original_entry = $entry;
+
 			$this->save_entry( $form, $entry, $editable_fields );
 
 			remove_action( 'gform_after_update_entry', array( gravity_flow(), 'filter_after_update_entry' ) );
 
-			do_action( 'gform_after_update_entry', $form, $entry['id'] );
-			do_action( "gform_after_update_entry_{$form['id']}", $form, $entry['id'] );
+			do_action( 'gform_after_update_entry', $form, $entry['id'], $original_entry );
+			do_action( "gform_after_update_entry_{$form['id']}", $form, $entry['id'], $original_entry );
 
 			$entry = GFFormsModel::get_lead( $entry['id'] );
 			GFFormsModel::set_entry_meta( $entry, $form );
@@ -468,15 +470,15 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$note_message = __( 'Entry updated and marked complete.', 'gravityflow' );
 			if ( $this->confirmation_messageEnable ) {
 				$feedback = $this->confirmation_messageValue;
-				$feedback = GFCommon::replace_variables( $feedback, $form, $this->get_entry(), false, true, true, 'html' );
 				$feedback = $this->replace_variables( $feedback, $assignee );
+				$feedback = GFCommon::replace_variables( $feedback, $form, $this->get_entry(), false, true, true, 'html' );
 				$feedback = do_shortcode( $feedback );
 				$feedback = wp_kses_post( $feedback );
 			} else {
 				$feedback = $note_message;
 			}
 		} else {
-			$feedback = esc_html__( 'Entry updated - in progress.', 'gravityflow' );
+			$feedback     = esc_html__( 'Entry updated - in progress.', 'gravityflow' );
 			$note_message = $feedback;
 		}
 
@@ -492,13 +494,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		$feedback = apply_filters( 'gravityflow_feedback_message_user_input', $feedback, $new_status, $assignee, $form, $this );
 
 		$note = sprintf( '%s: %s', $this->get_name(), $note_message );
-
-		$user_note = rgpost( 'gravityflow_note' );
-		if ( ! empty( $user_note ) ) {
-			$note .= sprintf( "\n%s: %s", esc_html__( 'Note', 'gravityflow' ), $user_note );
-		}
-
-		$this->add_note( $note );
+		$this->add_note( $note . $this->maybe_add_user_note(), true );
 
 		$status = $this->evaluate_status();
 		$this->update_step_status( $status );
@@ -1021,11 +1017,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					}
 					foreach ( $inputs as $input ) {
 						$this->save_input( $form, $calculation_field, $lead, $input['id'] );
-						GFFormsModel::refresh_lead_field_value( $lead['id'], $input['id'] );
 					}
 				} else {
 					$this->save_input( $form, $calculation_field, $lead, $calculation_field->id );
-					GFFormsModel::refresh_lead_field_value( $lead['id'], $calculation_field->id );
 				}
 			}
 		}
@@ -1037,7 +1031,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$this->log_debug( __METHOD__ . '(): Saving total fields.' );
 			foreach ( $total_fields as $total_field ) {
 				$this->save_input( $form, $total_field, $lead, $total_field->id );
-				GFFormsModel::refresh_lead_field_value( $lead['id'], $total_field->id );
 			}
 		}
 	}
@@ -1112,22 +1105,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Replace the workflow_note merge tag and the tags in the base step class.
-	 *
-	 * @param string $text The text with merge tags.
-	 * @param Gravity_Flow_Assignee $assignee
-	 *
-	 * @return mixed
-	 */
-	public function replace_variables( $text, $assignee ) {
-		$text    = parent::replace_variables( $text, $assignee );
-		$comment = rgpost( 'gravityflow_note' );
-		$text    = str_replace( '{workflow_note}', $comment, $text );
-
-		return $text;
 	}
 
 	/**

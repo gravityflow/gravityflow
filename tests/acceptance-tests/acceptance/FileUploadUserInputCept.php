@@ -25,10 +25,11 @@ $I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'File Upload User Input' );
 $I->attachFile( 'input[name=input_2]', 'gravityflow-logo.png' );
 $I->click( 'Submit' );
-$I->seeElement( 'div.gravityflow_validation_error' );
+$I->waitForElement( 'div.gravityflow_validation_error', 3 );
 
 $I->selectOption( 'input[name=input_3]', 'Second Choice' );
 $I->click( 'Submit' );
+$I->waitForText( 'gravityflow-logo.png', 3 );
 $I->seeLink( 'gravityflow-logo.png' );
 
 

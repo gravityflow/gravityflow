@@ -77,7 +77,7 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 	function validate( $posted_values ) {
 		$valid = true;
 		if ( $this->background_updates == 'disabled' && empty( $this->accept_terms ) ) {
-			$this->set_field_validation_result( 'accept_terms', esc_html__( 'Please accept the terms.' ) );
+			$this->set_field_validation_result( 'accept_terms', esc_html__( 'Please accept the terms.', 'gravityflow' ) );
 			$valid = false;
 		}
 

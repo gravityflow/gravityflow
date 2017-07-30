@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_Dropbox extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFDropbox';
 
 	public function get_label() {
-		return esc_html__( 'Dropbox', 'gravityflow' );
+		return 'Dropbox';
 	}
 
 	public function get_icon_url() {

@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_Breeze extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GF_Breeze';
 
 	public function get_label() {
-		return esc_html__( 'Breeze', 'gravityflow' );
+		return 'Breeze';
 	}
 
 	public function get_icon_url() {

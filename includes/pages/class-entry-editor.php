@@ -71,6 +71,15 @@ class Gravity_Flow_Entry_Editor {
 	private $_display_fields = array();
 
 	/**
+	 * An array of field IDs required for use with calculations.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @var array
+	 */
+	private $_calculation_dependencies = array();
+
+	/**
 	 * The content to be displayed for the display fields.
 	 *
 	 * @var array
@@ -200,6 +209,8 @@ class Gravity_Flow_Entry_Editor {
 				$field->conditionalLogicFields = $conditional_logic_fields;
 			}
 
+			$field->gravityflow_is_display_field = $this->is_display_field( $field );
+
 			// Remove unneeded fields from the form to prevent JS errors resulting from scripts expecting fields to be present and visible.
 			if ( $this->can_remove_field( $field ) ) {
 				continue;
@@ -227,8 +238,11 @@ class Gravity_Flow_Entry_Editor {
 
 				$field->description = null;
 				$field->maxLength   = null;
-			} elseif ( ! $this->_has_editable_product_field && $is_product_field && $field->type != 'total' ) {
-				$this->_has_editable_product_field = true;
+			} else {
+				$field->gravityflow_is_editable = true;
+				if ( ! $this->_has_editable_product_field && $is_product_field && $field->type != 'total' ) {
+					$this->_has_editable_product_field = true;
+				}
 			}
 
 			if ( empty( $field->label ) ) {
@@ -267,6 +281,7 @@ class Gravity_Flow_Entry_Editor {
 
 		$dynamic_conditional_logic_enabled = $this->_is_dynamic_conditional_logic_enabled;
 
+		/* @var GF_Field $field */
 		foreach ( $form['fields'] as $key => $field ) {
 			if ( $field->type == 'page' ) {
 				unset( $form['fields'][ $key ] );
@@ -274,6 +289,10 @@ class Gravity_Flow_Entry_Editor {
 			}
 
 			$is_applicable_field = $this->is_editable_field( $field );
+
+			if ( $is_applicable_field && $field->has_calculation() ) {
+				$this->set_calculation_dependencies( $field->calculationFormula );
+			}
 
 			if ( ! $is_applicable_field ) {
 				// Populate the $_display_fields array.
@@ -291,6 +310,44 @@ class Gravity_Flow_Entry_Editor {
 	}
 
 	/**
+	 * Add the IDs of any fields in the formula to the $_calculation_dependencies array.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param string $formula The calculation formula to be evaluated.
+	 */
+	public function set_calculation_dependencies( $formula ) {
+		if ( empty( $formula ) ) {
+			return;
+		}
+
+		preg_match_all( '/{[^{]*?:(\d+).*?}/mi', $formula, $matches, PREG_SET_ORDER );
+		if ( ! empty( $matches ) ) {
+			foreach ( $matches as $match ) {
+				$field_id = rgar( $match, 1 );
+				if ( $field_id && ! $this->is_calculation_dependency( $field_id ) ) {
+					$this->_calculation_dependencies[] = $field_id;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Checks whether a field is required for calculations.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param GF_Field|string $field The field object or field ID to be checked.
+	 *
+	 * @return bool
+	 */
+	public function is_calculation_dependency( $field ) {
+		$field_id = is_object( $field ) ? $field->id : $field;
+
+		return in_array( $field_id, $this->_calculation_dependencies );
+	}
+
+	/**
 	 * Determines if the field can be removed from the form object.
 	 *
 	 * Fields involved in conditional logic must always be added to the form.
@@ -300,7 +357,7 @@ class Gravity_Flow_Entry_Editor {
 	 * @return bool
 	 */
 	public function can_remove_field( $field ) {
-		$can_remove_field = ! ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) ) && empty( $field->conditionalLogicFields );
+		$can_remove_field = ! ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) || $this->is_calculation_dependency( $field ) ) && empty( $field->conditionalLogicFields );
 
 		return $can_remove_field;
 	}
@@ -335,6 +392,10 @@ class Gravity_Flow_Entry_Editor {
 			if ( $field->get_input_type() == 'email' && $field->emailConfirmEnabled ) {
 				$_POST[ 'input_' . $field->id . '_2' ] = $value;
 			}
+
+			if ( $field->get_input_type() == 'multiselect' && $field->storageType === 'json' ) {
+				$value = json_decode( $value, true );
+			}
 		}
 
 		if ( $field->get_input_type() == 'fileupload' ) {
@@ -345,6 +406,18 @@ class Gravity_Flow_Entry_Editor {
 
 		$html = $field->get_field_input( $this->form, $value, $this->entry );
 		$html .= $this->maybe_get_coupon_script( $field );
+
+		if ( $field->type === 'chainedselect' && function_exists( 'gf_chained_selects' ) ) {
+			if ( ! wp_script_is( 'gform_chained_selects' ) ) {
+				wp_enqueue_script( 'gform_chained_selects' );
+				gf_chained_selects()->localize_scripts();
+			}
+
+			if ( ! $this->_is_dynamic_conditional_logic_enabled && wp_script_is( 'gform_conditional_logic' ) ) {
+				$script = "if ( typeof window.gf_form_conditional_logic === 'undefined' ) { window.gf_form_conditional_logic = []; }";
+				GFFormDisplay::add_init_script( $field->formId, 'conditional_logic', GFFormDisplay::ON_PAGE_RENDER, $script );
+			}
+		}
 
 		return $html;
 	}
@@ -410,18 +483,19 @@ class Gravity_Flow_Entry_Editor {
 
 		$value = RGFormsModel::get_lead_field_value( $this->entry, $field );
 
-		$dynamic_conditional_logic_enabled = $this->_is_dynamic_conditional_logic_enabled;
+		$conditional_logic_dependency = $this->_is_dynamic_conditional_logic_enabled && ! empty( $field->conditionalLogicFields );
 
-		if ( $dynamic_conditional_logic_enabled ) {
-			if ( ! empty( $field->conditionalLogicFields ) ) {
-				$field_input = $field->get_field_input( $this->form, $value, $this->entry );
-				$html        = '<div style="display:none;">' . $field_input . '</div>';
-			}
+		if ( $conditional_logic_dependency || $this->is_calculation_dependency( $field ) ) {
+			$html = $field->get_field_input( $this->form, $value, $this->entry );
 		}
 
 		if ( ! $this->is_display_field( $field ) ) {
 
 			return $html;
+		}
+
+		if ( $html ) {
+			$html = '<div style="display:none;">' . $html . '</div>';
 		}
 
 		$value = $this->maybe_get_product_calculation_value( $value, $field );
@@ -635,7 +709,7 @@ class Gravity_Flow_Entry_Editor {
 		}
 
 		if ( $this->is_hidden_field( $field ) ) {
-			$field_container = sprintf( '<li style="display:none;">%s</li>', $this->_non_editable_field_content[ $field->id ] );
+			$field_container = sprintf( '<li id="field_%s_%s" style="display:none;">%s</li>', $field->formId, $field->id, $this->_non_editable_field_content[ $field->id ] );
 		}
 
 		return $field_container;

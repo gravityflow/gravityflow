@@ -21,7 +21,7 @@ class Gravity_Flow_Step_Feed_Drip extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_addon_instance = null;
 
 	public function get_label() {
-		return esc_html__( 'Drip', 'gravityflow' );
+		return 'Drip';
 	}
 
 	public function get_icon_url() {

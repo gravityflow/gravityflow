@@ -20,7 +20,7 @@ class Gravity_Flow_Step_Feed_CleverReach extends Gravity_Flow_Step_Feed_Add_On {
 	protected $_class_name = 'GFCleverReach';
 
 	public function get_label() {
-		return esc_html__( 'CleverReach', 'gravityflow' );
+		return 'CleverReach';
 	}
 
 	public function get_feed_label( $feed ) {
