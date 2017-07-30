@@ -18,3 +18,4 @@ tmp/
 .DS_Store
 tests/_output/*
 .DS_Store
+.env
