@@ -929,6 +929,9 @@ PRIMARY KEY  (id)
 
 			foreach ( $step_classes as $step_class ) {
 				$type = $step_class->get_type();
+				if ( is_callable( array( $step_class, 'process_auth' ) ) ) {
+					$step_class->process_auth();
+				}
 				$step_settings = $step_class->get_settings();
 				$step_settings['id'] = 'gravityflow-step-settings-' . $type;
 				$step_settings['class'] = 'gravityflow-step-settings';

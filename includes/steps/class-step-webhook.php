@@ -26,6 +26,8 @@ if ( ! class_exists( 'GFForms' ) ) {
  */
 class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	public $_step_type = 'webhook';
+	protected $temporary_credentials = array();
+	protected $oauth1_client;
 
 	public function get_label() {
 		return esc_html__( 'Outgoing Webhook', 'gravityflow' );
@@ -35,8 +37,86 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		return '<i class="fa fa-external-link"></i>';
 	}
 
-	public function get_settings() {
+	/**
+	 * Handles OAuth1 authentication
+	 * !Note - the callback_url in the client constructor must be registered in the WP-Api application callback_url
+	 * So for the docs the current web address of the step setting form is taken and used to setup the application and put into
+	 * the callback url field.
+	 * @return void
+	 */ 
+	
+	public function process_auth() {
+		if ( $this->get_setting( 'authentication' ) != 'oauth1' ) {
+			return;
+		}
+		session_start();
+		$consumer_key = $this->get_setting( 'oauth1_consumer_key' );
+		$consumer_secret = $this->get_setting( 'oauth1_consumer_secret' );
+		$url = $this->get_setting( 'url' );
+		require_once( trailingslashit( dirname(__DIR__) ) . '/class-oauth1-client.php' );
+		try {
+			$this->oauth1_client = new Gravity_Flow_Oauth1_Client(
+				array(
+					'consumer_key' => $consumer_key,
+					'consumer_secret' => $consumer_secret,
+					'callback_url' => "$_SERVER[REQUEST_SCHEME]://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]",
+				),
+				'gravi_flow_' . $this->get_setting( 'oauth1_consumer_key' ),
+				$url
+			);
+			
+		} catch ( Exception $e ) {
+			error_log( 'Exception caught ' . $e->getMessage() );
+			return;
+		}
+		
+		$this->oauth_progress = get_user_meta( get_current_user_id(), $this->oauth1_client->data_store['progress'], true );
+		if ( $this->oauth_progress === '' ) {
+			if ( empty( $consumer_key ) || empty( $consumer_secret )) {
+				?><h5>Please enter your consumer key and secret in the settings fields below</h5><?php
+				return;
+			}
+			$this->get_temp_creds( $this->get_setting( 'oauth1_consumer_key' ), $this->get_setting( 'oauth1_consumer_secret' ) );
+			
+			$_SESSION['temp_secret'] = $this->temporary_credentials['oauth_token_secret'];
+			if ( !isset($this->temporary_credentials['oauth_token']) ) {
+				?><p class='oauth_failed'>Temporary credits request failed - check your settings and make sure to register this url as the callback url in your receiving app.</p><?php
+			}
+			$auth_creds = array( 'oauth_consumer_key' => $this->get_setting( 'oauth1_consumer_key' ), 'oauth_consumer_secret' => $this->get_setting( 'oauth1_consumer_secret' ) ) + $this->temporary_credentials;
+			$auth_app_page = add_query_arg( $auth_creds, $this->oauth1_client->api_auth_urls['oauth1']['authorize'] );
+			update_user_meta( get_current_user_id(), $this->oauth1_client->data_store['progress'], 'redirected_for_auth' );
+			?><script>
+					window.onload = function() {
+						if ( confirm( 'You will now be redirected to the oauthserver to authorize the app - if you aren\'t logged in you will need to log in first. If you need to change any of the details for the webhook please hit NO/Cancel and resave the correct details.' ) ) {
+							window.location = '<?php echo $auth_app_page; ?>';
+						}
+					}
+			</script><?php
+		} else if ( $this->oauth_progress == 'redirected_for_auth' ) {
+			if ( empty( $_GET['oauth_verifier'] ) ) {
+				?><p class='oauth_failed'>Something went wrong with the authorization please contact support</p><?php
+				return;
+			}
+			else {
+				try {
+					$this->oauth1_client->config['token'] = $_GET['oauth_token'];
+					$this->oauth1_client->config['token_secret'] = $_SESSION['temp_secret'];
+					$access_credentials = $this->oauth1_client->requestAccessToken( $_GET['oauth_verifier'] );
+					update_user_meta( get_current_user_id(), $this->oauth1_client->data_store['full_credentials'], $access_credentials );
+					update_user_meta( get_current_user_id(), $this->oauth1_client->data_store['progress'], 'access_tokens_received' );
+					?><p class='oauth_granted'>Your webhook is now authorized via OAuth and can make requests to <?php echo $this->get_setting( 'url' ); ?></p><?php
+				} catch (Exception $e) {
+					?><p class='oauth_failed'>Oauth verification failed. Please contact support</p><?php
+					error_log( 'Exception caught ' . $e->getMessage() );
+				}
+			}
+		}
+		else if ( $this->oauth_progress == 'access_tokens_received' ) {
+			?><p class='oauth_granted'>Your webhook is authorised via OAuth and can make requests to <?php echo $this->url; ?></p><?php
+		}
+	}
 
+	public function get_settings() {
 		$settings = array(
 			'title'  => esc_html__( 'Outgoing Webhook', 'gravityflow' ),
 			'fields' => array(
@@ -90,6 +170,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 							'label' => 'Basic',
 							'value' => 'basic',
 						),
+						array(
+							'label' => 'OAuth1',
+							'value' => 'oauth1',
+						),
 					),
 				),
 				array(
@@ -108,6 +192,24 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'dependency' => array(
 						'field' => 'authentication',
 						'values' => array( 'basic' ),
+					),
+				),
+				array(
+					'name'  => 'oauth1_consumer_key',
+					'label' => esc_html__( 'Oauth Consumer Key - see docs for info', 'gravityflow' ),
+					'type'  => 'text',
+					'dependency' => array(
+						'field' => 'authentication',
+						'values' => array( 'oauth1' )
+					),
+				),
+				array(
+					'name'  => 'oauth1_consumer_secret',
+					'label' => esc_html__( 'Oauth Consumer Secret - see docs for info', 'gravityflow' ),
+					'type'  => 'text',
+					'dependency' => array(
+						'field' => 'authentication',
+						'values' => array( 'oauth1' )
 					),
 				),
 				array(
@@ -158,7 +260,6 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				),
 			),
 		);
-
 		if ( in_array( $this->get_setting( 'method' ), array( 'post', 'put', 'patch', '' ) ) ) {
 
 			if ( $this->get_setting( 'body' ) == 'raw' ) {
@@ -239,7 +340,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				);
 			}
 		}
-
+		
 		return $settings;
 	}
 
@@ -442,6 +543,25 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			} else {
 				$headers = array();
 			}
+		}
+		if ( $this->authentication == 'oauth1' ) {
+			require_once( trailingslashit( dirname(__DIR__) ) . '/class-oauth1-client.php' );
+			$this->oauth1_client = new Gravity_Flow_Oauth1_Client(
+				array(
+					'consumer_key' => $this->get_setting( 'oauth1_consumer_key' ),
+					'consumer_secret' => $this->get_setting( 'oauth1_consumer_secret' ),
+					'token' => '',
+					'token_secret' => '',
+				),
+				'gravi_flow_' . $this->get_setting('oauth1_consumer_key'),
+				$url
+			);
+			$access_credentials = get_user_meta( get_current_user_id(), $this->oauth1_client->data_store['full_credentials'], true);
+			$this->oauth1_client->config['token'] = $access_credentials['oauth_token'];
+			$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret'];
+			
+			//Note we don't send the final $options[] parameter in here because our request is always sent in the body
+			$headers['Authorization'] = $this->oauth1_client->getFullRequestHeader( $this->get_setting('url'), $method );
 		}
 
 		$args = array(
@@ -747,6 +867,26 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		return $selected_choice;
 	}
+	
+	/**
+	 * Helper to use the consumer key and secret entered to get temporary credentials
+	 * and then allow the user to authorize the webhook's connection using those credentials.
+	 * 
+	 * 
+     * @param string $fields the fields being validated.
+	 * @param array $settings The settings
+	 * 
+	 * @return string
+	 */
+	function get_temp_creds( $consumer_key, $consumer_secret ) {
+		try {
+			$this->temporary_credentials = $this->oauth1_client->requestToken();
+			update_user_meta( get_current_user_id(), $this->oauth1_client->data_store['progress'], 'temp_creds_received' );
+		} catch (Exception $e) {
+			error_log( 'Exception caught ' . $e->getMessage() );
+		}
+	}
+	
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Webhook() );
