@@ -828,6 +828,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $timestamp;
 	}
 
+	public function process_entry_edit() {
+
+		// Bail early if there are no editable fields
+
+		// Load Gravity_Flow_Entry_Editor
+
+		// Gravity_Flow_Entry_Editor::process()
+	}
+
 	/**
 	 * Process the step. For example, assign to a user, send to a service, send a notification or do nothing. Return (bool) $complete.
 	 *
@@ -2022,7 +2031,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	/**
 	 * Removes assignees from and/or adds assignees to a step. Call after updating entry values.
-	 * Make sure you call get_assignees() to get the assignees before you update the entry before you update the entry or the previous assignees may not get removed.
+	 * Make sure you call get_assignees() to get the assignees before you update the entry or the previous assignees may not get removed.
 	 *
 	 * @param Gravity_Flow_Assignee[] $previous_assignees The previous assignees.
 	 */
@@ -2136,6 +2145,25 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function maybe_filter_validation_result( $validation_result, $new_status ) {
 		return $validation_result;
+	}
+
+	/**
+	 * Initialize the entry updater for the current step.
+	 *
+	 * @param array $form The form associated with the entry to be updated.
+	 *
+	 * @since 1.8.1-dev
+	 *
+	 * @return Gravity_Flow_Entry_Updater
+	 */
+	public function get_entry_updater( $form ) {
+		if ( ! class_exists( 'Gravity_Flow_Entry_Updater' ) ) {
+			require_once( gravity_flow()->get_base_path() . '/includes/class-entry-updater.php' );
+		}
+
+		$entry_editor = new Gravity_Flow_Entry_Updater( $form, $this );
+
+		return $entry_editor;
 	}
 
 }

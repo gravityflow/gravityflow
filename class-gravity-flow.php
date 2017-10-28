@@ -3845,7 +3845,6 @@ PRIMARY KEY  (id)
 		 * @param array $entry The entry created from the current form submission.
 		 * @param array $form The form object used to process the current submission.
 		 *
-		 * @return null
 		 */
 		public function action_entry_created( $entry, $form ) {
 			$form_id = absint( $form['id'] );
@@ -3856,15 +3855,54 @@ PRIMARY KEY  (id)
 
 			$steps = $this->get_steps( $form_id );
 
-			foreach ( $steps as $step ) {
-				if ( ! $step->is_active() || ! is_callable( array( $step, 'intercept_submission' ) ) ) {
-					continue;
+			if ( ! empty( $steps ) ) {
+				foreach ( $steps as $step ) {
+					if ( ! $step->is_active() || ! is_callable( array( $step, 'intercept_submission' ) ) ) {
+						continue;
+					}
+
+					$step->intercept_submission();
 				}
 
-				$step->intercept_submission();
+				add_filter( "gform_after_create_post_{$form_id}", array( $this, 'action_after_create_post' ), 10, 3 );
 			}
 
 			$this->maybe_delay_workflow( $entry, $form );
+		}
+
+		/**
+		 * Store the media IDs for the processed post images in the entry meta for use when steps with editable fields update the post.
+		 *
+		 * @since 1.8.1-dev
+		 *
+		 * @param int   $post_id The ID of the post created from the current entry.
+		 * @param array $entry   The entry currently being processed.
+		 * @param array $form    The form currently being processed.
+		 */
+		public function action_after_create_post( $post_id, $entry, $form ) {
+			$post_images = gform_get_meta( $entry['id'], '_post_images' );
+
+			if ( $post_images ) {
+				return;
+			}
+
+			$post_images = array();
+
+			foreach ( $form['fields'] as $field ) {
+				if ( $field->type !== 'post_image' || rgempty( $field->id, $entry ) ) {
+					continue;
+				}
+
+				$props = rgexplode( '|:|', $entry[ $field->id ], 5 );
+
+				if ( ! empty( $props[4] ) ) {
+					$post_images[ $field->id ] = $props[4];
+				}
+			}
+
+			if ( ! empty( $post_images ) ) {
+				gform_add_meta( $entry['id'], '_post_images', $post_images );
+			}
 		}
 
 		/**
