@@ -986,7 +986,7 @@ PRIMARY KEY  (id)
 				}
 				$step_settings['dependency'] = array( 'field' => 'step_type', 'values' => array( $type ) );
 				$settings[] = $step_settings;
-				
+
 			}
 
 			$list_url         = remove_query_arg( 'fid' );
@@ -4840,6 +4840,19 @@ AND m.meta_value='queued'";
 						$step_ids_updated = true;
 					}
 				}
+				// Change feed id in conditional logic
+				$is_condition_enabled = rgar( $new_step_meta, 'feed_condition_conditional_logic' ) == true;
+				$logic                = rgars( $new_step_meta, 'feed_condition_conditional_logic_object/conditionalLogic' );
+				if ( $is_condition_enabled && ! empty( $logic ) ) {
+				    foreach ( $new_step_meta['feed_condition_conditional_logic_object']['conditionalLogic']['rules'] as $key => $rule ) {
+				        if ( strstr( $rule['fieldId'], 'workflow_step_status_' ) ) {
+					        $old_feed_id = explode( '_', $rule['fieldId'] ); // fieldId is in the format of "workflow_step_status_30"
+					        $new_step_meta['feed_condition_conditional_logic_object']['conditionalLogic']['rules'][$key]['fieldId'] = 'workflow_step_status_' . $feed_id_mappings[$old_feed_id[3]];
+					        $step_ids_updated = true;
+                        }
+                    }
+                }
+
 				if ( $step_ids_updated ) {
 					$this->update_feed_meta( $new_step->get_id(), $new_step_meta );
 				}
