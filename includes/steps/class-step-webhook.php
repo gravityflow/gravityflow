@@ -294,6 +294,30 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		return $settings;
 	}
 
+	public function get_status_config() {
+		//@TODO - Adding tooltip to expand on 200 / 400 / Other
+		return array(
+			array(
+				'status'                    => 'complete',
+				'status_label'              => __( 'Complete', 'gravityflow' ),
+				'destination_setting_label' => esc_html__( 'Next step on success (2xx)', 'gravityflow' ),
+				'default_destination'       => 'next',
+			),
+			array(
+				'status'                    => 'rejected',
+				'status_label'              => __( 'Rejected', 'gravityflow' ),
+				'destination_setting_label' => esc_html__( 'Next step on client error (4xx)', 'gravityflow' ),
+				'default_destination'       => 'complete',
+			),
+			array(
+				'status'                    => 'error',
+				'status_label'              => __( 'Rejected', 'gravityflow' ),
+				'destination_setting_label' => esc_html__( 'Next step on other responses', 'gravityflow' ),
+				'default_destination'       => 'complete',
+			),
+		);
+	}
+
 	/**
 	 * Prepares common HTTP header names as choices.
 	 *
@@ -580,6 +604,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		$this->log_debug( __METHOD__ . '() - request: ' . print_r( $args, true ) );
 		$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) );
 
+		//@TODO - Inspect $response for determination of 2xx/4xx/other
 		if ( is_wp_error( $response ) ) {
 			$step_status = 'error';
 		} else {
