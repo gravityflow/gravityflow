@@ -290,7 +290,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				);
 			}
 		}
-		
+
 		return $settings;
 	}
 
@@ -298,21 +298,27 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		//@TODO - Adding tooltip to expand on 200 / 400 / Other
 		return array(
 			array(
-				'status'                    => 'complete',
-				'status_label'              => __( 'Complete', 'gravityflow' ),
-				'destination_setting_label' => esc_html__( 'Next step on success (2xx)', 'gravityflow' ),
+				'status'                    => 'success',
+				'status_label'              => __( 'Success', 'gravityflow' ),
+				'destination_setting_label' => esc_html__( 'Next Step if Success', 'gravityflow' ),
 				'default_destination'       => 'next',
 			),
 			array(
-				'status'                    => 'rejected',
-				'status_label'              => __( 'Rejected', 'gravityflow' ),
-				'destination_setting_label' => esc_html__( 'Next step on client error (4xx)', 'gravityflow' ),
+				'status'                    => 'error-client',
+				'status_label'              => __( 'Error - Client', 'gravityflow' ),
+				'destination_setting_label' => esc_html__( 'Next Step if Client Error', 'gravityflow' ),
+				'default_destination'       => 'complete',
+			),
+			array(
+				'status'                    => 'error-server',
+				'status_label'              => __( 'Error - Server', 'gravityflow' ),
+				'destination_setting_label' => esc_html__( 'Next Step if Server Error', 'gravityflow' ),
 				'default_destination'       => 'complete',
 			),
 			array(
 				'status'                    => 'error',
-				'status_label'              => __( 'Rejected', 'gravityflow' ),
-				'destination_setting_label' => esc_html__( 'Next step on other responses', 'gravityflow' ),
+				'status_label'              => __( 'Error - Other', 'gravityflow' ),
+				'destination_setting_label' => esc_html__( 'Next step if Other Error', 'gravityflow' ),
 				'default_destination'       => 'complete',
 			),
 		);
@@ -604,19 +610,78 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		$this->log_debug( __METHOD__ . '() - request: ' . print_r( $args, true ) );
 		$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) );
 
-		//@TODO - Inspect $response for determination of 2xx/4xx/other
 		if ( is_wp_error( $response ) ) {
 			$step_status = 'error';
+			$http_response_message = ' (WP Error)';
 		} else {
-			$step_status = 'success';
+			//$step_status = 'success';
+			//$step_status = 'complete';
+			if ( isset( $response['response']['code'] ) ) {
+				$http_response_code = intval( $response['response']['code'] );
+				switch ( true ) {
+					case in_array( $http_response_code, range( 200,299 ) ):
+						$http_response_message = $response['response']['code'] . ' ' . $response['response']['message'] . ' (Success)';
+						$step_status = 'success';
+						break;
+					case in_array( $http_response_code, range( 400,499 ) ):
+						$step_status = 'error-client';
+						$http_response_message = $response['response']['code'] . ' ' . $response['response']['message'] . ' (Client Error)';
+						break;
+					case in_array( $http_response_code, range( 500,599 ) ):
+						$step_status = 'error-server';
+						$http_response_message = $response['response']['code'] . ' ' . $response['response']['message'] . ' (Server Error)';
+						break;
+					default:
+						$step_status = 'error';
+						$http_response_message = $response['response']['code'] . ' ' . $response['response']['message'] . ' (Error)';
+				}
+			} else {
+				$step_status = 'error';
+				$http_response_message = ' (Error)';
+			}
 		}
 
-		$this->add_note( sprintf( esc_html__( 'Webhook sent. URL: %s', 'gravityflow' ), $url ) );
+		$this->add_note( sprintf( esc_html__( 'Webhook sent.  URL: %1$s.  RESPONSE: %2$s', 'gravityflow' ), $url, $http_response_message ) );
 
 		do_action( 'gravityflow_post_webhook', $response, $args, $entry, $this );
 
 		return $step_status;
 	}
+
+	/**
+	 * Determines the current status of the step.
+	 *
+	 * @return string
+	 */
+	/* public function status_evaluation() {
+		gravity_flow()->log_debug( __METHOD__ . '(): JO: hard-setting error-client');
+		
+		$approvers   = $this->get_assignees();
+		$step_status = 'approved';
+
+		foreach ( $approvers as $approver ) {
+
+			$approver_status = $approver->get_status();
+
+			if ( $approver_status == 'rejected' ) {
+				$step_status = 'rejected';
+				break;
+			}
+			if ( $this->assignee_policy == 'any' ) {
+				if ( $approver_status == 'approved' ) {
+					$step_status = 'approved';
+					break;
+				} else {
+					$step_status = 'pending';
+				}
+			} else if ( empty( $approver_status ) || $approver_status == 'pending' ) {
+				$step_status = 'pending';
+			}
+		} 
+		$step_status = 'error-server';
+
+		return $step_status;
+	}*/
 
 	/**
 	 * Prepare value map.
