@@ -298,7 +298,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		//@TODO - Adding tooltip to expand on 200 / 400 / Other
 		return array(
 			array(
-				'status'                    => 'success',
+				'status'                    => 'complete',
 				'status_label'              => __( 'Success', 'gravityflow' ),
 				'destination_setting_label' => esc_html__( 'Next Step if Success', 'gravityflow' ),
 				'default_destination'       => 'next',
@@ -512,7 +512,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	 */
 	function process() {
 
-		$this->send_webhook();
+		$this->send_webhook();		
 
 		return true;
 	}
@@ -621,7 +621,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				switch ( true ) {
 					case in_array( $http_response_code, range( 200,299 ) ):
 						$http_response_message = $response['response']['code'] . ' ' . $response['response']['message'] . ' (Success)';
-						$step_status = 'success';
+						$step_status = 'complete';
 						break;
 					case in_array( $http_response_code, range( 400,499 ) ):
 						$step_status = 'error-client';
@@ -645,6 +645,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		do_action( 'gravityflow_post_webhook', $response, $args, $entry, $this );
 
+		$this->update_step_status( $step_status );
+
 		return $step_status;
 	}
 
@@ -653,35 +655,22 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	 *
 	 * @return string
 	 */
-	/* public function status_evaluation() {
-		gravity_flow()->log_debug( __METHOD__ . '(): JO: hard-setting error-client');
-		
-		$approvers   = $this->get_assignees();
-		$step_status = 'approved';
-
-		foreach ( $approvers as $approver ) {
-
-			$approver_status = $approver->get_status();
-
-			if ( $approver_status == 'rejected' ) {
-				$step_status = 'rejected';
-				break;
-			}
-			if ( $this->assignee_policy == 'any' ) {
-				if ( $approver_status == 'approved' ) {
-					$step_status = 'approved';
-					break;
-				} else {
-					$step_status = 'pending';
-				}
-			} else if ( empty( $approver_status ) || $approver_status == 'pending' ) {
-				$step_status = 'pending';
-			}
-		} 
-		$step_status = 'error-server';
+	public function status_evaluation() {
+		$step_status = $this->get_status();
 
 		return $step_status;
-	}*/
+	}
+
+	/**
+	 * Determines if the current step has been completed.
+	 *
+	 * @return bool
+	 */
+	public function is_complete() {
+		$status = $this->evaluate_status();
+
+		return ! in_array( $status, array( 'pending', 'queued' ) );
+	}
 
 	/**
 	 * Prepare value map.
