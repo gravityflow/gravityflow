@@ -295,7 +295,6 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	}
 
 	public function get_status_config() {
-		//@TODO - Adding tooltip to expand on 200 / 400 / Other
 		return array(
 			array(
 				'status'                    => 'complete',
@@ -512,7 +511,9 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	 */
 	function process() {
 
-		$this->send_webhook();		
+		$step_status = $this->send_webhook();
+
+		$this->update_step_status( $step_status );
 
 		return true;
 	}
@@ -614,8 +615,6 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$step_status = 'error';
 			$http_response_message = ' (WP Error)';
 		} else {
-			//$step_status = 'success';
-			//$step_status = 'complete';
 			if ( isset( $response['response']['code'] ) ) {
 				$http_response_code = intval( $response['response']['code'] );
 				switch ( true ) {
@@ -643,9 +642,9 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		$this->add_note( sprintf( esc_html__( 'Webhook sent.  URL: %1$s.  RESPONSE: %2$s', 'gravityflow' ), $url, $http_response_message ) );
 
-		do_action( 'gravityflow_post_webhook', $response, $args, $entry, $this );
+		$this->log_debug( __METHOD__ . '() - result: ' . $http_response_message );
 
-		$this->update_step_status( $step_status );
+		do_action( 'gravityflow_post_webhook', $response, $args, $entry, $this );
 
 		return $step_status;
 	}
