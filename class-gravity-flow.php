@@ -5754,10 +5754,12 @@ AND m.meta_value='queued'";
 				$step_ids_updated = false;
 				foreach ( $statuses_configs as $status_config ) {
 					$destination_key = 'destination_' . $status_config['status'];
-					$old_destination_step_id = $new_step_meta[ $destination_key ];
-					if ( ! in_array( $old_destination_step_id, array( 'next', 'complete' ) ) && isset( $feed_id_mappings[ $old_destination_step_id ] ) ) {
-						$new_step_meta[ $destination_key ] = $feed_id_mappings[ $old_destination_step_id ];
-						$step_ids_updated = true;
+					if( isset( $new_step_meta[ $destination_key ] ) ) {
+						$old_destination_step_id = $new_step_meta[ $destination_key ];
+						if ( ! in_array( $old_destination_step_id, array( 'next', 'complete' ) ) && isset( $feed_id_mappings[ $old_destination_step_id ] ) ) {
+							$new_step_meta[ $destination_key ] = $feed_id_mappings[ $old_destination_step_id ];
+							$step_ids_updated = true;
+						}
 					}
 				}
 				if ( $new_step->get_type() == 'approval' ) {

@@ -44,4 +44,4 @@ $I->fillField( 'textarea[name="gravityflow_note"]', 'Second note added' );
 $I->click( 'Update' );
 $I->selectOption( 'input[name="gravityflow_status"]', 'Complete' );
 $I->click( 'Update' );
-$I->waitForText( 'Status: Approved', 3 );
+$I->waitForText( 'Entry updated and marked complete.', 3 );
