@@ -5754,7 +5754,7 @@ AND m.meta_value='queued'";
 				$step_ids_updated = false;
 				foreach ( $statuses_configs as $status_config ) {
 					$destination_key = 'destination_' . $status_config['status'];
-					if( isset( $new_step_meta[ $destination_key ] ) ) {
+					if ( isset( $new_step_meta[ $destination_key ] ) ) {
 						$old_destination_step_id = $new_step_meta[ $destination_key ];
 						if ( ! in_array( $old_destination_step_id, array( 'next', 'complete' ) ) && isset( $feed_id_mappings[ $old_destination_step_id ] ) ) {
 							$new_step_meta[ $destination_key ] = $feed_id_mappings[ $old_destination_step_id ];

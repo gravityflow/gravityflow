@@ -294,6 +294,11 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		return $settings;
 	}
 
+	/**
+	 * Returns an array of statuses and their properties.
+	 *
+	 * @return array
+	 */
 	public function get_status_config() {
 		return array(
 			array(
@@ -640,6 +645,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			}
 		}
 
+		/* Translators: 1st placeholders is URL provided by user in step settings, 2nd placeholder is response codes from webhook execution */
 		$this->add_note( sprintf( esc_html__( 'Webhook sent.  URL: %1$s.  RESPONSE: %2$s', 'gravityflow' ), $url, $http_response_message ) );
 
 		$this->log_debug( __METHOD__ . '() - result: ' . $http_response_message );
