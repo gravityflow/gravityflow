@@ -544,7 +544,6 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		$body = null;
 
-
 		// Get request headers.
 		$headers = gravity_flow()->get_generic_map_fields( $this->get_feed_meta(), 'requestHeaders', $this->get_form(), $entry );
 
@@ -645,10 +644,41 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			}
 		}
 
-		/* Translators: 1st placeholders is URL provided by user in step settings, 2nd placeholder is response codes from webhook execution */
-		$this->add_note( sprintf( esc_html__( 'Webhook sent.  URL: %1$s.  RESPONSE: %2$s', 'gravityflow' ), $url, $http_response_message ) );
+		/**
+		 * Allow the step status to be modified on the webhook step.
+		 *
+		 * @param string              $step_status The step status derived from webhook response
+		 * @param array               $response    The response returned from webhook.
+		 * @param array               $args        The arguments used for executing the webhook request
+		 * @param array               $entry       The current entry.
+		 * @param Gravity_Flow_Step   $this        The current step.
+		 *
+		 * @return string
+		 */
+		$step_status = apply_filters( 'gravityflow_step_status_webhook', $step_status, $response, $args, $entry, $this );
 
-		$this->log_debug( __METHOD__ . '() - result: ' . $http_response_message );
+		/**
+		 * Allow the message logged to the timeline following webhook step to be modified
+		 *
+		 * @param string              $http_response_message The status message derived from webhook response
+		 * @param string              $step_status           The step status derived from webhook response
+		 * @param array               $response              The response returned from webhook.
+		 * @param array               $args                  The arguments used for executing the webhook request
+		 * @param array               $entry                 The current entry.
+		 * @param Gravity_Flow_Step   $this                  The current step.
+		 *
+		 * @return string
+		 */
+		$custom_response_message = apply_filters( 'gravityflow_response_message_webhook', $http_response_message, $step_status, $response, $args, $entry, $this );
+
+		if ( $custom_response_message == $http_response_message ) {
+			/* Translators: 1st placeholders is URL provided by user in step settings, 2nd placeholder is response codes from webhook execution */
+			$this->add_note( sprintf( esc_html__( 'Webhook sent.  URL: %1$s.  RESPONSE: %2$s', 'gravityflow' ), $url, $http_response_message ) );
+			$this->log_debug( __METHOD__ . '() - result: ' . $http_response_message );
+		} else {
+			$this->add_note( esc_html( $custom_response_message ) );
+			$this->log_debug( __METHOD__ . '() - result: ' . $custom_response_message );
+		}
 
 		do_action( 'gravityflow_post_webhook', $response, $args, $entry, $this );
 
