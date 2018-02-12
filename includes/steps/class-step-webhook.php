@@ -518,13 +518,13 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		$step_status = $this->send_webhook();
 
+		//Ensure webhook steps defined / last updated prior to v2.0.2 (w/o 4xx, 5xx, other response code config) continue to process
 		$destination_status_key = 'destination_' . $step_status;
-		if ( isset( $this->{$destination_status_key} ) ) {
-			$this->update_step_status( $step_status );
-		} else {
-			$this->update_step_status( 'complete' );
+		if ( ! isset( $this->{$destination_status_key} ) ) {
+			$step_status = 'complete';
 		}
 
+		$this->update_step_status( $step_status );
 		return true;
 	}
 
