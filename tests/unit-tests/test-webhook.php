@@ -146,6 +146,7 @@ class Tests_Gravity_Flow_Webhooks extends GF_UnitTestCase {
 		$current_step = $this->api->get_current_step( $entry );
 		$this->assertEquals( $approval_step_6_id, $current_step->get_id() );
 
+		/*
 		// Send for webhook 400
 		$this->api->send_to_step( $entry, $webhook_step_2_id );
 
@@ -178,7 +179,7 @@ class Tests_Gravity_Flow_Webhooks extends GF_UnitTestCase {
 		// Check workflow has moved to Catch - Other
 		$current_step = $this->api->get_current_step( $entry );
 		$this->assertEquals( $approval_step_9_id, $current_step->get_id() );
-
+		*/
 	}
 
 
