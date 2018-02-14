@@ -308,13 +308,13 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				'default_destination'       => 'next',
 			),
 			array(
-				'status'                    => 'error-client',
+				'status'                    => 'error_client',
 				'status_label'              => __( 'Error - Client', 'gravityflow' ),
 				'destination_setting_label' => esc_html__( 'Next Step if Client Error', 'gravityflow' ),
 				'default_destination'       => 'complete',
 			),
 			array(
-				'status'                    => 'error-server',
+				'status'                    => 'error_server',
 				'status_label'              => __( 'Error - Server', 'gravityflow' ),
 				'destination_setting_label' => esc_html__( 'Next Step if Server Error', 'gravityflow' ),
 				'default_destination'       => 'complete',
@@ -559,7 +559,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$auth_string = sprintf( '%s:%s', $this->basic_username, $this->basic_password );
 			$headers['Authorization'] = sprintf( 'Basic %s', base64_encode( $auth_string ) );
 		}
-		$this->log_debug( __METHOD__ . '() - log body setting ' . $this->body . ' :: ' . $this->raw_body);
+		$this->log_debug( __METHOD__ . '() - log body setting ' . $this->body . ' :: ' . $this->raw_body );
 		if ( $this->body == 'raw' ) {
 			$body = $this->raw_body;
 			$body = GFCommon::replace_variables( $body, $this->get_form(), $entry, false, false, false, 'text' );
@@ -632,11 +632,11 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 						$step_status = 'complete';
 						break;
 					case in_array( $http_response_code, range( 400,499 ) ):
-						$step_status = 'error-client';
+						$step_status = 'error_client';
 						$http_response_message = $response['response']['code'] . ' ' . $response['response']['message'] . ' (Client Error)';
 						break;
 					case in_array( $http_response_code, range( 500,599 ) ):
-						$step_status = 'error-server';
+						$step_status = 'error_server';
 						$http_response_message = $response['response']['code'] . ' ' . $response['response']['message'] . ' (Server Error)';
 						break;
 					default:
@@ -748,11 +748,15 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$type = is_array( $field_type ) ? $field_type[0] : $field_type;
 			$type = ucfirst( GF_Fields::get( $type )->get_form_editor_field_title() );
 
+			/* Translators: Placeholder is for the field type which should be selected */
 			$first_choice_label = sprintf( __( 'Select a %s Field', 'gravityflow' ), $type );
 
 		}
 
-		$fields[] = array( 'value' => '', 'label' => $first_choice_label );
+		$fields[] = array(
+			'value' => '',
+			'label' => $first_choice_label,
+		);
 
 		// If field types not restricted add the default fields and entry meta.
 		if ( is_null( $field_type ) ) {
@@ -764,7 +768,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 			$entry_meta = GFFormsModel::get_entry_meta( $form['id'] );
 			foreach ( $entry_meta as $meta_key => $meta ) {
-				$fields[] = array( 'value' => $meta_key, 'label' => rgars( $entry_meta, "{$meta_key}/label" ) );
+				$fields[] = array(
+					'value' => $meta_key,
+					'label' => rgars( $entry_meta, "{$meta_key}/label" ),
+				);
 			}
 		}
 
@@ -835,7 +842,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 						$col_index ++;
 					}
 				} elseif ( ! rgar( $field, 'displayOnly' ) && $field_is_valid_type && ! $exclude_field ) {
-					$fields[] = array( 'value' => $field->id, 'label' => GFCommon::get_label( $field ) );
+					$fields[] = array(
+						'value' => $field->id,
+						'label' => GFCommon::get_label( $field ),
+					);
 				}
 			}
 		}
@@ -985,7 +995,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		return $selected_choice;
 	}
-	
+
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Webhook() );
