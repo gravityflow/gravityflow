@@ -39,172 +39,27 @@ class Tests_Gravity_Flow_Webhooks extends GF_UnitTestCase {
 
 	function test_webhook_process_200() {
 
-		$settings = array();
-		$settings['step_name'] = 'Webhook - 200';
-		$settings['url'] = 'http://unit-test-webhook.com/200';
-		$webhook_step_1_id = $this->_add_webhook_step( $settings );
-
-		$settings = array();
-		$settings['step_name'] = 'Processing Issue';
-		$approval_step_2_id = $this->_add_approval_step( $settings );
-
-		$webhook_step_1 = $this->api->get_step( $webhook_step_1_id );
-
-		$approval_step_2 = $this->api->get_step( $approval_step_2_id );
-
-		$webhook_step_1->destination_complete = 'complete';
-		$webhook_step_1->destination_error_client = $approval_step_2;
-		$webhook_step_1->destination_error_server = $approval_step_2;
-		$webhook_step_1->destination_error = $approval_step_2;
-
-		gravity_flow()->update_feed_meta( $webhook_step_1_id, $webhook_step_1->get_feed_meta() );
-
-		$steps = $this->api->get_steps();
-		$count_steps = count( $steps );
-		$this->assertEquals( 2, $count_steps );
-
-		$this->_create_entries();
-		$entries = GFAPI::get_entries( $this->form_id );
-
-		$entry = $entries[0];
-
-		$entry_id = $entry['id'];
-
-		// Refresh entry
-		$entry = GFAPI::get_entry( $entry_id );
-
-		// Check status
-		$status = $this->api->get_status( $entry );
-		$this->assertEquals( 'complete', $status );
+		$this->_create_webhook_test( '200', 'complete' );
 
 	}
 
 	function test_webhook_process_400() {
 
-		$settings = array();
-		$settings['step_name'] = 'Webhook - 400';
-		$settings['url'] = 'http://unit-test-webhook.com/400';
-		$webhook_step_1_id = $this->_add_webhook_step( $settings );
-
-		$settings = array();
-		$settings['step_name'] = 'Processing Issue';
-		$approval_step_2_id = $this->_add_approval_step( $settings );
-
-		$webhook_step_1 = $this->api->get_step( $webhook_step_1_id );
-
-		$approval_step_2 = $this->api->get_step( $approval_step_2_id );
-
-		$webhook_step_1->destination_complete = $approval_step_2;
-		$webhook_step_1->destination_error_client = 'complete';
-		$webhook_step_1->destination_error_server = $approval_step_2;
-		$webhook_step_1->destination_error = $approval_step_2;
-
-		gravity_flow()->update_feed_meta( $webhook_step_1_id, $webhook_step_1->get_feed_meta() );
-
-		$steps = $this->api->get_steps();
-		$count_steps = count( $steps );
-		$this->assertEquals( 2, $count_steps );
-
-		$this->_create_entries();
-		$entries = GFAPI::get_entries( $this->form_id );
-
-		$entry = $entries[0];
-
-		$entry_id = $entry['id'];
-
-		// Refresh entry
-		$entry = GFAPI::get_entry( $entry_id );
-
-		// Check status
-		$status = $this->api->get_status( $entry );
-		$this->assertEquals( 'error_client', $status );
+		$this->_create_webhook_test( '400', 'error_client' );
 
 	}
 
 	function test_webhook_process_500() {
 
-		$settings = array();
-		$settings['step_name'] = 'Webhook - 500';
-		$settings['url'] = 'http://unit-test-webhook.com/500';
-		$webhook_step_1_id = $this->_add_webhook_step( $settings );
-
-		$settings = array();
-		$settings['step_name'] = 'Processing Issue';
-		$approval_step_2_id = $this->_add_approval_step( $settings );
-
-		$webhook_step_1 = $this->api->get_step( $webhook_step_1_id );
-
-		$approval_step_2 = $this->api->get_step( $approval_step_2_id );
-
-		$webhook_step_1->destination_complete = $approval_step_2;
-		$webhook_step_1->destination_error_client = $approval_step_2;
-		$webhook_step_1->destination_error_server = 'complete';
-		$webhook_step_1->destination_error = $approval_step_2;
-
-		gravity_flow()->update_feed_meta( $webhook_step_1_id, $webhook_step_1->get_feed_meta() );
-
-		$steps = $this->api->get_steps();
-		$count_steps = count( $steps );
-		$this->assertEquals( 2, $count_steps );
-
-		$this->_create_entries();
-		$entries = GFAPI::get_entries( $this->form_id );
-
-		$entry = $entries[0];
-
-		$entry_id = $entry['id'];
-
-		// Refresh entry
-		$entry = GFAPI::get_entry( $entry_id );
-
-		// Check status
-		$status = $this->api->get_status( $entry );
-		$this->assertEquals( 'error_server', $status );
+		$this->_create_webhook_test( '500', 'error_server' );
 
 	}
 
 	function test_webhook_process_other() {
 
-		$settings = array();
-		$settings['step_name'] = 'Webhook - other';
-		$settings['url'] = 'http://unit-test-webhook.com/other';
-		$webhook_step_1_id = $this->_add_webhook_step( $settings );
-
-		$settings = array();
-		$settings['step_name'] = 'Processing Issue';
-		$approval_step_2_id = $this->_add_approval_step( $settings );
-
-		$webhook_step_1 = $this->api->get_step( $webhook_step_1_id );
-
-		$approval_step_2 = $this->api->get_step( $approval_step_2_id );
-
-		$webhook_step_1->destination_complete = $approval_step_2;
-		$webhook_step_1->destination_error_client = $approval_step_2;
-		$webhook_step_1->destination_error_server = $approval_step_2;
-		$webhook_step_1->destination_error = 'complete';
-
-		gravity_flow()->update_feed_meta( $webhook_step_1_id, $webhook_step_1->get_feed_meta() );
-
-		$steps = $this->api->get_steps();
-		$count_steps = count( $steps );
-		$this->assertEquals( 2, $count_steps );
-
-		$this->_create_entries();
-		$entries = GFAPI::get_entries( $this->form_id );
-
-		$entry = $entries[0];
-
-		$entry_id = $entry['id'];
-
-		// Refresh entry
-		$entry = GFAPI::get_entry( $entry_id );
-
-		// Check status
-		$status = $this->api->get_status( $entry );
-		$this->assertEquals( 'error', $status );
+		$this->_create_webhook_test( 'other', 'error' );
 
 	}
-
 
 	function test_the_tests() {
 
@@ -276,6 +131,70 @@ class Tests_Gravity_Flow_Webhooks extends GF_UnitTestCase {
 		$settings = wp_parse_args( $override_settings, $default_settings );
 
 		return $this->api->add_step( $settings );
+	}
+
+	function _create_webhook_test( $response_code, $expected_status ) {
+
+		$settings = array();
+		$settings['step_name'] = 'Webhook - ' . $response_code;
+		$settings['url'] = 'http://unit-test-webhook.com/' . $response_code;
+		$webhook_step_1_id = $this->_add_webhook_step( $settings );
+
+		$settings = array();
+		$settings['step_name'] = 'Processing Issue';
+		$approval_step_2_id = $this->_add_approval_step( $settings );
+
+		$webhook_step_1 = $this->api->get_step( $webhook_step_1_id );
+
+		$approval_step_2 = $this->api->get_step( $approval_step_2_id );
+
+		switch ( $response_code ) :
+			case '200':
+				$webhook_step_1->destination_complete = 'complete';
+				$webhook_step_1->destination_error_client = $approval_step_2;
+				$webhook_step_1->destination_error_server = $approval_step_2;
+				$webhook_step_1->destination_error = $approval_step_2;
+				break;
+			case '400':
+				$webhook_step_1->destination_complete = $approval_step_2;
+				$webhook_step_1->destination_error_client = 'complete';
+				$webhook_step_1->destination_error_server = $approval_step_2;
+				$webhook_step_1->destination_error = $approval_step_2;
+				break;
+			case '500':
+				$webhook_step_1->destination_complete = $approval_step_2;
+				$webhook_step_1->destination_error_client = $approval_step_2;
+				$webhook_step_1->destination_error_server = 'complete';
+				$webhook_step_1->destination_error = $approval_step_2;
+				break;
+			case 'other':
+				$webhook_step_1->destination_complete = $approval_step_2;
+				$webhook_step_1->destination_error_client = $approval_step_2;
+				$webhook_step_1->destination_error_server = $approval_step_2;
+				$webhook_step_1->destination_error = 'complete';
+				break;
+		endswitch;
+
+		gravity_flow()->update_feed_meta( $webhook_step_1_id, $webhook_step_1->get_feed_meta() );
+
+		$steps = $this->api->get_steps();
+		$count_steps = count( $steps );
+		$this->assertEquals( 2, $count_steps );
+
+		$this->_create_entries();
+		$entries = GFAPI::get_entries( $this->form_id );
+
+		$entry = $entries[0];
+
+		$entry_id = $entry['id'];
+
+		// Refresh entry
+		$entry = GFAPI::get_entry( $entry_id );
+
+		// Check status
+		$workflow_status = $this->api->get_status( $entry );
+		$this->assertEquals( $expected_status, $workflow_status );
+
 	}
 
 }
