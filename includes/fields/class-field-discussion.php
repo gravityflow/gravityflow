@@ -8,7 +8,7 @@
  */
 
 if ( ! class_exists( 'GFForms' ) ) {
-    die();
+	die();
 }
 
 /**
@@ -177,7 +177,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 						'assignee_key' => 'example|John Doe',
 						'timestamp'    => time(),
 						'value'        => esc_attr__( 'Example comment.', 'gravityflow' ),
-					)
+					),
 				) );
 			} else {
 				$entry_value = rgar( $entry, $this->id );
@@ -252,7 +252,9 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			$display_items         = '';
 			$hidden_items          = '';
 
-			if ( $entry_id && ! $this->is_form_editor() ) {
+			$display_toggle = apply_filters( 'gravityflow_discussion_items_display_toggle', false, $this );
+
+			if ( ( $entry_id && ! $this->is_form_editor() ) || $display_toggle ) {
 
 				/**
 				 * Set the amount of discussion items to be shown on active user input step without toggle.
@@ -271,7 +273,9 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 					$view_more_label = esc_attr__( 'View More', 'gravityflow' );
 					$view_less_label = esc_attr__( 'View Less', 'gravityflow' );
 
-					$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-title='%s' onclick='GravityFlowEntryDetail.displayDiscussionItemToggle(%d, %d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], $recent_display_limit, __( 'View More', 'gravityflow' ) );
+					if ( $format === 'html' ) {
+						$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-title='%s' onclick='GravityFlowEntryDetail.displayDiscussionItemToggle(%d, %d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], $recent_display_limit, __( 'View More', 'gravityflow' ) );
+					}
 
 				}
 			}
@@ -301,6 +305,10 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 				} else {
 					$return .= $display_items;
 				}
+				$return .= '<style type="text/css" media="print">';
+				$return .= '.gravityflow-dicussion-item-hidden { display:block !important; }';
+				$return .= '.gravityflow-dicussion-item-toggle-display { display: none; }';
+				$return .= '</style>';
 			} else {
 				$return .= $hidden_items . $display_items;
 			}
@@ -432,10 +440,11 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			$previous_value_json = rgar( $entry, $this->id );
 			$assignee_key        = gravity_flow()->get_current_user_assignee_key();
 
-			$new_comment = array( 'id'           => uniqid( '', true ),
-			                      'assignee_key' => $assignee_key,
-			                      'timestamp'    => time(),
-			                      'value'        => $value
+			$new_comment = array(
+				'id'             => uniqid( '', true ),
+				'assignee_key' => $assignee_key,
+				'timestamp'    => time(),
+				'value'        => $value,
 			);
 			if ( empty( $previous_value_json ) ) {
 				if ( ! empty( $value ) ) {
@@ -568,7 +577,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 						field_id: fieldId,
 						item_id: itemId,
 						action: 'gravityflow_delete_discussion_item',
-						gravityflow_delete_discussion_item: '<?php echo wp_create_nonce( 'gravityflow_delete_discussion_item' ) ?>'
+						gravityflow_delete_discussion_item: '<?php echo wp_create_nonce( 'gravityflow_delete_discussion_item' ); ?>'
 					}, function (response) {
 						if (response) {
 							jQuery('#gravityflow-discussion-item-' + response).remove();
