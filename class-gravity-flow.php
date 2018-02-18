@@ -1162,7 +1162,8 @@ PRIMARY KEY  (id)
 
 
 			$settings[] = array(
-				'title'  => 'Step',
+				'title'  => 'Step ID #' . absint( rgget( 'fid' ) ),
+				'tooltip' => 'Test',
 				'fields' => array(
 					array(
 						'name'     => 'step_name',
@@ -2629,9 +2630,10 @@ PRIMARY KEY  (id)
 		 */
 		public function feed_list_columns() {
 			$columns = array(
-				'step_name' => __( 'Step name', 'gravityflow' ),
+				'step_name'      => __( 'Step name', 'gravityflow' ),
 				'step_highlight' => '',
-				'step_type' => esc_html__( 'Step Type', 'gravityflow' ),
+				'step_id'        => esc_html__( 'Step ID #', 'gravityflow' ),
+				'step_type'      => esc_html__( 'Step Type', 'gravityflow' ),
 			);
 
 			$count_entries = apply_filters( 'gravityflow_entry_count_step_list', true );
@@ -2661,6 +2663,18 @@ PRIMARY KEY  (id)
 			$icon_html = ( strpos( $icon_url, 'http' ) === 0 ) ? sprintf( '<img src="%s" style="width:20px;height:20px;margin-right:5px;vertical-align:middle;"/>', $icon_url ) : sprintf( '<span style="width:20px;height:20px;margin-right:5px;vertical-align:middle;">%s</span>', $icon_url );
 
 			return $icon_html . $step_label;
+		}
+
+		/**
+		 * Returns the value to be displayed in the step ID column of the feeds list.
+		 *
+		 * @param array $item The current feed.
+		 *
+		 * @return string
+		 */
+		public function get_column_value_step_id( $item ) {
+
+			return $item['id'];
 		}
 
 		/**
