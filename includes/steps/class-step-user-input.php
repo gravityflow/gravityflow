@@ -347,14 +347,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		$editable_fields  = array();
 		$assignee_details = $this->get_assignees();
 
-		$match = false;
-
 		foreach ( $assignee_details as $assignee ) {
-
-			if ( $assignee->current_user_is_assignee() ) {
-				$match = true;
-			}
-			if ( $match && is_array( $assignee->get_editable_fields() ) ) {
+			if ( $assignee->is_current_user() && is_array( $assignee->get_editable_fields() ) ) {
 				$assignee_editable_fields = $assignee->get_editable_fields();
 				$editable_fields          = array_merge( $editable_fields, $assignee_editable_fields );
 			}
@@ -433,7 +427,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$assignees = $this->get_assignees();
 
 			foreach ( $assignees as $assignee ) {
-				if ( $assignee->current_user_is_assignee() ) {
+				if ( $assignee->is_current_user() ) {
 					$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
 					break;
 				}
@@ -750,7 +744,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			$can_update = false;
 			foreach ( $assignees as $assignee ) {
-				if ( $assignee->current_user_is_assignee() ) {
+				if ( $assignee->is_current_user() ) {
 					$can_update = true;
 					break;
 				}

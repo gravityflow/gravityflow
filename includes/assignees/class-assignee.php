@@ -174,17 +174,20 @@ class Gravity_Flow_Assignee extends Gravity_Flow_Assignee_Base {
 		}
 	}
 
-	public function current_user_is_assignee() {
+	public function is_current_user() {
 
 		$assignee_key = $this->step->get_current_assignee_key();
 		$assignee     = $this->step->get_assignee( $assignee_key );
+
+		if ( $assignee->get_id() != $this->get_id() ) {
+			return false;
+		}
 
 		$status = $assignee->get_status();
 
 		if ( $status == 'pending' ) {
 			return true;
 		}
-
 
 		// Check roles
 		$current_role_status = false;

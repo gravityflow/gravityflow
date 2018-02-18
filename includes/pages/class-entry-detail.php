@@ -330,7 +330,7 @@ class Gravity_Flow_Entry_Detail {
 		$assignees = $current_step->get_assignees();
 		$can_update = false;
 		foreach ( $assignees as $assignee ) {
-			if ( $assignee->current_user_is_assignee() ) {
+			if ( $assignee->is_current_user() ) {
 				$can_update = true;
 				break;
 			}

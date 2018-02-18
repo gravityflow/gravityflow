@@ -322,6 +322,10 @@ abstract class Gravity_Flow_Assignee_Base {
 
 	}
 
+	public function is_current_user() {
+
+	}
+
 	public function user_is_assignee( $user ) {
 
 		// Check roles
