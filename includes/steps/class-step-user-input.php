@@ -344,19 +344,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			return $this->_editable_fields;
 		}
 
-		$current_user_key = $this->get_current_assignee_key();
 		$editable_fields  = array();
 		$assignee_details = $this->get_assignees();
 
+		$match = false;
+
 		foreach ( $assignee_details as $assignee ) {
 
-			$assignee_key  = $assignee->get_key();
-			$assignee_type = $assignee->get_type();
-
-			$match = false;
-			if ( $assignee_type == 'role' && gravity_flow()->check_user_role( $assignee->get_id() ) ) {
-				$match = true;
-			} elseif ( $assignee_key == $current_user_key ) {
+			if ( $assignee->current_user_is_assignee() ) {
 				$match = true;
 			}
 			if ( $match && is_array( $assignee->get_editable_fields() ) ) {
@@ -435,10 +430,18 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			$this->maybe_adjust_assignment( $previous_assignees );
 
-			$assignee_key = $this->get_current_assignee_key();
-			$assignee     = $this->get_assignee( $assignee_key );
+			$assignees = $this->get_assignees();
 
-			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
+			foreach ( $assignees as $assignee ) {
+				if ( $assignee->current_user_is_assignee() ) {
+					$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
+					break;
+				}
+			}
+
+			if ( ! $feedback ) {
+				$feedback = new WP_Error( 'assignee_not_found', esc_html__( 'There was a problem while updating the assignee status.' ) );
+			}
 
 			$this->maybe_send_notification( $new_status );
 		}
@@ -743,9 +746,15 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			$this->maybe_display_assignee_status_list( $args, $form );
 
-			$assignee_status = $this->get_current_assignee_status();
-			list( $role, $role_status ) = $this->get_current_role_status();
-			$can_update = $assignee_status == 'pending' || $role_status == 'pending';
+			$assignees = $this->get_assignees();
+
+			$can_update = false;
+			foreach ( $assignees as $assignee ) {
+				if ( $assignee->current_user_is_assignee() ) {
+					$can_update = true;
+					break;
+				}
+			}
 
 			$this->maybe_enable_update_button( $can_update );
 
@@ -840,6 +849,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					$role_name    = translate_user_role( $assignee_id );
 					echo sprintf( '<li>%s: (%s)</li>', esc_html__( 'Role', 'gravityflow' ), $role_name, $status_label );
 					echo '<li>' . $role_name . ': ' . $assignee_status . '</li>';
+				} else {
+					echo '<li>' . $assignee->get_id() . '</li>';
 				}
 			}
 		}

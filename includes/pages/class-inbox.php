@@ -185,6 +185,8 @@ class Gravity_Flow_Inbox {
 				 */
 				$sorting = apply_filters( 'gravityflow_inbox_sorting', $sorting );
 
+				$search_criteria = apply_filters( 'gravityflow_inbox_search_criteria', $search_criteria );
+
 				$entries = GFAPI::get_entries( $form_ids, $search_criteria, $sorting, $paging, $total_count );
 			}
 		}

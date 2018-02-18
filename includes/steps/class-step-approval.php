@@ -127,7 +127,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		$assignee_key = isset( $request['assignee'] ) ? $request['assignee'] : gravity_flow()->get_current_user_assignee_key();
 
-		$assignee = new Gravity_Flow_Assignee( $assignee_key, $this );
+		$assignee = Gravity_Flow_Assignees::create( $assignee_key, $this );
 
 		$feedback = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
 

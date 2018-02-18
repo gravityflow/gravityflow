@@ -1064,6 +1064,8 @@ PRIMARY KEY  (id)
 				);
 			}
 
+			$choices = apply_filters( 'gravityflow_assignee_choices', $choices, $form );
+
 			return $choices;
 		}
 
@@ -1449,7 +1451,7 @@ PRIMARY KEY  (id)
 						}
 					}
 					// No longer an assignee - remove.
-					$old_assignee = new Gravity_Flow_Assignee( $old_assignee_key, $step_for_entry );
+					$old_assignee = Gravity_Flow_Assignees::create( $old_assignee_key, $step_for_entry );
 					$old_assignee->remove();
 					$old_assignee->log_event( 'removed' );
 					$results['removed'][] = $old_assignee;
@@ -5340,7 +5342,7 @@ PRIMARY KEY  (id)
 		public function add_timeline_note( $entry_id, $note, $user_id = false, $user_name = 'gravityflow' ) {
 			$assignee_key = $this->get_current_user_assignee_key();
 			if ( $assignee_key ) {
-				$assignee = new Gravity_Flow_Assignee( $assignee_key );
+				$assignee = Gravity_Flow_Assignees::create( $assignee_key );
 				if ( $assignee->get_type() === 'user_id' ) {
 					$user_id   = $assignee->get_id();
 					$user_name = $assignee->get_display_name();
@@ -6102,7 +6104,7 @@ AND m.meta_value='queued'";
 
 			$assignee_key = sanitize_text_field( $token['sub'] );
 
-			$assignee = new Gravity_Flow_Assignee( $assignee_key );
+			$assignee = Gravity_Flow_Assignees::create( $assignee_key );
 
 			return $assignee;
 		}

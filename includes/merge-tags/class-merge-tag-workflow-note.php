@@ -189,8 +189,8 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 	 * @return string
 	 */
 	protected function get_assignee_display_name( $assignee_or_key ) {
-		if ( ! $assignee_or_key instanceof Gravity_Flow_Assignee ) {
-			$assignee = new Gravity_Flow_Assignee( $assignee_or_key );
+		if ( ! $assignee_or_key instanceof Gravity_Flow_Assignee_Base ) {
+			$assignee = Gravity_Flow_Assignees::create( $assignee_or_key );
 		} else {
 			$assignee = $assignee_or_key;
 		}

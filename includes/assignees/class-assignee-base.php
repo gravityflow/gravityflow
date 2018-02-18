@@ -1,6 +1,6 @@
 <?php
 /**
- * Gravity Flow Assignee
+ * Gravity Flow Assignee Base
  *
  * @package     GravityFlow
  * @subpackage  Classes/Assignee
@@ -16,7 +16,16 @@ if ( ! class_exists( 'GFForms' ) ) {
 /**
  * Class Gravity_Flow_Assignee
  */
-class Gravity_Flow_Assignee {
+abstract class Gravity_Flow_Assignee_Base {
+
+	/**
+	 * The unique name of this assignee.
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
+	public $name;
 
 	/**
 	 * The ID of this assignee.
@@ -102,47 +111,19 @@ class Gravity_Flow_Assignee {
 			throw new Exception( 'Assignees must be instantiated with either a string or an array' );
 		}
 
-		switch ( $type ) {
-			case  'assignee_field' :
-				$entry        = $this->step->get_entry();
-				$assignee_key = rgar( $entry, $id );
-				list( $this->type, $this->id ) = rgexplode( '|', $assignee_key, 2 );
-				break;
-			case  'assignee_user_field' :
-				$entry      = $this->step->get_entry();
-				$this->id   = absint( rgar( $entry, $id ) );
-				$this->type = 'user_id';
-				break;
-			case  'assignee_role_field' :
-				$entry      = $this->step->get_entry();
-				$this->id   = sanitize_text_field( rgar( $entry, $id ) );
-				$this->type = 'role';
-				break;
-			case  'email_field' :
-				$entry      = $this->step->get_entry();
-				$this->id   = sanitize_email( rgar( $entry, $id ) );
-				$this->type = 'email';
-				break;
-			case 'entry' :
-				$entry      = $this->step->get_entry();
-				$this->id   = rgar( $entry, $id );
-				$this->type = 'user_id';
-				break;
-			default :
-				$this->type = $type;
-				$this->id   = $id;
-		}
+		$this->type = $type;
+		$this->id   = $id;
 
-		$this->maybe_set_user();
 		$this->key = $this->type . '|' . $this->id;
 	}
+
 
 	/**
 	 * If applicable, set the user property for the assignee.
 	 *
 	 * @since 1.7.1
 	 */
-	private function maybe_set_user() {
+	protected function maybe_set_user() {
 		if ( ! $this->get_user() ) {
 			if ( $this->get_type() === 'user_id' ) {
 				$user = get_user_by( 'ID', $this->get_id() );
@@ -335,5 +316,25 @@ class Gravity_Flow_Assignee {
 	 */
 	public function log_event( $status, $duration = 0 ) {
 		gravity_flow()->log_event( 'assignee', 'status', $this->step->get_form_id(), $this->step->get_entry_id(), $status, $this->step->get_id(), $duration, $this->get_id(), $this->get_type(), $this->get_display_name() );
+	}
+
+	public function send_notification( $message ) {
+
+	}
+
+	public function user_is_assignee( $user ) {
+
+		// Check roles
+		$current_role_status = false;
+		$role                = false;
+
+		foreach ( gravity_flow()->get_user_roles() as $role ) {
+			$current_role_status = $this->step->get_role_status( $role );
+			if ( $current_role_status == 'pending' ) {
+				break;
+			}
+		}
+
+		return array( $role, $current_role_status );
 	}
 }
