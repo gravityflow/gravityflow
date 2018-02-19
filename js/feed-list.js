@@ -51,10 +51,14 @@
 
             $(".toggle-step-ids").click( function() {
                 if( ! $(this).hasClass('active') ) {
-                    $('.row-actions').css('position','initial');
+                    $('.row-actions span.step_id').each(function(i) {
+                        $(this).clone().prependTo( $( this ).parents(".step_name"));
+                    });
+                    $('.row-actions span.step_id').hide();
                     $( this ).addClass( 'active' );
                 } else {
-                    $('.row-actions').css('position','');
+                    $( '.step_name > .step_id' ).remove();
+                    $('.row-actions span.step_id').show();
                     $( this ).removeClass( 'active' );
                 }
                 
