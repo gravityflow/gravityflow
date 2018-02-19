@@ -96,7 +96,6 @@ class Gravity_Flow_Bootstrap {
 	 * Includes the assignee classes.
 	 */
 	public static function include_assignees() {
-		require_once( dirname( __FILE__ ) . '/includes/assignees/class-assignee-base.php' );
 		require_once( dirname( __FILE__ ) . '/includes/assignees/class-assignees.php' );
 		require_once( dirname( __FILE__ ) . '/includes/assignees/class-assignee.php' );
 	}

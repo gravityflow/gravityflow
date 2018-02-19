@@ -21,7 +21,7 @@ class Gravity_Flow_Assignees {
 	/**
 	 * The merge tag class names.
 	 *
-	 * @var Gravity_Flow_Assignee_Base[]
+	 * @var Gravity_Flow_Assignee[]
 	 */
 	private static $class_names = array();
 
@@ -37,14 +37,14 @@ class Gravity_Flow_Assignees {
 	/**
 	 * Register the supplied assignee.
 	 *
-	 * @param Gravity_Flow_Assignee_Base $assignee The assignee class.
+	 * @param Gravity_Flow_Assignee $assignee The assignee class.
 	 *
 	 * @throws Exception When the merge tags name property has not been set.
 	 */
 	public static function register( $assignee ) {
 
-		if ( ! is_subclass_of( $assignee, 'Gravity_Flow_Assignee_Base' ) ) {
-			throw new Exception( 'Must be a subclass of Gravity_Flow_Assignee_Base' );
+		if ( ! is_subclass_of( $assignee, 'Gravity_Flow_Assignee' ) ) {
+			throw new Exception( 'Must be a subclass of Gravity_Flow_Assignee' );
 		}
 		$name = $assignee->name;
 
@@ -62,7 +62,7 @@ class Gravity_Flow_Assignees {
 	 * @param null|array $args The arguments used to initialize the class.
 	 * @param Gravity_Flow_Step $step The step.
 	 *
-	 * @return Gravity_Flow_Assignee_Base|false
+	 * @return Gravity_Flow_Assignee|false
 	 */
 	public static function create( $args, $step = null ) {
 

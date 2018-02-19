@@ -404,6 +404,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			$previous_assignees = $this->get_assignees();
 
+			foreach ( $previous_assignees as $assignee ) {
+				if ( $assignee->is_current_user() ) {
+					$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
+					break;
+				}
+			}
+
 			$original_entry = $entry;
 
 			$this->save_entry( $form, $entry, $editable_fields );
@@ -423,15 +430,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			GFCache::flush();
 
 			$this->maybe_adjust_assignment( $previous_assignees );
-
-			$assignees = $this->get_assignees();
-
-			foreach ( $assignees as $assignee ) {
-				if ( $assignee->is_current_user() ) {
-					$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
-					break;
-				}
-			}
 
 			if ( ! $feedback ) {
 				$feedback = new WP_Error( 'assignee_not_found', esc_html__( 'There was a problem while updating the assignee status.' ) );
