@@ -829,7 +829,7 @@ PRIMARY KEY  (id)
 		public function feed_list_title() {
 			$url = add_query_arg( array( 'fid' => '0' ) );
 			$url = esc_url( $url );
-			return esc_html__( 'Workflow Steps', 'gravityflow' ) . " <a class='add-new-h2' href='{$url}'>" . __( 'Add New' , 'gravityflow' ) . '</a>';
+			return esc_html__( 'Workflow Steps', 'gravityflow' ) . " <a class='add-new-h2' href='{$url}'>" . __( 'Add New' , 'gravityflow' ) . '</a> <span class="toggle-step-ids"><i class="fa fa-eye-slash" title="' . __( 'Show/Hide Step ID\'s' , 'gravityflow' ) . '"></i></span>';
 		}
 
 		/**
@@ -1163,7 +1163,6 @@ PRIMARY KEY  (id)
 
 			$settings[] = array(
 				'title'  => 'Step ID #' . absint( rgget( 'fid' ) ),
-				'tooltip' => 'Test',
 				'fields' => array(
 					array(
 						'name'     => 'step_name',
@@ -2632,7 +2631,6 @@ PRIMARY KEY  (id)
 			$columns = array(
 				'step_name'      => __( 'Step name', 'gravityflow' ),
 				'step_highlight' => '',
-				'step_id'        => esc_html__( 'Step ID #', 'gravityflow' ),
 				'step_type'      => esc_html__( 'Step Type', 'gravityflow' ),
 			);
 
@@ -2663,18 +2661,6 @@ PRIMARY KEY  (id)
 			$icon_html = ( strpos( $icon_url, 'http' ) === 0 ) ? sprintf( '<img src="%s" style="width:20px;height:20px;margin-right:5px;vertical-align:middle;"/>', $icon_url ) : sprintf( '<span style="width:20px;height:20px;margin-right:5px;vertical-align:middle;">%s</span>', $icon_url );
 
 			return $icon_html . $step_label;
-		}
-
-		/**
-		 * Returns the value to be displayed in the step ID column of the feeds list.
-		 *
-		 * @param array $item The current feed.
-		 *
-		 * @return string
-		 */
-		public function get_column_value_step_id( $item ) {
-
-			return $item['id'];
 		}
 
 		/**
@@ -2733,6 +2719,25 @@ PRIMARY KEY  (id)
 
 			return $step_highlight;
 		}
+
+		/**
+		 * Returns the array of links to be displayed when mouseover a step.
+		 *
+		 * @return array
+		 */
+		public function get_action_links() {
+			$feed_id       = '_id_';
+			$edit_url      = add_query_arg( array( 'fid' => $feed_id ) );
+			$links         = array(
+				'edit'      => '<a title="' . esc_attr__( 'Edit this feed', 'gravityforms' ) . '" href="' . esc_url( $edit_url ) . '">' . esc_html__( 'Edit', 'gravityforms' ) . '</a>',
+				'duplicate' => '<a title="' . esc_attr__( 'Duplicate this feed', 'gravityforms' ) . '" href="#" onclick="gaddon.duplicateFeed(\'' . esc_js( $feed_id ) . '\');" onkeypress="gaddon.duplicateFeed(\'' . esc_js( $feed_id ) . '\');">' . esc_html__( 'Duplicate', 'gravityforms' ) . '</a>',
+				'delete'    => '<a title="' . esc_attr__( 'Delete this feed', 'gravityforms' ) . '" class="submitdelete" onclick="javascript: if(confirm(\'' . esc_js( __( 'WARNING: You are about to delete this item.', 'gravityforms' ) ) . esc_js( __( "'Cancel' to stop, 'OK' to delete.", 'gravityforms' ) ) . '\')){ gaddon.deleteFeed(\'' . esc_js( $feed_id ) . '\'); }" onkeypress="javascript: if(confirm(\'' . esc_js( __( 'WARNING: You are about to delete this item.', 'gravityforms' ) ) . esc_js( __( "'Cancel' to stop, 'OK' to delete.", 'gravityforms' ) ) . '\')){ gaddon.deleteFeed(\'' . esc_js( $feed_id ) . '\'); }" style="cursor:pointer;">' . esc_html__( 'Delete', 'gravityforms' ) . '</a>',
+				'step_id'   => 'Step ID# ' . $feed_id,
+			);
+	
+			return $links;
+		}
+	
 
 		/**
 		 * Returns the message to be displayed in the feeds list when no steps have been configured for the form.
