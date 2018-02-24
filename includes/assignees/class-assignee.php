@@ -22,7 +22,7 @@ class Gravity_Flow_Assignee {
 	/**
 	 * The unique name of this assignee.
 	 *
-	 * @since 1.0
+	 * @since 2.1
 	 *
 	 * @var string
 	 */
@@ -362,7 +362,7 @@ class Gravity_Flow_Assignee {
 
 		if ( $assignee_type == 'email' ) {
 			$email                   = $assignee_id;
-			$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $email;
+			$notification['id']      = 'workflow_step_' . $this->get_id() . '_email_' . $email;
 			$notification['name']    = $notification['id'];
 			$notification['to']      = $email;
 			$notification['message'] = $this->step->replace_variables( $message, $this );
@@ -377,7 +377,7 @@ class Gravity_Flow_Assignee {
 			$users = get_users( array( 'include' => array( $assignee_id ) ) );
 		}
 
-		$this->step->log_debug( __METHOD__ . sprintf( '() sending assignee notifications to %d users', count( $users ) ) );
+		$this->step->log_debug( __METHOD__ . sprintf( '() sending notifications to %d users', count( $users ) ) );
 
 		$user_assignee_args = array(
 			'type' => $assignee_type,
