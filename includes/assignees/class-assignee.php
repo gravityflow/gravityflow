@@ -354,6 +354,8 @@ class Gravity_Flow_Assignee {
 	/**
 	 * Sends a notification to the assignee.
 	 *
+	 * @uses Gravity_Flow_Step::send_notification() to send, log and deduplicate the notifications.
+	 *
 	 * @since 2.1
 	 *
 	 * @param $notification
@@ -368,7 +370,7 @@ class Gravity_Flow_Assignee {
 			$notification['id']      = 'workflow_step_' . $this->get_id() . '_email_' . $email;
 			$notification['name']    = $notification['id'];
 			$notification['to']      = $email;
-			$notification['message'] = $this->step->replace_variables( $message, $this );
+			$notification['message'] = $this->replace_variables( $message );
 			$this->step->send_notification( $notification );
 
 			return;
@@ -388,11 +390,11 @@ class Gravity_Flow_Assignee {
 		);
 		foreach ( $users as $user ) {
 			$user_assignee_args['user'] = $user;
-			$user_assignee              = $this->step->get_assignee( $user_assignee_args );
+			$user_assignee              = Gravity_Flow_Assignees::create( $user_assignee_args, $this->step );
 			$notification['id']         = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
 			$notification['name']       = $notification['id'];
 			$notification['to']         = $user->user_email;
-			$notification['message']    = $this->step->replace_variables( $message, $user_assignee );
+			$notification['message']    = $user_assignee->replace_variables( $message );
 			$this->step->send_notification( $notification );
 		}
 	}
@@ -512,5 +514,29 @@ class Gravity_Flow_Assignee {
 
 		}
 		return $assignee_status_label;
+	}
+
+	/**
+	 * Override this method to replace merge tags.
+	 * Important: call the parent method first.
+	 * $text = parent::replace_variables( $text );
+	 *
+	 * @since 2.1
+	 *
+	 * @param string $text The text containing merge tags to be processed.
+	 *
+	 * @return string
+	 */
+	public function replace_variables( $text ) {
+
+		$args = array(
+			'assignee' => $this,
+			'step'     => $this->step,
+		);
+
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_url', $args )->replace( $text );
+		$text = Gravity_Flow_Merge_Tags::get( 'workflow_cancel', $args )->replace( $text );
+
+		return $text;
 	}
 }
