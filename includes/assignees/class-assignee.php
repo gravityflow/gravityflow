@@ -387,6 +387,13 @@ class Gravity_Flow_Assignee {
 		}
 	}
 
+	/**
+	 * Checks whether the current user (WP or Token auth) is an assignee.
+	 *
+	 * @since 2.1
+	 *
+	 * @return bool
+	 */
 	public function is_current_user() {
 
 		$assignee_key = $this->step->get_current_assignee_key();
@@ -416,5 +423,84 @@ class Gravity_Flow_Assignee {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Processes the status update for the assignee.
+	 *
+	 *
+	 * @param $new_status
+	 *
+	 * @return bool|WP_Error True on success or WP_Error
+	 */
+	public function process_status( $new_status ) {
+
+		$current_user_status = $this->get_status();
+
+		list( $role, $current_role_status ) = $this->step->get_current_role_status();
+
+		if ( $current_user_status != 'pending' && $current_role_status != 'pending' ) {
+			$error = new WP_Error( esc_html__( 'The status could not be changed because this step has already been processed.', 'gravityflow' ) );
+			return $error;
+		}
+
+		if ( $current_user_status == 'pending' ) {
+			$this->update_status( $new_status );
+		}
+
+		if ( $current_role_status == 'pending' ) {
+			$this->step->update_role_status( $role, $new_status );
+		}
+
+		$this->step->refresh_entry();
+
+		$success = true;
+
+		return $success;
+	}
+
+	/**
+	 * Returns the label to be displayed for the assignee on the workflow detail page.
+	 *
+	 * @since 2.1
+	 *
+	 * @return string
+	 */
+	public function get_status_label() {
+
+		$assignee_status_label = '';
+		$user_approval_status  = $this->get_status();
+
+		$this->step->log_debug( __METHOD__ . '(): status for: ' . $this->get_key() );
+		$this->step->log_debug( __METHOD__ . '(): assignee status: ' . $user_approval_status );
+
+		$status_label = $this->step->get_status_label( $user_approval_status );
+		if ( ! empty( $user_approval_status ) ) {
+			$assignee_type = $this->get_type();
+
+			switch ( $assignee_type ) {
+				case 'email':
+					$type_label   = esc_html__( 'Email', 'gravityflow' );
+					$display_name = $this->get_id();
+					break;
+				case 'role':
+					$type_label   = esc_html__( 'Role', 'gravityflow' );
+					$display_name = translate_user_role( $this->get_id() );
+					break;
+				case 'user_id':
+					$user         = get_user_by( 'id', $this->get_id() );
+					$display_name = $user ? $user->display_name : $this->get_id() . ' ' . esc_html__( '(Missing)', 'gravityflow' );
+					$type_label   = esc_html__( 'User', 'gravityflow' );
+					break;
+				default:
+					$display_name = $this->get_id();
+					$type_label   = $this->get_type();
+			}
+			$assignee_status_label = sprintf( '%s: %s (%s)', $type_label, $display_name, $status_label );
+
+			$assignee_status_label = apply_filters( 'gravityflow_assignee_status_workflow_detail', $assignee_status_label, $this, $this );
+
+		}
+		return $assignee_status_label;
 	}
 }

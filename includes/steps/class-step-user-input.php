@@ -530,22 +530,12 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * @return string|bool If processed return a message to be displayed to the user.
 	 */
 	public function process_assignee_status( $assignee, $new_status, $form ) {
-		if ( $new_status == 'complete' ) {
-			$current_user_status = $assignee->get_status();
-
-			list( $role, $current_role_status ) = $this->get_current_role_status();
-
-			if ( $current_user_status == 'pending' ) {
-				$assignee->update_status( 'complete' );
-			}
-
-			if ( $current_role_status == 'pending' ) {
-				$this->update_role_status( $role, 'complete' );
-			}
-			$this->refresh_entry();
-		}
 
 		if ( $new_status == 'complete' ) {
+			$success = $assignee->process_status( $new_status );
+			if ( is_wp_error( $success ) ) {
+				return $success;
+			}
 			$note_message = __( 'Entry updated and marked complete.', 'gravityflow' );
 			if ( $this->confirmation_messageEnable ) {
 				$feedback = $this->confirmation_messageValue;
@@ -818,37 +808,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		$this->log_debug( __METHOD__ . '(): assignee details: ' . print_r( $assignees, true ) );
 
 		foreach ( $assignees as $assignee ) {
-			$assignee_status = $assignee->get_status();
+			$assignee_status_label = $assignee->get_status_label();
+			$assignee_status_li    = sprintf( '<li>%s</li>', $assignee_status_label );
 
-			$this->log_debug( __METHOD__ . '(): showing status for: ' . $assignee->get_key() );
-			$this->log_debug( __METHOD__ . '(): assignee status: ' . $assignee_status );
-
-			if ( ! empty( $assignee_status ) ) {
-
-				$assignee_type = $assignee->get_type();
-				$assignee_id   = $assignee->get_id();
-
-				if ( $assignee_type == 'user_id' ) {
-					$user_info    = get_user_by( 'id', $assignee_id );
-					$status_label = $this->get_status_label( $assignee_status );
-					echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'User', 'gravityflow' ), $user_info->display_name, $status_label );
-				} elseif ( $assignee_type == 'email' ) {
-					$email        = $assignee_id;
-					$status_label = $this->get_status_label( $assignee_status );
-					echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Email', 'gravityflow' ), $email, $status_label );
-				} elseif ( $assignee_type == 'role' ) {
-					$status_label = $this->get_status_label( $assignee_status );
-					$role_name    = translate_user_role( $assignee_id );
-					echo sprintf( '<li>%s: (%s)</li>', esc_html__( 'Role', 'gravityflow' ), $role_name, $status_label );
-					echo '<li>' . $role_name . ': ' . $assignee_status . '</li>';
-				} else {
-					echo '<li>' . $assignee->get_id() . '</li>';
-				}
-			}
+			echo $assignee_status_li;
 		}
 
 		echo '</ul>';
-
 	}
 
 	/**
@@ -1069,28 +1035,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				$assignees = $this->get_assignees();
 
 				foreach ( $assignees as $assignee ) {
+					$assignee_status_label = $assignee->get_status_label();
+					$assignee_status_li    = sprintf( '<li>%s</li>', $assignee_status_label );
 
-					$assignee_type = $this->get_type();
-
-					$status = $assignee->get_status();
-
-					if ( ! empty( $user_status ) ) {
-						$status_label = $this->get_status_label( $status );
-						switch ( $assignee_type ) {
-							case 'email':
-								echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Email', 'gravityflow' ), $this->get_id(), $status_label );
-								break;
-							case 'user_id' :
-								$user_info = get_user_by( 'id', $assignee->get_id() );
-								echo '<li>' . esc_html__( 'User', 'gravityflow' ) . ': ' . $user_info->display_name . '<br />' . esc_html__( 'Status', 'gravityflow' ) . ': ' . esc_html( $status_label ) . '</li>';
-								break;
-							case 'role' :
-
-								$role_name = translate_user_role( $assignee->get_id() );
-								echo '<li>' . $role_name . ': ' . esc_html( $status_label ) . '</li>';
-								break;
-						}
-					}
+					echo $assignee_status_li;
 				}
 
 				?>
