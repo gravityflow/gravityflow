@@ -87,12 +87,15 @@ class Gravity_Flow_Assignee {
 	/**
 	 * Gravity_Flow_Assignee constructor.
 	 *
-	 * @throws Exception If the assignee can not be instantiated with the passed arguments.
+	 * @since 1.0
 	 *
 	 * @param string|array           $args An assignee key or array.
 	 * @param bool|Gravity_Flow_Step $step The current step or false.
 	 */
 	public function __construct( $args = array(), $step = false ) {
+		if ( empty( $args ) ) {
+			return;
+		}
 		$this->step = $step;
 		if ( is_string( $args ) ) {
 			$parts = explode( '|', $args );
@@ -109,7 +112,7 @@ class Gravity_Flow_Assignee {
 				$this->user = $args['user'];
 			}
 		} else {
-			throw new Exception( 'Assignees must be instantiated with either a string or an array' );
+			return;
 		}
 
 
