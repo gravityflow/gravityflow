@@ -348,6 +348,13 @@ class Gravity_Flow_Assignee {
 		gravity_flow()->log_event( 'assignee', 'status', $this->step->get_form_id(), $this->step->get_entry_id(), $status, $this->step->get_id(), $duration, $this->get_id(), $this->get_type(), $this->get_display_name() );
 	}
 
+	/**
+	 * Sends a notification to the assignee.
+	 *
+	 * @since 2.1
+	 *
+	 * @param $notification
+	 */
 	public function send_notification( $notification ) {
 		$message       = $notification['message'];
 		$assignee_type = $this->get_type();
