@@ -15,18 +15,20 @@ if ( ! class_exists( 'GFForms' ) ) {
 /**
  * Class Gravity_Flow_Assignees
  *
- * @since 2.0.2-dev
+ * @since 2.1
  */
 class Gravity_Flow_Assignees {
 	/**
-	 * The merge tag class names.
+	 * The assignee class names.
+	 *
+	 * @since 2.1
 	 *
 	 * @var Gravity_Flow_Assignee[]
 	 */
 	private static $class_names = array();
 
 	/**
-	 * Get an array of registered merge tag class names.
+	 * Get an array of registered assignee class names.
 	 *
 	 * @return string[]
 	 */
@@ -37,7 +39,9 @@ class Gravity_Flow_Assignees {
 	/**
 	 * Register the supplied assignee.
 	 *
-	 * @param Gravity_Flow_Assignee $assignee The assignee class.
+	 * @since 2.1
+	 *
+	 * @param Gravity_Flow_Assignee $assignee An example instance of the assignee class.
 	 *
 	 * @throws Exception When the merge tags name property has not been set.
 	 */
@@ -46,18 +50,20 @@ class Gravity_Flow_Assignees {
 		if ( ! is_subclass_of( $assignee, 'Gravity_Flow_Assignee' ) ) {
 			throw new Exception( 'Must be a subclass of Gravity_Flow_Assignee' );
 		}
+
 		$name = $assignee->name;
 
 		if ( empty( $name ) ) {
 			throw new Exception( 'The name property must be set' );
 		}
 
-
 		self::$class_names[ $assignee->name ] = get_class( $assignee );
 	}
 
 	/**
 	 * Create the Assignee class, if available.
+	 *
+	 * @since 2.1
 	 *
 	 * @param null|array $args The arguments used to initialize the class.
 	 * @param Gravity_Flow_Step $step The step.
