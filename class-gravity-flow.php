@@ -1064,6 +1064,14 @@ PRIMARY KEY  (id)
 				);
 			}
 
+			/**
+			 * Allows the assignee choices to be modified.
+			 *
+			 * @since 2.1
+			 *
+			 * @param array $choices The assignee choices
+			 * @param array $form    The Form
+			 */
 			$choices = apply_filters( 'gravityflow_assignee_choices', $choices, $form );
 
 			return $choices;

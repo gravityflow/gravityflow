@@ -358,7 +358,7 @@ class Gravity_Flow_Assignee {
 	 *
 	 * @since 2.1
 	 *
-	 * @param $notification
+	 * @param array $notification The notification to be sent.
 	 */
 	public function send_notification( $notification ) {
 		$message       = $notification['message'];
@@ -440,8 +440,9 @@ class Gravity_Flow_Assignee {
 	/**
 	 * Processes the status update for the assignee.
 	 *
+	 * @since 2.1
 	 *
-	 * @param $new_status
+	 * @param string $new_status The status string e.g. complete, approved, rejected.
 	 *
 	 * @return bool|WP_Error True on success or WP_Error
 	 */

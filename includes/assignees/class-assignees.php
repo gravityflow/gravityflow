@@ -43,7 +43,7 @@ class Gravity_Flow_Assignees {
 	 *
 	 * @param Gravity_Flow_Assignee $assignee An example instance of the assignee class.
 	 *
-	 * @throws Exception When the merge tags name property has not been set.
+	 * @throws Exception When the assignee name property has not been set.
 	 */
 	public static function register( $assignee ) {
 
