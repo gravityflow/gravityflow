@@ -58,13 +58,7 @@ th.column-step_highlight, td.column-step_highlight {
     display: none;
 }
 
-.row-actions .step_id {
-    color: #555;
-}
-
-td.step_name > .step_id { 
-    margin-right: 10px;
-}
+.row-actions .step_id { color: #555; }
 
 #form_settings h3 span.toggle-step-ids i.fa-eye-slash { 
     font-size: 0.6em !important; 
