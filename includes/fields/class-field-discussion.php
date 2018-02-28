@@ -305,10 +305,6 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 				} else {
 					$return .= $display_items;
 				}
-				$return .= '<style type="text/css" media="print">';
-				$return .= '.gravityflow-dicussion-item-hidden { display:block !important; }';
-				$return .= '.gravityflow-dicussion-item-toggle-display { display: none; }';
-				$return .= '</style>';
 			} else {
 				$return .= $hidden_items . $display_items;
 			}
