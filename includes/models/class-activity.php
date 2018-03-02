@@ -59,6 +59,13 @@ class Gravity_Flow_Activity {
 		$log_objects_placeholders = array_fill( 0, count( $objects ), '%s' );
 		$log_objects_in_list = $wpdb->prepare( implode( ', ', $log_objects_placeholders ), $objects );
 
+		/**
+		* Allows the limit for activity events to be modified before events are retrieved.
+		*
+		* @param int $limit The limit of events.
+		*/
+		$limit = (int) apply_filters( 'gravityflow_limit_activity_events', $limit );
+
 		$activity_table = self::get_activity_log_table_name();
 		$entry_table = self::get_entry_table_name();
 		$sql     = $wpdb->prepare( "
