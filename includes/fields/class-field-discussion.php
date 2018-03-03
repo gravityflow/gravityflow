@@ -252,12 +252,19 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			$display_items         = '';
 			$hidden_items          = '';
 
-			$display_toggle = apply_filters( 'gravityflow_discussion_items_display_toggle', false, $this );
+			/**
+			 * Whether to show / hide the toggle to display more discussion items.
+			 *
+			 * @param boolean                       $hide_toggle Whether to prevent the display more toggle from displaying.
+			 * @param Gravity_Flow_Field_Discussion $this        The field currently being processed.
+			 *
+			 * @since 2.0.2.dev
+			 */
+			$display_toggle = apply_filters( 'gravityflow_discussion_items_display_toggle', true, $this );
 
-			if ( ( $entry_id && ! $this->is_form_editor() ) || $display_toggle ) {
-
+			if ( ( $entry_id && ! $this->is_form_editor() && $display_toggle ) ) {
 				/**
-				 * Set the amount of discussion items to be shown on active user input step without toggle.
+				 * Set the amount of discussion items to be shown in non-print inbox / status view when toggle is active.
 				 *
 				 * @param int                           $max_display_limit Amount of comments to be shown. Default is 10.
 				 * @param Gravity_Flow_Field_Discussion $this              The field currently being processed.
@@ -276,7 +283,6 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 					if ( $format === 'html' ) {
 						$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-title='%s' onclick='GravityFlowEntryDetail.displayDiscussionItemToggle(%d, %d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], $recent_display_limit, __( 'View More', 'gravityflow' ) );
 					}
-
 				}
 			}
 
