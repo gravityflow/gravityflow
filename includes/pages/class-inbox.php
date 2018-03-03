@@ -166,13 +166,6 @@ class Gravity_Flow_Inbox {
 			$search_criteria['field_filters'] = $field_filters;
 			$search_criteria['status']        = 'active';
 
-			/**
-			* Allows the search criteria to be modified before entries are searched for the inbox.
-			*
-			* @param array $search_criteria The search criteria.
-			*/
-			$search_criteria = apply_filters( 'gravityflow_inbox_search_criteria', $search_criteria );
-
 			$form_ids = $args['form_id'] ? $args['form_id'] : gravity_flow()->get_workflow_form_ids();
 
 			gravity_flow()->log_debug( __METHOD__ . '(): $form_ids => ' . print_r( $form_ids, 1 ) );
