@@ -6,3 +6,4 @@
 - Updated the Sliced Invoices integration.
 - Added the gravityflow_step_schedule_timestamp filter to allow the scheduled start of steps to apply custom logic (business hours, delay specific entries, etc)
 - Updated discussion field to support use of view more / less on non-edit field scenarios (display only field on user input or any other step type) including status page
+- Added filter gravityflow_discussion_items_display_toggle to allow view more / less to be active or inactive per discussion field

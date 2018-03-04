@@ -258,7 +258,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			 * @param boolean                       $hide_toggle Whether to prevent the display more toggle from displaying.
 			 * @param Gravity_Flow_Field_Discussion $this        The field currently being processed.
 			 *
-			 * @since 2.0.2.dev
+			 * @since 2.0.2
 			 */
 			$display_toggle = apply_filters( 'gravityflow_discussion_items_display_toggle', true, $this );
 

@@ -6,14 +6,14 @@
     GravityFlowEntryDetail.displayDiscussionItemToggle = function (formId, fieldId, displayLimit) {
 
             $toggle = $(':focus').parent();
-            
             $toggle.find( '.gravityflow-dicussion-item-hidden' ).slideToggle( 'fast' );
 
-            var oldText = $toggle.children( '.gravityflow-dicussion-item-toggle-display' ).attr( 'title' );
-            var newText = $toggle.children( '.gravityflow-dicussion-item-toggle-display' ).data( 'title' );
+            var $viewMore = $toggle.children( '.gravityflow-dicussion-item-toggle-display' );
+            var oldText = $viewMore.attr( 'title' );
+            var newText = $viewMore.data( 'title' );
 
-            $toggle.children( '.gravityflow-dicussion-item-toggle-display' ).attr( 'title', newText ).text( newText );
-            $toggle.children( '.gravityflow-dicussion-item-toggle-display' ).data( 'title', oldText );    
+            $viewMore.attr( 'title', newText ).text( newText );
+            $viewMore.data( 'title', oldText );    
 
     }
 
