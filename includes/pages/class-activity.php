@@ -42,11 +42,11 @@ class Gravity_Flow_Activity_List {
 		*
 		* @since 2.0.2
 		*
-		* Allows the limit for activity events to be modified before events are displayed.
+		* Allows the limit for events to be modified before events are displayed on the activity page.
 		*
 		* @param int $limit The limit of events.
 		*/
-		$limit = (int) apply_filters( 'gravityflow_limit_activity_events', 400 );
+		$limit = (int) apply_filters( 'gravitylow_event_limit_activity_page', 400 );
 
 		$events = Gravity_Flow_Activity::get_events( $limit );
 
