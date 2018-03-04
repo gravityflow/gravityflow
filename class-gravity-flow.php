@@ -1160,9 +1160,14 @@ PRIMARY KEY  (id)
 				'choices'    => $step_type_choices,
 			);
 
-
+			if( absint( rgget( 'fid' ) ) !== 0 ) {
+				$step_title = esc_html__( 'Step ID #', 'gravityflow' ) . absint( rgget( 'fid' ) );
+			} else {
+				$step_title = esc_html__( 'Step', 'gravityflow' );
+			}
+			
 			$settings[] = array(
-				'title'  => 'Step ID #' . absint( rgget( 'fid' ) ),
+				'title'  => $step_title,
 				'fields' => array(
 					array(
 						'name'     => 'step_name',

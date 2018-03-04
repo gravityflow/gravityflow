@@ -48,18 +48,6 @@
                         } );
                 }
             });
-
-            $(".toggle-step-ids").click( function() {
-                if( ! $(this).hasClass('active') ) {
-                    $('.row-actions').css('position','initial');
-                    $( this ).addClass( 'active' );
-                } else {
-                    $('.row-actions').css('position','');
-                    $( this ).removeClass( 'active' );
-                }
-                
-            });
-
     });
 
 }(window.GravityFlow = window.GravityFlow || {}, jQuery));
