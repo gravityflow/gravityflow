@@ -5,8 +5,9 @@
 - Fixed an issue where calculated product fields hidden by conditional logic could appear in order summary when the entry is updated on the User Input step.
 - Updated the Sliced Invoices integration.
 - Added the gravityflow_step_schedule_timestamp filter to allow the scheduled start of steps to apply custom logic (business hours, delay specific entries, etc)
+- Added filter gravityflow_inbox_paging to inbox page to enable control of pagination options
 - Modified Outgoing Webhook step:
-     => Previously only status was complete, it now will handle response codes appropriate statuses: 2xx (complete), 4xx (error_client), 5xx (error_server), other (error)
+   => Previously only status was complete, it now will handle response codes appropriate statuses: 2xx (complete), 4xx (error_client), 5xx (error_server), other (error)
 	 => Creation of 2 new filters: gravityflow_step_status_webhook and gravityflow_response_message_webhook that enable custom logic and note at conclusion of step
 	 => Suggested documentation updates to co-incide with release: 2 new filters, blog post on extending statuses as part of step framework
 	 => Release note example(s): Conditional logic / retry on webhook failure or success branch with notification on server configuration issues
