@@ -1156,15 +1156,14 @@ PRIMARY KEY  (id)
 				'type'       => 'radio_image',
 				'horizontal' => true,
 				'required'   => true,
-				'onchange' => 'jQuery(this).parents("form").submit();',
+				'onchange'   => 'jQuery(this).parents("form").submit();',
 				'choices'    => $step_type_choices,
 			);
 
-			if( absint( rgget( 'fid' ) ) !== 0 ) {
-				$step_title = esc_html__( 'Step ID #', 'gravityflow' ) . absint( rgget( 'fid' ) );
-			} else {
-				$step_title = esc_html__( 'Step', 'gravityflow' );
-			}
+
+			$step_id = absint( rgget( 'fid' ) );
+
+			$step_title = $step_id === 0 ? $step_title = esc_html__( 'Step', 'gravityflow' ) : esc_html__( 'Step ID #', 'gravityflow' ) . $step_id;
 			
 			$settings[] = array(
 				'title'  => $step_title,
