@@ -195,6 +195,15 @@ class Gravity_Flow_Inbox {
 				 */
 				$sorting = apply_filters( 'gravityflow_inbox_sorting', $sorting );
 
+				/**
+				 * Allows the search criteria to be modified before entries are searched for the inbox.
+				 *
+				 * @since 2.1
+				 *
+				 * @param array $sorting The search criteria.
+				 */
+				$search_criteria = apply_filters( 'gravityflow_inbox_search_criteria', $search_criteria );
+
 				$entries = GFAPI::get_entries( $form_ids, $search_criteria, $sorting, $paging, $total_count );
 			}
 		}

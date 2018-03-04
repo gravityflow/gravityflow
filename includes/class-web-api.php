@@ -122,7 +122,7 @@ class Gravity_Flow_Web_API {
 		if ( empty( $assignee_key ) ) {
 			$response = $this->get_assignees_array( $step );
 		} else {
-			$assignee = new Gravity_Flow_Assignee( $assignee_key, $step );
+			$assignee = Gravity_Flow_Assignees::create( $assignee_key, $step );
 			$response = $this->get_assignee_array( $assignee );
 		}
 
@@ -157,7 +157,7 @@ class Gravity_Flow_Web_API {
 		$api     = new Gravity_Flow_API( $form_id );
 
 		$step     = $api->get_current_step( $entry );
-		$assignee = new Gravity_Flow_Assignee( $assignee_key, $step );
+		$assignee = Gravity_Flow_Assignees::create( $assignee_key, $step );
 
 		if ( ! isset( $HTTP_RAW_POST_DATA ) ) {
 			$HTTP_RAW_POST_DATA = file_get_contents( 'php://input' );

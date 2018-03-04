@@ -57,3 +57,5 @@ td.column-step_highlight .step_highlight_color {
 th.column-step_highlight, td.column-step_highlight {
     display: none;
 }
+
+.row-actions .step_id { color: #555; }

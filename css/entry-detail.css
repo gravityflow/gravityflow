@@ -411,3 +411,13 @@ table#gravityflow-inbox tbody tr{
     border-right-width: 3px;
     border-right-style: solid;
 }
+
+@media print {
+    .gravityflow-dicussion-item-hidden { 
+        display:block !important;
+    }
+
+    .gravityflow-dicussion-item-toggle-display { 
+        display: none;
+    }
+}

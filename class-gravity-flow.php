@@ -1064,6 +1064,16 @@ PRIMARY KEY  (id)
 				);
 			}
 
+			/**
+			 * Allows the assignee choices to be modified.
+			 *
+			 * @since 2.1
+			 *
+			 * @param array $choices The assignee choices
+			 * @param array $form    The Form
+			 */
+			$choices = apply_filters( 'gravityflow_assignee_choices', $choices, $form );
+
 			return $choices;
 		}
 
@@ -1156,13 +1166,17 @@ PRIMARY KEY  (id)
 				'type'       => 'radio_image',
 				'horizontal' => true,
 				'required'   => true,
-				'onchange' => 'jQuery(this).parents("form").submit();',
+				'onchange'   => 'jQuery(this).parents("form").submit();',
 				'choices'    => $step_type_choices,
 			);
 
 
+			$step_id = absint( rgget( 'fid' ) );
+
+			$step_title = $step_id === 0 ? $step_title = esc_html__( 'Step', 'gravityflow' ) : esc_html__( 'Step ID #', 'gravityflow' ) . $step_id;
+			
 			$settings[] = array(
-				'title'  => 'Step',
+				'title'  => $step_title,
 				'fields' => array(
 					array(
 						'name'     => 'step_name',
@@ -1449,7 +1463,7 @@ PRIMARY KEY  (id)
 						}
 					}
 					// No longer an assignee - remove.
-					$old_assignee = new Gravity_Flow_Assignee( $old_assignee_key, $step_for_entry );
+					$old_assignee = Gravity_Flow_Assignees::create( $old_assignee_key, $step_for_entry );
 					$old_assignee->remove();
 					$old_assignee->log_event( 'removed' );
 					$results['removed'][] = $old_assignee;
@@ -2629,9 +2643,9 @@ PRIMARY KEY  (id)
 		 */
 		public function feed_list_columns() {
 			$columns = array(
-				'step_name' => __( 'Step name', 'gravityflow' ),
+				'step_name'      => __( 'Step name', 'gravityflow' ),
 				'step_highlight' => '',
-				'step_type' => esc_html__( 'Step Type', 'gravityflow' ),
+				'step_type'      => esc_html__( 'Step Type', 'gravityflow' ),
 			);
 
 			$count_entries = apply_filters( 'gravityflow_entry_count_step_list', true );
@@ -2719,6 +2733,25 @@ PRIMARY KEY  (id)
 
 			return $step_highlight;
 		}
+
+		/**
+		 * Returns the array of links to be displayed when mouseover a step.
+		 *
+		 * @return array
+		 */
+		public function get_action_links() {
+			$feed_id       = '_id_';
+			$edit_url      = add_query_arg( array( 'fid' => $feed_id ) );
+			$links         = array(
+				'edit'      => '<a title="' . esc_attr__( 'Edit this feed', 'gravityforms' ) . '" href="' . esc_url( $edit_url ) . '">' . esc_html__( 'Edit', 'gravityforms' ) . '</a>',
+				'duplicate' => '<a title="' . esc_attr__( 'Duplicate this feed', 'gravityforms' ) . '" href="#" onclick="gaddon.duplicateFeed(\'' . esc_js( $feed_id ) . '\');" onkeypress="gaddon.duplicateFeed(\'' . esc_js( $feed_id ) . '\');">' . esc_html__( 'Duplicate', 'gravityforms' ) . '</a>',
+				'delete'    => '<a title="' . esc_attr__( 'Delete this feed', 'gravityforms' ) . '" class="submitdelete" onclick="javascript: if(confirm(\'' . esc_js( __( 'WARNING: You are about to delete this item.', 'gravityforms' ) ) . esc_js( __( "'Cancel' to stop, 'OK' to delete.", 'gravityforms' ) ) . '\')){ gaddon.deleteFeed(\'' . esc_js( $feed_id ) . '\'); }" onkeypress="javascript: if(confirm(\'' . esc_js( __( 'WARNING: You are about to delete this item.', 'gravityforms' ) ) . esc_js( __( "'Cancel' to stop, 'OK' to delete.", 'gravityforms' ) ) . '\')){ gaddon.deleteFeed(\'' . esc_js( $feed_id ) . '\'); }" style="cursor:pointer;">' . esc_html__( 'Delete', 'gravityforms' ) . '</a>',
+				'step_id'   => 'Step ID# ' . $feed_id,
+			);
+	
+			return $links;
+		}
+	
 
 		/**
 		 * Returns the message to be displayed in the feeds list when no steps have been configured for the form.
@@ -5340,7 +5373,7 @@ PRIMARY KEY  (id)
 		public function add_timeline_note( $entry_id, $note, $user_id = false, $user_name = 'gravityflow' ) {
 			$assignee_key = $this->get_current_user_assignee_key();
 			if ( $assignee_key ) {
-				$assignee = new Gravity_Flow_Assignee( $assignee_key );
+				$assignee = Gravity_Flow_Assignees::create( $assignee_key );
 				if ( $assignee->get_type() === 'user_id' ) {
 					$user_id   = $assignee->get_id();
 					$user_name = $assignee->get_display_name();
@@ -6104,7 +6137,7 @@ AND m.meta_value='queued'";
 
 			$assignee_key = sanitize_text_field( $token['sub'] );
 
-			$assignee = new Gravity_Flow_Assignee( $assignee_key );
+			$assignee = Gravity_Flow_Assignees::create( $assignee_key );
 
 			return $assignee;
 		}
