@@ -24,3 +24,13 @@
 .rtl .gravityflow-dicussion-item-toggle-display {
     float: left;
 }
+
+@media print {
+    .gravityflow-dicussion-item-hidden { 
+        display:block !important;
+    }
+
+    .gravityflow-dicussion-item-toggle-display { 
+        display: none;
+    }
+}

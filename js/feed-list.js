@@ -48,8 +48,6 @@
                         } );
                 }
             });
-
-
     });
 
 }(window.GravityFlow = window.GravityFlow || {}, jQuery));

@@ -190,6 +190,7 @@ class Gravity_Flow_Print_Entries {
 			</title>
 			<link rel='stylesheet' href='<?php echo GFCommon::get_base_url() ?>/css/print<?php echo $min; ?>.css' type='text/css'/>
 			<link rel='stylesheet' href='<?php echo gravity_flow()->get_base_url() ?>/css/entry-detail<?php echo $min; ?>.css' type='text/css'/>
+			<link rel='stylesheet' href='<?php echo gravity_flow()->get_base_url() ?>/css/discussion-field<?php echo $min; ?>.css' type='text/css'/>
 			<?php
 			$styles = apply_filters( 'gravityflow_print_styles', false );
 			if ( ! empty( $styles ) ) {

@@ -5,19 +5,16 @@
 
     GravityFlowEntryDetail.displayDiscussionItemToggle = function (formId, fieldId, displayLimit) {
 
-        var $toggle = $( '#field_' + formId + '_' + fieldId );
+            $toggle = $(':focus').parent();
+            $toggle.find( '.gravityflow-dicussion-item-hidden' ).slideToggle( 'fast' );
 
-        if ( $toggle ) {
+            var $viewMore = $toggle.children( '.gravityflow-dicussion-item-toggle-display' );
+            var oldText = $viewMore.attr( 'title' );
+            var newText = $viewMore.data( 'title' );
 
-            $toggle.children( '.gravityflow-dicussion-item-hidden' ).slideToggle( 'fast' );
+            $viewMore.attr( 'title', newText ).text( newText );
+            $viewMore.data( 'title', oldText );    
 
-            var oldText = $toggle.children( '.gravityflow-dicussion-item-toggle-display' ).attr( 'title' );
-            var newText = $toggle.children( '.gravityflow-dicussion-item-toggle-display' ).data( 'title' );
-
-            $toggle.children( '.gravityflow-dicussion-item-toggle-display' ).attr( 'title', newText ).text( newText );
-            $toggle.children( '.gravityflow-dicussion-item-toggle-display' ).data( 'title', oldText );
-
-        }
     }
 
 }(window.GravityFlowEntryDetail = window.GravityFlowEntryDetail || {}, jQuery));
