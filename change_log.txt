@@ -5,3 +5,4 @@
 - Fixed an issue where calculated product fields hidden by conditional logic could appear in order summary when the entry is updated on the User Input step.
 - Updated the Sliced Invoices integration.
 - Added the gravityflow_step_schedule_timestamp filter to allow the scheduled start of steps to apply custom logic (business hours, delay specific entries, etc)
+- Add gravityflow_limit_activity_events filter to enable the activity page to display more than default 400 events
