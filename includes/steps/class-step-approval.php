@@ -127,7 +127,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		$assignee_key = isset( $request['assignee'] ) ? $request['assignee'] : gravity_flow()->get_current_user_assignee_key();
 
-		$assignee = new Gravity_Flow_Assignee( $assignee_key, $this );
+		$assignee = $this->get_assignee( $assignee_key );
 
 		$feedback = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
 
@@ -517,24 +517,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			return false;
 		}
 
-		$current_user_status = $assignee->get_status();
-		list( $role, $current_role_status ) = $this->get_current_role_status();
-
-		if ( $current_user_status != 'pending' && $current_role_status != 'pending' ) {
-			return esc_html__( 'The status could not be changed because this step has already been processed.', 'gravityflow' );
-		}
-
 		if ( $new_status == 'revert' ) {
 			return $this->process_revert_status();
 		}
 
-		if ( $current_user_status == 'pending' ) {
-			$assignee->update_status( $new_status );
-		}
-
-		if ( $current_role_status == 'pending' ) {
-			$this->update_role_status( $role, $new_status );
-		}
+		$assignee->process_status( $new_status );
 
 		$this->add_status_update_note( $new_status, $assignee );
 		$status = $this->evaluate_status();
@@ -717,38 +704,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			<?php
 			$assignees = $this->get_assignees();
 			foreach ( $assignees as $assignee ) {
-				$user_approval_status = $assignee->get_status();
-				$status_label         = $this->get_status_label( $user_approval_status );
-				if ( ! empty( $user_approval_status ) ) {
-					$assignee_type = $assignee->get_type();
+				$assignee_status_label = $assignee->get_status_label();
+				$assignee_status_li    = sprintf( '<li>%s</li>', $assignee_status_label );
 
-					switch ( $assignee_type ) {
-						case 'email' :
-							$type_label   = esc_html__( 'Email', 'gravityflow' );
-							$display_name = $assignee->get_id();
-							break;
-						case 'role' :
-							$type_label   = esc_html__( 'Role', 'gravityflow' );
-							$display_name = translate_user_role( $assignee->get_id() );
-							break;
-						case 'user_id' :
-							$user         = get_user_by( 'id', $assignee->get_id() );
-							$display_name = $user ? $user->display_name : $assignee->get_id() . ' ' . esc_html__( '(Missing)', 'gravityflow' );
-							$type_label   = esc_html__( 'User', 'gravityflow' );
-							break;
-						default :
-							$display_name = $assignee->get_id();
-							$type_label   = $assignee->get_type();
-					}
-					$assignee_status_label = sprintf( '%s: %s (%s)', $type_label, $display_name, $status_label );
-
-					$assignee_status_label = apply_filters( 'gravityflow_assignee_status_workflow_detail', $assignee_status_label, $assignee, $this );
-
-					$assignee_status_li = sprintf( '<li>%s</li>', $assignee_status_label );
-
-					echo $assignee_status_li;
-
-				}
+				echo $assignee_status_li;
 			}
 			?>
 		</ul>
@@ -761,20 +720,21 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @param array $form The current form.
 	 */
 	public function workflow_detail_status_box_actions( $form ) {
-		$approve_icon         = $this->get_approve_icon();
-		$reject_icon          = $this->get_reject_icon();
-		$revert_icon          = $this->get_revert_icon();
-		$user_approval_status = $this->get_user_status();
+		$approve_icon = $this->get_approve_icon();
+		$reject_icon  = $this->get_reject_icon();
+		$revert_icon  = $this->get_revert_icon();
 
-		$role_approval_status = false;
-		foreach ( gravity_flow()->get_user_roles() as $role ) {
-			$role_approval_status = $this->get_role_status( $role );
-			if ( $role_approval_status == 'pending' ) {
+		$assignees = $this->get_assignees();
+
+		$can_update = false;
+		foreach ( $assignees as $assignee ) {
+			if ( $assignee->is_current_user() ) {
+				$can_update = true;
 				break;
 			}
 		}
 
-		if ( $user_approval_status == 'pending' || $role_approval_status == 'pending' ) {
+		if ( $can_update ) {
 			wp_nonce_field( 'gravityflow_approvals_' . $this->get_id() );
 
 			if ( $this->note_mode !== 'hidden' ) { ?>
@@ -885,24 +845,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				<?php
 				$assignees = $this->get_assignees();
 				foreach ( $assignees as $assignee ) {
-					$user_approval_status = $assignee->get_status();
-					if ( ! empty( $user_approval_status ) ) {
-						$assignee_type = $assignee->get_type();
-						$assignee_id   = $assignee->get_id();
-						if ( $assignee_type == 'email' ) {
-							echo '<li>' . $assignee_id . ': ' . $user_approval_status . '</li>';
-							continue;
-						}
-						if ( $assignee_type == 'role' ) {
-							$users = get_users( array( 'role' => $assignee_id ) );
-						} else {
-							$users = get_users( array( 'include' => array( $assignee_id ) ) );
-						}
+					$assignee_status_label = $assignee->get_status_label();
+					$assignee_status_li    = sprintf( '<li>%s</li>', $assignee_status_label );
 
-						foreach ( $users as $user ) {
-							echo '<li>' . $user->display_name . ': ' . $user_approval_status . '</li>';
-						}
-					}
+					echo $assignee_status_li;
 				}
 
 				?>

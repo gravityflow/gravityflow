@@ -1,5 +1,7 @@
 - Added the current step as parameters to the gravityflow_feedback_approval_token and gravityflow_feedback_approval filters.
 - Added the gravityflow_feedback_cancel_workflow filter to allow the user feedback to be modified when the workflow is cancelled using the cancel workflow link.
+- Added the gravityflow_inbox_search_criteria filter to allow the search criteria to be modify.
+- Added the gravityflow_assignee_choices filter to allow the list of assignee choices to be modified in the step settings.
 - Updated the Status Page export to match table display and run gravityflow_field_value_status_table filter
 - Fixed an issue where, in some situations, getting the next step was not using the latest version of the entry.
 - Fixed an issue where calculated product fields hidden by conditional logic could appear in order summary when the entry is updated on the User Input step.
@@ -7,3 +9,6 @@
 - Added the gravityflow_step_schedule_timestamp filter to allow the scheduled start of steps to apply custom logic (business hours, delay specific entries, etc)
 - Updated discussion field to support use of view more / less on non-edit field scenarios (display only field on user input or any other step type) including status page
 - Added filter gravityflow_discussion_items_display_toggle to allow view more / less to be active or inactive per discussion field
+- Added Step ID to workflow settings list (row actions mouseover) and to sub-title of edit step screen
+- Added filter gravityflow_inbox_paging to inbox page to enable control of pagination options
+- API: Updated the way assignees are handled to allow the base assignee class to be extended so new types of assignees can be created.

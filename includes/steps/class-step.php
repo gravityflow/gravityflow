@@ -1026,47 +1026,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$this->log_debug( __METHOD__ . '() starting. assignee: ' . $assignee->get_key() );
 
 		$notification = $this->get_notification( 'assignee' );
-		$message      = $notification['message'];
 
 		if ( $is_reminder ) {
 			$notification['subject'] = esc_html__( 'Reminder', 'gravityflow' ) . ': ' . $notification['subject'];
 		}
 
-		$assignee_type = $assignee->get_type();
-		$assignee_id   = $assignee->get_id();
-
-		if ( $assignee_type == 'email' ) {
-			$email                   = $assignee_id;
-			$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $email;
-			$notification['name']    = $notification['id'];
-			$notification['to']      = $email;
-			$notification['message'] = $this->replace_variables( $message, $assignee );
-			$this->send_notification( $notification );
-
-			return;
-		}
-
-		if ( $assignee_type == 'role' ) {
-			$users = get_users( array( 'role' => $assignee_id ) );
-		} else {
-			$users = get_users( array( 'include' => array( $assignee_id ) ) );
-		}
-
-		$this->log_debug( __METHOD__ . sprintf( '() sending assignee notifications to %d users', count( $users ) ) );
-
-		$user_assignee_args = array(
-			'type' => $assignee_type,
-			'id'   => $assignee_id,
-		);
-		foreach ( $users as $user ) {
-			$user_assignee_args['user'] = $user;
-			$user_assignee              = $this->get_assignee( $user_assignee_args );
-			$notification['id']         = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
-			$notification['name']       = $notification['id'];
-			$notification['to']         = $user->user_email;
-			$notification['message']    = $this->replace_variables( $message, $user_assignee );
-			$this->send_notification( $notification );
-		}
+		$assignee->send_notification( $notification );
 	}
 
 	/**
@@ -1530,7 +1495,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return Gravity_Flow_Assignee
 	 */
 	public function get_assignee( $args ) {
-		$assignee = new Gravity_Flow_Assignee( $args, $this );
+		$assignee = Gravity_Flow_Assignees::create( $args, $this );
 
 		return $assignee;
 	}
@@ -1956,38 +1921,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$notification['subject'] = $this->replace_variables( $notification['subject'], null );
 		}
 
-		$message = $notification['message'];
-
 		foreach ( $assignees as $assignee ) {
 			/* @var Gravity_Flow_Assignee $assignee */
-			$assignee_type = $assignee->get_type();
-			$assignee_id   = $assignee->get_id();
-
-			if ( $assignee_type == 'email' ) {
-				$email                   = $assignee_id;
-				$notification['to']      = $email;
-				$notification['id']      = 'workflow_step_' . $this->get_id() . '_email_' . $email;
-				$notification['name']    = $notification['id'];
-				$notification['message'] = $this->replace_variables( $message, $assignee );
-				$this->send_notification( $notification );
-
-				continue;
-			}
-
-
-			if ( $assignee_type == 'role' ) {
-				$users = get_users( array( 'role' => $assignee_id ) );
-			} else {
-				$users = get_users( array( 'include' => array( $assignee_id ) ) );
-			}
-
-			foreach ( $users as $user ) {
-				$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
-				$notification['name']    = $notification['id'];
-				$notification['to']      = $user->user_email;
-				$notification['message'] = $this->replace_variables( $message, $assignee );
-				$this->send_notification( $notification );
-			}
+			$assignee->send_notification( $notification );
 		}
 	}
 
