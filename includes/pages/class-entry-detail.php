@@ -327,18 +327,16 @@ class Gravity_Flow_Entry_Detail {
 	 * @return bool
 	 */
 	public static function can_update( $current_step ) {
-		$current_user_status = $current_step->get_user_status();
-		$current_role_status = false;
-		if ( $current_step ) {
-			foreach ( gravity_flow()->get_user_roles() as $role ) {
-				$current_role_status = $current_step->get_role_status( $role );
-				if ( $current_role_status == 'pending' ) {
-					break;
-				}
+		$assignees = $current_step->get_assignees();
+		$can_update = false;
+		foreach ( $assignees as $assignee ) {
+			if ( $assignee->is_current_user() ) {
+				$can_update = true;
+				break;
 			}
 		}
 
-		return $current_user_status == 'pending' || $current_role_status == 'pending';
+		return $can_update;
 	}
 
 	/**

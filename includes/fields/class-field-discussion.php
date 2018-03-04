@@ -340,7 +340,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		$date             = esc_html( GFCommon::format_date( $item_datetime, false, $timestamp_format, false ) );
 
 		if ( $item['assignee_key'] ) {
-			$assignee     = new Gravity_Flow_Assignee( $item['assignee_key'] );
+			$assignee     = Gravity_Flow_Assignees::create( $item['assignee_key'] );
 			$display_name = $assignee->get_display_name();
 		} else {
 			$display_name = '';
