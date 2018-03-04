@@ -176,6 +176,16 @@ class Gravity_Flow_Inbox {
 					'page_size' => 150,
 				);
 
+				/**
+				 *
+				 * @since 2.0.2
+				 *
+				 * Allows the paging criteria to be modified before entries are searched for the inbox.
+				 *
+				 * @param array $paging The paging criteria.
+				 */
+				$paging = apply_filters( 'gravityflow_inbox_paging', $paging );
+
 				$sorting = array();
 
 				/**
