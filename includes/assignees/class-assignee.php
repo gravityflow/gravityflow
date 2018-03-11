@@ -535,9 +535,11 @@ class Gravity_Flow_Assignee {
 			'step'     => $this->step,
 		);
 
-		$text = Gravity_Flow_Merge_Tags::get( 'workflow_url', $args )->replace( $text );
-		$text = Gravity_Flow_Merge_Tags::get( 'workflow_cancel', $args )->replace( $text );
+		$merge_tags = Gravity_Flow_Merge_Tags::get_all( $args );
 
+		foreach ( $merge_tags as $merge_tag ) {
+			$text = $merge_tag->replace( $text );
+		}
 		return $text;
 	}
 }
