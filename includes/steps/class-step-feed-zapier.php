@@ -122,7 +122,7 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 	 */
 	public function is_feed_condition_met( $feed, $form, $entry ) {
 
-		return GFZapier::conditions_met( $form, $feed, $entry );
+		return $feed['is_active'] && GFZapier::conditions_met( $form, $feed, $entry );
 	}
 }
 

@@ -158,7 +158,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 
 					$this->add_note( $note );
 				} else {
-					$this->log_debug( __METHOD__ . '() - Feed condition not met' );
+					$this->log_debug( __METHOD__ . '() - Feed inactive or condition not met' );
 				}
 			}
 		}
@@ -237,7 +237,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 */
 	public function is_feed_condition_met( $feed, $form, $entry ) {
 
-		return gravity_flow()->is_feed_condition_met( $feed, $form, $entry );
+		return $feed['is_active'] && gravity_flow()->is_feed_condition_met( $feed, $form, $entry );
 	}
 
 	/**
@@ -410,9 +410,12 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		$add_on_feeds = $this->get_processed_add_on_feeds();
 		$feeds        = $this->get_feeds();
 
+		$form  = $this->get_form();
+		$entry = $this->get_entry();
+
 		foreach ( $feeds as $feed ) {
 			$setting_key = 'feed_' . $feed['id'];
-			if ( $this->{$setting_key} && ! in_array( $feed['id'], $add_on_feeds ) ) {
+			if ( $this->{$setting_key} && ! in_array( $feed['id'], $add_on_feeds ) && $this->is_feed_condition_met( $feed, $form, $entry ) ) {
 				return 'pending';
 			}
 		}
