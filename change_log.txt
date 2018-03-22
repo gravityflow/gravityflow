@@ -1,0 +1,1 @@
+- Added the filter gravityflow_step_status_evaluation_approval to allow the status evaluation of approval step to check custom logic (X of Y approvals)
