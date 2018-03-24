@@ -1,9 +1,9 @@
 # Copyright 2015-2018 Steven Henty.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Flow 2.0.2-dev\n"
+"Project-Id-Version: Gravity Flow 2.1\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2018-03-10 11:05:35+00:00\n"
+"POT-Creation-Date: 2018-03-18 09:13:59+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -929,7 +929,7 @@ msgstr ""
 #: class-gravity-flow.php:7294 includes/pages/class-inbox.php:445
 #: includes/steps/class-step-approval.php:745
 #: includes/steps/class-step-user-input.php:1006
-#: includes/steps/class-step.php:1869
+#: includes/steps/class-step.php:1871
 msgid "Note"
 msgstr ""
 
@@ -2495,15 +2495,15 @@ msgstr ""
 msgid "%s: No assignees"
 msgstr ""
 
-#: includes/steps/class-step.php:2038
+#: includes/steps/class-step.php:2040
 msgid "Processed"
 msgstr ""
 
-#: includes/steps/class-step.php:2122
+#: includes/steps/class-step.php:2124
 msgid "A note is required"
 msgstr ""
 
-#: includes/steps/class-step.php:2167
+#: includes/steps/class-step.php:2169
 msgid "There was a problem while updating your form."
 msgstr ""
 

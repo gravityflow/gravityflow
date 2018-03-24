@@ -1,13 +1,14 @@
 # Copyright 2015-2017 Steven Henty.
 # Translators:
 # Omar Al Mulhim <ceh.lover@gmail.com>, 2017
+# Seraj I.T. <seraj@seraj.sa>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
 "POT-Creation-Date: 2017-12-07 10:59:04+00:00\n"
-"PO-Revision-Date: 2017-12-07 17:04+0000\n"
-"Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
+"PO-Revision-Date: 2018-03-14 20:41+0000\n"
+"Last-Translator: Seraj I.T. <seraj@seraj.sa>\n"
 "Language-Team: Arabic (http://www.transifex.com/gravityflow/gravityflow/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -46,7 +47,7 @@ msgstr "المناقشة"
 
 #: class-gravity-flow.php:391
 msgid "Please fill in all required fields"
-msgstr ""
+msgstr "الرجاء تعبئة جميع الحقول"
 
 #: class-gravity-flow.php:599
 msgid "No results matched"
@@ -105,7 +106,7 @@ msgstr "الوصف"
 
 #: class-gravity-flow.php:933
 msgid "Highlight"
-msgstr ""
+msgstr "تمييز"
 
 #: class-gravity-flow.php:936
 msgid ""
@@ -302,11 +303,11 @@ msgstr "عند انتهاء الصلاحية"
 
 #: class-gravity-flow.php:1845
 msgid "Highlight this step"
-msgstr ""
+msgstr "تمييز هذه الخطوة"
 
 #: class-gravity-flow.php:1864
 msgid "Color"
-msgstr ""
+msgstr "لون"
 
 #: class-gravity-flow.php:1982 includes/steps/class-step-approval.php:231
 #: includes/steps/class-step-user-input.php:127

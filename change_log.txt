@@ -1,0 +1,1 @@
+- Fixed editable Post Category field not being populated with the current entry value on the User Input step.
