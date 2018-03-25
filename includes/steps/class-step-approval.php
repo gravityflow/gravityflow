@@ -384,9 +384,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		 *
 		 * @since 2.1-dev 
 		 *
-		 * @param string                $step_status   The status of the step
-		 * @param array                 $assignees     Array of Gravity_Flow_Assignee objects
-		 * @param Gravity_Flow_Step     $step          The current step
+		 * @param string                     $step_status   The status of the step
+		 * @param Gravity_Flow_Assignee[]    $approvers     The array of Gravity_Flow_Assignee objects
+		 * @param Gravity_Flow_Step          $step          The current step
 		 */
 		$step_status = apply_filters( 'gravityflow_step_status_evaluation_approval', $step_status, $approvers, $this );
 
