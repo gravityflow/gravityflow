@@ -721,6 +721,57 @@ abstract class Gravity_Flow_Step extends stdClass {
 			return $schedule_datetime;
 		}
 
+		if ( $this->schedule_type == 'time_field' ) {
+
+			$this->log_debug( __METHOD__ . '() schedule_time_field: ' . $this->schedule_time_field );
+			$schedule_time = $entry[ (string) $this->schedule_time_field ];
+			$this->log_debug( __METHOD__ . '() schedule_time: ' . $schedule_time );
+
+			$this->log_debug( __METHOD__ . '() schedule_date_field: ' . $this->schedule_date_field );
+			$schedule_date = $entry[ (string) $this->schedule_date_field ];
+			$this->log_debug( __METHOD__ . '() schedule_date: ' . $schedule_date );
+
+			// @source Gravity Wiz // Gravity Forms // Schedule a Post by Date Field
+			if( $schedule_time ) {
+		        list( $schedule_time_hour, $schedule_time_min, $schedule_time_am_pm ) = array_pad( preg_split( '/[: ]/', $time ), 3, false );
+		        if( strtolower( $schedule_time_am_pm ) == 'pm' ) {
+		        	$schedule_time_hour += 12;
+		        }
+			    } else {
+			    	$schedule_time_hour = $schedule_time_min = '00';
+			    }
+			$schedule_datetime = strtotime( sprintf( '%s %s:%s:00', $schedule_date, $schedule_time_hour, $schedule_time_min ) );
+			$schedule_time     = date( 'Y-m-d H:i:s', $schedule_datetime );
+			$schedule_time_gmt = get_gmt_from_date( $schedule_time );
+			$schedule_datetime = strtotime( $schedule_date_gmt );
+
+			// Calculate offset
+			if ( $this->schedule_time_field_offset ) {
+				$offset = 0;
+				switch ( $this->schedule_time_field_offset_unit ) {
+					case 'minutes' :
+						$offset = ( MINUTE_IN_SECONDS * $this->schedule_time_field_offset );
+						break;
+					case 'hours' :
+						$offset = ( HOUR_IN_SECONDS * $this->schedule_time_field_offset );
+						break;
+					case 'days' :
+						$offset = ( DAY_IN_SECONDS * $this->schedule_time_field_offset );
+						break;
+					case 'weeks' :
+						$offset = ( WEEK_IN_SECONDS * $this->schedule_time_field_offset );
+						break;
+				}
+				if ( $this->schedule_time_field_before_after == 'before' ) {
+					$schedule_datetime = $schedule_datetime - $offset;
+				} else {
+					$schedule_datetime += $offset;
+				}
+			}
+
+			return $schedule_datetime;
+		}
+
 		$entry_timestamp = $this->get_step_timestamp();
 
 		$schedule_timestamp = $entry_timestamp;
@@ -841,6 +892,56 @@ abstract class Gravity_Flow_Step extends stdClass {
 						break;
 				}
 				if ( $this->expiration_date_field_before_after == 'before' ) {
+					$expiration_datetime = $expiration_datetime - $offset;
+				} else {
+					$expiration_datetime += $offset;
+				}
+			}
+
+			return $expiration_datetime;
+		}
+
+		if ( $this->expiration_type == 'time_field' ) {
+
+			$this->log_debug( __METHOD__ . '() expiration_time_field: ' . $this->expiration_time_field );
+			$expiration_time = $entry[ (string) $this->schedule_time_field ];
+			$this->log_debug( __METHOD__ . '() expiration_time: ' . $expiration_time );
+
+			$this->log_debug( __METHOD__ . '() expiration_date_field: ' . $this->expiration_date_field );
+			$expiration_date = $entry[ (string) $this->schedule_date_field ];
+			$this->log_debug( __METHOD__ . '() expiration_date: ' . $expiration_date );
+			
+			if( $expiration_time ) {
+		        list( $expiration_time_hour, $expiration_time_min, $expiration_time_am_pm ) = array_pad( preg_split( '/[: ]/', $time ), 3, false );
+		        if( strtolower( $expiration_time_am_pm ) == 'pm' ) {
+		        	$expiration_time_hour += 12;
+		        }
+			    } else {
+			    	$expiration_time_hour = $expiration_time_min = '00';
+			    }
+			$expiration_datetime = strtotime( sprintf( '%s %s:%s:00', $expiration_date, $expiration_time_hour, $expiration_time_min ) );
+			$expiration_time     = date( 'Y-m-d H:i:s', $expiration_datetime );
+			$schedule_time_gmt = get_gmt_from_date( $expiration_time );
+			$expiration_datetime = strtotime( $schedule_date_gmt );
+
+			// Calculate offset
+			if ( $this->expiration_time_field_offset ) {
+				$offset = 0;
+				switch ( $this->expiration_time_field_offset_unit ) {
+					case 'minutes' :
+						$offset = ( MINUTE_IN_SECONDS * $this->expiration_time_field_offset );
+						break;
+					case 'hours' :
+						$offset = ( HOUR_IN_SECONDS * $this->expiration_time_field_offset );
+						break;
+					case 'days' :
+						$offset = ( DAY_IN_SECONDS * $this->expiration_time_field_offset );
+						break;
+					case 'weeks' :
+						$offset = ( WEEK_IN_SECONDS * $this->expiration_time_field_offset );
+						break;
+				}
+				if ( $this->expiration_time_field_before_after == 'before' ) {
 					$expiration_datetime = $expiration_datetime - $offset;
 				} else {
 					$expiration_datetime += $offset;
