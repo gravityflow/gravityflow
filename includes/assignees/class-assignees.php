@@ -95,4 +95,12 @@ class Gravity_Flow_Assignees {
 		return $assignee;
 	}
 
+	public static function get_names() {
+		$classes = self::get_class_names();
+
+		$names = array_keys( $classes );
+
+		return $names;
+	}
+
 }
