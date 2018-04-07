@@ -265,11 +265,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return WP_Error|boolean
 	 */
 	public function rest_permission_callback( $request ) {
-		$assignee_key = gravity_flow()->get_current_user_assignee_key();
-
-		if ( empty( $assignee_key ) ) {
-			return false;
-		}
 
 		if ( ! is_user_logged_in() ) {
 
@@ -296,8 +291,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 		}
 
-		if ( $this->is_assignee( $assignee_key ) ) {
-			return true;
+		$assignees = $this->get_assignees();
+
+		foreach ( $assignees as $assignee ) {
+			if ( $assignee->is_current_user() ) {
+				return true;
+				break;
+			}
 		}
 
 		return false;

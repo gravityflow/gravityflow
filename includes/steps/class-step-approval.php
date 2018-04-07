@@ -125,11 +125,14 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			return $response;
 		}
 
-		$assignee_key = isset( $request['assignee'] ) ? $request['assignee'] : gravity_flow()->get_current_user_assignee_key();
+		$assignees = $this->get_assignees();
 
-		$assignee = $this->get_assignee( $assignee_key );
-
-		$feedback = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
+		foreach ( $assignees as $assignee ) {
+			if ( $assignee->is_current_user() ) {
+				$feedback = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
+				break;
+			}
+		}
 
 		if ( empty( $assignee ) ) {
 			return new WP_Error( 'not_supported', __( 'Action not supported.', 'gravityflow' ) );
