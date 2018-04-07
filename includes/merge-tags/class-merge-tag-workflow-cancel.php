@@ -1,9 +1,21 @@
 <?php
+/**
+ * Gravity Flow Workflow Cancel Merge Tag
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Merge_Tag_Workflow_Cancel
+ *
+ * @since 1.7.1-dev
+ */
 class Gravity_Flow_Merge_Tag_Workflow_Cancel extends Gravity_Flow_Merge_Tag_Workflow_Url {
 
 	/**
@@ -11,7 +23,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Cancel extends Gravity_Flow_Merge_Tag_Work
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @var null
+	 * @var string
 	 */
 	public $name = 'workflow_cancel';
 

@@ -2,14 +2,12 @@
 /**
  * Gravity Flow API
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/API
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public Licenses
  * @since       1.0
  */
-
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
@@ -19,7 +17,6 @@ if ( ! class_exists( 'GFForms' ) ) {
  * The future-proof way to interact with the high level functions in Gravity Flow.
  *
  * Class Gravity_Flow_API
- *
  *
  * @since 1.0
  */
@@ -35,7 +32,7 @@ class Gravity_Flow_API {
 	/**
 	 * The constructor for the API. Requires a Form ID.
 	 *
-	 * @param $form_id
+	 * @param int $form_id The current form ID.
 	 */
 	public function __construct( $form_id ) {
 		$this->form_id = $form_id;
@@ -47,7 +44,7 @@ class Gravity_Flow_API {
 	 * - step_type (string)
 	 * - description (string)
 	 *
-	 * @param $step_settings
+	 * @param array $step_settings The step settings (aka feed meta).
 	 *
 	 * @return mixed
 	 */
@@ -58,8 +55,8 @@ class Gravity_Flow_API {
 	/**
 	 * Returns the step with the given step ID. Optionally pass an Entry object to perform entry-specific functions.
 	 *
-	 * @param int $step_id
-	 * @param null $entry
+	 * @param int        $step_id The current step ID.
+	 * @param null|array $entry   The current entry.
 	 *
 	 * @return Gravity_Flow_Step|bool Returns the Step. False if not found.
 	 */
@@ -79,7 +76,7 @@ class Gravity_Flow_API {
 	/**
 	 * Returns the current step for the given entry.
 	 *
-	 * @param $entry
+	 * @param array $entry The current entry.
 	 *
 	 * @return Gravity_Flow_Step|bool
 	 */
@@ -93,7 +90,7 @@ class Gravity_Flow_API {
 	 * Processes the workflow for the given Entry ID. Handles the step orchestration - moving the workflow through the steps and ending the workflow.
 	 * Not generally required unless there's been a change to the entry outside the usual workflow orchestration.
 	 *
-	 * @param $entry_id
+	 * @param int $entry_id The ID of the current entry.
 	 */
 	public function process_workflow( $entry_id ) {
 		$form = GFAPI::get_form( $this->form_id );
@@ -103,7 +100,7 @@ class Gravity_Flow_API {
 	/**
 	 * Cancels the workflow for the given Entry ID. Removes the assignees, adds a note in the entry's timeline and logs the event.
 	 *
-	 * @param array $entry The entry
+	 * @param array $entry The current entry.
 	 *
 	 * @return bool True for success. False if not currently in a workflow.
 	 */
@@ -114,6 +111,16 @@ class Gravity_Flow_API {
 		if ( ! $step ) {
 			return false;
 		}
+
+		/**
+		 * Fires before a workflow is cancelled.
+		 *
+		 * @param array             $entry The current entry.
+		 * @param array             $form  The current form.
+		 * @param Gravity_Flow_Step $step  The current step object.
+		 */
+		do_action( 'gravityflow_pre_cancel_workflow', $entry, $form, $step );
+
 		$assignees = $step->get_assignees();
 		foreach ( $assignees as $assignee ) {
 			$assignee->remove();
@@ -123,13 +130,14 @@ class Gravity_Flow_API {
 		$feedback = esc_html__( 'Workflow cancelled.', 'gravityflow' );
 		gravity_flow()->add_timeline_note( $entry_id, $feedback );
 		gravity_flow()->log_event( 'workflow', 'cancelled', $form['id'], $entry_id );
+
 		return true;
 	}
 
 	/**
 	 * Restarts the current step for the given entry, adds a note in the entry's timeline and logs the activity.
 	 *
-	 * @param array $entry The entry
+	 * @param array $entry The current entry.
 	 *
 	 * @return bool True for success. False if the entry doesn't have a current step.
 	 */
@@ -151,7 +159,7 @@ class Gravity_Flow_API {
 	/**
 	 * Restarts the workflow for an entry, adds a note in the entry's timeline and logs the activity.
 	 *
-	 * @param $entry
+	 * @param array $entry The current entry.
 	 */
 	public function restart_workflow( $entry ) {
 
@@ -164,8 +172,8 @@ class Gravity_Flow_API {
 		 *
 		 * @since 1.4.3
 		 *
-		 * @param $entry
-		 * @param $form
+		 * @param array $entry The current entry.
+		 * @param array $form The current form.
 		 */
 		do_action( 'gravityflow_pre_restart_workflow', $entry, $form );
 
@@ -193,7 +201,7 @@ class Gravity_Flow_API {
 	/**
 	 * Returns the workflow status for the current entry.
 	 *
-	 * @param $entry
+	 * @param array $entry The current entry.
 	 *
 	 * @return string|bool The status.
 	 */
@@ -212,8 +220,8 @@ class Gravity_Flow_API {
 	/**
 	 * Sends an entry to the specified step.
 	 *
-	 * @param array $entry
-	 * @param int $step_id
+	 * @param array $entry   The current entry.
+	 * @param int   $step_id The ID of the step the entry is to be sent to.
 	 */
 	public function send_to_step( $entry, $step_id ) {
 		$current_step = $this->get_current_step( $entry );
@@ -237,8 +245,8 @@ class Gravity_Flow_API {
 	/**
 	 * Add a note to the timeline of the specified entry.
 	 *
-	 * @param $entry_id
-	 * @param $note
+	 * @param int    $entry_id The ID of the current entry.
+	 * @param string $note     The note to be added to the timeline.
 	 */
 	public function add_timeline_note( $entry_id, $note ) {
 		gravity_flow()->add_timeline_note( $entry_id, $note );
@@ -247,16 +255,16 @@ class Gravity_Flow_API {
 	/**
 	 * Registers activity event in the activity log. The activity log is used to generate reports.
 	 *
-	 * @param string $log_type The object of the event. 'workflow', 'step', 'assignee'
-	 * @param string $event 'started', 'ended', 'status'
-	 * @param int $form_id The form ID.
-	 * @param int $entry_id The Entry ID.
-	 * @param string $log_value The value to log.
-	 * @param int $step_id The Step ID.
-	 * @param int $duration The duration in seconds - if applicable.
-	 * @param int $assignee_id The assignee ID - if applicable.
-	 * @param string $assignee_type - The Assignee type - if applicable
-	 * @param string $display_name - The display name of the User.
+	 * @param string $log_type      The object of the event: 'workflow', 'step', 'assignee'.
+	 * @param string $event         The event which occurred: 'started', 'ended', 'status'.
+	 * @param int    $form_id       The form ID.
+	 * @param int    $entry_id      The Entry ID.
+	 * @param string $log_value     The value to log.
+	 * @param int    $step_id       The Step ID.
+	 * @param int    $duration      The duration in seconds - if applicable.
+	 * @param int    $assignee_id   The assignee ID - if applicable.
+	 * @param string $assignee_type The Assignee type - if applicable.
+	 * @param string $display_name  The display name of the User.
 	 */
 	public function log_activity( $log_type, $event, $form_id = 0, $entry_id = 0, $log_value = '', $step_id = 0, $duration = 0, $assignee_id = 0, $assignee_type = '', $display_name = '' ) {
 		gravity_flow()->log_event( $log_type, $event, $form_id, $entry_id, $log_value, $step_id, $duration, $assignee_id, $assignee_type, $display_name );
@@ -265,7 +273,7 @@ class Gravity_Flow_API {
 	/**
 	 * Returns the timeline for the specified entry with simple formatting.
 	 *
-	 * @param $entry
+	 * @param array $entry The current entry.
 	 *
 	 * @return string
 	 */
@@ -273,4 +281,3 @@ class Gravity_Flow_API {
 		return gravity_flow()->get_timeline( $entry );
 	}
 }
-

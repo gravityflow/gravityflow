@@ -2,10 +2,9 @@
 /**
  * Gravity Flow Step Feed WP E-Signature
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Step_Feed_Esign
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.3.3-dev
  */
@@ -14,18 +13,55 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Step_Feed_Esign
+ */
 class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
+
+	/**
+	 * The step type.
+	 *
+	 * @var string
+	 */
 	public $_step_type = 'wp-e-signature';
 
+	/**
+	 * The name of the class used by the add-on.
+	 *
+	 * @var string
+	 */
 	protected $_class_name = 'GFEsignAddOn';
+
+	/**
+	 * The slug used by the add-on.
+	 *
+	 * @var string
+	 */
 	protected $_slug = 'esig-gf';
+
+	/**
+	 * The E-Signature feed ID.
+	 *
+	 * @var int
+	 */
 	protected $_feed_id;
 
-
+	/**
+	 * Returns the step label.
+	 *
+	 * @return string
+	 */
 	public function get_label() {
 		return 'WP E-Signature';
 	}
 
+	/**
+	 * Returns the feed name.
+	 *
+	 * @param array $feed The E-Signature feed properties.
+	 *
+	 * @return string
+	 */
 	public function get_feed_label( $feed ) {
 		$sad_page_id    = rgars( $feed, 'meta/esig_gf_sad' );
 		$sad            = new esig_sad_document();
@@ -36,10 +72,20 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 		return $document->document_title;
 	}
 
+	/**
+	 * Returns the URL for the step icon.
+	 *
+	 * @return string
+	 */
 	public function get_icon_url() {
 		return $this->get_base_url() . '/images/esig-icon.png';
 	}
 
+	/**
+	 * Returns an array of settings for this step type.
+	 *
+	 * @return array
+	 */
 	public function get_settings() {
 		$settings = parent::get_settings();
 
@@ -75,13 +121,20 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 		return $settings;
 	}
 
-
+	/**
+	 * Prevent the feeds assigned to the current step from being processed by the associated add-on.
+	 */
 	public function intercept_submission() {
 		parent::intercept_submission();
 
 		remove_filter( 'gform_confirmation', array( ESIG_GRAVITY_Admin::get_instance(), 'reroute_confirmation' ) );
 	}
 
+	/**
+	 * Processes this step.
+	 *
+	 * @return bool Is the step complete?
+	 */
 	public function process() {
 		$complete = parent::process();
 		$this->assign();
@@ -89,6 +142,13 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 		return $complete;
 	}
 
+	/**
+	 * Processes the given feed for the add-on.
+	 *
+	 * @param array $feed The add-on feed properties.
+	 *
+	 * @return bool Is feed processing complete?
+	 */
 	public function process_feed( $feed ) {
 		$this->_feed_id = $feed['id'];
 		add_action( 'esig_sad_document_invite_send', array( $this, 'sad_document_invite_send' ) );
@@ -98,6 +158,11 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 		return false;
 	}
 
+	/**
+	 * Determines if this step type is supported.
+	 *
+	 * @return bool
+	 */
 	public function is_supported() {
 		return parent::is_supported() && class_exists( 'esig_sad_document' ) && class_exists( 'WP_E_Document' );
 	}
@@ -143,6 +208,12 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 		return $document_ids;
 	}
 
+	/**
+	 * Displays content inside the Workflow metabox on the workflow detail page.
+	 *
+	 * @param array $form The Form array which may contain validation details.
+	 * @param array $args Additional args which may affect the display.
+	 */
 	public function workflow_detail_box( $form, $args ) {
 		$document_ids = $this->get_document_ids();
 
@@ -198,6 +269,9 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 		}
 	}
 
+	/**
+	 * Deletes custom entry meta when the step or workflow is restarted.
+	 */
 	public function restart_action() {
 		gform_delete_meta( $this->get_entry_id(), 'workflow_step_' . $this->get_id() . '_document_ids' );
 	}

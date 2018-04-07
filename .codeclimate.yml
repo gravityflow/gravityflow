@@ -1,0 +1,18 @@
+version: "2"
+plugins:
+  csslint:
+    enabled: true
+  phpcodesniffer:
+    enabled: true
+    config:
+      standard: "WordPress-Core,WordPress-Docs"
+    checks:
+      WordPress Files FileName InvalidClassFileName:
+        enabled: false
+      WordPress PHP YodaConditions NotYoda:
+        enabled: false
+exclude_patterns:
+- "tests/"
+- "languages/"
+- "**/index.php"
+- "Gruntfile.js"

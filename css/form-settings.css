@@ -21,9 +21,20 @@
     top: 90px;
 }
 
+.rtl .mt-_gaddon_setting_workflow_notification_message,
+.rtl .gravityflow-tab-field span[class^="mt-_gaddon_setting_"] {
+    float: left;
+    left: 15px;
+}
+
 #wp-_gaddon_setting_workflow_notification_message-wrap,
 .gravityflow-tab-field div.wp-editor-wrap {
     margin-right: 15px;
+}
+
+.rtl #wp-_gaddon_setting_workflow_notification_message-wrap,
+.rtl .gravityflow-tab-field div.wp-editor-wrap {
+    margin-left: 15px;
 }
 
 .gform-routing-row{
@@ -34,6 +45,12 @@
 #editable_fields{
     position: absolute;
     left: -9999px;
+}
+
+.rtl #assignees,
+.rtl #editable_fields{
+    right: -9999px;
+    left: auto;
 }
 
 table.gforms_form_settings th{
@@ -48,6 +65,20 @@ table.gforms_form_settings tr.gravityflow_sub_setting th{
 
 table.gforms_form_settings tr.gravityflow_sub_setting td{
     padding-left: 10px;
+}
+
+.rtl table.gforms_form_settings th{
+    border-right: 0;
+    padding-right: 0!important;
+}
+
+.rtl table.gforms_form_settings tr.gravityflow_sub_setting th{
+    border-right: 1px dashed #dfdfdf;
+    padding-right: 10px!important;
+}
+
+.rtl table.gforms_form_settings tr.gravityflow_sub_setting td{
+    padding-right: 10px;
 }
 
 table.gform-routings thead th{
@@ -167,6 +198,8 @@ tr#gaddon-setting-row-step_type label > span > i {
     color:#0074a2;
 }
 
+.gravityflow-step-highlight-type-container,
+.gravityflow-step-highlight-color-container,
 .gravityflow-schedule-type-container,
 .gravityflow-schedule-delay-container,
 .gravityflow-schedule-date-container,
@@ -176,8 +209,16 @@ tr#gaddon-setting-row-step_type label > span > i {
     margin: 10px 0 10px 0;
 }
 
+.gravityflow-step-highlight-type-container {
+    display: none;
+}
+
 .gravityflow_display_fields_selected_container{
     margin-top:5px;
+}
+
+.gravityflow-step-highlight-color-container .wp-picker-container {
+    margin-top: 5px;
 }
 
 .settings-field-map-table .custom-value-reset {
@@ -194,9 +235,18 @@ tr#gaddon-setting-row-step_type label > span > i {
     transition: none;
 }
 
+.rtl .settings-field-map-table .custom-value-reset {
+    background: url( ../images/xit.gif ) no-repeat scroll 100% 0 transparent;
+    text-indent:9999px;
+}
+
 .settings-field-map-table .custom-value-reset {
     margin-top: 10px;
     margin-left: 165px;
+}
+
+.rtl .settings-field-map-table .custom-value-reset {
+    margin-right: 165px;
 }
 
 .settings-field-map-table .custom-value-container:hover .custom-value-reset { display:block; }

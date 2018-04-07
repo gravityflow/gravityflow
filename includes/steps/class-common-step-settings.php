@@ -2,21 +2,38 @@
 /**
  * Gravity Flow Common Step Settings Functions
  *
- * @package   GravityFlow
- * @copyright   Copyright (c) 2017, Steven Henty S.L.
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since     1.5.1-dev
+ * @since       1.5.1-dev
  */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Common_Step_Settings
+ */
 class Gravity_Flow_Common_Step_Settings {
 
+	/**
+	 * Choices array of assignees.
+	 *
+	 * @var array
+	 */
 	private $_account_choices = array();
+
+	/**
+	 * Choices array of active Gravity PDF feeds.
+	 *
+	 * @var array
+	 */
 	private $_gpdf_choices = array();
 
+	/**
+	 * Gravity_Flow_Common_Step_Settings constructor.
+	 */
 	public function __construct() {
 		$this->_account_choices = gravity_flow()->get_users_as_choices();
 		$this->set_gpdf_choices();

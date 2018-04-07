@@ -1,25 +1,32 @@
 sudo: false
+dist: trusty
 language: php
 cache:
   directories:
     - node_modules
 php:
-- 5.2
-- 5.3
-- 5.4
-- 5.5
-- 5.6
-- 7.0
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+matrix:
+  include:
+    - php: 5.2
+      dist: precise
+    - php: 5.3
+      dist: precise
+    - php: 7.2
 env:
   matrix:
-  - WP_VERSION=latest WP_MULTISITE=0
-  - WP_VERSION=4.6 WP_MULTISITE=0
-  - WP_VERSION=4.5 WP_MULTISITE=0
-  - WP_VERSION=4.4 WP_MULTISITE=0
-  - WP_VERSION=4.3 WP_MULTISITE=0
-  - WP_VERSION=4.2 WP_MULTISITE=0
-  - WP_VERSION=4.1 WP_MULTISITE=0
-  - WP_VERSION=4.0 WP_MULTISITE=0
+    - WP_VERSION=latest WP_MULTISITE=0
+    - WP_VERSION=4.9 WP_MULTISITE=0
+    - WP_VERSION=4.8 WP_MULTISITE=0
+    - WP_VERSION=4.7 WP_MULTISITE=0
+    - WP_VERSION=4.6 WP_MULTISITE=0
+    - WP_VERSION=4.5 WP_MULTISITE=0
+    - WP_VERSION=4.4 WP_MULTISITE=0
+    - WP_VERSION=4.3 WP_MULTISITE=0
   global:
     - WP_TRAVISCI=travis:phpunit
 before_script:
@@ -39,6 +46,10 @@ before_script:
   # Install the specified version of PHPUnit depending on the PHP version:
   if [[ "$WP_TRAVISCI" == "travis:phpunit" ]]; then
     case "$TRAVIS_PHP_VERSION" in
+      7.2)
+        echo "Using PHPUnit 6.0"
+        composer global require "phpunit/phpunit=6.0.*"
+        ;;
       7.1|7.0|hhvm|nightly)
         echo "Using PHPUnit 5.7"
         composer global require "phpunit/phpunit=5.7.*"
@@ -79,7 +90,7 @@ before_script:
 - grunt --version
 - git --version
 - svn --version
-- git clone https://${GFTOKEN}@github.com/stevehenty/gravityforms.git $PWD/tmp/gravityforms
+- git clone https://${GFTOKEN}@github.com/gravityforms/gravityforms.git $PWD/tmp/gravityforms
 - bash tests/bin/install.sh wordpress_unit_tests root '' localhost $WP_VERSION
 script: phpunit
 notifications:

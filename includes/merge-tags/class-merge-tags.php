@@ -1,17 +1,45 @@
 <?php
+/**
+ * Gravity Flow Merge Tags
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
+if ( ! class_exists( 'GFForms' ) ) {
+	die();
+}
+
+/**
+ * Class Gravity_Flow_Merge_Tags
+ *
+ * @since 1.7.1-dev
+ */
 class Gravity_Flow_Merge_Tags {
 
+	/**
+	 * The merge tag class names.
+	 *
+	 * @var Gravity_Flow_Merge_Tag[]
+	 */
 	private static $class_names = array();
 
+	/**
+	 * Get an array of registered merge tag class names.
+	 *
+	 * @return Gravity_Flow_Merge_Tag[]
+	 */
 	private static function get_class_names() {
 		return self::$class_names;
 	}
 
 	/**
-	 * @param Gravity_Flow_Merge_Tag $merge_tag
+	 * Register the supplied merge tag.
 	 *
-	 * @throws Exception
+	 * @param Gravity_Flow_Merge_Tag $merge_tag The merge tag class.
+	 *
+	 * @throws Exception When the merge tags name property has not been set.
 	 */
 	public static function register( $merge_tag ) {
 
@@ -29,9 +57,12 @@ class Gravity_Flow_Merge_Tags {
 	}
 
 	/**
-	 * @param $args
+	 * Get the specified merge tag class, if available.
 	 *
-	 * @return Gravity_Flow_Merge_Tag
+	 * @param string     $name The merge tag class name.
+	 * @param null|array $args The arguments used to initialize the class.
+	 *
+	 * @return Gravity_Flow_Merge_Tag|false
 	 */
 	public static function get( $name, $args ) {
 		$classes = self::get_class_names();
@@ -44,7 +75,9 @@ class Gravity_Flow_Merge_Tags {
 	}
 
 	/**
-	 * @param $args
+	 * Get an array of registered merge tag classes.
+	 *
+	 * @param null|array $args The arguments used to initialize the class.
 	 *
 	 * @return Gravity_Flow_Merge_Tag[]
 	 */

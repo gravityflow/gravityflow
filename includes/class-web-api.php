@@ -1,13 +1,28 @@
 <?php
+/**
+ * Gravity Flow Web API
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Web_API
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public Licenses
+ */
+
+if ( ! class_exists( 'GFForms' ) ) {
+	die();
+}
 
 /**
  * Class Gravity_Flow_Web_API
  *
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 class Gravity_Flow_Web_API {
 
+	/**
+	 * Gravity_Flow_Web_API constructor.
+	 */
 	public function __construct() {
 		add_action( 'gform_webapi_get_entries_assignees', array( $this, 'get_entries_assignees' ), 10, 2 );
 		add_action( 'gform_webapi_post_entries_assignees', array( $this, 'post_entries_assignees' ), 10, 2 );
@@ -15,6 +30,11 @@ class Gravity_Flow_Web_API {
 		add_action( 'gform_webapi_get_entries_steps', array( $this, 'get_entries_steps' ) );
 	}
 
+	/**
+	 * Gets the steps for the specified entry.
+	 *
+	 * @param int $entry_id The entry ID.
+	 */
 	public function get_entries_steps( $entry_id ) {
 
 		$capability = apply_filters( 'gravityflow_web_api_capability_get_entries_steps', 'gravityflow_create_steps' );
@@ -54,6 +74,11 @@ class Gravity_Flow_Web_API {
 		$this->end( 200, $response );
 	}
 
+	/**
+	 * Gets the steps for the specified form.
+	 *
+	 * @param int $form_id The form ID.
+	 */
 	public function get_forms_steps( $form_id ) {
 
 		$capability = apply_filters( 'gravityflow_web_api_capability_get_forms_steps', 'gravityflow_create_steps' );
@@ -78,6 +103,12 @@ class Gravity_Flow_Web_API {
 		$this->end( 200, $response );
 	}
 
+	/**
+	 * Gets the assignee(s) for the specified entry.
+	 *
+	 * @param int         $entry_id     The entry ID.
+	 * @param null|string $assignee_key The assignee key or null.
+	 */
 	public function get_entries_assignees( $entry_id, $assignee_key = null ) {
 
 		$capability = apply_filters( 'gravityflow_web_api_capability_get_entries_assignees', 'gravityflow_create_steps' );
@@ -91,7 +122,7 @@ class Gravity_Flow_Web_API {
 		if ( empty( $assignee_key ) ) {
 			$response = $this->get_assignees_array( $step );
 		} else {
-			$assignee = new Gravity_Flow_Assignee( $assignee_key, $step );
+			$assignee = Gravity_Flow_Assignees::create( $assignee_key, $step );
 			$response = $this->get_assignee_array( $assignee );
 		}
 
@@ -101,8 +132,8 @@ class Gravity_Flow_Web_API {
 	/**
 	 * Processes a status update for a specified assignee of the current step of the specified entry.
 	 *
-	 * @param $entry_id
-	 * @param string $assignee_key
+	 * @param int         $entry_id     The entry ID.
+	 * @param null|string $assignee_key The assignee key or null.
 	 */
 	public function post_entries_assignees( $entry_id, $assignee_key = null ) {
 		global $HTTP_RAW_POST_DATA;
@@ -126,7 +157,7 @@ class Gravity_Flow_Web_API {
 		$api     = new Gravity_Flow_API( $form_id );
 
 		$step     = $api->get_current_step( $entry );
-		$assignee = new Gravity_Flow_Assignee( $assignee_key, $step );
+		$assignee = Gravity_Flow_Assignees::create( $assignee_key, $step );
 
 		if ( ! isset( $HTTP_RAW_POST_DATA ) ) {
 			$HTTP_RAW_POST_DATA = file_get_contents( 'php://input' );
@@ -148,7 +179,9 @@ class Gravity_Flow_Web_API {
 	}
 
 	/**
-	 * @param Gravity_Flow_Step|bool $step
+	 * Gets the assignees for the supplied step.
+	 *
+	 * @param Gravity_Flow_Step|bool $step The current step.
 	 *
 	 * @return array
 	 */
@@ -164,7 +197,9 @@ class Gravity_Flow_Web_API {
 	}
 
 	/**
-	 * @param Gravity_Flow_Assignee $assignee
+	 * Get an array of properties for the supplied assignee object.
+	 *
+	 * @param Gravity_Flow_Assignee $assignee The assignee.
 	 *
 	 * @return array
 	 */
@@ -179,8 +214,10 @@ class Gravity_Flow_Web_API {
 	}
 
 	/**
-	 * @param $status
-	 * @param $response
+	 * Completes the request by having the Gravity Forms Web API output the specified status code and response.
+	 *
+	 * @param int          $status   The status code.
+	 * @param array|string $response The response.
 	 */
 	public function end( $status, $response ) {
 		GFWebAPI::end( $status, $response );
@@ -188,7 +225,9 @@ class Gravity_Flow_Web_API {
 
 
 	/**
-	 * @param array $caps
+	 * Validates if the user has the capabilities required to perform the current request.
+	 *
+	 * @param array $caps The capabilities required for the current request.
 	 *
 	 * @return bool
 	 */
@@ -201,8 +240,11 @@ class Gravity_Flow_Web_API {
 		$this->die_forbidden();
 	}
 
+	/**
+	 * End the request with a 403 error.
+	 */
 	public function die_forbidden() {
-		$this->end( 403, __( 'Forbidden', 'gravityforms' ) );
+		$this->end( 403, __( 'Forbidden', 'gravityflow' ) );
 	}
 }
 

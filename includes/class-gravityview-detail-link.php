@@ -1,4 +1,12 @@
 <?php
+/**
+ * Integrates Gravity Flow with GravityView.
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.5.1-dev
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
@@ -7,21 +15,49 @@ if ( ! class_exists( 'GFForms' ) ) {
 /**
  * Add custom options for workflow_detail_link fields
  *
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 
+	/**
+	 * The name of the GravityView field type.
+	 *
+	 * @var string
+	 */
 	var $name = 'workflow_detail_link';
 
+	/**
+	 * The contexts in which a field is available.
+	 *
+	 * @var array
+	 */
 	var $contexts = array( 'multiple' );
 
+	/**
+	 * Can the field be sorted in search?
+	 *
+	 * @var bool
+	 */
 	var $is_sortable = false;
 
+	/**
+	 * Can the field be searched?
+	 *
+	 * @var bool
+	 */
 	var $is_searchable = false;
 
+	/**
+	 * The group this field belongs to.
+	 *
+	 * @var string
+	 */
 	var $group = 'meta';
 
+	/**
+	 * Gravity_Flow_GravityView_Workflow_Detail_Link constructor.
+	 */
 	public function __construct() {
 		$this->label = esc_html__( 'Link to Workflow Entry Detail', 'gravityflow' );
 
@@ -34,7 +70,6 @@ class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 	 * Adds hooks for GravityView.
 	 *
 	 * @since 1.5.1-dev
-	 *
 	 */
 	private function add_hooks() {
 		add_filter( 'gravityview_entry_default_fields', array( $this, 'add_entry_default_field' ), 10, 3 );
@@ -44,15 +79,15 @@ class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 	/**
 	 * Add Entry Notes to the Add Field picker in Edit View
 	 *
-	 * @see GravityView_Admin_Views::get_entry_default_fields()
+	 * @see   GravityView_Admin_Views::get_entry_default_fields()
 	 *
 	 * @since 1.17
 	 *
-	 * @param array $entry_default_fields Fields configured to show in the picker
-	 * @param array $form Gravity Forms form array
-	 * @param string $zone Current context: `directory`, `single`, `edit`
+	 * @param array  $entry_default_fields Fields configured to show in the picker.
+	 * @param array  $form                 Gravity Forms form array.
+	 * @param string $zone                 Current context: `directory`, `single`, `edit`.
 	 *
-	 * @return array Fields array with notes added, if in Multiple Entries or Single Entry context
+	 * @return array Fields array with notes added, if in Multiple Entries or Single Entry context.
 	 */
 	public function add_entry_default_field( $entry_default_fields, $form, $zone ) {
 
@@ -70,10 +105,10 @@ class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 	/**
 	 * Generate the workflow detail link.
 	 *
-	 * @param string $output HTML value output
-	 * @param array  $entry The GF entry array
-	 * @param  array $field_settings Settings for the particular GV field
-	 * @param array $field Current field being displayed
+	 * @param string $output         HTML value output.
+	 * @param array  $entry          The GF entry array.
+	 * @param array  $field_settings Settings for the particular GV field.
+	 * @param array  $field          Current field being displayed.
 	 *
 	 * @since 1.5.1-dev
 	 *
@@ -106,11 +141,11 @@ class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 	/**
 	 * Adds the link text field option.
 	 *
-	 * @param array $field_options
-	 * @param string $template_id
-	 * @param string $field_id
-	 * @param string $context
-	 * @param string $input_type
+	 * @param array  $field_options The field properties.
+	 * @param string $template_id   The template ID.
+	 * @param string $field_id      The field ID.
+	 * @param string $context       The current context.
+	 * @param string $input_type    The field input type.
 	 *
 	 * @return array
 	 */

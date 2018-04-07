@@ -2,10 +2,9 @@
 /**
  * Gravity Flow Step Feed Sprout Invoices
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Step_Feed_Sprout_Invoices
- * @copyright   Copyright (c) 2016-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2016-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.4.3-dev
  */
@@ -14,9 +13,23 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-
+/**
+ * Class Gravity_Flow_Step_Feed_Sprout_Invoices
+ */
 class Gravity_Flow_Step_Feed_Sprout_Invoices extends Gravity_Flow_Step_Feed_Add_On {
+
+	/**
+	 * The step type.
+	 *
+	 * @var string
+	 */
 	public $_step_type = 'sprout_invoices';
+
+	/**
+	 * The name of the class used by the add-on.
+	 *
+	 * @var string
+	 */
 	protected $_slug = 'gravityformssproutinvoices';
 
 	/**
@@ -33,14 +46,29 @@ class Gravity_Flow_Step_Feed_Sprout_Invoices extends Gravity_Flow_Step_Feed_Add_
 	 */
 	protected $_invoice_form_id = false;
 
+	/**
+	 * Returns the step label.
+	 *
+	 * @return string
+	 */
 	public function get_label() {
 		return 'Sprout Invoices';
 	}
 
+	/**
+	 * Returns the URL for the step icon.
+	 *
+	 * @return string
+	 */
 	public function get_icon_url() {
 		return $this->get_base_url() . '/images/sproutapps-icon.png';
 	}
 
+	/**
+	 * Determines if this step type is supported.
+	 *
+	 * @return bool
+	 */
 	public function is_supported() {
 		$form_id = $this->get_form_id();
 
@@ -119,6 +147,13 @@ class Gravity_Flow_Step_Feed_Sprout_Invoices extends Gravity_Flow_Step_Feed_Add_
 		);
 	}
 
+	/**
+	 * Processes the given feed for the add-on.
+	 *
+	 * @param array $feed The add-on feed properties.
+	 *
+	 * @return bool Is feed processing complete?
+	 */
 	public function process_feed( $feed ) {
 		$form  = $this->get_form();
 		$entry = $this->get_entry();
@@ -134,6 +169,9 @@ class Gravity_Flow_Step_Feed_Sprout_Invoices extends Gravity_Flow_Step_Feed_Add_
 		return true;
 	}
 
+	/**
+	 * If enabled prevent the Sprout Invoices/Estimates integrations from running during submission for the current form.
+	 */
 	public function intercept_submission() {
 		$form_id = $this->get_form_id();
 

@@ -1,10 +1,35 @@
 <?php
+/**
+ * Gravity Flow Installation Wizard: License Key Step
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Installation_Wizard
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
+/**
+ * Class Gravity_Flow_Installation_Wizard_Step_License_Key
+ */
 class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Installation_Wizard_Step {
+
+	/**
+	 * Is this step required?
+	 *
+	 * @var bool
+	 */
 	public $required = true;
 
+	/**
+	 * The step name.
+	 *
+	 * @var string
+	 */
 	protected $_name = 'license_key';
 
+	/**
+	 * Displays the content for this step.
+	 */
 	public function display() {
 
 		if ( ! $this->license_key && defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
@@ -45,10 +70,22 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 		}
 	}
 
+	/**
+	 * Returns the title for this step.
+	 *
+	 * @return string
+	 */
 	public function get_title() {
 		return esc_html__( 'License Key', 'gravityflow' );
 	}
 
+	/**
+	 * Validates the posted values for this step.
+	 *
+	 * @param array $posted_values The posted values.
+	 *
+	 * @return bool
+	 */
 	public function validate( $posted_values ) {
 
 		$valid_key = true;
@@ -78,6 +115,9 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 		return $valid;
 	}
 
+	/**
+	 * Installs the license key, if supplied.
+	 */
 	public function install() {
 		if ( $this->license_key ) {
 			$gravityflow = gravity_flow();
@@ -88,6 +128,11 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 		}
 	}
 
+	/**
+	 * Returns the previous button label.
+	 *
+	 * @return string
+	 */
 	public function get_previous_button_text() {
 		return '';
 	}

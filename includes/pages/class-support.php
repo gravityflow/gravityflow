@@ -1,21 +1,27 @@
 <?php
+/**
+ * Gravity Flow Support
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Support
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
 /**
- * Gravity Flow Support
+ * Class Gravity_Flow_Support
  *
- *
- * @package     GravityFlow
- * @subpackage  Classes/Gravity_Flow_Support
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * @since 1.0
  */
 class Gravity_Flow_Support {
 
+	/**
+	 * Displays the support page content.
+	 */
 	public static function display() {
 
 		$license_message = '';
@@ -209,7 +215,7 @@ class Gravity_Flow_Support {
 		}
 		$plugins = join( ', ', $plugins );
 
-		//get theme info
+		// Get theme info.
 		$theme            = wp_get_theme();
 		$theme_name       = $theme->get( 'Name' );
 		$theme_uri        = $theme->get( 'ThemeURI' );

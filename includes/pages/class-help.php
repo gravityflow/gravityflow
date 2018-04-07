@@ -1,19 +1,27 @@
 <?php
+/**
+ * Gravity Flow Help
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
+
 /**
- * Gravity Flow Help
+ * Class Gravity_Flow_Help
  *
- *
- * @package     GravityFlow
- * @subpackage  Classes/Gravity_Flow
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * @since 1.0
  */
 class Gravity_Flow_Help {
+
+	/**
+	 * Displays the help page content.
+	 */
 	public static function display() {
 
 		?>

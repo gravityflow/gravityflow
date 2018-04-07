@@ -2,10 +2,9 @@
 /**
  * Gravity Flow Step Feed User Registration
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Step_Feed_User_Registration
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -14,13 +13,32 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-add_action( 'gform_user_registered', array( 'Gravity_Flow_Step_Feed_User_Registration', 'action_gform_user_registered' ), 10, 4 );
+add_action( 'gform_user_registered', array( 'Gravity_Flow_Step_Feed_User_Registration', 'action_gform_user_registered' ), 10, 3 );
 
+/**
+ * Class Gravity_Flow_Step_Feed_User_Registration
+ */
 class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Add_On {
+
+	/**
+	 * The step type.
+	 *
+	 * @var string
+	 */
 	public $_step_type = 'user_registration';
 
+	/**
+	 * The name of the class used by the add-on.
+	 *
+	 * @var string
+	 */
 	protected $_class_name = 'GFUser';
 
+	/**
+	 * Returns the class name for the add-on.
+	 *
+	 * @return string
+	 */
 	public function get_feed_add_on_class_name() {
 		$class_name        = class_exists( 'GF_User_Registration' ) ? 'GF_User_Registration' : 'GFUser';
 		$this->_class_name = $class_name;
@@ -28,14 +46,29 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		return $class_name;
 	}
 
+	/**
+	 * Returns the step label.
+	 *
+	 * @return string
+	 */
 	public function get_label() {
 		return esc_html__( 'User Registration', 'gravityflow' );
 	}
 
+	/**
+	 * Returns the HTML for the step icon.
+	 *
+	 * @return string
+	 */
 	public function get_icon_url() {
 		return '<i class="fa fa-user" style="color:darkgreen"></i>';
 	}
 
+	/**
+	 * Returns the feeds for the add-on.
+	 *
+	 * @return array
+	 */
 	public function get_feeds() {
 		$form_id = $this->get_form_id();
 
@@ -49,6 +82,13 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		return $feeds;
 	}
 
+	/**
+	 * Processes the given feed for the add-on.
+	 *
+	 * @param array $feed The add-on feed properties.
+	 *
+	 * @return bool Is feed processing complete?
+	 */
 	function process_feed( $feed ) {
 
 		if ( class_exists( 'GF_User_Registration' ) ) {
@@ -61,18 +101,21 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 
 			return $step_complete;
 		}
-		// User Registration < 3.0
+		// User Registration < 3.0.
 		$form  = $this->get_form();
 		$entry = $this->get_entry();
 		remove_filter( 'gform_disable_registration', '__return_true' );
 		GFUser::gf_create_user( $entry, $form );
 
-		// Make sure it's not run twice
+		// Make sure it's not run twice.
 		add_filter( 'gform_disable_registration', '__return_true' );
 
 		return true;
 	}
 
+	/**
+	 * Prevent the feeds assigned to the current step from being processed by the associated add-on.
+	 */
 	public function intercept_submission() {
 		if ( class_exists( 'GF_User_Registration' ) ) {
 			parent::intercept_submission();
@@ -83,6 +126,13 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		add_filter( 'gform_disable_registration', '__return_true' );
 	}
 
+	/**
+	 * Returns the feed name.
+	 *
+	 * @param array $feed The feed properties.
+	 *
+	 * @return string
+	 */
 	public function get_feed_label( $feed ) {
 		if ( class_exists( 'GF_User_Registration' ) ) {
 			return parent::get_feed_label( $feed );
@@ -93,8 +143,14 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		return $label;
 	}
 
+	/**
+	 * Displays content inside the Workflow metabox on the workflow detail page.
+	 *
+	 * @param array $form The Form array which may contain validation details.
+	 * @param array $args Additional args which may affect the display.
+	 */
 	public function workflow_detail_box( $form, $args ) {
-		$step_status = $this->get_status();
+		$step_status  = $this->get_status();
 		$status_label = $this->get_status_label( $step_status );
 
 		$display_step_status = (bool) $args['step_status'];
@@ -117,8 +173,13 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		endif;
 	}
 
+	/**
+	 * Displays content inside the Workflow metabox on the Gravity Forms Entry Detail page.
+	 *
+	 * @param array $form The current form.
+	 */
 	public function entry_detail_status_box( $form ) {
-		$step_status = $this->get_status();
+		$step_status  = $this->get_status();
 		$status_label = $this->get_status_label( $step_status );
 
 		?>
@@ -134,7 +195,14 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 		<?php
 	}
 
-	public static function action_gform_user_registered( $user_id, $feed, $entry, $user_pass ) {
+	/**
+	 * Target for the gform_user_registered hook; completes the step.
+	 *
+	 * @param int   $user_id The ID of the new user.
+	 * @param array $feed    The feed properties.
+	 * @param array $entry   The current entry.
+	 */
+	public static function action_gform_user_registered( $user_id, $feed, $entry ) {
 
 		$api = new Gravity_Flow_API( $entry['form_id'] );
 		$step = $api->get_current_step( $entry );

@@ -12,7 +12,8 @@ function _manually_load_plugin() {
 		require dirname( dirname( __FILE__ ) ) . '/tmp/gravityforms/gravityforms.php';
 	}
 	require dirname( dirname( __FILE__ ) ) . '/gravityflow.php';
-	GFForms::setup( true );
+	//GFForms::setup( true );
+	gf_upgrade()->install();
 	GFForms::loaded();
 	gravity_flow()->setup();
 }

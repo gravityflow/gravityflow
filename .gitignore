@@ -20,3 +20,4 @@ tests/_output/*
 .DS_Store
 .env
 tests/acceptance-tests/_support/_generated/AcceptanceTesterActions.php
+codeclimate-report.html

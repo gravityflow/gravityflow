@@ -2,10 +2,9 @@
 /**
  * Gravity Flow Step User Input
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Step_User_Input
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -14,29 +13,67 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Step_User_Input
+ */
 class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
+	/**
+	 * The step type.
+	 *
+	 * @var string
+	 */
 	public $_step_type = 'user_input';
 
+	/**
+	 * An array of field IDs which the user can edit.
+	 *
+	 * @var array
+	 */
 	protected $_editable_fields = array();
 
+	/**
+	 * An array of field IDs to be processed when updating the post created from the current entry.
+	 *
+	 * @var array
+	 */
 	protected $_update_post_fields = array(
 		'fields' => array(),
 		'images' => array(),
 	);
 
+	/**
+	 * Returns the step label.
+	 *
+	 * @return string
+	 */
 	public function get_label() {
 		return esc_html__( 'User Input', 'gravityflow' );
 	}
 
+	/**
+	 * Indicates this step can expire without user input.
+	 *
+	 * @return bool
+	 */
 	public function supports_expiration() {
 		return true;
 	}
 
+	/**
+	 * Returns the HTML for the step icon.
+	 *
+	 * @return string
+	 */
 	public function get_icon_url() {
 		return '<i class="fa fa-pencil" ></i>';
 	}
 
+	/**
+	 * Returns an array of settings for this step type.
+	 *
+	 * @return array
+	 */
 	public function get_settings() {
 		$form         = $this->get_form();
 		$settings_api = $this->get_common_settings_api();
@@ -85,7 +122,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					'checkbox' => array(
 						'label'          => esc_html__( 'Enable field conditional logic', 'gravityflow' ),
 						'name'           => 'conditional_logic_editable_fields_enabled',
-						'defeault_value' => '0',
+						'default_value' => '1',
 					),
 					'select'   => array(
 						'name'    => 'conditional_logic_editable_fields_mode',
@@ -111,7 +148,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 						array(
 							'label'          => esc_html__( 'Enable field conditional logic', 'gravityflow' ),
 							'name'           => 'conditional_logic_editable_fields_enabled',
-							'defeault_value' => '0',
+							'default_value' => '1',
 						),
 					),
 				);
@@ -148,13 +185,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			array(
 				'name'          => 'default_status',
 				'type'          => 'select',
-				'label'         => __( 'Save Progress Option', 'gravityflow' ),
+				'label'         => __( 'Save Progress', 'gravityflow' ),
 				'tooltip'       => __( 'This setting allows the assignee to save the field values without submitting the form as complete. Select Disabled to hide the "in progress" option or select the default value for the radio buttons.', 'gravityflow' ),
 				'default_value' => 'hidden',
 				'choices'       => array(
 					array( 'label' => __( 'Disabled', 'gravityflow' ), 'value' => 'hidden' ),
 					array( 'label' => __( 'Radio buttons (default: In progress)', 'gravityflow' ), 'value' => 'in_progress' ),
 					array( 'label' => __( 'Radio buttons (default: Complete)', 'gravityflow' ), 'value' => 'complete' ),
+					array( 'label' => __( 'Submit buttons (Save and Submit)', 'gravityflow' ), 'value' => 'submit_buttons' ),
 				),
 			),
 			array(
@@ -183,7 +221,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					'id'     => 'tab_assignee_notification',
 					'fields' => $settings_api->get_setting_notification( array(
 						'checkbox_default_value' => true,
-						'default_message'        => __( 'A new entry requires your input', 'gravityflow' ),
+						'default_message'        => __( 'A new entry requires your input.', 'gravityflow' ),
 					) ),
 				),
 				array(
@@ -219,18 +257,42 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		return $settings;
 	}
 
+	/**
+	 * Determines if this forms fields have conditional logic configured.
+	 *
+	 * @param array $form The current form.
+	 *
+	 * @return bool
+	 */
 	public function fields_have_conditional_logic( $form ) {
 		return gravity_flow()->fields_have_conditional_logic( $form );
 	}
 
+	/**
+	 * Determines if this forms page fields have conditional logic configured.
+	 *
+	 * @param array $form The current form.
+	 *
+	 * @return bool
+	 */
 	public function pages_have_conditional_logic( $form ) {
 		return gravity_flow()->pages_have_conditional_logic( $form );
 	}
 
+	/**
+	 * Set the assignees for this step.
+	 *
+	 * @return bool
+	 */
 	public function process() {
 		return $this->assign();
 	}
 
+	/**
+	 * Determines the current status of the step.
+	 *
+	 * @return string
+	 */
 	public function status_evaluation() {
 		$assignee_details = $this->get_assignees();
 		$step_status      = 'complete';
@@ -253,6 +315,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		return $step_status;
 	}
 
+	/**
+	 * Determines if all the editable fields are empty.
+	 *
+	 * @param array $entry           The current entry.
+	 * @param array $editable_fields An array of field IDs which the user can edit.
+	 *
+	 * @return bool
+	 */
 	public function fields_empty( $entry, $editable_fields ) {
 
 		foreach ( $editable_fields as $editable_field ) {
@@ -264,27 +334,21 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		return true;
 	}
 
+	/**
+	 * Returns an array of editable fields for the current user.
+	 *
+	 * @return array
+	 */
 	public function get_editable_fields() {
 		if ( ! empty( $this->_editable_fields ) ) {
 			return $this->_editable_fields;
 		}
 
-		$current_user_key = $this->get_current_assignee_key();
 		$editable_fields  = array();
 		$assignee_details = $this->get_assignees();
 
 		foreach ( $assignee_details as $assignee ) {
-
-			$assignee_key  = $assignee->get_key();
-			$assignee_type = $assignee->get_type();
-
-			$match = false;
-			if ( $assignee_type == 'role' && gravity_flow()->check_user_role( $assignee->get_id() ) ) {
-				$match = true;
-			} elseif ( $assignee_key == $current_user_key ) {
-				$match = true;
-			}
-			if ( $match && is_array( $assignee->get_editable_fields() ) ) {
+			if ( $assignee->is_current_user() && is_array( $assignee->get_editable_fields() ) ) {
 				$assignee_editable_fields = $assignee->get_editable_fields();
 				$editable_fields          = array_merge( $editable_fields, $assignee_editable_fields );
 			}
@@ -296,7 +360,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		return $editable_fields;
 	}
 
-
+	/**
+	 * Handles POSTed values from the workflow detail page.
+	 *
+	 * @param array $form  The current form.
+	 * @param array $entry The current entry.
+	 *
+	 * @return string|bool|WP_Error Return a success feedback message safe for page output or a WP_Error instance with an error.
+	 */
 	public function maybe_process_status_update( $form, $entry ) {
 
 		$feedback = false;
@@ -311,7 +382,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				return false;
 			}
 
-			// Loading files that have been uploaded to temp folder
+			// Loading files that have been uploaded to temp folder.
 			$files = GFCommon::json_decode( rgpost( 'gform_uploaded_files' ) );
 			if ( ! is_array( $files ) ) {
 				$files = array();
@@ -333,6 +404,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			$previous_assignees = $this->get_assignees();
 
+			foreach ( $previous_assignees as $assignee ) {
+				if ( $assignee->is_current_user() ) {
+					$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
+					break;
+				}
+			}
+
 			$original_entry = $entry;
 
 			$this->save_entry( $form, $entry, $editable_fields );
@@ -353,10 +431,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			$this->maybe_adjust_assignment( $previous_assignees );
 
-			$assignee_key = $this->get_current_assignee_key();
-			$assignee     = $this->get_assignee( $assignee_key );
-
-			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
+			if ( ! $feedback ) {
+				$feedback = new WP_Error( 'assignee_not_found', esc_html__( 'There was a problem while updating the assignee status.' ) );
+			}
 
 			$this->maybe_send_notification( $new_status );
 		}
@@ -416,9 +493,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	/**
 	 * Upload the file to the temporary folder for the current field.
 	 *
-	 * @param GF_Field $field The field properties.
-	 * @param array $files An array of files which have already been uploaded.
-	 * @param string $target_path The path to the tmp folder the file should be moved to.
+	 * @param GF_Field $field       The field properties.
+	 * @param array    $files       An array of files which have already been uploaded.
+	 * @param string   $target_path The path to the tmp folder the file should be moved to.
 	 *
 	 * @return array
 	 */
@@ -444,33 +521,25 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	}
 
 	/**
-	 * @param Gravity_Flow_Assignee $assignee
-	 * @param string $new_status
-	 * @param array $form
+	 * Validates and performs the assignees status update.
+	 *
+	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
+	 * @param string                $new_status The new status.
+	 * @param array                 $form The current form.
 	 *
 	 * @return string|bool If processed return a message to be displayed to the user.
 	 */
 	public function process_assignee_status( $assignee, $new_status, $form ) {
-		if ( $new_status == 'complete' ) {
-			$current_user_status = $assignee->get_status();
-
-			list( $role, $current_role_status ) = $this->get_current_role_status();
-
-			if ( $current_user_status == 'pending' ) {
-				$assignee->update_status( 'complete' );
-			}
-
-			if ( $current_role_status == 'pending' ) {
-				$this->update_role_status( $role, 'complete' );
-			}
-			$this->refresh_entry();
-		}
 
 		if ( $new_status == 'complete' ) {
+			$success = $assignee->process_status( $new_status );
+			if ( is_wp_error( $success ) ) {
+				return $success;
+			}
 			$note_message = __( 'Entry updated and marked complete.', 'gravityflow' );
 			if ( $this->confirmation_messageEnable ) {
 				$feedback = $this->confirmation_messageValue;
-				$feedback = $this->replace_variables( $feedback, $assignee );
+				$feedback = $assignee->replace_variables( $feedback );
 				$feedback = GFCommon::replace_variables( $feedback, $form, $this->get_entry(), false, true, true, 'html' );
 				$feedback = do_shortcode( $feedback );
 				$feedback = wp_kses_post( $feedback );
@@ -485,11 +554,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		/**
 		 * Allow the feedback message to be modified on the user input step.
 		 *
-		 * @param string $feedback
-		 * @param string $new_status
-		 * @param Gravity_Flow_Assignee $assignee
-		 * @param array $form
-		 * @param Gravity_Flow_Step $this
+		 * @param string                $feedback   The message to be displayed to the assignee when the detail page is redisplayed.
+		 * @param string                $new_status The new status.
+		 * @param Gravity_Flow_Assignee $assignee   The assignee properties.
+		 * @param array                 $form       The current form.
+		 * @param Gravity_Flow_Step     $this       The current step.
 		 */
 		$feedback = apply_filters( 'gravityflow_feedback_message_user_input', $feedback, $new_status, $assignee, $form, $this );
 
@@ -509,7 +578,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * Determine if this step is valid.
 	 *
 	 * @param string $new_status The new status for the current step.
-	 * @param array $form The form currently being processed.
+	 * @param array  $form       The form currently being processed.
 	 *
 	 * @return bool
 	 */
@@ -524,7 +593,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * Determine if the note is valid.
 	 *
 	 * @param string $new_status The new status for the current step.
-	 * @param string $note The submitted note.
+	 * @param string $note       The submitted note.
 	 *
 	 * @return bool
 	 */
@@ -551,8 +620,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	/**
 	 * Determine if the editable fields for this step are valid.
 	 *
-	 * @param bool $valid The steps current validation state.
-	 * @param array $form The form currently being processed.
+	 * @param bool  $valid The steps current validation state.
+	 * @param array $form  The form currently being processed.
 	 *
 	 * @return bool
 	 */
@@ -635,8 +704,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	/**
 	 * Allow the validation result to be overridden using the gravityflow_validation_user_input filter.
 	 *
-	 * @param array $validation_result The validation result and form currently being processed.
-	 * @param string $new_status The new status for the current step.
+	 * @param array  $validation_result The validation result and form currently being processed.
+	 * @param string $new_status        The new status for the current step.
 	 *
 	 * @return array
 	 */
@@ -659,17 +728,23 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			$this->maybe_display_assignee_status_list( $args, $form );
 
-			$assignee_status = $this->get_current_assignee_status();
-			list( $role, $role_status ) = $this->get_current_role_status();
-			$can_update = $assignee_status == 'pending' || $role_status == 'pending';
+			$assignees = $this->get_assignees();
+
+			$can_update = false;
+			foreach ( $assignees as $assignee ) {
+				if ( $assignee->is_current_user() ) {
+					$can_update = true;
+					break;
+				}
+			}
 
 			$this->maybe_enable_update_button( $can_update );
 
 			/**
 			 * Allows content to be added in the workflow box below the status list.
 			 *
-			 * @param Gravity_Flow_Step $this
-			 * @param array $form
+			 * @param Gravity_Flow_Step $this The current step.
+			 * @param array             $form The current form.
 			 */
 			do_action( 'gravityflow_below_status_list_user_input', $this, $form );
 
@@ -715,9 +790,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		/**
 		 * Allows the assignee status list to be hidden.
 		 *
-		 * @param array $form
-		 * @param array $entry
-		 * @param Gravity_Flow_Step $current_step
+		 * @param array             $form         The current form.
+		 * @param array             $entry        The current entry.
+		 * @param Gravity_Flow_Step $current_step The current step.
 		 */
 		$display_assignee_status_list = apply_filters( 'gravityflow_assignee_status_list_user_input', $display_step_status, $form, $this );
 		if ( ! $display_assignee_status_list ) {
@@ -733,35 +808,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		$this->log_debug( __METHOD__ . '(): assignee details: ' . print_r( $assignees, true ) );
 
 		foreach ( $assignees as $assignee ) {
-			$assignee_status = $assignee->get_status();
+			$assignee_status_label = $assignee->get_status_label();
+			$assignee_status_li    = sprintf( '<li>%s</li>', $assignee_status_label );
 
-			$this->log_debug( __METHOD__ . '(): showing status for: ' . $assignee->get_key() );
-			$this->log_debug( __METHOD__ . '(): assignee status: ' . $assignee_status );
-
-			if ( ! empty( $assignee_status ) ) {
-
-				$assignee_type = $assignee->get_type();
-				$assignee_id   = $assignee->get_id();
-
-				if ( $assignee_type == 'user_id' ) {
-					$user_info    = get_user_by( 'id', $assignee_id );
-					$status_label = $this->get_status_label( $assignee_status );
-					echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'User', 'gravityflow' ), $user_info->display_name, $status_label );
-				} elseif ( $assignee_type == 'email' ) {
-					$email        = $assignee_id;
-					$status_label = $this->get_status_label( $assignee_status );
-					echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Email', 'gravityflow' ), $email, $status_label );
-				} elseif ( $assignee_type == 'role' ) {
-					$status_label = $this->get_status_label( $assignee_status );
-					$role_name    = translate_user_role( $assignee_id );
-					echo sprintf( '<li>%s: (%s)</li>', esc_html__( 'Role', 'gravityflow' ), $role_name, $status_label );
-					echo '<li>' . $role_name . ': ' . $assignee_status . '</li>';
-				}
-			}
+			echo $assignee_status_li;
 		}
 
 		echo '</ul>';
-
 	}
 
 	/**
@@ -776,12 +829,18 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		?>
 		<script>
-			(function (GFFlowInput, $) {
+			(function (GravityFlowUserInput, $) {
 				$(document).ready(function () {
-					$('#gravityflow_update_button').prop('disabled', false);
+					<?php if ( $this->default_status == 'submit_buttons' ) { ?>
+						$('#gravityflow_save_progress_button').prop('disabled', false);
+						$('#gravityflow_submit_button').prop('disabled', false);
+					<?php } else { ?>
+						$('#gravityflow_update_button').prop('disabled', false);
+					<?php } ?>
 				});
-			}(window.GFFlowInput = window.GFFlowInput || {}, jQuery));
+			}(window.GravityFlowUserInput = window.GravityFlowUserInput || {}, jQuery));
 		</script>
+
 		<?php
 	}
 
@@ -791,7 +850,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	public function display_status_inputs() {
 		$default_status = $this->default_status ? $this->default_status : 'complete';
 
-		if ( $default_status == 'hidden' ) {
+		if ( in_array( $default_status, array( 'hidden', 'submit_buttons' ), true ) ) {
 			?>
 			<input type="hidden" id="gravityflow_status_hidden" name="gravityflow_status" value="complete"/>
 			<?php
@@ -802,7 +861,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			/**
 			 * Allows the 'in progress' label to be modified on the User Input step.
 			 *
-			 * @params string $in_progress_label
+			 * @params string $in_progress_label The "In progress" label.
 			 * @params Gravity_Flow_Step $this The current step.
 			 */
 			$in_progress_label = apply_filters( 'gravityflow_in_progress_label_user_input', $in_progress_label, $this );
@@ -812,7 +871,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			/**
 			 * Allows the 'complete' label to be modified on the User Input step.
 			 *
-			 * @params string $complete_label
+			 * @params string $complete_label The "Complete" label.
 			 * @params Gravity_Flow_Step $this The current step.
 			 */
 			$complete_label = apply_filters( 'gravityflow_complete_label_user_input', $complete_label, $this )
@@ -840,15 +899,86 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		<br/>
 		<div class="gravityflow-action-buttons">
 			<?php
-			$button_text = $this->default_status == 'hidden' ? esc_html__( 'Submit', 'gravityflow' ) : esc_html__( 'Update', 'gravityflow' );
-			$button_text = apply_filters( 'gravityflow_update_button_text_user_input', $button_text, $form, $this );
+			if ( $this->default_status == 'submit_buttons' ) {
 
-			$form_id          = absint( $form['id'] );
-			$button_click     = "jQuery('#action').val('update'); jQuery('#gform_{$form_id}').submit(); return false;";
-			$update_button_id = 'gravityflow_update_button';
+				$form_id          = absint( $form['id'] );
 
-			$update_button    = '<input id="' . $update_button_id . '" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="4" value="' . $button_text . '" name="save" onclick="' . $button_click . '"/>';
-			echo apply_filters( 'gravityflow_update_button_user_input', $update_button );
+				$save_progress_button_text   = esc_html__( 'Save', 'gravityflow' );
+
+				/**
+				 * Allows the save_progress button label to be modified on the User Input step when the Save Progress option is set to 'Submit Buttons'.
+				 *
+				 * @since  1.9.2
+				 *
+				 * @params string $save_progress_label. The "Save" label.
+				 * @params array  $form The form for the current entry.
+				 * @params Gravity_Flow_Step $this The current step.
+				 */
+				$save_progress_button_text   = apply_filters( 'gravityflow_save_progress_button_text_user_input', $save_progress_button_text, $form, $this );
+				$save_progress_button_click  = "jQuery('#action').val('update'); jQuery('#gravityflow_status_hidden').val('in_progress'); jQuery('#gform_{$form_id}').submit(); return false;";
+				$save_progress_button        = '<input id="gravityflow_save_progress_button" disabled="disabled" class="button button-large button-secondary" type="submit" tabindex="4" value="' . $save_progress_button_text . '" name="in_progress" onclick="' . $save_progress_button_click . '" />';
+
+				/**
+				 * Allows the save_progress button to be modified on the User Input step when the Save Progress option is set to 'Submit Buttons'.
+				 *
+				 * @since  1.9.2
+				 *
+				 * @params string $save_progress_button The HTML for the "Save" button.
+				 */
+				echo apply_filters( 'gravityflow_save_progress_button_user_input', $save_progress_button );
+
+				$submit_button_text   = esc_html__( 'Submit', 'gravityflow' );
+
+				/**
+				 * Allows the submit button label to be modified on the User Input step when the Save Progress option is set to 'Submit Buttons'.
+				 *
+				 * @since  1.9.2
+				 *
+				 * @params string $submit_label The "Submit" label.
+				 * @params array  $form The form for the current entry.
+				 * @params Gravity_Flow_Step $this The current step.
+				 */
+				$submit_button_text   = apply_filters( 'gravityflow_submit_button_text_user_input', $submit_button_text, $form, $this );
+				$submit_button_click  = "jQuery('#action').val('update'); jQuery('#gravityflow_status_hidden').val('complete'); jQuery('#gform_{$form_id}').submit(); return false;";
+				$submit_button        = '<input id="gravityflow_submit_button" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="5" value="' . $submit_button_text . '" name="save" onclick="' . $submit_button_click . '"/>';
+
+				/**
+				* Allows the submit button to be modified on the User Input step when the Save Progress option is set to 'Submit Buttons'
+				*
+				* @since 1.9.2
+				*
+				* @params string $submit_button The HTML for the "Submit" button.
+				*/
+				echo apply_filters( 'gravityflow_submit_button_user_input', $submit_button );
+			} else {
+
+				$button_text = $this->default_status == 'hidden' ? esc_html__( 'Submit', 'gravityflow' ) : esc_html__( 'Update', 'gravityflow' );
+
+				/**
+				 * Allows the update button label to be modified on the User Input step when the Save Progress option is set to hidden or either radio button setting.
+				 *
+				 * @since  unknown
+				 *
+				 * @params string $update_label The "Update" label.
+				 * @params array  $form The form for the current entry.
+				 * @params Gravity_Flow_Step $this The current step.
+				 */
+				$button_text = apply_filters( 'gravityflow_update_button_text_user_input', $button_text, $form, $this );
+
+				$form_id          = absint( $form['id'] );
+				$button_click     = "jQuery('#action').val('update'); jQuery('#gform_{$form_id}').submit(); return false;";
+				$update_button    = '<input id="gravityflow_update_button" disabled="disabled" class="button button-large button-primary" type="submit" tabindex="4" value="' . $button_text . '" name="save" onclick="' . $button_click . '"/>';
+
+				/**
+				* Allows the update button to be modified on the User Input step when the Save Progress option is set to hidden or either radio button setting.
+				*
+				* @since unknown
+				*
+				* @params string $update_button The HTML for the "Update" button.
+				*/
+				echo apply_filters( 'gravityflow_update_button_user_input', $update_button );
+
+			}
 			?>
 		</div>
 		<?php
@@ -888,6 +1018,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		}
 	}
 
+	/**
+	 * Displays content inside the Workflow metabox on the Gravity Forms Entry Detail page.
+	 *
+	 * @param array $form The current form.
+	 */
 	public function entry_detail_status_box( $form ) {
 		$status = $this->evaluate_status();
 		?>
@@ -900,28 +1035,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				$assignees = $this->get_assignees();
 
 				foreach ( $assignees as $assignee ) {
+					$assignee_status_label = $assignee->get_status_label();
+					$assignee_status_li    = sprintf( '<li>%s</li>', $assignee_status_label );
 
-					$assignee_type = $this->get_type();
-
-					$status = $assignee->get_status();
-
-					if ( ! empty( $user_status ) ) {
-						$status_label = $this->get_status_label( $status );
-						switch ( $assignee_type ) {
-							case 'email':
-								echo sprintf( '<li>%s: %s (%s)</li>', esc_html__( 'Email', 'gravityflow' ), $this->get_id(), $status_label );
-								break;
-							case 'user_id' :
-								$user_info = get_user_by( 'id', $assignee->get_id() );
-								echo '<li>' . esc_html__( 'User', 'gravityflow' ) . ': ' . $user_info->display_name . '<br />' . esc_html__( 'Status', 'gravityflow' ) . ': ' . esc_html( $status_label ) . '</li>';
-								break;
-							case 'role' :
-
-								$role_name = translate_user_role( $assignee->get_id() );
-								echo '<li>' . $role_name . ': ' . esc_html( $status_label ) . '</li>';
-								break;
-						}
-					}
+					echo $assignee_status_li;
 				}
 
 				?>
@@ -930,37 +1047,46 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		<?php
 	}
 
+	/**
+	 * Updates the entry.
+	 *
+	 * @param array $form            The current form.
+	 * @param array $lead            The current entry.
+	 * @param array $editable_fields The editable fields for the current user.
+	 */
 	public function save_entry( $form, &$lead, $editable_fields ) {
 
 		$this->log_debug( __METHOD__ . '(): Saving entry.' );
 
 		$is_new_lead = $lead == null;
 
-		// Bailing if null
+		// Bailing if null.
 		if ( $is_new_lead ) {
 			return;
 		}
 
-		$total_fields = array();
-
-		/* @var $calculation_fields GF_Field[] */
+		$total_fields       = array();
 		$calculation_fields = array();
 
+		/**
+		 * The field properties.
+		 *
+		 * @var GF_Field $field
+		 */
 		foreach ( $form['fields'] as &$field ) {
-			/* @var $field GF_Field */
 
-			//Ignore fields that are marked as display only
+			// Ignore fields that are marked as display only.
 			if ( $field->displayOnly && $field->type != 'password' ) {
 				continue;
 			}
 
-			//process total field after all fields have been saved
+			// Process total field after all fields have been saved.
 			if ( $field->type == 'total' ) {
 				$total_fields[] = $field;
 				continue;
 			}
 
-			// process calculation fields after all fields have been saved (moved after the is hidden check)
+			// Process calculation fields after all fields have been saved (moved after the is hidden check).
 			if ( $field->has_calculation() ) {
 				$calculation_fields[] = $field;
 				continue;
@@ -996,9 +1122,17 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		if ( ! empty( $calculation_fields ) ) {
 			$this->log_debug( __METHOD__ . '(): Saving calculation fields.' );
+
+			/**
+			 * The calculation field properties.
+			 *
+			 * @var GF_Field $calculation_field
+			 */
 			foreach ( $calculation_fields as $calculation_field ) {
-				// Make sure that the value gets recalculated
-				$calculation_field->conditionalLogic = null;
+				// Make sure that the value gets recalculated.
+				if ( ! $this->conditional_logic_editable_fields_enabled ) {
+					$calculation_field->conditionalLogic = null;
+				}
 
 				$inputs = $calculation_field->get_entry_inputs();
 
@@ -1026,9 +1160,15 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		GFFormsModel::refresh_product_cache( $form, $lead = RGFormsModel::get_lead( $lead['id'] ) );
 
-		//saving total field as the last field of the form.
+		// Saving total field as the last field of the form.
 		if ( ! empty( $total_fields ) ) {
 			$this->log_debug( __METHOD__ . '(): Saving total fields.' );
+
+			/**
+			 * The total field properties.
+			 *
+			 * @var GF_Field $total_field
+			 */
 			foreach ( $total_fields as $total_field ) {
 				$this->save_input( $form, $total_field, $lead, $total_field->id );
 			}
@@ -1088,7 +1228,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		}
 
 		$existing_value = rgar( $entry, $field->id );
-		$value          = $field->get_value_save_entry( $existing_value, $form, $input_name, $entry['id'], $entry );
+		$this->maybe_pre_process_post_image_field( $field, $existing_value, $input_name );
+		$value = $field->get_value_save_entry( $existing_value, $form, $input_name, $entry['id'], $entry );
 
 		if ( ! empty( $value ) && $existing_value != $value ) {
 			$result = GFAPI::update_entry_field( $entry['id'], $field->id, $value );
@@ -1103,6 +1244,28 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					unset( $post_images[ $field->id ] );
 					gform_update_meta( $entry['id'], '_post_images', $post_images, $form['id'] );
 				}
+			}
+		}
+	}
+
+	/**
+	 * Add the existing post image URL to the $_gf_uploaded_files global so the image title, caption, and description can be updated.
+	 *
+	 * @since 2.1.2-dev
+	 *
+	 * @param GF_Field $field          The current field object.
+	 * @param string   $existing_value The current fields existing entry value.
+	 * @param string   $input_name     The input name to use when accessing the current fields values in the submission.
+	 */
+	public function maybe_pre_process_post_image_field( $field, $existing_value, $input_name ) {
+		if ( $existing_value && $field->type === 'post_image' && empty( $_FILES[ $input_name ]['name'] ) ) {
+			$parts             = explode( '|:|', $existing_value );
+			$existing_filename = basename( rgar( $parts, 0 ) );
+			$new_filename      = rgar( GFFormsModel::$uploaded_files[ $field->formId ], $input_name );
+
+			if ( ! empty( $new_filename ) && $new_filename === $existing_filename ) {
+				global $_gf_uploaded_files;
+				$_gf_uploaded_files[ $input_name ] = $parts[0];
 			}
 		}
 	}
@@ -1297,7 +1460,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		foreach ( explode( ',', $value ) as $cat_string ) {
 			$cat_array = explode( ':', $cat_string );
-			// the category id is the last item in the array, access it using end() in case the category name includes colons.
+			// The category id is the last item in the array, access it using end() in case the category name includes colons.
 			array_push( $post_categories, end( $cat_array ) );
 		}
 

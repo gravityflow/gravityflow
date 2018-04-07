@@ -1,14 +1,55 @@
 <?php
+/**
+ * Gravity Flow Installation Wizard
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Installation_Wizard
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
+/**
+ * An abstract class used as the base for all installation wizard steps.
+ *
+ * Class Gravity_Flow_Installation_Wizard_Step
+ */
 abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 
+	/**
+	 * The step name.
+	 *
+	 * @var string
+	 */
 	protected $_name = '';
 
+	/**
+	 * The field validation results.
+	 *
+	 * @var array
+	 */
 	protected $_field_validation_results = array();
+
+	/**
+	 * The validation summary.
+	 *
+	 * @var string
+	 */
 	protected $_validation_summary = '';
 
+	/**
+	 * The step values.
+	 *
+	 * @var array
+	 */
 	private $_step_values;
 
+	/**
+	 * Gravity_Flow_Installation_Wizard_Step constructor.
+	 *
+	 * @param array $values The step values.
+	 *
+	 * @throws Exception When the step name has not been set.
+	 */
 	public function __construct( $values = array() ) {
 		if ( empty( $this->_name ) ) {
 			throw new Exception( 'Name not set' );
@@ -16,12 +57,19 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 		$this->_step_values = $values;
 	}
 
+	/**
+	 * Returns the step name.
+	 *
+	 * @return string
+	 */
 	public function get_name() {
 		return $this->_name;
 	}
 
 	/**
-	 * @param string $key
+	 * Compares the supplied key against the current step name.
+	 *
+	 * @param string $key The step name.
 	 *
 	 * @return bool
 	 */
@@ -29,22 +77,52 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 		return $key == $this->get_name();
 	}
 
+	/**
+	 * Returns the step title.
+	 *
+	 * @return string
+	 */
 	public function get_title() {
 		return '';
 	}
 
+	/**
+	 * Sets the value for the specified property.
+	 *
+	 * @param string $key   The property key.
+	 * @param mixed  $value The property value.
+	 */
 	public function __set( $key, $value ) {
 		$this->_step_values[ $key ] = $value;
 	}
 
+	/**
+	 * Determines if the specified property has been defined.
+	 *
+	 * @param string $key The property key.
+	 *
+	 * @return bool
+	 */
 	public function __isset( $key ) {
 		return isset( $this->_step_values[ $key ] );
 	}
 
+	/**
+	 * Deletes the specified property.
+	 *
+	 * @param string $key The property key.
+	 */
 	public function __unset( $key ) {
 		unset( $this->_step_values[ $key ] );
 	}
 
+	/**
+	 * Returns the specified property or an empty string for an undefined property.
+	 *
+	 * @param string $key The property key.
+	 *
+	 * @return mixed
+	 */
 	public function &__get( $key ) {
 		if ( ! isset( $this->_step_values[ $key ] ) ) {
 			$this->_step_values[ $key ] = '';
@@ -52,18 +130,40 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 		return $this->_step_values[ $key ];
 	}
 
+	/**
+	 * Returns the values for the current step.
+	 *
+	 * @return array
+	 */
 	public function get_values() {
 		return $this->_step_values;
 	}
 
+	/**
+	 * Override to display content for this step.
+	 */
 	public function display() {
 	}
 
+	/**
+	 * Override to validate the posted values for this step.
+	 *
+	 * @param array $posted_values The posted values.
+	 *
+	 * @return bool
+	 */
 	public function validate( $posted_values ) {
-		// Assign $this->_validation_result;
+		// Assign $this->_validation_result;.
 		return true;
 	}
 
+	/**
+	 * Returns the validation result for the specified property or an empty string for an undefined property.
+	 *
+	 * @param string $key The property key.
+	 *
+	 * @return mixed
+	 */
 	public function get_field_validation_result( $key ) {
 		if ( ! isset( $this->_field_validation_results[ $key ] ) ) {
 			$this->_field_validation_results[ $key ] = '';
@@ -72,24 +172,38 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 	}
 
 	/**
-	 * @param string  $key
-	 * @param $text
+	 * Set the field validation result for the specified property.
+	 *
+	 * @param string $key  The property key.
+	 * @param string $text The validation result.
 	 */
 	public function set_field_validation_result( $key, $text ) {
 		$this->_field_validation_results[ $key ] = $text;
 	}
 
+	/**
+	 * Set the validation summary property.
+	 *
+	 * @param string $text The validation summary.
+	 */
 	public function set_validation_summary( $text ) {
 		$this->_validation_summary = $text;
 	}
 
+	/**
+	 * Returns the validation summary property.
+	 *
+	 * @return string
+	 */
 	public function get_validation_summary() {
 		return $this->_validation_summary;
 	}
 
 	/**
-	 * @param string $key
-	 * @param bool $echo
+	 * Return the markup for the validation message.
+	 *
+	 * @param string $key  The property key.
+	 * @param bool   $echo Indicates if the message should be echoed.
 	 *
 	 * @return string
 	 */
@@ -106,30 +220,61 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 		return $message;
 	}
 
+	/**
+	 * Override to determine if the current step has been completed.
+	 */
 	public function is_complete() {
 	}
 
+	/**
+	 * Returns the next button label.
+	 *
+	 * @return string
+	 */
 	public function get_next_button_text() {
 		return __( 'Next', 'gravityflow' );
 	}
 
+	/**
+	 * Returns the previous button label.
+	 *
+	 * @return string
+	 */
 	public function get_previous_button_text() {
 		return __( 'Back', 'gravityflow' );
 	}
 
+	/**
+	 * Update the step options in the database and class property.
+	 *
+	 * @param array $values The step values.
+	 */
 	public function update( $values ) {
 		update_option( 'gravityflow_installation_wizard_' . $this->get_name(), $values );
 		$this->_step_values = $values;
 	}
 
+	/**
+	 * Override to return summary content.
+	 *
+	 * @param bool $echo Indicates if the summary should be echoed.
+	 *
+	 * @return string
+	 */
 	public function summary( $echo = true ) {
 		return '';
 	}
 
+	/**
+	 * Override to perform actions when the installation wizard is completing.
+	 */
 	public function install() {
-		// do something
+		// Do something.
 	}
 
+	/**
+	 * Deletes this steps values from the database.
+	 */
 	public function flush_values() {
 		delete_option( 'gravityflow_installation_wizard_' . $this->get_name() );
 	}

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Gravity Flow Workflow Timeline Merge Tag
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
@@ -8,6 +15,11 @@ if ( ! class_exists( 'Gravity_Flow_Merge_Tag_Workflow_Note' ) ) {
 	require_once( 'class-merge-tag-workflow-note.php' );
 }
 
+/**
+ * Class Gravity_Flow_Merge_Tag_Workflow_Timeline
+ *
+ * @since 1.7.1-dev
+ */
 class Gravity_Flow_Merge_Tag_Workflow_Timeline extends Gravity_Flow_Merge_Tag_Workflow_Note {
 
 	/**
@@ -15,7 +27,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Timeline extends Gravity_Flow_Merge_Tag_Wo
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @var null
+	 * @var string
 	 */
 	public $name = 'workflow_timeline';
 
@@ -33,7 +45,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Timeline extends Gravity_Flow_Merge_Tag_Wo
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param string $text  The text to be processed.
+	 * @param string $text The text to be processed.
 	 *
 	 * @return string
 	 */

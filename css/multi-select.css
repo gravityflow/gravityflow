@@ -20,8 +20,17 @@
   float: left;
   width: 45%;
 }
+
+.rtl .ms-container .ms-selectable, .ms-container .ms-selection{
+  float: right;
+}
+
 .ms-container .ms-selection{
   float: right;
+}
+
+.rtl .ms-container .ms-selection{
+  float: left;
 }
 
 .ms-container .ms-list{
@@ -67,6 +76,10 @@
   padding: 5px 0px 0px 5px;
   cursor: pointer;
   color: #999;
+}
+
+.rtl .ms-container .ms-optgroup-label{
+  padding: 5px 5px 0px 0px;
 }
 
 .ms-container .ms-selectable li.ms-elem-selectable,

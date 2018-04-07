@@ -11,6 +11,16 @@ table { border-collapse: collapse; }
     -webkit-transform: rotate(1deg);
 }
 
+.rtl .ui-sortable-helper {
+    -webkit-box-shadow: -6px 6px 28px -9px rgba(0,0,0,0.75);
+    -moz-box-shadow: -6px 6px 28px -9px rgba(0,0,0,0.75);
+    box-shadow: -6px 6px 28px -9px rgba(0,0,0,0.75);
+
+    transform: rotate(-1deg);
+    -moz-transform: rotate(-1deg);
+    -webkit-transform: rotate(-1deg);
+}
+
 .step-drop-zone {
     border: 1px dashed #bbb;
     background-color: #FFF !important;
@@ -38,3 +48,14 @@ td.check-column,
 .tablenav.bottom{
     display: none;
 }
+
+td.column-step_highlight .step_highlight_color {
+    width: 0.25em;
+    height: 100%;
+}
+
+th.column-step_highlight, td.column-step_highlight {
+    display: none;
+}
+
+.row-actions .step_id { color: #555; }

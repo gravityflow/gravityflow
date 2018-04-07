@@ -1,23 +1,43 @@
 <?php
+/**
+ * Gravity Flow Installation Wizard
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Installation_Wizard
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Installation_Wizard
+ */
 class Gravity_Flow_Installation_Wizard {
+
+	/**
+	 * The installation wizard step class names.
+	 *
+	 * @var array
+	 */
 	private $_step_class_names = array();
 
+	/**
+	 * Gravity_Flow_Installation_Wizard constructor.
+	 */
 	function __construct() {
-		$path = gravity_flow()->get_base_path()  . '/includes/wizard/steps/';
+		$path = gravity_flow()->get_base_path() . '/includes/wizard/steps/';
 		require_once( $path . 'class-iw-step.php' );
 		$classes = array();
 		foreach ( glob( $path . 'class-iw-step-*.php' ) as $filename ) {
 			require_once( $filename );
 			$regex = '/class-iw-step-(.*?).php/';
 			preg_match( $regex, $filename, $matches );
-			$class_name = 'Gravity_Flow_Installation_Wizard_Step_' . str_replace( '-', '_', $matches[1] );
-			$step = new $class_name;
-			$step_name = $step->get_name();
+			$class_name            = 'Gravity_Flow_Installation_Wizard_Step_' . str_replace( '-', '_', $matches[1] );
+			$step                  = new $class_name;
+			$step_name             = $step->get_name();
 			$classes[ $step_name ] = $class_name;
 		}
 		$sorted = array();
@@ -27,6 +47,11 @@ class Gravity_Flow_Installation_Wizard {
 		$this->_step_class_names = $sorted;
 	}
 
+	/**
+	 * Returns the step names in the order the steps will appear.
+	 *
+	 * @return array
+	 */
 	public function get_sorted_step_names() {
 		return array(
 			'welcome',
@@ -37,11 +62,16 @@ class Gravity_Flow_Installation_Wizard {
 		);
 	}
 
+	/**
+	 * Displays the HTML for the current step.
+	 *
+	 * @return bool
+	 */
 	public function display() {
 
 		/**
 		 * @var Gravity_Flow_Installation_Wizard_Step $current_step The step being displayed.
-		 * @var string $nonce_key The nonce key for the current step.
+		 * @var string                                $nonce_key    The nonce key for the current step.
 		 */
 		list( $current_step, $nonce_key ) = $this->get_current_step();
 		$this->include_styles();
@@ -106,7 +136,7 @@ class Gravity_Flow_Installation_Wizard {
 	/**
 	 * Get the step to be displayed and it's nonce key.
 	 *
-	 * @return array
+	 * @return [Gravity_Flow_Installation_Wizard_Step,string]
 	 */
 	public function get_current_step() {
 		$name         = rgpost( '_step_name' );
@@ -157,7 +187,7 @@ class Gravity_Flow_Installation_Wizard {
 	public function include_styles() {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
-		// register admin styles
+		// Register admin styles.
 		wp_register_style( 'gform_admin', GFCommon::get_base_url() . "/css/admin{$min}.css" );
 		wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
 		?>
@@ -192,7 +222,9 @@ class Gravity_Flow_Installation_Wizard {
 	}
 
 	/**
-	 * @param bool|string $name
+	 * Returns the specified step.
+	 *
+	 * @param bool|string $name The step name.
 	 *
 	 * @return Gravity_Flow_Installation_Wizard_Step
 	 */
@@ -211,7 +243,9 @@ class Gravity_Flow_Installation_Wizard {
 	}
 
 	/**
-	 * @param Gravity_Flow_Installation_Wizard_Step $current_step
+	 * Returns the previous step.
+	 *
+	 * @param Gravity_Flow_Installation_Wizard_Step $current_step The current step.
 	 *
 	 * @return bool|Gravity_Flow_Installation_Wizard_Step
 	 */
@@ -231,7 +265,9 @@ class Gravity_Flow_Installation_Wizard {
 	}
 
 	/**
-	 * @param Gravity_Flow_Installation_Wizard_Step $current_step
+	 * Returns the next step.
+	 *
+	 * @param Gravity_Flow_Installation_Wizard_Step $current_step The current step.
 	 *
 	 * @return bool|Gravity_Flow_Installation_Wizard_Step
 	 */
@@ -250,6 +286,9 @@ class Gravity_Flow_Installation_Wizard {
 		return $this->get_step( $next_step_name );
 	}
 
+	/**
+	 * Performs the actions to complete the installation such as saving options to the database.
+	 */
 	public function complete_installation() {
 		foreach ( array_keys( $this->_step_class_names ) as $step_name ) {
 			$step = $this->get_step( $step_name );
@@ -259,6 +298,11 @@ class Gravity_Flow_Installation_Wizard {
 		update_option( 'gravityflow_pending_installation', false );
 	}
 
+	/**
+	 * Returns the posted options.
+	 *
+	 * @return array
+	 */
 	public function get_posted_values() {
 		$posted_values = stripslashes_deep( $_POST );
 		$values        = array();
@@ -272,8 +316,10 @@ class Gravity_Flow_Installation_Wizard {
 	}
 
 	/**
-	 * @param Gravity_Flow_Installation_Wizard_Step $current_step
-	 * @param bool $echo
+	 * Returns the HTML markup for the installation progress.
+	 *
+	 * @param Gravity_Flow_Installation_Wizard_Step $current_step The current step.
+	 * @param bool                                  $echo         Indicates if the HTML should be echoed.
 	 *
 	 * @return string
 	 */
@@ -304,7 +350,9 @@ class Gravity_Flow_Installation_Wizard {
 	}
 
 	/**
-	 * @param Gravity_Flow_Installation_Wizard_Step $step
+	 * Get the index for the current step in the _step_class_names array.
+	 *
+	 * @param Gravity_Flow_Installation_Wizard_Step $step The current step.
 	 *
 	 * @return mixed
 	 */
@@ -314,6 +362,9 @@ class Gravity_Flow_Installation_Wizard {
 		return $i;
 	}
 
+	/**
+	 * Display the summary.
+	 */
 	public function summary() {
 		?>
 
@@ -332,6 +383,8 @@ class Gravity_Flow_Installation_Wizard {
 	}
 
 	/**
+	 * Get an array containing all the steps.
+	 *
 	 * @return Gravity_Flow_Installation_Wizard_Step[]
 	 */
 	public function get_steps() {
@@ -343,6 +396,9 @@ class Gravity_Flow_Installation_Wizard {
 		return $steps;
 	}
 
+	/**
+	 * Flush the values for all steps.
+	 */
 	public function flush_values() {
 		$steps = $this->get_steps();
 		foreach ( $steps as $step ) {

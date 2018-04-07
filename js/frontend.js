@@ -71,8 +71,9 @@
 
 					return false;
 				});
-		});
-
+		});		
 	});
+
+	
 
 }(window.GravityFlowFrontEnd = window.GravityFlowFrontEnd || {}, jQuery));

@@ -1,9 +1,21 @@
 <?php
+/**
+ * Gravity Flow Created By Merge Tag
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Merge_Tag_Created_By
+ *
+ * @since 1.7.1-dev
+ */
 class Gravity_Flow_Merge_Tag_Created_By extends Gravity_Flow_Merge_Tag {
 
 	/**
@@ -11,7 +23,7 @@ class Gravity_Flow_Merge_Tag_Created_By extends Gravity_Flow_Merge_Tag {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @var null
+	 * @var string
 	 */
 	public $name = 'created_by';
 
@@ -29,7 +41,7 @@ class Gravity_Flow_Merge_Tag_Created_By extends Gravity_Flow_Merge_Tag {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param string $text  The text to be processed.
+	 * @param string $text The text to be processed.
 	 *
 	 * @return string
 	 */

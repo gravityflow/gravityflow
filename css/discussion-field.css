@@ -12,3 +12,25 @@
     margin-left:8px;
     font-size:90%;
 }
+
+.rtl .gravityflow-dicussion-item-date {
+    margin-right:8px;
+}
+
+.gravityflow-dicussion-item-toggle-display {
+    float: right;
+}
+
+.rtl .gravityflow-dicussion-item-toggle-display {
+    float: left;
+}
+
+@media print {
+    .gravityflow-dicussion-item-hidden { 
+        display:block !important;
+    }
+
+    .gravityflow-dicussion-item-toggle-display { 
+        display: none;
+    }
+}

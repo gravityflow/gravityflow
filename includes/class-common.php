@@ -2,26 +2,30 @@
 /**
  * Gravity Flow Common Functions
  *
- *
  * @package     GravityFlow
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.3.3
  */
-
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Common
+ *
+ * @since 1.3.3
+ */
 class Gravity_Flow_Common {
 
 	/**
 	 * Returns a URl to a workflow page.
 	 *
-	 * @param int|null              $page_id
-	 * @param Gravity_Flow_Assignee $assignee
-	 * @param string                $access_token
+	 * @param array                      $query_args   An associative array of query variables.
+	 * @param int|null                   $page_id      The ID of the WordPress Page where the shortcode is located.
+	 * @param Gravity_Flow_Assignee|null $assignee     The Assignee.
+	 * @param string                     $access_token The access token for the current assignee.
 	 *
 	 * @return string
 	 */
@@ -45,7 +49,20 @@ class Gravity_Flow_Common {
 			$query_args['gflow_access_token'] = $access_token;
 		}
 
-		return add_query_arg( $query_args, $base_url );
+		$url = add_query_arg( $query_args, $base_url );
+
+		/**
+		 * Allows the workflow URL (e.g. inbox or status page) to be modified.
+		 *
+		 * @since 1.9.2
+		 *
+		 * @param string $url The URL.
+		 * @param int|null $page_id The ID of the WordPress Page where the shortcode is located.
+		 * @param Gravity_Flow_Assignee $assignee The Assignee.
+		 */
+		$url = apply_filters( 'gravityflow_workflow_url', $url, $page_id, $assignee );
+
+		return $url;
 	}
 
 	/**
@@ -285,6 +302,11 @@ class Gravity_Flow_Common {
 		return $display_name;
 	}
 
+	/**
+	 * Get the Gravity Forms database version number.
+	 *
+	 * @return string
+	 */
 	public static function get_gravityforms_db_version() {
 
 		if ( method_exists( 'GFFormsModel', 'get_database_version' ) ) {
@@ -296,16 +318,79 @@ class Gravity_Flow_Common {
 		return $db_version;
 	}
 
+	/**
+	 * Get the name of the Gravity Forms table containing the entry properties.
+	 *
+	 * @return string
+	 */
 	public static function get_entry_table_name() {
 		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_table_name() : GFFormsModel::get_entry_table_name();
 	}
 
+	/**
+	 * Get the name of the Gravity Forms table containing the entry meta.
+	 *
+	 * @return string
+	 */
 	public static function get_entry_meta_table_name() {
 		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? GFFormsModel::get_lead_meta_table_name() : GFFormsModel::get_entry_meta_table_name();
 	}
 
+	/**
+	 * Get the name of the Gravity Forms column containing the entry ID.
+	 *
+	 * @return string
+	 */
 	public static function get_entry_id_column_name() {
 		return version_compare( self::get_gravityforms_db_version(), '2.3-dev-1', '<' ) ? 'lead_id' : 'entry_id';
+	}
+
+	/**
+	 * Determines if a field should be displayed.
+	 *
+	 * @since 2.0.1-dev
+	 *
+	 * @param GF_Field               $field            The field properties.
+	 * @param Gravity_Flow_Step|null $current_step     The current step for this entry.
+	 * @param array                  $form             The form for the current entry.
+	 * @param array                  $entry            The entry being processed for display.
+	 * @param bool                   $is_product_field Is the current field one of the product field types.
+	 *
+	 * @return bool
+	 */
+	public static function is_display_field( $field, $current_step, $form, $entry, $is_product_field = false ) {
+		$display_field       = true;
+		$display_fields_mode = $current_step ? $current_step->display_fields_mode : 'all_fields';
+
+		if ( $display_fields_mode === 'selected_fields' ) {
+			$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
+
+			if ( $field->type !== 'section' && ! in_array( $field->id, $display_fields_selected ) ) {
+				$display_field = false;
+			}
+		} else {
+			if ( $field->type !== 'section' && GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
+				$display_field = false;
+			}
+		}
+
+		$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $current_step );
+
+		return $display_field;
+	}
+
+	/**
+	 * Checks whether a field is an editable field.
+	 *
+	 * @since 2.0.1-dev
+	 *
+	 * @param GF_Field          $field        The field to be checked.
+	 * @param Gravity_Flow_Step $current_step The current step.
+	 *
+	 * @return bool
+	 */
+	public static function is_editable_field( $field, $current_step ) {
+		return in_array( $field->id, $current_step->get_editable_fields() );
 	}
 
 }

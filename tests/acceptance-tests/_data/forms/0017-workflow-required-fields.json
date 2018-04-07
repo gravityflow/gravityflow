@@ -1,0 +1,331 @@
+{
+  "0": {
+    "title": "0017 Workflow Required Fields",
+    "description": "",
+    "labelPlacement": "top_label",
+    "descriptionPlacement": "below",
+    "button": {
+      "type": "text",
+      "text": "Submit",
+      "imageUrl": ""
+    },
+    "fields": [
+      {
+        "type": "text",
+        "id": 2,
+        "label": "Simple text",
+        "adminLabel": "",
+        "isRequired": false,
+        "size": "medium",
+        "errorMessage": "",
+        "inputs": null,
+        "formId": 2,
+        "description": "",
+        "allowsPrepopulate": false,
+        "inputMask": false,
+        "inputMaskValue": "",
+        "inputType": "",
+        "labelPlacement": "",
+        "descriptionPlacement": "",
+        "subLabelPlacement": "",
+        "placeholder": "",
+        "cssClass": "",
+        "inputName": "",
+        "adminOnly": false,
+        "noDuplicates": false,
+        "defaultValue": "",
+        "choices": "",
+        "conditionalLogic": "",
+        "failed_validation": "",
+        "productField": "",
+        "enablePasswordInput": "",
+        "maxLength": "",
+        "multipleFiles": false,
+        "maxFiles": "",
+        "calculationFormula": "",
+        "calculationRounding": "",
+        "enableCalculation": "",
+        "disableQuantity": false,
+        "displayAllCategories": false,
+        "useRichTextEditor": false
+      },
+      {
+        "type": "textarea",
+        "id": 1,
+        "label": "Pharagraph",
+        "adminLabel": "",
+        "isRequired": false,
+        "size": "medium",
+        "errorMessage": "",
+        "inputs": null,
+        "formId": 2,
+        "description": "",
+        "allowsPrepopulate": false,
+        "inputMask": false,
+        "inputMaskValue": "",
+        "inputType": "",
+        "labelPlacement": "",
+        "descriptionPlacement": "",
+        "subLabelPlacement": "",
+        "placeholder": "",
+        "cssClass": "",
+        "inputName": "",
+        "adminOnly": false,
+        "noDuplicates": false,
+        "defaultValue": "",
+        "choices": "",
+        "conditionalLogic": "",
+        "failed_validation": "",
+        "productField": "",
+        "form_id": "",
+        "useRichTextEditor": false,
+        "multipleFiles": false,
+        "maxFiles": "",
+        "calculationFormula": "",
+        "calculationRounding": "",
+        "enableCalculation": "",
+        "disableQuantity": false,
+        "displayAllCategories": false
+      }
+    ],
+    "version": "2.0.6.3",
+    "id": 2,
+    "useCurrentUserAsAuthor": true,
+    "postContentTemplateEnabled": false,
+    "postTitleTemplateEnabled": false,
+    "postTitleTemplate": "",
+    "postContentTemplate": "",
+    "lastPageButton": null,
+    "pagination": null,
+    "firstPageCssClass": null,
+    "confirmations": [
+      {
+        "id": "57bc4725447b3",
+        "name": "Default Confirmation",
+        "isDefault": true,
+        "type": "message",
+        "message": "Thanks for contacting us! We will get in touch with you shortly.",
+        "url": "",
+        "pageId": "",
+        "queryString": ""
+      }
+    ],
+    "notifications": [
+      {
+        "id": "57bc47254443a",
+        "to": "{admin_email}",
+        "name": "Admin Notification",
+        "event": "form_submission",
+        "toType": "email",
+        "subject": "New submission from {form_title}",
+        "message": "{all_fields}"
+      }
+    ],
+    "feeds": {
+      "gravityflow": [
+        {
+          "id": "5",
+          "form_id": "2",
+          "is_active": "1",
+          "feed_order": "0",
+          "meta": {
+            "step_name": "Approve with note",
+            "description": "",
+            "step_type": "approval",
+            "feed_condition_conditional_logic": "0",
+            "feed_condition_conditional_logic_object": {
+              "conditionalLogic": {
+                "actionType": "show",
+                "logicType": "all",
+                "rules": [
+                  {
+                    "fieldId": "2",
+                    "operator": "isnot",
+                    "value": ""
+                  },
+                  {
+                    "fieldId": "1",
+                    "operator": "isnot",
+                    "value": ""
+                  }
+                ]
+              }
+            },
+            "scheduled": "0",
+            "schedule_type": "delay",
+            "schedule_date": "",
+            "schedule_delay_offset": "",
+            "schedule_delay_unit": "hours",
+            "schedule_date_field_offset": "0",
+            "schedule_date_field_offset_unit": "hours",
+            "schedule_date_field_before_after": "after",
+            "type": "select",
+            "assignees": [
+              "user_id|1"
+            ],
+            "routing": [
+              {
+                "assignee": "user_id|1",
+                "fieldId": "0",
+                "operator": "is",
+                "value": "",
+                "type": ""
+              }
+            ],
+            "unanimous_approval": "",
+            "instructionsEnable": "1",
+            "instructionsValue": "Instructions: please review the values in the fields below and click on the Approve or Reject button",
+            "display_fields_mode": "all_fields",
+            "assignee_notification_enabled": "0",
+            "assignee_notification_from_name": "",
+            "assignee_notification_from_email": "{admin_email}",
+            "assignee_notification_reply_to": "",
+            "assignee_notification_bcc": "",
+            "assignee_notification_subject": "",
+            "assignee_notification_message": "A new entry is pending your approval. Please check your Workflow Inbox.",
+            "assignee_notification_disable_autoformat": "0",
+            "resend_assignee_emailEnable": "0",
+            "resend_assignee_emailValue": "7",
+            "rejection_notification_enabled": "0",
+            "rejection_notification_type": "select",
+            "rejection_notification_routing": "",
+            "rejection_notification_from_name": "",
+            "rejection_notification_from_email": "{admin_email}",
+            "rejection_notification_reply_to": "",
+            "rejection_notification_bcc": "",
+            "rejection_notification_subject": "",
+            "rejection_notification_message": "Entry {entry_id} has been rejected",
+            "rejection_notification_disable_autoformat": "0",
+            "approval_notification_enabled": "0",
+            "approval_notification_type": "select",
+            "approval_notification_routing": [
+              {
+                "assignee": "user_id|1",
+                "fieldId": "0",
+                "operator": "is",
+                "value": "",
+                "type": ""
+              }
+            ],
+            "approval_notification_from_name": "",
+            "approval_notification_from_email": "{admin_email}",
+            "approval_notification_reply_to": "",
+            "approval_notification_bcc": "",
+            "approval_notification_subject": "",
+            "approval_notification_message": "Entry {entry_id} has been approved",
+            "approval_notification_disable_autoformat": "0",
+            "revertEnable": "0",
+            "revertValue": "6",
+            "note_mode": "required",
+            "expiration": "0",
+            "expiration_type": "delay",
+            "expiration_date": "",
+            "expiration_delay_offset": "",
+            "expiration_delay_unit": "hours",
+            "status_expiration": "rejected",
+            "destination_expired": "next",
+            "destination_rejected": "complete",
+            "destination_approved": "next"
+          },
+          "addon_slug": "gravityflow"
+        },
+        {
+          "id": "6",
+          "form_id": "2",
+          "is_active": "1",
+          "feed_order": "0",
+          "meta": {
+            "step_name": "Editable fields",
+            "description": "",
+            "step_type": "user_input",
+            "feed_condition_conditional_logic": "0",
+            "feed_condition_conditional_logic_object": [],
+            "scheduled": "0",
+            "schedule_type": "delay",
+            "schedule_date": "",
+            "schedule_delay_offset": "",
+            "schedule_delay_unit": "hours",
+            "schedule_date_field_offset": "0",
+            "schedule_date_field_offset_unit": "hours",
+            "schedule_date_field_before_after": "after",
+            "type": "select",
+            "assignees": [
+              "user_id|1"
+            ],
+            "editable_fields": [
+              "2",
+              "1"
+            ],
+            "routing": "",
+            "highlight_editable_fields_enabled": "1",
+            "highlight_editable_fields_class": "green-background",
+            "assignee_policy": "any",
+            "instructionsEnable": "1",
+            "instructionsValue": "Editable instructions.",
+            "display_fields_mode": "all_fields",
+            "default_status": "in_progress",
+            "note_mode": "required_if_in_progress",
+            "assignee_notification_enabled": "0",
+            "assignee_notification_from_name": "",
+            "assignee_notification_from_email": "{admin_email}",
+            "assignee_notification_reply_to": "",
+            "assignee_notification_bcc": "",
+            "assignee_notification_subject": "",
+            "assignee_notification_message": "A new entry requires your input",
+            "assignee_notification_disable_autoformat": "0",
+            "resend_assignee_emailEnable": "0",
+            "resend_assignee_emailValue": "7",
+            "expiration": "0",
+            "expiration_type": "delay",
+            "expiration_date": "",
+            "expiration_delay_offset": "",
+            "expiration_delay_unit": "hours",
+            "status_expiration": "complete",
+            "destination_expired": "next",
+            "destination_complete": "next"
+          },
+          "addon_slug": "gravityflow"
+        },
+        {
+          "id": "7",
+          "form_id": "2",
+          "is_active": "1",
+          "feed_order": "0",
+          "meta": {
+            "step_name": "Get JSON",
+            "description": "",
+            "step_type": "webhook",
+            "feed_condition_conditional_logic": "1",
+            "feed_condition_conditional_logic_object": {
+              "conditionalLogic": {
+                "actionType": "show",
+                "logicType": "all",
+                "rules": [
+                  {
+                    "fieldId": "2",
+                    "operator": "contains",
+                    "value": "Text"
+                  }
+                ]
+              }
+            },
+            "scheduled": "0",
+            "schedule_type": "delay",
+            "schedule_date": "",
+            "schedule_delay_offset": "",
+            "schedule_delay_unit": "hours",
+            "schedule_date_field_offset": "0",
+            "schedule_date_field_offset_unit": "hours",
+            "schedule_date_field_before_after": "after",
+            "url": "http:\/\/ip.jsontest.com\/",
+            "method": "get",
+            "format": "json",
+            "destination_complete": "complete"
+          },
+          "addon_slug": "gravityflow"
+        }
+      ]
+    }
+  },
+  "version": "2.0.6.3"
+}

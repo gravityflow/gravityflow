@@ -2,23 +2,28 @@
 /**
  * Gravity Flow Step Approval
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Step_Approval
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
-
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Step_Approval
+ */
 class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
+	/**
+	 * The step type.
+	 *
+	 * @var string
+	 */
 	public $_step_type = 'approval';
-
 
 	/**
 	 * The resource slug for the REST API.
@@ -27,6 +32,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 */
 	protected $_rest_base = 'approvals';
 
+	/**
+	 * Returns an array of statuses and their properties.
+	 *
+	 * @return array
+	 */
 	public function get_status_config() {
 		return array(
 			array(
@@ -81,7 +91,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 *
 	 * @since 1.7.1
 	 *
-	 * @param WP_REST_Request $request
+	 * @param WP_REST_Request $request Full data about the request.
 	 *
 	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
 	 *                                is already an instance, WP_HTTP_Response, otherwise
@@ -117,7 +127,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		$assignee_key = isset( $request['assignee'] ) ? $request['assignee'] : gravity_flow()->get_current_user_assignee_key();
 
-		$assignee = new Gravity_Flow_Assignee( $assignee_key, $this );
+		$assignee = $this->get_assignee( $assignee_key );
 
 		$feedback = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
 
@@ -132,18 +142,38 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $response;
 	}
 
+	/**
+	 * Indicates this step supports expiration.
+	 *
+	 * @return bool
+	 */
 	public function supports_expiration() {
 		return true;
 	}
 
+	/**
+	 * Returns the step label.
+	 *
+	 * @return string
+	 */
 	public function get_label() {
 		return esc_html__( 'Approval', 'gravityflow' );
 	}
 
+	/**
+	 * Returns the HTML for the step icon.
+	 *
+	 * @return string
+	 */
 	public function get_icon_url() {
 		return '<i class="fa fa-check" style="color:darkgreen;"></i>';
 	}
 
+	/**
+	 * Returns an array of settings for this step type.
+	 *
+	 * @return array
+	 */
 	public function get_settings() {
 		$settings_api = $this->get_common_settings_api();
 
@@ -300,16 +330,31 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		return $settings;
 	}
 
+	/**
+	 * Set the assignees for this step.
+	 *
+	 * @return bool
+	 */
 	public function process() {
 		return $this->assign();
 	}
 
+	/**
+	 * Determines if the current step has been completed.
+	 *
+	 * @return bool
+	 */
 	public function is_complete() {
 		$status = $this->evaluate_status();
 
 		return ! in_array( $status, array( 'pending', 'queued' ) );
 	}
 
+	/**
+	 * Determines the current status of the step.
+	 *
+	 * @return string
+	 */
 	public function status_evaluation() {
 		$approvers   = $this->get_assignees();
 		$step_status = 'approved';
@@ -334,9 +379,27 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			}
 		}
 
+		/**
+		 * Allows the step status for the approval to be customized
+		 *
+		 * @since 2.1-dev 
+		 *
+		 * @param string                     $step_status   The status of the step
+		 * @param Gravity_Flow_Assignee[]    $approvers     The array of Gravity_Flow_Assignee objects
+		 * @param Gravity_Flow_Step          $step          The current step
+		 */
+		$step_status = apply_filters( 'gravityflow_step_status_evaluation_approval', $step_status, $approvers, $this );
+
 		return $step_status;
 	}
 
+	/**
+	 * Decodes and validates the supplied token.
+	 *
+	 * @param array $token The token properties.
+	 *
+	 * @return bool
+	 */
 	public function is_valid_token( $token ) {
 		$token_json  = base64_decode( $token );
 		$token_array = json_decode( $token_json, true );
@@ -374,8 +437,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * Handles POSTed values from the workflow detail page.
 	 *
-	 * @param $form
-	 * @param $entry
+	 * @param array $form  The current form.
+	 * @param array $entry The current entry.
 	 *
 	 * @return string|bool|WP_Error Return a success feedback message safe for page output or a WP_Error instance with an error.
 	 */
@@ -431,7 +494,20 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 			do_action( 'gravityflow_post_status_update_approval', $entry, $assignee, $new_status, $form );
 
-			$feedback = apply_filters( 'gravityflow_feedback_approval', $feedback, $entry, $assignee, $new_status, $form );
+			/**
+			 * Allows the user feedback to be modified after processing the approval status update.
+			 *
+			 * @since 2.0.2 Added the current step
+			 * @since 1.7.1
+			 *
+			 * @param string                $feedback   The feedback to send to the browser.
+			 * @param array                 $entry      The current entry array.
+			 * @param Gravity_Flow_Assignee $assignee   The assignee object.
+			 * @param string                $new_status The new status
+			 * @param array                 $form       The current form array.
+			 * @param Gravity_Flow_Step     $step       The current step
+			 */
+			$feedback = apply_filters( 'gravityflow_feedback_approval', $feedback, $entry, $assignee, $new_status, $form, $this );
 
 		}
 
@@ -439,9 +515,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	/**
-	 * @param Gravity_Flow_Assignee $assignee
-	 * @param $new_status
-	 * @param $form
+	 * Validates and performs the assignees status update.
+	 *
+	 * @param Gravity_Flow_Assignee $assignee   The assignee properties.
+	 * @param string                $new_status The new status for this step.
+	 * @param array                 $form       The current form.
 	 *
 	 * @return bool|string Return a success feedback message safe for page output or false.
 	 */
@@ -450,24 +528,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			return false;
 		}
 
-		$current_user_status = $assignee->get_status();
-		list( $role, $current_role_status ) = $this->get_current_role_status();
-
-		if ( $current_user_status != 'pending' && $current_role_status != 'pending' ) {
-			return esc_html__( 'The status could not be changed because this step has already been processed.', 'gravityflow' );
-		}
-
 		if ( $new_status == 'revert' ) {
 			return $this->process_revert_status();
 		}
 
-		if ( $current_user_status == 'pending' ) {
-			$assignee->update_status( $new_status );
-		}
-
-		if ( $current_role_status == 'pending' ) {
-			$this->update_role_status( $role, $new_status );
-		}
+		$assignee->process_status( $new_status );
 
 		$this->add_status_update_note( $new_status, $assignee );
 		$status = $this->evaluate_status();
@@ -505,8 +570,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * If applicable add a note to the current entry.
 	 *
-	 * @param string $new_status The new status for the step.
-	 * @param Gravity_Flow_Assignee $assignee The step assignee.
+	 * @param string                $new_status The new status for the step.
+	 * @param Gravity_Flow_Assignee $assignee   The step assignee.
 	 */
 	public function add_status_update_note( $new_status, $assignee ) {
 		$note = '';
@@ -544,7 +609,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * Determine if this step is valid.
 	 *
 	 * @param string $new_status The new status for the current step.
-	 * @param array $form The form currently being processed.
+	 * @param array  $form       The form currently being processed.
 	 *
 	 * @return bool
 	 */
@@ -558,7 +623,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * Determine if the note is valid.
 	 *
 	 * @param string $new_status The new status for the current step.
-	 * @param string $note The submitted note.
+	 * @param string $note       The submitted note.
 	 *
 	 * @return bool
 	 */
@@ -597,8 +662,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * Allow the validation result to be overridden using the gravityflow_validation_approval filter.
 	 *
-	 * @param array $validation_result The validation result and form currently being processed.
-	 * @param string $new_status The new status for the current step.
+	 * @param array  $validation_result The validation result and form currently being processed.
+	 * @param string $new_status        The new status for the current step.
 	 *
 	 * @return array
 	 */
@@ -608,6 +673,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
+	/**
+	 * Displays content inside the Workflow metabox on the workflow detail page.
+	 *
+	 * @param array $form The Form array which may contain validation details.
+	 * @param array $args Additional args which may affect the display.
+	 */
 	public function workflow_detail_box( $form, $args ) {
 		$status               = esc_html__( 'Pending Approval', 'gravityflow' );
 		$approve_icon         = '<i class="fa fa-check" style="color:green"></i>';
@@ -635,66 +706,46 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
+	/**
+	 * Display the assignee status in the workflow detail status box.
+	 */
 	public function workflow_detail_status_box_status() {
 		?>
 		<ul>
 			<?php
 			$assignees = $this->get_assignees();
 			foreach ( $assignees as $assignee ) {
-				$user_approval_status = $assignee->get_status();
-				$status_label         = $this->get_status_label( $user_approval_status );
-				if ( ! empty( $user_approval_status ) ) {
-					$assignee_type = $assignee->get_type();
+				$assignee_status_label = $assignee->get_status_label();
+				$assignee_status_li    = sprintf( '<li>%s</li>', $assignee_status_label );
 
-					switch ( $assignee_type ) {
-						case 'email' :
-							$type_label   = esc_html__( 'Email', 'gravityflow' );
-							$display_name = $assignee->get_id();
-							break;
-						case 'role' :
-							$type_label   = esc_html__( 'Role', 'gravityflow' );
-							$display_name = translate_user_role( $assignee->get_id() );
-							break;
-						case 'user_id' :
-							$user         = get_user_by( 'id', $assignee->get_id() );
-							$display_name = $user ? $user->display_name : $assignee->get_id() . ' ' . esc_html__( '(Missing)', 'gravityflow' );
-							$type_label   = esc_html__( 'User', 'gravityflow' );
-							break;
-						default :
-							$display_name = $assignee->get_id();
-							$type_label   = $assignee->get_type();
-					}
-					$assignee_status_label = sprintf( '%s: %s (%s)', $type_label, $display_name, $status_label );
-
-					$assignee_status_label = apply_filters( 'gravityflow_assignee_status_workflow_detail', $assignee_status_label, $assignee, $this );
-
-					$assignee_status_li = sprintf( '<li>%s</li>', $assignee_status_label );
-
-					echo $assignee_status_li;
-
-				}
+				echo $assignee_status_li;
 			}
 			?>
 		</ul>
 		<?php
 	}
 
+	/**
+	 * Displays the note input and step action buttons in the workflow detail status box.
+	 *
+	 * @param array $form The current form.
+	 */
 	public function workflow_detail_status_box_actions( $form ) {
 		$approve_icon = $this->get_approve_icon();
 		$reject_icon  = $this->get_reject_icon();
-		$revert_icon = $this->get_revert_icon();
+		$revert_icon  = $this->get_revert_icon();
 
-		$user_approval_status = $this->get_user_status();
+		$assignees = $this->get_assignees();
 
-		$role_approval_status = false;
-		foreach ( gravity_flow()->get_user_roles() as $role ) {
-			$role_approval_status = $this->get_role_status( $role );
-			if ( $role_approval_status == 'pending' ) {
+		$can_update = false;
+		foreach ( $assignees as $assignee ) {
+			if ( $assignee->is_current_user() ) {
+				$can_update = true;
 				break;
 			}
 		}
 
-		if ( $user_approval_status == 'pending' || $role_approval_status == 'pending' ) {
+		if ( $can_update ) {
 			wp_nonce_field( 'gravityflow_approvals_' . $this->get_id() );
 
 			if ( $this->note_mode !== 'hidden' ) { ?>
@@ -702,7 +753,17 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				<div>
 					<label for="gravityflow-note">
 						<?php
-						esc_html_e( 'Note', 'gravityflow' );
+						$note_label = esc_html__( 'Note', 'gravityflow' );
+						/**
+						 * Allows the label for the Note field on the approval step to be modified.
+						 *
+						 * @since 1.8.1
+						 *
+						 * @param string @note_label the label
+						 * @param Gravity_Flow_Step_Approval $this The current Approval Step.
+						 */
+						$note_label = apply_filters( 'gravityflow_approval_note_label_workflow_detail', $note_label, $this );
+						echo $note_label;
 						$required_indicator = ( $this->note_mode == 'required' ) ? '*' : '';
 						printf( "<span class='gfield_required'>%s</span>", $required_indicator );
 						?>
@@ -732,7 +793,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					 * Allows the 'Approve' label to be modified on the Approval step.
 					 *
 					 * @params string $approve_label The label to be modified.
-					 * @params Gravity_Flow_Step $this The current step.
+					 * @params Gravity_Flow_Step_Approval $this The current step.
 					 */
 					$approve_label = apply_filters( 'gravityflow_approve_label_workflow_detail', $approve_label, $this );
 
@@ -748,7 +809,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					 * Allows the 'Reject' label to be modified on the Approval step.
 					 *
 					 * @params string $reject_label The label to be modified.
-					 * @params Gravity_Flow_Step $this The current step.
+					 * @params Gravity_Flow_Step_Approval $this The current step.
 					 */
 					$reject_label = apply_filters( 'gravityflow_reject_label_workflow_detail', $reject_label, $this );
 
@@ -765,7 +826,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						 * Allows the 'Revert' label to be modified on the Approval step.
 						 *
 						 * @params string $revert_label The label to be modified.
-						 * @params Gravity_Flow_Step $this The current step.
+						 * @params Gravity_Flow_Step_Approval $this The current step.
 						 */
 						$revert_label = apply_filters( 'gravityflow_revert_label_workflow_detail', $revert_label, $this );
 
@@ -779,6 +840,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 	}
 
+	/**
+	 * Displays content inside the Workflow metabox on the Gravity Forms Entry Detail page.
+	 *
+	 * @param array $form The current form.
+	 */
 	public function entry_detail_status_box( $form ) {
 		$status = $this->evaluate_status();
 		?>
@@ -790,24 +856,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				<?php
 				$assignees = $this->get_assignees();
 				foreach ( $assignees as $assignee ) {
-					$user_approval_status = $assignee->get_status();
-					if ( ! empty( $user_approval_status ) ) {
-						$assignee_type = $assignee->get_type();
-						$assignee_id   = $assignee->get_id();
-						if ( $assignee_type == 'email' ) {
-							echo '<li>' . $assignee_id . ': ' . $user_approval_status . '</li>';
-							continue;
-						}
-						if ( $assignee_type == 'role' ) {
-							$users = get_users( array( 'role' => $assignee_id ) );
-						} else {
-							$users = get_users( array( 'include' => array( $assignee_id ) ) );
-						}
+					$assignee_status_label = $assignee->get_status_label();
+					$assignee_status_li    = sprintf( '<li>%s</li>', $assignee_status_label );
 
-						foreach ( $users as $user ) {
-							echo '<li>' . $user->display_name . ': ' . $user_approval_status . '</li>';
-						}
-					}
+					echo $assignee_status_li;
 				}
 
 				?>
@@ -817,26 +869,34 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 	}
 
+	/**
+	 * Triggers sending of the approval notification.
+	 */
 	public function send_approval_notification() {
 		$this->maybe_send_notification( 'approval' );
 	}
 
+	/**
+	 * Triggers sending of the rejection notification.
+	 */
 	public function send_rejection_notification() {
 		$this->maybe_send_notification( 'rejection' );
 	}
 
 	/**
-	 * @param $text
-	 * @param Gravity_Flow_Assignee $assignee
+	 * Replaces the step merge tags.
 	 *
-	 * @return mixed
+	 * @param string                $text     The text containing merge tags to be processed.
+	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
+	 *
+	 * @return string
 	 */
 	public function replace_variables( $text, $assignee ) {
 		$text = parent::replace_variables( $text, $assignee );
 
 		$args = array(
 			'assignee' => $assignee,
-			'step' => $this,
+			'step'     => $this,
 		);
 
 		$text = Gravity_Flow_Merge_Tags::get( 'workflow_approve_token', $args )->replace( $text );
@@ -850,12 +910,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * Provides a way for a step to process a token action before anything else. If feedback is returned it is displayed and nothing else with be rendered.
 	 *
-	 * @param $action
-	 * @param $token
-	 * @param $form
-	 * @param $entry
+	 * @param array $action The action properties.
+	 * @param array $token  The assignee token properties.
+	 * @param array $form   The current form.
+	 * @param array $entry  The current entry.
 	 *
-	 * @return bool|string|void|WP_Error
+	 * @return bool|string|WP_Error
 	 */
 	public function maybe_process_token_action( $action, $token, $form, $entry ) {
 		$feedback = parent::maybe_process_token_action( $action, $token, $form, $entry );
@@ -894,6 +954,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		/**
 		 * Allows the user feedback to be modified after processing the token action.
 		 *
+		 * @since 2.0.2 Added the current step
 		 * @since 1.7.1
 		 *
 		 * @param string                $feedback   The feedback to send to the browser.
@@ -901,12 +962,16 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		 * @param Gravity_Flow_Assignee $assignee   The assignee object.
 		 * @param string                $new_status The new status
 		 * @param array                 $form       The current form array.
+		 * @param Gravity_Flow_Step     $step       The current step
 		 */
-		$feedback = apply_filters( 'gravityflow_feedback_approval_token', $feedback, $entry, $assignee, $new_status, $form );
+		$feedback = apply_filters( 'gravityflow_feedback_approval_token', $feedback, $entry, $assignee, $new_status, $form, $this );
 
 		return $feedback;
 	}
 
+	/**
+	 * Triggers actions to be performed when this step ends.
+	 */
 	public function end() {
 		$status = $this->evaluate_status();
 		$entry  = $this->get_entry();
@@ -926,7 +991,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * If a post exists for the entry perform the configured approval or rejection action.
 	 *
-	 * @param array $entry The current entry.
+	 * @param array  $entry  The current entry.
 	 * @param string $action The action to perform.
 	 */
 	public function maybe_perform_post_action( $entry, $action ) {
@@ -956,16 +1021,31 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 	}
 
+	/**
+	 * Returns the HTML for the approve icon.
+	 *
+	 * @return string
+	 */
 	public function get_approve_icon() {
 		$approve_icon = '<i class="fa fa-check" style="color:green"></i>';
 		return $approve_icon;
 	}
 
+	/**
+	 * Returns the HTML for the reject icon.
+	 *
+	 * @return string
+	 */
 	public function get_reject_icon() {
 		$reject_icon  = '<i class="fa fa-times" style="color:red"></i>';
 		return $reject_icon;
 	}
 
+	/**
+	 * Returns the HTML for the revert icon.
+	 *
+	 * @return string
+	 */
 	public function get_revert_icon() {
 		$revert_icon  = '<i class="fa fa-undo" style="color:blue"></i>';
 		return $revert_icon;

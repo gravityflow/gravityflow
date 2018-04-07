@@ -1,21 +1,29 @@
 <?php
+/**
+ * Gravity Flow Activity List
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
 /**
- * Gravity Flow Activity List
+ * Class Gravity_Flow_Activity_List
  *
- *
- * @package     GravityFlow
- * @subpackage  Classes/Gravity_Flow
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * @since 1.0
  */
 class Gravity_Flow_Activity_List {
 
+	/**
+	 * Displays the activity list.
+	 *
+	 * @param array $args The page arguments.
+	 */
 	public static function display( $args ) {
 
 		$defaults = array(
@@ -30,7 +38,17 @@ class Gravity_Flow_Activity_List {
 			return;
 		}
 
-		$events = Gravity_Flow_Activity::get_events();
+		/**
+		*
+		* @since 2.0.2
+		*
+		* Allows the limit for events to be modified before events are displayed on the activity page.
+		*
+		* @param int $limit The limit of events.
+		*/
+		$limit = (int) apply_filters( 'gravityflow_event_limit_activity_page', 400 );
+
+		$events = Gravity_Flow_Activity::get_events( $limit );
 
 		if ( sizeof( $events ) > 0 ) {
 			?>
@@ -146,6 +164,13 @@ class Gravity_Flow_Activity_List {
 		}
 	}
 
+	/**
+	 * Formats the duration for display.
+	 *
+	 * @param int $seconds The event duration.
+	 *
+	 * @return string
+	 */
 	public static function format_duration( $seconds ) {
 		return gravity_flow()->format_duration( $seconds );
 	}

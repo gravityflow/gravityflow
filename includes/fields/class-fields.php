@@ -2,16 +2,19 @@
 /**
  * Gravity Flow Fields Functions
  *
- * @package   GravityFlow
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since     1.4.2-dev
+ * @since       1.4.2-dev
  */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Fields
+ */
 class Gravity_Flow_Fields {
 
 	/**
@@ -85,7 +88,6 @@ class Gravity_Flow_Fields {
 	public function field_settings( $position ) {
 		if ( $position == 20 ) {
 			// After Description setting.
-
 			$this->setting_assignees();
 			$this->setting_role();
 		}
@@ -188,13 +190,13 @@ class Gravity_Flow_Fields {
 
 	/**
 	 * Retrieves the value of the specified user property/meta key for the specified user ID.
-     *
-     * @since 1.5.1-dev
-     *
-     * @param string|int $user_id The user ID.
-	 * @param string $property The user property to return.
-	 * @param bool $url_encode Indicates if the urlencode function should be applied.
-	 * @param bool $esc_html Indicates if the esc_html function should be applied.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param string|int $user_id    The user ID.
+	 * @param string     $property   The user property to return.
+	 * @param bool       $url_encode Indicates if the urlencode function should be applied.
+	 * @param bool       $esc_html   Indicates if the esc_html function should be applied.
 	 *
 	 * @return string
 	 */
@@ -226,12 +228,12 @@ class Gravity_Flow_Fields {
 
 	/**
 	 * Filters the value of invalid or special characters before output.
-     *
-     * @since 1.5.1-dev
-     *
-     * @param string|int $value The user ID or property to be filtered.
-	 * @param bool $url_encode Indicates if the urlencode function should be applied.
-	 * @param bool $esc_html Indicates if the esc_html function should be applied.
+	 *
+	 * @since 1.5.1-dev
+	 *
+	 * @param string|int $value      The user ID or property to be filtered.
+	 * @param bool       $url_encode Indicates if the urlencode function should be applied.
+	 * @param bool       $esc_html   Indicates if the esc_html function should be applied.
 	 *
 	 * @return string
 	 */

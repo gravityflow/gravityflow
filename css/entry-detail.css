@@ -18,10 +18,21 @@
     border-style: solid;
 }
 
+.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::before,
+.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::after {
+    left: auto;
+    right: 0;
+}
+
 .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::before {
     border-width: 0.4em;
     border-left-color: #ccc;
     border-top-color: #ccc;
+}
+
+.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::before {
+    border-left-color: transparent;
+    border-right-color: #ccc;
 }
 
 .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::after {
@@ -29,6 +40,11 @@
     border-width: 0.4em;
     border-left-color: #0c0;
     border-top-color: #0c0;
+}
+
+.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::after {
+    border-left-color: transparent;
+    border-right-color: #0c0;
 }
 
 .gravityflow-editable-field.green-background:not(.gfield_error) {
@@ -42,6 +58,14 @@
     padding:10px;
 }
 
+#gravityflow_save_progress_button {
+    margin-right:10px;
+}
+
+.rtl #gravityflow_save_progress_button {
+    margin-left:10px;
+}
+
 /* Notes */
 
 .gravityflow-note-avatar{
@@ -51,12 +75,21 @@
     padding-right:10px;
 }
 
+.rtl .gravityflow-note-avatar{
+    float: right;
+    padding-left:10px;
+}
+
 
 .gravityflow-note-body-wrap{
     border: 1px solid #E0E0E0;
     margin-left: 100px;
     padding: 10px;
     display:block;
+}
+
+.rtl .gravityflow-note-body-wrap{
+    margin-right: 100px;
 }
 
 .gravityflow-note-body{
@@ -84,6 +117,11 @@
     font-size:1.2em;
     color:#939FA5;
 }
+
+.rtl .gravityflow-note-title{
+    float: right;
+}
+
 .gravityflow-note-title a {
     font-weight:bold;
     text-decoration: none;
@@ -102,6 +140,11 @@
     display: block;
 }
 
+.rtl .gravityflow-note-meta{
+    float: left;
+    text-align: left;
+}
+
 .gravityflow-note-body-wrap{
     background-color:#FFF;
 }
@@ -114,16 +157,24 @@
     float:right;
 }
 
-.gravityflow-note{
+.rtl #gravityflow-add-note-container{
+    float:left;
+}
 
+.gravityflow-note{
     margin:20px 0 30px;
     clear:both;
     width:100%;
 }
+
 #gravityflow-note-content{
     padding:10px;
     float:left;
     position: relative;
+}
+
+.rtl #gravityflow-note-content{
+    float:right;
 }
 
 .gravityflow-notes-checkbox{
@@ -165,6 +216,11 @@
     font-size:1.2em;
     color:#939FA5;
 }
+
+.rtl .gravityflow-note-title {
+    float: right;
+}
+
 .gravityflow-note-title a {
     font-weight:bold;
     text-decoration: none;
@@ -181,6 +237,11 @@
     font-size: 11px;
     text-align: right;
     display: block;
+}
+
+.rtl .gravityflow-note-meta{
+    float: left;
+    text-align: left;
 }
 
 #gravityflow-admin-action{
@@ -200,6 +261,13 @@
         width: 100%;
         margin-right: 0;
     }
+
+    .rtl .has-right-sidebar #post-body {
+        clear: right;
+        float: left;
+        margin-left: 0;
+    }
+
     .has-right-sidebar .inner-sidebar{
         width:100%;
     }
@@ -208,6 +276,9 @@
         margin-right: 0!important;
     }
 
+    .rtl .has-right-sidebar #post-body-content {
+        margin-left: 0!important;
+    }
 }
 
 .gravityflow-note-avatar span > i {
@@ -231,12 +302,24 @@ table.entry-detail-view td.detail-view{
     line-height: 1.8;
 }
 
+.rtl .gravityflow-field-value {
+    padding: 7px 40px 7px 7px;
+}
+
 .gravityflow-field-value p {
     text-align: left;
 }
 
+.rtl .gravityflow-field-value p {
+    text-align: right;
+}
+
 .gravityflow-field-value ul.bulleted {
     margin-left: 12px;
+}
+
+.rtl .gravityflow-field-value ul.bulleted {
+    margin-right: 12px;
 }
 
 .gravityflow-field-value ul.bulleted li {
@@ -276,6 +359,11 @@ td.gravityflow-order-summary{
     margin: 1em 0 1em 2em;
 }
 
+.rtl .gravityflow-instructions div.inside ul,
+.rtl .gravityflow-instructions div.inside ol {
+    margin: 1em 2em 1em 0;
+}
+
 .gravityflow-instructions div.inside ul li {
     list-style-type: disc;
 }
@@ -302,7 +390,34 @@ span.gf_admin_page_formid {
     white-space: nowrap;
 }
 
+.rtl span.gf_admin_page_formid {
+    margin: 0 12px 0 2px;
+}
+
 .gravityflow-box-title{
     cursor:default;
     border-bottom: 1px solid #eee;
+}
+
+/* Step Highlight */
+table#gravityflow-inbox tbody tr{
+    border-left-width: 3px;
+    border-left-style: solid;
+}
+
+.rtl table#gravityflow-inbox tbody tr{
+    border-left-width: 0;
+    border-left-style: none;
+    border-right-width: 3px;
+    border-right-style: solid;
+}
+
+@media print {
+    .gravityflow-dicussion-item-hidden { 
+        display:block !important;
+    }
+
+    .gravityflow-dicussion-item-toggle-display { 
+        display: none;
+    }
 }

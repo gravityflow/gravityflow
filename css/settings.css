@@ -2,3 +2,17 @@ table.gravityflow-settings-labels th {
     min-width:100px;
     text-align:left;
 }
+
+.rtl table.gravityflow-settings-labels th {
+	text-align:right;
+}
+
+.oauth-not-verified, .oauth-failed, p.error {
+	color:red;
+	font-weight:bold;
+}
+
+.oauth-verified, .oauth-success {
+	color:green;
+	font-weight:bold;
+}

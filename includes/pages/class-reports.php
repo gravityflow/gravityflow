@@ -1,21 +1,28 @@
 <?php
+/**
+ * Gravity Flow Reports
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Reports
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
 /**
- * Gravity Flow Reports
- *
- *
- * @package     GravityFlow
- * @subpackage  Classes/Gravity_Flow_Reports
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * Class Gravity_Flow_Reports
  */
 class Gravity_Flow_Reports {
 
+	/**
+	 * Display of the reports page
+	 *
+	 * @param array $args The reports page arguments.
+	 */
 	public static function display( $args ) {
 
 		$assignee_key = sanitize_text_field( rgget( 'assignee' ) );
@@ -34,17 +41,17 @@ class Gravity_Flow_Reports {
 		}
 
 		$defaults = array(
-			'view' => rgget( 'view' ),
-			'form_id' => absint( rgget( 'form-id' ) ),
-			'step_id' => absint( rgget( 'step-id' ) ),
-			'category' => sanitize_key( rgget( 'category' ) ),
-			'range' => $range,
-			'start_date' => $start_date,
-			'assignee' => $assignee_key,
-			'assignee_type' => $assignee_type,
-			'assignee_id' => $assignee_id,
+			'view'              => rgget( 'view' ),
+			'form_id'           => absint( rgget( 'form-id' ) ),
+			'step_id'           => absint( rgget( 'step-id' ) ),
+			'category'          => sanitize_key( rgget( 'category' ) ),
+			'range'             => $range,
+			'start_date'        => $start_date,
+			'assignee'          => $assignee_key,
+			'assignee_type'     => $assignee_type,
+			'assignee_id'       => $assignee_id,
 			'check_permissions' => true,
-			'base_url' => admin_url( 'admin.php?page=gravityflow-reports' ),
+			'base_url'          => admin_url( 'admin.php?page=gravityflow-reports' ),
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -54,11 +61,11 @@ class Gravity_Flow_Reports {
 			return;
 		}
 
-		$filter_vars['config'] = self::get_filter_config_vars();
+		$filter_vars['config']   = self::get_filter_config_vars();
 		$filter_vars['selected'] = array(
-			'formId' => $args['form_id'],
+			'formId'   => $args['form_id'],
 			'category' => $args['category'],
-			'stepId' => empty( $args['step_id'] ) ? '' : $args['step_id'],
+			'stepId'   => empty( $args['step_id'] ) ? '' : $args['step_id'],
 			'assignee' => $args['assignee'],
 		);
 
@@ -111,12 +118,17 @@ class Gravity_Flow_Reports {
 
 	}
 
+	/**
+	 * Output the report for all forms.
+	 *
+	 * @param array $args The reports page arguments.
+	 */
 	public static function report_all_forms( $args ) {
 
 		$defaults = array(
-			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
+			'start_date'        => date( 'Y-m-d', strtotime( '-1 year' ) ),
 			'check_permissions' => true,
-			'base_url' => admin_url(),
+			'base_url'          => admin_url(),
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -133,25 +145,27 @@ class Gravity_Flow_Reports {
 		$chart_data[] = array( esc_html__( 'Form', 'gravityflow' ), esc_html__( 'Workflows Completed', 'gravityflow' ), esc_html__( 'Average Duration (hours)', 'gravityflow' ) );
 
 		foreach ( $rows as $row ) {
-			$form = GFAPI::get_form( $row->form_id );
-			$title = esc_html( $form['title'] );
+			$form         = GFAPI::get_form( $row->form_id );
+			$title        = esc_html( $form['title'] );
 			$chart_data[] = array( $title, absint( $row->c ), absint( $row->av ) / HOUR_IN_SECONDS );
 		}
 
 		$chart_options = array(
-			'chart' => array(
-				'title' => esc_html__( 'Forms', 'gravityflow' ),
+			'chart'  => array(
+				'title'    => esc_html__( 'Forms', 'gravityflow' ),
 				'subtitle' => esc_html__( 'Workflows completed and average duration', 'gravityflow' ),
 			),
-			'bars' => 'horizontal',
+			'bars'   => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
 			'series' => array(
 				array( 'axis' => 'count' ),
 				array( 'axis' => 'average_duration' ),
 			),
-			'axes' => array(
+			'axes'   => array(
 				'x' => array(
-					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Workflows Completed', 'gravityflow' ) ),
+					'count'            => array( 'side'  => 'top',
+					                             'label' => esc_html__( 'Workflows Completed', 'gravityflow' )
+					),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
 				),
 			),
@@ -163,12 +177,18 @@ class Gravity_Flow_Reports {
 		echo '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
 	}
 
+	/**
+	 * Output the report for a specific form by month.
+	 *
+	 * @param int   $form_id The form ID.
+	 * @param array $args    The reports page arguments.
+	 */
 	public static function report_form_by_month( $form_id, $args ) {
 
 		$defaults = array(
-			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
+			'start_date'        => date( 'Y-m-d', strtotime( '-1 year' ) ),
 			'check_permissions' => true,
-			'base_url' => admin_url(),
+			'base_url'          => admin_url(),
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -191,19 +211,21 @@ class Gravity_Flow_Reports {
 		$form = GFAPI::get_form( $form_id );
 
 		$chart_options = array(
-			'chart' => array(
-				'title' => esc_html( $form['title'] ),
+			'chart'  => array(
+				'title'    => esc_html( $form['title'] ),
 				'subtitle' => esc_html__( 'Workflows completed and average duration', 'gravityflow' ),
 			),
-			'bars' => 'horizontal',
+			'bars'   => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
 			'series' => array(
 				array( 'axis' => 'count' ),
 				array( 'axis' => 'average_duration' ),
 			),
-			'axes' => array(
+			'axes'   => array(
 				'x' => array(
-					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Workflows Completed', 'gravityflow' ) ),
+					'count'            => array( 'side'  => 'top',
+					                             'label' => esc_html__( 'Workflows Completed', 'gravityflow' )
+					),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
 				),
 			),
@@ -215,12 +237,18 @@ class Gravity_Flow_Reports {
 		echo '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
 	}
 
+	/**
+	 * Output the report for a specific form by step.
+	 *
+	 * @param int   $form_id The form ID.
+	 * @param array $args    The reports page arguments.
+	 */
 	public static function report_form_by_step( $form_id, $args ) {
 
 		$defaults = array(
-			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
+			'start_date'        => date( 'Y-m-d', strtotime( '-1 year' ) ),
 			'check_permissions' => true,
-			'base_url' => admin_url(),
+			'base_url'          => admin_url(),
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -248,19 +276,19 @@ class Gravity_Flow_Reports {
 		$form = GFAPI::get_form( $form_id );
 
 		$chart_options = array(
-			'chart' => array(
-				'title' => esc_html( $form['title'] ),
+			'chart'  => array(
+				'title'    => esc_html( $form['title'] ),
 				'subtitle' => esc_html__( 'Step completed and average duration', 'gravityflow' ),
 			),
-			'bars' => 'horizontal',
+			'bars'   => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
 			'series' => array(
 				array( 'axis' => 'count' ),
 				array( 'axis' => 'average_duration' ),
 			),
-			'axes' => array(
+			'axes'   => array(
 				'x' => array(
-					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Completed', 'gravityflow' ) ),
+					'count'            => array( 'side' => 'top', 'label' => esc_html__( 'Completed', 'gravityflow' ) ),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
 				),
 			),
@@ -272,12 +300,18 @@ class Gravity_Flow_Reports {
 		echo '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
 	}
 
+	/**
+	 * Output the report for a specific step by assignee.
+	 *
+	 * @param int   $step_id The step ID.
+	 * @param array $args    The reports page arguments.
+	 */
 	public static function report_step_by_assignee( $step_id, $args ) {
 
 		$defaults = array(
-			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
+			'start_date'        => date( 'Y-m-d', strtotime( '-1 year' ) ),
 			'check_permissions' => true,
-			'base_url' => admin_url( 'admin.php?page=gravityflow-reports' ),
+			'base_url'          => admin_url( 'admin.php?page=gravityflow-reports' ),
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -310,19 +344,19 @@ class Gravity_Flow_Reports {
 		}
 
 		$chart_options = array(
-			'chart' => array(
-				'title' => esc_html( $step->get_name() ),
+			'chart'  => array(
+				'title'    => esc_html( $step->get_name() ),
 				'subtitle' => esc_html__( 'Step completed and average duration by assignee', 'gravityflow' ),
 			),
-			'bars' => 'horizontal',
+			'bars'   => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
 			'series' => array(
 				array( 'axis' => 'count' ),
 				array( 'axis' => 'average_duration' ),
 			),
-			'axes' => array(
+			'axes'   => array(
 				'x' => array(
-					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Completed', 'gravityflow' ) ),
+					'count'            => array( 'side' => 'top', 'label' => esc_html__( 'Completed', 'gravityflow' ) ),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
 				),
 			),
@@ -334,12 +368,18 @@ class Gravity_Flow_Reports {
 		echo '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
 	}
 
+	/**
+	 * Output the report for a specific form by assignee.
+	 *
+	 * @param int   $form_id The form ID.
+	 * @param array $args    The reports page arguments.
+	 */
 	public static function report_form_by_assignee( $form_id, $args ) {
 
 		$defaults = array(
-			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
+			'start_date'        => date( 'Y-m-d', strtotime( '-1 year' ) ),
 			'check_permissions' => true,
-			'base_url' => admin_url( 'admin.php?page=gravityflow-reports' ),
+			'base_url'          => admin_url( 'admin.php?page=gravityflow-reports' ),
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -370,19 +410,19 @@ class Gravity_Flow_Reports {
 		$form = GFAPI::get_form( $form_id );
 
 		$chart_options = array(
-			'chart' => array(
-				'title' => esc_html( $form['title'] ),
+			'chart'  => array(
+				'title'    => esc_html( $form['title'] ),
 				'subtitle' => esc_html__( 'Step completed and average duration by assignee', 'gravityflow' ),
 			),
-			'bars' => 'horizontal',
+			'bars'   => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
 			'series' => array(
 				array( 'axis' => 'count' ),
 				array( 'axis' => 'average_duration' ),
 			),
-			'axes' => array(
+			'axes'   => array(
 				'x' => array(
-					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Completed', 'gravityflow' ) ),
+					'count'            => array( 'side' => 'top', 'label' => esc_html__( 'Completed', 'gravityflow' ) ),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
 				),
 			),
@@ -394,12 +434,19 @@ class Gravity_Flow_Reports {
 		echo '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
 	}
 
+	/**
+	 * Output the report for a specific assignee by month.
+	 *
+	 * @param string $assignee_type The assignee type.
+	 * @param string $assignee_id   The assignee ID.
+	 * @param array  $args          The reports page arguments.
+	 */
 	public static function report_assignee_by_month( $assignee_type, $assignee_id, $args ) {
 
 		$defaults = array(
-			'start_date' => date( 'Y-m-d', strtotime( '-1 year' ) ),
+			'start_date'        => date( 'Y-m-d', strtotime( '-1 year' ) ),
 			'check_permissions' => true,
-			'base_url' => admin_url( 'admin.php?page=gravityflow-reports' ),
+			'base_url'          => admin_url( 'admin.php?page=gravityflow-reports' ),
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -427,19 +474,21 @@ class Gravity_Flow_Reports {
 		}
 
 		$chart_options = array(
-			'chart' => array(
-				'title' => esc_html( $display_name ),
+			'chart'  => array(
+				'title'    => esc_html( $display_name ),
 				'subtitle' => esc_html__( 'Workflows completed and average duration by month', 'gravityflow' ),
 			),
-			'bars' => 'horizontal',
+			'bars'   => 'horizontal',
 			'height' => 200 + count( $rows ) * 100,
 			'series' => array(
 				array( 'axis' => 'count' ),
 				array( 'axis' => 'average_duration' ),
 			),
-			'axes' => array(
+			'axes'   => array(
 				'x' => array(
-					'count' => array( 'side' => 'top', 'label' => esc_html__( 'Workflows Completed', 'gravityflow' ) ),
+					'count'            => array( 'side'  => 'top',
+					                             'label' => esc_html__( 'Workflows Completed', 'gravityflow' )
+					),
 					'average_duration' => array( 'label' => esc_html__( 'Average Duration (hours)', 'gravityflow' ) ),
 				),
 			),
@@ -451,11 +500,26 @@ class Gravity_Flow_Reports {
 		echo '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
 	}
 
+	/**
+	 * Format the duration for output.
+	 *
+	 * @param int $seconds The duration in seconds.
+	 *
+	 * @return string
+	 */
 	public static function format_duration( $seconds ) {
 		return gravity_flow()->format_duration( $seconds );
 	}
 
-	public static function form_drop_down( $selected_value, $echo = true) {
+	/**
+	 * Returns the HTML for the form drop down.
+	 *
+	 * @param string|int $selected_value The selected form.
+	 * @param bool       $echo           Indicates if the content should be echoed.
+	 *
+	 * @return string
+	 */
+	public static function form_drop_down( $selected_value, $echo = true ) {
 		$m = array();
 
 		$m[] = '<select id="gravityflow-form-drop-down" name="form-id">';
@@ -474,6 +538,14 @@ class Gravity_Flow_Reports {
 		return $html;
 	}
 
+	/**
+	 * Returns the HTML for the range drop down.
+	 *
+	 * @param string|int $selected_value The selected range.
+	 * @param bool       $echo           Indicates if the content should be echoed.
+	 *
+	 * @return string
+	 */
 	public static function range_drop_down( $selected_value, $echo = true ) {
 		$m   = array();
 		$m[] = '<select id="gravityflow-reports-range" name="range">';
@@ -491,6 +563,14 @@ class Gravity_Flow_Reports {
 		return $html;
 	}
 
+	/**
+	 * Returns the HTML for the category drop down.
+	 *
+	 * @param string|int $selected_value The selected category.
+	 * @param bool       $echo           Indicates if the content should be echoed.
+	 *
+	 * @return string
+	 */
 	public static function category_drop_down( $selected_value, $echo = true ) {
 		$m = array();
 		$m[] = '<select id="gravityflow-reports-category" name="category" style="display:none;">';
@@ -507,6 +587,11 @@ class Gravity_Flow_Reports {
 		return $html;
 	}
 
+	/**
+	 * Output the step filter.
+	 *
+	 * @param array $args The reports page arguments.
+	 */
 	public static function step_filter( $args ) {
 		?>
 		<form method="GET" action="<?php echo esc_url( $args['base_url'] );?>">
@@ -518,6 +603,14 @@ class Gravity_Flow_Reports {
 	<?php
 	}
 
+	/**
+	 * Returns the HTML for the step drop down.
+	 *
+	 * @param int  $form_id The form ID.
+	 * @param bool $echo    Indicates if the content should be echoed.
+	 *
+	 * @return string
+	 */
 	public static function step_drop_down( $form_id, $echo = true ) {
 		$m = array();
 
@@ -536,26 +629,41 @@ class Gravity_Flow_Reports {
 		return $html;
 	}
 
+	/**
+	 * Get an array of form IDs which have workflows.
+	 *
+	 * @return array
+	 */
 	public static function get_form_ids() {
 		return gravity_flow()->get_workflow_form_ids();
 	}
 
+	/**
+	 * Returns step and assignee properties to be used when rendering the filters.
+	 *
+	 * @return array
+	 */
 	public static function get_filter_config_vars() {
-		$form_ids = self::get_form_ids();
+		$form_ids   = self::get_form_ids();
 		$steps_vars = array();
 		foreach ( $form_ids as $form_id ) {
-			$steps = gravity_flow()->get_steps( $form_id );
+			$steps                  = gravity_flow()->get_steps( $form_id );
 			$steps_vars[ $form_id ] = array();
 			foreach ( $steps as $step ) {
-				$assignees = $step->get_assignees();
+				$assignees     = $step->get_assignees();
 				$assignee_vars = array();
 				foreach ( $assignees as $assignee ) {
 					$assignee_id = $assignee->get_id();
 					if ( ! empty( $assignee_id ) ) {
-						$assignee_vars[] = array( 'key' => $assignee->get_key(), 'name' => $assignee->get_display_name() );
+						$assignee_vars[] = array( 'key'  => $assignee->get_key(),
+						                          'name' => $assignee->get_display_name()
+						);
 					}
 				}
-				$steps_vars[ $form_id ][ $step->get_id() ] = array( 'id' => $step->get_id(), 'name' => $step->get_name(), 'assignees' => $assignee_vars );
+				$steps_vars[ $form_id ][ $step->get_id() ] = array( 'id'        => $step->get_id(),
+				                                                    'name'      => $step->get_name(),
+				                                                    'assignees' => $assignee_vars
+				);
 			}
 		}
 

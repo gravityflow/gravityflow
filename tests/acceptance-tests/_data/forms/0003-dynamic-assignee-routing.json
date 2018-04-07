@@ -1,0 +1,337 @@
+{
+  "0": {
+    "title": "0003 Dynamic Assignee Routing",
+    "description": "",
+    "labelPlacement": "top_label",
+    "descriptionPlacement": "below",
+    "button": {
+      "type": "text",
+      "text": "Submit",
+      "imageUrl": ""
+    },
+    "fields": [
+      {
+        "type": "text",
+        "id": 1,
+        "label": "Single Line",
+        "adminLabel": "",
+        "isRequired": false,
+        "size": "medium",
+        "errorMessage": "",
+        "inputs": null,
+        "labelPlacement": "",
+        "descriptionPlacement": "",
+        "subLabelPlacement": "",
+        "placeholder": "",
+        "multipleFiles": false,
+        "maxFiles": "",
+        "calculationFormula": "",
+        "calculationRounding": "",
+        "enableCalculation": "",
+        "disableQuantity": false,
+        "displayAllCategories": false,
+        "inputMask": false,
+        "inputMaskValue": "",
+        "allowsPrepopulate": false,
+        "formId": 10,
+        "description": "",
+        "inputType": "",
+        "cssClass": "",
+        "inputName": "",
+        "adminOnly": false,
+        "noDuplicates": false,
+        "defaultValue": "",
+        "choices": "",
+        "conditionalLogic": ""
+      },
+      {
+        "type": "textarea",
+        "id": 2,
+        "label": "Paragraph",
+        "adminLabel": "",
+        "isRequired": false,
+        "size": "medium",
+        "errorMessage": "",
+        "inputs": null,
+        "labelPlacement": "",
+        "descriptionPlacement": "",
+        "subLabelPlacement": "",
+        "placeholder": "",
+        "multipleFiles": false,
+        "maxFiles": "",
+        "calculationFormula": "",
+        "calculationRounding": "",
+        "enableCalculation": "",
+        "disableQuantity": false,
+        "displayAllCategories": false,
+        "inputMask": false,
+        "inputMaskValue": "",
+        "allowsPrepopulate": false,
+        "formId": 10,
+        "description": "",
+        "inputType": "",
+        "cssClass": "",
+        "inputName": "",
+        "adminOnly": false,
+        "noDuplicates": false,
+        "defaultValue": "",
+        "choices": "",
+        "conditionalLogic": ""
+      },
+      {
+        "type": "checkbox",
+        "id": 3,
+        "label": "Publishers",
+        "adminLabel": "",
+        "isRequired": false,
+        "size": "medium",
+        "errorMessage": "",
+        "choices": [
+          {
+            "text": "Publisher 1",
+            "value": "publisher1",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Publisher 2",
+            "value": "publisher2",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Publisher 3",
+            "value": "publisher3",
+            "isSelected": false,
+            "price": ""
+          },
+          {
+            "text": "Publisher 4",
+            "value": "publisher4",
+            "isSelected": false,
+            "price": ""
+          }
+        ],
+        "inputs": [
+          {
+            "id": "3.1",
+            "label": "Publisher 1",
+            "name": ""
+          },
+          {
+            "id": "3.2",
+            "label": "Publisher 2",
+            "name": ""
+          },
+          {
+            "id": "3.3",
+            "label": "Publisher 3",
+            "name": ""
+          },
+          {
+            "id": "3.4",
+            "label": "Publisher 4",
+            "name": ""
+          }
+        ],
+        "labelPlacement": "",
+        "descriptionPlacement": "",
+        "subLabelPlacement": "",
+        "placeholder": "",
+        "multipleFiles": false,
+        "maxFiles": "",
+        "calculationFormula": "",
+        "calculationRounding": "",
+        "enableCalculation": "",
+        "disableQuantity": false,
+        "displayAllCategories": false,
+        "inputMask": false,
+        "inputMaskValue": "",
+        "allowsPrepopulate": false,
+        "enableChoiceValue": true,
+        "formId": 10,
+        "description": "",
+        "inputType": "",
+        "cssClass": "",
+        "inputName": "",
+        "adminOnly": false,
+        "noDuplicates": false,
+        "defaultValue": "",
+        "conditionalLogic": ""
+      }
+    ],
+    "version": "1.9.14.30",
+    "id": 10,
+    "useCurrentUserAsAuthor": true,
+    "postContentTemplateEnabled": false,
+    "postTitleTemplateEnabled": false,
+    "postTitleTemplate": "",
+    "postContentTemplate": "",
+    "lastPageButton": null,
+    "pagination": null,
+    "firstPageCssClass": null,
+    "confirmations": [
+      {
+        "id": "56598179e72f2",
+        "name": "Default Confirmation",
+        "isDefault": true,
+        "type": "message",
+        "message": "Thanks for contacting us! We will get in touch with you shortly.",
+        "url": "",
+        "pageId": "",
+        "queryString": ""
+      }
+    ],
+    "notifications": [
+      {
+        "id": "56598179e6a4f",
+        "to": "{admin_email}",
+        "name": "Admin Notification",
+        "event": "form_submission",
+        "toType": "email",
+        "subject": "New submission from {form_title}",
+        "message": "{all_fields}"
+      }
+    ],
+    "feeds": {
+      "gravityflow": [
+        {
+          "id": "25",
+          "form_id": "10",
+          "is_active": "1",
+          "meta": {
+            "step_name": "User Input",
+            "description": "",
+            "step_type": "user_input",
+            "feed_condition_conditional_logic": "0",
+            "feed_condition_conditional_logic_object": [],
+            "scheduled": "0",
+            "schedule_type": "delay",
+            "schedule_date": "",
+            "schedule_delay_offset": "",
+            "schedule_delay_unit": "hours",
+            "type": "routing",
+            "routing": [
+              {
+                "target": false,
+                "fieldId": "3",
+                "operator": "is",
+                "value": "publisher1",
+                "type": false,
+                "assignee": "user_id|2",
+                "editable_fields": [
+                  "1",
+                  "2",
+                  "3"
+                ]
+              },
+              {
+                "target": false,
+                "fieldId": "3",
+                "operator": "is",
+                "value": "publisher2",
+                "type": false,
+                "assignee": "user_id|3",
+                "editable_fields": [
+                  "1",
+                  "2",
+                  "3"
+                ]
+              },
+              {
+                "target": false,
+                "fieldId": "3",
+                "operator": "is",
+                "value": "publisher3",
+                "type": false,
+                "assignee": "user_id|4",
+                "editable_fields": [
+                  "1",
+                  "2",
+                  "3"
+                ]
+              },
+              {
+                "target": false,
+                "fieldId": "3",
+                "operator": "is",
+                "value": "publisher4",
+                "type": false,
+                "assignee": "user_id|5",
+                "editable_fields": [
+                  "1",
+                  "2",
+                  "3"
+                ]
+              },
+              {
+                "target": false,
+                "fieldId": "3",
+                "operator": "is",
+                "value": "publisher1",
+                "type": false,
+                "assignee": "user_id|1",
+                "editable_fields": [
+                  "1",
+                  "2",
+                  "3"
+                ]
+              },
+              {
+                "target": false,
+                "fieldId": "3",
+                "operator": "is",
+                "value": "publisher2",
+                "type": false,
+                "assignee": "user_id|1",
+                "editable_fields": [
+                  "1",
+                  "2",
+                  "3"
+                ]
+              },
+              {
+                "target": false,
+                "fieldId": "3",
+                "operator": "is",
+                "value": "publisher3",
+                "type": false,
+                "assignee": "user_id|1",
+                "editable_fields": [
+                  "1",
+                  "2",
+                  "3"
+                ]
+              }
+            ],
+            "assignee_policy": "all",
+            "instructionsEnable": "1",
+            "instructionsValue": "<span style=\"color: #ff0000;\">Some instructions<\/span>",
+            "display_fields_mode": "all_fields",
+            "default_status": "in_progress",
+            "note_mode": "not_required",
+            "assignee_notification_enabled": "1",
+            "assignee_notification_from_name": "",
+            "assignee_notification_from_email": "{admin_email}",
+            "assignee_notification_reply_to": "",
+            "assignee_notification_bcc": "",
+            "assignee_notification_subject": "New Newstand Issue",
+            "assignee_notification_message": "A new entry requires your input\r\n\r\n{workflow_entry_link}",
+            "resend_assignee_emailEnable": "0",
+            "resend_assignee_emailValue": "7",
+            "expiration": "0",
+            "expiration_type": "delay",
+            "expiration_date": "",
+            "expiration_delay_offset": "",
+            "expiration_delay_unit": "hours",
+            "destination_complete": "next"
+          },
+          "addon_slug": "gravityflow",
+          "order": "0",
+          "feed_order": "0"
+        }
+      ]
+    }
+  },
+  "version": "2.0.7.14"
+}

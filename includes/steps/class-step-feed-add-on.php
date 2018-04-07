@@ -2,14 +2,12 @@
 /**
  * Gravity_Flow_Step_Feed_Add_On
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Step_Feed_Add_On
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
-
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
@@ -192,7 +190,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	/**
 	 * Processes the given feed for the add-on.
 	 *
-	 * @param $feed
+	 * @param array $feed The add-on feed properties.
 	 *
 	 * @return bool Is feed processing complete?
 	 */
@@ -211,23 +209,16 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 */
 	public function intercept_submission() {
 		$form_id = $this->get_form_id();
-		if ( gravity_flow()->is_gravityforms_supported( '2.0-beta-2' ) ) {
-			$slug = $this->get_slug();
-			add_filter( "gform_{$slug}_pre_process_feeds_{$form_id}", array( $this, 'pre_process_feeds' ), 10, 2 );
-		} else {
-			add_filter( "gform_is_delayed_pre_process_feed_{$form_id}", array(
-				$this,
-				'is_delayed_pre_process_feed'
-			), 10, 4 );
-		}
+		$slug    = $this->get_slug();
+		add_filter( "gform_{$slug}_pre_process_feeds_{$form_id}", array( $this, 'pre_process_feeds' ), 10, 2 );
 	}
 
 	/**
 	 * Returns the label of the given feed.
 	 *
-	 * @param $feed
+	 * @param array $feed The add-on feed properties.
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public function get_feed_label( $feed ) {
 		$label = $feed['meta']['feedName'];
@@ -238,8 +229,8 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	/**
 	 * Determines if the supplied feed should be processed.
 	 *
-	 * @param array $feed The current feed.
-	 * @param array $form The current form.
+	 * @param array $feed  The current feed.
+	 * @param array $form  The current form.
 	 * @param array $entry The current entry.
 	 *
 	 * @return bool
@@ -281,36 +272,6 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		}
 
 		return $feeds;
-	}
-
-	/**
-	 * Prevent the feeds assigned to the current step from being processed by the associated add-on.
-	 *
-	 * @param bool $is_delayed Is feed processing delayed?
-	 * @param array $form The form object currently being processed.
-	 * @param array $entry The entry object currently being processed.
-	 * @param string $slug The Add-On slug e.g. gravityformsmailchimp
-	 *
-	 * @todo Remove once min GF version reaches 2.0.
-	 *
-	 * @return bool
-	 */
-	public function is_delayed_pre_process_feed( $is_delayed, $form, $entry, $slug ) {
-		if ( $slug == $this->get_slug() ) {
-			$feeds = $this->get_feeds();
-			if ( is_array( $feeds ) ) {
-				foreach ( $feeds as $feed ) {
-					$setting_key = 'feed_' . $feed['id'];
-					if ( $this->{$setting_key} ) {
-						$this->get_add_on_instance()->log_debug( __METHOD__ . "(): Delaying feed (#{$feed['id']} - {$this->get_feed_label( $feed )}) for entry #{$entry['id']}." );
-
-						return true;
-					}
-				}
-			}
-		}
-
-		return $is_delayed;
 	}
 
 	/**
@@ -389,7 +350,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 * Add the ID of the current feed to the processed feeds array for the current add-on.
 	 *
 	 * @param array $add_on_feeds The IDs of the processed feeds.
-	 * @param int $feed_id The ID of the processed feed.
+	 * @param int   $feed_id      The ID of the processed feed.
 	 *
 	 * @return array
 	 */
@@ -405,7 +366,7 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 * If necessary remove the current feed from the processed feeds array for the current add-on.
 	 *
 	 * @param array $add_on_feeds The IDs of the processed feeds.
-	 * @param int $feed_id The ID of the processed feed.
+	 * @param int   $feed_id      The ID of the processed feed.
 	 *
 	 * @return array
 	 */
@@ -423,8 +384,8 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	/**
 	 * Update the processed_feeds array for the current entry.
 	 *
-	 * @param array $add_on_feeds The IDs of the processed feeds for the current add-on.
-	 * @param bool|int $entry_id False or the ID of the entry the meta should be saved for.
+	 * @param array    $add_on_feeds The IDs of the processed feeds for the current add-on.
+	 * @param bool|int $entry_id     False or the ID of the entry the meta should be saved for.
 	 */
 	public function update_processed_feeds( $add_on_feeds, $entry_id = false ) {
 		if ( ! $entry_id ) {
@@ -449,9 +410,12 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 		$add_on_feeds = $this->get_processed_add_on_feeds();
 		$feeds        = $this->get_feeds();
 
+		$form  = $this->get_form();
+		$entry = $this->get_entry();
+
 		foreach ( $feeds as $feed ) {
 			$setting_key = 'feed_' . $feed['id'];
-			if ( $this->{$setting_key} && ! in_array( $feed['id'], $add_on_feeds ) ) {
+			if ( $this->{$setting_key} && ! in_array( $feed['id'], $add_on_feeds ) && $this->is_feed_condition_met( $feed, $form, $entry ) ) {
 				return 'pending';
 			}
 		}

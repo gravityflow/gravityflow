@@ -17,7 +17,7 @@
     },
     "require-dev": {
       "apigen/apigen": "~4.1.2",
-      "lucatume/wp-browser": "1.19.12",
-      "codeception/codeception": "2.2.12"
+      "lucatume/wp-browser": "1.21",
+      "codeception/codeception": "2.3.7"
     }
 }

@@ -2,10 +2,9 @@
 /**
  * Gravity Flow Step Notification
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Gravity_Flow_Step_Notification
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -14,17 +13,41 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Step_Notification
+ */
 class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
+
+	/**
+	 * The step type.
+	 *
+	 * @var string
+	 */
 	public $_step_type = 'notification';
 
+	/**
+	 * Returns the step label.
+	 *
+	 * @return string
+	 */
 	public function get_label() {
 		return esc_html__( 'Notification', 'gravityflow' );
 	}
 
+	/**
+	 * Returns the HTML for the step icon.
+	 *
+	 * @return string
+	 */
 	public function get_icon_url() {
 		return '<i class="fa fa-envelope-o"></i>';
 	}
 
+	/**
+	 * Returns an array of settings for this step type.
+	 *
+	 * @return array
+	 */
 	public function get_settings() {
 		$form    = $this->get_form();
 		$choices = array();
@@ -63,6 +86,11 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		);
 	}
 
+	/**
+	 * Triggers sending of the selected notifications.
+	 *
+	 * @return bool
+	 */
 	function process() {
 		$this->log_debug( __METHOD__ . '(): starting' );
 
@@ -98,6 +126,9 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 		return true;
 	}
 
+	/**
+	 * Sends the workflow notification, if enabled.
+	 */
 	public function send_workflow_notification() {
 
 		if ( ! $this->workflow_notification_enabled ) {
@@ -130,7 +161,7 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	/**
 	 * Prevents the current notification from being sent during form submission if it is selected for this step.
 	 *
-	 * @param bool $is_disabled Indicates if the current notification has already been disabled.
+	 * @param bool  $is_disabled  Indicates if the current notification has already been disabled.
 	 * @param array $notification The current notifications properties.
 	 *
 	 * @return bool

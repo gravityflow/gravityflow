@@ -25,6 +25,9 @@
     font-size: 13px;
     line-height: 2.1em;
 }
+.rtl #gravityflow-status-filters{
+    background-image: -webkit-gradient(linear,right bottom,right top,from(#f5f5f5),to(#fafafa));
+}
 #entry-id{
     padding:3px;
 }

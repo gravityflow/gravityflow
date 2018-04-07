@@ -1,9 +1,21 @@
 <?php
+/**
+ * Gravity Flow Workflow URL Merge Tag
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Merge_Tag_Workflow_Url
+ *
+ * @since 1.7.1-dev
+ */
 class Gravity_Flow_Merge_Tag_Workflow_Url extends Gravity_Flow_Merge_Tag {
 
 	/**
@@ -11,7 +23,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Url extends Gravity_Flow_Merge_Tag {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @var null
+	 * @var string
 	 */
 	public $name = 'workflow_url';
 
@@ -95,8 +107,8 @@ class Gravity_Flow_Merge_Tag_Workflow_Url extends Gravity_Flow_Merge_Tag {
 	/**
 	 * Returns the inbox URL.
 	 *
-	 * @param int|null $page_id
-	 * @param string $access_token
+	 * @param int|null $page_id      The ID of the WordPress Page where the shortcode is located.
+	 * @param string   $access_token The access token for the current assignee.
 	 *
 	 * @return string
 	 */
@@ -112,9 +124,8 @@ class Gravity_Flow_Merge_Tag_Workflow_Url extends Gravity_Flow_Merge_Tag {
 	/**
 	 * Returns the entry URL.
 	 *
-	 * @param int|null $page_id
-	 * @param Gravity_Flow_Assignee $assignee
-	 * @param string $access_token
+	 * @param int|null $page_id      The ID of the WordPress Page where the shortcode is located.
+	 * @param string   $access_token The access token for the current assignee.
 	 *
 	 * @return string
 	 */

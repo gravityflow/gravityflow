@@ -1,4 +1,11 @@
 <?php
+/**
+ * Gravity Flow Workflow Reject Token Merge Tag
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
@@ -8,6 +15,11 @@ if ( ! class_exists( 'Gravity_Flow_Merge_Tag_Workflow_Url' ) ) {
 	require_once( 'class-merge-tag-workflow-url.php' );
 }
 
+/**
+ * Class Gravity_Flow_Merge_Tag_Workflow_Reject_Token
+ *
+ * @since 1.7.1-dev
+ */
 class Gravity_Flow_Merge_Tag_Workflow_Reject_Token extends Gravity_Flow_Merge_Tag_Workflow_Url {
 
 	/**
@@ -15,7 +27,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Reject_Token extends Gravity_Flow_Merge_Ta
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @var null
+	 * @var string
 	 */
 	public $name = 'workflow_reject_token';
 
@@ -62,6 +74,11 @@ class Gravity_Flow_Merge_Tag_Workflow_Reject_Token extends Gravity_Flow_Merge_Ta
 		return $text;
 	}
 
+	/**
+	 * Get the reject token for the current assignee and step.
+	 *
+	 * @return string
+	 */
 	protected function get_token() {
 		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 2, $this->assignee );
 

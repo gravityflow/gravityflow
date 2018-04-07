@@ -1,20 +1,26 @@
 <?php
+/**
+ * Gravity Flow Print Entries
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Print_Entries
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
 /**
- * Gravity Flow Print Entries
- *
- *
- * @package     GravityFlow
- * @subpackage  Classes/Gravity_Flow_Print_Entries
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * Class Gravity_Flow_Print_Entries
  */
 class Gravity_Flow_Print_Entries {
+
+	/**
+	 * Output the entries to be printed.
+	 */
 	public static function render() {
 
 		$entry_ids = self::get_entry_ids();
@@ -47,13 +53,24 @@ class Gravity_Flow_Print_Entries {
 				$gravity_flow = gravity_flow();
 				$current_step = $gravity_flow->get_current_step( $form, $entry );
 
-				// Check view permissions
-
+				// Check view permissions.
 				$entry = GFAPI::get_entry( $entry_id );
 
 				require_once( $gravity_flow->get_base_path() . '/includes/pages/class-entry-detail.php' );
 
-				if ( ! Gravity_Flow_Entry_Detail::is_permission_granted( $entry, $form, $current_step ) ) {
+				$permission_granted = Gravity_Flow_Entry_Detail::is_permission_granted( $entry, $form, $current_step );
+
+				/**
+				 * Allows the the permission check to be overridden for the workflow entry detail page.
+				 *
+				 * @param bool              $permission_granted Whether permission is granted to open the entry.
+				 * @param array             $entry              The current entry.
+				 * @param array             $form               The form for the current entry.
+				 * @param Gravity_Flow_Step $current_step       The current step.
+				 */
+				$permission_granted = apply_filters( 'gravityflow_permission_granted_entry_detail', $permission_granted, $entry, $form, $current_step );
+
+				if ( ! $permission_granted ) {
 					esc_attr_e( "You don't have permission to view this entry.", 'gravityflow' );
 					continue;
 				}
@@ -66,7 +83,7 @@ class Gravity_Flow_Print_Entries {
 					Gravity_Flow_Entry_Detail::timeline( $entry, $form );
 				}
 
-				// output entry divider/page break
+				// Output entry divider/page break.
 				if ( array_search( $entry_id, $entry_ids ) < count( $entry_ids ) - 1 ) {
 					echo '<div class="print-hr ' . $page_break . '"></div>';
 				}
@@ -89,8 +106,7 @@ class Gravity_Flow_Print_Entries {
 	public static function get_entry_ids() {
 		$entries = rgget( 'lid' );
 		if ( 0 == $entries ) {
-			// get all the entry ids for the current filter / search
-
+			// Get all the entry ids for the current filter/search.
 			$form_id         = 0;
 			$search_criteria = self::get_search_criteria();
 			$entry_ids       = GFFormsModel::search_lead_ids( $form_id, $search_criteria );
@@ -98,7 +114,7 @@ class Gravity_Flow_Print_Entries {
 			$entry_ids = explode( ',', $entries );
 		}
 
-		// sort lead IDs numerically
+		// Sort lead IDs numerically.
 		sort( $entry_ids );
 
 		return $entry_ids;
@@ -129,7 +145,7 @@ class Gravity_Flow_Print_Entries {
 			$key            = $search_field_id;
 			$val            = rgget( 's' );
 			$strpos_row_key = strpos( $search_field_id, '|' );
-			if ( $strpos_row_key !== false ) { //multi-row
+			if ( $strpos_row_key !== false ) { // Multi-row.
 				$key_array = explode( '|', $search_field_id );
 				$key       = $key_array[0];
 				$val       = $key_array[1] . ':' . $val;
@@ -174,6 +190,7 @@ class Gravity_Flow_Print_Entries {
 			</title>
 			<link rel='stylesheet' href='<?php echo GFCommon::get_base_url() ?>/css/print<?php echo $min; ?>.css' type='text/css'/>
 			<link rel='stylesheet' href='<?php echo gravity_flow()->get_base_url() ?>/css/entry-detail<?php echo $min; ?>.css' type='text/css'/>
+			<link rel='stylesheet' href='<?php echo gravity_flow()->get_base_url() ?>/css/discussion-field<?php echo $min; ?>.css' type='text/css'/>
 			<?php
 			$styles = apply_filters( 'gravityflow_print_styles', false );
 			if ( ! empty( $styles ) ) {

@@ -1,17 +1,17 @@
 <?php
-/*
+/**
 Plugin Name: Gravity Flow
 Plugin URI: https://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
-Version: 1.8.1-dev
+Version: 2.1.2-dev
 Author: Gravity Flow
-Author URI: http://www.gravityflow.io
+Author URI: https://gravityflow.io
 License: GPL-3.0+
 Text Domain: gravityflow
 Domain Path: /languages
 
 ------------------------------------------------------------------------
-Copyright 2015-2017 Steven Henty S.L.
+Copyright 2015-2018 Steven Henty S.L.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,9 +25,9 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses.
-*/
+ */
 
-define( 'GRAVITY_FLOW_VERSION', '1.8.1-dev' );
+define( 'GRAVITY_FLOW_VERSION', '2.1.2-dev' );
 
 define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 
@@ -35,8 +35,14 @@ define( 'GRAVITY_FLOW_EDD_ITEM_NAME', 'Gravity Flow' );
 
 add_action( 'gform_loaded', array( 'Gravity_Flow_Bootstrap', 'load' ), 1 );
 
+/**
+ * Class Gravity_Flow_Bootstrap
+ */
 class Gravity_Flow_Bootstrap {
 
+	/**
+	 * Includes the required files and registers the add-on with Gravity Forms.
+	 */
 	public static function load() {
 
 		if ( ! method_exists( 'GFForms', 'include_feed_addon_framework' ) ) {
@@ -67,19 +73,18 @@ class Gravity_Flow_Bootstrap {
 			include( dirname( __FILE__ ) . '/includes/class-feed-extension.php' );
 		}
 
-		if ( ! class_exists( 'Gravity_Flow_Assignee' ) ) {
-			include( dirname( __FILE__ ) . '/includes/class-assignee.php' );
-		}
-
 		if ( class_exists( 'GravityView_Field' ) ) {
 			include( dirname( __FILE__ ) . '/includes/class-gravityview-detail-link.php' );
 		}
 
 		require_once( dirname( __FILE__ ) . '/includes/class-common.php' );
 
+		require_once( 'includes/class-connected-apps.php' );
 		require_once( 'class-gravity-flow.php' );
 		require_once( 'includes/models/class-activity.php' );
+		require_once( 'includes/integrations/class-gp-nested-forms.php' );
 
+		self::include_assignees();
 		self::include_steps();
 		self::include_fields();
 		self::include_merge_tags();
@@ -88,6 +93,17 @@ class Gravity_Flow_Bootstrap {
 		do_action( 'gravityflow_loaded' );
 	}
 
+	/**
+	 * Includes the assignee classes.
+	 */
+	public static function include_assignees() {
+		require_once( dirname( __FILE__ ) . '/includes/assignees/class-assignees.php' );
+		require_once( dirname( __FILE__ ) . '/includes/assignees/class-assignee.php' );
+	}
+
+	/**
+	 * Includes the step classes.
+	 */
 	public static function include_steps() {
 		require_once( dirname( __FILE__ ) . '/includes/steps/class-step.php' );
 		require_once( dirname( __FILE__ ) . '/includes/steps/class-steps.php' );
@@ -98,6 +114,9 @@ class Gravity_Flow_Bootstrap {
 		}
 	}
 
+	/**
+	 * Includes the field classes.
+	 */
 	public static function include_fields() {
 		require_once( dirname( __FILE__ ) . '/includes/fields/class-fields.php' );
 
@@ -106,6 +125,9 @@ class Gravity_Flow_Bootstrap {
 		}
 	}
 
+	/**
+	 * Includes the merge tag classes.
+	 */
 	public static function include_merge_tags() {
 		require_once( dirname( __FILE__ ) . '/includes/merge-tags/class-merge-tag.php' );
 		require_once( dirname( __FILE__ ) . '/includes/merge-tags/class-merge-tags.php' );
@@ -117,14 +139,24 @@ class Gravity_Flow_Bootstrap {
 
 }
 
+/**
+ * Returns an instance of the Gravity_Flow class.
+ *
+ * @return Gravity_Flow|null
+ */
 function gravity_flow() {
 	if ( class_exists( 'Gravity_Flow' ) ) {
 		return Gravity_Flow::get_instance();
 	}
+
+	return null;
 }
 
 add_action( 'init', 'gravityflow_edd_plugin_updater', 0 );
 
+/**
+ * Initialize the EDD plugin updater.
+ */
 function gravityflow_edd_plugin_updater() {
 
 	$gravity_flow = gravity_flow();

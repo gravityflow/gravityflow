@@ -39,7 +39,7 @@ services:
       - DBUS_SESSION_BUS_ADDRESS=/dev/null
     volumes:
       - /dev/shm:/dev/shm
-    image: selenium/standalone-chrome-debug
+    image: selenium/standalone-chrome-debug:3.7.1
     ports:
       - '4444'
       - '5900:5900'

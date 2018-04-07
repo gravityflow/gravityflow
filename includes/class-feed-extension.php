@@ -2,33 +2,60 @@
 /**
  * Gravity Flow Extension Base
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/ExtensionBase
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
-
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 GFForms::include_feed_addon_framework();
 
+/**
+ * Class Gravity_Flow_Feed_Extension
+ *
+ * @since 1.0
+ */
 abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
+	/**
+	 * The item name used by Easy Digital Downloads.
+	 *
+	 * @var string
+	 */
 	public $edd_item_name = '';
 
+	/**
+	 * If the extensions minimum requirements are met add the general hooks.
+	 */
 	public function init() {
 		parent::init();
+
+		$meets_requirements = $this->meets_minimum_requirements();
+		if ( ! $meets_requirements['meets_requirements'] ) {
+			return;
+		}
+
 		add_filter( 'gravityflow_menu_items', array( $this, 'menu_items' ) );
 		add_filter( 'gravityflow_toolbar_menu_items', array( $this, 'toolbar_menu_items' ) );
 	}
 
+	/**
+	 * If the extensions minimum requirements are met add the admin hooks.
+	 */
 	public function init_admin() {
 		parent::init_admin();
+
+		$meets_requirements = $this->meets_minimum_requirements();
+		if ( ! $meets_requirements['meets_requirements'] ) {
+			return;
+		}
+
 		add_filter( 'gravityflow_settings_menu_tabs', array( $this, 'app_settings_tabs' ) );
+		add_filter( 'plugin_action_links', array( $this, 'plugin_settings_link' ), 10, 2 );
 
 		// Members 2.0+ Integration.
 		if ( function_exists( 'members_register_cap_group' ) ) {
@@ -56,27 +83,27 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 		return $caps;
 	}
 
+	/**
+	 * Add a tab to the app settings page for this extension.
+	 *
+	 * @param array $settings_tabs The app settings tabs.
+	 *
+	 * @return array
+	 */
 	public function app_settings_tabs( $settings_tabs ) {
-
-		$callback = 'app_settings_tab';
-
-		if ( is_callable( array( $this, 'meets_minimum_requirements' ) ) ) {
-			$meets_requirements = $this->meets_minimum_requirements();
-
-			if ( ! $meets_requirements['meets_requirements'] ) {
-				$callback = 'failed_requirements_page';
-			}
-		}
 
 		$settings_tabs[] = array(
 			'name'     => $this->_slug,
 			'label'    => $this->get_short_title(),
-			'callback' => array( $this, $callback ),
+			'callback' => array( $this, 'app_settings_tab' ),
 		);
 
 		return $settings_tabs;
 	}
 
+	/**
+	 * The callback for this extensions app settings tab.
+	 */
 	public function app_settings_tab() {
 
 		require_once( GFCommon::get_base_path() . '/tooltips.php' );
@@ -94,23 +121,23 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 		if ( $this->maybe_uninstall() ) {
 			?>
 			<div class="push-alert-gold" style="border-left: 1px solid #E6DB55; border-right: 1px solid #E6DB55;">
-				<?php printf( esc_html_x( '%s has been successfully uninstalled. It can be re-activated from the %splugins page%s.', 'Displayed on the settings page after uninstalling a Gravity Flow extension.', 'gravityforms' ), esc_html( $this->_title ), "<a href='plugins.php'>", '</a>' ); ?>
+				<?php printf( esc_html_x( '%s has been successfully uninstalled. It can be re-activated from the %splugins page%s.', 'Displayed on the settings page after uninstalling a Gravity Flow extension.', 'gravityflow' ), esc_html( $this->_title ), "<a href='plugins.php'>", '</a>' ); ?>
 			</div>
 			<?php
 		} else {
-			//saves settings page if save button was pressed
+			// Saves settings page if save button was pressed.
 			$this->maybe_save_app_settings();
 
-			//reads main addon settings
+			// Reads main add-on settings.
 			$settings = $this->get_app_settings();
 			$this->set_settings( $settings );
 
-			//reading addon fields
+			// Reading add-on fields.
 			$sections = $this->app_settings_fields();
 
 			GFCommon::display_admin_message();
 
-			//rendering settings based on fields and current settings
+			// Rendering settings based on fields and current settings.
 			$this->render_settings( $sections );
 
 			$this->render_uninstall();
@@ -150,6 +177,11 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 		<?php
 	}
 
+	/**
+	 * Get the settings for the app settings tab.
+	 *
+	 * @return array
+	 */
 	public function app_settings_fields() {
 		return array(
 			array(
@@ -170,10 +202,23 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 		);
 	}
 
+	/**
+	 * Return the saved settings.
+	 *
+	 * @return mixed
+	 */
 	public function get_app_settings() {
 		return parent::get_app_settings();
 	}
 
+	/**
+	 * Validate the license key setting.
+	 *
+	 * @param string $value The field value; the license key.
+	 * @param array  $field The field properties.
+	 *
+	 * @return bool|null
+	 */
 	public function license_feedback( $value, $field ) {
 
 		if ( empty( $value ) ) {
@@ -193,6 +238,13 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 	}
 
+	/**
+	 * Retrieve the license data.
+	 *
+	 * @param string $value The license key for this extension.
+	 *
+	 * @return array|mixed|object
+	 */
 	public function check_license( $value ) {
 		$response = gravity_flow()->perform_edd_license_request( 'check_license', $value, $this->edd_item_name );
 
@@ -200,11 +252,17 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 	}
 
+	/**
+	 * Deactivate the old license key and active the new license key.
+	 *
+	 * @param array  $field         The field properties.
+	 * @param string $field_setting The field value; the license key.
+	 */
 	public function license_validation( $field, $field_setting ) {
 		$old_license = $this->get_app_setting( 'license_key' );
 
 		if ( $old_license && $field_setting != $old_license ) {
-			// deactivate the old site
+			// Deactivate the old site.
 			$response = gravity_flow()->perform_edd_license_request( 'deactivate_license', $old_license, $this->edd_item_name );
 		}
 
@@ -217,6 +275,13 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 	}
 
+	/**
+	 * Activate the license key.
+	 *
+	 * @param string $license_key The license key for this extension.
+	 *
+	 * @return array|mixed|object
+	 */
 	public function activate_license( $license_key ) {
 		$response = gravity_flow()->perform_edd_license_request( 'activate_license', $license_key, $this->edd_item_name );
 
@@ -228,22 +293,67 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 		return json_decode( wp_remote_retrieve_body( $response ) );
 	}
 
+	/**
+	 * Override to add menu items to the Gravity Flow app menu.
+	 *
+	 * @param array $menu_items The app menu items.
+	 *
+	 * @return array
+	 */
 	public function menu_items( $menu_items ) {
 		return $menu_items;
 	}
 
+	/**
+	 * Override to add menu items to the Gravity Flow toolbar.
+	 *
+	 * @param array $menu_items The toolbar menu items.
+	 *
+	 * @return array
+	 */
 	public function toolbar_menu_items( $menu_items ) {
 		return $menu_items;
 	}
 
 	/**
-	 * Prevent the failed requirements page being added to the Forms > Settings area.
-	 * Add the settings link to the installed plugins page.
+	 * Add the failed requirements error message.
 	 *
 	 * @since 1.7.1-dev
 	 */
 	public function failed_requirements_init() {
-		add_filter( 'plugin_action_links', array( $this, 'plugin_settings_link' ), 10, 2 );
+		$failed_requirements = $this->meets_minimum_requirements();
+
+		// Prepare errors list.
+		$errors = '';
+		foreach ( $failed_requirements['errors'] as $error ) {
+			$errors .= sprintf( '<li>%s</li>', esc_html( $error ) );
+		}
+
+		// Prepare error message.
+		$error_message = sprintf(
+			'%s<br />%s<ol>%s</ol>',
+			sprintf( esc_html__( '%s is not able to run because your WordPress environment has not met the minimum requirements.', 'gravityflow' ), $this->_title ),
+			sprintf( esc_html__( 'Please resolve the following issues to use %s:', 'gravityflow' ), $this->get_short_title() ),
+			$errors
+		);
+
+		// Add error message.
+		GFCommon::add_error_message( $error_message );
+	}
+
+	/**
+	 * Determine if the add-ons minimum requirements have been met with Gravity Forms 2.2+.
+	 *
+	 * @since 1.8.1-dev
+	 *
+	 * @return array
+	 */
+	public function meets_minimum_requirements() {
+		if ( $this->is_gravityforms_supported( '2.2' ) ) {
+			return parent::meets_minimum_requirements();
+		}
+
+		return array( 'meets_requirements' => true, 'errors' => array() );
 	}
 
 	/**

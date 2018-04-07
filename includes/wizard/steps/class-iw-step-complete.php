@@ -1,9 +1,28 @@
 <?php
+/**
+ * Gravity Flow Installation Wizard: Completion Step
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Installation_Wizard
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
+/**
+ * Class Gravity_Flow_Installation_Wizard_Step_Complete
+ */
 class Gravity_Flow_Installation_Wizard_Step_Complete extends Gravity_Flow_Installation_Wizard_Step {
 
+	/**
+	 * The step name.
+	 *
+	 * @var string
+	 */
 	protected $_name = 'complete';
 
+	/**
+	 * Displays the content for this step.
+	 */
 	public function display() {
 
 		$url = admin_url( 'admin.php?page=gf_edit_forms&view=settings&subview=gravityflow&id=' );
@@ -94,14 +113,29 @@ class Gravity_Flow_Installation_Wizard_Step_Complete extends Gravity_Flow_Instal
 	<?php
 	}
 
+	/**
+	 * Returns the title for this step.
+	 *
+	 * @return string
+	 */
 	public function get_title() {
 		return esc_html__( 'Installation Complete', 'gravityflow' );
 	}
 
+	/**
+	 * Returns the next button label.
+	 *
+	 * @return string
+	 */
 	public function get_next_button_text() {
 		return '';
 	}
 
+	/**
+	 * Returns the previous button label.
+	 *
+	 * @return string
+	 */
 	public function get_previous_button_text() {
 		return '';
 	}

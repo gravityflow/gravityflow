@@ -1,9 +1,23 @@
 <?php
+/**
+ * Gravity Flow Merge Tag
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Merge_Tag
+ *
+ * An abstract class used as the base for all merge tags.
+ *
+ * @since 1.7.1-dev
+ */
 abstract class Gravity_Flow_Merge_Tag {
 
 	/**
@@ -16,58 +30,74 @@ abstract class Gravity_Flow_Merge_Tag {
 	public $name = null;
 
 	/**
-	 * @var array $form The form array.
+	 * The form array.
 	 *
 	 * @since 1.7.1-dev
+	 *
+	 * @var null|array
 	 */
 	protected $form = null;
 
 	/**
-	 * @var array $form The Entry array.
+	 * The Entry array.
 	 *
 	 * @since 1.7.1-dev
+	 *
+	 * @var null|array
 	 */
 	protected $entry = null;
 
 	/**
-	 * @var bool $_url_encode Indicates if the replacement value should be URL encoded.
+	 * Indicates if the replacement value should be URL encoded.
 	 *
 	 * @since 1.7.1-dev
+	 *
+	 * @var bool
 	 */
 	protected $url_encode = false;
 
 	/**
-	 * @var bool $_esc_html Indicates if HTML found in the replacement value should be escaped.
+	 * Indicates if HTML found in the replacement value should be escaped.
 	 *
 	 * @since 1.7.1-dev
+	 *
+	 * @var bool
 	 */
 	protected $esc_html = true;
 
 	/**
-	 * @var bool $_nl2br Indicates if newlines should be converted to html <br> tags.
+	 * Indicates if newlines should be converted to html <br> tags.
 	 *
 	 * @since 1.7.1-dev
+	 *
+	 * @var bool
 	 */
 	protected $nl2br = true;
 
 	/**
-	 * @var string $_format Determines how the value should be formatted. HTML or text.
+	 * Determines how the value should be formatted. HTML or text.
 	 *
 	 * @since 1.7.1-dev
+	 *
+	 * @var string
 	 */
 	protected $format = 'html';
 
 	/**
-	 * @var Gravity_Flow_Step $step The current step.
+	 * The current step.
 	 *
 	 * @since 1.7.1-dev
+	 *
+	 * @var null|Gravity_Flow_Step
 	 */
 	protected $step = null;
 
 	/**
-	 * @var Gravity_Flow_Assignee $assignee The assignee.
+	 * The assignee.
 	 *
 	 * @since 1.7.1-dev
+	 *
+	 * @var null|Gravity_Flow_Assignee
 	 */
 	protected $assignee = null;
 
@@ -80,6 +110,11 @@ abstract class Gravity_Flow_Merge_Tag {
 	 */
 	protected $regex = '';
 
+	/**
+	 * Gravity_Flow_Merge_Tag constructor.
+	 *
+	 * @param null|array $args The arguments used to initialize the class.
+	 */
 	public function __construct( $args = null ) {
 
 		if ( isset( $args['form'] ) ) {
@@ -115,6 +150,13 @@ abstract class Gravity_Flow_Merge_Tag {
 		}
 	}
 
+	/**
+	 * Get an array of matches for the current merge tags pattern.
+	 *
+	 * @param string $text The text which may contain merge tags to be processed.
+	 *
+	 * @return array
+	 */
 	protected function get_matches( $text ) {
 
 		$matches = array();
@@ -124,6 +166,13 @@ abstract class Gravity_Flow_Merge_Tag {
 		return $matches;
 	}
 
+	/**
+	 * Override this to replace the matches in the supplied text.
+	 *
+	 * @param string $text The text which may contain merge tags to be processed.
+	 *
+	 * @return WP_Error|string
+	 */
 	public function replace( $text ) {
 		return new WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be over-ridden in subclass." ), __METHOD__ ) );
 	}

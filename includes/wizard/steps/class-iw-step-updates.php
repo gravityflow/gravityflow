@@ -1,12 +1,31 @@
 <?php
+/**
+ * Gravity Flow Installation Wizard: Updates Step
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Installation_Wizard
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
+/**
+ * Class Gravity_Flow_Installation_Wizard_Step_Updates
+ */
 class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Installation_Wizard_Step {
 
+	/**
+	 * The step name.
+	 *
+	 * @var string
+	 */
 	protected $_name = 'updates';
 
+	/**
+	 * Displays the content for this step.
+	 */
 	function display() {
 		if ( $this->background_updates == '' ) {
-			// first run
+			// First run.
 			$this->background_updates = 'enabled';
 		};
 
@@ -70,10 +89,22 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 	<?php
 	}
 
+	/**
+	 * Returns the title for this step.
+	 *
+	 * @return string
+	 */
 	function get_title() {
 		return esc_html__( 'Background Updates', 'gravityflow' );
 	}
 
+	/**
+	 * Validates the posted values for this step.
+	 *
+	 * @param array $posted_values The posted values.
+	 *
+	 * @return bool
+	 */
 	function validate( $posted_values ) {
 		$valid = true;
 		if ( $this->background_updates == 'disabled' && empty( $this->accept_terms ) ) {
@@ -84,6 +115,13 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 		return $valid;
 	}
 
+	/**
+	 * Returns the summary content.
+	 *
+	 * @param bool $echo Indicates if the summary should be echoed.
+	 *
+	 * @return string
+	 */
 	function summary( $echo = true ) {
 		$html = $this->background_updates !== 'disabled' ? esc_html__( 'Enabled', 'gravityflow' ) . '&nbsp;<i class="fa fa-check gf_valid"></i>' :   esc_html__( 'Disabled', 'gravityflow' ) . '&nbsp;<i class="fa fa-times gf_invalid"></i>' ;
 		if ( $echo ) {
@@ -92,6 +130,9 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 		return $html;
 	}
 
+	/**
+	 * Configures the plugin settings with the value of the background_updates setting.
+	 */
 	function install() {
 		$gravityflow = gravity_flow();
 

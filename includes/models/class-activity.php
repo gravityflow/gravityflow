@@ -1,4 +1,11 @@
 <?php
+/**
+ * Gravity Flow Activity
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
@@ -6,26 +13,46 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 /**
  * Class Gravity_Flow_Activity
- *
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 class Gravity_Flow_Activity {
 
+	/**
+	 * Returns the name of the activity log table.
+	 *
+	 * @return string
+	 */
 	public static function get_activity_log_table_name() {
 		global $wpdb;
 
 		return $wpdb->prefix . 'gravityflow_activity_log';
 	}
 
+	/**
+	 * Returns the name of the Gravity Forms leads table.
+	 *
+	 * @return string
+	 */
 	public static function get_lead_table_name() {
 		return GFFormsModel::get_lead_table_name();
 	}
 
+	/**
+	 * Returns the name of the Gravity Forms entries table.
+	 *
+	 * @return string
+	 */
 	public static function get_entry_table_name() {
 		return Gravity_Flow_Common::get_entry_table_name();
 	}
 
+	/**
+	 * Returns the activity log events for the specified objects.
+	 *
+	 * @param int   $limit   The maximum number of events to retrieve.
+	 * @param array $objects The objects the events should be retrieved for.
+	 *
+	 * @return array|null|object
+	 */
 	public static function get_events( $limit = 400, $objects = array( 'workflow', 'step', 'assignee' ) ) {
 		global $wpdb;
 
@@ -45,6 +72,14 @@ ORDER BY a.id DESC LIMIT %d", $limit );
 		return $results;
 	}
 
+	/**
+	 * Get the activity log data for the given dates for all forms.
+	 *
+	 * @param string $start_date The start date.
+	 * @param string $end_date   The end date.
+	 *
+	 * @return array|bool|null|object
+	 */
 	public static function get_report_data_for_all_forms( $start_date, $end_date = '' ) {
 		global $wpdb;
 
@@ -74,6 +109,15 @@ GROUP BY a.form_id", $start_date );
 
 	}
 
+	/**
+	 * Get the activity log data for the given dates for the specified form.
+	 *
+	 * @param int    $form_id    The form ID.
+	 * @param string $start_date The start date.
+	 * @param string $end_date   The end date.
+	 *
+	 * @return array|null|object
+	 */
 	public static function get_report_data_for_form( $form_id, $start_date, $end_date = '' ) {
 		global $wpdb;
 
@@ -95,6 +139,15 @@ GROUP BY YEAR(a.date_created), MONTH(a.date_created)", $form_id, $start_date );
 
 	}
 
+	/**
+	 * Get the activity log data for the given dates for the specified form grouped by step id.
+	 *
+	 * @param int    $form_id    The form ID.
+	 * @param string $start_date The start date.
+	 * @param string $end_date   The end date.
+	 *
+	 * @return array|null|object
+	 */
 	public static function get_report_data_for_form_by_step( $form_id, $start_date, $end_date = '' ) {
 		global $wpdb;
 
@@ -116,6 +169,15 @@ GROUP BY a.feed_id", $form_id, $start_date );
 
 	}
 
+	/**
+	 * Get the activity log data for the given dates for the specified step grouped by assignee.
+	 *
+	 * @param int    $step_id    The step ID.
+	 * @param string $start_date The start date.
+	 * @param string $end_date   The end date.
+	 *
+	 * @return array|null|object
+	 */
 	public static function get_report_data_for_step_by_assignee( $step_id, $start_date, $end_date = '' ) {
 		global $wpdb;
 
@@ -137,6 +199,15 @@ GROUP BY a.assignee_id, a.assignee_type", $step_id, $start_date );
 
 	}
 
+	/**
+	 * Get the activity log data for the given dates for the specified form grouped by the assignee.
+	 *
+	 * @param int    $form_id    The form ID.
+	 * @param string $start_date The start date.
+	 * @param string $end_date   The end date.
+	 *
+	 * @return array|null|object
+	 */
 	public static function get_report_data_for_form_by_assignee( $form_id, $start_date, $end_date = '' ) {
 		global $wpdb;
 
@@ -158,6 +229,14 @@ GROUP BY a.assignee_id, a.assignee_type", $form_id, $start_date );
 
 	}
 
+	/**
+	 * Get the activity log data for the given dates for all forms grouped by assignee.
+	 *
+	 * @param string $start_date The start date.
+	 * @param string $end_date   The end date.
+	 *
+	 * @return array|bool|null|object
+	 */
 	public static function get_report_data_for_all_forms_by_assignee( $start_date, $end_date = '' ) {
 		global $wpdb;
 
@@ -178,6 +257,16 @@ GROUP BY a.assignee_id, a.assignee_type", $start_date );
 
 	}
 
+	/**
+	 * Get the activity log data for the given dates and assignee for all forms.
+	 *
+	 * @param string $assignee_type The assignee type.
+	 * @param string $assignee_id   The assignee ID.
+	 * @param string $start_date    The start date.
+	 * @param string $end_date      The end date.
+	 *
+	 * @return array|bool|null|object
+	 */
 	public static function get_report_data_for_assignee_by_month( $assignee_type, $assignee_id, $start_date, $end_date = '' ) {
 		global $wpdb;
 
@@ -207,6 +296,11 @@ GROUP BY YEAR(a.date_created), MONTH(a.date_created)", $assignee_type, $assignee
 		return $results;
 	}
 
+	/**
+	 * Get an array of form IDs which have workflows.
+	 *
+	 * @return array
+	 */
 	public static function get_form_ids() {
 		return gravity_flow()->get_workflow_form_ids();
 	}

@@ -1,4 +1,5 @@
-Added support for Members version 2.0+; moved the capabilities to a new Gravity Flow group with human readable labels.
-Fixed an issue populating multi-select fields with the existing entry value on the user input step when the field uses the new json storageType.
-Fixed the $original_entry parameter not being passed when the gform_after_update_entry hook is triggered on entry update by the user input step.
-Fixed empty fields being displayed on the user input step when 'show empty fields' was not enabled.
+- Added the filter gravityflow_step_status_evaluation_approval to allow the status evaluation of approval step to check custom logic (X of Y approvals)
+- Fixed editable Post Image field not being populated with the current entry value on the User Input step.
+- Fixed editable Post Image field value retaining the previous image URL on entry update if the step failed validation.
+- Fixed status export .csv to include duration as a separate column so it is consistent with status export table info
+- Fixed a PHP warning for the Discussion field.

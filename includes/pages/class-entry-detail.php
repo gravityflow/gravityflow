@@ -1,29 +1,34 @@
 <?php
+/**
+ * Gravity Flow Entry Detail
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.0
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
+
 /**
- * Gravity Flow Entry Detail
- *
- *
- * @package     GravityFlow
- * @subpackage  Classes/Gravity_Flow
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * Class Gravity_Flow_Entry_Detail
  */
 class Gravity_Flow_Entry_Detail {
 
 	/**
-	 * @param $form
-	 * @param $entry
-	 * @param null|Gravity_Flow_Step $current_step
-	 * @param array $args
+	 * Displays the entry detail page.
+	 *
+	 * @param array                  $form         The current form.
+	 * @param array                  $entry        The current entry.
+	 * @param null|Gravity_Flow_Step $current_step Null or the current step.
+	 * @param array                  $args         The entry detail page arguments.
 	 */
 	public static function entry_detail( $form, $entry, $current_step = null, $args = array() ) {
 
-		// In case fields need the GFEntryDetail class
+		// In case fields need the GFEntryDetail class.
 		require_once( GFCommon::get_base_path() . '/entry_detail.php' );
 
 		$form_id      = absint( $form['id'] );
@@ -48,16 +53,27 @@ class Gravity_Flow_Entry_Detail {
 			<?php
 			self::maybe_show_header( $form, $args );
 
-			if ( $check_view_entry_permissions ) {
-				$permission_granted = self::is_permission_granted( $entry, $form, $current_step );
+			$permission_granted = $check_view_entry_permissions ? self::is_permission_granted( $entry, $form, $current_step ) : true;
 
-				if ( ! $permission_granted ) {
-					$permission_denied_message = esc_attr__( "You don't have permission to view this entry.", 'gravityflow' );
-					$permission_denied_message = apply_filters( 'gravityflow_permission_denied_message_entry_detail', $permission_denied_message, $current_step );
-					echo $permission_denied_message;
+			/**
+			 * Allows the the permission check to be overridden for the workflow entry detail page.
+			 *
+			 * @param bool                   $permission_granted Whether permission is granted to open the entry.
+			 * @param array                  $entry              The current entry.
+			 * @param array                  $form               The current form.
+			 * @param null|Gravity_Flow_Step $current_step       Null or the current step.
+			 */
+			$permission_granted = apply_filters( 'gravityflow_permission_granted_entry_detail', $permission_granted, $entry, $form, $current_step );
 
-					return;
-				}
+			gravity_flow()->log_debug( __METHOD__ . '() $permission_granted: ' . ( $permission_granted ? 'yes' : 'no' ) );
+
+
+			if ( ! $permission_granted ) {
+				$permission_denied_message = esc_attr__( "You don't have permission to view this entry.", 'gravityflow' );
+				$permission_denied_message = apply_filters( 'gravityflow_permission_denied_message_entry_detail', $permission_denied_message, $current_step );
+				echo $permission_denied_message;
+
+				return;
 			}
 
 			$url     = remove_query_arg( array( 'gworkflow_token', 'new_status' ) );
@@ -256,8 +272,8 @@ class Gravity_Flow_Entry_Detail {
 	/**
 	 * Checks if the current user has permission to view the entry details.
 	 *
-	 * @param array $entry The current entry.
-	 * @param array $form The current form.
+	 * @param array                  $entry        The current entry.
+	 * @param array                  $form         The current form.
 	 * @param Gravity_Flow_Step|null $current_step The step currently being displayed.
 	 *
 	 * @return bool
@@ -300,18 +316,6 @@ class Gravity_Flow_Entry_Detail {
 			}
 		}
 
-		/**
-		 * Allows the the permission check to be overridden for the workflow entry detail page.
-		 *
-		 * @param bool $permission_granted Whether permission is granted to open the entry.
-		 * @param array $entry
-		 * @param array $form
-		 * @param Gravity_Flow_Step $current_step
-		 */
-		$permission_granted = apply_filters( 'gravityflow_permission_granted_entry_detail', $permission_granted, $entry, $form, $current_step );
-
-		gravity_flow()->log_debug( __METHOD__ . '() $permission_granted: ' . ( $permission_granted ? 'yes' : 'no' ) );
-
 		return $permission_granted;
 	}
 
@@ -323,28 +327,26 @@ class Gravity_Flow_Entry_Detail {
 	 * @return bool
 	 */
 	public static function can_update( $current_step ) {
-		$current_user_status = $current_step->get_user_status();
-		$current_role_status = false;
-		if ( $current_step ) {
-			foreach ( gravity_flow()->get_user_roles() as $role ) {
-				$current_role_status = $current_step->get_role_status( $role );
-				if ( $current_role_status == 'pending' ) {
-					break;
-				}
+		$assignees = $current_step->get_assignees();
+		$can_update = false;
+		foreach ( $assignees as $assignee ) {
+			if ( $assignee->is_current_user() ) {
+				$can_update = true;
+				break;
 			}
 		}
 
-		return $current_user_status == 'pending' || $current_role_status == 'pending';
+		return $can_update;
 	}
 
 	/**
 	 * Displays the step instructions, if appropriate.
 	 *
-	 * @param bool $can_update Indicates if the user can edit field values on this step.
-	 * @param bool $display_instructions Indicates if the step instructions should be displayed
-	 * @param Gravity_Flow_Step $current_step The step this entry is currently on.
-	 * @param array $form The current form.
-	 * @param array $entry The current entry.
+	 * @param bool              $can_update           Indicates if the user can edit field values on this step.
+	 * @param bool              $display_instructions Indicates if the step instructions should be displayed.
+	 * @param Gravity_Flow_Step $current_step         The step this entry is currently on.
+	 * @param array             $form                 The current form.
+	 * @param array             $entry                The current entry.
 	 */
 	public static function maybe_show_instructions( $can_update, $display_instructions, $current_step, $form, $entry ) {
 		if ( $can_update && $display_instructions && $current_step->instructionsEnable ) {
@@ -372,7 +374,7 @@ class Gravity_Flow_Entry_Detail {
 	 *
 	 * @since 1.6.2
 	 *
-	 * @param $instructions
+	 * @param string $instructions The step instructions.
 	 *
 	 * @return string
 	 */
@@ -430,6 +432,13 @@ class Gravity_Flow_Entry_Detail {
 		return $classes;
 	}
 
+	/**
+	 * Displays the print button and include timeline checkbox, if applicable.
+	 *
+	 * @param array $entry The current entry.
+	 * @param bool  $show_timeline                Indicates if the timeline should be displayed.
+	 * @param bool  $check_view_entry_permissions Indicates if the user/assignee requires permission to view the entry.
+	 */
 	public static function print_button( $entry, $show_timeline, $check_view_entry_permissions ) {
 
 		if ( is_user_logged_in() || $check_view_entry_permissions ) :
@@ -457,9 +466,9 @@ class Gravity_Flow_Entry_Detail {
 	/**
 	 * Displays the timeline notes, if enabled.
 	 *
-	 * @param array $entry The current entry.
-	 * @param array $form The current form.
-	 * @param bool $show_timeline Indicates if the timeline should be displayed.
+	 * @param array $entry         The current entry.
+	 * @param array $form          The current form.
+	 * @param bool  $show_timeline Indicates if the timeline should be displayed.
 	 */
 	public static function maybe_show_timeline( $entry, $form, $show_timeline ) {
 		if ( ! $show_timeline ) {
@@ -488,7 +497,7 @@ class Gravity_Flow_Entry_Detail {
 	 * @since 1.7.1-dev Removed unused emails code. Updated to use new method for getting the notes.
 	 *
 	 * @param array $entry The current entry.
-	 * @param array $form The current form.
+	 * @param array $form  The current form.
 	 */
 	public static function timeline( $entry, $form ) {
 		$notes = self::get_timeline_notes( $entry );
@@ -522,6 +531,15 @@ class Gravity_Flow_Entry_Detail {
 			$avatar = get_avatar( $user_id, 65 );
 		} else {
 			$step_icon = $step ? $step->get_icon_url() : gravity_flow()->get_base_url() . '/images/gravityflow-icon-blue.svg';
+
+			/**
+			 * Allows the step icon to be filtered for the timeline.
+			 *
+			 * @param string                 $step_icon The step icon HTML or image URL.
+			 * @param Gravity_Flow_Step|bool $step      A step object or false if the type of step which added the note no longer exists.
+			 */
+			$step_icon = apply_filters( 'gravityflow_timeline_step_icon', $step_icon, $step );
+
 			if ( strpos( $step_icon, 'http' ) !== false ) {
 				$avatar = sprintf( '<img class="avatar avatar-65 photo" src="%s" style="width:65px;height:65px;" />', $step_icon );
 			} else {
@@ -537,8 +555,8 @@ class Gravity_Flow_Entry_Detail {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param string $display_name The user display name, step or workflow label.
 	 * @param object $note         The note properties.
+	 * @param string $display_name The user display name, step or workflow label.
 	 *
 	 * @return string
 	 */
@@ -600,11 +618,13 @@ class Gravity_Flow_Entry_Detail {
 	}
 
 	/**
-	 * @param $form
-	 * @param $entry
-	 * @param bool|false $allow_display_empty_fields
-	 * @param array $editable_fields
-	 * @param Gravity_Flow_Step|null $current_step
+	 * Display the detail grid, the table which will contain the fields.
+	 *
+	 * @param array                  $form                       The current form.
+	 * @param array                  $entry                      The current entry.
+	 * @param bool|false             $allow_display_empty_fields Indicates if empty fields should be displayed.
+	 * @param array                  $editable_fields            An array of field IDs which the user can edit.
+	 * @param Gravity_Flow_Step|null $current_step               Null or the current step.
 	 */
 	public static function entry_detail_grid( $form, $entry, $allow_display_empty_fields = false, $editable_fields = array(), $current_step = null ) {
 		$form_id = absint( $form['id'] );
@@ -668,10 +688,10 @@ class Gravity_Flow_Entry_Detail {
 	/**
 	 * Handles displaying the relevant non-editable and editable fields for the current step.
 	 *
-	 * @param array $form The current form.
-	 * @param array $entry The current entry.
-	 * @param Gravity_Flow_Step $current_step The step this entry is currently on.
-	 * @param bool $display_empty_fields Indicates if fields without a value should be displayed.
+	 * @param array             $form                 The current form.
+	 * @param array             $entry                The current entry.
+	 * @param Gravity_Flow_Step $current_step         The step this entry is currently on.
+	 * @param bool              $display_empty_fields Indicates if fields without a value should be displayed.
 	 */
 	public static function entry_editor( $form, $entry, $current_step, $display_empty_fields ) {
 		?>
@@ -697,8 +717,8 @@ class Gravity_Flow_Entry_Detail {
 	/**
 	 * Displays the products summary table if enabled for the current step.
 	 *
-	 * @param array $form The current form.
-	 * @param array $entry The current entry.
+	 * @param array             $form         The current form.
+	 * @param array             $entry        The current entry.
 	 * @param Gravity_Flow_Step $current_step The step this entry is currently on.
 	 */
 	public static function maybe_show_products_summary( $form, $entry, $current_step ) {
@@ -733,11 +753,13 @@ class Gravity_Flow_Entry_Detail {
 	}
 
 	/**
-	 * @param array $form
-	 * @param array $entry
-	 * @param bool $display_empty_fields
-	 * @param Gravity_Flow_Step|null $current_step
-	 * @param $format
+	 * Displays the markup for form fields.
+	 *
+	 * @param array                  $form                 The current form.
+	 * @param array                  $entry                The current entry.
+	 * @param bool                   $display_empty_fields Indicates if empty fields should be displayed.
+	 * @param Gravity_Flow_Step|null $current_step         Null or the current step.
+	 * @param string                 $format               The requested format: table.
 	 */
 	public static function fields( $form, $entry, $display_empty_fields, $current_step, $format ) {
 		$form_id                 = absint( $form['id'] );
@@ -748,7 +770,7 @@ class Gravity_Flow_Entry_Detail {
 		foreach ( $form['fields'] as &$field ) {
 			/* @var GF_Field $field */
 
-			// Not needed as we're always adminOnly
+			// Not needed as we're always adminOnly.
 			$field->adminOnly = false;
 
 			$is_product_field = GFCommon::is_product_field( $field->type );
@@ -776,7 +798,7 @@ class Gravity_Flow_Entry_Detail {
 				case 'captcha':
 				case 'password':
 				case 'page':
-					//ignore captcha, password, page field
+					// Ignore captcha, password, page field.
 					break;
 
 				case 'html':
@@ -836,11 +858,11 @@ class Gravity_Flow_Entry_Detail {
 	/**
 	 * Determine if the current section is empty.
 	 *
-	 * @param GF_Field $section_field The section field properties.
-	 * @param Gravity_Flow_Step|null $current_step The current step for this entry.
-	 * @param array $form The form for the current entry.
-	 * @param array $entry The entry being processed for display.
-	 * @param bool $display_empty_fields Indicates if empty fields should be displayed.
+	 * @param GF_Field               $section_field        The section field properties.
+	 * @param Gravity_Flow_Step|null $current_step         The current step for this entry.
+	 * @param array                  $form                 The form for the current entry.
+	 * @param array                  $entry                The entry being processed for display.
+	 * @param bool                   $display_empty_fields Indicates if empty fields should be displayed.
 	 *
 	 * @return bool
 	 */
@@ -886,41 +908,25 @@ class Gravity_Flow_Entry_Detail {
 	/**
 	 * Determine if the field should be displayed.
 	 *
-	 * @param GF_Field $field The field properties.
-	 * @param Gravity_Flow_Step|null $current_step The current step for this entry.
-	 * @param array $form The form for the current entry.
-	 * @param array $entry The entry being processed for display.
-	 * @param bool $is_product_field Is the current field one of the product field types.
+	 * @param GF_Field               $field            The field properties.
+	 * @param Gravity_Flow_Step|null $current_step     The current step for this entry.
+	 * @param array                  $form             The form for the current entry.
+	 * @param array                  $entry            The entry being processed for display.
+	 * @param bool                   $is_product_field Is the current field one of the product field types.
 	 *
 	 * @return bool
 	 */
 	public static function is_display_field( $field, $current_step, $form, $entry, $is_product_field ) {
-		$display_field           = true;
-		$display_fields_mode     = $current_step ? $current_step->display_fields_mode : 'all_fields';
-		$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
-
-		if ( $display_fields_mode == 'selected_fields' ) {
-			if ( ! in_array( $field->id, $display_fields_selected ) ) {
-				$display_field = false;
-			}
-		} else {
-			if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
-				$display_field = false;
-			}
-		}
-
-		$display_field = (bool) apply_filters( 'gravityflow_workflow_detail_display_field', $display_field, $field, $form, $entry, $current_step );
-
-		return $display_field;
+		return Gravity_Flow_Common::is_display_field( $field, $current_step, $form, $entry, $is_product_field );
 	}
 
 	/**
 	 * Get the field value to be displayed.
 	 *
-	 * @param mixed $value The field value from the entry.
+	 * @param mixed    $value The field value from the entry.
 	 * @param GF_Field $field The field properties.
-	 * @param array $form The form for the current entry.
-	 * @param array $entry The entry being processed for display.
+	 * @param array    $entry The entry being processed for display.
+	 * @param array    $form  The form for the current entry.
 	 *
 	 * @return string
 	 */
@@ -967,6 +973,13 @@ class Gravity_Flow_Entry_Detail {
 		return empty( $field->label ) ? $field->adminLabel : $field->label;
 	}
 
+	/**
+	 * Displays the product summary table.
+	 *
+	 * @param array $form     The current form.
+	 * @param array $entry    The current entry.
+	 * @param array $products The product info for this entry.
+	 */
 	public static function products_summary( $form, $entry, $products ) {
 		$form_id = absint( $form['id'] );
 		?>

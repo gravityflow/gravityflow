@@ -2,10 +2,9 @@
 /**
  * Gravity Flow Step
  *
- *
  * @package     GravityFlow
  * @subpackage  Classes/Step
- * @copyright   Copyright (c) 2015-2017, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       1.0
  */
@@ -18,7 +17,6 @@ if ( ! class_exists( 'GFForms' ) ) {
  * An abstract class used as the base for all Steps.
  *
  * Class Gravity_Flow_Step
- *
  *
  * @since 1.0
  */
@@ -62,16 +60,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * The assignees for this step.
 	 *
+	 * @since 1.8.1
+	 *
 	 * @var Gravity_Flow_Assignee[]
 	 */
-	private $_assignee_details = array();
-
-	/**
-	 * The assignee keys for this step.
-	 *
-	 * @var array
-	 */
-	private $_assignee_keys = array();
+	protected $_assignees = array();
 
 	/**
 	 * The assignee emails for which notifications have been processed.
@@ -111,7 +104,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * The constructor for the Step. Provide an entry object to perform and entry-specific tasks.
 	 *
-	 * @param array $feed Required. The Feed on which this step is based.
+	 * @param array      $feed  Required. The Feed on which this step is based.
 	 * @param null|array $entry Optional. Instantiate with an entry to perform entry related tasks.
 	 */
 	public function __construct( $feed = array(), $entry = null ) {
@@ -131,7 +124,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * Magic method to allow direct access to the settings as properties.
 	 * Returns an empty string for undefined properties allowing for graceful backward compatibility where new settings may not have been defined in stored settings.
 	 *
-	 * @param $name
+	 * @param string $name The property key.
 	 *
 	 * @return mixed
 	 */
@@ -143,15 +136,33 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $this->_meta[ $name ];
 	}
 
+	/**
+	 * Sets the value for the specified property.
+	 *
+	 * @param string $key   The property key.
+	 * @param mixed  $value The property value.
+	 */
 	public function __set( $key, $value ) {
 		$this->_meta[ $key ] = $value;
 		$this->$key          = $value;
 	}
 
+	/**
+	 * Determines if the specified property has been defined.
+	 *
+	 * @param string $key The property key.
+	 *
+	 * @return bool
+	 */
 	public function __isset( $key ) {
 		return isset( $this->_meta[ $key ] );
 	}
 
+	/**
+	 * Deletes the specified property.
+	 *
+	 * @param string $key The property key.
+	 */
 	public function __unset( $key ) {
 		unset( $this->$key );
 	}
@@ -169,7 +180,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *    'default_destination' => 'next',
 	 *    )
 	 *
-	 *
 	 * @return array An array of arrays
 	 */
 	public function get_status_config() {
@@ -184,6 +194,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Returns an array of the configuration of the status options for this step.
+	 *
 	 * @deprecated
 	 *
 	 * @return array
@@ -212,7 +224,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *   ),
 	 * );
 	 *
-	 *
 	 * @return array
 	 */
 	public function get_actions() {
@@ -233,7 +244,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @deprecated 1.7.1
 	 *
-	 * @param WP_REST_Request $request
+	 * @param WP_REST_Request $request Full data about the request.
 	 *
 	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
 	 *                                is already an instance, WP_HTTP_Response, otherwise
@@ -263,7 +274,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( ! is_user_logged_in() ) {
 
 			// Email assignee authentication & nonce check.
-
 			$nonce = $request->get_header( 'x_wp_nonce' );
 
 			if ( empty( $nonce ) ) {
@@ -296,7 +306,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Process the REST request for an entry.
 	 *
-	 * @param WP_REST_Request $request
+	 * @param WP_REST_Request $request Full data about the request.
 	 *
 	 * @return WP_REST_Response|mixed If response generated an error, WP_Error, if response
 	 *                                is already an instance, WP_HTTP_Response, otherwise
@@ -311,7 +321,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the translated label for a status key.
 	 *
-	 * @param $status
+	 * @param string $status The status key.
 	 *
 	 * @return string
 	 */
@@ -451,7 +461,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the user-defined name of the step.
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public function get_name() {
 		return $this->step_name;
@@ -490,7 +500,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns the Gravity Flow base URL
+	 * Returns the Gravity Flow base URL.
 	 *
 	 * @return string
 	 */
@@ -499,7 +509,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns the Gravity Flow base path
+	 * Returns the Gravity Flow base path.
 	 *
 	 * @return string
 	 */
@@ -510,7 +520,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the ID of the next step.
 	 *
-	 * @return int|mixed|string
+	 * @return int|string
 	 */
 	public function get_next_step_id() {
 		if ( isset( $this->_next_step_id ) ) {
@@ -532,7 +542,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Sets the next step.
 	 *
-	 * @param $id
+	 * @param int|string $id The ID of the next step.
 	 */
 	public function set_next_step_id( $id ) {
 		$this->_next_step_id = $id;
@@ -644,6 +654,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$schedule_date_gmt = get_gmt_from_date( $schedule_date );
 			$schedule_datetime = strtotime( $schedule_date_gmt );
 
+			/**
+			 * Allows the scheduled date/timestamp to be custom defined.
+			 *
+			 * @since 2.0.2-dev
+			 *
+			 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
+			 * @param string               $schedule_type      The type of schedule defined in step settings.
+			 * @param Gravity_Flow_Step    $this               The current step.
+			 *
+			 * @return int
+			 */
+			$schedule_datetime = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_datetime, $this->schedule_type, $this );
 			return $schedule_datetime;
 		}
 
@@ -660,7 +682,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$schedule_date_gmt = get_gmt_from_date( $schedule_date );
 			$schedule_datetime = strtotime( $schedule_date_gmt );
 
-			// Calculate offset
+			// Calculate offset.
 			if ( $this->schedule_date_field_offset ) {
 				$offset = 0;
 				switch ( $this->schedule_date_field_offset_unit ) {
@@ -684,6 +706,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 				}
 			}
 
+			/**
+			 * Allows the scheduled date/timestamp to be custom defined.
+			 *
+			 * @since 2.0.2-dev
+			 *
+			 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
+			 * @param string               $schedule_type      The type of schedule defined in step settings.
+			 * @param Gravity_Flow_Step    $this               The current step.
+			 *
+			 * @return int
+			 */
+			$schedule_datetime = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_datetime, $this->schedule_type, $this );
 			return $schedule_datetime;
 		}
 
@@ -706,9 +740,26 @@ abstract class Gravity_Flow_Step extends stdClass {
 				break;
 		}
 
+		/**
+		 * Allows the scheduled date/timestamp to be custom defined.
+		 *
+		 * @since 2.0.2-dev
+		 *
+		 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
+		 * @param string               $schedule_type      The type of schedule defined in step settings.
+		 * @param Gravity_Flow_Step    $this               The current step.
+		 *
+		 * @return int
+		 */
+		$schedule_timestamp = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_timestamp, $this->schedule_type, $this );
 		return $schedule_timestamp;
 	}
 
+	/**
+	 * Determines if the step has expired.
+	 *
+	 * @return bool
+	 */
 	public function is_expired() {
 		if ( ! $this->supports_expiration() ) {
 			return false;
@@ -741,7 +792,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the schedule timestamp calculated from the schedule settings.
 	 *
-	 * @return bool|int|mixed
+	 * @return bool|int
 	 */
 	public function get_expiration_timestamp() {
 		if ( ! $this->expiration ) {
@@ -772,7 +823,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$schedule_date_gmt = get_gmt_from_date( $expiration_date );
 			$expiration_datetime = strtotime( $schedule_date_gmt );
 
-			// Calculate offset
+			// Calculate offset.
 			if ( $this->expiration_date_field_offset ) {
 				$offset = 0;
 				switch ( $this->expiration_date_field_offset_unit ) {
@@ -821,12 +872,22 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $expiration_timestamp;
 	}
 
+	/**
+	 * Returns the value of the entries workflow_timestamp property.
+	 *
+	 * @return string|int
+	 */
 	public function get_entry_timestamp() {
 		$entry = $this->get_entry();
 
 		return $entry['workflow_timestamp'];
 	}
 
+	/**
+	 * Returns the step timestamp from the entry meta.
+	 *
+	 * @return bool|int
+	 */
 	public function get_step_timestamp() {
 		$timestamp = gform_get_meta( $this->get_entry_id(), 'workflow_step_' . $this->get_id() . '_timestamp' );
 
@@ -842,6 +903,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return true;
 	}
 
+	/**
+	 * Set the assignee status to pending and trigger sending of the assignee notification if enabled.
+	 *
+	 * @return bool
+	 */
 	public function assign() {
 		$complete = $this->is_complete();
 
@@ -852,7 +918,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		} else {
 			foreach ( $assignees as $assignee ) {
 				$assignee->update_status( 'pending' );
-				// send notification
+				// Send notification.
 				$this->maybe_send_assignee_notification( $assignee );
 				$complete = false;
 			}
@@ -864,8 +930,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Sends the assignee email if the assignee_notification_setting is enabled.
 	 *
-	 * @param Gravity_Flow_Assignee $assignee
-	 * @param bool $is_reminder Indicates if this is a reminder notification. Default is false.
+	 * @param Gravity_Flow_Assignee $assignee    The assignee properties.
+	 * @param bool                  $is_reminder Indicates if this is a reminder notification. Default is false.
 	 */
 	public function maybe_send_assignee_notification( $assignee, $is_reminder = false ) {
 		if ( $this->assignee_notification_enabled ) {
@@ -920,7 +986,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return array
 	 */
 	public function get_notification_assignees( $type ) {
-		$type .= '_notification_';
+		$type              .= '_notification_';
 		$notification_type = $this->{$type . 'type'};
 		$assignees         = array();
 
@@ -953,54 +1019,19 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Sends the assignee email.
 	 *
-	 * @param Gravity_Flow_Assignee $assignee
-	 * @param bool $is_reminder Indicates if this is a reminder notification. Default is false.
+	 * @param Gravity_Flow_Assignee $assignee    The assignee properties.
+	 * @param bool                  $is_reminder Indicates if this is a reminder notification. Default is false.
 	 */
 	public function send_assignee_notification( $assignee, $is_reminder = false ) {
 		$this->log_debug( __METHOD__ . '() starting. assignee: ' . $assignee->get_key() );
 
 		$notification = $this->get_notification( 'assignee' );
-		$message      = $notification['message'];
 
 		if ( $is_reminder ) {
 			$notification['subject'] = esc_html__( 'Reminder', 'gravityflow' ) . ': ' . $notification['subject'];
 		}
 
-		$assignee_type = $assignee->get_type();
-		$assignee_id   = $assignee->get_id();
-
-		if ( $assignee_type == 'email' ) {
-			$email                   = $assignee_id;
-			$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $email;
-			$notification['name']    = $notification['id'];
-			$notification['to']      = $email;
-			$notification['message'] = $this->replace_variables( $message, $assignee );
-			$this->send_notification( $notification );
-
-			return;
-		}
-
-		if ( $assignee_type == 'role' ) {
-			$users = get_users( array( 'role' => $assignee_id ) );
-		} else {
-			$users = get_users( array( 'include' => array( $assignee_id ) ) );
-		}
-
-		$this->log_debug( __METHOD__ . sprintf( '() sending assignee notifications to %d users', count( $users ) ) );
-
-		$user_assignee_args = array(
-			'type' => $assignee_type,
-			'id'   => $assignee_id,
-		);
-		foreach ( $users as $user ) {
-			$user_assignee_args['user'] = $user;
-			$user_assignee              = $this->get_assignee( $user_assignee_args );
-			$notification['id']         = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
-			$notification['name']       = $notification['id'];
-			$notification['to']         = $user->user_email;
-			$notification['message']    = $this->replace_variables( $message, $user_assignee );
-			$this->send_notification( $notification );
-		}
+		$assignee->send_notification( $notification );
 	}
 
 	/**
@@ -1008,28 +1039,30 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * Important: call the parent method first.
 	 * $text = parent::replace_variables( $text, $assignee );
 	 *
-	 * @param $text
-	 * @param Gravity_Flow_Assignee $assignee
+	 * @param string                $text     The text containing merge tags to be processed.
+	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	public function replace_variables( $text, $assignee ) {
 
 		$args = array(
 			'assignee' => $assignee,
-			'step' => $this,
+			'step'     => $this,
 		);
 
-		$text = Gravity_Flow_Merge_Tags::get( 'workflow_url', $args )->replace( $text );
-		$text = Gravity_Flow_Merge_Tags::get( 'workflow_cancel', $args )->replace( $text );
+		$merge_tags = Gravity_Flow_Merge_Tags::get_all( $args );
 
+		foreach ( $merge_tags as $merge_tag ) {
+			$text = $merge_tag->replace( $text );
+		}
 		return $text;
 	}
 
 	/**
 	 * Replace the {workflow_entry_link}, {workflow_entry_url}, {workflow_inbox_link}, and {workflow_inbox_url} merge tags.
 	 *
-	 * @param string $text The text being processed.
+	 * @param string                $text     The text being processed.
 	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
 	 *
 	 * @return string
@@ -1050,7 +1083,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Get the access token for the workflow_entry_ and workflow_inbox_ merge tags.
 	 *
-	 * @param array $a The merge tag attributes.
+	 * @param array                 $a        The merge tag attributes.
 	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
 	 *
 	 * @return string
@@ -1073,8 +1106,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Replace the {workflow_cancel_link} and {workflow_cancel_url} merge tags.
 	 *
-	 * @param string $text The text being processed.
-	 * @param Gravity_Flow_Assignee $assignee The assignee.
+	 * @param string                $text     The text being processed.
+	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
 	 *
 	 * @return string
 	 */
@@ -1084,7 +1117,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( $assignee ) {
 			$args = array(
 				'assignee' => $assignee,
-				'step' => $this,
+				'step'     => $this,
 			);
 
 			$text = Gravity_Flow_Merge_Tags::get( 'workflow_cancel', $args )->replace( $text );
@@ -1096,9 +1129,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the entry URL.
 	 *
-	 * @param int|null $page_id
-	 * @param Gravity_Flow_Assignee $assignee
-	 * @param string $access_token
+	 * @param int|null              $page_id      The ID of the WordPress Page where the shortcode is located.
+	 * @param Gravity_Flow_Assignee $assignee     The assignee properties.
+	 * @param string                $access_token The access token for the current assignee.
 	 *
 	 * @return string
 	 */
@@ -1119,9 +1152,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the inbox URL.
 	 *
-	 * @param int|null $page_id
-	 * @param Gravity_Flow_Assignee $assignee
-	 * @param string $access_token
+	 * @param int|null              $page_id      The ID of the WordPress Page where the shortcode is located.
+	 * @param Gravity_Flow_Assignee $assignee     The assignee properties.
+	 * @param string                $access_token The access token for the current assignee.
 	 *
 	 * @return string
 	 */
@@ -1138,7 +1171,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Updates the status for this step.
 	 *
-	 * @param string|bool $status
+	 * @param string|bool $status The step status.
 	 */
 	public function update_step_status( $status = false ) {
 		if ( empty( $status ) ) {
@@ -1170,8 +1203,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Optionally override this method to add additional entry meta. See the Gravity Forms Add-On Framework for details on the return array.
 	 *
-	 * @param array $entry_meta
-	 * @param int $form_id
+	 * @param array $entry_meta The entry meta properties.
+	 * @param int   $form_id    The current form ID.
 	 *
 	 * @return array
 	 */
@@ -1182,8 +1215,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the status key
 	 *
-	 * @param $assignee
-	 * @param bool $type
+	 * @param string      $assignee The assignee key.
+	 * @param bool|string $type     The assignee type.
 	 *
 	 * @return string
 	 */
@@ -1202,8 +1235,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the status timestamp key
 	 *
-	 * @param $assignee_key
-	 * @param bool $type
+	 * @param string      $assignee_key The assignee key.
+	 * @param bool|string $type         The assignee type.
 	 *
 	 * @return string
 	 */
@@ -1219,6 +1252,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $key;
 	}
 
+	/**
+	 * Retrieves the step status from the entry meta.
+	 *
+	 * @return bool|string
+	 */
 	public function get_status() {
 		$status_key = 'workflow_step_status_' . $this->get_id();
 		$status     = gform_get_meta( $this->get_entry_id(), $status_key );
@@ -1258,6 +1296,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return 'complete';
 	}
 
+	/**
+	 * Return the value of the status expiration setting.
+	 *
+	 * @return string
+	 */
 	public function get_expiration_status_key() {
 		$status_expiration = $this->status_expiration ? $this->status_expiration : 'complete';
 
@@ -1267,7 +1310,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Processes the conditional logic for the entry in this step.
 	 *
-	 * @param $form
+	 * @param array $form The current form.
 	 *
 	 * @return bool
 	 */
@@ -1287,9 +1330,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the status for a user. Defaults to current WordPress user or authenticated email address.
 	 *
-	 * @param int|string|bool $user_id
+	 * @param int|bool $user_id The user ID.
 	 *
-	 * @return bool|mixed
+	 * @return bool|string
 	 */
 	public function get_user_status( $user_id = false ) {
 		global $current_user;
@@ -1332,9 +1375,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the status for the given role.
 	 *
-	 * @param string $role
+	 * @param string $role The user role.
 	 *
-	 * @return bool|mixed
+	 * @return bool|string
 	 */
 	public function get_role_status( $role ) {
 		if ( empty( $role ) ) {
@@ -1348,8 +1391,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Updates the status for the given user.
 	 *
-	 * @param bool $user_id
-	 * @param bool $new_assignee_status
+	 * @param bool|int    $user_id             The user ID.
+	 * @param bool|string $new_assignee_status The assignee status.
 	 */
 	public function update_user_status( $user_id = false, $new_assignee_status = false ) {
 		if ( $user_id === false ) {
@@ -1364,8 +1407,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Updates the status for the given role.
 	 *
-	 * @param string|bool $role
-	 * @param bool $new_assignee_status
+	 * @param bool|string $role                The user role.
+	 * @param bool|string $new_assignee_status The assignee status.
 	 */
 	public function update_role_status( $role = false, $new_assignee_status = false ) {
 		if ( $role == false ) {
@@ -1388,9 +1431,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return Gravity_Flow_Assignee[]
 	 */
 	public function get_assignees() {
-		$assignees = $this->get_assignee_details();
-		if ( ! empty( $assignees ) ) {
-			return $assignees;
+		if ( ! empty( $this->_assignees ) ) {
+			return $this->_assignees;
 		}
 
 		if ( ! empty( $this->type ) ) {
@@ -1398,7 +1440,17 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$this->maybe_add_routing_assignees();
 			$this->log_debug( __METHOD__ . '(): assignees: ' . print_r( $this->get_assignee_keys(), true ) );
 
-			return $this->get_assignee_details();
+			/**
+			 * Allows the assignees to be modified for the step.
+			 *
+			 * @since 1.8.1
+			 *
+			 * @param Gravity_Flow_Assignee[] $this->_assignees The array of Assignees.
+			 * @param Gravity_Flow_Step       $this The current step.
+			 */
+			$this->_assignees = apply_filters( 'gravityflow_step_assignees', $this->_assignees, $this );
+
+			return $this->_assignees;
 		}
 
 		return array();
@@ -1407,18 +1459,20 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Retrieve an array containing this steps assignee details.
 	 *
+	 * @deprecated 1.8.1
+	 *
 	 * @return Gravity_Flow_Assignee[]
 	 */
 	public function get_assignee_details() {
-		return $this->_assignee_details;
+		_deprecated_function( 'get_assignee_details', '1.8.1', '$this->_assignees or get_assignees' );
+		return $this->_assignees;
 	}
 
 	/**
 	 * Flush assignee details.
 	 */
 	public function flush_assignees() {
-		$this->_assignee_details = array();
-		$this->_assignee_keys = array();
+		$this->_assignees = array();
 	}
 
 	/**
@@ -1427,7 +1481,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return array
 	 */
 	public function get_assignee_keys() {
-		return $this->_assignee_keys;
+		$assignees = $this->_assignees;
+		$assignee_keys = array();
+		foreach( $assignees as $assignee ) {
+			$assignee_keys[] = $assignee->get_key();
+		}
+		return $assignee_keys;
 	}
 
 	/**
@@ -1438,7 +1497,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return Gravity_Flow_Assignee
 	 */
 	public function get_assignee( $args ) {
-		$assignee = new Gravity_Flow_Assignee( $args, $this );
+		$assignee = Gravity_Flow_Assignees::create( $args, $this );
 
 		return $assignee;
 	}
@@ -1456,7 +1515,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Get the status for the current assignee.
 	 *
-	 * @return bool|mixed
+	 * @return bool|string
 	 */
 	public function get_current_assignee_status() {
 		$assignee_key = $this->get_current_assignee_key();
@@ -1551,8 +1610,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 
 			if ( $object ) {
-				$this->_assignee_details[] = $assignee;
-				$this->_assignee_keys[]    = $key;
+				$this->_assignees[] = $assignee;
 			}
 		}
 	}
@@ -1560,7 +1618,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Removes assignee from the step. This is only used for maintenance when the assignee settings change.
 	 *
-	 * @param Gravity_Flow_Assignee|bool $assignee
+	 * @param Gravity_Flow_Assignee|bool $assignee The assignee properties.
 	 */
 	public function remove_assignee( $assignee = false ) {
 		if ( $assignee === false ) {
@@ -1574,8 +1632,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Handles POSTed values from the workflow detail page.
 	 *
-	 * @param $form
-	 * @param $entry
+	 * @param array $form  The current form.
+	 * @param array $entry The current entry.
 	 *
 	 * @return string|bool|WP_Error Return a success feedback message safe for page output or a WP_Error instance with an error.
 	 */
@@ -1584,9 +1642,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Displays content inside the Workflow metabox on the workflow detail page.
+	 *
 	 * @deprecated since 1.3.2
 	 *
-	 * @param array $form The Form array which may contain validation details
+	 * @param array $form The Form array which may contain validation details.
 	 */
 	public function workflow_detail_status_box( $form ) {
 		_deprecated_function( 'workflow_detail_status_box', '1.3.2', 'workflow_detail_box' );
@@ -1608,7 +1668,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Displays content inside the Workflow metabox on the workflow detail page.
 	 *
-	 * @param array $form The Form array which may contain validation details
+	 * @param array $form The Form array which may contain validation details.
 	 * @param array $args Additional args which may affect the display.
 	 */
 	public function workflow_detail_box( $form, $args ) {
@@ -1618,7 +1678,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Displays content inside the Workflow metabox on the Gravity Forms Entry Detail page.
 	 *
-	 * @param $form
+	 * @param array $form The current form.
 	 */
 	public function entry_detail_status_box( $form ) {
 
@@ -1626,6 +1686,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	/**
 	 * Override to return an array of editable fields for the current user.
+	 *
 	 * @return array
 	 */
 	public function get_editable_fields() {
@@ -1655,7 +1716,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Sends an email.
 	 *
-	 * @param $notification
+	 * @param array $notification The notification properties.
 	 */
 	public function send_notification( $notification ) {
 		$entry = $this->get_entry();
@@ -1681,8 +1742,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * If Gravity PDF is enabled we'll generate the appropriate PDF and attach it to the current notification
 	 *
-	 * @param array $notification The notification array currently being sent
-	 * @param string $gpdf_id The Gravity PDF ID
+	 * @param array  $notification The notification array currently being sent.
+	 * @param string $gpdf_id      The Gravity PDF ID.
 	 *
 	 * @return array
 	 */
@@ -1783,10 +1844,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		if ( $is_user_event ) {
 			$assignee_key = $this->get_current_assignee_key();
-			$assignee     = $this->get_assignee( $assignee_key );
-			if ( $assignee->get_type() === 'user_id' ) {
-				$user_id   = $assignee->get_id();
-				$user_name = $assignee->get_display_name();
+			if ( $assignee_key ) {
+				$assignee = $this->get_assignee( $assignee_key );
+				if ( $assignee instanceof Gravity_Flow_Assignee && $assignee->get_type() === 'user_id' ) {
+					$user_id   = $assignee->get_id();
+					$user_name = $assignee->get_display_name();
+				}
 			}
 		}
 
@@ -1814,7 +1877,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Evaluates a routing rule.
 	 *
-	 * @param $routing_rule
+	 * @param array $routing_rule The routing rule properties.
 	 *
 	 * @return bool Is the routing rule a match?
 	 */
@@ -1846,8 +1909,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Sends a notification to an array of assignees.
 	 *
-	 * @param array $assignees
-	 * @param array $notification
+	 * @param Gravity_Flow_Assignee[] $assignees    The assignee properties.
+	 * @param array                   $notification The notification properties.
 	 */
 	public function send_notifications( $assignees, $notification ) {
 		if ( empty( $assignees ) ) {
@@ -1860,38 +1923,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$notification['subject'] = $this->replace_variables( $notification['subject'], null );
 		}
 
-		$message = $notification['message'];
-
 		foreach ( $assignees as $assignee ) {
 			/* @var Gravity_Flow_Assignee $assignee */
-			$assignee_type = $assignee->get_type();
-			$assignee_id   = $assignee->get_id();
-
-			if ( $assignee_type == 'email' ) {
-				$email                   = $assignee_id;
-				$notification['to']      = $email;
-				$notification['id']      = 'workflow_step_' . $this->get_id() . '_email_' . $email;
-				$notification['name']    = $notification['id'];
-				$notification['message'] = $this->replace_variables( $message, $assignee );
-				$this->send_notification( $notification );
-
-				continue;
-			}
-
-
-			if ( $assignee_type == 'role' ) {
-				$users = get_users( array( 'role' => $assignee_id ) );
-			} else {
-				$users = get_users( array( 'include' => array( $assignee_id ) ) );
-			}
-
-			foreach ( $users as $user ) {
-				$notification['id']      = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
-				$notification['name']    = $notification['id'];
-				$notification['to']      = $user->user_email;
-				$notification['message'] = $this->replace_variables( $message, $assignee );
-				$this->send_notification( $notification );
-			}
+			$assignee->send_notification( $notification );
 		}
 	}
 
@@ -1922,12 +1956,17 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Logs debug messages to the Gravity Flow log file generated by the Gravity Forms Logging Add-On.
 	 *
-	 * @param string $message
+	 * @param string $message The message to be logged.
 	 */
 	public function log_debug( $message ) {
 		gravity_flow()->log_debug( $message );
 	}
 
+	/**
+	 * Retrieves the feed meta for the current step.
+	 *
+	 * @return array
+	 */
 	public function get_feed_meta() {
 		return $this->_meta;
 	}
@@ -1935,10 +1974,10 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Process token action if conditions are satisfied.
 	 *
-	 * @param $action
-	 * @param $token
-	 * @param $form
-	 * @param $entry
+	 * @param array $action The action properties.
+	 * @param array $token  The assignee token properties.
+	 * @param array $form   The current form.
+	 * @param array $entry  The current entry.
 	 *
 	 * @return bool|WP_Error Return a success feedback message safe for page output or false.
 	 */
@@ -1946,12 +1985,24 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return false;
 	}
 
+	/**
+	 * Add a new event to the activity log.
+	 *
+	 * @param string $step_event  The event name.
+	 * @param string $step_status The step status.
+	 * @param int    $duration    The duration in seconds, if any.
+	 */
 	public function log_event( $step_event, $step_status = '', $duration = 0 ) {
 
 		gravity_flow()->log_event( 'step', $step_event, $this->get_form_id(), $this->get_entry_id(), $step_status, $this->get_id(), $duration );
 
 	}
 
+	/**
+	 * Override to indicate if the current step supports expiration.
+	 *
+	 * @return bool
+	 */
 	public function supports_expiration() {
 		return false;
 	}
@@ -1959,7 +2010,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the correct value for the step setting for the current context - either step settings or step processing.
 	 *
-	 * @param $setting
+	 * @param string $setting The setting key.
 	 *
 	 * @return array|mixed|string
 	 */
@@ -1978,9 +2029,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Process a status change for an assignee.
 	 *
-	 * @param Gravity_Flow_Assignee $assignee
-	 * @param string $new_status
-	 * @param array $form
+	 * @param Gravity_Flow_Assignee $assignee   The assignee properties.
+	 * @param string                $new_status The assignee status.
+	 * @param array                 $form       The current form.
 	 *
 	 * @return string|bool Return a success feedback message safe for page output or false.
 	 */
@@ -1992,6 +2043,13 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $note;
 	}
 
+	/**
+	 * Determines if the supplied assignee key belongs to one of the steps assignees.
+	 *
+	 * @param string $assignee_key The assignee key.
+	 *
+	 * @return bool
+	 */
 	public function is_assignee( $assignee_key ) {
 		$assignees    = $this->get_assignees();
 		$current_user = wp_get_current_user();
@@ -2052,7 +2110,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * Determine if the note is valid and update the form with the result.
 	 *
 	 * @param string $new_status The new status for the current step.
-	 * @param array $form The form currently being processed.
+	 * @param array  $form       The form currently being processed.
 	 *
 	 * @return bool
 	 */
@@ -2063,7 +2121,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( ! $valid ) {
 			$form['workflow_note'] = array(
 				'failed_validation'  => true,
-				'validation_message' => esc_html__( 'A note is required' )
+				'validation_message' => esc_html__( 'A note is required', 'gravityflow' )
 			);
 		}
 
@@ -2074,7 +2132,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * Override this with the validation logic to determine if the submitted note for this step is valid.
 	 *
 	 * @param string $new_status The new status for the current step.
-	 * @param string $note The submitted note.
+	 * @param string $note       The submitted note.
 	 *
 	 * @return bool
 	 */
@@ -2085,8 +2143,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Get the validation result for this step.
 	 *
-	 * @param bool $valid The steps current validation state.
-	 * @param array $form The form currently being processed.
+	 * @param bool   $valid      The steps current validation state.
+	 * @param array  $form       The form currently being processed.
 	 * @param string $new_status The new status for the current step.
 	 *
 	 * @return array|bool|WP_Error
@@ -2117,8 +2175,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Override this to implement a custom filter for this steps validation result.
 	 *
-	 * @param array $validation_result The validation result and form currently being processed.
-	 * @param string $new_status The new status for the current step.
+	 * @param array  $validation_result The validation result and form currently being processed.
+	 * @param string $new_status        The new status for the current step.
 	 *
 	 * @return array
 	 */
@@ -2127,4 +2185,3 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 }
-

@@ -1,9 +1,21 @@
 <?php
+/**
+ * Gravity Flow Workflow Note Merge Tag
+ *
+ * @package     GravityFlow
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
 
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+/**
+ * Class Gravity_Flow_Merge_Tag_Workflow_Note
+ *
+ * @since 1.7.1-dev
+ */
 class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 
 	/**
@@ -11,7 +23,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @var null
+	 * @var string
 	 */
 	public $name = 'workflow_note';
 
@@ -29,7 +41,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param string $text  The text to be processed.
+	 * @param string $text The text to be processed.
 	 *
 	 * @return string
 	 */
@@ -52,10 +64,11 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 					'step_id'      => null,
 					'display_name' => false,
 					'display_date' => false,
+					'history'      => false,
 				) );
 
 				$replacement = '';
-				$notes       = $this->get_step_notes( $entry['id'], $a['step_id'] );
+				$notes       = $this->get_step_notes( $entry['id'], $a['step_id'], $a['history'] );
 
 				if ( ! empty( $notes ) ) {
 					$replacement_array = array();
@@ -82,21 +95,38 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 	 *
 	 * @since 1.7.1-dev
 	 *
-	 * @param int      $entry_id The current entry ID.
-	 * @param int|null $step_id  The step ID or null to return the most recent note.
+	 * @param int             $entry_id The current entry ID.
+	 * @param null|string|int $step_id  The step ID or name. Null will return the most recent note.
+	 * @param bool            $history  Include notes from previous occurrences of the specified step.
 	 *
 	 * @return array
 	 */
-	protected function get_step_notes( $entry_id, $step_id ) {
+	protected function get_step_notes( $entry_id, $step_id, $history ) {
 		$notes      = Gravity_Flow_Common::get_workflow_notes( $entry_id, true );
 		$step_notes = array();
 
+		if ( ! is_numeric( $step_id ) && is_string( $step_id ) ) {
+			// Try to look up the step ID by step name.
+			$step_id = $this->get_step_id_by_name( $step_id );
+		}
+
+		$step_found            = false;
+		$step_timestamp        = $step_id && ! $history ? gform_get_meta( $entry_id, 'workflow_step_' . $step_id . '_timestamp' ) : 0;
+		$step_status_timestamp = $step_id && ! $history ? gform_get_meta( $entry_id, 'workflow_step_status_' . $step_id . '_timestamp' ) : 0;
+
 		foreach ( $notes as $note ) {
+			if ( $step_found && ! $history &&
+			     ( $step_id != $note['step_id'] || $note['timestamp'] < $step_timestamp || $note['timestamp'] > $step_status_timestamp )
+			) {
+				break;
+			}
+
 			if ( $step_id && $step_id != $note['step_id'] ) {
 				continue;
 			}
 
 			$step_notes[] = $note;
+			$step_found   = true;
 
 			if ( is_null( $step_id ) ) {
 				break;
@@ -104,6 +134,32 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 		}
 
 		return $step_notes;
+	}
+
+	/**
+	 * Retrieve the step id for the specified step name.
+	 *
+	 * @since 1.8.1
+	 *
+	 * @param string $step_name The step name.
+	 *
+	 * @return int|false The step ID or false if not found.
+	 */
+	protected function get_step_id_by_name( $step_name ) {
+		$step_id = false;
+		if ( is_string( $step_name ) && ! is_numeric( $step_name ) ) {
+			$step_name = strtolower( $step_name );
+			$steps     = gravity_flow()->get_steps( $this->form['id'] );
+
+			foreach ( $steps as $step ) {
+				if ( strtolower( $step->get_name() ) === $step_name ) {
+					$step_id = $step->get_id();
+					break;
+				}
+			}
+		}
+
+		return $step_id;
 	}
 
 	/**
@@ -134,7 +190,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 	 */
 	protected function get_assignee_display_name( $assignee_or_key ) {
 		if ( ! $assignee_or_key instanceof Gravity_Flow_Assignee ) {
-			$assignee = new Gravity_Flow_Assignee( $assignee_or_key );
+			$assignee = Gravity_Flow_Assignees::create( $assignee_or_key );
 		} else {
 			$assignee = $assignee_or_key;
 		}
