@@ -3,3 +3,4 @@
 - Fixed editable Post Image field value retaining the previous image URL on entry update if the step failed validation.
 - Fixed status export .csv to include duration as a separate column so it is consistent with status export table info
 - Fixed a PHP warning for the Discussion field.
+- Fixed an issue with the approval step for assignees added via custom code.
