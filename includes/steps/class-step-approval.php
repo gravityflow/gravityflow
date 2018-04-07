@@ -453,9 +453,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				if ( is_wp_error( $validation ) ) {
 					return $validation;
 				}
-
-				$assignee_key = $this->get_current_assignee_key();
-				$assignee     = $this->get_assignee( $assignee_key );
 			} else {
 
 				$gflow_token = rgget( 'gflow_token' );
@@ -485,10 +482,16 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					return false;
 				}
 
-				$assignee = $this->get_assignee( 'user_id|' . get_current_user_id() );
 			}
 
-			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
+			$assignees = $this->get_assignees();
+
+			foreach ( $assignees as $assignee ) {
+				if ( $assignee->is_current_user() ) {
+					$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
+					break;
+				}
+			}
 
 			$entry = $this->refresh_entry();
 
