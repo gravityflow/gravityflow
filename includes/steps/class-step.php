@@ -296,7 +296,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 		foreach ( $assignees as $assignee ) {
 			if ( $assignee->is_current_user() ) {
 				return true;
-				break;
 			}
 		}
 
