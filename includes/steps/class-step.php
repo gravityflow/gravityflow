@@ -1601,6 +1601,22 @@ abstract class Gravity_Flow_Step extends stdClass {
 					$object = get_userdata( $id );
 					break;
 
+				case 'assignee_users_field' :
+					$entry      = $this->get_entry();
+					$json_value = $entry[ $id ];
+					$user_ids   = json_decode( $json_value );
+					if ( $user_ids && is_array( $user_ids ) ) {
+						foreach ( $user_ids as $user_id ) {
+							$user = get_userdata( $user_id );
+							if ( $user ) {
+								$user_assignee = $this->get_assignee( 'user_id|' . $user_id );;
+								$this->_assignees[] = $user_assignee;
+							}
+						}
+					}
+					$object = false;
+					break;
+
 				case 'role' :
 					$object = get_role( $id );
 					break;

@@ -1099,6 +1099,8 @@ PRIMARY KEY  (id)
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_field|' . $field->id );
 					} elseif ( $type == 'workflow_user' ) {
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_user_field|' . $field->id );
+					} elseif ( $type == 'workflow_users' ) {
+						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_users_field|' . $field->id );
 					} elseif ( $type == 'workflow_role' ) {
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_role_field|' . $field->id );
 					}
