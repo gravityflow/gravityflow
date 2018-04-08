@@ -357,8 +357,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 
 		$default_args = array(
-			'singular'           => __( 'entry', 'gravityflow' ),
-			'plural'             => __( 'entries', 'gravityflow' ),
+			'singular'           => 'entry',    // Not translated - only used in class names
+			'plural'             => 'entries',  // Not translated - only used in class names
 			'ajax'               => false,
 			'base_url'           => admin_url( 'admin.php?page=gravityflow-status' ),
 			'detail_base_url'    => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
