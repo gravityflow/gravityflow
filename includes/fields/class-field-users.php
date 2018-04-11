@@ -24,6 +24,13 @@ class Gravity_Flow_Field_Users extends GF_Field_MultiSelect {
 	public $type = 'workflow_users';
 
 	/**
+	 * Set the storage type to json
+	 *
+	 * @var string
+	 */
+	public $storageType = 'json';
+
+	/**
 	 * Adds the Workflow Fields group to the form editor.
 	 *
 	 * @param array $field_groups The properties for the field groups.
