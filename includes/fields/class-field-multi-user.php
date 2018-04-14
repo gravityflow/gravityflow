@@ -1,6 +1,6 @@
 <?php
 /**
- * Gravity Flow Users Field
+ * Gravity Flow Multi-User Field
  *
  * @package     GravityFlow
  * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
@@ -12,16 +12,16 @@ if ( ! class_exists( 'GFForms' ) ) {
 }
 
 /**
- * Class Gravity_Flow_Field_Users
+ * Class Gravity_Flow_Field_Multi_User
  */
-class Gravity_Flow_Field_Users extends GF_Field_MultiSelect {
+class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 
 	/**
 	 * The field type.
 	 *
 	 * @var string
 	 */
-	public $type = 'workflow_users';
+	public $type = 'workflow_multi_user';
 
 	/**
 	 * Set the storage type to json
@@ -84,7 +84,7 @@ class Gravity_Flow_Field_Users extends GF_Field_MultiSelect {
 	 * @return string
 	 */
 	public function get_form_editor_field_title() {
-		return __( 'Users', 'gravityflow' );
+		return __( 'Multi-User', 'gravityflow' );
 	}
 
 	/**
@@ -138,7 +138,12 @@ class Gravity_Flow_Field_Users extends GF_Field_MultiSelect {
 	 * @return string
 	 */
 	public function get_value_entry_list( $value, $entry, $field_id, $columns, $form ) {
-		$assignee = parent::get_value_entry_list( $value, $entry, $field_id, $columns, $form );
+
+		$user_ids = $this->to_array( $value );
+
+		$display_names = $this->get_display_names( $user_ids );
+
+		$assignee = parent::get_value_entry_list( $display_names, $entry, $field_id, $columns, $form );
 		$value    = $this->get_display_name( $assignee );
 
 		return $value;
@@ -162,7 +167,15 @@ class Gravity_Flow_Field_Users extends GF_Field_MultiSelect {
 	 */
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
 
-		return Gravity_Flow_Fields::get_user_variable( $value, $modifier, $url_encode, $esc_html );
+		$user_ids = $this->to_array( $value );
+
+		$output_arr = array();
+
+		foreach ( $user_ids as $user_id ) {
+			$output_arr[] = Gravity_Flow_Fields::get_user_variable( $user_id, $modifier, $url_encode, $esc_html );
+		}
+
+		return GFCommon::implode_non_blank( ', ', $output_arr );
 	}
 
 	/**
@@ -177,16 +190,22 @@ class Gravity_Flow_Field_Users extends GF_Field_MultiSelect {
 	 * @return string
 	 */
 	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
-		$assignee = parent::get_value_entry_detail( $value, $currency, $use_text, $format, $media );
-		$value    = $this->get_display_name( $assignee );
 
-		return $value;
+		if ( empty( $value ) || $format == 'text' ) {
+			return $value;
+		}
+
+		$user_ids = $this->to_array( $value );
+
+		$display_names = $this->get_display_names( $user_ids );
+
+		return parent::get_value_entry_detail( $display_names, $currency, $use_text, $format, $media );
 	}
 
 	/**
 	 * Gets the display name for the selected user.
 	 *
-	 * @param int $user_id The user ID.
+	 * @param int $user_id The array of user ID.
 	 *
 	 * @return string
 	 */
@@ -198,6 +217,16 @@ class Gravity_Flow_Field_Users extends GF_Field_MultiSelect {
 		$value = is_object( $user ) ? $user->display_name : $user_id;
 
 		return $value;
+	}
+
+	public function get_display_names( $user_ids ) {
+		$display_names = array();
+
+		foreach ( $user_ids as $user_id ) {
+			$display_names[] = $this->get_display_name( $user_id );
+		}
+
+		return $display_names;
 	}
 
 	/**
@@ -215,7 +244,10 @@ class Gravity_Flow_Field_Users extends GF_Field_MultiSelect {
 			$input_id = $this->id;
 		}
 
-		return $this->get_display_name( rgar( $entry, $input_id ) );
+		$value         = json_decode( rgar( $entry, $input_id ), true );
+		$display_names = $this->get_display_names( $value );
+
+		return GFCommon::implode_non_blank( ', ', $display_names );
 	}
 
 	/**
@@ -240,4 +272,4 @@ class Gravity_Flow_Field_Users extends GF_Field_MultiSelect {
 	}
 }
 
-GF_Fields::register( new Gravity_Flow_Field_Users() );
+GF_Fields::register( new Gravity_Flow_Field_Multi_User() );

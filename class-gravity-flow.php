@@ -791,7 +791,7 @@ PRIMARY KEY  (id)
 			$chosen_fields = array();
 			foreach ( $form['fields'] as $field ) {
 				$input_type = GFFormsModel::get_input_type( $field );
-				if ( $field->enableEnhancedUI && in_array( $input_type, array( 'workflow_assignee_select', 'workflow_user', 'workflow_role' ) ) ) {
+				if ( $field->enableEnhancedUI && in_array( $input_type, array( 'workflow_assignee_select', 'workflow_user', 'workflow_role', 'workflow_multi_user' ) ) ) {
 					$chosen_fields[] = "#input_{$form['id']}_{$field->id}";
 				}
 			}
@@ -813,7 +813,7 @@ PRIMARY KEY  (id)
 			}
 
 			foreach ( $form['fields'] as $field ) {
-				if ( in_array( RGFormsModel::get_input_type( $field ), array( 'workflow_assignee_select', 'workflow_user', 'workflow_role' ) ) && $field->enableEnhancedUI ) {
+				if ( in_array( RGFormsModel::get_input_type( $field ), array( 'workflow_assignee_select', 'workflow_user', 'workflow_role', 'workflow_multi_user' ) ) && $field->enableEnhancedUI ) {
 					return true;
 				}
 			}
@@ -1099,8 +1099,8 @@ PRIMARY KEY  (id)
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_field|' . $field->id );
 					} elseif ( $type == 'workflow_user' ) {
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_user_field|' . $field->id );
-					} elseif ( $type == 'workflow_users' ) {
-						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_users_field|' . $field->id );
+					} elseif ( $type == 'workflow_multi_user' ) {
+						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_multi_user_field|' . $field->id );
 					} elseif ( $type == 'workflow_role' ) {
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_role_field|' . $field->id );
 					}
