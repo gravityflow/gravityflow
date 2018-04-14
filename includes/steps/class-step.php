@@ -265,11 +265,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return WP_Error|boolean
 	 */
 	public function rest_permission_callback( $request ) {
-		$assignee_key = gravity_flow()->get_current_user_assignee_key();
-
-		if ( empty( $assignee_key ) ) {
-			return false;
-		}
 
 		if ( ! is_user_logged_in() ) {
 
@@ -296,8 +291,12 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 		}
 
-		if ( $this->is_assignee( $assignee_key ) ) {
-			return true;
+		$assignees = $this->get_assignees();
+
+		foreach ( $assignees as $assignee ) {
+			if ( $assignee->is_current_user() ) {
+				return true;
+			}
 		}
 
 		return false;
@@ -1045,17 +1044,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return string
 	 */
 	public function replace_variables( $text, $assignee ) {
-
-		$args = array(
-			'assignee' => $assignee,
-			'step'     => $this,
-		);
-
-		$merge_tags = Gravity_Flow_Merge_Tags::get_all( $args );
-
-		foreach ( $merge_tags as $merge_tag ) {
-			$text = $merge_tag->replace( $text );
-		}
 		return $text;
 	}
 
@@ -2198,6 +2186,44 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function maybe_filter_validation_result( $validation_result, $new_status ) {
 		return $validation_result;
+	}
+
+	/**
+	 * Purges assignees from the database.
+	 *
+	 * @since 2.1.2
+	 */
+	public function purge_assignees() {
+		global $wpdb;
+
+		$entry_id = $this->get_entry_id();
+
+		$entry_meta_table = Gravity_Flow_Common::get_entry_meta_table_name();
+
+		$entry_id_column = Gravity_Flow_Common::get_entry_id_column_name();
+
+		$assignee_types = array(
+			'^workflow_user_id_',
+			'^workflow_role_',
+			'^workflow_email_',
+			'^workflow_api_key_',
+		);
+
+		$assignee_names = Gravity_Flow_Assignees::get_names();
+		foreach ( $assignee_names as $assignee_name ) {
+			if ( $assignee_name == 'generic' ) {
+				continue;
+			}
+			$assignee_types[] = "^workflow_{$assignee_name}_";
+		}
+
+		$assignee_types_str = join( '|', $assignee_types );
+
+		$sql = $wpdb->prepare( "DELETE FROM {$entry_meta_table} WHERE {$entry_id_column}=%d AND meta_key REGEXP %s", $entry_id, $assignee_types_str );
+
+		$result = $wpdb->query( $sql );
+
+		$this->log_debug( 'Assignees purged. number of rows deleted: ' . $result );
 	}
 
 }

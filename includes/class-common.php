@@ -30,10 +30,10 @@ class Gravity_Flow_Common {
 	 * @return string
 	 */
 	public static function get_workflow_url( $query_args, $page_id = null, $assignee = null, $access_token = '' ) {
-		if ( $assignee && $assignee->get_type() == 'email' ) {
+		if ( empty( $access_token ) && $assignee && $assignee->get_type() == 'email' ) {
 			$token_lifetime_days        = apply_filters( 'gravityflow_entry_token_expiration_days', 30, $assignee );
 			$token_expiration_timestamp = strtotime( '+' . (int) $token_lifetime_days . ' days' );
-			$access_token               = $access_token ? $access_token : gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
+			$access_token               = gravity_flow()->generate_access_token( $assignee, null, $token_expiration_timestamp );
 		}
 
 		$base_url = '';

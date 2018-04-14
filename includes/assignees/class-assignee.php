@@ -542,8 +542,11 @@ class Gravity_Flow_Assignee {
 		$merge_tags = Gravity_Flow_Merge_Tags::get_all( $args );
 
 		foreach ( $merge_tags as $merge_tag ) {
-			$text = $merge_tag->replace( $text );
+			if ( $merge_tag instanceof Gravity_Flow_Merge_Tag_Assignee_Base ) {
+				$text = $merge_tag->replace( $text );
+			}
 		}
+
 		return $text;
 	}
 }

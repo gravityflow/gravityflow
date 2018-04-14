@@ -95,4 +95,19 @@ class Gravity_Flow_Assignees {
 		return $assignee;
 	}
 
+	/**
+	 * Returns an array of the name properties of each assignee class.
+	 *
+	 * @since 2.1.2
+	 *
+	 * @return array
+	 */
+	public static function get_names() {
+		$classes = self::get_class_names();
+
+		$names = array_keys( $classes );
+
+		return $names;
+	}
+
 }
