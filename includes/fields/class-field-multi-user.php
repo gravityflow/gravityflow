@@ -167,7 +167,7 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 	 */
 	public function get_value_merge_tag( $value, $input_id, $entry, $form, $modifier, $raw_value, $url_encode, $esc_html, $format, $nl2br ) {
 
-		$user_ids = $this->to_array( $value );
+		$user_ids = $this->to_array( $raw_value );
 
 		$output_arr = array();
 
@@ -197,7 +197,7 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 
 		$user_ids = $this->to_array( $value );
 
-		$display_names = $this->get_display_names( $user_ids );
+		$display_names = $use_text ? $this->get_display_names( $user_ids ) : $user_ids;
 
 		return parent::get_value_entry_detail( $display_names, $currency, $use_text, $format, $media );
 	}
