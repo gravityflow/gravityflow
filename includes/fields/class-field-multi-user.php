@@ -172,7 +172,7 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 		$output_arr = array();
 
 		foreach ( $user_ids as $user_id ) {
-			$output_arr[] = Gravity_Flow_Fields::get_user_variable( $user_id, $modifier, $url_encode, $esc_html );
+			$output_arr[] = $modifier == 'value' ? $user_id : Gravity_Flow_Fields::get_user_variable( $user_id, $modifier, $url_encode, $esc_html );
 		}
 
 		return GFCommon::implode_non_blank( ', ', $output_arr );
