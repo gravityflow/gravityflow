@@ -802,7 +802,7 @@ PRIMARY KEY  (id)
 			$chosen_fields = array();
 			foreach ( $form['fields'] as $field ) {
 				$input_type = GFFormsModel::get_input_type( $field );
-				if ( $field->enableEnhancedUI && in_array( $input_type, array( 'workflow_assignee_select', 'workflow_user', 'workflow_role' ) ) ) {
+				if ( $field->enableEnhancedUI && in_array( $input_type, array( 'workflow_assignee_select', 'workflow_user', 'workflow_role', 'workflow_multi_user' ) ) ) {
 					$chosen_fields[] = "#input_{$form['id']}_{$field->id}";
 				}
 			}
@@ -824,7 +824,7 @@ PRIMARY KEY  (id)
 			}
 
 			foreach ( $form['fields'] as $field ) {
-				if ( in_array( RGFormsModel::get_input_type( $field ), array( 'workflow_assignee_select', 'workflow_user', 'workflow_role' ) ) && $field->enableEnhancedUI ) {
+				if ( in_array( RGFormsModel::get_input_type( $field ), array( 'workflow_assignee_select', 'workflow_user', 'workflow_role', 'workflow_multi_user' ) ) && $field->enableEnhancedUI ) {
 					return true;
 				}
 			}
@@ -1110,6 +1110,8 @@ PRIMARY KEY  (id)
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_field|' . $field->id );
 					} elseif ( $type == 'workflow_user' ) {
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_user_field|' . $field->id );
+					} elseif ( $type == 'workflow_multi_user' ) {
+						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_multi_user_field|' . $field->id );
 					} elseif ( $type == 'workflow_role' ) {
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_role_field|' . $field->id );
 					}
@@ -6711,14 +6713,18 @@ AND m.meta_value='queued'";
 				'label'    => '',
 				'type'     => 'select',
 				'default_value' => 'all_fields',
-				'onchange' => 'jQuery(this).siblings(".gravityflow_display_fields_selected_container").toggle(this.value=="selected_fields");',
+				'onchange' => 'jQuery(this).siblings(".gravityflow_display_fields_selected_container").toggle(this.value != "all_fields");',
 				'choices' => array(
 					array(
-						'label' => __( 'All fields', 'gravityflow' ),
+						'label' => __( 'Display all fields', 'gravityflow' ),
 						'value' => 'all_fields',
 					),
 					array(
-						'label' => __( 'Selected fields', 'gravityflow' ),
+						'label' => __( 'Display all fields except selected', 'gravityflow' ),
+						'value' => 'all_fields_except',
+					),
+					array(
+						'label' => __( 'Hide all fields except selected', 'gravityflow' ),
 						'value' => 'selected_fields',
 					),
 				),
@@ -6764,7 +6770,7 @@ AND m.meta_value='queued'";
 				'choices' => $fields_as_choices,
 			);
 			$this->settings_select( $mode_field );
-			$style = $mode_value == 'selected_fields' ? '' :  'style="display:none;"';
+			$style = $mode_value == 'all_fields' ? 'style="display:none;"' : '';
 			echo '<div class="gravityflow_display_fields_selected_container" ' . $style . '>';
 			$this->settings_select( $multiselect_field );
 			echo '</div>';

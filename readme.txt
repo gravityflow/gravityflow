@@ -55,6 +55,10 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 2.1.1 =
+- Fixed editable Post Category field not being populated with the current entry value on the User Input step.
+- Fixed an issue which prevents the rendering of certain merge tags e.g. {workflow_form_submission_link} in extensions and custom code.
+
 = 2.1 =
 - Added support for the Gravity Perks Nested Forms add-on.
 - Added the current step as parameters to the gravityflow_feedback_approval_token and gravityflow_feedback_approval filters.

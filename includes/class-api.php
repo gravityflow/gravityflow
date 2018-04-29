@@ -121,10 +121,8 @@ class Gravity_Flow_API {
 		 */
 		do_action( 'gravityflow_pre_cancel_workflow', $entry, $form, $step );
 
-		$assignees = $step->get_assignees();
-		foreach ( $assignees as $assignee ) {
-			$assignee->remove();
-		}
+		$step->purge_assignees();
+
 		gform_update_meta( $entry_id, 'workflow_final_status', 'cancelled' );
 		gform_delete_meta( $entry_id, 'workflow_step' );
 		$feedback = esc_html__( 'Workflow cancelled.', 'gravityflow' );
@@ -148,6 +146,7 @@ class Gravity_Flow_API {
 		}
 		$entry_id = $entry['id'];
 		$this->log_activity( 'step', 'restarted', $this->form_id, $entry_id );
+		$step->purge_assignees();
 		$step->restart_action();
 		$step->start();
 		$feedback = esc_html__( 'Workflow Step restarted.', 'gravityflow' );
@@ -178,11 +177,9 @@ class Gravity_Flow_API {
 		do_action( 'gravityflow_pre_restart_workflow', $entry, $form );
 
 		if ( $current_step ) {
-			$assignees = $current_step->get_assignees();
-			foreach ( $assignees as $assignee ) {
-				$assignee->remove();
-			}
+			$current_step->purge_assignees();
 		}
+
 		$steps = $this->get_steps();
 		foreach ( $steps as $step ) {
 			// Create a step based on the entry and use it to reset the status.
@@ -226,10 +223,7 @@ class Gravity_Flow_API {
 	public function send_to_step( $entry, $step_id ) {
 		$current_step = $this->get_current_step( $entry );
 		if ( $current_step ) {
-			$assignees = $current_step->get_assignees();
-			foreach ( $assignees as $assignee ) {
-				$assignee->remove();
-			}
+			$current_step->purge_assignees();
 			$current_step->update_step_status( 'cancelled' );
 		}
 		$entry_id = $entry['id'];

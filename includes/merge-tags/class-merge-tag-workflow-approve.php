@@ -11,16 +11,12 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-if ( ! class_exists( 'Gravity_Flow_Merge_Tag_Approve_Token' ) ) {
-	require_once( 'class-merge-tag-workflow-approve-token.php' );
-}
-
 /**
  * Class Gravity_Flow_Merge_Tag_Approve
  *
  * @since 1.7.1-dev
  */
-class Gravity_Flow_Merge_Tag_Approve extends Gravity_Flow_Merge_Tag_Approve_Token {
+class Gravity_Flow_Merge_Tag_Approve extends Gravity_Flow_Merge_Tag_Assignee_Base {
 
 	/**
 	 * The name of the merge tag.

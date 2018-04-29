@@ -357,8 +357,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 
 		$default_args = array(
-			'singular'           => __( 'entry', 'gravityflow' ),
-			'plural'             => __( 'entries', 'gravityflow' ),
+			'singular'           => 'entry',    // Not translated - only used in class names
+			'plural'             => 'entries',  // Not translated - only used in class names
 			'ajax'               => false,
 			'base_url'           => admin_url( 'admin.php?page=gravityflow-status' ),
 			'detail_base_url'    => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
@@ -1827,6 +1827,12 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	 */
 	public function export_column_names( $echo = true ) {
 		$columns    = $this->get_columns();
+
+		if ( isset( $columns['workflow_final_status'] ) ) {
+			$final_status_offset = array_search('workflow_final_status',array_keys($columns)) + 1;
+			$columns = array_slice($columns, 0, $final_status_offset, true) + array('duration' => esc_html__( 'Duration', 'gravityflow' )) + array_slice($columns, $final_status_offset, NULL, true);
+		}
+
 		$export_arr = array();
 
 		foreach ( $columns as $key => $column_title ) {
@@ -1948,6 +1954,10 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$export      = '';
 		$rows        = array();
 		$columns     = $this->get_columns();
+		if ( isset( $columns['workflow_final_status'] ) ) {
+			$final_status_offset = array_search('workflow_final_status',array_keys($columns)) + 1;
+			$columns = array_slice($columns, 0, $final_status_offset, true) + array('duration' => esc_html__( 'Duration', 'gravityflow' )) + array_slice($columns, $final_status_offset, NULL, true);
+		}
 		$column_keys = array_keys( $columns );
 
 		if ( ( $cb = array_search( 'cb', $column_keys ) ) !== false ) {
@@ -1982,7 +1992,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 							$step_id = rgar( $item, 'workflow_step' );
 							if ( $step_id > 0 ) {
 								$step      = gravity_flow()->get_step( $step_id );
-								$col_val = $step->get_name();
+								$col_val = $step ? $step->get_name() : $step_id;
 							} else {
 								$col_val = $step_id;
 							}
@@ -1990,6 +2000,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 						default :
 							$col_val = $item[ $column_key ];
 					}
+				} else {
+					switch ( $column_key ) {
+						case 'duration':
+							if( $item[ 'workflow_final_status' ] == 'pending' ) {
+								$duration     = time() - strtotime( $item['date_created'] );
+								$duration_str = $this->format_duration( $duration );
+								$col_val = $duration_str;
+							} else {
+								$col_val = '';
+							}
+						break;
+					}	
 				}
 
 				/**

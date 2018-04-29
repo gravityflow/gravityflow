@@ -407,6 +407,9 @@ class Gravity_Flow_Entry_Editor {
 
 		$value = apply_filters( 'gravityflow_field_value_entry_editor', $value, $field, $this->form, $this->entry, $this->step );
 
+		$value = $this->get_post_image_value( $value, $field );
+		$value = $this->get_post_category_value( $value, $field );
+
 		$html = $field->get_field_input( $this->form, $value, $this->entry );
 		$html .= $this->maybe_get_coupon_script( $field );
 
@@ -423,6 +426,81 @@ class Gravity_Flow_Entry_Editor {
 		}
 
 		return $html;
+	}
+
+	/**
+	 * Ensures the post image field value is in the correct format for populating the field.
+	 *
+	 * @since 2.1.2-dev
+	 *
+	 * @param string|array $value The field value.
+	 * @param GF_Field     $field The current field object.
+	 *
+	 * @return string|array
+	 */
+	public function get_post_image_value( $value, $field ) {
+		if ( $field->type !== 'post_image' || empty( $value ) || ! is_string( $value ) || strpos( $value, '|:|' ) === false ) {
+			return $value;
+		}
+
+		$array = explode( '|:|', $value );
+		$value = array(
+			$field->id . '.1' => rgar( $array, 1 ), // Title.
+			$field->id . '.4' => rgar( $array, 2 ), // Caption.
+			$field->id . '.7' => rgar( $array, 3 ), // Description.
+		);
+
+		$path_info = pathinfo( rgar( $array, 0 ) );
+		if ( ! isset( GFFormsModel::$uploaded_files[ $field->formId ]["input_{$field->id}"] ) ) {
+			GFFormsModel::$uploaded_files[ $field->formId ]["input_{$field->id}"] = $path_info['basename'];
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Ensures the post category field value is in the correct format for populating the field.
+	 *
+	 * @since 2.1.1-dev
+	 *
+	 * @param string|array $value The field value.
+	 * @param GF_Field     $field The current field object.
+	 *
+	 * @return string|array
+	 */
+	public function get_post_category_value( $value, $field ) {
+		if ( $field->type !== 'post_category' || empty( $value ) ) {
+			return $value;
+		}
+
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $item ) {
+				if ( ! empty( $item ) ) {
+					$value[ $key ] = $this->get_post_category_id( $item );
+				}
+			}
+		} else {
+			$value = $this->get_post_category_id( $value );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Returns the post category id from the supplied value.
+	 *
+	 * The entry value will be in the format "category_name:category_id".
+	 *
+	 * @since 2.1.1-dev
+	 *
+	 * @param string $value The field value.
+	 *
+	 * @return string
+	 */
+	public function get_post_category_id( $value ) {
+		$parts = explode( ':', $value );
+
+		return isset( $parts[1] ) ? $parts[1] : $parts[0];
 	}
 
 	/**

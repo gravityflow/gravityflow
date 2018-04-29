@@ -366,11 +366,13 @@ class Gravity_Flow_Assignee {
 		$assignee_id   = $this->get_id();
 
 		if ( $assignee_type == 'email' ) {
-			$email                   = $assignee_id;
-			$notification['id']      = 'workflow_step_' . $this->get_id() . '_email_' . $email;
-			$notification['name']    = $notification['id'];
-			$notification['to']      = $email;
-			$notification['message'] = $this->replace_variables( $message );
+			$email                = $assignee_id;
+			$notification['id']   = 'workflow_step_' . $this->get_id() . '_email_' . $email;
+			$notification['name'] = $notification['id'];
+			$notification['to']   = $email;
+			$message              = $this->replace_variables( $message );
+			// Call $this->step->replace_variables() for backwards compatibility
+			$notification['message'] = $this->step->replace_variables( $message, $this );
 			$this->step->send_notification( $notification );
 
 			return;
@@ -394,7 +396,9 @@ class Gravity_Flow_Assignee {
 			$notification['id']         = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
 			$notification['name']       = $notification['id'];
 			$notification['to']         = $user->user_email;
-			$notification['message']    = $user_assignee->replace_variables( $message );
+			$message                    = $user_assignee->replace_variables( $message );
+			// Call $this->step->replace_variables() for backwards compatibility
+			$notification['message'] = $this->step->replace_variables( $message, $user_assignee );
 			$this->step->send_notification( $notification );
 		}
 	}
@@ -538,8 +542,11 @@ class Gravity_Flow_Assignee {
 		$merge_tags = Gravity_Flow_Merge_Tags::get_all( $args );
 
 		foreach ( $merge_tags as $merge_tag ) {
-			$text = $merge_tag->replace( $text );
+			if ( $merge_tag instanceof Gravity_Flow_Merge_Tag_Assignee_Base ) {
+				$text = $merge_tag->replace( $text );
+			}
 		}
+
 		return $text;
 	}
 }

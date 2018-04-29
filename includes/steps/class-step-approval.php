@@ -125,11 +125,14 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			return $response;
 		}
 
-		$assignee_key = isset( $request['assignee'] ) ? $request['assignee'] : gravity_flow()->get_current_user_assignee_key();
+		$assignees = $this->get_assignees();
 
-		$assignee = $this->get_assignee( $assignee_key );
-
-		$feedback = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
+		foreach ( $assignees as $assignee ) {
+			if ( $assignee->is_current_user() ) {
+				$feedback = $this->process_assignee_status( $assignee, $new_status, $this->get_form() );
+				break;
+			}
+		}
 
 		if ( empty( $assignee ) ) {
 			return new WP_Error( 'not_supported', __( 'Action not supported.', 'gravityflow' ) );
@@ -379,6 +382,17 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			}
 		}
 
+		/**
+		 * Allows the step status for the approval to be customized
+		 *
+		 * @since 2.1-dev 
+		 *
+		 * @param string                     $step_status   The status of the step
+		 * @param Gravity_Flow_Assignee[]    $approvers     The array of Gravity_Flow_Assignee objects
+		 * @param Gravity_Flow_Step          $step          The current step
+		 */
+		$step_status = apply_filters( 'gravityflow_step_status_evaluation_approval', $step_status, $approvers, $this );
+
 		return $step_status;
 	}
 
@@ -442,9 +456,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				if ( is_wp_error( $validation ) ) {
 					return $validation;
 				}
-
-				$assignee_key = $this->get_current_assignee_key();
-				$assignee     = $this->get_assignee( $assignee_key );
 			} else {
 
 				$gflow_token = rgget( 'gflow_token' );
@@ -474,10 +485,16 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					return false;
 				}
 
-				$assignee = $this->get_assignee( 'user_id|' . get_current_user_id() );
 			}
 
-			$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
+			$assignees = $this->get_assignees();
+
+			foreach ( $assignees as $assignee ) {
+				if ( $assignee->is_current_user() ) {
+					$feedback = $this->process_assignee_status( $assignee, $new_status, $form );
+					break;
+				}
+			}
 
 			$entry = $this->refresh_entry();
 
@@ -870,30 +887,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 */
 	public function send_rejection_notification() {
 		$this->maybe_send_notification( 'rejection' );
-	}
-
-	/**
-	 * Replaces the step merge tags.
-	 *
-	 * @param string                $text     The text containing merge tags to be processed.
-	 * @param Gravity_Flow_Assignee $assignee The assignee properties.
-	 *
-	 * @return string
-	 */
-	public function replace_variables( $text, $assignee ) {
-		$text = parent::replace_variables( $text, $assignee );
-
-		$args = array(
-			'assignee' => $assignee,
-			'step'     => $this,
-		);
-
-		$text = Gravity_Flow_Merge_Tags::get( 'workflow_approve_token', $args )->replace( $text );
-		$text = Gravity_Flow_Merge_Tags::get( 'workflow_approve', $args )->replace( $text );
-		$text = Gravity_Flow_Merge_Tags::get( 'workflow_reject_token', $args )->replace( $text );
-		$text = Gravity_Flow_Merge_Tags::get( 'workflow_reject', $args )->replace( $text );
-
-		return $text;
 	}
 
 	/**
