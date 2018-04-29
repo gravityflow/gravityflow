@@ -1822,6 +1822,28 @@ PRIMARY KEY  (id)
 				'choices' => $date_field_choices,
 			);
 
+			$time_fields = GFFormsModel::get_fields_by_type( $form, 'time' );
+
+			$time_field_choices = array();
+
+			if ( ! empty($time_fields ) ) {
+				$schedule_type['choices'][] = array(
+					'label' => esc_html__( 'Time Field', 'gravityflow' ),
+					'value' => 'time_field',
+				);
+
+
+				foreach ( $time_fields  as $time_field ) {
+						$time_field_choices[] = array( 'value' => $time_field->id, 'label' => GFFormsModel::get_label( $time_field ) );
+					}
+			}
+
+			$schedule_time_fields = array(
+				'name' => 'schedule_time_field',
+				'label' => esc_html__( 'Schedule Time Field', 'gravityflow' ),
+				'choices' => $time_field_choices,
+			);
+
 			$schedule_date = array(
 				'id' => 'schedule_date',
 				'name' => 'schedule_date',
@@ -1870,6 +1892,7 @@ PRIMARY KEY  (id)
 			$schedule_date_style = ( $schedule_type_setting == 'date' ) ? '' : 'style="display:none;"';
 			$schedule_delay_style = ( $schedule_type_setting == 'delay' ) ? '' : 'style="display:none;"';
 			$schedule_date_fields_style = ( $schedule_type_setting == 'date_field' ) ? '' : 'style="display:none;"';
+			$schedule_time_fields_style = ( $schedule_type_setting == 'time_field' ) ? '' : 'style="display:none;"';
 			?>
 			<div class="gravityflow-schedule-settings" <?php echo $schedule_style ?> >
 				<div class="gravityflow-schedule-type-container">
@@ -1923,6 +1946,38 @@ PRIMARY KEY  (id)
 					$this->settings_select( $schedule_date_fields );
 					?>
 				</div>
+				<div class="gravityflow-schedule-time-field-container" <?php echo $schedule_time_fields_style ?>>
+					<?php
+					esc_html_e( 'Start this step', 'gravityflow' );
+					echo '&nbsp;';
+					$delay_offset_field['name'] = 'schedule_time_field_offset';
+					$delay_offset_field['default_value'] = '0';
+					$this->settings_text( $delay_offset_field );
+					$unit_field['name'] = 'schedule_time_field_offset_unit';
+					$this->settings_select( $unit_field );
+					echo '&nbsp;';
+					$before_after_field = array(
+						'name' => 'schedule_time_field_before_after',
+						'label' => esc_html__( 'Schedule', 'gravityflow' ),
+						'default_value' => 'after',
+						'choices' => array(
+							array(
+								'label' => esc_html__( 'after', 'gravityflow' ),
+								'value' => 'after',
+							),
+							array(
+								'label' => esc_html__( 'before', 'gravityflow' ),
+								'value' => 'before',
+							),
+						),
+					);
+					$this->settings_select( $before_after_field );
+					echo '&nbsp; date &nbsp;';
+					$this->settings_select( $schedule_date_fields );
+					echo '&nbsp; at time &nbsp;';
+					$this->settings_select( $schedule_time_fields );
+					?>
+				</div>
 			</div>
 			<script>
 				(function($) {
@@ -1933,16 +1988,25 @@ PRIMARY KEY  (id)
 						$('.gravityflow-schedule-delay-container').show();
 						$('.gravityflow-schedule-date-container').hide();
 						$('.gravityflow-schedule-date-field-container').hide();
+						$('.gravityflow-schedule-time-field-container').hide();
 					});
 					$( '#schedule_type1' ).click(function(){
 						$('.gravityflow-schedule-delay-container').hide();
 						$('.gravityflow-schedule-date-container').show();
 						$('.gravityflow-schedule-date-field-container').hide();
+						$('.gravityflow-schedule-time-field-container').hide();
 					});
 					$( '#schedule_type2' ).click(function(){
 						$('.gravityflow-schedule-delay-container').hide();
 						$('.gravityflow-schedule-date-container').hide();
 						$('.gravityflow-schedule-date-field-container').show();
+						$('.gravityflow-schedule-time-field-container').hide();
+					});
+					$( '#schedule_type3' ).click(function(){
+						$('.gravityflow-schedule-delay-container').hide();
+						$('.gravityflow-schedule-date-container').hide();
+						$('.gravityflow-schedule-date-field-container').hide();
+						$('.gravityflow-schedule-time-field-container').show();
 					});
 				})(jQuery);
 			</script>
@@ -1985,6 +2049,28 @@ PRIMARY KEY  (id)
 						'value' => 'date',
 					),
 				),
+			);
+
+			$time_fields = GFFormsModel::get_fields_by_type( $form, 'time' );
+
+			$time_field_choices = array();
+
+			if ( ! empty( $time_fields ) ) {
+				$expiration_type['choices'][] = array(
+					'label' => esc_html__( 'time Field', 'gravityflow' ),
+					'value' => 'time_field',
+				);
+
+
+				foreach ( $time_fields  as $time_field ) {
+					$time_field_choices[] = array( 'value' => $time_field->id, 'label' => GFFormsModel::get_label( $time_field ) );
+				}
+			}
+
+			$expiration_time_fields = array(
+				'name' => 'expiration_time_field',
+				'label' => esc_html__( 'Expiration time Field', 'gravityflow' ),
+				'choices' => $time_field_choices,
 			);
 
 			$date_fields = GFFormsModel::get_fields_by_type( $form, 'date' );
@@ -2057,7 +2143,7 @@ PRIMARY KEY  (id)
 			$expiration_date_style = ( $expiration_type_setting == 'date' ) ? '' : 'style="display:none;"';
 			$expiration_delay_style = ( $expiration_type_setting == 'delay' ) ? '' : 'style="display:none;"';
 			$expiration_date_fields_style = ( $expiration_type_setting == 'date_field' ) ? '' : 'style="display:none;"';
-
+			$expiration_time_fields_style = ( $expiration_type_setting == 'time_field' ) ? '' : 'style="display:none;"';
 			?>
 			<div class="gravityflow-expiration-settings" <?php echo $expiration_style ?> >
 				<div class="gravityflow-expiration-type-container" class="gravityflow-sub-setting">
@@ -2111,6 +2197,36 @@ PRIMARY KEY  (id)
 					$this->settings_select( $expiration_date_fields );
 					?>
 				</div>
+				<div class="gravityflow-expiration-time-field-container" <?php echo $expiration_time_fields_style ?>>
+					<?php
+					esc_html_e( 'Expire this step', 'gravityflow' );
+					echo '&nbsp;';
+					$delay_offset_field['name'] = 'expiration_time_field_offset';
+					$delay_offset_field['default_value'] = '0';
+					$this->settings_text( $delay_offset_field );
+					$unit_field['name'] = 'expiration_time_field_offset_unit';
+					$this->settings_select( $unit_field );
+					echo '&nbsp;';
+					$before_after_field = array(
+						'name' => 'expiration_date_field_before_after',
+						'label' => esc_html__( 'Expiration', 'gravityflow' ),
+						'default_value' => 'after',
+						'choices' => array(
+							array(
+								'label' => esc_html__( 'after', 'gravityflow' ),
+								'value' => 'after',
+							),
+							array(
+								'label' => esc_html__( 'before', 'gravityflow' ),
+								'value' => 'before',
+							),
+						),
+					);
+					$this->settings_select( $before_after_field );
+
+					$this->settings_select( $expiration_time_fields );
+					?>
+				</div>				
 				<div class="gravityflow-sub-setting">
 					<?php
 					$status_choices = rgar( $field, 'status_choices' );
@@ -2150,16 +2266,25 @@ PRIMARY KEY  (id)
 						$('.gravityflow-expiration-date-container').hide();
 						$('.gravityflow-expiration-delay-container').show();
 						$('.gravityflow-expiration-date-field-container').hide();
+						$('.gravityflow-expiration-time-field-container').hide();
 					});
 					$( '#expiration_type1' ).click(function(){
 						$('.gravityflow-expiration-date-container').show();
 						$('.gravityflow-expiration-delay-container').hide();
 						$('.gravityflow-expiration-date-field-container').hide();
+						$('.gravityflow-expiration-time-field-container').hide();
 					});
 					$( '#expiration_type2' ).click(function(){
 						$('.gravityflow-expiration-delay-container').hide();
 						$('.gravityflow-expiration-date-container').hide();
 						$('.gravityflow-expiration-date-field-container').show();
+						$('.gravityflow-expiration-time-field-container').hide();
+					});
+					$( '#expiration_type3' ).click(function(){
+						$('.gravityflow-expiration-delay-container').hide();
+						$('.gravityflow-expiration-date-container').hide();
+						$('.gravityflow-expiration-date-field-container').hide();
+						$('.gravityflow-expiration-time-field-container').show();
 					});
 				})(jQuery);
 			</script>
@@ -3135,6 +3260,10 @@ PRIMARY KEY  (id)
 					$scheduled_date = $current_step->schedule_date;
 					break;
 				case 'date_field' :
+					$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+					$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
+					break;
+				case 'time_field' :
 					$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
 					$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
 					break;
