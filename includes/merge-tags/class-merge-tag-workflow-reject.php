@@ -59,7 +59,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Reject extends Gravity_Flow_Merge_Tag_Assi
 				return $text;
 			}
 
-			$reject_token = $this->get_token();
+			$reject_token = $this->get_token( 'reject' );
 
 			if ( is_array( $matches ) ) {
 				foreach ( $matches as $match ) {

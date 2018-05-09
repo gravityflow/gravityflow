@@ -59,7 +59,7 @@ class Gravity_Flow_Merge_Tag_Approve extends Gravity_Flow_Merge_Tag_Assignee_Bas
 				return $text;
 			}
 
-			$approve_token = $this->get_token();
+			$approve_token = $this->get_token( 'approve' );
 
 			if ( is_array( $matches ) ) {
 				foreach ( $matches as $match ) {
