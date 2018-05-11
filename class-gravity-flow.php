@@ -503,7 +503,7 @@ PRIMARY KEY  (id)
 				}
 			}
 
-			$users = is_admin() ? $this->get_users_as_choices() : array();
+			$users = $this->is_form_settings( 'gravityflow' ) ? $this->get_users_as_choices() : array();
 
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
