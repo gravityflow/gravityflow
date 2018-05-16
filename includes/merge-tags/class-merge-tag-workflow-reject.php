@@ -11,16 +11,12 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-if ( ! class_exists( 'Gravity_Flow_Merge_Tag_Workflow_Reject_Token' ) ) {
-	require_once( 'class-merge-tag-workflow-reject-token.php' );
-}
-
 /**
  * Class Gravity_Flow_Merge_Tag_Workflow_Reject
  *
  * @since 1.7.1-dev
  */
-class Gravity_Flow_Merge_Tag_Workflow_Reject extends Gravity_Flow_Merge_Tag_Workflow_Reject_Token {
+class Gravity_Flow_Merge_Tag_Workflow_Reject extends Gravity_Flow_Merge_Tag_Assignee_Base {
 
 	/**
 	 * The name of the merge tag.
@@ -63,7 +59,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Reject extends Gravity_Flow_Merge_Tag_Work
 				return $text;
 			}
 
-			$reject_token = $this->get_token();
+			$reject_token = $this->get_token( 'reject' );
 
 			if ( is_array( $matches ) ) {
 				foreach ( $matches as $match ) {

@@ -503,7 +503,7 @@ PRIMARY KEY  (id)
 				}
 			}
 
-			$users = is_admin() ? $this->get_users_as_choices() : array();
+			$users = $this->is_form_settings( 'gravityflow' ) ? $this->get_users_as_choices() : array();
 
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
@@ -561,6 +561,16 @@ PRIMARY KEY  (id)
 					),
 				),
 				array(
+					'handle'  => 'gravityflow_quicksearch',
+					'src'     => $this->get_base_url() . "/js/quicksearch{$min}.js",
+					'deps'    => array( 'jquery' ),
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=0' ),
+					),
+				),
+				array(
 					'handle'  => 'gf_routing_setting',
 					'src'     => $this->get_base_url() . "/js/routing-setting{$min}.js",
 					'deps'    => array( 'jquery' ),
@@ -588,6 +598,7 @@ PRIMARY KEY  (id)
 						'feedId'         => absint( rgget( 'fid' ) ),
 						'formId'         => absint( rgget( 'id' ) ),
 						'mergeTagLabels' => $this->get_form_settings_js_merge_tag_labels(),
+						'assigneeSearchPlaceholder' => esc_attr__( 'Type to search', 'gravityflow' ),
 					),
 				),
 				array(
@@ -791,7 +802,7 @@ PRIMARY KEY  (id)
 			$chosen_fields = array();
 			foreach ( $form['fields'] as $field ) {
 				$input_type = GFFormsModel::get_input_type( $field );
-				if ( $field->enableEnhancedUI && in_array( $input_type, array( 'workflow_assignee_select', 'workflow_user', 'workflow_role' ) ) ) {
+				if ( $field->enableEnhancedUI && in_array( $input_type, array( 'workflow_assignee_select', 'workflow_user', 'workflow_role', 'workflow_multi_user' ) ) ) {
 					$chosen_fields[] = "#input_{$form['id']}_{$field->id}";
 				}
 			}
@@ -813,7 +824,7 @@ PRIMARY KEY  (id)
 			}
 
 			foreach ( $form['fields'] as $field ) {
-				if ( in_array( RGFormsModel::get_input_type( $field ), array( 'workflow_assignee_select', 'workflow_user', 'workflow_role' ) ) && $field->enableEnhancedUI ) {
+				if ( in_array( RGFormsModel::get_input_type( $field ), array( 'workflow_assignee_select', 'workflow_user', 'workflow_role', 'workflow_multi_user' ) ) && $field->enableEnhancedUI ) {
 					return true;
 				}
 			}
@@ -1099,6 +1110,8 @@ PRIMARY KEY  (id)
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_field|' . $field->id );
 					} elseif ( $type == 'workflow_user' ) {
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_user_field|' . $field->id );
+					} elseif ( $type == 'workflow_multi_user' ) {
+						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_multi_user_field|' . $field->id );
 					} elseif ( $type == 'workflow_role' ) {
 						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_role_field|' . $field->id );
 					}
@@ -1174,7 +1187,7 @@ PRIMARY KEY  (id)
 			$step_id = absint( rgget( 'fid' ) );
 
 			$step_title = $step_id === 0 ? $step_title = esc_html__( 'Step', 'gravityflow' ) : esc_html__( 'Step ID #', 'gravityflow' ) . $step_id;
-			
+
 			$settings[] = array(
 				'title'  => $step_title,
 				'fields' => array(
@@ -2748,10 +2761,10 @@ PRIMARY KEY  (id)
 				'delete'    => '<a title="' . esc_attr__( 'Delete this feed', 'gravityforms' ) . '" class="submitdelete" onclick="javascript: if(confirm(\'' . esc_js( __( 'WARNING: You are about to delete this item.', 'gravityforms' ) ) . esc_js( __( "'Cancel' to stop, 'OK' to delete.", 'gravityforms' ) ) . '\')){ gaddon.deleteFeed(\'' . esc_js( $feed_id ) . '\'); }" onkeypress="javascript: if(confirm(\'' . esc_js( __( 'WARNING: You are about to delete this item.', 'gravityforms' ) ) . esc_js( __( "'Cancel' to stop, 'OK' to delete.", 'gravityforms' ) ) . '\')){ gaddon.deleteFeed(\'' . esc_js( $feed_id ) . '\'); }" style="cursor:pointer;">' . esc_html__( 'Delete', 'gravityforms' ) . '</a>',
 				'step_id'   => 'Step ID# ' . $feed_id,
 			);
-	
+
 			return $links;
 		}
-	
+
 
 		/**
 		 * Returns the message to be displayed in the feeds list when no steps have been configured for the form.
@@ -4740,7 +4753,7 @@ PRIMARY KEY  (id)
 		 */
 		public function filter_after_update_entry( $form, $entry_id ) {
 			$entry = GFAPI::get_entry( $entry_id );
-			if ( isset( $entry['workflow_final_status'] ) && $entry['workflow_final_status'] == 'pending' ) {
+			if ( ! is_wp_error( $entry ) && isset( $entry['workflow_final_status'] ) && $entry['workflow_final_status'] == 'pending' ) {
 				$this->process_workflow( $form, $entry_id );
 			}
 		}
@@ -4754,7 +4767,7 @@ PRIMARY KEY  (id)
 		public function process_workflow( $form, $entry_id ) {
 
 			$entry = GFAPI::get_entry( $entry_id );
-			if ( isset( $entry['workflow_step'] ) ) {
+			if ( ! is_wp_error( $entry ) && isset( $entry['workflow_step'] ) ) {
 
 				$this->log_debug( __METHOD__ . '() - processing. entry id ' . $entry_id );
 
@@ -6700,14 +6713,18 @@ AND m.meta_value='queued'";
 				'label'    => '',
 				'type'     => 'select',
 				'default_value' => 'all_fields',
-				'onchange' => 'jQuery(this).siblings(".gravityflow_display_fields_selected_container").toggle(this.value=="selected_fields");',
+				'onchange' => 'jQuery(this).siblings(".gravityflow_display_fields_selected_container").toggle(this.value != "all_fields");',
 				'choices' => array(
 					array(
-						'label' => __( 'All fields', 'gravityflow' ),
+						'label' => __( 'Display all fields', 'gravityflow' ),
 						'value' => 'all_fields',
 					),
 					array(
-						'label' => __( 'Selected fields', 'gravityflow' ),
+						'label' => __( 'Display all fields except selected', 'gravityflow' ),
+						'value' => 'all_fields_except',
+					),
+					array(
+						'label' => __( 'Hide all fields except selected', 'gravityflow' ),
 						'value' => 'selected_fields',
 					),
 				),
@@ -6753,7 +6770,7 @@ AND m.meta_value='queued'";
 				'choices' => $fields_as_choices,
 			);
 			$this->settings_select( $mode_field );
-			$style = $mode_value == 'selected_fields' ? '' :  'style="display:none;"';
+			$style = $mode_value == 'all_fields' ? 'style="display:none;"' : '';
 			echo '<div class="gravityflow_display_fields_selected_container" ' . $style . '>';
 			$this->settings_select( $multiselect_field );
 			echo '</div>';

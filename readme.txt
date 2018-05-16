@@ -2,7 +2,7 @@
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
 Requires at least: 4.2
-Tested up to: 4.9.4
+Tested up to: 4.9.5
 License: GPL-3.0+
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -54,6 +54,31 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 2.2.1 =
+- Fixed an issue preventing the one-click approve and reject links from working.
+- Fixed a fatal error which can occur if the entry is deleted before workflow processing starts.
+- Fixed a fatal error which can occur when entry detail permissions are evaluated with the status page shortcode set to allow anonymous access.
+- Fixed an issue with the Multi-User field on the User Input step where no fields are editable for the assignee.
+- Fixed a performance issue in the WP admin which can affect sites with a lot of users.
+
+= 2.2 =
+- Added the Multi-User field.
+- Added the filter gravityflow_step_status_evaluation_approval to allow the status evaluation of approval step to check custom logic (X of Y approvals).
+- Added the "Display all fields except selected" choice to the Display Fields setting.
+- Added searching to the lists of assignees.
+- Updated the Sprout Invoices step to support the new Sprout Invoices + Gravity Forms add-on.
+- Updated the existing choice labels in the Display Fields setting to "Display all fields" and "Hide all fields except selected".
+- Fixed editable Post Image field not being populated with the current entry value on the User Input step.
+- Fixed editable Post Image field value retaining the previous image URL on entry update if the step failed validation.
+- Fixed status export .csv to include duration as a separate column so it is consistent with status export table info.
+- Fixed a PHP warning for the Discussion field.
+- Fixed an issue with the approval step for assignees added via custom code.
+- Fixed some merge tags such as {created_by} being replaced in assignee notifications before the entry was available.
+
+= 2.1.1 =
+- Fixed editable Post Category field not being populated with the current entry value on the User Input step.
+- Fixed an issue which prevents the rendering of certain merge tags e.g. {workflow_form_submission_link} in extensions and custom code.
 
 = 2.1 =
 - Added support for the Gravity Perks Nested Forms add-on.

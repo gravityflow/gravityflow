@@ -4,7 +4,49 @@
 
 	$(document).ready(function () {
 
-		$('#assignees, #editable_fields, #workflow_notification_users, .gravityflow-multiselect-ui').multiSelect();
+		$('#editable_fields, .gravityflow-multiselect-ui').multiSelect();
+
+		var multiSelectWithSearch = {
+			selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='"+gravityflow_form_settings_js_strings.assigneeSearchPlaceholder+"'>",
+			selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='"+gravityflow_form_settings_js_strings.assigneeSearchPlaceholder+"'>",
+			afterInit: function(ms){
+				var that = this,
+					$selectableSearch = that.$selectableUl.prev(),
+					$selectionSearch = that.$selectionUl.prev(),
+					selectableSearchString = '#'+ms.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+					selectionSearchString = '#'+ms.attr('id')+' .ms-elem-selection.ms-selected';
+
+				if ( $('#'+ms.attr('id')+' .ms-elem-selectable').length > 10 ) {
+					$('.ms-container .search-input').show();
+				}
+
+				that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+					.on('keydown', function(e){
+						if (e.which === 40){
+							that.$selectableUl.focus();
+							return false;
+						}
+					});
+
+				that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+					.on('keydown', function(e){
+						if (e.which == 40){
+							that.$selectionUl.focus();
+							return false;
+						}
+					});
+			},
+			afterSelect: function(){
+				this.qs1.cache();
+				this.qs2.cache();
+			},
+			afterDeselect: function(){
+				this.qs1.cache();
+				this.qs2.cache();
+			}
+		};
+
+		$('#assignees').multiSelect(multiSelectWithSearch);
 
 		var gravityFlowIsDirty = false, gravityFlowSubmitted = false;
 
@@ -194,7 +236,7 @@
 		// Notification Tabs
 
 		GravityFlowFeedSettings.initNotificationTab = function (type) {
-			$('#' + type + '_notification_users').multiSelect();
+			$('#' + type + '_notification_users').multiSelect(multiSelectWithSearch);
 
 			var $enabledSetting = $('#' + type + '_notification_enabled');
 
