@@ -46,7 +46,7 @@
 			}
 		};
 
-		$('#assignees').multiSelect(multiSelectWithSearch);
+		$('#assignees, #workflow_notification_users').multiSelect(multiSelectWithSearch);
 
 		var gravityFlowIsDirty = false, gravityFlowSubmitted = false;
 
