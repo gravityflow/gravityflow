@@ -306,7 +306,20 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 			$input_id = $this->id;
 		}
 
-		return $this->get_display_name( rgar( $entry, $input_id ) );
+		$assignee = rgar( $entry, $input_id );
+
+		list( $type, $value ) = explode( '|', $assignee, 2 );
+		switch ( $type ) {
+			case 'role' :
+				$value = translate_user_role( $value );
+				break;
+			case 'user_id' :
+				if( $use_text == true || $is_csv == true ) {
+					$value = $this->get_display_name( $value );
+				}
+		}
+		
+		return $value;
 	}
 
 	/**
