@@ -1,1 +1,3 @@
+- Added the filter gravityflow_form_ids_inbox which allows adjustment of form id(s) when searching for entries for the inbox table.
+- Added the filter gravityflow_form_ids_status which allows adjustment of form id(s) when searching for entries for the status table.
 - Fixed a notice which can get displayed if GravityView is installed.

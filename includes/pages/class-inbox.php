@@ -168,6 +168,18 @@ class Gravity_Flow_Inbox {
 
 			$form_ids = $args['form_id'] ? $args['form_id'] : gravity_flow()->get_workflow_form_ids();
 
+			/**
+			 * Allows form id(s) to be adjusted to define which forms' entries are displayed in inbox table.
+			 *
+			 * @since 2.2.2-dev
+			 * 
+			 * Return an array of form ids for use with GFAPI.
+			 *
+			 * @param array   $form_ids        The form ids
+			 * @param array   $search_criteria The search criteria
+			 */
+			$form_ids = apply_filters( 'gravityflow_form_ids_inbox', $form_ids, $search_criteria);
+
 			gravity_flow()->log_debug( __METHOD__ . '(): $form_ids => ' . print_r( $form_ids, 1 ) );
 			gravity_flow()->log_debug( __METHOD__ . '(): $search_criteria => ' . print_r( $search_criteria, 1 ) );
 

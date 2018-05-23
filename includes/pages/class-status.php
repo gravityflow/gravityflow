@@ -1637,6 +1637,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$sorting = array( 'key' => $orderby, 'direction' => $order );
 
+		/**
+		 * Allows form id(s) to be adjusted to define which forms' entries are displayed in status table.
+		 *
+		 * @since 2.2.2-dev
+		 * 
+		 * Return an array of form ids for use with GFAPI.
+		 *
+		 * @param array   $form_ids       The form ids
+		 * @param array   $search_criteria The search criteria
+		 */
+		$form_ids = apply_filters( 'gravityflow_form_ids_status', $form_ids, $search_criteria );
+
 		gravity_flow()->log_debug( __METHOD__ . '(): search criteria: ' . print_r( $search_criteria, true ) );
 
 		$entries = GFAPI::get_entries( $form_ids, $search_criteria, $sorting, $paging, $total_count );
