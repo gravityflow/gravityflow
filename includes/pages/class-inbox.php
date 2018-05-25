@@ -171,10 +171,10 @@ class Gravity_Flow_Inbox {
 			/**
 			 * Allows form id(s) to be adjusted to define which forms' entries are displayed in inbox table.
 			 *
+			 * Return an array of form ids for use with GFAPI.
+			 * 
 			 * @since 2.2.2-dev
 			 * 
-			 * Return an array of form ids for use with GFAPI.
-			 *
 			 * @param array   $form_ids        The form ids
 			 * @param array   $search_criteria The search criteria
 			 */
