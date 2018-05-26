@@ -814,7 +814,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( $this->expiration_type == 'date_field' ) {
 
 			$this->log_debug( __METHOD__ . '() expiration_date_field: ' . $this->expiration_date_field );
-			$expiration_date = $entry[ (string) $this->schedule_date_field ];
+			$expiration_date = $entry[ (string) $this->expiration_date_field ];
 			$this->log_debug( __METHOD__ . '() expiration_date: ' . $expiration_date );
 
 			$expiration_datetime = strtotime( $expiration_date );
