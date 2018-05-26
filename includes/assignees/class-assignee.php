@@ -412,32 +412,33 @@ class Gravity_Flow_Assignee {
 	 */
 	public function is_current_user() {
 
-		$assignee_key = $this->step->get_current_assignee_key();
-		$assignee     = $this->step->get_assignee( $assignee_key );
+		$assignee_key  = $this->step->get_current_assignee_key();
+		$step_assignee = $this->step->get_assignee( $assignee_key );
 
-		if ( ! $assignee || in_array( $this->get_type(), array( 'user_id', 'email' ) ) && $assignee->get_id() != $this->get_id() ) {
+		$type = $this->get_type();
+
+		if ( ! $step_assignee ) {
 			return false;
 		}
 
-		$status = $assignee->get_status();
+		$status = $this->get_status();
 
-		if ( $status == 'pending' ) {
+		if ( $status != 'pending' ) {
+			return false;
+		}
+
+		if ( in_array( $type, array( 'user_id', 'email' ) ) && $step_assignee->get_id() == $this->get_id() ) {
 			return true;
 		}
 
-		// Check roles
-		$current_role_status = false;
-
-		foreach ( gravity_flow()->get_user_roles() as $role ) {
-			$current_role_status = $this->step->get_role_status( $role );
-			if ( $current_role_status == 'pending' ) {
-				break;
+		if ( $type == 'role' ) {
+			$user = wp_get_current_user();
+			$role = $this->get_id();
+			if ( in_array( $role, (array) $user->roles ) ) {
+				return true;
 			}
 		}
 
-		if ( $current_role_status == 'pending' ) {
-			return true;
-		}
 		return false;
 	}
 
