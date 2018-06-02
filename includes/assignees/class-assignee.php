@@ -412,12 +412,12 @@ class Gravity_Flow_Assignee {
 	 */
 	public function is_current_user() {
 
-		$assignee_key  = $this->step->get_current_assignee_key();
-		$step_assignee = $this->step->get_assignee( $assignee_key );
+		$current_user_assignee_key = $this->step->get_current_assignee_key();
+		$current_user_assignee     = $this->step->get_assignee( $current_user_assignee_key );
 
 		$type = $this->get_type();
 
-		if ( ! $step_assignee ) {
+		if ( ! $current_user_assignee ) {
 			return false;
 		}
 
@@ -427,7 +427,7 @@ class Gravity_Flow_Assignee {
 			return false;
 		}
 
-		if ( in_array( $type, array( 'user_id', 'email' ) ) && $step_assignee->get_id() == $this->get_id() ) {
+		if ( in_array( $type, array( 'user_id', 'email', 'role' ) ) && $current_user_assignee->get_id() == $this->get_id() ) {
 			return true;
 		}
 
