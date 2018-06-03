@@ -63,6 +63,7 @@ table.entry-detail-view td{
 }
 .rtl #poststuff #post-body.columns-2 {
     margin-left: 280px;
+    margin-right: 0;
 }
 
 #poststuff .postbox-container {
@@ -158,6 +159,10 @@ table.entry-detail-view td{
     margin-top:5px;
     margin-bottom:5px;
     clear:both;
+}
+
+.rtl .gravityflow-note-body-wrap {
+    margin-left: 0;
 }
 
 @media screen and (max-width: 880px) {
