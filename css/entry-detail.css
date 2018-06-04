@@ -322,6 +322,7 @@ table.entry-detail-view td.detail-view{
 
 .rtl .gravityflow-field-value ul.bulleted {
     margin-right: 12px;
+    margin-left: 0;
 }
 
 .gravityflow-field-value ul.bulleted li {
@@ -409,7 +410,6 @@ table#gravityflow-inbox tbody tr{
 
 .rtl table#gravityflow-inbox tbody tr{
     border-left-width: 0;
-    border-left-style: none;
     border-right-width: 3px;
     border-right-style: solid;
 }
