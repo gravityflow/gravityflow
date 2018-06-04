@@ -63,6 +63,7 @@ table.entry-detail-view td{
 }
 .rtl #poststuff #post-body.columns-2 {
     margin-left: 280px;
+    margin-right: 0;
 }
 
 #poststuff .postbox-container {

@@ -77,7 +77,8 @@
 
 .rtl .gravityflow-note-avatar{
     float: right;
-    padding-left:10px;
+    padding-left: 10px;
+    padding-right: 0;
 }
 
 
@@ -90,6 +91,7 @@
 
 .rtl .gravityflow-note-body-wrap{
     margin-right: 100px;
+    margin-left: 0;
 }
 
 .gravityflow-note-body{
@@ -413,11 +415,11 @@ table#gravityflow-inbox tbody tr{
 }
 
 @media print {
-    .gravityflow-dicussion-item-hidden { 
+    .gravityflow-dicussion-item-hidden {
         display:block !important;
     }
 
-    .gravityflow-dicussion-item-toggle-display { 
+    .gravityflow-dicussion-item-toggle-display {
         display: none;
     }
 }
