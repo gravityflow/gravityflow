@@ -18,7 +18,7 @@ function sh_gform_after_email( $is_success, $to, $subject, $message, $headers, $
 		'post_parent'  => 0,
 		'post_author'  => 1,
 		'post_status'  => 'publish',
-		'post_title'   => $subject . ' - ' . $to,
+		'post_title'   => $subject,
 	);
 	wp_insert_post( $page );
 }
