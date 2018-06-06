@@ -422,4 +422,9 @@ table#gravityflow-inbox tbody tr{
     .gravityflow-dicussion-item-toggle-display {
         display: none;
     }
+
+    /* This is set in Gravity Forms print.css, we need to alter here for the print version */
+    .rtl table.entry-detail-view th, .rtl table.entry-detail-notes th {
+        text-align: right;
+    }
 }
