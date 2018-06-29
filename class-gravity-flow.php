@@ -5074,6 +5074,8 @@ PRIMARY KEY  (id)
 				'check_permissions' => $check_permissions,
 				'timeline'          => $a['timeline'],
 				'sidebar'           => $a['sidebar'],
+				'workflow_info'     => $a['workflow_info'],
+				'step_status'       => $a['step_status'],
 			);
 
 			$this->inbox_page( $args );
