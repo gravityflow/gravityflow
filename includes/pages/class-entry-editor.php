@@ -391,46 +391,74 @@ class Gravity_Flow_Entry_Editor {
 			return $html;
 		}
 
+		if ( $field->get_input_type() == 'fileupload' ) {
+			$field->_is_entry_detail = true;
+		}
+
+		$html = $field->get_field_input( $this->form, $this->get_editable_field_value( $field ), $this->entry );
+		$html .= $this->maybe_get_coupon_script( $field );
+
+		$this->maybe_output_chained_select_scripts( $field );
+
+		return $html;
+	}
+
+	/**
+	 * Gets the editable field value.
+	 *
+	 * @since 2.2.1-dev
+	 *
+	 * @param GF_Field $field The current field.
+	 *
+	 * @return array|string
+	 */
+	public function get_editable_field_value( $field ) {
 		$posted_form_id = rgpost( 'gravityflow_submit' );
 		if ( $posted_form_id == $this->form['id'] && rgpost( 'step_id' ) == $this->step->get_id() ) {
 			// Updated or failed validation.
 			$value = GFFormsModel::get_field_value( $field );
 		} else {
 			$value = GFFormsModel::get_lead_field_value( $this->entry, $field );
-			if ( $field->get_input_type() == 'email' && $field->emailConfirmEnabled ) {
-				$_POST[ 'input_' . $field->id . '_2' ] = $value;
-			}
 
 			if ( $field->get_input_type() == 'multiselect' && $field->storageType === 'json' ) {
 				$value = json_decode( $value, true );
 			}
+
+			// Process merge tags in default values.
+			if ( is_array( $field->get_entry_inputs() ) ) {
+				foreach ( $value as $key => $item ) {
+					$input = GFFormsModel::get_input( $field, $key );
+					if ( $item === rgar( $input, 'defaultValue' ) ) {
+						$value[ $key ] = GFCommon::replace_variables_prepopulate( $item );
+					}
+				}
+			} elseif ( $field->get_input_type() == 'email' && $field->emailConfirmEnabled ) {
+				$input = GFFormsModel::get_input( $field, $field->id );
+				if ( $value === rgar( $input, 'defaultValue' ) ) {
+					$value = GFCommon::replace_variables_prepopulate( $value );
+				}
+				$value = array( $value, $value );
+			} else {
+				$value = $field->get_value_default_if_empty( $value );
+			}
 		}
 
-		if ( $field->get_input_type() == 'fileupload' ) {
-			$field->_is_entry_detail = true;
-		}
-
+		/**
+		 * Allow the field value to be overridden before the inputs are populated.
+		 *
+		 * @param array|string      $value The field value.
+		 * @param GF_Field          $field The current field.
+		 * @param array             $form  The current form.
+		 * @param array             $entry The current entry.
+		 * @param Gravity_Flow_Step $step  The current step.
+		 */
 		$value = apply_filters( 'gravityflow_field_value_entry_editor', $value, $field, $this->form, $this->entry, $this->step );
 
+		// Ensure values are in the correct format.
 		$value = $this->get_post_image_value( $value, $field );
 		$value = $this->get_post_category_value( $value, $field );
 
-		$html = $field->get_field_input( $this->form, $value, $this->entry );
-		$html .= $this->maybe_get_coupon_script( $field );
-
-		if ( $field->type === 'chainedselect' && function_exists( 'gf_chained_selects' ) ) {
-			if ( ! wp_script_is( 'gform_chained_selects' ) ) {
-				wp_enqueue_script( 'gform_chained_selects' );
-				gf_chained_selects()->localize_scripts();
-			}
-
-			if ( ! $this->_is_dynamic_conditional_logic_enabled && wp_script_is( 'gform_conditional_logic' ) ) {
-				$script = "if ( typeof window.gf_form_conditional_logic === 'undefined' ) { window.gf_form_conditional_logic = []; }";
-				GFFormDisplay::add_init_script( $field->formId, 'conditional_logic', GFFormDisplay::ON_PAGE_RENDER, $script );
-			}
-		}
-
-		return $html;
+		return $value;
 	}
 
 	/**
@@ -839,6 +867,27 @@ class Gravity_Flow_Entry_Editor {
 				GFFormDisplay::$init_scripts[ $form['id'] ] = $init_scripts;
 			}
 
+		}
+	}
+
+	/**
+	 * Outputs the chained select field scripts.
+	 *
+	 * @since 2.2.1-dev
+	 *
+	 * @param GF_Field $field The current field.
+	 */
+	public function maybe_output_chained_select_scripts( $field ) {
+		if ( $field->type === 'chainedselect' && function_exists( 'gf_chained_selects' ) ) {
+			if ( ! wp_script_is( 'gform_chained_selects' ) ) {
+				wp_enqueue_script( 'gform_chained_selects' );
+				gf_chained_selects()->localize_scripts();
+			}
+
+			if ( ! $this->_is_dynamic_conditional_logic_enabled && wp_script_is( 'gform_conditional_logic' ) ) {
+				$script = "if ( typeof window.gf_form_conditional_logic === 'undefined' ) { window.gf_form_conditional_logic = []; }";
+				GFFormDisplay::add_init_script( $field->formId, 'conditional_logic', GFFormDisplay::ON_PAGE_RENDER, $script );
+			}
 		}
 	}
 }
