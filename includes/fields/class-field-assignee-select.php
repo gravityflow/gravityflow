@@ -317,6 +317,9 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 				if( $use_text == true || $is_csv == true ) {
 					$value = $this->get_display_name( $value );
 				}
+				if( $use_text == false && $is_csv == false ) {
+					$value = $assignee;
+				}
 		}
 		
 		return $value;

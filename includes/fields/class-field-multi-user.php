@@ -251,6 +251,10 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 			return GFCommon::implode_non_blank( ', ', $display_names );
 		}
 
+		if( $use_text == false && $is_csv == false ) {
+			return rgar( $entry, $input_id );
+		}
+
 		return GFCommon::implode_non_blank( ', ', $value );
 	}
 
