@@ -367,7 +367,7 @@ class Gravity_Flow_Assignee {
 
 		if ( $assignee_type == 'email' ) {
 			$email                = $assignee_id;
-			$notification['id']   = 'workflow_step_' . $this->get_id() . '_email_' . $email;
+			$notification['id']   = 'workflow_step_' . $this->step->get_id() . '_email_' . $email;
 			$notification['name'] = $notification['id'];
 			$notification['to']   = $email;
 			$message              = $this->replace_variables( $message );
