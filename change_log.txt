@@ -1,2 +1,3 @@
 - Added the "Workflow: cancelled" notification event for sending form notifications when the workflow is cancelled.
 - Fixed an issue which prevents tokens from working correctly with role assignees.
+- Fixed an issue which prevents form connector mapping assignee field and export display of user-based field types (assignee, user, multiuser)
