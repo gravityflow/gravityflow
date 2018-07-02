@@ -1,2 +1,3 @@
 - Added the "Workflow: cancelled" notification event for sending form notifications when the workflow is cancelled.
 - Fixed an issue which prevents tokens from working correctly with role assignees.
+- Fixed the step ID in the notification ID.
