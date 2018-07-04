@@ -5512,7 +5512,7 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * Get an array of form IDs which have workflows.
+		 * Returns an array of active form IDs which have workflows.
 		 *
 		 * @return array
 		 */
@@ -5520,7 +5520,7 @@ PRIMARY KEY  (id)
 			if ( isset( $this->form_ids ) ) {
 				return $this->form_ids;
 			}
-			$forms = GFFormsModel::get_forms();
+			$forms = GFFormsModel::get_forms( true );
 			$form_ids = array();
 			foreach ( $forms as $form ) {
 				$form_id = absint( $form->id );
@@ -5590,8 +5590,20 @@ AND m.meta_value='queued'";
 
 			foreach ( $results as $result ) {
 				$form = GFAPI::get_form( $result->form_id );
+
+				if ( ! $form ) {
+					continue;
+				}
+
+				if ( ! $form['is_active'] ) {
+					continue;
+				}
+
 				$entry = GFAPI::get_entry( $result->id );
 				$step = $this->get_current_step( $form, $entry );
+				if ( $step && ! $step->is_active() ) {
+					continue;
+				}
 				if ( $step && $step->is_queued() ) {
 					$complete = $step->start();
 					if ( $complete ) {
@@ -5621,10 +5633,19 @@ AND m.meta_value='queued'";
 
 			foreach ( $form_ids as $form_id ) {
 				$form = GFAPI::get_form( $form_id );
+
+				if ( ! $form['is_active'] ) {
+					continue;
+				}
+
 				$steps = $this->get_steps( $form_id );
 				foreach ( $steps as $step ) {
 					if ( ! $step || ! $step instanceof Gravity_Flow_Step ) {
 						$this->log_debug( __METHOD__ . '(): step not a step!  ' . print_r( $step ) . ' - form ID: ' . $form_id );
+						continue;
+					}
+
+					if ( ! $step->is_active() ) {
 						continue;
 					}
 
