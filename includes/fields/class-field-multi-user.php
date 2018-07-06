@@ -246,12 +246,13 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 
 		$value = json_decode( rgar( $entry, $input_id ), true );
 
-		if( $use_text == true || $is_csv == true ) {
+		if ( $use_text == true || $is_csv == true ) {
 			$display_names = $this->get_display_names( $value );
+
 			return GFCommon::implode_non_blank( ', ', $display_names );
 		}
 
-		if( $use_text == false && $is_csv == false ) {
+		if ( $use_text == false && $is_csv == false ) {
 			return rgar( $entry, $input_id );
 		}
 

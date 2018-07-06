@@ -310,17 +310,17 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 		list( $type, $value ) = explode( '|', $assignee, 2 );
 		switch ( $type ) {
-			case 'role' :
+			case 'role':
 				$value = translate_user_role( $value );
 				break;
-			case 'user_id' :
-				if( $use_text == false && $is_csv == false ) {
+			case 'user_id':
+				if ( $use_text == false && $is_csv == false ) {
 					$value = $assignee;
 				} else {
 					$value = $this->get_display_name( $assignee );
 				}
 		}
-		
+
 		return $value;
 	}
 
