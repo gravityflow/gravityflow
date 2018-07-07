@@ -282,7 +282,6 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 
 					if ( $format === 'html' ) {
 						$return .= sprintf( "<a href='javascript:void(0);' title='%s' data-title='%s' onclick='GravityFlowEntryDetail.displayDiscussionItemToggle(%d, %d, %d);'  class='gravityflow-dicussion-item-toggle-display'>%s</a>", $view_more_label, $view_less_label, $this['formId'], $this['id'], $recent_display_limit, __( 'View More', 'gravityflow' ) );
-						$return .= $this->inline_scripts();
 					}
 				}
 			}
@@ -332,28 +331,6 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 		$limit     = rgar( $modifiers, 'limit', 0 );
 
 		return absint( $limit );
-	}
-
-	public function inline_scripts() {
-
-		$scripts = '<script type="text/javascript">
-			if (typeof GravityFlowEntryDetail == "undefined") {
-				(function (GravityFlowEntryDetail, $) {
-					GravityFlowEntryDetail.displayDiscussionItemToggle = function (formId, fieldId, displayLimit) {
-						console.log("Inline script version");
-						$toggle = jQuery(":focus").parent();
-						console.dir( $toggle );
-						$toggle.find( ".gravityflow-dicussion-item-hidden" ).slideToggle( "fast" );
-						var $viewMore = $toggle.children( ".gravityflow-dicussion-item-toggle-display" );
-						var oldText = $viewMore.attr( "title" );
-						var newText = $viewMore.data( "title" );
-						$viewMore.attr( "title", newText ).text( newText );
-						$viewMore.data( "title", oldText );
-					}
-				}(window.GravityFlowEntryDetail = window.GravityFlowEntryDetail || {}, jQuery));
-			}
-		</script>';
-		return $scripts;
 	}
 
 	/**
