@@ -1,3 +1,5 @@
 - Added the "Workflow: cancelled" notification event for sending form notifications when the workflow is cancelled.
 - Fixed an issue which prevents tokens from working correctly with role assignees.
 - Fixed an issue which causes discussion field show / hide toggle to display on non-Gravity Flow pages.
+- Fixed the step ID in the notification ID.
+- Fixed an issue where reminders are sent out when forms or steps are inactive.
