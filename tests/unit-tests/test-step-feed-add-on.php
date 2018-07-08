@@ -33,7 +33,7 @@ class Tests_Gravity_Flow_Step_Feed_Add_On extends GF_UnitTestCase {
 	public function test_steps_get_instance() {
 
 		$step = Gravity_Flow_Steps::get( 'test_feed' );
-		$this->assertInstanceOf( Gravity_Flow_Step_Feed_Test_Add_On::class, $step );
+		$this->assertInstanceOf( 'Gravity_Flow_Step_Feed_Test_Add_On', $step );
 
 	}
 
@@ -66,7 +66,7 @@ class Tests_Gravity_Flow_Step_Feed_Add_On extends GF_UnitTestCase {
 		$this->_include_test_add_on();
 		$step   = $this->_get_step();
 		$add_on = $step->get_add_on_instance();
-		$this->assertInstanceOf( Test_Feed_Addon::class, $add_on );
+		$this->assertInstanceOf( 'Test_Feed_Addon', $add_on );
 
 	}
 
