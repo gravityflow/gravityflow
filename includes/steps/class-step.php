@@ -724,19 +724,21 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$schedule_timestamp = $entry_timestamp;
 
-		switch ( $this->schedule_delay_unit ) {
-			case 'minutes' :
-				$schedule_timestamp += ( MINUTE_IN_SECONDS * $this->schedule_delay_offset );
-				break;
-			case 'hours' :
-				$schedule_timestamp += ( HOUR_IN_SECONDS * $this->schedule_delay_offset );
-				break;
-			case 'days' :
-				$schedule_timestamp += ( DAY_IN_SECONDS * $this->schedule_delay_offset );
-				break;
-			case 'weeks' :
-				$schedule_timestamp += ( WEEK_IN_SECONDS * $this->schedule_delay_offset );
-				break;
+		if ( $this->schedule_delay_offset ) {
+			switch ( $this->schedule_delay_unit ) {
+				case 'minutes' :
+					$schedule_timestamp += ( MINUTE_IN_SECONDS * $this->schedule_delay_offset );
+					break;
+				case 'hours' :
+					$schedule_timestamp += ( HOUR_IN_SECONDS * $this->schedule_delay_offset );
+					break;
+				case 'days' :
+					$schedule_timestamp += ( DAY_IN_SECONDS * $this->schedule_delay_offset );
+					break;
+				case 'weeks' :
+					$schedule_timestamp += ( WEEK_IN_SECONDS * $this->schedule_delay_offset );
+					break;
+			}
 		}
 
 		/**
