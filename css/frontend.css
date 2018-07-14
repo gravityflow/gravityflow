@@ -215,6 +215,7 @@ table#gravityflow-inbox td a {
     padding:10px;
     height:100%;
     border-bottom:none;
+    box-shadow: none;
 }
 
 .gravityflow-actions-locked{
@@ -465,6 +466,11 @@ input.small-text{
 
 /**** STATUS PAGE ****/
 
+#gravityflow-status-filter label,
+#gravityflow-status-filter input{
+    display: inline-block;
+}
+
 #gravityflow-status-filter .subsubsub li a,
 .pagination-links a{
     border-bottom: 0;
@@ -698,6 +704,7 @@ table.wp-list-table.entries td .gravityflow-empty {
     padding:10px;
     height:100%;
     border-bottom:none;
+    box-shadow: none;
 }
 
 table.wp-list-table.entries th,
