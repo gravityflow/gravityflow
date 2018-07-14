@@ -61,7 +61,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Fixed a notice which can get displayed if GravityView is installed.
 - Fixed a compatibility issue with the Nested Forms Perk.
 - Fixed an issue with the assignee policy for multiple role assignees.
-- Fixed an issue where date field expiration may use the wrong field to caluclate the expiration date.
+- Fixed an issue where date field expiration may use the wrong field to calculate the expiration date.
 
 
 = 2.2.1 =

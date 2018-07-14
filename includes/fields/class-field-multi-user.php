@@ -244,10 +244,19 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 			$input_id = $this->id;
 		}
 
-		$value         = json_decode( rgar( $entry, $input_id ), true );
-		$display_names = $this->get_display_names( $value );
+		$value = json_decode( rgar( $entry, $input_id ), true );
 
-		return GFCommon::implode_non_blank( ', ', $display_names );
+		if ( $use_text == true || $is_csv == true ) {
+			$display_names = $this->get_display_names( $value );
+
+			return GFCommon::implode_non_blank( ', ', $display_names );
+		}
+
+		if ( $use_text == false && $is_csv == false ) {
+			return rgar( $entry, $input_id );
+		}
+
+		return GFCommon::implode_non_blank( ', ', $value );
 	}
 
 	/**

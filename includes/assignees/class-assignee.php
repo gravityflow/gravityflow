@@ -367,7 +367,7 @@ class Gravity_Flow_Assignee {
 
 		if ( $assignee_type == 'email' ) {
 			$email                = $assignee_id;
-			$notification['id']   = 'workflow_step_' . $this->get_id() . '_email_' . $email;
+			$notification['id']   = 'workflow_step_' . $this->step->get_id() . '_email_' . $email;
 			$notification['name'] = $notification['id'];
 			$notification['to']   = $email;
 			$message              = $this->replace_variables( $message );
@@ -393,7 +393,7 @@ class Gravity_Flow_Assignee {
 		foreach ( $users as $user ) {
 			$user_assignee_args['user'] = $user;
 			$user_assignee              = Gravity_Flow_Assignees::create( $user_assignee_args, $this->step );
-			$notification['id']         = 'workflow_step_' . $this->get_id() . '_user_' . $user->ID;
+			$notification['id']         = 'workflow_step_' . $this->step->get_id() . '_user_' . $user->ID;
 			$notification['name']       = $notification['id'];
 			$notification['to']         = $user->user_email;
 			$message                    = $user_assignee->replace_variables( $message );

@@ -128,6 +128,7 @@ class Gravity_Flow_API {
 		$feedback = esc_html__( 'Workflow cancelled.', 'gravityflow' );
 		gravity_flow()->add_timeline_note( $entry_id, $feedback );
 		gravity_flow()->log_event( 'workflow', 'cancelled', $form['id'], $entry_id );
+		GFAPI::send_notifications( $form, $entry, 'workflow_cancelled' );
 
 		return true;
 	}

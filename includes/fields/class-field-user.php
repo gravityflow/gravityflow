@@ -211,7 +211,13 @@ class Gravity_Flow_Field_User extends GF_Field_Select {
 			$input_id = $this->id;
 		}
 
-		return $this->get_display_name( rgar( $entry, $input_id ) );
+		$user_id = rgar( $entry, $input_id );
+
+		if ( $use_text == true || $is_csv == true ) {
+			return $this->get_display_name( $user_id );
+		}
+
+		return $user_id;
 	}
 
 	/**
