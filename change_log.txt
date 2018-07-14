@@ -4,3 +4,4 @@
 - Fixed an issue which prevents form connector mapping assignee field and export display of user-based field types (assignee, user, multiuser)
 - Fixed the step ID in the notification ID.
 - Fixed an issue where reminders are sent out when forms or steps are inactive.
+- Fixed some issues with RTL styles

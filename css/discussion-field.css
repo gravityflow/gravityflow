@@ -15,6 +15,7 @@
 
 .rtl .gravityflow-dicussion-item-date {
     margin-right:8px;
+    margin-left: 0;
 }
 
 .gravityflow-dicussion-item-toggle-display {
@@ -26,11 +27,11 @@
 }
 
 @media print {
-    .gravityflow-dicussion-item-hidden { 
+    .gravityflow-dicussion-item-hidden {
         display:block !important;
     }
 
-    .gravityflow-dicussion-item-toggle-display { 
+    .gravityflow-dicussion-item-toggle-display {
         display: none;
     }
 }

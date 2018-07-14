@@ -35,6 +35,7 @@
 .rtl #wp-_gaddon_setting_workflow_notification_message-wrap,
 .rtl .gravityflow-tab-field div.wp-editor-wrap {
     margin-left: 15px;
+    margin-right: 0;
 }
 
 .gform-routing-row{
@@ -75,10 +76,12 @@ table.gforms_form_settings tr.gravityflow_sub_setting td{
 .rtl table.gforms_form_settings tr.gravityflow_sub_setting th{
     border-right: 1px dashed #dfdfdf;
     padding-right: 10px!important;
+    padding-left: 0 !important;
 }
 
 .rtl table.gforms_form_settings tr.gravityflow_sub_setting td{
     padding-right: 10px;
+    padding-left: 0;
 }
 
 table.gform-routings thead th{
@@ -247,6 +250,7 @@ tr#gaddon-setting-row-step_type label > span > i {
 
 .rtl .settings-field-map-table .custom-value-reset {
     margin-right: 165px;
+    margin-left: 0;
 }
 
 .settings-field-map-table .custom-value-container:hover .custom-value-reset { display:block; }
