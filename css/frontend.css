@@ -474,7 +474,8 @@ input.small-text{
 /**** STATUS PAGE ****/
 
 #gravityflow-status-filter label,
-#gravityflow-status-filter input{
+#gravityflow-status-filter input,
+#gravityflow-status-list .paging-input input{
     display: inline-block;
 }
 
