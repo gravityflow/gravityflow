@@ -67,6 +67,11 @@ class Gravity_Flow_Merge_Tag_Current_Step extends Gravity_Flow_Merge_Tag {
 				$property = isset( $match[2] ) ? $match[2] : 'name';
 
 				switch ( $property ) :
+					case 'duration':
+						$duration = time() - $current_step->get_step_timestamp();
+						$value = gravity_flow()->format_duration( $duration );
+						break;
+
 					case 'expiration':
 						$expiration_date = $current_step->get_expiration_timestamp();
 						if ( false !== $expiration_date ) {
