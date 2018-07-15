@@ -2999,36 +2999,36 @@ PRIMARY KEY  (id)
 
 			if ( $current_step && ! $display_workflow_info && ! $step_status ) {
 				$current_user_assignee_key = $current_step->get_current_assignee_key();
-                if ( $current_user_assignee_key ) {
-	                $assignee = $current_step->get_assignee( $current_user_assignee_key );
-	                $current_user_is_assignee = $assignee->is_current_user();
-                }
-            }
+				if ( $current_user_assignee_key ) {
+					$assignee                 = $current_step->get_assignee( $current_user_assignee_key );
+					$current_user_is_assignee = $assignee->is_current_user();
+				}
+			}
 
 			if ( $current_user_is_assignee || $display_workflow_info || ( $current_step && $step_status ) ) {
 
 				?>
-                <div id="gravityflow-status-box-container" class="postbox">
+				<div id="gravityflow-status-box-container" class="postbox">
 
-                    <h3 class="hndle" style="cursor:default;">
-                        <span><?php if ( $display_workflow_info ) {
-								echo esc_html( $this->translate_navigation_label( 'workflow' ) );
-							} ?></span>
-                    </h3>
+					<h3 class="hndle" style="cursor:default;">
+						<span><?php if ( $display_workflow_info ) {
+							echo esc_html( $this->translate_navigation_label( 'workflow' ) );
+						} ?></span>
+					</h3>
 
-                    <div id="submitcomment" class="submitbox">
-                        <div id="minor-publishing" class="gravityflow-status-box">
+					<div id="submitcomment" class="submitbox">
+						<div id="minor-publishing" class="gravityflow-status-box">
 							<?php
 
 							$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
 							$this->maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args );
 
 							?>
-                        </div>
+						</div>
 
-                    </div>
+					</div>
 
-                </div>
+				</div>
 
 				<?php
 			}
