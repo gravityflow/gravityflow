@@ -130,9 +130,9 @@ class Gravity_Flow_Merge_Tag_Current_Step extends Gravity_Flow_Merge_Tag {
 				$text = str_replace( $full_tag, $this->format_value( $value ), $text );
 			}
 			return $text;
-
 		}
 
+		return $text;
 	}
 }
 
