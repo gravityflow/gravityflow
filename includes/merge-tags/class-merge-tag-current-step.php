@@ -60,7 +60,6 @@ class Gravity_Flow_Merge_Tag_Current_Step extends Gravity_Flow_Merge_Tag {
 			}
 
 			$current_step = $this->step;
-			$entry = $this->entry;
 
 			foreach ( $matches as $match ) {
 				$full_tag = $match[0];
