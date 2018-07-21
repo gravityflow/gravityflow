@@ -12,9 +12,9 @@ if ( ! class_exists( 'GFForms' ) ) {
 }
 
 /**
- * Class Gravity_Flow_Merge_Tag_Created_By
+ * Class Gravity_Flow_Merge_Tag_Current_Step
  *
- * @since 1.7.1-dev
+ * @since 2.2.3
  */
 class Gravity_Flow_Merge_Tag_Current_Step extends Gravity_Flow_Merge_Tag {
 
