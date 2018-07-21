@@ -2993,28 +2993,45 @@ PRIMARY KEY  (id)
 
 			$display_workflow_info = (bool) $args['workflow_info'];
 
-			?>
-			<div id="gravityflow-status-box-container" class="postbox">
+			$step_status = (bool) $args['step_status'];
 
-				<h3 class="hndle" style="cursor:default;">
-					<span><?php if ( $display_workflow_info ) { echo esc_html( $this->translate_navigation_label( 'workflow' ) ); } ?></span>
-				</h3>
+			$current_user_is_assignee = false;
 
-				<div id="submitcomment" class="submitbox">
-					<div id="minor-publishing" class="gravityflow-status-box">
-						<?php
+			if ( $current_step && ! $display_workflow_info && ! $step_status ) {
+				$current_user_assignee_key = $current_step->get_current_assignee_key();
+				if ( $current_user_assignee_key ) {
+					$assignee                 = $current_step->get_assignee( $current_user_assignee_key );
+					$current_user_is_assignee = $assignee->is_current_user();
+				}
+			}
 
-						$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
-						$this->maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args );
+			if ( $current_user_is_assignee || $display_workflow_info || ( $current_step && $step_status ) ) {
+				?>
+				<div id="gravityflow-status-box-container" class="postbox">
 
-						?>
+					<h3 class="hndle" style="cursor:default;">
+						<span><?php
+							if ( $display_workflow_info ) {
+								echo esc_html( $this->translate_navigation_label( 'workflow' ) );
+							}
+							?></span>
+					</h3>
+
+					<div id="submitcomment" class="submitbox">
+						<div id="minor-publishing" class="gravityflow-status-box">
+							<?php
+
+							$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
+							$this->maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args );
+
+							?>
+						</div>
+
 					</div>
 
 				</div>
-
-			</div>
-
-			<?php
+				<?php
+			}
 
 			do_action( 'gravityflow_workflow_detail_sidebar', $form, $entry, $current_step, $args );
 
@@ -4068,7 +4085,7 @@ PRIMARY KEY  (id)
 			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_submit">
 				<?php if ( $admin_ui ) :	?>
 					<h2 class="gf_admin_page_title">
-						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
+						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravity-flow-icon-cropped.svg" style="margin-right:5px;"/>
 
 						<span><?php esc_html_e( 'Submit a Workflow Form', 'gravityflow' ); ?></span>
 
@@ -4308,7 +4325,7 @@ PRIMARY KEY  (id)
 				<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_detail">
 					<?php if ( $args['show_header'] ) :	?>
 						<h2 class="gf_admin_page_title">
-							<img width="45" height="22" src="<?php echo $this->get_base_url(); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
+							<img width="45" height="22" src="<?php echo $this->get_base_url(); ?>/images/gravity-flow-icon-cropped.svg" style="margin-right:5px;"/>
 							<span><?php esc_html_e( 'Workflow Inbox', 'gravityflow' ); ?></span>
 						</h2>
 
@@ -4354,7 +4371,7 @@ PRIMARY KEY  (id)
 
 				<?php if ( $args['display_header'] ) : ?>
 					<h2 class="gf_admin_page_title">
-						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
+						<img width="44px" height="22px" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravity-flow-icon-cropped.svg" style="margin-right:5px;"/>
 						<span><?php esc_html_e( 'Workflow Status', 'gravityflow' ); ?></span>
 					</h2>
 
@@ -4398,7 +4415,7 @@ PRIMARY KEY  (id)
 
 				<?php if ( $args['display_header'] ) : ?>
 					<h2 class="gf_admin_page_title">
-						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
+						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravity-flow-icon-cropped.svg" style="margin-right:5px;"/>
 
 						<span><?php esc_html_e( 'Workflow Activity', 'gravityflow' ); ?></span>
 
@@ -4444,7 +4461,7 @@ PRIMARY KEY  (id)
 
 				<?php if ( $args['display_header'] ) : ?>
 					<h2 class="gf_admin_page_title">
-						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravityflow-icon-blue-grad.svg" style="margin-right:5px;"/>
+						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravity-flow-icon-cropped.svg" style="margin-right:5px;"/>
 
 						<span><?php esc_html_e( 'Workflow Reports', 'gravityflow' ); ?></span>
 
@@ -5074,6 +5091,8 @@ PRIMARY KEY  (id)
 				'check_permissions' => $check_permissions,
 				'timeline'          => $a['timeline'],
 				'sidebar'           => $a['sidebar'],
+				'workflow_info'     => $a['workflow_info'],
+				'step_status'       => $a['step_status'],
 			);
 
 			$this->inbox_page( $args );

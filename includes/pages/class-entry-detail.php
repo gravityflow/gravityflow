@@ -246,7 +246,7 @@ class Gravity_Flow_Entry_Detail {
 		?>
 		<h2 class="gf_admin_page_title">
 			<img width="45" height="22"
-			     src="<?php echo gravity_flow()->get_base_url(); ?>/images/gravityflow-icon-blue-grad.svg"
+			     src="<?php echo gravity_flow()->get_base_url(); ?>/images/gravity-flow-icon-cropped.svg"
 			     style="margin-right:5px;"/>
 			<?php esc_html_e( $form['title'] ); ?><span
 				class="gf_admin_page_formid">ID: <?php echo absint( $form['id'] ); ?></span>

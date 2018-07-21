@@ -80,7 +80,7 @@ class Gravity_Flow_Installation_Wizard {
 
 		<div class="wrap about-wrap gform_installation_progress_step_wrap">
 
-			<img style="border:0" src="<?php echo gravity_flow()->get_base_url() ?>/images/gravityflow-logo-blue-450.png"/>
+			<img style="border:0;width:350px;" src="<?php echo gravity_flow()->get_base_url() ?>/images/gravity-flow-logo.svg"/>
 
 			<div id="gform_installation_progress">
 				<?php $this->progress( $current_step ); ?>

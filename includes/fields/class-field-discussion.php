@@ -262,7 +262,7 @@ class Gravity_Flow_Field_Discussion extends GF_Field_Textarea {
 			 */
 			$display_toggle = apply_filters( 'gravityflow_discussion_items_display_toggle', true, $this );
 
-			if ( ( ! $this->is_form_editor() && $display_toggle ) ) {
+			if ( ( rgget( 'view' ) == 'entry' && $display_toggle ) ) {
 				/**
 				 * Set the amount of discussion items to be shown in non-print inbox / status view when toggle is active.
 				 *

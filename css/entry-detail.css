@@ -77,7 +77,8 @@
 
 .rtl .gravityflow-note-avatar{
     float: right;
-    padding-left:10px;
+    padding-left: 10px;
+    padding-right: 0;
 }
 
 
@@ -90,6 +91,7 @@
 
 .rtl .gravityflow-note-body-wrap{
     margin-right: 100px;
+    margin-left: 0;
 }
 
 .gravityflow-note-body{
@@ -320,6 +322,7 @@ table.entry-detail-view td.detail-view{
 
 .rtl .gravityflow-field-value ul.bulleted {
     margin-right: 12px;
+    margin-left: 0;
 }
 
 .gravityflow-field-value ul.bulleted li {
@@ -407,17 +410,21 @@ table#gravityflow-inbox tbody tr{
 
 .rtl table#gravityflow-inbox tbody tr{
     border-left-width: 0;
-    border-left-style: none;
     border-right-width: 3px;
     border-right-style: solid;
 }
 
 @media print {
-    .gravityflow-dicussion-item-hidden { 
+    .gravityflow-dicussion-item-hidden {
         display:block !important;
     }
 
-    .gravityflow-dicussion-item-toggle-display { 
+    .gravityflow-dicussion-item-toggle-display {
         display: none;
+    }
+
+    /* This is set in Gravity Forms print.css, we need to alter here for the print version */
+    .rtl table.entry-detail-view th, .rtl table.entry-detail-notes th {
+        text-align: right;
     }
 }
