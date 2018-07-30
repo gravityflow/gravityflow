@@ -1017,6 +1017,65 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 			$label = $step ? esc_html( $step->get_name() ) : '';
 
+			$step_status = rgar( $item, 'workflow_step_status_' . $step->get_id() );
+
+			if ( 'queued' == $step_status ) {
+
+				$display_step_schedule = true;
+				/**
+				 * Allows the field value to be filtered in the status table.
+				 *
+				 * @since 2.2.3-dev
+				 *
+				 * @param bool   $display_step_schedule   The value to determine display.
+				 * @param int    $item                    ['form_id'] The Form ID.
+				 * @param array  $item                    The entry array.
+				 * @param array  $step                    The current step array.
+				 */
+				$display_step_schedule = apply_filters( 'gravityflow_step_schedule_status_table', $display_step_schedule, $item['form_id'], $item, $step );
+
+				if ( $display_step_schedule ) {
+					$step->_entry = $item;
+					$scheduled_timestamp = $step->get_schedule_timestamp();
+					switch ( $step->schedule_type ) {
+						case 'date':
+							$scheduled_date = $step->schedule_date;
+							break;
+						case 'date_field':
+							$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+							$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
+							break;
+						case 'delay':
+						default:
+							$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+							$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
+					}
+
+					$label .= '' . sprintf( '<br/>(%s: %s)', esc_html__( 'Queued', 'gravityflow' ), $scheduled_date );
+				}
+			}
+
+			if ( $step->supports_expiration() && $step->expiration ) {
+				$display_step_expiration = true;
+				/**
+				 * Allows the field value to be filtered in the status table.
+				 *
+				 * @since 2.2.3-dev
+				 *
+				 * @param bool   $display_step_expiration The value to determine display.
+				 * @param int    $item                    ['form_id'] The Form ID.
+				 * @param array  $item                    The entry array.
+				 * @param array  $step                    The current step array.
+				 */
+				$display_step_expiration = apply_filters( 'gravityflow_step_expiration_status_table', $display_step_expiration, $item['form_id'], $item, $step );
+
+				$step->_entry = $item;
+				$expiration_timestamp = $step->get_expiration_timestamp();
+				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
+				$expiration_date      = get_date_from_gmt( $expiration_date_str );
+				$label .= sprintf( '<br />(%s: %s)', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
+			}
+
 			/**
 			 * Allows the field value to be filtered in the status table.
 			 *
