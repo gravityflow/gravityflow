@@ -41,3 +41,7 @@
     margin-top:20px;
 }
 
+.step_status_queue,
+.step_status_expires{
+    display: block;
+}

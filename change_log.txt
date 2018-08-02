@@ -1,3 +1,1 @@
 - Updated the Status Table Step Column to display the queued start time for a scheduled step and the expiration time for a step when set.
-- Added the filter gravityflow_step_schedule_status_table which allows the scheduled date/time to display (or not) in the status table step column (default is true).
-- Added the filter gravityflow_step_expiration_status_table which allows the expiration date/time to display (or not) in the status table step column (default is true).
