@@ -1,1 +1,2 @@
+- Added "Authorized" as an available choice for the entry Payment Status property in the step condition setting.
 - Fixed an issue with the Multi-User field on the entry detail pages where the ID is displayed instead of the user's name.
