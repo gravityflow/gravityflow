@@ -1,0 +1,1 @@
+- Fixed an issue with the Multi-User field on the entry detail pages where the ID is displayed instead of the user's name.
