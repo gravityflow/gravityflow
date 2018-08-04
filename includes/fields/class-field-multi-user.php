@@ -197,7 +197,7 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 
 		$user_ids = $this->to_array( $value );
 
-		$display_names = $use_text ? $this->get_display_names( $user_ids ) : $user_ids;
+		$display_names = $this->get_display_names( $user_ids );
 
 		return parent::get_value_entry_detail( $display_names, $currency, $use_text, $format, $media );
 	}
