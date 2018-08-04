@@ -55,6 +55,20 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 2.2.3 =
+- Added the "Workflow: cancelled" notification event for sending form notifications when the workflow is cancelled.
+- Added the merge_tag {current_step} with [modifiers] for duration (time), expiration (date/time), ID, name (default), schedule (date/time), start (date/time) and type.
+- Fixed an issue which prevents tokens from working correctly with role assignees.
+- Fixed an issue which causes discussion field show / hide toggle to display on non-Gravity Flow pages.
+- Fixed an issue which prevents form connector mapping assignee field and export display of user-based field types (assignee, user, multiuser)
+- Fixed the step ID in the notification ID.
+- Fixed an issue where reminder emails may be sent out under certain circumstances when forms or steps are inactive.
+- Fixed some issues with RTL styles
+- Fixed some issues with styles on the Twenty Seventeen theme.
+- Fixed an issue with the status shortcode where the workflow_info and step_status attributes are ignored.
+
+
+
 = 2.2.2 =
 - Added the filter gravityflow_form_ids_inbox which allows adjustment of form id(s) when searching for entries for the inbox table.
 - Added the filter gravityflow_form_ids_status which allows adjustment of form id(s) when searching for entries for the status table.

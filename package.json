@@ -5,25 +5,22 @@
   "description": "Build script for Gravity Flow.",
   "main": "Gruntfile.js",
   "devDependencies": {
-    "grunt": ">=0.4.5 <1.0.0",
-    "grunt-aws-s3": "^0.11.1",
-    "grunt-contrib-clean": "^0.6.0",
+    "grunt": "^1.0.3",
+    "grunt-aws-s3": "^2.0.0",
+    "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-compress": "^1.4.3",
     "grunt-contrib-cssmin": "^0.12.2",
-    "grunt-contrib-jshint": "~0.6.2",
-    "grunt-contrib-uglify": "^0.7.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-dropbox": "https://github.com/stevehenty/grunt-dropbox/tarball/master",
+    "grunt-contrib-uglify": "^3.3.0",
+    "grunt-dropbox": "^0.2.0",
     "grunt-md5sum": "^2.0.1",
     "grunt-php": "^1.1.1",
     "grunt-phpunit": "^0.3.6",
-    "grunt-potomo": "^3.3.3",
+    "grunt-potomo": "^3.5.0",
     "grunt-shell": "^1.1.1",
     "grunt-slack-notifier": "^0.1.0",
     "grunt-slack-upload": "^1.0.0",
     "grunt-string-replace": "^1.2.1",
-    "grunt-version": "^0.3.1",
-    "grunt-wp-i18n": "^0.4.5",
-    "matchdep": "~0.1.2"
+    "grunt-wp-i18n": "^1.0.2",
+    "matchdep": "^2.0.0"
   }
 }

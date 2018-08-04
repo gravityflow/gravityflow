@@ -63,6 +63,7 @@ table.entry-detail-view td{
 }
 .rtl #poststuff #post-body.columns-2 {
     margin-left: 280px;
+    margin-right: 0;
 }
 
 #poststuff .postbox-container {
@@ -80,6 +81,7 @@ table.entry-detail-view td{
 .rtl #post-body.columns-2 #postbox-container-1 {
     float: left;
     margin-left: -310px;
+    margin-right: 0;
 }
 
 #post-body.columns-2 #postbox-container-2 {
@@ -153,6 +155,7 @@ table.entry-detail-view td{
 }
 .rtl .postbox input[type=radio]{
     margin-left:5px;
+    margin-right: 0;
 }
 #gravityflow-note{
     margin-top:5px;
@@ -215,6 +218,7 @@ table#gravityflow-inbox td a {
     padding:10px;
     height:100%;
     border-bottom:none;
+    box-shadow: none;
 }
 
 .gravityflow-actions-locked{
@@ -235,6 +239,7 @@ table#gravityflow-inbox td a {
 .rtl .gravityflow-action,
 .rtl .gravityflow-actions-unlock{
     margin-left: 5px;
+    margin-right: 0;
 }
 
 .gravityflow-actions-lock{
@@ -242,6 +247,7 @@ table#gravityflow-inbox td a {
 }
 .rtl .gravityflow-actions-lock{
     margin-left: 5px;
+    margin-right: 0;
 }
 
 .gravityflow-actions{
@@ -307,6 +313,7 @@ table.entry-products col.entry-products-col4{
 
 .rtl .wp-core-ui .notice.is-dismissible {
     padding-left: 38px;
+    padding-right: 0;
 }
 
 .gravityflow_workflow_wrap div.updated,
@@ -441,6 +448,7 @@ table#gravityflow-inbox tbody tr{
 }
 
 .rtl table#gravityflow-inbox tbody tr{
+    border-left-width: 0;
     border-right-width: 3px;
     border-right-style: solid;
     border-right-color: transparent;
@@ -465,6 +473,13 @@ input.small-text{
 
 /**** STATUS PAGE ****/
 
+#gravityflow-status-filter label,
+#gravityflow-status-filter input,
+#gravityflow-status-list .paging-input input,
+.detail-view-print label{
+    display: inline-block;
+}
+
 #gravityflow-status-filter .subsubsub li a,
 .pagination-links a{
     border-bottom: 0;
@@ -483,6 +498,7 @@ input.small-text{
 
 .rtl .tablenav-pages a {
     margin-left: 1px;
+    margin-right: 0;
 }
 
 .tablenav-pages .current-page {
@@ -497,6 +513,7 @@ input.small-text{
 
 .rtl .tablenav-pages .next-page {
     margin-right: 2px;
+    margin-left: 0;
 }
 
 .tablenav a.button-secondary {
@@ -580,6 +597,7 @@ input.small-text{
 
 .rtl .tablenav .displaying-num {
     margin-left: 2px;
+    margin-right: 0;
 }
 
 .tablenav .actions {
@@ -602,6 +620,7 @@ input.small-text{
 
 .rtl .tablenav .delete {
     margin-left: 20px;
+    margin-right: 0;
 }
 
 #gravityflow-status-filter .subsubsub {
@@ -698,6 +717,7 @@ table.wp-list-table.entries td .gravityflow-empty {
     padding:10px;
     height:100%;
     border-bottom:none;
+    box-shadow: none;
 }
 
 table.wp-list-table.entries th,
