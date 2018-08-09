@@ -3097,7 +3097,7 @@ PRIMARY KEY  (id)
 				$expiration_timestamp = $current_step->get_expiration_timestamp();
 				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
 				$expiration_date      = get_date_from_gmt( $expiration_date_str );
-				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
+				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), GFCommon::format_date( $expiration_date, true, $date_format ) );
 			}
 
 			/**

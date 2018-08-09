@@ -1,0 +1,1 @@
+- Updated the Entry Detail workflow info box display of step expiration to use existing gravityflow_date_format_entry_detail filter to format date.
