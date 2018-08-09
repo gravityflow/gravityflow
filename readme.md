@@ -56,6 +56,7 @@ Contributors:
 * Steve Henty @stevehenty
 * Richard Wawrzyniak @richardW8k
 * Jamie Oastler @Idealien
+* Yoren Chang @yoren
 * Jake Jackson @gravitypdf
 
 Thank you also to all the translators:

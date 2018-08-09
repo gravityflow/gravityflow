@@ -7154,6 +7154,10 @@ AND m.meta_value='queued'";
 						'operators' => array( 'is', 'isnot' ),
 						'choices'   => array(
 							array(
+								'text'  => esc_html__( 'Authorized', 'gravityflow' ),
+								'value' => 'Authorized',
+							),
+							array(
 								'text'  => esc_html__( 'Paid', 'gravityflow' ),
 								'value' => 'Paid',
 							),
