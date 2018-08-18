@@ -412,6 +412,7 @@ class Gravity_Flow_Inbox {
 				$field = GFFormsModel::get_field( $form, $id );
 
 				if ( is_object( $field ) ) {
+					require_once( GFCommon::get_base_path() . '/entry_list.php' );
 					$value = $field->get_value_entry_list( rgar( $entry, $id ), $entry, $id, $columns, $form );
 				} else {
 					$value = rgar( $entry, $id );
