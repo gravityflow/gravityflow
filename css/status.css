@@ -40,8 +40,3 @@
 .gravityflow-export-status-button{
     margin-top:20px;
 }
-
-.step_status_queued,
-.step_status_expires{
-    display: block;
-}

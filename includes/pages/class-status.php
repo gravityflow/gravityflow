@@ -1037,7 +1037,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 						$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
 				}
 
-				$label .= sprintf( '<span class="step_status_queued">(%s: %s)</span>', esc_html__( 'Queued', 'gravityflow' ), $scheduled_date );
+				$label .= '' . sprintf( '<div class="step_status_queue">(%s: %s)</div>', esc_html__( 'Queued', 'gravityflow' ), $scheduled_date );
 
 			}
 
@@ -1046,7 +1046,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 				$expiration_timestamp = $step->get_expiration_timestamp();
 				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
 				$expiration_date      = get_date_from_gmt( $expiration_date_str );
-				$label .= sprintf( '<span class="step_status_expires">(%s: %s)</span>', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
+				$label .= sprintf( '<div class="step_status_expires">(%s: %s)</div>', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
 			}
 
 			/**
