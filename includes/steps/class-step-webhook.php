@@ -275,7 +275,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				);
 				$settings['fields'][] = array(
 					'name'                => 'mappings',
-					'label'               => esc_html__( 'Field Values', 'gravityflow' ),
+					'label'               => esc_html__( 'Request Field Values', 'gravityflow' ),
 					'type'                => 'generic_map',
 					'enable_custom_key'   => false,
 					'enable_custom_value' => true,
@@ -289,6 +289,44 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					),
 				);
 			}
+		}
+
+		$settings['fields'][] = array(
+			'name'          => 'response_body',
+			'label'         => esc_html__( 'Response Mapping', 'gravityflow' ),
+			'type'          => 'radio',
+			'default_value' => '',
+			'horizontal'    => true,
+			'onchange'      => "jQuery(this).closest('form').submit();",
+			'tooltip'       => '<h6>' . esc_html__( 'Mapping', 'gravityflow' ) . '</h6>' . esc_html__( 'Whether to map selected values from the request response to the form entry.', 'gravityflow' ),
+			'choices'       => array(
+				array(
+					'label' => __( 'None', 'gravityflow' ),
+					'value' => '',
+				),
+				array(
+					'label' => __( 'Select Fields', 'gravityflow' ),
+					'value' => 'select_fields',
+				),
+			),
+		);
+
+		if ( in_array( $this->get_setting( 'response_body' ), array( 'select_fields' ) ) ) {
+			$settings['fields'][] = array(
+				'name'                => 'response_mappings',
+				'label'               => esc_html__( 'Response Field Values', 'gravityflow' ),
+				'type'                => 'generic_map',
+				'enable_custom_key'   => false,
+				'enable_custom_value' => true,
+				'key_field_title'     => esc_html__( 'Key', 'gravityflow' ),
+				'value_field_title'   => esc_html__( 'Value', 'gravityflow' ),
+				'value_choices'       => $this->value_mappings(),
+				'tooltip'             => '<h6>' . esc_html__( 'Mapping', 'gravityflow' ) . '</h6>' . esc_html__( 'Map selected field values from the request response to the form. Values from the response will be saved in the entry in the selected form', 'gravityflow' ),
+				'dependency'          => array(
+					'field'  => 'response_body',
+					'values' => array( 'select_fields' ),
+				),
+			);
 		}
 
 		return $settings;
@@ -624,6 +662,40 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$step_status = 'error';
 			$http_response_message = ' (WP Error)';
 		} else {
+
+			if ( $this->get_setting( 'response_body' ) == 'select_fields' ) {
+
+				$this->log_debug( __METHOD__ . '(): Mapping response data into $entry' );
+
+				if ( ! is_array( $this->response_mappings ) ) {
+					$this->log_debug( __METHOD__ . '(): Step has no response mappings defined' );
+					return;
+				}
+
+				foreach ( $this->response_mappings as $mapping ) {
+					if ( rgblank( $mapping['key'] ) ) {
+						continue;
+					}
+
+					//@TODO - Hack
+					$content_type = array( 'subtype' => 'json');
+					$response_body = $response['body'];
+
+					$data = json_decode( $response[ 'body' ], true );
+					
+					$entry = $this->add_mapping_to_entry( $entry, $mapping, $data, $content_type );
+				}
+
+				$result = GFAPI::update_entry( $entry );
+
+				if ( is_wp_error( $result ) ) {
+					$this->log_debug( __METHOD__ . '(): There was an issue with updating the entry.' );
+				} else {
+					$this->log_debug( __METHOD__ . '(): Updated entry: ' . print_r( $entry, true ) );
+				}
+
+			}
+
 			if ( isset( $response['response']['code'] ) ) {
 				$http_response_code = intval( $response['response']['code'] );
 				switch ( true ) {
@@ -688,6 +760,108 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		do_action( 'gravityflow_post_webhook', $response, $args, $entry, $this );
 
 		return $step_status;
+	}
+
+	/**
+	 * Add the mapped value of the response to the entry.
+	 *
+	 * @since 2.2.4-dev
+	 *
+	 * @param array $entry        The entry to update.
+	 * @param array $mapping      The properties for the mapping being processed.
+	 * @param array $data         The response params
+	 * @param array $content_type The content type of incoming request
+	 *
+	 * @return array
+	 */
+	public function add_mapping_to_entry( $entry, $mapping, $data, $content_type ) {
+
+		$skip_mapping = false;
+
+		$source_field_id = trim( $mapping['custom_key'] );
+
+		$target_field_id = (string) $mapping['value'];
+
+		if ( ! isset( $data[ $source_field_id ] ) ) {
+			return $entry;
+		}
+
+		$form = $this->get_form();
+
+		$target_field = GFFormsModel::get_field( $form, $target_field_id );
+
+		if ( $target_field instanceof GF_FIELD ) {
+
+			if ( in_array( $target_field->type, array( 'fileupload', 'post_title', 'post_content', 'post_excerpt', 'post_tags', 'post_category', 'post_image', 'post_custom_field', 'product', 'singleproduct', 'quantity', 'option', 'shipping', 'singleshipping', 'total' ) ) ) {
+				$skip_mapping = true;
+			} else {
+				$this->log_debug( __METHOD__ . '(): Mapping into Field #' . $target_field->id . ' / Type: ' . $target_field->type );
+
+				$is_full_target      = $target_field_id === (string) intval( $target_field_id );
+				$target_field_inputs = $target_field->get_entry_inputs();
+
+				//Non-Choice Field Type
+				if ( $is_full_target && ! is_array( $target_field_inputs ) ) {
+
+					if ( rgar( $content_type, 'subtype' ) == 'json' && in_array( $target_field->type, array( 'multiselect', 'workflow_multi_user' ) ) ) {
+
+						if ( ! is_array( $data[ $source_field_id ] ) ) {
+							$data[ $source_field_id ] = json_decode( $data[ $source_field_id ] );
+						}
+
+						$entry[ $target_field_id ] = $target_field->get_value_save_entry( $data[ $source_field_id ], $form, false, $entry['id'], $entry );
+
+					} elseif ( in_array( $target_field->type, array( 'workflow_discussion' ) ) ) {
+						$entry[ $target_field_id ] = $target_field->get_value_save_entry( $data[ $source_field_id ], $form, false, $entry['id'], $entry );
+					} else {
+						$entry[ $target_field_id ] = $target_field->sanitize_entry_value( $data[ $source_field_id ],  $form['id'] );
+					}
+
+					//Choice Field Types
+				} elseif ( is_array( $target_field_inputs ) ) {
+
+					//Received Parent Input ID
+					if ( $target_field_id == $target_field['id'] ) {
+
+						if ( is_array( $data[ $source_field_id ] ) ) {
+							$choices = $data[ $source_field_id ];
+						} else {
+							$choices = json_decode( $data[ $source_field_id ], true );
+						}
+
+						foreach ( $choices as $source_field ) {
+
+							$entry[ $source_field['id'] ] = $target_field->sanitize_entry_value( $source_field['value'], $form['id'] );
+						}
+
+						//Received Direct Input ID
+					} else {
+						foreach ( $target_field_inputs as $input ) {
+							if ( $target_field_id === $input['id'] ) {
+								$entry[ $target_field_id ] = $target_field->sanitize_entry_value( $data[ $source_field_id ], $form['id'] );
+								break;
+							}
+						}
+					}
+				} else {
+					$skip_mapping = true;
+				}
+			}
+		} elseif ( $target_field_id == 'gf_custom' ) {
+			$this->log_debug( __METHOD__ . '(): Mapping into gf_custom' );
+			$entry[ $target_field_id ] = GFCommon::replace_variables( $data[ $source_field_id ], $form, $entry, false, true, false, 'text' );
+		} else {
+			$skip_mapping = true;
+		}
+
+		if ( $skip_mapping ) {
+			if ( is_object( $target_field ) ) {
+				$this->log_debug( __METHOD__ . '(): Field Type ' . $target_field->type . ' - Not available for import yet.' );
+			} else {
+				$this->log_debug( __METHOD__ . '(): Incoming field mapping error.' );
+			}
+		}
+		return $entry;
 	}
 
 	/**
