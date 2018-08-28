@@ -677,13 +677,24 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 						continue;
 					}
 
-					//@TODO - Hack
-					$content_type = array( 'subtype' => 'json');
-					$response_body = $response['body'];
-
-					$data = json_decode( $response[ 'body' ], true );
+					/*
+					//@TODO - Security review of json parsing response body as is.
 					
-					$entry = $this->add_mapping_to_entry( $entry, $mapping, $data, $content_type );
+					//@TODO? - Evaluate content_type header?
+					//wp_remote_retrieve_headers does not canonicalize header. 
+					//Pattern from Rest API get_header / canonicalize_header_name to get content_type key
+					$headers = array_change_key_case($headers, CASE_LOWER);
+					$replacedHeaderKeys = str_replace('-', '_', array_keys($headers));
+					$headers = array_combine($replacedHeaderKeys, $headers);
+
+					//@TODO? - Incoming webhook evaluates content_type 'sub-type' to determine
+    				$data = $response->get_json_params();
+					$data = $response->get_json_params();
+					*/
+
+					$data = json_decode( wp_remote_retrieve_body( $response ), TRUE );
+					
+					$entry = $this->add_mapping_to_entry( $entry, $mapping, $data, array( 'subtype' => 'json' ) );
 				}
 
 				$result = GFAPI::update_entry( $entry );
