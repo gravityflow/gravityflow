@@ -7152,44 +7152,7 @@ AND m.meta_value='queued'";
 					'label'  => esc_html__( 'Payment Status', 'gravityflow' ),
 					'filter' => array(
 						'operators' => array( 'is', 'isnot' ),
-						'choices'   => array(
-							array(
-								'text'  => esc_html__( 'Authorized', 'gravityflow' ),
-								'value' => 'Authorized',
-							),
-							array(
-								'text'  => esc_html__( 'Paid', 'gravityflow' ),
-								'value' => 'Paid',
-							),
-							array(
-								'text'  => esc_html__( 'Processing', 'gravityflow' ),
-								'value' => 'Processing',
-							),
-							array(
-								'text'  => esc_html__( 'Failed', 'gravityflow' ),
-								'value' => 'Failed',
-							),
-							array(
-								'text'  => esc_html__( 'Active', 'gravityflow' ),
-								'value' => 'Active',
-							),
-							array(
-								'text'  => esc_html__( 'Cancelled', 'gravityflow' ),
-								'value' => 'Cancelled',
-							),
-							array(
-								'text'  => esc_html__( 'Pending', 'gravityflow' ),
-								'value' => 'Pending',
-							),
-							array(
-								'text'  => esc_html__( 'Refunded', 'gravityflow' ),
-								'value' => 'Refunded',
-							),
-							array(
-								'text'  => esc_html__( 'Voided', 'gravityflow' ),
-								'value' => 'Voided',
-							),
-						),
+						'choices'   => $this->get_entry_payment_statuses_as_choices(),
 					),
 				),
 				'payment_amount' => array(
@@ -7212,6 +7175,58 @@ AND m.meta_value='queued'";
 					),
 				),
 			);
+		}
+
+		/**
+		 * Returns an array of supported entry payment statuses formatted for use as drop down choices.
+		 *
+		 * @since 2.2.4-dev
+		 *
+		 * @return array
+		 */
+		public function get_entry_payment_statuses_as_choices() {
+			if ( ! $this->is_gravityforms_supported( '2.4' ) ) {
+				return array(
+					array(
+						'text'  => esc_html__( 'Authorized', 'gravityflow' ),
+						'value' => 'Authorized',
+					),
+					array(
+						'text'  => esc_html__( 'Paid', 'gravityflow' ),
+						'value' => 'Paid',
+					),
+					array(
+						'text'  => esc_html__( 'Processing', 'gravityflow' ),
+						'value' => 'Processing',
+					),
+					array(
+						'text'  => esc_html__( 'Failed', 'gravityflow' ),
+						'value' => 'Failed',
+					),
+					array(
+						'text'  => esc_html__( 'Active', 'gravityflow' ),
+						'value' => 'Active',
+					),
+					array(
+						'text'  => esc_html__( 'Cancelled', 'gravityflow' ),
+						'value' => 'Cancelled',
+					),
+					array(
+						'text'  => esc_html__( 'Pending', 'gravityflow' ),
+						'value' => 'Pending',
+					),
+					array(
+						'text'  => esc_html__( 'Refunded', 'gravityflow' ),
+						'value' => 'Refunded',
+					),
+					array(
+						'text'  => esc_html__( 'Voided', 'gravityflow' ),
+						'value' => 'Voided',
+					),
+				);
+			}
+
+			return GFCommon::get_entry_payment_statuses_as_choices();
 		}
 
 		/**
