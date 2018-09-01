@@ -26,6 +26,7 @@ $I->amGoingTo( 'View Workflow Inbox.' );
 $I->amOnWorkflowPage( 'Inbox' );
 $I->click( 'StepCheck - Update' );
 
+
 $I->waitForText( 'Status: Pending', 3 );
 $I->seeInField('#input_27_1', 'Codeception Question');
 $I->seeInField('#input_27_3', '42');
@@ -41,6 +42,14 @@ $I->seeInField('#input_27_2', 'Why it is the answer to the Ultimate Question of 
 $I->click( 'Submit' );
 
 $I->see( 'https://unit-test-webhook.com/200-0027. RESPONSE: 202 Accepted (Success)' );
-$I->see( 'customQuestion200' );
-$I->see( 'customAnswer200' );
-$I->see( 'customRationale200' );
+$I->seeInField('#input_27_1', 'customQuestion200');
+$I->seeInField('#input_27_3', 'customAnswer200');
+$I->seeInField('#input_27_2', 'customRationale200' );
+$I->fillField( 'Question', 'Codeception Question' );
+$I->fillField( 'Answer', '42' );
+$I->fillField( 'Rationale', 'Why it is the answer to the Ultimate Question of Life, the Universe, and Everything' );
+$I->click( 'Submit' );
+
+$I->waitForText( 'Status: Complete', 3 );
+$I->dontSee( 'https://unit-test-webhook.com/200-nojson' );
+

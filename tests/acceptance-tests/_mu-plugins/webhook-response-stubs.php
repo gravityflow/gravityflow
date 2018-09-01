@@ -46,6 +46,18 @@ function webhook_response_test_results( $preempt, $request, $url ) {
 				'filename' => '',
 			);
 			break;
+		case '200-nojson':
+			$response = array(
+				'headers'  => array( 'content_type' => 'application/json'),
+				'body'     => 'There is text in the body, not json. Who is => "Jason" guy I keep hearing about?',
+				'response' => array(
+					'code'    => 202,
+					'message' => 'Accepted',
+				),
+				'cookies'  => array(),
+				'filename' => '',
+			);
+			break;
 		case '400':
 		case '400-empty':
 			$response = array(

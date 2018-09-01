@@ -665,10 +665,18 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 			if ( $this->get_setting( 'response_body' ) == 'select_fields' ) {
 
-				$this->log_debug( __METHOD__ . '(): Mapping response data into $entry' );
+				$this->log_debug( __METHOD__ . '(): Attempting to map response data into $entry' );
 
 				if ( ! is_array( $this->response_mappings ) ) {
 					$this->log_debug( __METHOD__ . '(): Step has no response mappings defined' );
+					return;
+				}
+
+				$data = json_decode( wp_remote_retrieve_body( $response ), TRUE );
+
+				//PHP >= 5.3?
+				if ( json_last_error() !== 0 ) {
+					$this->log_debug( __METHOD__ . '(): Response body does not include properly formatted JSON' );
 					return;
 				}
 
@@ -677,24 +685,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 						continue;
 					}
 
-					/*
-					//@TODO - Security review of json parsing response body as is.
-					
-					//@TODO? - Evaluate content_type header?
-					//wp_remote_retrieve_headers does not canonicalize header. 
-					//Pattern from Rest API get_header / canonicalize_header_name to get content_type key
-					$headers = array_change_key_case($headers, CASE_LOWER);
-					$replacedHeaderKeys = str_replace('-', '_', array_keys($headers));
-					$headers = array_combine($replacedHeaderKeys, $headers);
-
-					//@TODO? - Incoming webhook evaluates content_type 'sub-type' to determine
-    				$data = $response->get_json_params();
-					$data = $response->get_json_params();
-					*/
-
-					$data = json_decode( wp_remote_retrieve_body( $response ), TRUE );
-					
 					$entry = $this->add_mapping_to_entry( $entry, $mapping, $data, array( 'subtype' => 'json' ) );
+
 				}
 
 				$result = GFAPI::update_entry( $entry );
