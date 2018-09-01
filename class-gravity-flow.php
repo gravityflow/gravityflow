@@ -7135,83 +7135,87 @@ AND m.meta_value='queued'";
 				}
 			}
 
-			$properties = apply_filters( 'gravityflow_feed_condition_entry_properties', array(
-				'ip'             => array(
-					'label'  => esc_html__( 'User IP', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+			$form_id    = absint( rgget( 'id' ) );
+			$properties = apply_filters( 'gravityflow_feed_condition_entry_properties',
+				array(
+					'ip'             => array(
+						'label'  => esc_html__( 'User IP', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+						),
 					),
-				),
-				'source_url'     => array(
-					'label'  => esc_html__( 'Source URL', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					'source_url'     => array(
+						'label'  => esc_html__( 'Source URL', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+						),
 					),
-				),
-				'payment_status' => array(
-					'label'  => esc_html__( 'Payment Status', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot' ),
-						'choices'   => array(
-							array(
-								'text'  => esc_html__( 'Authorized', 'gravityflow' ),
-								'value' => 'Authorized',
-							),
-							array(
-								'text'  => esc_html__( 'Paid', 'gravityflow' ),
-								'value' => 'Paid',
-							),
-							array(
-								'text'  => esc_html__( 'Processing', 'gravityflow' ),
-								'value' => 'Processing',
-							),
-							array(
-								'text'  => esc_html__( 'Failed', 'gravityflow' ),
-								'value' => 'Failed',
-							),
-							array(
-								'text'  => esc_html__( 'Active', 'gravityflow' ),
-								'value' => 'Active',
-							),
-							array(
-								'text'  => esc_html__( 'Cancelled', 'gravityflow' ),
-								'value' => 'Cancelled',
-							),
-							array(
-								'text'  => esc_html__( 'Pending', 'gravityflow' ),
-								'value' => 'Pending',
-							),
-							array(
-								'text'  => esc_html__( 'Refunded', 'gravityflow' ),
-								'value' => 'Refunded',
-							),
-							array(
-								'text'  => esc_html__( 'Voided', 'gravityflow' ),
-								'value' => 'Voided',
+					'payment_status' => array(
+						'label'  => esc_html__( 'Payment Status', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot' ),
+							'choices'   => array(
+								array(
+									'text'  => esc_html__( 'Authorized', 'gravityflow' ),
+									'value' => 'Authorized',
+								),
+								array(
+									'text'  => esc_html__( 'Paid', 'gravityflow' ),
+									'value' => 'Paid',
+								),
+								array(
+									'text'  => esc_html__( 'Processing', 'gravityflow' ),
+									'value' => 'Processing',
+								),
+								array(
+									'text'  => esc_html__( 'Failed', 'gravityflow' ),
+									'value' => 'Failed',
+								),
+								array(
+									'text'  => esc_html__( 'Active', 'gravityflow' ),
+									'value' => 'Active',
+								),
+								array(
+									'text'  => esc_html__( 'Cancelled', 'gravityflow' ),
+									'value' => 'Cancelled',
+								),
+								array(
+									'text'  => esc_html__( 'Pending', 'gravityflow' ),
+									'value' => 'Pending',
+								),
+								array(
+									'text'  => esc_html__( 'Refunded', 'gravityflow' ),
+									'value' => 'Refunded',
+								),
+								array(
+									'text'  => esc_html__( 'Voided', 'gravityflow' ),
+									'value' => 'Voided',
+								),
 							),
 						),
 					),
-				),
-				'payment_amount' => array(
-					'label'  => esc_html__( 'Payment Amount', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					'payment_amount' => array(
+						'label'  => esc_html__( 'Payment Amount', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+						),
+					),
+					'transaction_id' => array(
+						'label'  => esc_html__( 'Transaction ID', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+						),
+					),
+					'created_by' => array(
+						'label'  => esc_html__( 'Created By', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot' ),
+							'choices'   => $user_choices,
+						),
 					),
 				),
-				'transaction_id' => array(
-					'label'  => esc_html__( 'Transaction ID', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
-					),
-				),
-				'created_by' => array(
-					'label'  => esc_html__( 'Created By', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot' ),
-						'choices'   => $user_choices,
-					),
-				),
-			) );
+				$form_id
+			);
 
 			return $properties;
 		}
