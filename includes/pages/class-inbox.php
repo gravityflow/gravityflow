@@ -408,6 +408,12 @@ class Gravity_Flow_Inbox {
 					$value = self::format_actions( $step );
 				}
 				break;
+			case 'payment_status':
+				$value = rgar( $entry, 'payment_status' );
+				if ( gravity_flow()->is_gravityforms_supported( '2.4' ) ) {
+					$value = GFCommon::get_entry_payment_status_text( $value );
+				}
+				break;
 			default:
 				$field = GFFormsModel::get_field( $form, $id );
 
