@@ -7135,7 +7135,7 @@ AND m.meta_value='queued'";
 				}
 			}
 
-			return array(
+			$properties = apply_filters( 'gravityflow_feed_condition_entry_properties', array(
 				'ip'             => array(
 					'label'  => esc_html__( 'User IP', 'gravityflow' ),
 					'filter' => array(
@@ -7211,7 +7211,9 @@ AND m.meta_value='queued'";
 						'choices'   => $user_choices,
 					),
 				),
-			);
+			) );
+
+			return $properties;
 		}
 
 		/**

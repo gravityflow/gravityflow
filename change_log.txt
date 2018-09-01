@@ -3,3 +3,4 @@
 - Updated the Entry Detail workflow info box display of step expiration date to use existing gravityflow_date_format_entry_detail filter.
 - Fixed an issue with the Multi-User field on the entry detail pages where the ID is displayed instead of the user's name.
 - Fixed an issue with the File Upload field display the inbox shortcode page via fields attribute. The file icon/link was not displaying and generating PHP error.
+- Added gravityflow_feed_condition_entry_properties filter to allow modifying entry properties in the feed condition.
