@@ -269,6 +269,16 @@ class Gravity_Flow_Inbox {
 			$columns['last_updated'] = __( 'Last Updated', 'gravityflow' );
 		}
 
+		/**
+		 * Allows the columns to be filtered for the inbox table.
+		 *
+		 * @since 2.2.4-dev
+		 *
+		 * @param array         $columns The columns to be filtered
+		 * @param array         $args    The array of args for this inbox table.
+		 */
+		$columns = apply_filters( 'gravityflow_columns_inbox_table', $columns, $args );
+
 		return $columns;
 	}
 

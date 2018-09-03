@@ -1,4 +1,5 @@
 - Added "Authorized" as an available choice for the entry Payment Status property in the step condition setting.
+- Added gravityflow_columns_inbox_table to allow columns in inbox to be adjusted in similar fashion to status (gravityflow_columns_status_table)
 - Added gravityflow_date_format_current_step_merge_tag filter to allow the date/time-based modifiers for {current_step} adjust format: expiration, schedule, and start.
 - Updated the Entry Detail workflow info box display of step expiration date to use existing gravityflow_date_format_entry_detail filter.
 - Updated the step condition setting to support custom payment statuses added by the gform_payment_statuses filter with Gravity Forms 2.4 and greater.
