@@ -1650,9 +1650,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$form_ids = apply_filters( 'gravityflow_form_ids_status', $form_ids, $search_criteria );
 
 		gravity_flow()->log_debug( __METHOD__ . '(): search criteria: ' . print_r( $search_criteria, true ) );
-
+		timer_start();
 		$entries = GFAPI::get_entries( $form_ids, $search_criteria, $sorting, $paging, $total_count );
-
+		gravity_flow()->log_debug( __METHOD__ . '(): duration of get_entries: ' . timer_stop() );
 		gravity_flow()->log_debug( __METHOD__ . '(): count entries: ' . count( $entries ) );
 		gravity_flow()->log_debug( __METHOD__ . '(): total count: ' . $total_count );
 

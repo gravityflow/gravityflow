@@ -39,7 +39,13 @@ class Gravity_Flow_Inbox {
 		}
 
 		$total_count = 0;
-		$entries     = self::get_entries( $args, $total_count );
+
+		timer_start();
+
+		$entries = self::get_entries( $args, $total_count );
+
+		gravity_flow()->log_debug( __METHOD__ . '(): duration of get_entries: ' . timer_stop() );
+
 
 		gravity_flow()->log_debug( __METHOD__ . "(): {$total_count} pending tasks." );
 
