@@ -7135,7 +7135,8 @@ AND m.meta_value='queued'";
 				}
 			}
 
-			$form_id    = absint( rgget( 'id' ) );
+			$form_id = absint( rgget( 'id' ) );
+
 			/**
 			 * Allows feed condition entry properties to be modified for the form.
 			 *
