@@ -674,8 +674,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 				$data = json_decode( wp_remote_retrieve_body( $response ), TRUE );
 
-				//PHP >= 5.3?
-				if ( json_last_error() !== 0 ) {
+				if (! is_array( $data ) ) {
 					$this->log_debug( __METHOD__ . '(): Response body does not include properly formatted JSON' );
 					return;
 				}
