@@ -7136,6 +7136,14 @@ AND m.meta_value='queued'";
 			}
 
 			$form_id    = absint( rgget( 'id' ) );
+			/**
+			 * Allows feed condition entry properties to be modified for the form.
+			 *
+			 * @since 2.2.4-dev
+			 *
+			 * @param array $properties The feed condition entry properties.
+			 * @param int   $form_id Form id.
+			 */
 			$properties = apply_filters( 'gravityflow_feed_condition_entry_properties',
 				array(
 					'ip'             => array(
