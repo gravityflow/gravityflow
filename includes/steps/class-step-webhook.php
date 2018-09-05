@@ -771,8 +771,8 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	 *
 	 * @param array $entry        The entry to update.
 	 * @param array $mapping      The properties for the mapping being processed.
-	 * @param array $data         The response params
-	 * @param array $content_type The content type of incoming request
+	 * @param array $data         The response params.
+	 * @param array $content_type The content type of incoming request.
 	 *
 	 * @return array
 	 */
@@ -816,7 +816,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					} elseif ( in_array( $target_field->type, array( 'workflow_discussion' ) ) ) {
 						$entry[ $target_field_id ] = $target_field->get_value_save_entry( $data[ $source_field_id ], $form, false, $entry['id'], $entry );
 					} else {
-						$entry[ $target_field_id ] = $target_field->sanitize_entry_value( $data[ $source_field_id ],  $form['id'] );
+						$entry[ $target_field_id ] = $target_field->sanitize_entry_value( $data[ $source_field_id ], $form['id'] );
 					}
 
 					// Choice Field Types.
