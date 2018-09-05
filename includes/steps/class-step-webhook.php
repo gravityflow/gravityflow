@@ -672,9 +672,9 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					return;
 				}
 
-				$data = json_decode( wp_remote_retrieve_body( $response ), TRUE );
+				$data = json_decode( wp_remote_retrieve_body( $response ), true );
 
-				if (! is_array( $data ) ) {
+				if ( ! is_array( $data ) ) {
 					$this->log_debug( __METHOD__ . '(): Response body does not include properly formatted JSON' );
 					return;
 				}
@@ -726,9 +726,9 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		/**
 		 * Allow the step status to be modified on the webhook step.
 		 *
-		 * @param string              $step_status The step status derived from webhook response
+		 * @param string              $step_status The step status derived from webhook response.
 		 * @param array               $response    The response returned from webhook.
-		 * @param array               $args        The arguments used for executing the webhook request
+		 * @param array               $args        The arguments used for executing the webhook request.
 		 * @param array               $entry       The current entry.
 		 * @param Gravity_Flow_Step   $this        The current step.
 		 *
@@ -739,10 +739,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		/**
 		 * Allow the message logged to the timeline following webhook step to be modified
 		 *
-		 * @param string              $http_response_message The status message derived from webhook response
-		 * @param string              $step_status           The step status derived from webhook response
+		 * @param string              $http_response_message The status message derived from webhook response.
+		 * @param string              $step_status           The step status derived from webhook response.
 		 * @param array               $response              The response returned from webhook.
-		 * @param array               $args                  The arguments used for executing the webhook request
+		 * @param array               $args                  The arguments used for executing the webhook request.
 		 * @param array               $entry                 The current entry.
 		 * @param Gravity_Flow_Step   $this                  The current step.
 		 *
@@ -802,7 +802,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				$is_full_target      = $target_field_id === (string) intval( $target_field_id );
 				$target_field_inputs = $target_field->get_entry_inputs();
 
-				//Non-Choice Field Type
+				// Non-Choice Field Type.
 				if ( $is_full_target && ! is_array( $target_field_inputs ) ) {
 
 					if ( rgar( $content_type, 'subtype' ) == 'json' && in_array( $target_field->type, array( 'multiselect', 'workflow_multi_user' ) ) ) {
@@ -819,10 +819,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 						$entry[ $target_field_id ] = $target_field->sanitize_entry_value( $data[ $source_field_id ],  $form['id'] );
 					}
 
-					//Choice Field Types
+					// Choice Field Types.
 				} elseif ( is_array( $target_field_inputs ) ) {
 
-					//Received Parent Input ID
+					// Received Parent Input ID.
 					if ( $target_field_id == $target_field['id'] ) {
 
 						if ( is_array( $data[ $source_field_id ] ) ) {
@@ -836,7 +836,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 							$entry[ $source_field['id'] ] = $target_field->sanitize_entry_value( $source_field['value'], $form['id'] );
 						}
 
-						//Received Direct Input ID
+						// Received Direct Input ID.
 					} else {
 						foreach ( $target_field_inputs as $input ) {
 							if ( $target_field_id === $input['id'] ) {
