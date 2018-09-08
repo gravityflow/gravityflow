@@ -1,5 +1,6 @@
 - Added "Authorized" as an available choice for the entry Payment Status property in the step condition setting.
 - Added response field mapping for JSON values to the Outgoing Webhook step.
+- Added gravityflow_entry_webhook_response_mapping to allow the entry/response values to be adjusted during webhook response mapping.
 - Added gravityflow_columns_inbox_table to allow columns in inbox to be adjusted in similar fashion to status (gravityflow_columns_status_table)
 - Added gravityflow_date_format_current_step_merge_tag filter to allow the date/time-based modifiers for {current_step} adjust format: expiration, schedule, and start.
 - Updated the Entry Detail workflow info box display of step expiration date to use existing gravityflow_date_format_entry_detail filter.

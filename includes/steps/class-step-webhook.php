@@ -863,6 +863,21 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				$this->log_debug( __METHOD__ . '(): Incoming field mapping error.' );
 			}
 		}
+
+		/**
+		 * Allow the entry to be modified during the response mapping of the webhook step.
+		 *
+		 * @since 2.2.4-dev
+		 * 
+		 * @param array               $entry        The entry
+		 * @param array               $mapping      The response field mappings for outgoing webhook step.
+		 * @param array               $data         The response data
+		 * @param Gravity_Flow_Step   $this         The current step.
+		 *
+		 * @return array
+		 */
+		$entry = apply_filters( 'gravityflow_entry_webhook_response_mapping', $entry, $mapping, $data, $this );
+
 		return $entry;
 	}
 
