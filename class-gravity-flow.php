@@ -198,7 +198,13 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'gform_register_init_scripts', array( $this, 'filter_gform_register_init_scripts' ), 10, 3 );
 			add_action( 'wp_login', array( $this, 'filter_wp_login' ), 10, 2 );
 			add_action( 'gform_post_add_entry', array( $this, 'action_gform_post_add_entry' ), 10, 2 );
-			add_action( 'gform_after_submission', array( $this, 'after_submission' ), 9, 2 );
+
+			if ( $this->is_gravityforms_supported( '2.3.3.10' ) ) {
+				add_action( 'gform_pre_handle_confirmation', array( $this, 'after_submission' ), 9, 2 );
+			} else {
+				add_action( 'gform_after_submission', array( $this, 'after_submission' ), 9, 2 );
+			}
+
 			add_action( 'gform_after_update_entry', array( $this, 'filter_after_update_entry' ), 10, 2 );
 
 			$this->add_delayed_payment_support(
@@ -7306,7 +7312,21 @@ AND m.meta_value='queued'";
 			}
 
 			$step = gravity_flow()->get_current_step( $form, $entry );
-			$args = compact( 'form', 'entry', 'url_encode', 'esc_html', 'nl2br', 'format', 'step' );
+
+			$assignee = null;
+
+			if ( ! $assignee ) {
+				$current_assignees = $step->get_assignees();
+				foreach ( $current_assignees as $current_assignee ) {
+					if ( $current_assignee->is_current_user() ) {
+						$assignee = $current_assignee;
+						break;
+					}
+				}
+			}
+
+			$args = compact( 'form', 'entry', 'url_encode', 'esc_html', 'nl2br', 'format', 'step', 'assignee' );
+
 			$merge_tags = Gravity_Flow_Merge_Tags::get_all( $args );
 
 			foreach ( $merge_tags as $merge_tag ) {

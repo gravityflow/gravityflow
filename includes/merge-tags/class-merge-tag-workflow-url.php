@@ -61,7 +61,12 @@ class Gravity_Flow_Merge_Tag_Workflow_Url extends Gravity_Flow_Merge_Tag_Assigne
 					'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
 					'text'    => $location == 'inbox' ? esc_html__( 'Inbox', 'gravityflow' ) : esc_html__( 'Entry', 'gravityflow' ),
 					'token'   => false,
+					'assignee' => '',
 				) );
+
+				if ( ! empty( $a['assignee'] ) ) {
+					$this->assignee = $this->step->get_assignee( $a['assignee'] );
+				}
 
 				$token = $this->get_workflow_url_access_token( $a );
 
