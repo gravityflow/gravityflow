@@ -39,7 +39,13 @@ class Gravity_Flow_Inbox {
 		}
 
 		$total_count = 0;
-		$entries     = self::get_entries( $args, $total_count );
+
+		timer_start();
+
+		$entries = self::get_entries( $args, $total_count );
+
+		gravity_flow()->log_debug( __METHOD__ . '(): duration of get_entries: ' . timer_stop() );
+
 
 		gravity_flow()->log_debug( __METHOD__ . "(): {$total_count} pending tasks." );
 
@@ -263,6 +269,16 @@ class Gravity_Flow_Inbox {
 			$columns['last_updated'] = __( 'Last Updated', 'gravityflow' );
 		}
 
+		/**
+		 * Allows the columns to be filtered for the inbox table.
+		 *
+		 * @since 2.2.4-dev
+		 *
+		 * @param array         $columns The columns to be filtered
+		 * @param array         $args    The array of args for this inbox table.
+		 */
+		$columns = apply_filters( 'gravityflow_columns_inbox_table', $columns, $args );
+
 		return $columns;
 	}
 
@@ -406,6 +422,12 @@ class Gravity_Flow_Inbox {
 				$step = $api->get_current_step( $entry );
 				if ( $step ) {
 					$value = self::format_actions( $step );
+				}
+				break;
+			case 'payment_status':
+				$value = rgar( $entry, 'payment_status' );
+				if ( gravity_flow()->is_gravityforms_supported( '2.4' ) ) {
+					$value = GFCommon::get_entry_payment_status_text( $value );
 				}
 				break;
 			default:
