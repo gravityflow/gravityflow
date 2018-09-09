@@ -58,9 +58,9 @@ class Gravity_Flow_Merge_Tag_Workflow_Url extends Gravity_Flow_Merge_Tag_Assigne
 				$options_string = isset( $match[4] ) ? $match[4] : '';
 
 				$a = $this->get_attributes( $options_string, array(
-					'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-					'text'    => $location == 'inbox' ? esc_html__( 'Inbox', 'gravityflow' ) : esc_html__( 'Entry', 'gravityflow' ),
-					'token'   => false,
+					'page_id'  => gravity_flow()->get_app_setting( 'inbox_page' ),
+					'text'     => $location == 'inbox' ? esc_html__( 'Inbox', 'gravityflow' ) : esc_html__( 'Entry', 'gravityflow' ),
+					'token'    => false,
 					'assignee' => '',
 				) );
 
