@@ -7300,7 +7300,7 @@ AND m.meta_value='queued'";
 		 * Target for the gform_pre_replace_merge_tags filter. Replaces the workflow_timeline and created_by merge tags.
 		 *
 		 * @since 2.2.4 Added the assignee to the merge tag if the current user is an assignee.
-		 * @since unkown
+		 * @since unknown
 		 *
 		 * @param string $text       The text which may contain merge tags to be processed.
 		 * @param array  $form       The current form.
