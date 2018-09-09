@@ -4727,7 +4727,11 @@ PRIMARY KEY  (id)
 
 			if ( $is_delayed ) {
 				$this->log_debug( __METHOD__ . '() - processing delayed for entry id ' . $entry['id'] );
-				remove_action( 'gform_after_submission', array( $this, 'after_submission' ), 9 );
+				if ( $this->is_gravityforms_supported( '2.3.3.10' ) ) {
+					remove_action( 'gform_pre_handle_confirmation', array( $this, 'after_submission' ), 9 );
+				} else {
+					remove_action( 'gform_after_submission', array( $this, 'after_submission' ), 9 );
+				}
 			} else {
 				gform_update_meta( $entry['id'], "{$this->_slug}_is_fulfilled", true );
 			}
