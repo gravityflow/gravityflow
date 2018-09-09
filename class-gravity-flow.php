@@ -7319,7 +7319,7 @@ AND m.meta_value='queued'";
 
 			$assignee = null;
 
-			if ( $step && ! $assignee ) {
+			if ( $step ) {
 				$current_assignees = $step->get_assignees();
 				foreach ( $current_assignees as $current_assignee ) {
 					if ( $current_assignee->is_current_user() ) {
