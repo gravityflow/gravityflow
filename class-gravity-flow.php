@@ -244,6 +244,8 @@ if ( class_exists( 'GFForms' ) ) {
 			if ( $this->is_app_settings() ) {
 				require_once( GFCommon::get_base_path() . '/tooltips.php' );
 			}
+
+			$this->add_admin_notices();
 		}
 
 		/**
@@ -3837,7 +3839,7 @@ PRIMARY KEY  (id)
 
 			$settings = array();
 
-			if ( ! is_multisite() || ( is_multisite() && is_main_site() && ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) ) {
+			if ( ( ! is_multisite() || ( is_multisite() && is_main_site() ) ) && ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
 				$settings[] = array(
 					'title'  => esc_html__( 'Settings', 'gravityflow' ),
 					'fields' => array(
@@ -3957,12 +3959,7 @@ PRIMARY KEY  (id)
 
 			$license_data = $this->check_license( $value );
 
-			$valid = null;
-			if ( empty( $license_data ) || $license_data->license == 'invalid' ) {
-				$valid = false;
-			} elseif ( $license_data->license == 'valid' ) {
-				$valid = true;
-			}
+			$valid = $license_data && $license_data->license == 'valid' ? true : false;
 
 			return $valid;
 
@@ -3980,9 +3977,14 @@ PRIMARY KEY  (id)
 				$value = $this->get_app_setting( 'license_key' );
 			}
 
-			$response = $this->perform_edd_license_request( 'check_license', $value );
+			// Static cache to prevent multiple requests for the same license key.
+			static $response = array();
 
-			return json_decode( wp_remote_retrieve_body( $response ) );
+			if ( ! isset( $response[ $value ] ) ) {
+				$response[ $value ] = $this->perform_edd_license_request( 'check_license', $value );
+			}
+
+			return json_decode( wp_remote_retrieve_body( $response[ $value ] ) );
 		}
 
 		/**
@@ -4000,13 +4002,13 @@ PRIMARY KEY  (id)
 				$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, 1 ) );
 			}
 
+			set_transient( 'gravityflow_license_details', false );
 
 			if ( empty( $field_setting ) ) {
 				return;
 			}
 
 			$this->activate_license( $field_setting );
-
 		}
 
 		/**
@@ -7659,6 +7661,78 @@ AND m.meta_value='queued'";
 			 * @param string $site_cookie_path The site cookie path.
 			 */
 			return apply_filters( 'gravityflow_site_cookie_path', $site_cookie_path );
+		}
+
+		/**
+		 * Adds the invalid license admin notice.
+		 *
+		 * @since 2.2.4
+		 */
+		public function add_admin_notices() {
+
+			$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] );
+
+			if ( $is_saving_license_key ) {
+				$posted_license_key = sanitize_text_field( rgpost( '_gaddon_setting_license_key' ) );
+				$license_details    = $posted_license_key ? $this->check_license( $posted_license_key ) : false;
+			} else {
+				$license_details = get_transient( 'gravityflow_license_details' );
+				if ( ! $license_details ) {
+					$license_key     = defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ? GRAVITY_FLOW_LICENSE_KEY : '';
+					$license_details = $this->check_license( $license_key );
+				}
+			}
+
+			if ( $license_details ) {
+				set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
+			}
+
+			$license_status = $license_details ? $license_details->license : '';
+
+			if ( $license_status != 'valid' ) {
+
+				$add_buttons = ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) || ( is_multisite() && ! is_main_site() );
+
+				$primary_button_link = admin_url( 'admin.php?page=gravityflow_settings' );
+
+				$message = sprintf( '<img src="%s" style="vertical-align:text-bottom;margin-right:5px;"/>', GFCommon::get_base_url() . '/images/exclamation.png' );
+
+				switch ( $license_status ) {
+					case 'expired':
+						$message     .= esc_html__( 'Your Gravity Flow license has expired.', 'gravityflow' );
+						$add_buttons = false;
+						break;
+					case 'invalid':
+						$message .= esc_html__( 'Your Gravity Flow license is invalid.', 'gravityflow' );
+						break;
+					case 'deactivated':
+						$message .= esc_html__( 'Your Gravity Flow license is inactive.', 'gravityflow' );
+						break;
+					/** @noinspection PhpMissingBreakStatementInspection */
+					case '':
+						$license_status = 'site_inactive';
+					// break intentionally left blank
+					case 'inactive':
+					case 'site_inactive':
+					default:
+						$message .= esc_html__( 'Your Gravity Flow license has not been activated.', 'gravityflow' );
+						break;
+				}
+
+				$message .= ' ' . esc_html__( 'This means you&rsquo;re missing out on security fixes, updates and support!', 'gravityflow' );
+
+				$url = 'https://gravityflow.io/?utm_source=admin_notice&utm_medium=admin&utm_content=' . $license_status . '&utm_campaign=Admin%20Notice#pricing';
+
+				// Show a different notice on settings page for inactive licenses (hide the buttons)
+				if ( $add_buttons && ! $this->is_app_settings() ) {
+					$message .= '<br /><br />' . esc_html__( '%sActivate your license%s or %sget a license here%s', 'gravityflow' );
+					$message = sprintf( $message, '<a href="' . esc_url( $primary_button_link ) . '" class="button button-primary">', '</a>', '<a href="' . esc_url( $url ) . '" class="button button-secondary">', '</a>' );
+				}
+
+				$key = 'gravityflow_license_notice_' . date( 'Y' ) . date( 'z' );
+
+				GFCommon::add_dismissible_message( $message, $key, 'error', 'gravityflow_settings', false, 'site-wide' );
+			}
 		}
 	}
 }
