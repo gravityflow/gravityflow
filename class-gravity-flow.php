@@ -245,7 +245,7 @@ if ( class_exists( 'GFForms' ) ) {
 				require_once( GFCommon::get_base_path() . '/tooltips.php' );
 			}
 
-			$this->add_admin_notices();
+			add_action( 'admin_notices', array( $this, 'action_admin_notices' ) );
 		}
 
 		/**
@@ -7668,7 +7668,7 @@ AND m.meta_value='queued'";
 		 *
 		 * @since 2.2.4
 		 */
-		public function add_admin_notices() {
+		public function action_admin_notices() {
 
 			$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] );
 
@@ -7731,7 +7731,16 @@ AND m.meta_value='queued'";
 
 				$key = 'gravityflow_license_notice_' . date( 'Y' ) . date( 'z' );
 
-				GFCommon::add_dismissible_message( $message, $key, 'error', 'gravityflow_settings', false, 'site-wide' );
+				$notice = array(
+					'key' => $key,
+					'capabilities' => 'gravityflow_settings',
+					'type' => 'error',
+					'text' => $message,
+				);
+
+				$notices = array( $notice );
+
+				GFCommon::display_dismissible_message( $notices );
 			}
 		}
 	}
