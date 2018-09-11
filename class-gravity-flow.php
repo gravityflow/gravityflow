@@ -3097,7 +3097,7 @@ PRIMARY KEY  (id)
 				$expiration_timestamp = $current_step->get_expiration_timestamp();
 				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
 				$expiration_date      = get_date_from_gmt( $expiration_date_str );
-				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
+				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), GFCommon::format_date( $expiration_date, true, $date_format ) );
 			}
 
 			/**
@@ -7135,79 +7135,113 @@ AND m.meta_value='queued'";
 				}
 			}
 
-			return array(
-				'ip'             => array(
-					'label'  => esc_html__( 'User IP', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+			$form_id = absint( rgget( 'id' ) );
+
+			/**
+			 * Allows feed condition entry properties to be modified for the form.
+			 *
+			 * @since 2.2.4-dev
+			 *
+			 * @param array $properties The feed condition entry properties.
+			 * @param int   $form_id Form id.
+			 */
+			$properties = apply_filters( 'gravityflow_feed_condition_entry_properties',
+				array(
+					'ip'             => array(
+						'label'  => esc_html__( 'User IP', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+						),
 					),
-				),
-				'source_url'     => array(
-					'label'  => esc_html__( 'Source URL', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+					'source_url'     => array(
+						'label'  => esc_html__( 'Source URL', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+						),
 					),
-				),
-				'payment_status' => array(
-					'label'  => esc_html__( 'Payment Status', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot' ),
-						'choices'   => array(
-							array(
-								'text'  => esc_html__( 'Paid', 'gravityflow' ),
-								'value' => 'Paid',
-							),
-							array(
-								'text'  => esc_html__( 'Processing', 'gravityflow' ),
-								'value' => 'Processing',
-							),
-							array(
-								'text'  => esc_html__( 'Failed', 'gravityflow' ),
-								'value' => 'Failed',
-							),
-							array(
-								'text'  => esc_html__( 'Active', 'gravityflow' ),
-								'value' => 'Active',
-							),
-							array(
-								'text'  => esc_html__( 'Cancelled', 'gravityflow' ),
-								'value' => 'Cancelled',
-							),
-							array(
-								'text'  => esc_html__( 'Pending', 'gravityflow' ),
-								'value' => 'Pending',
-							),
-							array(
-								'text'  => esc_html__( 'Refunded', 'gravityflow' ),
-								'value' => 'Refunded',
-							),
-							array(
-								'text'  => esc_html__( 'Voided', 'gravityflow' ),
-								'value' => 'Voided',
-							),
+					'payment_status' => array(
+						'label'  => esc_html__( 'Payment Status', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot' ),
+							'choices'   => $this->get_entry_payment_statuses_as_choices(),
+						),
+					),
+					'payment_amount' => array(
+						'label'  => esc_html__( 'Payment Amount', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+						),
+					),
+					'transaction_id' => array(
+						'label'  => esc_html__( 'Transaction ID', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
+						),
+					),
+					'created_by' => array(
+						'label'  => esc_html__( 'Created By', 'gravityflow' ),
+						'filter' => array(
+							'operators' => array( 'is', 'isnot' ),
+							'choices'   => $user_choices,
 						),
 					),
 				),
-				'payment_amount' => array(
-					'label'  => esc_html__( 'Payment Amount', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
-					),
-				),
-				'transaction_id' => array(
-					'label'  => esc_html__( 'Transaction ID', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot', '>', '<', 'contains' ),
-					),
-				),
-				'created_by' => array(
-					'label'  => esc_html__( 'Created By', 'gravityflow' ),
-					'filter' => array(
-						'operators' => array( 'is', 'isnot' ),
-						'choices'   => $user_choices,
-					),
-				),
+				$form_id
 			);
+
+			return $properties;
+		}
+
+		/**
+		 * Returns an array of supported entry payment statuses formatted for use as drop down choices.
+		 *
+		 * @since 2.2.4-dev
+		 *
+		 * @return array
+		 */
+		public function get_entry_payment_statuses_as_choices() {
+			if ( ! $this->is_gravityforms_supported( '2.4' ) ) {
+				return array(
+					array(
+						'text'  => esc_html__( 'Authorized', 'gravityflow' ),
+						'value' => 'Authorized',
+					),
+					array(
+						'text'  => esc_html__( 'Paid', 'gravityflow' ),
+						'value' => 'Paid',
+					),
+					array(
+						'text'  => esc_html__( 'Processing', 'gravityflow' ),
+						'value' => 'Processing',
+					),
+					array(
+						'text'  => esc_html__( 'Failed', 'gravityflow' ),
+						'value' => 'Failed',
+					),
+					array(
+						'text'  => esc_html__( 'Active', 'gravityflow' ),
+						'value' => 'Active',
+					),
+					array(
+						'text'  => esc_html__( 'Cancelled', 'gravityflow' ),
+						'value' => 'Cancelled',
+					),
+					array(
+						'text'  => esc_html__( 'Pending', 'gravityflow' ),
+						'value' => 'Pending',
+					),
+					array(
+						'text'  => esc_html__( 'Refunded', 'gravityflow' ),
+						'value' => 'Refunded',
+					),
+					array(
+						'text'  => esc_html__( 'Voided', 'gravityflow' ),
+						'value' => 'Voided',
+					),
+				);
+			}
+
+			return GFCommon::get_entry_payment_statuses_as_choices();
 		}
 
 		/**

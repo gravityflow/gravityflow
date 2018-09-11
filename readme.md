@@ -5,7 +5,9 @@ Gravity Flow
 
 Gravity Flow is a premium plugin for WordPress which provides Workflow automation for forms created in Gravity Forms.
 
-This repository is a development version of Gravity Flow intended to facilitate communication with developers. It is not stable and not intended for installation on production sites.
+This repository is a development version of Gravity Flow intended to facilitate communication with developers. It is not stable and should not be used on production sites.
+
+Do not use this repository as a way of evaluating Gravity Flow before purchasing - it's not stable and not everything will work and we will not be able to answer any questions.
 
 Pull requests are welcome.
 
@@ -56,6 +58,7 @@ Contributors:
 * Steve Henty @stevehenty
 * Richard Wawrzyniak @richardW8k
 * Jamie Oastler @Idealien
+* Yoren Chang @yoren
 * Jake Jackson @gravitypdf
 
 Thank you also to all the translators:
