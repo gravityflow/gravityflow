@@ -3968,7 +3968,6 @@ PRIMARY KEY  (id)
 			$valid = $license_data && $license_data->license == 'valid' ? true : false;
 
 			return $valid;
-
 		}
 
 		/**
@@ -4037,13 +4036,16 @@ PRIMARY KEY  (id)
 		/**
 		 * Send a request to the EDD store url.
 		 *
-		 * @param string $edd_action The action to perform (check_license, activate_license or deactivate_license).
-		 * @param string $license    The license key.
-		 * @param string $item_name  The EDD item name. Defaults to the value of the GRAVITY_FLOW_EDD_ITEM_NAME constant.
+		 * @since 2.2.4 Added support for item ID as well as name.
+		 * @since unkonwn
+		 *
+		 * @param string     $edd_action      The action to perform (check_license, activate_license or deactivate_license).
+		 * @param string     $license         The license key.
+		 * @param string|int $item_name_or_id The EDD item name. Defaults to the value of the GRAVITY_FLOW_EDD_ITEM_NAME constant.
 		 *
 		 * @return array|WP_Error The response.
 		 */
-		public function perform_edd_license_request( $edd_action, $license, $item_name = GRAVITY_FLOW_EDD_ITEM_NAME ) {
+		public function perform_edd_license_request( $edd_action, $license, $item_name_or_id = GRAVITY_FLOW_EDD_ITEM_ID ) {
 			// Prepare the request arguments.
 			$args = array(
 				'timeout'   => 10,
@@ -4051,10 +4053,15 @@ PRIMARY KEY  (id)
 				'body'      => array(
 					'edd_action' => $edd_action,
 					'license'    => trim( $license ),
-					'item_name'  => urlencode( $item_name ),
 					'url'        => home_url(),
 				),
 			);
+
+			if ( is_numeric( $item_name_or_id ) ) {
+				$args['body']['item_id'] = $item_name_or_id;
+			} else {
+				$args['body']['item_name'] = urlencode( $item_name_or_id );
+			}
 
 			// Send the remote request.
 			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, $args );
@@ -7697,28 +7704,32 @@ AND m.meta_value='queued'";
 		 */
 		public function action_admin_notices() {
 
-			$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] );
+			$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] ) && isset( $_POST[ '_gravityflow_save_settings_nonce' ] );
 
 			if ( $is_saving_license_key ) {
 				$posted_license_key = sanitize_text_field( rgpost( '_gaddon_setting_license_key' ) );
-				$license_details    = $posted_license_key ? $this->check_license( $posted_license_key ) : false;
+				$license_details    = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
+				if ( $license_details ) {
+					set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
+				}
 			} else {
 				$license_details = get_transient( 'gravityflow_license_details' );
 				if ( ! $license_details ) {
 					$license_key     = defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ? GRAVITY_FLOW_LICENSE_KEY : '';
 					$license_details = $this->check_license( $license_key );
+					if ( $license_details ) {
+						set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
+					}
 				}
 			}
 
-			if ( $license_details ) {
-				set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
-			}
+
 
 			$license_status = $license_details ? $license_details->license : '';
 
 			if ( $license_status != 'valid' ) {
 
-				$add_buttons = ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) || ( is_multisite() && ! is_main_site() );
+				$add_buttons = ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) || ( is_multisite() && is_main_site() );
 
 				$primary_button_link = admin_url( 'admin.php?page=gravityflow_settings' );
 
