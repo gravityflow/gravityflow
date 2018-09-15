@@ -31,7 +31,7 @@ define( 'GRAVITY_FLOW_VERSION', '2.2.4-dev' );
 
 define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 
-define( 'GRAVITY_FLOW_EDD_ITEM_NAME', 'Gravity Flow' );
+define( 'GRAVITY_FLOW_EDD_ITEM_ID', 1473 );
 
 add_action( 'gform_loaded', array( 'Gravity_Flow_Bootstrap', 'load' ), 1 );
 
@@ -173,7 +173,7 @@ function gravityflow_edd_plugin_updater() {
 		new Gravity_Flow_EDD_SL_Plugin_Updater( GRAVITY_FLOW_EDD_STORE_URL, __FILE__, array(
 			'version'   => GRAVITY_FLOW_VERSION,
 			'license'   => $license_key,
-			'item_name' => GRAVITY_FLOW_EDD_ITEM_NAME,
+			'item_id' => GRAVITY_FLOW_EDD_ITEM_ID,
 			'author'    => 'Steven Henty',
 		) );
 	}
