@@ -9,3 +9,4 @@
 - Updated the step condition setting, inbox, and status pages to support custom payment statuses added by the gform_payment_statuses filter with Gravity Forms 2.4 and greater.
 - Fixed an issue with the Multi-User field on the entry detail pages where the ID is displayed instead of the user's name.
 - Fixed an issue with the File Upload field display the inbox shortcode page via fields attribute. The file icon/link was not displaying and generating PHP error.
+- Fixed RTL CSS in the inbox and entry detail page for Divi and other themes that set table cells to `text-align:left`.
