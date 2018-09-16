@@ -7716,14 +7716,14 @@ AND m.meta_value='queued'";
 				return;
 			}
 
-			$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] ) && isset( $_POST[ '_gravityflow_save_settings_nonce' ] );
+			$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] ) && isset( $_POST['_gravityflow_save_settings_nonce'] );
 
 			$license_details = false;
 
 			if ( $is_saving_license_key ) {
 				$posted_license_key = sanitize_text_field( rgpost( '_gaddon_setting_license_key' ) );
-				if ( wp_verify_nonce( $_POST[ '_gravityflow_save_settings_nonce' ], 'gravityflow_save_settings' ) ) {
-					$license_details    = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
+				if ( wp_verify_nonce( $_POST['_gravityflow_save_settings_nonce'], 'gravityflow_save_settings' ) ) {
+					$license_details = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
 				}
 				if ( $license_details ) {
 					set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
@@ -7752,16 +7752,16 @@ AND m.meta_value='queued'";
 				switch ( $license_status ) {
 					case 'expired':
 						/* translators: %s is the title of the plugin */
-					$message     .= sprintf( esc_html__( 'Your %s license has expired.', 'gravityflow' ), $this->_title );
+						$message     .= sprintf( esc_html__( 'Your %s license has expired.', 'gravityflow' ), $this->_title );
 						$add_buttons = false;
 						break;
 					case 'invalid':
 						/* translators: %s is the title of the plugin */
-					$message .= sprintf( esc_html__( 'Your %s license is invalid.', 'gravityflow' ), $this->_title );
+						$message .= sprintf( esc_html__( 'Your %s license is invalid.', 'gravityflow' ), $this->_title );
 						break;
 					case 'deactivated':
 						/* translators: %s is the title of the plugin */
-					$message .= sprintf( esc_html__( 'Your %s license is inactive.', 'gravityflow' ), $this->_title );
+						$message .= sprintf( esc_html__( 'Your %s license is inactive.', 'gravityflow' ), $this->_title );
 						break;
 					/** @noinspection PhpMissingBreakStatementInspection */
 					case '':
@@ -7788,10 +7788,10 @@ AND m.meta_value='queued'";
 				$key = 'gravityflow_license_notice_' . date( 'Y' ) . date( 'z' );
 
 				$notice = array(
-					'key' => $key,
+					'key'          => $key,
 					'capabilities' => 'gravityflow_settings',
-					'type' => 'error',
-					'text' => $message,
+					'type'         => 'error',
+					'text'         => $message,
 				);
 
 				$notices = array( $notice );

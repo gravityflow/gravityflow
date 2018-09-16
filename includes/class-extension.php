@@ -256,7 +256,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 			$value = $this->get_app_setting( 'license_key' );
 		}
 		$item_name_or_id = empty( $this->edd_item_id ) ? $this->edd_item_name : $this->edd_item_id;
-		$response = gravity_flow()->perform_edd_license_request( 'check_license', $value, $item_name_or_id );
+		$response        = gravity_flow()->perform_edd_license_request( 'check_license', $value, $item_name_or_id );
 
 		return json_decode( wp_remote_retrieve_body( $response ) );
 
@@ -273,7 +273,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 		if ( $old_license && $field_setting != $old_license ) {
 			$item_name_or_id = empty( $this->edd_item_id ) ? $this->edd_item_name : $this->edd_item_id;
-			$response = gravity_flow()->perform_edd_license_request( 'deactivate_license', $old_license, $item_name_or_id );
+			$response        = gravity_flow()->perform_edd_license_request( 'deactivate_license', $old_license, $item_name_or_id );
 			$this->log_debug( __METHOD__ . '(): response: ' . print_r( $response, 1 ) );
 		}
 
@@ -294,7 +294,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	 */
 	public function activate_license( $license_key ) {
 		$item_name_or_id = empty( $this->edd_item_id ) ? $this->edd_item_name : $this->edd_item_id;
-		$response = gravity_flow()->perform_edd_license_request( 'activate_license', $license_key, $item_name_or_id );
+		$response        = gravity_flow()->perform_edd_license_request( 'activate_license', $license_key, $item_name_or_id );
 
 		// Force plugins page to refresh the update info.
 		set_site_transient( 'update_plugins', null );
@@ -413,7 +413,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		if ( $is_saving_license_key ) {
 			$posted_license_key = sanitize_text_field( rgpost( '_gaddon_setting_license_key' ) );
 			if ( wp_verify_nonce( $_POST[ '_' . $this->get_slug() . '_save_settings_nonce' ], $this->get_slug() . '_save_settings' ) ) {
-				$license_details    = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
+				$license_details = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
 			}
 			if ( $license_details ) {
 				set_transient( $transient_key, $license_details, DAY_IN_SECONDS );
