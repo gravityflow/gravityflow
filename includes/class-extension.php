@@ -259,7 +259,6 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		$response        = gravity_flow()->perform_edd_license_request( 'check_license', $value, $item_name_or_id );
 
 		return json_decode( wp_remote_retrieve_body( $response ) );
-
 	}
 
 	/**
@@ -282,7 +281,6 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		}
 
 		$this->activate_license( $field_setting );
-
 	}
 
 	/**
