@@ -7751,14 +7751,17 @@ AND m.meta_value='queued'";
 
 				switch ( $license_status ) {
 					case 'expired':
-						$message     .= esc_html__( 'Your Gravity Flow license has expired.', 'gravityflow' );
+						/* translators: %s is the title of the plugin */
+					$message     .= sprintf( esc_html__( 'Your %s license has expired.', 'gravityflow' ), $this->_title );
 						$add_buttons = false;
 						break;
 					case 'invalid':
-						$message .= esc_html__( 'Your Gravity Flow license is invalid.', 'gravityflow' );
+						/* translators: %s is the title of the plugin */
+					$message .= sprintf( esc_html__( 'Your %s license is invalid.', 'gravityflow' ), $this->_title );
 						break;
 					case 'deactivated':
-						$message .= esc_html__( 'Your Gravity Flow license is inactive.', 'gravityflow' );
+						/* translators: %s is the title of the plugin */
+					$message .= sprintf( esc_html__( 'Your %s license is inactive.', 'gravityflow' ), $this->_title );
 						break;
 					/** @noinspection PhpMissingBreakStatementInspection */
 					case '':
@@ -7767,7 +7770,8 @@ AND m.meta_value='queued'";
 					case 'inactive':
 					case 'site_inactive':
 					default:
-						$message .= esc_html__( 'Your Gravity Flow license has not been activated.', 'gravityflow' );
+						/* translators: %s is the title of the plugin */
+						$message .= sprintf( esc_html__( 'Your %s license has not been activated.', 'gravityflow' ), $this->_title );
 						break;
 				}
 
