@@ -395,13 +395,26 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	 */
 	public function action_admin_notices() {
 
+		if ( is_multisite() && ! is_main_site() ) {
+			return;
+		}
+
+		$pending_installation = ! is_multisite() && ( get_option( 'gravityflow_pending_installation' ) || isset( $_GET['gravityflow_installation_wizard'] ) );
+
+		if ( $pending_installation ) {
+			return;
+		}
+
 		$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] ) && isset( $_POST[ '_' . $this->get_slug() . '_save_settings_nonce' ] );
 
 		$transient_key = $this->get_slug() . '_license_details';
 
+		$license_details = false;
 		if ( $is_saving_license_key ) {
 			$posted_license_key = sanitize_text_field( rgpost( '_gaddon_setting_license_key' ) );
-			$license_details    = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
+			if ( wp_verify_nonce( $_POST[ '_' . $this->get_slug() . '_save_settings_nonce' ], $this->get_slug() . '_save_settings' ) ) {
+				$license_details    = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
+			}
 			if ( $license_details ) {
 				set_transient( $transient_key, $license_details, DAY_IN_SECONDS );
 			}
