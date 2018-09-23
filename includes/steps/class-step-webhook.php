@@ -901,6 +901,17 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		return $entry;
 	}
 
+	/**
+	 * Parses the response value. Uses the backslash to drill down into arrays.
+	 *
+	 * @since 2.3.1
+	 *
+	 * @param array  $value     The response values.
+	 * @param string $key       The key used to lookup the value.
+	 * @param string $default   The defaeult return value.
+	 *
+	 * @return array|string|WP_Error
+	 */
 	public function parse_response_value( $value, $key, $default = '' ) {
 		if ( ! is_array( $value ) && ! ( is_object( $value ) && $value instanceof ArrayAccess ) ) {
 			return $default;
