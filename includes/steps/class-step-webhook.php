@@ -812,7 +812,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		$target_field = GFFormsModel::get_field( $form, $target_field_id );
 
-		if ( $target_field instanceof GF_FIELD ) {
+		if ( $target_field instanceof GF_Field ) {
 
 			if ( in_array( $target_field->type, array( 'fileupload', 'post_title', 'post_content', 'post_excerpt', 'post_tags', 'post_category', 'post_image', 'post_custom_field', 'product', 'singleproduct', 'quantity', 'option', 'shipping', 'singleshipping', 'total' ) ) ) {
 				$skip_mapping = true;
