@@ -751,11 +751,28 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		$custom_response_message = apply_filters( 'gravityflow_response_message_webhook', $http_response_message, $step_status, $response, $args, $entry, $this );
 
 		if ( $custom_response_message == $http_response_message ) {
+
+			$show_url_in_note = true;
+
+			/**
+			 * Allows the URL to be hidden in the notes. Useful if API keys are in the URL params.
+			 *
+			 * @since 2.3.1
+			 *
+			 * @param bool $show_url_in_note
+			 */
+			$show_url_in_note = gf_apply_filters( array( 'gravityflow_webhook_url_in_note', $this->get_form_id() ), $show_url_in_note );
+
+			$url_in_note = $show_url_in_note ? sprintf( 'URL: %s.', $url ) : '';
+
 			/* Translators: 1st placeholders is URL provided by user in step settings, 2nd placeholder is response codes from webhook execution */
-			$this->add_note( sprintf( esc_html__( 'Webhook sent.  URL: %1$s.  RESPONSE: %2$s', 'gravityflow' ), $url, $http_response_message ) );
+			$this->add_note( sprintf( esc_html__( 'Webhook sent. %1$s RESPONSE: %2$s', 'gravityflow' ), $url_in_note, $http_response_message ) );
+
 			$this->log_debug( __METHOD__ . '() - result: ' . $http_response_message );
 		} else {
+
 			$this->add_note( esc_html( $custom_response_message ) );
+
 			$this->log_debug( __METHOD__ . '() - result: ' . $custom_response_message );
 		}
 
@@ -784,7 +801,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 		$target_field_id = (string) $mapping['value'];
 
-		if ( ! isset( $data[ $source_field_id ] ) ) {
+		$value = $this->parse_response_value( $data, $source_field_id );
+
+		if ( is_wp_error( $value ) ) {
+			$this->log_debug( $value->get_error_message() );
 			return $entry;
 		}
 
@@ -807,16 +827,16 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 
 					if ( rgar( $content_type, 'subtype' ) == 'json' && in_array( $target_field->type, array( 'multiselect', 'workflow_multi_user' ) ) ) {
 
-						if ( ! is_array( $data[ $source_field_id ] ) ) {
-							$data[ $source_field_id ] = json_decode( $data[ $source_field_id ] );
+						if ( ! is_array( $value ) ) {
+							$value = json_decode( $value );
 						}
 
-						$entry[ $target_field_id ] = $target_field->get_value_save_entry( $data[ $source_field_id ], $form, false, $entry['id'], $entry );
+						$entry[ $target_field_id ] = $target_field->get_value_save_entry( $value, $form, false, $entry['id'], $entry );
 
 					} elseif ( in_array( $target_field->type, array( 'workflow_discussion' ) ) ) {
-						$entry[ $target_field_id ] = $target_field->get_value_save_entry( $data[ $source_field_id ], $form, false, $entry['id'], $entry );
+						$entry[ $target_field_id ] = $target_field->get_value_save_entry( $value, $form, false, $entry['id'], $entry );
 					} else {
-						$entry[ $target_field_id ] = $target_field->sanitize_entry_value( $data[ $source_field_id ], $form['id'] );
+						$entry[ $target_field_id ] = $target_field->sanitize_entry_value( $value, $form['id'] );
 					}
 
 					// Choice Field Types.
@@ -825,10 +845,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					// Received Parent Input ID.
 					if ( $target_field_id == $target_field['id'] ) {
 
-						if ( is_array( $data[ $source_field_id ] ) ) {
-							$choices = $data[ $source_field_id ];
+						if ( is_array( $value ) ) {
+							$choices = $value;
 						} else {
-							$choices = json_decode( $data[ $source_field_id ], true );
+							$choices = json_decode( $value, true );
 						}
 
 						foreach ( $choices as $source_field ) {
@@ -840,7 +860,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					} else {
 						foreach ( $target_field_inputs as $input ) {
 							if ( $target_field_id === $input['id'] ) {
-								$entry[ $target_field_id ] = $target_field->sanitize_entry_value( $data[ $source_field_id ], $form['id'] );
+								$entry[ $target_field_id ] = $target_field->sanitize_entry_value( $value, $form['id'] );
 								break;
 							}
 						}
@@ -851,7 +871,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			}
 		} elseif ( $target_field_id == 'gf_custom' ) {
 			$this->log_debug( __METHOD__ . '(): Mapping into gf_custom' );
-			$entry[ $target_field_id ] = GFCommon::replace_variables( $data[ $source_field_id ], $form, $entry, false, true, false, 'text' );
+			$entry[ $target_field_id ] = GFCommon::replace_variables( $value, $form, $entry, false, true, false, 'text' );
 		} else {
 			$skip_mapping = true;
 		}
@@ -879,6 +899,30 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		$entry = apply_filters( 'gravityflow_entry_webhook_response_mapping', $entry, $mapping, $data, $this );
 
 		return $entry;
+	}
+
+	public function parse_response_value( $value, $key, $default = '' ) {
+		if ( ! is_array( $value ) && ! ( is_object( $value ) && $value instanceof ArrayAccess ) ) {
+			return $default;
+		}
+
+		/* translators: %s is the key used to lookup the value in the REST API response */
+		$error_message = sprintf( __( 'The key %s does not match any element in the response.', 'gravityflow' ), $key ) ;
+
+		if ( strpos( $key, '\\' ) === false ) {
+			return isset( $value[ $key ] ) ? $value[ $key ] : new WP_Error( 'invalid_key', $error_message );
+		}
+
+		$names = explode( '\\', $key );
+		if ( $names === false ) {
+			return new WP_Error( 'invalid_key_parsing', $error_message );
+		}
+		$val = $value;
+		foreach ( $names as $current_name ) {
+			$val = rgar( $val, $current_name, $default );
+		}
+
+		return $val;
 	}
 
 	/**
