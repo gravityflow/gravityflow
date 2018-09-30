@@ -275,4 +275,40 @@ class Gravity_Flow_API {
 	public function get_timeline( $entry ) {
 		return gravity_flow()->get_timeline( $entry );
 	}
+
+	/**
+	 * Returns an array of entries to be displayed in the inbox.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param array $args        The inbox configuration arguments.
+	 * @param int   $total_count The total number of entries for the current assignee.
+	 *
+	 * @return array
+	 */
+	public static function get_inbox_entries( $args = array(), &$total_count = 0 ) {
+		$entries = array();
+
+		if ( ! class_exists( 'Gravity_Flow_Inbox' ) ) {
+			require_once( gravity_flow()->get_base_path() . '/includes/pages/class-inbox.php' );
+		}
+
+		timer_start();
+
+		$search_criteria = Gravity_Flow_Inbox::get_search_criteria();
+
+		if ( ! empty( $search_criteria ) ) {
+			$form_ids = Gravity_Flow_Inbox::get_form_ids( $args, $search_criteria );
+
+			if ( ! empty( $form_ids ) ) {
+				$entries = GFAPI::get_entries( $form_ids, $search_criteria, Gravity_Flow_Inbox::get_paging(), Gravity_Flow_Inbox::get_sorting(), $total_count );
+			}
+		}
+
+		gravity_flow()->log_debug( __METHOD__ . '(): duration of get_entries: ' . timer_stop() );
+		gravity_flow()->log_debug( __METHOD__ . "(): {$total_count} pending tasks." );
+
+		return $entries;
+	}
+
 }
