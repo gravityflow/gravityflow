@@ -411,7 +411,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				}
 			}
 
-			$original_entry = $entry;
+			$original_entry = $entry = $this->refresh_entry();
 
 			$this->save_entry( $form, $entry, $editable_fields );
 
@@ -436,6 +436,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			}
 
 			$this->maybe_send_notification( $new_status );
+			GFAPI::send_notifications( $form, $entry, 'workflow_user_input' );
 		}
 
 		return $feedback;
@@ -567,9 +568,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		$status = $this->evaluate_status();
 		$this->update_step_status( $status );
-		$entry = $this->refresh_entry();
-
-		GFAPI::send_notifications( $form, $entry, 'workflow_user_input' );
 
 		return $feedback;
 	}
