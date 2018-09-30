@@ -199,7 +199,9 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'wp_login', array( $this, 'filter_wp_login' ), 10, 2 );
 			add_action( 'gform_post_add_entry', array( $this, 'action_gform_post_add_entry' ), 10, 2 );
 
-			if ( $this->is_gravityforms_supported( '2.3.3.10' ) ) {
+			if ( $this->is_gravityforms_supported( '2.3.4.2' ) ) {
+				add_filter( 'gform_entry_pre_handle_confirmation', array( $this, 'after_submission' ), 9, 2 );
+			} elseif ( $this->is_gravityforms_supported( '2.3.3.10' ) ) {
 				add_action( 'gform_pre_handle_confirmation', array( $this, 'after_submission' ), 9, 2 );
 			} else {
 				add_action( 'gform_after_submission', array( $this, 'after_submission' ), 9, 2 );
@@ -4770,15 +4772,21 @@ PRIMARY KEY  (id)
 		 *
 		 * @param array $entry The current entry.
 		 * @param array $form  The current form.
+		 *
+		 * @return array|WP_Error
 		 */
 		public function after_submission( $entry, $form ) {
 			if ( ! isset( $entry['id'] ) || $entry['status'] === 'spam' ) {
-				return;
+				return $entry;
 			}
+
 			if ( isset( $entry['workflow_step'] ) ) {
 				$entry_id = absint( $entry['id'] );
 				$this->process_workflow( $form, $entry_id );
+				$entry = GFAPI::get_entry( $entry_id );
 			}
+
+			return $entry;
 		}
 
 		/**
