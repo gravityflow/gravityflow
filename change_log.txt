@@ -1,0 +1,1 @@
+- Updated the processing of the workflow to trigger before the confirmation is processed.
