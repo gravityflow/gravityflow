@@ -581,6 +581,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			if ( $step ) {
 				$this->end();
 
+				$this->send_revert_notification();
+
 				$note = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
 				$this->add_note( $note . $this->maybe_add_user_note(), true );
 
@@ -906,6 +908,13 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 */
 	public function send_rejection_notification() {
 		$this->maybe_send_notification( 'rejection' );
+	}
+
+	/**
+	 * Triggers sending of the revert notification.
+	 */
+	public function send_revert_notification() {
+		$this->maybe_send_notification( 'revert' );
 	}
 
 	/**
