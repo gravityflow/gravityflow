@@ -205,41 +205,44 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				),
 				$settings_api->get_setting_instructions( esc_html__( 'Instructions: please review the values in the fields below and click on the Approve or Reject button', 'gravityflow' ) ),
 				$settings_api->get_setting_display_fields(),
-				$settings_api->get_setting_notification_tabs( array(
-					array(
-						'label'  => __( 'Assignee Email', 'gravityflow' ),
-						'id'     => 'tab_assignee_notification',
-						'fields' => $settings_api->get_setting_notification( array(
-							'default_message' => __( 'A new entry is pending your approval. Please check your Workflow Inbox.', 'gravityflow' ),
-						) ),
-					),
-					array(
-						'label'  => __( 'Rejection Email', 'gravityflow' ),
-						'id'     => 'tab_rejection_notification',
-						'fields' => $settings_api->get_setting_notification( array(
-							'name_prefix'      => 'rejection',
-							'checkbox_label'   => __( 'Send email when the entry is rejected', 'gravityflow' ),
-							'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is rejected.', 'gravityflow' ),
-							'default_message'  => __( 'Entry {entry_id} has been rejected', 'gravityflow' ),
-							'send_to_fields'   => true,
-							'resend_field'     => false,
-						) ),
-					),
-					array(
-						'label'  => __( 'Approval Email', 'gravityflow' ),
-						'id'     => 'tab_approval_notification',
-						'fields' => $settings_api->get_setting_notification( array(
-							'name_prefix'      => 'approval',
-							'checkbox_label'   => __( 'Send email when the entry is approved', 'gravityflow' ),
-							'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is approved.', 'gravityflow' ),
-							'default_message'  => __( 'Entry {entry_id} has been approved', 'gravityflow' ),
-							'send_to_fields'   => true,
-							'resend_field'     => false,
-						) ),
-					),
-				) ),
+
 			),
 		);
+
+		$notification_tabs = $settings_api->get_setting_notification_tabs( array(
+			array(
+				'label'  => __( 'Assignee Email', 'gravityflow' ),
+				'id'     => 'tab_assignee_notification',
+				'fields' => $settings_api->get_setting_notification( array(
+					'default_message' => __( 'A new entry is pending your approval. Please check your Workflow Inbox.', 'gravityflow' ),
+				) ),
+			),
+			array(
+				'label'  => __( 'Rejection Email', 'gravityflow' ),
+				'id'     => 'tab_rejection_notification',
+				'fields' => $settings_api->get_setting_notification( array(
+					'name_prefix'      => 'rejection',
+					'checkbox_label'   => __( 'Send email when the entry is rejected', 'gravityflow' ),
+					'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is rejected.', 'gravityflow' ),
+					'default_message'  => __( 'Entry {entry_id} has been rejected', 'gravityflow' ),
+					'send_to_fields'   => true,
+					'resend_field'     => false,
+				) ),
+			),
+			array(
+				'label'  => __( 'Approval Email', 'gravityflow' ),
+				'id'     => 'tab_approval_notification',
+				'fields' => $settings_api->get_setting_notification( array(
+					'name_prefix'      => 'approval',
+					'checkbox_label'   => __( 'Send email when the entry is approved', 'gravityflow' ),
+					'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is approved.', 'gravityflow' ),
+					'default_message'  => __( 'Entry {entry_id} has been approved', 'gravityflow' ),
+					'send_to_fields'   => true,
+					'resend_field'     => false,
+				) ),
+			),
+		) );
+
 
 		$user_input_step_choices = array();
 		$revert_field            = array();
@@ -300,7 +303,23 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'label' => esc_html__( 'Required if reverted or rejected', 'gravityflow' )
 			);
 			$settings['fields'][]           = $revert_field;
+
+			$notification_tabs['tabs'][] = array(
+				'label'  => __( 'Revert Email', 'gravityflow' ),
+				'id'     => 'tab_revert_notification',
+				'fields' => $settings_api->get_setting_notification( array(
+					'name_prefix'      => 'revert',
+					'checkbox_label'   => __( 'Send email when the entry is reverted to a user input step', 'gravityflow' ),
+					'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is reverted to a user input.', 'gravityflow' ),
+					'default_message'  => __( 'Entry {entry_id} has been reverted', 'gravityflow' ),
+					'send_to_fields'   => true,
+					'resend_field'     => false,
+				) ),
+			);
+
 		}
+
+		$settings['fields'][] = $notification_tabs;
 
 		$settings['fields'][] = $note_mode_setting;
 

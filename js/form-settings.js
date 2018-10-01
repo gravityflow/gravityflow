@@ -287,7 +287,7 @@
 
 		};
 
-		var notificationTabs = ['assignee', 'rejection', 'approval', 'in_progress', 'complete'];
+		var notificationTabs = ['assignee', 'rejection', 'approval', 'in_progress', 'complete', 'revert'];
 
 		for (var i = 0; i < notificationTabs.length; i++) {
 			GravityFlowFeedSettings.initNotificationTab(notificationTabs[i]);
@@ -319,6 +319,36 @@
 				$notificationTabs.tabs('disable', 1);
 			} else {
 				$notificationTabs.tabs('enable', 1);
+			}
+		});
+
+		// Approval - Revert Email Tab
+
+		var $revertSetting = $('#revertenable');
+		if ( !$revertSetting.prop("checked")) {
+			$('#tabs-notification_tabs').tabs('disable', 3);
+
+		}
+
+		$revertSetting.change(function () {
+			var disabled = $(this).prop("checked");
+			var $notificationTabs = $('#tabs-notification_tabs');
+			if (!disabled) {
+				var $enabledSetting = $('#revert_notification_enabled');
+
+				// Disable the Revert notification if enabled.
+				if ($enabledSetting.prop('checked')) {
+					$enabledSetting.click();
+				}
+
+				// If the Revert Email tab is active switch to the Assignee Email tab.
+				if ($notificationTabs.tabs('option', 'active') === 1) {
+					$notificationTabs.tabs('option', 'active', 0);
+				}
+
+				$notificationTabs.tabs('disable', 3);
+			} else {
+				$notificationTabs.tabs('enable', 3);
 			}
 		});
 
