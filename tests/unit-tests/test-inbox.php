@@ -210,6 +210,70 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		$this->assertEquals( $this->_get_bingo_array(), $sorting );
 	}
 
+	/**
+	 * Tests that entries are not returned when a user is not logged in and an access token is not found.
+	 */
+	function test_get_inbox_entries_anonymous() {
+		$this->_create_entries();
+		$this->_set_anonymous();
+		$entries = Gravity_Flow_API::get_inbox_entries( $this->_get_form_id_args() );
+		$this->assertEmpty( $entries );
+	}
+
+	/**
+	 * Tests that the expected entries are returned when a user is logged in.
+	 */
+	function test_get_inbox_entries_current_user() {
+		// Create 10 unassigned entries.
+		$this->_create_entries();
+
+		// Create 10 entries assigned to the current user.
+		$expected_ids = $this->_create_assigned_entries( 'workflow_user_id_1' );
+
+		// Create 10 entries assigned to someone else.
+		$this->_create_assigned_entries( 'workflow_email_test@test.test' );
+
+		// Get the entries for the current user.
+		$this->_set_user();
+		$entries = Gravity_Flow_API::get_inbox_entries( $this->_get_form_id_args() );
+
+		// Confirm ten entries were found.
+		$expected_count = 10;
+		$actual_count   = count( $entries );
+		$this->assertEquals( $expected_count, $actual_count );
+
+		// Confirm the found entry IDs match the created IDs.
+		$actual_ids = array_reverse( wp_list_pluck( $entries, 'id' ) );
+		$this->assertEquals( $expected_ids, $actual_ids );
+	}
+
+	/**
+	 * Tests that the expected entries are returned for an access token user.
+	 */
+	function test_get_inbox_entries_access_token() {
+		// Create 10 unassigned entries.
+		$this->_create_entries();
+
+		// Create 10 entries assigned to the access token assignee key.
+		$expected_ids = $this->_create_assigned_entries( 'workflow_email_test@test.test' );
+
+		// Create 10 entries assigned to someone else.
+		$this->_create_assigned_entries( 'workflow_user_id_1' );
+
+		// Get the entries for the current access token.
+		$this->_set_access_token();
+		$entries = Gravity_Flow_API::get_inbox_entries( $this->_get_form_id_args() );
+
+		// Confirm ten entries were found.
+		$expected_count = 10;
+		$actual_count   = count( $entries );
+		$this->assertEquals( $expected_count, $actual_count );
+
+		// Confirm the found entry IDs match the created IDs.
+		$actual_ids = array_reverse( wp_list_pluck( $entries, 'id' ) );
+		$this->assertEquals( $expected_ids, $actual_ids );
+	}
+
 	/* HELPERS */
 
 	/**
