@@ -171,6 +171,27 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		$this->assertEquals( $this->_get_bingo_array(), $form_ids );
 	}
 
+	/**
+	 * Tests that the default paging arguments are returned.
+	 */
+	function test_get_paging() {
+		$expected = array(
+			'page_size' => 150,
+		);
+		$paging   = Gravity_Flow_Inbox::get_paging();
+		$this->assertEquals( $expected, $paging );
+	}
+
+	/**
+	 * Tests that the gravityflow_inbox_paging filter can override the paging arguments.
+	 */
+	function test_get_paging_filter() {
+		add_filter( 'gravityflow_inbox_paging', array( $this, '_get_bingo_array' ) );
+		$paging = Gravity_Flow_Inbox::get_paging();
+		remove_filter( 'gravityflow_inbox_paging', array( $this, '_get_bingo_array' ) );
+		$this->assertEquals( $this->_get_bingo_array(), $paging );
+	}
+
 	/* HELPERS */
 
 	/**
