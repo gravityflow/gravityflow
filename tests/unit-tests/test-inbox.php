@@ -192,6 +192,24 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		$this->assertEquals( $this->_get_bingo_array(), $paging );
 	}
 
+	/**
+	 * Tests that the default sorting arguments are returned.
+	 */
+	function test_get_sorting() {
+		$sorting = Gravity_Flow_Inbox::get_sorting();
+		$this->assertEmpty( $sorting );
+	}
+
+	/**
+	 * Tests that the gravityflow_inbox_sorting filter can override the sorting arguments.
+	 */
+	function test_get_sorting_filter() {
+		add_filter( 'gravityflow_inbox_sorting', array( $this, '_get_bingo_array' ) );
+		$sorting = Gravity_Flow_Inbox::get_sorting();
+		remove_filter( 'gravityflow_inbox_sorting', array( $this, '_get_bingo_array' ) );
+		$this->assertEquals( $this->_get_bingo_array(), $sorting );
+	}
+
 	/* HELPERS */
 
 	/**
