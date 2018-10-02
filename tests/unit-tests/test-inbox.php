@@ -96,7 +96,6 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	 * Include the Gravity_Flow_Inbox class.
 	 */
 	public function _include_inbox() {
-		//require_once( gravity_flow()->get_base_path() . '/includes/pages/class-inbox.php' );
 		require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/includes/pages/class-inbox.php';
 	}
 
