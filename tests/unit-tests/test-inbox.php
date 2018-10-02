@@ -28,30 +28,45 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		$this->_include_inbox();
 	}
 
+	/**
+	 * Tests that the filter key is empty when a user is not logged in and an access token is not found.
+	 */
 	function test_get_filter_key_anonymous() {
 		$this->_set_anonymous();
 		$key = Gravity_Flow_Inbox::get_filter_key();
 		$this->assertEmpty( $key );
 	}
 
+	/**
+	 * Tests that the filter key is generated for the logged in user.
+	 */
 	function test_get_filter_key_current_user() {
 		$this->_set_user();
 		$key = Gravity_Flow_Inbox::get_filter_key();
 		$this->assertEquals( 'workflow_user_id_1', $key );
 	}
 
+	/**
+	 * Tests that the filter key is generated for the access token user.
+	 */
 	function test_get_filter_key_access_token() {
 		$this->_set_access_token();
 		$key = Gravity_Flow_Inbox::get_filter_key();
 		$this->assertEquals( 'workflow_email_test@test.test', $key );
 	}
 
+	/**
+	 * Tests that the search criteria is empty when a user is not logged in and an access token is not found.
+	 */
 	function test_get_search_criteria_anonymous() {
 		$this->_set_anonymous();
 		$search_criteria = Gravity_Flow_Inbox::get_search_criteria();
 		$this->assertEmpty( $search_criteria );
 	}
 
+	/**
+	 * Tests that the search criteria is generated for the logged in user.
+	 */
 	function test_get_search_criteria_current_user() {
 		$expected = array(
 			'field_filters' => array(
@@ -73,6 +88,9 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		$this->assertEquals( $expected, $search_criteria );
 	}
 
+	/**
+	 * Tests that the search criteria is generated for the access token user.
+	 */
 	function test_get_search_criteria_access_token() {
 		$expected = array(
 			'field_filters' => array(
