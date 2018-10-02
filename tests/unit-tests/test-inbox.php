@@ -108,6 +108,17 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		$this->assertEquals( $expected, $search_criteria );
 	}
 
+	/**
+	 * Tests that the gravityflow_inbox_search_criteria can override the search criteria.
+	 */
+	function test_get_search_criteria_filter() {
+		$this->_set_user();
+		add_filter( 'gravityflow_inbox_search_criteria', array( $this, '_get_bingo_array' ) );
+		$search_criteria = Gravity_Flow_Inbox::get_search_criteria();
+		remove_filter( 'gravityflow_inbox_search_criteria', array( $this, '_get_bingo_array' ) );
+		$this->assertEquals( $this->_get_bingo_array(), $search_criteria );
+	}
+
 	/* HELPERS */
 
 	/**
