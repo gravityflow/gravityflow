@@ -119,6 +119,58 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		$this->assertEquals( $this->_get_bingo_array(), $search_criteria );
 	}
 
+	/**
+	 * Tests that the form IDs can be retrieved from the inbox page arguments.
+	 */
+	function test_get_form_ids_from_args() {
+		$args            = $this->_get_form_id_args();
+		$search_criteria = array();
+		$form_ids        = Gravity_Flow_Inbox::get_form_ids( $args, $search_criteria );
+		$this->assertEquals( $this->form_id, $form_ids );
+	}
+
+	/**
+	 * Tests that no form IDs are returned when a feed does not exist.
+	 */
+	function test_get_form_ids_no_feeds() {
+		$args            = array();
+		$search_criteria = array();
+		$form_ids        = Gravity_Flow_Inbox::get_form_ids( $args, $search_criteria );
+		$this->assertEmpty( $form_ids );
+	}
+
+	/**
+	 * Tests that the form IDs are returned when a feed does exist.
+	 */
+	function test_get_form_ids_has_feed() {
+		$expected = array(
+			$this->form_id
+		);
+
+		// Clear the cached form IDs.
+		gravity_flow()->form_ids = null;
+
+		// Adding a feed so Gravity_Flow::get_workflow_form_ids() can find the form.
+		$this->_add_approval_step();
+
+		$args            = array();
+		$search_criteria = array();
+		$form_ids        = Gravity_Flow_Inbox::get_form_ids( $args, $search_criteria );
+		$this->assertEquals( $expected, $form_ids );
+	}
+
+	/**
+	 * Tests that the gravityflow_form_ids_inbox filter can override the form IDs.
+	 */
+	function test_get_form_ids_filter() {
+		$args            = array();
+		$search_criteria = array();
+		add_filter( 'gravityflow_form_ids_inbox', array( $this, '_get_bingo_array' ) );
+		$form_ids = Gravity_Flow_Inbox::get_form_ids( $args, $search_criteria );
+		remove_filter( 'gravityflow_form_ids_inbox', array( $this, '_get_bingo_array' ) );
+		$this->assertEquals( $this->_get_bingo_array(), $form_ids );
+	}
+
 	/* HELPERS */
 
 	/**
