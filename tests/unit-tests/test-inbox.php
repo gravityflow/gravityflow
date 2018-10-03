@@ -235,12 +235,12 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 
 		// Get the entries for the current user.
 		$this->_set_user();
-		$entries = Gravity_Flow_API::get_inbox_entries( $this->_get_form_id_args() );
+		$total   = 0;
+		$entries = Gravity_Flow_API::get_inbox_entries( $this->_get_form_id_args(), $total );
 
 		// Confirm ten entries were found.
 		$expected_count = 10;
-		$actual_count   = count( $entries );
-		$this->assertEquals( $expected_count, $actual_count );
+		$this->assertEquals( $expected_count, $total );
 
 		// Confirm the found entry IDs match the created IDs.
 		$actual_ids = array_reverse( wp_list_pluck( $entries, 'id' ) );
@@ -262,12 +262,12 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 
 		// Get the entries for the current access token.
 		$this->_set_access_token();
-		$entries = Gravity_Flow_API::get_inbox_entries( $this->_get_form_id_args() );
+		$total   = 0;
+		$entries = Gravity_Flow_API::get_inbox_entries( $this->_get_form_id_args(), $total );
 
 		// Confirm ten entries were found.
 		$expected_count = 10;
-		$actual_count   = count( $entries );
-		$this->assertEquals( $expected_count, $actual_count );
+		$this->assertEquals( $expected_count, $total );
 
 		// Confirm the found entry IDs match the created IDs.
 		$actual_ids = array_reverse( wp_list_pluck( $entries, 'id' ) );
