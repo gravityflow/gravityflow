@@ -213,9 +213,6 @@ if ( class_exists( 'GFForms' ) ) {
 				)
 			);
 
-			// Ensure User Input assignee notification does not send if an approval revert notification exists. 
-			add_filter( 'gravityflow_notification', array( $this, 'gravityflow_user_input_assignee_notification_revert_override'), 10, 4);
-
 			// GravityView Integration.
 			add_filter( 'gravityview/adv_filter/field_filters', array( $this, 'filter_gravityview_adv_filter_field_filters' ), 10, 2 );
 			add_filter( 'gravityview_search_criteria', array( $this, 'filter_gravityview_search_criteria' ), 999, 3 );
@@ -7435,13 +7432,6 @@ AND m.meta_value='queued'";
 		}
 
 
-		public function gravityflow_user_input_assignee_notification_revert_override( $notification, $form, $entry, $step ) {
-			gravity_flow()->log_debug( __METHOD__ . '(): User Input Assignee / Approval Revert notification check point' );
-			//Use $step to identify if previous step exists and type
-			//Confirm whether previous step type is approval and has revert message setup
-			//return false;
-			return $notification;
-		}
 
 
 		/**

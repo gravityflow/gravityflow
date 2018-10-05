@@ -1060,6 +1060,36 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$revert_icon  = '<i class="fa fa-undo" style="color:blue"></i>';
 		return $revert_icon;
 	}
+
+	/**
+	 * Ensure User Input assignee notification does not send if an approval revert notification exists. 
+	 *
+	 * @since 2.3.2-dev
+	 *
+	 * @param string                $notification     The potential notification
+	 * @param array                 $form             The current form array.
+	 * @param array                 $entry            The current entry.
+	 * @param Gravity_Flow_Step     $step             The current step
+	 */
+	public static function gravityflow_user_input_notification_override( $notification, $form, $entry, $step ) {
+		
+		$current_step_id = $step->get_ID();
+		$previous_step_id = gform_get_meta( $entry['id'], 'workflow_previous_step_id');
+		$previous_step = gravity_flow()->get_step( $previous_step_id, $entry );
+
+		if( $previous_step->get_type() == 'approval' && $step->get_type() == 'user_input' ) {
+
+			if( $previous_step->revertEnable && $previous_step->revertValue == $step->get_ID() ) {
+				return false;
+			}
+
+		}
+		
+		return $notification;
+	}
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Approval() );
+
+// Ensure User Input assignee notification does not send if an approval revert notification exists. 
+add_filter( 'gravityflow_notification', array( 'Gravity_Flow_Step_Approval', 'gravityflow_user_input_notification_override'), 10, 4);
