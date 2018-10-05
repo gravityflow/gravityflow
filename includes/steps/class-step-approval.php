@@ -1077,7 +1077,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$previous_step_id = gform_get_meta( $entry['id'], 'workflow_previous_step_id');
 		$previous_step = gravity_flow()->get_step( $previous_step_id, $entry );
 
-		if( $previous_step->get_type() == 'approval' && $step->get_type() == 'user_input' ) {
+		if( $previous_step && $previous_step->get_type() == 'approval' && $step->get_type() == 'user_input' ) {
 
 			if( $previous_step->revertEnable && $previous_step->revertValue == $step->get_ID() ) {
 				return false;
