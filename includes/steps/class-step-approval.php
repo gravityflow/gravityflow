@@ -320,7 +320,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		}
 
 		$settings['fields'][] = $notification_tabs;
-
 		$settings['fields'][] = $note_mode_setting;
 
 		$form = gravity_flow()->get_current_form();
@@ -585,6 +584,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 				$note = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
 				$this->add_note( $note . $this->maybe_add_user_note(), true );
+
+				// Ensure User Input assignee notification does not send if an approval revert notification exists. 
+				add_filter( 'gravityflow_notification', array( $this, 'gravityflow_user_input_notification_override'), 10, 4);
 
 				$step->start();
 				$feedback = esc_html__( 'Reverted to step:', 'gravityflow' ) . ' ' . $step->get_label();
@@ -1062,7 +1064,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	/**
-	 * Ensure User Input assignee notification does not send if an approval revert notification exists. 
+	 * Ensure User Input assignee notification does not send if an approval revert notification exists with override selected
 	 *
 	 * @since 2.3.2-dev
 	 *
@@ -1073,17 +1075,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 */
 	public static function gravityflow_user_input_notification_override( $notification, $form, $entry, $step ) {
 		
-		$current_step_id = $step->get_ID();
-		$previous_step_id = gform_get_meta( $entry['id'], 'workflow_previous_step_id');
-		$previous_step = gravity_flow()->get_step( $previous_step_id, $entry );
-
-		if( $previous_step && $previous_step->get_type() == 'approval' && $step->get_type() == 'user_input' ) {
-
-			if( $previous_step->revertEnable && $previous_step->revertValue == $step->get_ID() ) {
+			if( $step->get_type() == 'user_input' ) {
 				return false;
 			}
-
-		}
 		
 		return $notification;
 	}
@@ -1091,5 +1085,3 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Approval() );
 
-// Ensure User Input assignee notification does not send if an approval revert notification exists. 
-add_filter( 'gravityflow_notification', array( 'Gravity_Flow_Step_Approval', 'gravityflow_user_input_notification_override'), 10, 4);

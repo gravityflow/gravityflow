@@ -7431,9 +7431,6 @@ AND m.meta_value='queued'";
 			);
 		}
 
-
-
-
 		/**
 		 * Target for the gravityview_adv_filter_field_filters filter.
 		 *

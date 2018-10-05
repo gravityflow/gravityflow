@@ -1199,17 +1199,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return array
 	 */
 	public function get_entry_meta( $entry_meta, $form_id ) {
-		$previous_step = array( 'workflow_previous_step_id' => array(
-			'label'             => __( 'Previous Step:', 'gravityflow' ),
-			'is_numeric'        => true,
-			'is_default_column' => false, // This column will not be displayed by default on the entry list.
-			'filter'            => array(
-				'operators' => array( 'is', 'isnot' )
-			),
-		));
-		
-		return $previous_step;
-		//return array();
+		return array();
 	}
 
 	/**
@@ -1802,6 +1792,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$started  = $this->get_step_timestamp();
 		$duration = time() - $started;
 		$this->update_step_status( $status );
+
 		$assignees = $this->get_assignees();
 
 		foreach ( $assignees as $assignee ) {
@@ -1815,8 +1806,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 			gform_update_meta( $entry_id, 'workflow_current_status', $status );
 			gform_update_meta( $entry_id, 'workflow_current_status_timestamp', time() );
 		}
-
-		gform_update_meta( $entry_id, 'workflow_previous_step_id', $this->get_id() );
 
 		do_action( 'gravityflow_step_complete', $step_id, $entry_id, $this->get_form_id(), $status, $this );
 		$this->log_debug( __METHOD__ . '() - ending step ' . $step_id );
