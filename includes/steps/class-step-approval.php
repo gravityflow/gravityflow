@@ -104,10 +104,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$action = $request['action'];
 		$new_status = '';
 		switch ( $action ) {
-			case 'approve' :
+			case 'approve':
 				$new_status = 'approved';
 				break;
-			case 'reject' :
+			case 'reject':
 				$new_status = 'rejected';
 		}
 
@@ -242,7 +242,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				) ),
 			),
 		) );
-
 
 		$user_input_step_choices = array();
 		$revert_field            = array();
@@ -403,7 +402,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		/**
 		 * Allows the step status for the approval to be customized
 		 *
-		 * @since 2.1-dev 
+		 * @since 2.1-dev
 		 *
 		 * @param string                     $step_status   The status of the step
 		 * @param Gravity_Flow_Assignee[]    $approvers     The array of Gravity_Flow_Assignee objects
@@ -434,7 +433,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$new_status = $token_array['new_status'];
 		$entry_id   = $token_array['entry_id'];
 		$sig        = $token_array['sig'];
-
 
 		$expiration_days = apply_filters( 'gravityflow_approval_token_expiration_days', 1 );
 
@@ -502,7 +500,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				if ( ! ( $valid_token ) ) {
 					return false;
 				}
-
 			}
 
 			$assignees = $this->get_assignees();
@@ -585,8 +582,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$note = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
 				$this->add_note( $note . $this->maybe_add_user_note(), true );
 
-				// Ensure User Input assignee notification does not send if an approval revert notification exists. 
-				add_filter( 'gravityflow_notification', array( $this, 'gravityflow_user_input_notification_override'), 10, 4);
+				// Ensure User Input assignee notification does not send if an approval revert notification exists.
+				add_filter( 'gravityflow_notification', array( $this, 'gravityflow_user_input_notification_override' ), 10, 4 );
 
 				$step->start();
 				$feedback = esc_html__( 'Reverted to step:', 'gravityflow' ) . ' ' . $step->get_label();
@@ -658,28 +655,28 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 */
 	public function validate_note_mode( $new_status, $note ) {
 		switch ( $this->note_mode ) {
-			case 'required' :
+			case 'required':
 				return ! empty( $note );
 
-			case 'required_if_approved' :
+			case 'required_if_approved':
 				if ( $new_status == 'approved' && empty( $note ) ) {
 					return false;
 				}
 				break;
 
-			case 'required_if_rejected' :
+			case 'required_if_rejected':
 				if ( $new_status == 'rejected' && empty( $note ) ) {
 					return false;
 				}
 				break;
 
-			case 'required_if_reverted' :
+			case 'required_if_reverted':
 				if ( $new_status == 'revert' && empty( $note ) ) {
 					return false;
 				}
 				break;
 
-			case 'required_if_reverted_or_rejected' :
+			case 'required_if_reverted_or_rejected':
 				if ( ( $new_status == 'revert' || $new_status == 'rejected' ) && empty( $note ) ) {
 					return false;
 				}
@@ -726,10 +723,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				<?php printf( '%s (%s)', $this->get_name(), $status ); ?>
 			</h4>
 			<div>
-				<?php $this->workflow_detail_status_box_status() ?>
+				<?php $this->workflow_detail_status_box_status(); ?>
 			</div>
 		<?php endif; ?>
-		<?php $this->workflow_detail_status_box_actions( $form ) ?>
+		<?php $this->workflow_detail_status_box_actions( $form ); ?>
 
 		<?php
 
@@ -777,7 +774,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		if ( $can_update ) {
 			wp_nonce_field( 'gravityflow_approvals_' . $this->get_id() );
 
-			if ( $this->note_mode !== 'hidden' ) { ?>
+			if ( $this->note_mode !== 'hidden' ) {
+				?>
 				<br/>
 				<div>
 					<label for="gravityflow-note">
@@ -798,9 +796,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						?>
 					</label>
 				</div>
-				<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note"><?php
+				<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note">
+					<?php
 					echo rgar( $form, 'failed_validation' ) ? esc_textarea( rgpost( 'gravityflow_note' ) ) : '';
-					?></textarea>
+					?>
+					</textarea>
 				<?php
 				$invalid_note = ( isset( $form['workflow_note'] ) && is_array( $form['workflow_note'] ) && $form['workflow_note']['failed_validation'] );
 				if ( $invalid_note ) {
@@ -812,9 +812,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			?>
 			<br/><br/>
 			<div class="gravityflow-action-buttons">
-				<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="approved"
-				        type="submit"
-				        class="button">
+				<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id(); ?>" value="approved" 
+						type="submit"
+						class="button">
 					<?php
 					$approve_label = esc_html__( 'Approve', 'gravityflow' );
 
@@ -826,11 +826,12 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					 */
 					$approve_label = apply_filters( 'gravityflow_approve_label_workflow_detail', $approve_label, $this );
 
-					echo $approve_icon . ' ' . $approve_label; ?>
+					echo $approve_icon . ' ' . $approve_label;
+					?>
 				</button>
-				<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="rejected"
-				        type="submit"
-				        class="button">
+				<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id(); ?>" value="rejected" 
+						type="submit"
+						class="button">
 					<?php
 					$reject_label = esc_html__( 'Reject', 'gravityflow' );
 
@@ -842,12 +843,13 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 					 */
 					$reject_label = apply_filters( 'gravityflow_reject_label_workflow_detail', $reject_label, $this );
 
-					echo $reject_icon . ' ' . $reject_label; ?>
+					echo $reject_icon . ' ' . $reject_label;
+					?>
 				</button>
 				<?php if ( $this->revertEnable ) : ?>
-					<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id() ?>" value="revert"
-					        type="submit"
-					        class="button">
+					<button name="gravityflow_approval_new_status_step_<?php echo $this->get_id(); ?>" value="revert" 
+							type="submit"
+							class="button">
 						<?php
 						$revert_label = esc_html__( 'Revert', 'gravityflow' );
 
@@ -859,7 +861,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						 */
 						$revert_label = apply_filters( 'gravityflow_revert_label_workflow_detail', $revert_label, $this );
 
-						echo $revert_icon . ' ' . $revert_label; ?>
+						echo $revert_icon . ' ' . $revert_label;
+						?>
 					</button>
 					<?php
 				endif;
@@ -878,7 +881,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$status = $this->evaluate_status();
 		?>
 
-		<h4 style="padding:10px;"><?php echo $this->get_name() . ': ' . $status ?></h4>
+		<h4 style="padding:10px;"><?php echo $this->get_name() . ': ' . $status; ?></h4>
 
 		<div style="padding:10px;">
 			<ul>
@@ -954,10 +957,10 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$assignee     = $this->get_assignee( $assignee_key );
 		$new_status   = false;
 		switch ( $token['scopes']['action'] ) {
-			case 'approve' :
+			case 'approve':
 				$new_status = 'approved';
 				break;
-			case 'reject' :
+			case 'reject':
 				$new_status = 'rejected';
 				break;
 		}
@@ -1013,17 +1016,17 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			if ( $post instanceof WP_Post ) {
 				$result = '';
 				switch ( $action ) {
-					case 'publish' :
-					case 'draft' :
+					case 'publish':
+					case 'draft':
 						$post->post_status = $action;
 						$result            = wp_update_post( $post );
 						break;
 
-					case 'trash' :
+					case 'trash':
 						$result = wp_delete_post( $post_id );
 						break;
 
-					case 'delete' :
+					case 'delete':
 						$result = wp_delete_post( $post_id, true );
 						break;
 				}
@@ -1074,11 +1077,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @param Gravity_Flow_Step     $step             The current step
 	 */
 	public static function gravityflow_user_input_notification_override( $notification, $form, $entry, $step ) {
-		
-			if( $step->get_type() == 'user_input' ) {
-				return false;
-			}
-		
+		if ( $step->get_type() == 'user_input' ) {
+			return false;
+		}
 		return $notification;
 	}
 }
