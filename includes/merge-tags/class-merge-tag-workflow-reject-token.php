@@ -70,7 +70,14 @@ class Gravity_Flow_Merge_Tag_Workflow_Reject_Token extends Gravity_Flow_Merge_Ta
 		return $text;
 	}
 
-	protected function get_token_expiration_days() {
+	/**
+	 * Get the number of days the token will remain valid for.
+	 *
+	 * @param Gravity_Flow_Assignee $assignee
+	 *
+	 * @return int
+	 */
+	protected function get_token_expiration_days( $assignee = null ) {
 		return apply_filters( 'gravityflow_approval_token_expiration_days', 2, $this->assignee );
 	}
 

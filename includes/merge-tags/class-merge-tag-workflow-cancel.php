@@ -51,15 +51,13 @@ class Gravity_Flow_Merge_Tag_Workflow_Cancel extends Gravity_Flow_Merge_Tag_Assi
 
 		if ( ! empty( $matches ) ) {
 
-			if ( empty( $this->step ) || empty( $this->assignee ) ) {
+			if ( empty( $this->step ) ) {
 				foreach ( $matches as $match ) {
 					$full_tag = $match[0];
 					$text = str_replace( $full_tag, '', $text );
 				}
 				return $text;
 			}
-
-			$cancel_token = $this->get_token( 'cancel_workflow' );
 
 			foreach ( $matches as $match ) {
 				$full_tag       = $match[0];
@@ -69,9 +67,20 @@ class Gravity_Flow_Merge_Tag_Workflow_Cancel extends Gravity_Flow_Merge_Tag_Assi
 				$a = $this->get_attributes( $options_string, array(
 					'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
 					'text'    => esc_html__( 'Cancel Workflow', 'gravityflow' ),
+					'token'    => false,
+					'assignee' => '',
 				) );
 
-				$url = $this->get_entry_url( $a['page_id'], $cancel_token );
+				$assignee = empty( $a['assignee'] ) ? $this->assignee : $this->step->get_assignee( $a['assignee'] );
+
+				if ( empty( $assignee ) ) {
+					$text = str_replace( $full_tag, '', $text );
+					continue;
+				}
+
+				$cancel_token = $this->get_token( 'cancel_workflow', $assignee );
+
+				$url = $this->get_entry_url( $a['page_id'], $cancel_token, $assignee );
 
 				$url = $this->format_value( $url );
 
@@ -89,28 +98,33 @@ class Gravity_Flow_Merge_Tag_Workflow_Cancel extends Gravity_Flow_Merge_Tag_Assi
 	/**
 	 * Get the number of days the token will remain valid for.
 	 *
+	 * @since 2.3.2 Added the $assignee arg.
 	 * @since 2.1.2-dev
+	 *
+	 * @param Gravity_Flow_Assignee $assignee
 	 *
 	 * @return int
 	 */
-	protected function get_token_expiration_days() {
-		return apply_filters( 'gravityflow_cancel_token_expiration_days', 2, $this->assignee );
+	protected function get_token_expiration_days( $assignee = null ) {
+		return apply_filters( 'gravityflow_cancel_token_expiration_days', 2, $assignee );
 	}
 
 	/**
 	 * Get the scopes to be used when generating the access token.
 	 *
+	 * @since 2.3.2 Added $assignee arg.
 	 * @since 2.1.2-dev
 	 *
-	 * @param string $action The access token action.
+	 * @param string                $action The access token action.
+	 * @param Gravity_Flow_Assignee $assignee
 	 *
 	 * @return array
 	 */
-	protected function get_token_scopes( $action = '' ) {
+	protected function get_token_scopes( $action = '', $assignee = null ) {
 		return array(
-			'pages'           => array( 'inbox' ),
-			'entry_id'        => $this->step->get_entry_id(),
-			'action'          => $action,
+			'pages'    => array( 'inbox' ),
+			'entry_id' => $this->step->get_entry_id(),
+			'action'   => $action,
 		);
 	}
 }

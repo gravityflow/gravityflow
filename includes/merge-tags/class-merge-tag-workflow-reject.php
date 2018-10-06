@@ -51,15 +51,13 @@ class Gravity_Flow_Merge_Tag_Workflow_Reject extends Gravity_Flow_Merge_Tag_Assi
 
 		if ( ! empty( $matches ) ) {
 
-			if ( empty( $this->step ) || empty( $this->assignee ) ) {
+			if ( empty( $this->step ) ) {
 				foreach ( $matches as $match ) {
 					$full_tag = $match[0];
 					$text = str_replace( $full_tag, '', $text );
 				}
 				return $text;
 			}
-
-			$reject_token = $this->get_token( 'reject' );
 
 			if ( is_array( $matches ) ) {
 				foreach ( $matches as $match ) {
@@ -70,9 +68,27 @@ class Gravity_Flow_Merge_Tag_Workflow_Reject extends Gravity_Flow_Merge_Tag_Assi
 					$a = $this->get_attributes( $options_string, array(
 						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
 						'text'    => esc_html__( 'Reject', 'gravityflow' ),
+						'token'    => false,
+						'assignee' => '',
 					) );
 
-					$url = $this->get_entry_url( $a['page_id'], $reject_token );
+					$step = empty( $a['step'] ) ? $this->step : gravity_flow()->get_step( $a['step'], $this->entry );
+
+					if ( empty( $step ) ) {
+						$text = str_replace( $full_tag, '', $text );
+						continue;
+					}
+
+					$assignee = empty( $a['assignee'] ) ? $this->assignee : $step->get_assignee( $a['assignee'] );
+
+					if ( empty( $assignee ) ) {
+						$text = str_replace( $full_tag, '', $text );
+						continue;
+					}
+
+					$reject_token = $this->get_token( 'reject', $assignee );
+
+					$url = $this->get_entry_url( $a['page_id'], $reject_token, $assignee );
 					$url = esc_url_raw( $url );
 
 					$url = $this->format_value( $url );

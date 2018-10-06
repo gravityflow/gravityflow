@@ -64,16 +64,19 @@ class Gravity_Flow_Merge_Tag_Workflow_Url extends Gravity_Flow_Merge_Tag_Assigne
 					'assignee' => '',
 				) );
 
-				if ( ! empty( $a['assignee'] ) ) {
-					$this->assignee = $this->step->get_assignee( $a['assignee'] );
+				$assignee = empty( $a['assignee'] ) ? $this->assignee : $this->step->get_assignee( $a['assignee'] );
+
+				if ( empty( $assignee ) ) {
+					$text = str_replace( $full_tag, '', $text );
+					continue;
 				}
 
-				$token = $this->get_workflow_url_access_token( $a );
+				$token = $this->get_workflow_url_access_token( $a, $assignee );
 
 				if ( $location == 'inbox' ) {
-					$url = $this->get_inbox_url( $a['page_id'], $token );
+					$url = $this->get_inbox_url( $a['page_id'], $token, $assignee );
 				} else {
-					$url = $this->get_entry_url( $a['page_id'], $token );
+					$url = $this->get_entry_url( $a['page_id'], $token, $assignee );
 				}
 
 				$url = $this->format_value( $url );
@@ -96,7 +99,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Url extends Gravity_Flow_Merge_Tag_Assigne
 	 *
 	 * @return string
 	 */
-	private function get_workflow_url_access_token( $a ) {
+	private function get_workflow_url_access_token( $a, $assignee = null ) {
 		$force_token = $a['token'];
 		$token       = '';
 
