@@ -73,20 +73,12 @@ class Gravity_Flow_Merge_Tag_Approve_Token extends Gravity_Flow_Merge_Tag_Assign
 	/**
 	 * Get the number of days the token will remain valid for.
 	 *
-	 * @since 2.3.2 Added $assignee arg.
 	 * @since 2.1.2-dev
-	 *
-	 * @param Gravity_Flow_Assignee $assignee
 	 *
 	 * @return int
 	 */
-	protected function get_token_expiration_days( $assignee = null ) {
-
-		if ( empty( $assignee ) ) {
-			$assignee = $this->assignee;
-		}
-
-		return apply_filters( 'gravityflow_approval_token_expiration_days', 2, $assignee );
+	protected function get_token_expiration_days() {
+		return apply_filters( 'gravityflow_approval_token_expiration_days', 2, $this->assignee );
 	}
 }
 

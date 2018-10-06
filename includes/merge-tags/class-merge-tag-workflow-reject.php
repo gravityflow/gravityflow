@@ -54,8 +54,9 @@ class Gravity_Flow_Merge_Tag_Workflow_Reject extends Gravity_Flow_Merge_Tag_Assi
 			if ( empty( $this->step ) ) {
 				foreach ( $matches as $match ) {
 					$full_tag = $match[0];
-					$text = str_replace( $full_tag, '', $text );
+					$text     = str_replace( $full_tag, '', $text );
 				}
+
 				return $text;
 			}
 
@@ -66,29 +67,39 @@ class Gravity_Flow_Merge_Tag_Workflow_Reject extends Gravity_Flow_Merge_Tag_Assi
 					$options_string = isset( $match[3] ) ? $match[3] : '';
 
 					$a = $this->get_attributes( $options_string, array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-						'text'    => esc_html__( 'Reject', 'gravityflow' ),
+						'page_id'  => gravity_flow()->get_app_setting( 'inbox_page' ),
+						'text'     => esc_html__( 'Reject', 'gravityflow' ),
 						'token'    => false,
 						'assignee' => '',
 					) );
 
-					$step = empty( $a['step'] ) ? $this->step : gravity_flow()->get_step( $a['step'], $this->entry );
+					$original_step = $this->step;
 
-					if ( empty( $step ) ) {
-						$text = str_replace( $full_tag, '', $text );
+					if ( ! empty( $a['step'] ) ) {
+						$this->step = gravity_flow()->get_step( $a['step'], $this->entry );
+					}
+
+					if ( empty( $this->step ) ) {
+						$text       = str_replace( $full_tag, '', $text );
+						$this->step = $original_step;
 						continue;
 					}
 
-					$assignee = empty( $a['assignee'] ) ? $this->assignee : $step->get_assignee( $a['assignee'] );
+					$original_assignee = $this->assignee;
 
-					if ( empty( $assignee ) ) {
-						$text = str_replace( $full_tag, '', $text );
+					if ( ! empty( $a['assignee'] ) ) {
+						$this->assignee = $this->step->get_assignee( $a['assignee'] );
+					}
+
+					if ( empty( $this->assignee ) ) {
+						$text           = str_replace( $full_tag, '', $text );
+						$this->assignee = $original_assignee;
 						continue;
 					}
 
-					$reject_token = $this->get_token( 'reject', $assignee );
+					$reject_token = $this->get_token( 'reject' );
 
-					$url = $this->get_entry_url( $a['page_id'], $reject_token, $assignee );
+					$url = $this->get_entry_url( $a['page_id'], $reject_token );
 					$url = esc_url_raw( $url );
 
 					$url = $this->format_value( $url );
@@ -98,6 +109,10 @@ class Gravity_Flow_Merge_Tag_Workflow_Reject extends Gravity_Flow_Merge_Tag_Assi
 					}
 
 					$text = str_replace( $full_tag, $url, $text );
+
+					$this->step = $original_step;
+
+					$this->assignee = $original_assignee;
 				}
 			}
 		}

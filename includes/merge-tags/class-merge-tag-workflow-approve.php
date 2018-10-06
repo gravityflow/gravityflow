@@ -63,23 +63,33 @@ class Gravity_Flow_Merge_Tag_Approve extends Gravity_Flow_Merge_Tag_Assignee_Bas
 					'step'     => '',
 				) );
 
-				$step = empty( $a['step'] ) ? $this->step : gravity_flow()->get_step( $a['step'], $this->entry );
+				$original_step = $this->step;
 
-				if ( empty( $step ) ) {
-					$text = str_replace( $full_tag, '', $text );
+				if ( ! empty( $a['step'] ) ) {
+					$this->step = gravity_flow()->get_step( $a['step'], $this->entry );
+				}
+
+				if ( empty( $this->step ) ) {
+					$text       = str_replace( $full_tag, '', $text );
+					$this->step = $original_step;
 					continue;
 				}
 
-				$assignee = empty( $a['assignee'] ) ? $this->assignee : $step->get_assignee( $a['assignee'] );
+				$original_assignee = $this->assignee;
 
-				if ( empty( $assignee ) ) {
-					$text = str_replace( $full_tag, '', $text );
+				if ( ! empty( $a['assignee'] ) ) {
+					$this->assignee = $this->step->get_assignee( $a['assignee'] );
+				}
+
+				if ( empty( $this->assignee ) ) {
+					$text           = str_replace( $full_tag, '', $text );
+					$this->assignee = $original_assignee;
 					continue;
 				}
 
-				$approve_token = $this->get_token( 'approve', $assignee );
+				$approve_token = $this->get_token( 'approve' );
 
-				$approve_url = $this->get_entry_url( $a['page_id'], $approve_token, $assignee );
+				$approve_url = $this->get_entry_url( $a['page_id'], $approve_token );
 				$approve_url = esc_url_raw( $approve_url );
 
 				$approve_url = $this->format_value( $approve_url );
@@ -89,6 +99,10 @@ class Gravity_Flow_Merge_Tag_Approve extends Gravity_Flow_Merge_Tag_Assignee_Bas
 				}
 
 				$text = str_replace( $full_tag, $approve_url, $text );
+
+				$this->step = $original_step;
+
+				$this->assignee = $original_assignee;
 			}
 		}
 
