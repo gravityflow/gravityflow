@@ -802,7 +802,7 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 	 * @return array
 	 */
 	public function _parse_workflow_url( $url ) {
-		$url_query_string = wp_parse_url( str_replace( '&amp;', '&', $url ), PHP_URL_QUERY );
+		$url_query_string = parse_url( str_replace( '&amp;', '&', $url ), PHP_URL_QUERY );
 		parse_str( $url_query_string, $query_args );
 
 		return $query_args;
