@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Testing the common functionality of Feed Add-On based steps.
+ * Testing the methods used when getting the inbox entries.
  *
  * @group testsuite
  */
@@ -25,15 +25,27 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 
 		$this->form_id = $this->factory->form->create();
 		$this->api     = new Gravity_Flow_API( $this->form_id );
-		$this->_include_inbox();
+	}
+
+	/**
+	 * Cleanup before testing.
+	 */
+	function clean_up_global_scope() {
+		// Clears the access token.
+		parent::clean_up_global_scope();
+
+		// Clear the current user.
+		wp_set_current_user( 0 );
+
+		// Clear the cached workflow form IDs.
+		gravity_flow()->form_ids = null;
 	}
 
 	/**
 	 * Tests that the filter key is empty when a user is not logged in and an access token is not found.
 	 */
 	function test_get_filter_key_anonymous() {
-		$this->_set_anonymous();
-		$key = Gravity_Flow_Inbox::get_filter_key();
+		$key = Gravity_Flow_API::get_inbox_filter_key();
 		$this->assertEmpty( $key );
 	}
 
@@ -42,7 +54,7 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	 */
 	function test_get_filter_key_current_user() {
 		$this->_set_user();
-		$key = Gravity_Flow_Inbox::get_filter_key();
+		$key = Gravity_Flow_API::get_inbox_filter_key();
 		$this->assertEquals( 'workflow_user_id_1', $key );
 	}
 
@@ -51,7 +63,7 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	 */
 	function test_get_filter_key_access_token() {
 		$this->_set_access_token();
-		$key = Gravity_Flow_Inbox::get_filter_key();
+		$key = Gravity_Flow_API::get_inbox_filter_key();
 		$this->assertEquals( 'workflow_email_test@test.test', $key );
 	}
 
@@ -59,8 +71,7 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	 * Tests that the search criteria is empty when a user is not logged in and an access token is not found.
 	 */
 	function test_get_search_criteria_anonymous() {
-		$this->_set_anonymous();
-		$search_criteria = Gravity_Flow_Inbox::get_search_criteria();
+		$search_criteria = Gravity_Flow_API::get_inbox_search_criteria();
 		$this->assertEmpty( $search_criteria );
 	}
 
@@ -84,7 +95,7 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		);
 
 		$this->_set_user();
-		$search_criteria = Gravity_Flow_Inbox::get_search_criteria();
+		$search_criteria = Gravity_Flow_API::get_inbox_search_criteria();
 		$this->assertEquals( $expected, $search_criteria );
 	}
 
@@ -104,7 +115,7 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		);
 
 		$this->_set_access_token();
-		$search_criteria = Gravity_Flow_Inbox::get_search_criteria();
+		$search_criteria = Gravity_Flow_API::get_inbox_search_criteria();
 		$this->assertEquals( $expected, $search_criteria );
 	}
 
@@ -114,7 +125,7 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	function test_get_search_criteria_filter() {
 		$this->_set_user();
 		add_filter( 'gravityflow_inbox_search_criteria', array( $this, '_get_bingo_array' ) );
-		$search_criteria = Gravity_Flow_Inbox::get_search_criteria();
+		$search_criteria = Gravity_Flow_API::get_inbox_search_criteria();
 		remove_filter( 'gravityflow_inbox_search_criteria', array( $this, '_get_bingo_array' ) );
 		$this->assertEquals( $this->_get_bingo_array(), $search_criteria );
 	}
@@ -125,7 +136,7 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	function test_get_form_ids_from_args() {
 		$args            = $this->_get_form_id_args();
 		$search_criteria = array();
-		$form_ids        = Gravity_Flow_Inbox::get_form_ids( $args, $search_criteria );
+		$form_ids        = Gravity_Flow_API::get_inbox_form_ids( $args, $search_criteria );
 		$this->assertEquals( $this->form_id, $form_ids );
 	}
 
@@ -135,7 +146,7 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	function test_get_form_ids_no_feeds() {
 		$args            = array();
 		$search_criteria = array();
-		$form_ids        = Gravity_Flow_Inbox::get_form_ids( $args, $search_criteria );
+		$form_ids        = Gravity_Flow_API::get_inbox_form_ids( $args, $search_criteria );
 		$this->assertEmpty( $form_ids );
 	}
 
@@ -147,15 +158,12 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 			$this->form_id
 		);
 
-		// Clear the cached form IDs.
-		gravity_flow()->form_ids = null;
-
 		// Adding a feed so Gravity_Flow::get_workflow_form_ids() can find the form.
 		$this->_add_approval_step();
 
 		$args            = array();
 		$search_criteria = array();
-		$form_ids        = Gravity_Flow_Inbox::get_form_ids( $args, $search_criteria );
+		$form_ids        = Gravity_Flow_API::get_inbox_form_ids( $args, $search_criteria );
 		$this->assertEquals( $expected, $form_ids );
 	}
 
@@ -166,7 +174,7 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		$args            = array();
 		$search_criteria = array();
 		add_filter( 'gravityflow_form_ids_inbox', array( $this, '_get_bingo_array' ) );
-		$form_ids = Gravity_Flow_Inbox::get_form_ids( $args, $search_criteria );
+		$form_ids = Gravity_Flow_API::get_inbox_form_ids( $args, $search_criteria );
 		remove_filter( 'gravityflow_form_ids_inbox', array( $this, '_get_bingo_array' ) );
 		$this->assertEquals( $this->_get_bingo_array(), $form_ids );
 	}
@@ -178,7 +186,7 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		$expected = array(
 			'page_size' => 150,
 		);
-		$paging   = Gravity_Flow_Inbox::get_paging();
+		$paging   = Gravity_Flow_API::get_inbox_paging();
 		$this->assertEquals( $expected, $paging );
 	}
 
@@ -187,16 +195,38 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	 */
 	function test_get_paging_filter() {
 		add_filter( 'gravityflow_inbox_paging', array( $this, '_get_bingo_array' ) );
-		$paging = Gravity_Flow_Inbox::get_paging();
+		$paging = Gravity_Flow_API::get_inbox_paging();
 		remove_filter( 'gravityflow_inbox_paging', array( $this, '_get_bingo_array' ) );
 		$this->assertEquals( $this->_get_bingo_array(), $paging );
+	}
+
+	/**
+	 * Tests that the paging arguments can be defined by the inbox configuration arguments.
+	 */
+	function test_get_paging_args() {
+		$args = array(
+			'paging' => array(
+				'page_size' => 50,
+			),
+		);
+
+		// Test that the page_size property was overridden by the args.
+		$paging = Gravity_Flow_API::get_inbox_paging( $args );
+		$this->assertEquals( $args['paging'], $paging );
+
+		// Define the paging offset.
+		$args['paging']['offset'] = 50;
+
+		// Test that the offset property was added.
+		$paging = Gravity_Flow_API::get_inbox_paging( $args );
+		$this->assertEquals( $args['paging'], $paging );
 	}
 
 	/**
 	 * Tests that the default sorting arguments are returned.
 	 */
 	function test_get_sorting() {
-		$sorting = Gravity_Flow_Inbox::get_sorting();
+		$sorting = Gravity_Flow_API::get_inbox_sorting();
 		$this->assertEmpty( $sorting );
 	}
 
@@ -205,17 +235,48 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	 */
 	function test_get_sorting_filter() {
 		add_filter( 'gravityflow_inbox_sorting', array( $this, '_get_bingo_array' ) );
-		$sorting = Gravity_Flow_Inbox::get_sorting();
+		$sorting = Gravity_Flow_API::get_inbox_sorting();
 		remove_filter( 'gravityflow_inbox_sorting', array( $this, '_get_bingo_array' ) );
 		$this->assertEquals( $this->_get_bingo_array(), $sorting );
+	}
+
+	/**
+	 * Tests that the sorting arguments can be defined by the inbox configuration arguments.
+	 */
+	function test_get_sorting_args() {
+		$args = array(
+			'sorting' => array(
+				'key' => 'id',
+			),
+		);
+
+		// Test that the key property was added.
+		$sorting = Gravity_Flow_API::get_inbox_sorting( $args );
+		$this->assertEquals( $args['sorting'], $sorting );
+
+		// Define the sorting direction.
+		$args['sorting']['direction'] = 'ASC';
+
+		// Test that the direction property was added.
+		$sorting = Gravity_Flow_API::get_inbox_sorting( $args );
+		$this->assertEquals( $args['sorting'], $sorting );
+
+		// Define if sorting numerically.
+		$args['sorting']['is_numeric'] = false;
+
+		// Test that the is_numeric property was added.
+		$sorting = Gravity_Flow_API::get_inbox_sorting( $args );
+		$this->assertEquals( $args['sorting'], $sorting );
 	}
 
 	/**
 	 * Tests that entries are not returned when a user is not logged in and an access token is not found.
 	 */
 	function test_get_inbox_entries_anonymous() {
-		$this->_create_entries();
-		$this->_set_anonymous();
+		// Create 30 entries with half assigned to a user.
+		$this->_create_entries( 'workflow_user_id_1' );
+
+		// Confirm that no entries are returned for the anonymous user.
 		$entries = Gravity_Flow_API::get_inbox_entries( $this->_get_form_id_args() );
 		$this->assertEmpty( $entries );
 	}
@@ -224,26 +285,41 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	 * Tests that the expected entries are returned when a user is logged in.
 	 */
 	function test_get_inbox_entries_current_user() {
-		// Create 10 unassigned entries.
-		$this->_create_entries();
-
-		// Create 10 entries assigned to the current user.
-		$expected_ids = $this->_create_assigned_entries( 'workflow_user_id_1' );
-
-		// Create 10 entries assigned to someone else.
-		$this->_create_assigned_entries( 'workflow_email_test@test.test' );
+		// Create 30 entries with half assigned to the current user.
+		$expected_ids = $this->_create_entries( 'workflow_user_id_1' );
 
 		// Get the entries for the current user.
 		$this->_set_user();
 		$total   = 0;
 		$entries = Gravity_Flow_API::get_inbox_entries( $this->_get_form_id_args(), $total );
 
-		// Confirm ten entries were found.
-		$expected_count = 10;
+		// Confirm fifteen entries were found.
+		$expected_count = 15;
 		$this->assertEquals( $expected_count, $total );
 
 		// Confirm the found entry IDs match the created IDs.
-		$actual_ids = array_reverse( wp_list_pluck( $entries, 'id' ) );
+		$actual_ids = wp_list_pluck( $entries, 'id' );
+		$this->assertEquals( $expected_ids, $actual_ids );
+	}
+
+	/**
+	 * Tests that the expected entries are returned when a user is logged in and the paging arguments are overridden.
+	 */
+	function test_get_inbox_entries_current_user_paging() {
+		// Gets the IDs of 5 entries assigned to the current user.
+		$expected_ids = array_slice( $this->_create_entries( 'workflow_user_id_1' ), 0, 5 );
+
+		$args = $this->_get_form_id_args();
+
+		$args['paging']['page_size'] = 5;
+
+		// Get the entries for the current user.
+		$this->_set_user();
+		$entries = Gravity_Flow_API::get_inbox_entries( $args );
+		$this->assertEquals( 5, count( $entries ) );
+
+		// Confirm the found entry IDs match the created IDs.
+		$actual_ids = wp_list_pluck( $entries, 'id' );
 		$this->assertEquals( $expected_ids, $actual_ids );
 	}
 
@@ -251,45 +327,89 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	 * Tests that the expected entries are returned for an access token user.
 	 */
 	function test_get_inbox_entries_access_token() {
-		// Create 10 unassigned entries.
-		$this->_create_entries();
-
-		// Create 10 entries assigned to the access token assignee key.
-		$expected_ids = $this->_create_assigned_entries( 'workflow_email_test@test.test' );
-
-		// Create 10 entries assigned to someone else.
-		$this->_create_assigned_entries( 'workflow_user_id_1' );
+		// Create 30 entries with half assigned to the current user.
+		$expected_ids = $this->_create_entries( 'workflow_email_test@test.test' );
 
 		// Get the entries for the current access token.
 		$this->_set_access_token();
 		$total   = 0;
 		$entries = Gravity_Flow_API::get_inbox_entries( $this->_get_form_id_args(), $total );
 
-		// Confirm ten entries were found.
-		$expected_count = 10;
+		// Confirm fifteen entries were found.
+		$expected_count = 15;
 		$this->assertEquals( $expected_count, $total );
 
 		// Confirm the found entry IDs match the created IDs.
-		$actual_ids = array_reverse( wp_list_pluck( $entries, 'id' ) );
+		$actual_ids = wp_list_pluck( $entries, 'id' );
 		$this->assertEquals( $expected_ids, $actual_ids );
 	}
 
+	/**
+	 * Tests that the expected entries are returned for an access token user when the sorting arguments are overridden.
+	 */
+	function test_get_inbox_entries_access_token_sorting() {
+		// Create 30 entries with half assigned to the current user.
+		$expected_ids = $this->_create_entries( 'workflow_email_test@test.test' );
+
+		$args = $this->_get_form_id_args();
+
+		$args['sorting']['direction'] = 'ASC';
+
+		// Get the entries for the current access token.
+		$this->_set_access_token();
+		$entries = Gravity_Flow_API::get_inbox_entries( $args );
+
+		// Confirm the found entry IDs match the created IDs.
+		$actual_ids = wp_list_pluck( $entries, 'id' );
+		$this->assertEquals( array_reverse( $expected_ids ), $actual_ids );
+	}
+
+	/**
+	 * Tests that no entries are found when a user is not logged in and an access token is not found.
+	 */
+	function test_get_inbox_entries_count_anonymous() {
+		// Create 30 entries with half assigned to a user.
+		$this->_create_entries( 'workflow_user_id_1' );
+
+		// Confirm that no entries are found for the anonymous user.
+		$count = Gravity_Flow_API::get_inbox_entries_count( $this->_get_form_id_args() );
+		$expected_count = 0;
+		$this->assertEquals( $expected_count, $count );
+	}
+
+	/**
+	 * Tests that the expected number of entries are found when a user is logged in.
+	 */
+	function test_get_inbox_entries_count_current_user() {
+		// Create 30 entries with half assigned to the current user.
+		$this->_create_entries( 'workflow_user_id_1' );
+
+		// Get the entries count for the current user.
+		$this->_set_user();
+		$count = Gravity_Flow_API::get_inbox_entries_count( $this->_get_form_id_args() );
+
+		// Confirm fifteen entries were found.
+		$expected_count = 15;
+		$this->assertEquals( $expected_count, $count );
+	}
+
+	/**
+	 * Tests that the expected number of entries are found for an access token user.
+	 */
+	function test_get_inbox_entries_count_access_token() {
+		// Create 30 entries with half assigned to the current user.
+		$this->_create_entries( 'workflow_email_test@test.test' );
+
+		// Get the entries count for the current access token.
+		$this->_set_access_token();
+		$count = Gravity_Flow_API::get_inbox_entries_count( $this->_get_form_id_args() );
+
+		// Confirm fifteen entries were found.
+		$expected_count = 15;
+		$this->assertEquals( $expected_count, $count );
+	}
+
 	/* HELPERS */
-
-	/**
-	 * Include the Gravity_Flow_Inbox class.
-	 */
-	public function _include_inbox() {
-		require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/includes/pages/class-inbox.php';
-	}
-
-	/**
-	 * Ensures the current user global and the access token query string parameter are empty.
-	 */
-	public function _set_anonymous() {
-		wp_set_current_user( 0 );
-		unset( $_GET['gflow_access_token'] );
-	}
 
 	/**
 	 * Populates the current user global for the admin user.
@@ -299,11 +419,9 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	}
 
 	/**
-	 * Clears the current user global and sets the access token query string parameter.
+	 * Sets the access token query string parameter.
 	 */
 	public function _set_access_token() {
-		wp_set_current_user( 0 );
-
 		// Decode the token to prevent a validation failure when base64 decoded in Gravity_Flow::validate_access_token().
 		$_GET['gflow_access_token'] = urldecode( gravity_flow()->generate_access_token( new Gravity_Flow_Assignee( 'email|test@test.test' ) ) );
 	}
@@ -371,28 +489,29 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	}
 
 	/**
-	 * Saves ten entries to the database and returns their IDs.
-	 *
-	 * @return array
-	 */
-	public function _create_entries() {
-		return $this->factory->entry->create_many( 10, $this->_generate_random_entry() );
-	}
-
-	/**
-	 * Saves ten entries to the database, assigns them, and returns their IDs.
+	 * Saves thirty entries to the database and returns the IDs of fifteen which are assigned to the current user/access token.
 	 *
 	 * @param string $filter_key The key which will be used in the search criteria when getting the entries later.
 	 *
 	 * @return array
 	 */
-	public function _create_assigned_entries( $filter_key ) {
-		$entry_ids = $this->_create_entries();
-		foreach ( $entry_ids as $entry_id ) {
+	public function _create_entries( $filter_key ) {
+		// Create 30 unassigned entries.
+		$created_entry_ids = $this->factory->entry->create_many( 30, $this->_generate_random_entry() );
+
+		// Get the keys to 15 random entries.
+		$random_keys = array_rand( $created_entry_ids, 15 );
+
+		// Assign the random entries to the current filter key.
+		$return_entry_ids = array();
+		foreach ( $random_keys as $key ) {
+			$entry_id           = $created_entry_ids[ $key ];
+			$return_entry_ids[] = $entry_id;
 			gform_update_meta( $entry_id, $filter_key, 'pending' );
 		}
 
-		return $entry_ids;
+		// Reverse to match default descending sort order used by GFAPI::get_entries().
+		return array_reverse( $return_entry_ids );
 	}
 
 }
