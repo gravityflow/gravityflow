@@ -8,7 +8,7 @@
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
-if ( ! class_exists( 'GFForms' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
 
@@ -28,7 +28,7 @@ class Gravity_Flow_Installation_Wizard {
 	 * Gravity_Flow_Installation_Wizard constructor.
 	 */
 	function __construct() {
-		$path = gravity_flow()->get_base_path() . '/includes/wizard/steps/';
+		$path = dirname(__FILE__) . '/steps/';
 		require_once( $path . 'class-iw-step.php' );
 		$classes = array();
 		foreach ( glob( $path . 'class-iw-step-*.php' ) as $filename ) {
@@ -54,10 +54,11 @@ class Gravity_Flow_Installation_Wizard {
 	 */
 	public function get_sorted_step_names() {
 		return array(
-			'welcome',
 			'license_key',
+			'gravity_forms',
 			'updates',
-            'pages',
+			'updates',
+			'pages',
 			'complete',
 		);
 	}
@@ -80,7 +81,7 @@ class Gravity_Flow_Installation_Wizard {
 
 		<div class="wrap about-wrap gform_installation_progress_step_wrap">
 
-			<img style="border:0;width:350px;" src="<?php echo gravity_flow()->get_base_url() ?>/images/gravity-flow-logo.svg"/>
+			<img style="border:0;width:350px;" src="<?php echo plugins_url( '', __FILE__ ) ?>/../../images/gravity-flow-logo.svg"/>
 
 			<div id="gform_installation_progress">
 				<?php $this->progress( $current_step ); ?>
@@ -136,23 +137,23 @@ class Gravity_Flow_Installation_Wizard {
 	/**
 	 * Get the step to be displayed and it's nonce key.
 	 *
-	 * @return [Gravity_Flow_Installation_Wizard_Step,string]
+	 * @return array
 	 */
 	public function get_current_step() {
-		$name         = rgpost( '_step_name' );
+		$name         = isset( $_POST['_step_name'] ) ? $_POST['_step_name'] : '';
 		$current_step = $this->get_step( $name );
 		$nonce_key    = '_gform_installation_wizard_step_' . $current_step->get_name();
 
 		if ( isset( $_POST[ $nonce_key ] ) && check_admin_referer( $nonce_key, $nonce_key ) ) {
 
-			if ( rgpost( '_previous' ) ) {
+			if ( isset( $_POST['_previous'] ) ) {
 				$posted_values = $this->get_posted_values();
 				$current_step->update( $posted_values );
 				$previous_step = $this->get_previous_step( $current_step );
 				if ( $previous_step ) {
 					$current_step = $previous_step;
 				}
-			} elseif ( rgpost( '_next' ) ) {
+			} elseif ( $_POST['_next'] ) {
 				$posted_values = $this->get_posted_values();
 				$current_step->update( $posted_values );
 				$validation_result = $current_step->validate( $posted_values );
@@ -162,7 +163,7 @@ class Gravity_Flow_Installation_Wizard {
 						$current_step = $next_step;
 					}
 				}
-			} elseif ( rgpost( '_install' ) ) {
+			} elseif ( $_POST['_install'] ) {
 				$posted_values = $this->get_posted_values();
 				$current_step->update( $posted_values );
 				$validation_result = $current_step->validate( $posted_values );
@@ -188,8 +189,8 @@ class Gravity_Flow_Installation_Wizard {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
 		// Register admin styles.
-		wp_register_style( 'gform_admin', GFCommon::get_base_url() . "/css/admin{$min}.css" );
-		wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
+		//wp_register_style( 'gform_admin', GFCommon::get_base_url() . "/css/admin{$min}.css" );
+		//wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
 		?>
 		<style>
 			#gform_installation_progress li {
@@ -216,6 +217,19 @@ class Gravity_Flow_Installation_Wizard {
 			.about-text input.regular-text {
 				font-size: 19px;
 				padding: 8px;
+			}
+
+			/* Copied from Gravity Forms Admin Styles in case Gravity Forms is not installed */
+			.validation_message {
+				color: #9E0B0F !important;
+				font-size: 11px;
+				font-family: sans-serif;
+				letter-spacing: normal;
+			}
+
+			.gfield_required {
+				color: #9E0B0F;
+				margin-left: 4px;
 			}
 		</style>
 		<?php

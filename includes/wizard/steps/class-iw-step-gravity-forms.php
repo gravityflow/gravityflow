@@ -1,0 +1,183 @@
+<?php
+/**
+ * Gravity Flow Installation Wizard: Updates Step
+ *
+ * @package     GravityFlow
+ * @subpackage  Classes/Gravity_Flow_Installation_Wizard
+ * @copyright   Copyright (c) 2015-2018, Steven Henty S.L.
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ */
+
+/**
+ * Class Gravity_Flow_Installation_Wizard_Step_Updates
+ */
+class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_Installation_Wizard_Step {
+
+	/**
+	 * The step name.
+	 *
+	 * @var string
+	 */
+	protected $_name = 'gravity_forms';
+
+	/**
+	 * Displays the content for this step.
+	 */
+	function display() {
+
+		$license_key_step_settings = get_option( 'gravityflow_installation_wizard_gravity_forms' );
+		$gravityforms_key          = $license_key_step_settings['gravityforms_key'];
+		$gravityforms_version      = $license_key_step_settings['gravityforms_version'];
+
+		$label   = '';
+		$action  = '';
+
+		$all_plugins = get_plugins();
+
+		$gf_is_installed = isset( $all_plugins['gravityforms/gravityforms.php'] );
+		if ( $gf_is_installed ) {
+			// Gravity Forms is installed - try to upgrade and activate
+
+			$gf_is_active      = class_exists( 'GFForms' );
+			$installed_version = $all_plugins['gravityforms/gravityforms.php']['Version'];
+			$upgrade_available = $gravityforms_key && version_compare( $installed_version, $gravityforms_version, '<' );
+
+			if ( $gf_is_active ) {
+				if ( $upgrade_available ) {
+					/* translators: 1. The installed version 2. the version of the update available */
+					$message = sprintf( esc_html__( 'Gravity Forms is installed and activated but there is a newer version available. You have version %1$s installed but the latest version is %2$s. Would you like us to update Gravity Forms to the latest version?', 'gravityflow' ), $installed_version, $gravityforms_version );
+
+					$label = esc_html__( 'Yes, update Gravity Forms', 'gravityflow' );
+
+					$action = 'update';
+				} else {
+					$message = esc_html__( "Gravity Forms is installed and activated. You're all set.", 'gravityflow' );
+				}
+			} else {
+				if ( $upgrade_available ) {
+					/* translators: 1. The installed version 2. the version of the update available */
+					$message = sprintf( esc_html__( 'Gravity Forms is installed and but it is not activated. There is a newer version available. You have version %1$s installed but the latest version is %2$s. Would you like us to update Gravity Forms to the latest version and activate it?', 'gravityflow' ), $installed_version, $gravityforms_version );
+
+					$label = esc_html__( 'Yes, update and activate Gravity Forms.', 'gravityflow' );
+
+					$action = 'update_and_activate';
+				} else {
+					$message = esc_html__( 'Gravity Forms is installed and but it is not activated. Would you like us to activate it?', 'gravityflow' );
+
+					$label = esc_html__( 'Yes, activate Gravity Forms.', 'gravityflow' );
+
+					$action = 'activate';
+				}
+			}
+
+		} else {
+			// Gravity Forms isn't installed. Try to download, install and activate it.
+			if ( $gravityforms_key ) {
+				$message = esc_html__( 'Gravity Forms is not installed. Would you like us to download and activate it?', 'gravityflow' );
+
+				$label = esc_html__( 'Yes, download and activate Gravity Forms.', 'gravityflow' );
+
+				$action = 'download';
+			} else {
+				$message = esc_html__( 'Gravity Forms is not installed. Please install and activate Gravity Forms before continuing.', 'gravityflow' );
+			}
+		}
+		?>
+		<p>
+			<?php
+			echo $message;
+			?>
+		</p>
+		<p>
+			<?php
+			if ( $action ) {
+				echo '<input type="hidden" value="action_required" name="action_required" />';
+				echo sprintf( '<label><input type="checkbox" id="gravityflow_consent" name="action" value="%s" />%s</label>', $action, $label );
+				$validation_message = $this->validation_message( 'action', false );
+				if ( $validation_message ) {
+					echo $validation_message;
+				}
+			}
+			?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Returns the title for this step.
+	 *
+	 * @return string
+	 */
+	function get_title() {
+		return esc_html__( 'Install Gravity Forms', 'gravityflow' );
+	}
+
+	/**
+	 * Validates the posted values for this step.
+	 *
+	 * @return bool
+	 */
+	function validate() {
+
+		if ( $this->action_required && empty( $this->action ) ) {
+			$this->set_field_validation_result( 'action', esc_html__( 'This is required in order to complete the installation.', 'gravityflow' ) );
+
+			return false;
+		}
+
+		$valid = true;
+
+		switch ( $this->action ) {
+			case 'update':
+			case 'update_and_activate':
+			case 'download':
+				$license_key_step_settings = get_option( 'gravityflow_installation_wizard_gravity_forms' );
+				$gravityforms_download_url = $license_key_step_settings['gravityforms_download_url'];
+				$result                    = $this->install_plugin( $gravityforms_download_url );
+				if ( is_wp_error( $result ) ) {
+					$this->set_field_validation_result( 'action', $result->get_error_message() );
+					$valid = false;
+				}
+		}
+
+		if ( $valid && $this->action != 'update' ) {
+			//$result = activate_plugin( 'gravityforms/gravityforms.php' );
+			if ( is_wp_error( $result ) ) {
+				$this->set_field_validation_result( 'action', $result->get_error_message() );
+				$valid = false;
+			}
+		}
+
+
+		return $valid;
+	}
+
+	/**
+	 * Returns the summary content.
+	 *
+	 * @param bool $echo Indicates if the summary should be echoed.
+	 *
+	 * @return string
+	 */
+	function summary( $echo = true ) {
+		$html = $this->background_updates !== 'disabled' ? esc_html__( 'Enabled', 'gravityflow' ) . '&nbsp;<i class="fa fa-check gf_valid"></i>' : esc_html__( 'Disabled', 'gravityflow' ) . '&nbsp;<i class="fa fa-times gf_invalid"></i>';
+		if ( $echo ) {
+			echo $html;
+		}
+
+		return $html;
+	}
+
+
+	function install_plugin( $plugin_zip ) {
+		include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		wp_cache_flush();
+
+		$upgrader = new Plugin_Upgrader();
+
+		//$installed = $upgrader->install( $plugin_zip );
+		$installed = true;
+		return $installed;
+	}
+
+}
