@@ -52,18 +52,20 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 
 		$merge_tag = $this->_get_merge_tag( 'assignees', $args );
 
+		$display_name = version_compare( get_bloginfo( 'version' ), '4.4', '>=' ) ? 'admin' : '1';
+
 		$text_in         = '{assignees}';
-		$expected_text_out = 'admin, ' . WP_TESTS_EMAIL . ' (Pending)';
+		$expected_text_out = $display_name . ', ' . WP_TESTS_EMAIL . ' (Pending)';
 		$actual_text_out = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 
 		$text_in           = '{assignees: status=false}';
-		$expected_text_out = 'admin, ' . WP_TESTS_EMAIL;
+		$expected_text_out = $display_name . ', ' . WP_TESTS_EMAIL;
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 
 		$text_in           = '{assignees: user_email=false}';
-		$expected_text_out = 'admin (Pending)';
+		$expected_text_out = $display_name . ' (Pending)';
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 
@@ -73,7 +75,7 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 
 		$text_in           = '{assignees: user_email=false status=false}';
-		$expected_text_out = 'admin';
+		$expected_text_out = $display_name;
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 	}
