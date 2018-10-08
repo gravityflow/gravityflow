@@ -266,20 +266,16 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$text_out = $merge_tag->replace( $text_in );
 		$this->assertNotEmpty( $text_out );
 
-		// Remove the URL and verify the remaining HTML is correct.
-		$expected_html = '<a href="#">Approve</a>';
-		$actual_html   = preg_replace( '/<a(.*)href="([^"]*)"(.*)>/', '<a$1href="#"$3>', $text_out );
-		$this->assertEquals( $expected_html, $actual_html, $this->_get_message( $text_in ) );
+		// Verify the link HTML matches the expected pattern.
+		$this->assertRegExp( '/<a(.*)href="([^"]*)">Approve<\/a>/', $text_out, $this->_get_message( $text_in ) );
 
 		// Verify the merge tag was replaced.
 		$text_in  = '{workflow_approve_link: text=testing}';
 		$text_out = $merge_tag->replace( $text_in );
 		$this->assertNotEmpty( $text_out );
 
-		// Remove the URL and verify the remaining HTML is correct.
-		$expected_html = '<a href="#">testing</a>';
-		$actual_html   = preg_replace( '/<a(.*)href="([^"]*)"(.*)>/', '<a$1href="#"$3>', $text_out );
-		$this->assertEquals( $expected_html, $actual_html, $this->_get_message( $text_in ) );
+		// Verify the link HTML matches the expected pattern.
+		$this->assertRegExp( '/<a(.*)href="([^"]*)">testing<\/a>/', $text_out, $this->_get_message( $text_in ) );
 	}
 
 	/**
@@ -428,20 +424,18 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$text_out = $merge_tag->replace( $text_in );
 		$this->assertNotEmpty( $text_out );
 
-		// Remove the URL and verify the remaining HTML is correct.
-		$expected_html = '<a href="#">Cancel Workflow</a>';
-		$actual_html   = preg_replace( '/<a(.*)href="([^"]*)"(.*)>/', '<a$1href="#"$3>', $text_out );
-		$this->assertEquals( $expected_html, $actual_html, $this->_get_message( $text_in ) );
+		// Verify the link HTML matches the expected pattern.
+		$this->assertRegExp( '/<a(.*)href="([^"]*)">Cancel Workflow<\/a>/', $text_out, $this->_get_message( $text_in ) );
 
 		// Verify the merge tag was replaced.
 		$text_in  = '{workflow_cancel_link: text=testing}';
 		$text_out = $merge_tag->replace( $text_in );
 		$this->assertNotEmpty( $text_out );
 
-		// Remove the URL and verify the remaining HTML is correct.
-		$expected_html = '<a href="#">testing</a>';
-		$actual_html   = preg_replace( '/<a(.*)href="([^"]*)"(.*)>/', '<a$1href="#"$3>', $text_out );
-		$this->assertEquals( $expected_html, $actual_html, $this->_get_message( $text_in ) );
+		// Verify the link HTML matches the expected pattern.
+		$this->assertRegExp( '/<a(.*)href="([^"]*)">testing<\/a>/', $text_out, $this->_get_message( $text_in ) );
+	}
+
 	}
 
 	/**
@@ -538,20 +532,16 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$text_out = $merge_tag->replace( $text_in );
 		$this->assertNotEmpty( $text_out );
 
-		// Remove the URL and verify the remaining HTML is correct.
-		$expected_html = '<a href="#">Reject</a>';
-		$actual_html   = preg_replace( '/<a(.*)href="([^"]*)"(.*)>/', '<a$1href="#"$3>', $text_out );
-		$this->assertEquals( $expected_html, $actual_html, $this->_get_message( $text_in ) );
+		// Verify the link HTML matches the expected pattern.
+		$this->assertRegExp( '/<a(.*)href="([^"]*)">Reject<\/a>/', $text_out, $this->_get_message( $text_in ) );
 
 		// Verify the merge tag was replaced.
 		$text_in  = '{workflow_reject_link: text=testing}';
 		$text_out = $merge_tag->replace( $text_in );
 		$this->assertNotEmpty( $text_out, $text_in );
 
-		// Remove the URL and verify the remaining HTML is correct.
-		$expected_html = '<a href="#">testing</a>';
-		$actual_html   = preg_replace( '/<a(.*)href="([^"]*)"(.*)>/', '<a$1href="#"$3>', $text_out );
-		$this->assertEquals( $expected_html, $actual_html, $this->_get_message( $text_in ) );
+		// Verify the link HTML matches the expected pattern.
+		$this->assertRegExp( '/<a(.*)href="([^"]*)">testing<\/a>/', $text_out, $this->_get_message( $text_in ) );
 	}
 
 	/**
@@ -685,20 +675,16 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$text_out = $merge_tag->replace( $text_in );
 		$this->assertNotEmpty( $text_out, $this->_get_message( $text_in ) );
 
-		// Remove the URL and verify the remaining HTML is correct.
-		$expected_html = '<a href="#">Entry</a>';
-		$actual_html   = preg_replace( '/<a(.*)href="([^"]*)"(.*)>/', '<a$1href="#"$3>', $text_out );
-		$this->assertEquals( $expected_html, $actual_html, $this->_get_message( $text_in ) );
+		// Verify the link HTML matches the expected pattern.
+		$this->assertRegExp( '/<a(.*)href="([^"]*)">Entry<\/a>/', $text_out, $this->_get_message( $text_in ) );
 
 		// Verify the merge tag was replaced.
 		$text_in  = '{workflow_entry_link: text=testing}';
 		$text_out = $merge_tag->replace( $text_in );
 		$this->assertNotEmpty( $text_out, $text_in );
 
-		// Remove the URL and verify the remaining HTML is correct.
-		$expected_html = '<a href="#">testing</a>';
-		$actual_html   = preg_replace( '/<a(.*)href="([^"]*)"(.*)>/', '<a$1href="#"$3>', $text_out );
-		$this->assertEquals( $expected_html, $actual_html, $this->_get_message( $text_in ) );
+		// Verify the link HTML matches the expected pattern.
+		$this->assertRegExp( '/<a(.*)href="([^"]*)">testing<\/a>/', $text_out, $this->_get_message( $text_in ) );
 	}
 
 	/**
@@ -778,20 +764,16 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$text_out = $merge_tag->replace( $text_in );
 		$this->assertNotEmpty( $text_out );
 
-		// Remove the URL and verify the remaining HTML is correct.
-		$expected_html = '<a href="#">Inbox</a>';
-		$actual_html   = preg_replace( '/<a(.*)href="([^"]*)"(.*)>/', '<a$1href="#"$3>', $text_out );
-		$this->assertEquals( $expected_html, $actual_html, $this->_get_message( $text_in ) );
+		// Verify the link HTML matches the expected pattern.
+		$this->assertRegExp( '/<a(.*)href="([^"]*)">Inbox<\/a>/', $text_out, $this->_get_message( $text_in ) );
 
 		// Verify the merge tag was replaced.
 		$text_in  = '{workflow_inbox_link: text=testing}';
 		$text_out = $merge_tag->replace( $text_in );
 		$this->assertNotEmpty( $text_out, $text_in );
 
-		// Remove the URL and verify the remaining HTML is correct.
-		$expected_html = '<a href="#">testing</a>';
-		$actual_html   = preg_replace( '/<a(.*)href="([^"]*)"(.*)>/', '<a$1href="#"$3>', $text_out );
-		$this->assertEquals( $expected_html, $actual_html, $this->_get_message( $text_in ) );
+		// Verify the link HTML matches the expected pattern.
+		$this->assertRegExp( '/<a(.*)href="([^"]*)">testing<\/a>/', $text_out, $this->_get_message( $text_in ) );
 	}
 
 	/* HELPERS */
