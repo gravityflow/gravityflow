@@ -176,8 +176,93 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 
-		// @todo the start, duration, expiration, and schedule modifiers.
+		$text_in           = '{current_step:start}';
+		$expected_text_out = '2018/10/08 at 9:30 am';
+		gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', strtotime( '2018-10-08 09:30' ) );
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 
+		$text_in           = '{current_step:duration}';
+		$expected_text_out = '1h';
+		gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', strtotime( '-1 hour' ) );
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in           = '{current_step:duration_minutes}';
+		$expected_text_out = '120';
+		gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', strtotime( '-2 hour' ) );
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in           = '{current_step:duration_seconds}';
+		$expected_text_out = '10800';
+		gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', strtotime( '-3 hour' ) );
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in           = '{current_step:expiration}';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in         = '{current_step:schedule}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
+	 * Tests that the {current_step:expiration} merge tag outputs the expected content when the step expiration settings are configured.
+	 */
+	public function test_current_step_expiration() {
+		$step_id = $this->_add_approval_step( array(
+			'expiration'              => true,
+			'expiration_type'         => 'delay',
+			'expiration_delay_offset' => '1',
+			'expiration_delay_unit'   => 'weeks'
+		) );
+		$entry   = $this->_create_entry();
+		$args    = array(
+			'step'  => $this->api->get_current_step( $entry ),
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'current_step', $args );
+
+		$timestamp            = time();
+		$expiration_timestamp = strtotime( '+1 week', $timestamp );
+		gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', $timestamp );
+
+		$text_in           = '{current_step:expiration}';
+		$expected_text_out = date( 'Y/m/d \a\t g:i a', $expiration_timestamp );
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
+	 * Tests that the {current_step:schedule} merge tag outputs the expected content when the step schedule settings are configured.
+	 */
+	public function test_current_step_schedule() {
+		$step_id = $this->_add_approval_step( array(
+			'scheduled'             => true,
+			'schedule_type'         => 'delay',
+			'schedule_delay_offset' => '1',
+			'schedule_delay_unit'   => 'weeks'
+		) );
+		$entry   = $this->_create_entry();
+		$args    = array(
+			'step'  => $this->api->get_current_step( $entry ),
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'current_step', $args );
+
+		$timestamp           = time();
+		$scheduled_timestamp = strtotime( '+1 week', $timestamp );
+		gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', $timestamp );
+
+		$text_in           = '{current_step:schedule}';
+		$expected_text_out = date( 'Y/m/d \a\t g:i a', $scheduled_timestamp );
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 	}
 
 	/**
