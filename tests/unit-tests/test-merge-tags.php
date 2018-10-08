@@ -1039,6 +1039,76 @@ Workflow Submitted';
 		$this->assertRegExp( '/<a(.*)href="([^"]*)">testing<\/a>/', $text_out, $this->_get_message( $text_in ) );
 	}
 
+	/**
+	 * Tests that the url_encode init argument and value formatting are working.
+	 */
+	public function test_formatting_url_encode() {
+		$args = array(
+			'url_encode' => true,
+			'esc_html'   => false,
+			'nl2br'      => false
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'formatting_test', $args );
+		$text_in   = '{formatting_test}';
+
+		$expected_text_out = '%3Ethis+is+url+encoded%21';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( 'url_encode' ) );
+	}
+
+	/**
+	 * Tests that the esc_html init argument and value formatting are working.
+	 */
+	public function test_formatting_esc_html() {
+		$args = array(
+			'url_encode' => false,
+			'esc_html'   => true,
+			'nl2br'      => false
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'formatting_test', $args );
+		$text_in   = '{formatting_test}';
+
+		$expected_text_out = '&lt;this&gt;is escaped&lt;/this&gt;';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( 'esc_html' ) );
+	}
+
+	/**
+	 * Tests that the nl2br and format init arguments and value formatting are working.
+	 */
+	public function test_formatting_nl2br() {
+		$args = array(
+			'url_encode' => false,
+			'esc_html'   => false,
+			'nl2br'      => true,
+			'format'     => 'text'
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'formatting_test', $args );
+		$text_in   = '{formatting_test}';
+
+		$expected_text_out = "line one\nline two\nline three";
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( 'nl2br-text' ) );
+
+		$args = array(
+			'url_encode' => false,
+			'esc_html'   => false,
+			'nl2br'      => true,
+			'format'     => 'html'
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'formatting_test', $args );
+
+		$expected_text_out = "line one<br />
+line two<br />
+line three";
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( 'nl2br-html' ) );
+	}
+
 	/* HELPERS */
 
 	/**
@@ -1125,3 +1195,53 @@ Workflow Submitted';
 	}
 
 }
+
+/**
+ * Class Gravity_Flow_Merge_Tag_Formatting_Test
+ *
+ * A custom merge tag for testing the value formatting method.
+ */
+class Gravity_Flow_Merge_Tag_Formatting_Test extends Gravity_Flow_Merge_Tag {
+
+	/**
+	 * The name of the merge tag.
+	 *
+	 * @var string
+	 */
+	public $name = 'formatting_test';
+
+	/**
+	 * The regular expression to use for the matching.
+	 *
+	 * @var string
+	 */
+	protected $regex = '/{formatting_test}/';
+
+	/**
+	 * Replace the {workflow_token_link} merge tags.
+	 *
+	 * @param string $text The text being processed.
+	 *
+	 * @return string
+	 */
+	public function replace( $text ) {
+		$matches = $this->get_matches( $text );
+
+		if ( ! empty( $matches ) ) {
+			if ( $this->url_encode ) {
+				$value = '>this is url encoded!';
+			} elseif ( $this->esc_html ) {
+				$value = '<this>is escaped</this>';
+			} elseif ( $this->nl2br ) {
+				$value = "line one\nline two\nline three";
+			}
+
+			$text = str_replace( '{formatting_test}', $this->format_value( $value ), $text );
+		}
+
+		return $text;
+	}
+
+}
+
+Gravity_Flow_Merge_Tags::register( new Gravity_Flow_Merge_Tag_Formatting_Test );
