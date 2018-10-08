@@ -183,7 +183,7 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 
 		$text_in           = '{current_step:duration}';
-		$expected_text_out = '1h';
+		$expected_text_out = method_exists( 'DateTime', 'diff' ) ? '1h' : '3600';
 		gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', strtotime( '-1 hour' ) );
 		$actual_text_out = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
