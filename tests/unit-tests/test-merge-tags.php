@@ -521,6 +521,8 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 
 		$merge_tag = $this->_get_merge_tag( 'workflow_note', array( 'entry' => $entry ) );
 
+		$display_name = version_compare( get_bloginfo( 'version' ), '4.4', '>=' ) ? 'admin' : '1';
+
 		// Test that the basic merge tag returns the latest note.
 		$text_in           = '{workflow_note}';
 		$expected_text_out = '<br />
@@ -530,7 +532,7 @@ step 2 test note';
 
 		// Test that the display_name modifier works.
 		$text_in           = '{workflow_note: display_name=true}';
-		$expected_text_out = 'admin<br />
+		$expected_text_out = $display_name . '<br />
 step 2 test note';
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
@@ -544,7 +546,7 @@ step 2 test note';
 
 		// Test that multiple modifiers work.
 		$text_in           = '{workflow_note: display_name=true display_date=true}';
-		$expected_text_out = 'admin: ' . $date . '<br />
+		$expected_text_out = $display_name . ': ' . $date . '<br />
 step 2 test note';
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
