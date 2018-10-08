@@ -735,6 +735,46 @@ step 1 test note 1';
 	}
 
 	/**
+	 * Tests that the workflow_timeline merge tag aborts early when the entry is not passed.
+	 */
+	public function test_workflow_timeline_no_entry() {
+		$merge_tag = $this->_get_merge_tag( 'workflow_timeline' );
+
+		$text_in           = '{workflow_timeline}';
+		$expected_text_out = '{workflow_timeline}';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out );
+	}
+
+	/**
+	 * Tests that the workflow_timeline merge tag outputs the expected content.
+	 */
+	public function test_workflow_timeline() {
+		$this->_add_approval_step();
+		$entry          = $this->_create_entry();
+		$submitted_date = date( 'd M Y g:i a', strtotime( $entry['date_created'] ) );
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_timeline', array( 'entry' => $entry ) );
+
+		$text_in           = '{workflow_timeline}';
+		$expected_text_out = 'Workflow: ' . $submitted_date . '<br />
+Workflow Submitted';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out );
+
+		$this->api->restart_step( $entry );
+		$restart_date = date( 'd M Y g:i a' );
+
+		$expected_text_out = 'Workflow: ' . $restart_date . '<br />
+Workflow Step restarted.<br />
+<br />
+Workflow: ' . $submitted_date . '<br />
+Workflow Submitted';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out );
+	}
+
+	/**
 	 * Tests that the workflow_entry_url merge tag outputs the expected content.
 	 */
 	public function test_workflow_entry_url() {
