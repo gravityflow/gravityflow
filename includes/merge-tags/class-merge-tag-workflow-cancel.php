@@ -59,8 +59,6 @@ class Gravity_Flow_Merge_Tag_Workflow_Cancel extends Gravity_Flow_Merge_Tag_Assi
 				return $text;
 			}
 
-			$cancel_token = $this->get_token( 'cancel_workflow' );
-
 			foreach ( $matches as $match ) {
 				$full_tag       = $match[0];
 				$type           = $match[1];
@@ -78,6 +76,8 @@ class Gravity_Flow_Merge_Tag_Workflow_Cancel extends Gravity_Flow_Merge_Tag_Assi
 				if ( ! empty( $a['assignee'] ) ) {
 					$this->assignee = $this->step->get_assignee( $a['assignee'] );
 				}
+
+				$cancel_token = $this->assignee ? $this->get_token( 'cancel_workflow' ) : '';
 
 				$url = $this->get_entry_url( $a['page_id'], $cancel_token );
 
