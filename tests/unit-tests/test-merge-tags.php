@@ -436,6 +436,142 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$this->assertRegExp( '/<a(.*)href="([^"]*)">testing<\/a>/', $text_out, $this->_get_message( $text_in ) );
 	}
 
+	/**
+	 * Tests that the workflow_fields merge tag aborts early if the current step is not passed in the init arguments.
+	 */
+	public function test_workflow_fields_no_step() {
+		$merge_tag = $this->_get_merge_tag( 'workflow_fields', array( 'entry' => $this->_create_entry() ) );
+
+		$text_in           = '{workflow_fields}';
+		$expected_text_out = '{workflow_fields}';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out );
+	}
+
+	/**
+	 * Tests that the workflow_fields merge tag outputs a table.
+	 */
+	public function test_workflow_fields() {
+		$this->_add_approval_step();
+		$entry = $this->_create_entry();
+		$step  = $this->api->get_current_step( $entry );
+		$args  = array(
+			'step'  => $step,
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_fields', $args );
+
+		$text_in           = '{workflow_fields}';
+		$expected_text_out = '<table width="99%"';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertStringStartsWith( $expected_text_out, $actual_text_out );
+	}
+
+	/**
+	 * Tests that the workflow_note merge tag aborts early if the entry is not passed in the init arguments.
+	 */
+	public function test_workflow_note_no_entry() {
+		$merge_tag = $this->_get_merge_tag( 'workflow_note' );
+
+		$text_in           = '{workflow_note}';
+		$expected_text_out = '{workflow_note}';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out );
+	}
+
+	/**
+	 * Tests that the workflow_note merge tags output the expected content.
+	 */
+	public function test_workflow_note() {
+
+		// Create the steps and entry.
+		$step_1_id = $this->_add_approval_step( array( 'step_name' => 'first' ) );
+		$step_2_id = $this->_add_approval_step();
+		$entry     = $this->_create_entry();
+
+		$time = time();
+		$date = date( 'd M Y g:i a', $time );
+
+		// Add the notes.
+		$notes = array(
+			array(
+				'id'           => 1,
+				'step_id'      => $step_1_id,
+				'assignee_key' => 'user_id|1',
+				'timestamp'    => strtotime( 'yesterday' ),
+				'value'        => 'step 1 test note 1',
+			),
+			array(
+				'id'           => 2,
+				'step_id'      => $step_1_id,
+				'assignee_key' => 'user_id|1',
+				'timestamp'    => $time,
+				'value'        => 'step 1 test note 2',
+			),
+			array(
+				'id'           => 3,
+				'step_id'      => $step_2_id,
+				'assignee_key' => 'user_id|1',
+				'timestamp'    => $time,
+				'value'        => 'step 2 test note',
+			)
+		);
+		gform_update_meta( $entry['id'], 'workflow_notes', json_encode( $notes ) );
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_note', array( 'entry' => $entry ) );
+
+		// Test that the basic merge tag returns the latest note.
+		$text_in           = '{workflow_note}';
+		$expected_text_out = '<br />
+step 2 test note';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+
+		// Test that the display_name modifier works.
+		$text_in           = '{workflow_note: display_name=true}';
+		$expected_text_out = 'admin<br />
+step 2 test note';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+
+		// Test that the display_date modifier works.
+		$text_in           = '{workflow_note: display_date=true}';
+		$expected_text_out = $date . '<br />
+step 2 test note';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+
+		// Test that multiple modifiers work.
+		$text_in           = '{workflow_note: display_name=true display_date=true}';
+		$expected_text_out = 'admin: ' . $date . '<br />
+step 2 test note';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+
+		// Test that the step_id modifier supports numeric ids.
+		$text_in           = "{workflow_note: step_id='{$step_1_id}'}";
+		$expected_text_out = '<br />
+step 1 test note 2';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+
+		// Test that the step_id modifier supports step names.
+		$text_in           = "{workflow_note: step_id=first}";
+		$expected_text_out = '<br />
+step 1 test note 2';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+
+		// Test that the history modifier works.
+		$text_in           = "{workflow_note: step_id='{$step_1_id}' history=true}";
+		$expected_text_out = '<br />
+step 1 test note 2<br />
+<br />
+<br />
+step 1 test note 1';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 	}
 
 	/**
