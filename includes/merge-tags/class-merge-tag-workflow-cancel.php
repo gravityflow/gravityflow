@@ -99,6 +99,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Cancel extends Gravity_Flow_Merge_Tag_Assi
 
 				$text = str_replace( $full_tag, $url, $text );
 
+				$this->step     = $original_step;
 				$this->assignee = $original_assignee;
 			}
 		}
