@@ -412,6 +412,35 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 	}
 
 	/**
+	 * Tests that the workflow_approve_url merge tags output the expected base URL.
+	 */
+	public function test_workflow_approve_url_base() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'entry'    => $entry,
+			'step'     => $step,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_approve', $args );
+
+		// Verify the merge tag is replaced with the admin URL.
+		$text_in  = "{workflow_approve_url}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertStringStartsWith( admin_url( 'admin.php' ), $text_out, $this->_get_message( $text_in ) );
+
+		$post_id = $this->_create_post();
+
+		// Verify the merge tag is replaced with the URL for the specified front-end page.
+		$text_in  = "{workflow_approve_url: page_id='{$post_id}'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertStringStartsWith( get_permalink( $post_id ), $text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
 	 * Tests that the workflow_approve_url merge tags output the expected content when using the step attribute.
 	 */
 	public function test_workflow_approve_url_step_attr() {
@@ -732,6 +761,35 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 	}
 
 	/**
+	 * Tests that the workflow_cancel_url merge tags output the expected base URL.
+	 */
+	public function test_workflow_cancel_url_base() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'step'     => $step,
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_cancel', $args );
+
+		// Verify the merge tag is replaced with the admin URL.
+		$text_in  = "{workflow_cancel_url}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertStringStartsWith( admin_url( 'admin.php' ), $text_out, $this->_get_message( $text_in ) );
+
+		$post_id = $this->_create_post();
+
+		// Verify the merge tag is replaced with the URL for the specified front-end page.
+		$text_in  = "{workflow_cancel_url: page_id='{$post_id}'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertStringStartsWith( get_permalink( $post_id ), $text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
 	 * Tests that the workflow_cancel_url merge tags output the expected content when using the step attribute.
 	 */
 	public function test_workflow_cancel_url_step_attr() {
@@ -799,7 +857,7 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 	}
 
 	/**
-	 * Tests that the workflow_approve_url merge tags output the expected content.
+	 * Tests that the workflow_cancel_url merge tags output the expected content.
 	 */
 	public function test_workflow_cancel_url() {
 		$this->_add_approval_step();
@@ -1129,7 +1187,7 @@ step 1 test note 1';
 	}
 
 	/**
-	 * Tests that the workflow_cancel merge tags do not output content when the assignee is not passed.
+	 * Tests that the workflow_reject merge tags do not output content when the assignee is not passed.
 	 */
 	public function test_workflow_reject_no_assignee() {
 		$this->_add_approval_step();
@@ -1149,6 +1207,35 @@ step 1 test note 1';
 		$text_in         = '{workflow_reject_link}';
 		$actual_text_out = $merge_tag->replace( $text_in );
 		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
+	 * Tests that the workflow_reject_url merge tags output the expected base URL.
+	 */
+	public function test_workflow_reject_url_base() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'step'     => $step,
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_reject', $args );
+
+		// Verify the merge tag is replaced with the admin URL.
+		$text_in  = "{workflow_reject_url}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertStringStartsWith( admin_url( 'admin.php' ), $text_out, $this->_get_message( $text_in ) );
+
+		$post_id = $this->_create_post();
+
+		// Verify the merge tag is replaced with the URL for the specified front-end page.
+		$text_in  = "{workflow_reject_url: page_id='{$post_id}'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertStringStartsWith( get_permalink( $post_id ), $text_out, $this->_get_message( $text_in ) );
 	}
 
 	/**
@@ -1225,7 +1312,7 @@ step 1 test note 1';
 	}
 
 	/**
-	 * Tests that the workflow_approve_url merge tags output the expected content.
+	 * Tests that the workflow_reject_url merge tags output the expected content.
 	 */
 	public function test_workflow_reject_url() {
 		$this->_add_approval_step();
@@ -1463,6 +1550,35 @@ Workflow Submitted';
 	}
 
 	/**
+	 * Tests that the workflow_entry_url merge tags output the expected base URL.
+	 */
+	public function test_workflow_entry_url_base() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'step'     => $step,
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_url', $args );
+
+		// Verify the merge tag is replaced with the admin URL.
+		$text_in  = "{workflow_entry_url}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertStringStartsWith( admin_url( 'admin.php' ), $text_out, $this->_get_message( $text_in ) );
+
+		$post_id = $this->_create_post();
+
+		// Verify the merge tag is replaced with the URL for the specified front-end page.
+		$text_in  = "{workflow_entry_url: page_id='{$post_id}'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertStringStartsWith( get_permalink( $post_id ), $text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
 	 * Tests that the workflow_entry_url merge tag outputs the expected content.
 	 */
 	public function test_workflow_entry_url() {
@@ -1623,6 +1739,35 @@ Workflow Submitted';
 	}
 
 	/**
+	 * Tests that the workflow_inbox_url merge tags output the expected base URL.
+	 */
+	public function test_workflow_inbox_url_base() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'step'     => $step,
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_url', $args );
+
+		// Verify the merge tag is replaced with the admin URL.
+		$text_in  = "{workflow_inbox_url}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertStringStartsWith( admin_url( 'admin.php' ), $text_out, $this->_get_message( $text_in ) );
+
+		$post_id = $this->_create_post();
+
+		// Verify the merge tag is replaced with the URL for the specified front-end page.
+		$text_in  = "{workflow_inbox_url: page_id='{$post_id}'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertStringStartsWith( get_permalink( $post_id ), $text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
 	 * Tests that the workflow_inbox_url merge tag outputs the expected content.
 	 */
 	public function test_workflow_inbox_url() {
@@ -1680,7 +1825,7 @@ Workflow Submitted';
 	}
 
 	/**
-	 * Tests that the workflow_entry_url merge tag outputs the expected content when using the token attribute.
+	 * Tests that the workflow_inbox_url merge tag outputs the expected content when using the token attribute.
 	 */
 	public function test_workflow_inbox_url_token_attr() {
 		$this->_add_approval_step();
@@ -1903,6 +2048,15 @@ line three";
 		return $this->api->add_step( $settings );
 	}
 
+	/**
+	 * Creates an empty post and returns the ID.
+	 *
+	 * @return int|WP_Error
+	 */
+	public function _create_post() {
+		return wp_insert_post( array( 'post_title' => 'test' ) );
+	}
+
 }
 
 /**
@@ -1927,7 +2081,7 @@ class Gravity_Flow_Merge_Tag_Formatting_Test extends Gravity_Flow_Merge_Tag {
 	protected $regex = '/{formatting_test}/';
 
 	/**
-	 * Replace the {workflow_token_link} merge tags.
+	 * Replaces the merge tags.
 	 *
 	 * @param string $text The text being processed.
 	 *
