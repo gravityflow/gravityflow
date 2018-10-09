@@ -20,6 +20,10 @@ class Gravity_Flow_Installation_Wizard_Step_Pages extends Gravity_Flow_Installat
 	 */
 	protected $_name = 'pages';
 
+	public $defaults = array(
+		'workflow_pages'  => 'custom',
+		);
+
 	/**
 	 * Displays the content for this step.
 	 */
@@ -28,22 +32,22 @@ class Gravity_Flow_Installation_Wizard_Step_Pages extends Gravity_Flow_Installat
 			// First run.
 			$this->workflow_pages = 'admin';
 		};
-		echo '<p>' . esc_html__( "Gravity Flow can be accessed from both the front end of your site and from the built-in WordPress admin pages (Workflow menu). If you want to use your site styles, or if you want to use the one-click approval links, then you'll need to add some pages to your site.", 'gravityflow' ) . '</p>';
+		echo '<p>' . esc_html__( "Your users can access Gravity Flow via the front end of your site and/or from the built-in WordPress admin pages (Workflow menu). If you want to use your site styles, or if you want to use the one-click approval links, then you'll need to add these pages to your site.", 'gravityflow' ) . '</p>';
 		echo '<p>' . sprintf( esc_html__( 'Would you like to create custom inbox, status, and submit pages now? The pages will contain the %s[gravityflow] shortcode%s enabling assignees to interact with the workflow from the front end of the site.', 'gravityflow' ), '<a href="http://docs.gravityflow.io/article/36-the-shortcode" target="_blank">', '</a>' ) . '</p>';
 
 		?>
-
         <div>
-            <label>
-                <input type="radio" value="admin" <?php checked( 'admin', $this->workflow_pages ); ?> name="workflow_pages"/>
-				<?php esc_html_e( 'No, use the WordPress Admin (Workflow menu).', 'gravityflow' ); ?>
-            </label>
+	        <label>
+		        <input type="radio" value="custom" <?php checked( 'custom', $this->workflow_pages ); ?> name="workflow_pages"/>
+		        <?php esc_html_e( 'Yes, create inbox, status, and submit pages now. (Recommended)', 'gravityflow' ); ?>
+	        </label>
+
         </div>
         <div>
-            <label>
-                <input type="radio" value="custom" <?php checked( 'custom', $this->workflow_pages ); ?> name="workflow_pages"/>
-				<?php esc_html_e( 'Yes, create inbox, status, and submit pages now.', 'gravityflow' ); ?>
-            </label>
+	        <label>
+		        <input type="radio" value="admin" <?php checked( 'admin', $this->workflow_pages ); ?> name="workflow_pages"/>
+		        <?php esc_html_e( 'No, use the WordPress Admin (Workflow menu).', 'gravityflow' ); ?>
+	        </label>
         </div>
 
 		<?php

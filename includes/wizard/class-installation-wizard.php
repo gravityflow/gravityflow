@@ -110,10 +110,12 @@ class Gravity_Flow_Installation_Wizard {
 				</div>
 				<?php
 				$next_button = '';
-				if ( $current_step->is( 'pages' ) ) {
-					$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_install"/>', esc_attr( $current_step->get_next_button_text() ) );
-				} elseif ( ! $current_step->is( 'complete' ) ) {
-					$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_next"/>', esc_attr( $current_step->get_next_button_text() ) );
+				if ( ! $current_step->disable_next_button ) {
+					if ( $current_step->is( 'pages' ) ) {
+						$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_install"/>', esc_attr( $current_step->get_next_button_text() ) );
+					} elseif ( ! $current_step->is( 'complete' ) ) {
+						$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_next"/>', esc_attr( $current_step->get_next_button_text() ) );
+					}
 				}
 				?>
 				<div>
@@ -153,20 +155,20 @@ class Gravity_Flow_Installation_Wizard {
 				if ( $previous_step ) {
 					$current_step = $previous_step;
 				}
-			} elseif ( $_POST['_next'] ) {
+			} elseif ( isset( $_POST['_next'] ) ) {
 				$posted_values = $this->get_posted_values();
 				$current_step->update( $posted_values );
-				$validation_result = $current_step->validate( $posted_values );
+				$validation_result = $current_step->validate();
 				if ( $validation_result === true ) {
 					$next_step = $this->get_next_step( $current_step );
 					if ( $next_step ) {
 						$current_step = $next_step;
 					}
 				}
-			} elseif ( $_POST['_install'] ) {
+			} elseif ( isset( $_POST['_install'] ) ) {
 				$posted_values = $this->get_posted_values();
 				$current_step->update( $posted_values );
-				$validation_result = $current_step->validate( $posted_values );
+				$validation_result = $current_step->validate();
 				if ( $validation_result === true ) {
 					$this->complete_installation();
 					$next_step = $this->get_next_step( $current_step );
@@ -222,7 +224,7 @@ class Gravity_Flow_Installation_Wizard {
 			/* Copied from Gravity Forms Admin Styles in case Gravity Forms is not installed */
 			.validation_message {
 				color: #9E0B0F !important;
-				font-size: 11px;
+				font-size: 14px;
 				font-family: sans-serif;
 				letter-spacing: normal;
 			}
@@ -341,6 +343,7 @@ class Gravity_Flow_Installation_Wizard {
 		$html              = '<ul id="gform_installation_progress">';
 		$done              = true;
 		$current_step_name = $current_step->get_name();
+		$yes_img_url = plugins_url( '', __FILE__ ) . '/../../images/yes.png';
 		foreach ( array_keys( $this->_step_class_names ) as $step_name ) {
 			$class = '';
 			$step  = $this->get_step( $step_name );
@@ -350,7 +353,8 @@ class Gravity_Flow_Installation_Wizard {
 			} else {
 				$class .= $done ? 'gform_installation_progress_step_complete' : 'gform_installation_progress_step_pending';
 			}
-			$check = $done ? '<i class="fa fa-check" style="color:green"></i>' : '<i class="fa fa-check" style="visibility:hidden"></i>';
+			$yes_visibility = $done ? '' : 'style="visibility:hidden"';
+			$check = sprintf( '<img src="%s" %s />', $yes_img_url, $yes_visibility );
 
 			$html .= sprintf( '<li id="gform_installation_progress_%s" class="%s">%s&nbsp;%s</li>', esc_attr( $step->get_name() ), esc_attr( $class ), esc_html( $step->get_title() ), $check );
 		}

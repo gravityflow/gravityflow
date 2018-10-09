@@ -25,12 +25,13 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 	 */
 	function display() {
 
-		$license_key_step_settings = get_option( 'gravityflow_installation_wizard_gravity_forms' );
-		$gravityforms_key          = $license_key_step_settings['gravityforms_key'];
-		$gravityforms_version      = $license_key_step_settings['gravityforms_version'];
+		$license_key_step_settings = $this->get_step_settings( 'license_key' );
+		$gravityforms_key          = isset( $license_key_step_settings['gravityforms_key'] ) ? $license_key_step_settings['gravityforms_key'] : '';
+		$gravityforms_version      = isset( $license_key_step_settings['gravityforms_version'] ) ? $license_key_step_settings['gravityforms_version'] : '';
 
-		$label   = '';
-		$action  = '';
+		$label  = '';
+		$action = '';
+		$action_required = false;
 
 		$all_plugins = get_plugins();
 
@@ -45,13 +46,19 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 			if ( $gf_is_active ) {
 				if ( $upgrade_available ) {
 					/* translators: 1. The installed version 2. the version of the update available */
-					$message = sprintf( esc_html__( 'Gravity Forms is installed and activated but there is a newer version available. You have version %1$s installed but the latest version is %2$s. Would you like us to update Gravity Forms to the latest version?', 'gravityflow' ), $installed_version, $gravityforms_version );
+					$message = sprintf( esc_html__( 'Gravity Forms is installed and activated but there is a newer version available. You have version %1$s installed but the latest version is %2$s. If you would like us to update Gravity Forms to the latest version, check the box below.', 'gravityflow' ), $installed_version, $gravityforms_version );
 
 					$label = esc_html__( 'Yes, update Gravity Forms', 'gravityflow' );
 
 					$action = 'update';
+
+					$action_required = false;
 				} else {
 					$message = esc_html__( "Gravity Forms is installed and activated. You're all set.", 'gravityflow' );
+
+					$this->action_required = false;
+
+					$this->action = 0;
 				}
 			} else {
 				if ( $upgrade_available ) {
@@ -61,25 +68,32 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 					$label = esc_html__( 'Yes, update and activate Gravity Forms.', 'gravityflow' );
 
 					$action = 'update_and_activate';
+
+					$action_required = true;
 				} else {
 					$message = esc_html__( 'Gravity Forms is installed and but it is not activated. Would you like us to activate it?', 'gravityflow' );
 
 					$label = esc_html__( 'Yes, activate Gravity Forms.', 'gravityflow' );
 
 					$action = 'activate';
+
+					$action_required = true;
 				}
 			}
 
 		} else {
 			// Gravity Forms isn't installed. Try to download, install and activate it.
 			if ( $gravityforms_key ) {
-				$message = esc_html__( 'Gravity Forms is not installed. Would you like us to download and activate it?', 'gravityflow' );
+				$message = esc_html__( 'The Gravity Forms form builder plugin is required but it is not installed. Would you like us to download and activate it?', 'gravityflow' );
 
 				$label = esc_html__( 'Yes, download and activate Gravity Forms.', 'gravityflow' );
 
 				$action = 'download';
+
+				$action_required = true;
 			} else {
 				$message = esc_html__( 'Gravity Forms is not installed. Please install and activate Gravity Forms before continuing.', 'gravityflow' );
+				$this->disable_next_button = true;
 			}
 		}
 		?>
@@ -88,18 +102,25 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 			echo $message;
 			?>
 		</p>
-		<p>
+
 			<?php
+			echo sprintf( '<input type="hidden" value="%s" name="action_required" />', $action_required );
 			if ( $action ) {
-				echo '<input type="hidden" value="action_required" name="action_required" />';
-				echo sprintf( '<label><input type="checkbox" id="gravityflow_consent" name="action" value="%s" />%s</label>', $action, $label );
+				echo "<div>";
+				echo sprintf( '<input id="gravityflow_action" type="hidden" value="%s" name="action" />', $this->action );
+				$onclick = "jQuery('#gravityflow_action').val(jQuery(this).prop('checked') ? this.value : 0);";
+				$required = $action_required ? '<span class="gfield_required">*</span>': '';
+				echo sprintf( '<label><input type="checkbox" id="gravityflow_action" onclick="%s" onkeypress="%s" value="%s" %s />%s%s</label>', $onclick, $onclick, $action, checked( ! empty( $this->action ), true , false ), $label, $required );
+				echo "</div>";
 				$validation_message = $this->validation_message( 'action', false );
 				if ( $validation_message ) {
 					echo $validation_message;
 				}
+			} else {
+				echo '<input id="gravityflow_action" type="hidden" value="0" name="action" />';
 			}
 			?>
-		</p>
+
 		<?php
 	}
 
@@ -125,13 +146,17 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 			return false;
 		}
 
+		if ( empty( $this->action ) ) {
+			return true;
+		}
+
 		$valid = true;
 
 		switch ( $this->action ) {
 			case 'update':
 			case 'update_and_activate':
 			case 'download':
-				$license_key_step_settings = get_option( 'gravityflow_installation_wizard_gravity_forms' );
+				$license_key_step_settings = $this->get_step_settings( 'license_key' );
 				$gravityforms_download_url = $license_key_step_settings['gravityforms_download_url'];
 				$result                    = $this->install_plugin( $gravityforms_download_url );
 				if ( is_wp_error( $result ) ) {
@@ -141,13 +166,17 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 		}
 
 		if ( $valid && $this->action != 'update' ) {
-			//$result = activate_plugin( 'gravityforms/gravityforms.php' );
+			$result = activate_plugin( 'gravityforms/gravityforms.php' );
 			if ( is_wp_error( $result ) ) {
 				$this->set_field_validation_result( 'action', $result->get_error_message() );
 				$valid = false;
 			}
 		}
 
+		if ( $valid && $this->action == 'download' ) {
+			update_option( 'rg_gforms_currency', 'USD' );
+			update_option( 'gform_pending_installation', false );
+		}
 
 		return $valid;
 	}
@@ -171,13 +200,31 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 
 	function install_plugin( $plugin_zip ) {
 		include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		include_once 'class-iw-installation-skin.php';
 		wp_cache_flush();
 
-		$upgrader = new Plugin_Upgrader();
+		add_filter( 'upgrader_package_options', array( $this, 'filter_upgrader_package_options' ) );
 
-		//$installed = $upgrader->install( $plugin_zip );
-		$installed = true;
-		return $installed;
+		$upgrader = new Plugin_Upgrader( new Gravity_Flow_Quiet_Installation_Skin() );
+
+		$result = $upgrader->install( $plugin_zip );
+
+		remove_filter( 'upgrader_package_options', array( $this, 'filter_upgrader_package_options' ) );
+
+		return $result;
 	}
 
+	/**
+	 * Filters the package options before running an update.
+	 *
+	 *
+	 * @return array
+	 */
+	function filter_upgrader_package_options( $options ) {
+		$options['abort_if_destination_exists'] = false;
+
+		return $options;
+	}
 }
+
+

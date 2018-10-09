@@ -106,10 +106,12 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 			if ( empty( $license_info ) || $license_info->license !== 'valid' ) {
 				$message = "&nbsp;<i class='fa fa-times gf_keystatus_invalid'></i> <span class='gf_keystatus_invalid_text'>" . __( 'Invalid or Expired Key : Please make sure you have entered the correct value and that your key is not expired.', 'gravityflow' ) . '</span>';
 				$this->set_field_validation_result( 'license_key', $message );
-				$this->is_valid_key              = false;
+				$this->is_valid_key = false;
+			} elseif ( $license_info->license === 'valid') {
 				$this->gravityforms_key          = isset( $license_info->gravityforms_key ) ? $license_info->gravityforms_key : '';
 				$this->gravityforms_download_url = isset( $license_info->gravityforms_download_url ) ? $license_info->gravityforms_download_url : '';
 				$this->gravityforms_version      = isset( $license_info->gravityforms_version ) ? $license_info->gravityforms_version : '';
+				$this->update();
 			}
 		}
 
@@ -123,7 +125,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 	}
 
 	/**
-	 * Installs the license key, if supplied.
+	 * Installs the license key, if supplied. Also saves the Gravity Forms Starter License key if eligible.
 	 */
 	public function install() {
 		if ( $this->license_key ) {
@@ -132,6 +134,14 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 			$settings                = $gravityflow->get_app_settings();
 			$settings['license_key'] = $this->license_key;
 			gravity_flow()->update_app_settings( $settings );
+
+			if ( $this->gravityforms_key && $this->gravityforms_download_url ) {
+				$current_key = get_option( 'rg_gforms_key' );
+				if ( empty( $current_key ) ) {
+					GFFormsModel::save_key( $this->gravityforms_key );
+					GFCommon::cache_remote_message();
+				}
+			}
 		}
 	}
 
