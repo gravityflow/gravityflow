@@ -77,7 +77,13 @@ class Gravity_Flow_Merge_Tag_Workflow_Cancel extends Gravity_Flow_Merge_Tag_Assi
 					$this->assignee = $this->step->get_assignee( $a['assignee'] );
 				}
 
-				$cancel_token = $this->assignee ? $this->get_token( 'cancel_workflow' ) : '';
+				if ( empty( $this->assignee ) ) {
+					$text           = str_replace( $full_tag, '', $text );
+					$this->assignee = $original_assignee;
+					continue;
+				}
+
+				$cancel_token = $this->get_token( 'cancel_workflow' );
 
 				$url = $this->get_entry_url( $a['page_id'], $cancel_token );
 
