@@ -113,6 +113,8 @@ abstract class Gravity_Flow_Merge_Tag {
 	/**
 	 * Gravity_Flow_Merge_Tag constructor.
 	 *
+	 * @since 1.7.1
+	 *
 	 * @param null|array $args The arguments used to initialize the class.
 	 */
 	public function __construct( $args = null ) {
@@ -153,6 +155,8 @@ abstract class Gravity_Flow_Merge_Tag {
 	/**
 	 * Get an array of matches for the current merge tags pattern.
 	 *
+	 * @since 1.7.1
+	 *
 	 * @param string $text The text which may contain merge tags to be processed.
 	 *
 	 * @return array
@@ -168,6 +172,8 @@ abstract class Gravity_Flow_Merge_Tag {
 
 	/**
 	 * Override this to replace the matches in the supplied text.
+	 *
+	 * @since 1.7.1
 	 *
 	 * @param string $text The text which may contain merge tags to be processed.
 	 *
