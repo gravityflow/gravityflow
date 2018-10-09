@@ -49,7 +49,7 @@ class Gravity_Flow_Merge_Tag_Approve extends Gravity_Flow_Merge_Tag_Assignee_Bas
 
 		$matches = $this->get_matches( $text );
 
-		if ( is_array( $matches ) ) {
+		if ( ! empty( $matches ) ) {
 			foreach ( $matches as $match ) {
 				$full_tag       = $match[0];
 				$type           = $match[1];
