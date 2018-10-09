@@ -27,6 +27,28 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$this->api     = new Gravity_Flow_API( $this->form_id );
 	}
 
+
+	// # ASSIGNEES ----------------------------------------------------------------------------------------------------
+
+
+	/**
+	 * Tests the text is not replaced when the merge tag is not found.
+	 */
+	public function test_assignees_invalid_text() {
+		$this->_add_approval_step();
+		$entry = $this->_create_entry();
+		$args  = array(
+			'step'  => $this->api->get_current_step( $entry ),
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'assignees', $args );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
+	}
+
 	/**
 	 * Tests that the assignee merge tag aborts early if the current step is not passed in the init arguments.
 	 */
@@ -78,6 +100,21 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$expected_text_out = $display_name;
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+
+	// # CREATED BY ---------------------------------------------------------------------------------------------------
+
+
+	/**
+	 * Tests the text is not replaced when the merge tag is not found.
+	 */
+	public function test_created_invalid_text() {
+		$merge_tag = $this->_get_merge_tag( 'created_by', array( 'entry' => $this->_create_entry() ) );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
 	}
 
 	/**
@@ -135,6 +172,28 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$expected_text_out = 'administrator';
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+
+	// # CURRENT STEP -------------------------------------------------------------------------------------------------
+
+
+	/**
+	 * Tests the text is not replaced when the merge tag is not found.
+	 */
+	public function test_current_step_invalid_text() {
+		$this->_add_approval_step();
+		$entry   = $this->_create_entry();
+		$args    = array(
+			'step'  => $this->api->get_current_step( $entry ),
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'current_step', $args );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
 	}
 
 	/**
@@ -265,10 +324,35 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 	}
 
+
+	// # WORKFLOW APPROVE ---------------------------------------------------------------------------------------------
+
+
 	/**
-	 * Tests that the workflow_approve merge tags do not output content when the step is not passed.
+	 * Tests the text is not replaced when the merge tag is not found.
 	 */
-	public function test_workflow_approve_no_step() {
+	public function test_workflow_approve_invalid_text() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'step'     => $step,
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_approve', $args );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
+	}
+
+	/**
+	 * Tests that the workflow_approve merge tags do not output content when the step and assignee are not passed.
+	 */
+	public function test_workflow_approve_no_step_no_assignee() {
 		$merge_tag = $this->_get_merge_tag( 'workflow_approve', array( 'entry' => $this->_create_entry() ) );
 
 		$text_in         = '{workflow_approve_url}';
@@ -278,6 +362,126 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$text_in         = '{workflow_approve_link}';
 		$actual_text_out = $merge_tag->replace( $text_in );
 		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
+	 * Tests that the workflow_approve merge tags do not output content when the step is not passed.
+	 */
+	public function test_workflow_approve_no_step() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'entry'    => $entry,
+			'assignee' => $assignee
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_approve', $args );
+
+		$text_in         = '{workflow_approve_url}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in         = '{workflow_approve_link}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
+	 * Tests that the workflow_approve merge tags do not output content when the assignee is not passed.
+	 */
+	public function test_workflow_approve_no_assignee() {
+		$this->_add_approval_step();
+		$entry = $this->_create_entry();
+		$step  = $this->api->get_current_step( $entry );
+		$args  = array(
+			'step'  => $step,
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_approve', $args );
+
+		$text_in         = '{workflow_approve_url}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in         = '{workflow_approve_link}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
+	 * Tests that the workflow_approve_url merge tags output the expected content when using the step attribute.
+	 */
+	public function test_workflow_approve_url_step_attr() {
+		$step_id  = $this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_approve', $args );
+
+		// Verify the merge tag is replaced by an empty string when an invalid step is specified.
+		$text_in  = "{workflow_approve_url: step=wrong}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Verify the merge tag is replaced with a URL when a valid step is specified.
+		$text_in  = "{workflow_approve_url: step='{$step_id}'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertNotEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Get the query string arguments.
+		$actual_query_args = $this->_parse_workflow_url( $text_out );
+
+		// Verify the access token is present.
+		$access_token = rgar( $actual_query_args, 'gflow_access_token' );
+		$this->assertNotEmpty( $access_token, $this->_get_message( $text_in . ' - token' ) );
+
+		$decoded_token = gravity_flow()->decode_access_token( $access_token );
+
+		// Verify the token action is correct.
+		$token_step_id = rgars( $decoded_token, 'scopes/step_id' );
+		$this->assertEquals( $step_id, $token_step_id, $this->_get_message( $text_in . ' - scopes step id' ) );
+	}
+
+	/**
+	 * Tests that the workflow_approve_url merge tags output the expected content when using the assignee attribute.
+	 */
+	public function test_workflow_approve_url_assignee_attr() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'entry' => $entry,
+			'step'  => $step,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_approve', $args );
+
+		// Verify the merge tag is replaced with a URL when a valid assignee is specified.
+		$text_in  = "{workflow_approve_url: assignee='user_id|1'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertNotEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Get the query string arguments.
+		$actual_query_args = $this->_parse_workflow_url( $text_out );
+
+		// Verify the access token is present.
+		$access_token = rgar( $actual_query_args, 'gflow_access_token' );
+		$this->assertNotEmpty( $access_token, $this->_get_message( $text_in . ' - token' ) );
+
+		$decoded_token = gravity_flow()->decode_access_token( $access_token );
+
+		// Verify the access token belongs to the correct assignee.
+		$actual_assignee = gravity_flow()->parse_token_assignee( $decoded_token );
+		$this->assertEquals( $assignee->get_key(), $actual_assignee->get_key() );
 	}
 
 	/**
@@ -363,6 +567,31 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$this->assertRegExp( '/<a(.*)href="([^"]*)">testing<\/a>/', $text_out, $this->_get_message( $text_in ) );
 	}
 
+
+	// # WORKFLOW APPROVE TOKEN ---------------------------------------------------------------------------------------
+
+
+	/**
+	 * Tests the text is not replaced when the merge tag is not found.
+	 */
+	public function test_workflow_approve_token_invalid_text() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'step'     => $step,
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_approve_token', $args );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
+	}
+
 	/**
 	 * Tests that the workflow_approve_token merge tag does not output content when the assignee is not passed.
 	 */
@@ -415,6 +644,70 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$this->assertEquals( $assignee->get_key(), $actual_assignee->get_key() );
 	}
 
+
+	// # WORKFLOW CANCEL ----------------------------------------------------------------------------------------------
+
+
+	/**
+	 * Tests the text is not replaced when the merge tag is not found.
+	 */
+	public function test_workflow_cancel_invalid_text() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'step'     => $step,
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_cancel', $args );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
+	}
+
+	/**
+	 * Tests that the workflow_cancel merge tags do not output content when the step and assignee are not passed.
+	 */
+	public function test_workflow_cancel_no_step_no_assignee() {
+		$merge_tag = $this->_get_merge_tag( 'workflow_cancel', array( 'entry' => $this->_create_entry() ) );
+
+		$text_in         = '{workflow_cancel_url}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in         = '{workflow_cancel_link}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
+	 * Tests that the workflow_cancel merge tags do not output content when the step is not passed.
+	 */
+	public function test_workflow_cancel_no_step() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'entry'    => $entry,
+			'assignee' => $assignee
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_cancel', $args );
+
+		$text_in         = '{workflow_cancel_url}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in         = '{workflow_cancel_link}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
 	/**
 	 * Tests that the workflow_cancel merge tags do not output content when the assignee is not passed.
 	 */
@@ -436,6 +729,73 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$text_in         = '{workflow_cancel_link}';
 		$actual_text_out = $merge_tag->replace( $text_in );
 		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
+	 * Tests that the workflow_cancel_url merge tags output the expected content when using the step attribute.
+	 */
+	public function test_workflow_cancel_url_step_attr() {
+		$step_id  = $this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_cancel', $args );
+
+		// Verify the merge tag is replaced by an empty string when an invalid step is specified.
+		$text_in  = "{workflow_cancel_url: step=wrong}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Verify the merge tag is replaced with a URL when a valid step is specified.
+		$text_in  = "{workflow_cancel_url: step='{$step_id}'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertNotEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Get the query string arguments.
+		$actual_query_args = $this->_parse_workflow_url( $text_out );
+
+		// Verify the access token is present.
+		$access_token = rgar( $actual_query_args, 'gflow_access_token' );
+		$this->assertNotEmpty( $access_token, $this->_get_message( $text_in . ' - token' ) );
+	}
+
+	/**
+	 * Tests that the workflow_cancel_url merge tags output the expected content when using the assignee attribute.
+	 */
+	public function test_workflow_cancel_url_assignee_attr() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'entry' => $entry,
+			'step'  => $step,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_cancel', $args );
+
+		// Verify the merge tag is replaced with a URL when a valid assignee is specified.
+		$text_in  = "{workflow_cancel_url: assignee='user_id|1'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertNotEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Get the query string arguments.
+		$actual_query_args = $this->_parse_workflow_url( $text_out );
+
+		// Verify the access token is present.
+		$access_token = rgar( $actual_query_args, 'gflow_access_token' );
+		$this->assertNotEmpty( $access_token, $this->_get_message( $text_in . ' - token' ) );
+
+		$decoded_token = gravity_flow()->decode_access_token( $access_token );
+
+		// Verify the access token belongs to the correct assignee.
+		$actual_assignee = gravity_flow()->parse_token_assignee( $decoded_token );
+		$this->assertEquals( $assignee->get_key(), $actual_assignee->get_key() );
 	}
 
 	/**
@@ -521,6 +881,29 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$this->assertRegExp( '/<a(.*)href="([^"]*)">testing<\/a>/', $text_out, $this->_get_message( $text_in ) );
 	}
 
+
+	// # WORKFLOW FIELDS ----------------------------------------------------------------------------------------------
+
+
+	/**
+	 * Tests the text is not replaced when the merge tag is not found.
+	 */
+	public function test_workflow_fields_invalid_text() {
+		$this->_add_approval_step();
+		$entry = $this->_create_entry();
+		$step  = $this->api->get_current_step( $entry );
+		$args  = array(
+			'step'  => $step,
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_fields', $args );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
+	}
+
 	/**
 	 * Tests that the workflow_fields merge tag aborts early if the current step is not passed in the init arguments.
 	 */
@@ -551,6 +934,26 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$expected_text_out = '<table width="99%"';
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertStringStartsWith( $expected_text_out, $actual_text_out );
+	}
+
+
+	// # WORKFLOW NOTE ------------------------------------------------------------------------------------------------
+
+
+	/**
+	 * Tests the text is not replaced when the merge tag is not found.
+	 */
+	public function test_workflow_note_invalid_text() {
+		$entry = $this->_create_entry();
+		$args  = array(
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_note', $args );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
 	}
 
 	/**
@@ -661,6 +1064,70 @@ step 1 test note 1';
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 	}
 
+
+	// # WORKFLOW REJECT ----------------------------------------------------------------------------------------------
+
+
+	/**
+	 * Tests the text is not replaced when the merge tag is not found.
+	 */
+	public function test_workflow_reject_invalid_text() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'step'     => $step,
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_reject', $args );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
+	}
+
+	/**
+	 * Tests that the workflow_reject merge tags do not output content when the step and assignee are not passed.
+	 */
+	public function test_workflow_reject_no_step_no_assignee() {
+		$merge_tag = $this->_get_merge_tag( 'workflow_reject', array( 'entry' => $this->_create_entry() ) );
+
+		$text_in         = '{workflow_reject_url}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in         = '{workflow_reject_link}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
+	 * Tests that the workflow_reject merge tags do not output content when the step is not passed.
+	 */
+	public function test_workflow_reject_no_step() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'entry'    => $entry,
+			'assignee' => $assignee
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_reject', $args );
+
+		$text_in         = '{workflow_reject_url}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in         = '{workflow_reject_link}';
+		$actual_text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
 	/**
 	 * Tests that the workflow_cancel merge tags do not output content when the assignee is not passed.
 	 */
@@ -682,6 +1149,79 @@ step 1 test note 1';
 		$text_in         = '{workflow_reject_link}';
 		$actual_text_out = $merge_tag->replace( $text_in );
 		$this->assertEmpty( $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
+	 * Tests that the workflow_reject_url merge tags output the expected content when using the step attribute.
+	 */
+	public function test_workflow_reject_url_step_attr() {
+		$step_id  = $this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_reject', $args );
+
+		// Verify the merge tag is replaced by an empty string when an invalid step is specified.
+		$text_in  = "{workflow_reject_url: step=wrong}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Verify the merge tag is replaced with a URL when a valid step is specified.
+		$text_in  = "{workflow_reject_url: step='{$step_id}'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertNotEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Get the query string arguments.
+		$actual_query_args = $this->_parse_workflow_url( $text_out );
+
+		// Verify the access token is present.
+		$access_token = rgar( $actual_query_args, 'gflow_access_token' );
+		$this->assertNotEmpty( $access_token, $this->_get_message( $text_in . ' - token' ) );
+
+		$decoded_token = gravity_flow()->decode_access_token( $access_token );
+
+		// Verify the token action is correct.
+		$token_step_id = rgars( $decoded_token, 'scopes/step_id' );
+		$this->assertEquals( $step_id, $token_step_id, $this->_get_message( $text_in . ' - scopes step id' ) );
+	}
+
+	/**
+	 * Tests that the workflow_reject_url merge tags output the expected content when using the assignee attribute.
+	 */
+	public function test_workflow_reject_url_assignee_attr() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'entry' => $entry,
+			'step'  => $step,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_reject', $args );
+
+		// Verify the merge tag is replaced with a URL when a valid assignee is specified.
+		$text_in  = "{workflow_reject_url: assignee='user_id|1'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertNotEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Get the query string arguments.
+		$actual_query_args = $this->_parse_workflow_url( $text_out );
+
+		// Verify the access token is present.
+		$access_token = rgar( $actual_query_args, 'gflow_access_token' );
+		$this->assertNotEmpty( $access_token, $this->_get_message( $text_in . ' - token' ) );
+
+		$decoded_token = gravity_flow()->decode_access_token( $access_token );
+
+		// Verify the access token belongs to the correct assignee.
+		$actual_assignee = gravity_flow()->parse_token_assignee( $decoded_token );
+		$this->assertEquals( $assignee->get_key(), $actual_assignee->get_key() );
 	}
 
 	/**
@@ -767,6 +1307,31 @@ step 1 test note 1';
 		$this->assertRegExp( '/<a(.*)href="([^"]*)">testing<\/a>/', $text_out, $this->_get_message( $text_in ) );
 	}
 
+
+	// # WORKFLOW REJECT TOKEN ----------------------------------------------------------------------------------------
+
+
+	/**
+	 * Tests the text is not replaced when the merge tag is not found.
+	 */
+	public function test_workflow_reject_token_invalid_text() {
+		$this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'step'     => $step,
+			'entry'    => $entry,
+			'assignee' => $assignee,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_reject_token', $args );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
+	}
+
 	/**
 	 * Tests that the workflow_reject_token merge tag does not output content when the assignee is not passed.
 	 */
@@ -819,6 +1384,21 @@ step 1 test note 1';
 		$this->assertEquals( $assignee->get_key(), $actual_assignee->get_key() );
 	}
 
+
+	// # WORKFLOW TIMELINE --------------------------------------------------------------------------------------------
+
+
+	/**
+	 * Tests the text is not replaced when the merge tag is not found.
+	 */
+	public function test_workflow_timeline_invalid_text() {
+		$merge_tag = $this->_get_merge_tag( 'workflow_timeline', array( 'entry' => $this->_create_entry() ) );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
+	}
+
 	/**
 	 * Tests that the workflow_timeline merge tag aborts early when the entry is not passed.
 	 */
@@ -859,15 +1439,35 @@ Workflow Submitted';
 		$this->assertEquals( $expected_text_out, $actual_text_out );
 	}
 
+
+	// # WORKFLOW URL -------------------------------------------------------------------------------------------------
+
+
 	/**
-	 * Tests that the workflow_entry_url merge tag outputs the expected content.
+	 * Tests the text is not replaced when the merge tag is not found.
 	 */
-	public function test_workflow_entry_url() {
+	public function test_workflow_url_invalid_text() {
 		$this->_add_approval_step();
 		$entry = $this->_create_entry();
 		$step  = $this->api->get_current_step( $entry );
 		$args  = array(
 			'step'  => $step,
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_url', $args );
+
+		$text_in  = 'no matching {merge_tag} here';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertEquals( $text_in, $text_out );
+	}
+
+	/**
+	 * Tests that the workflow_entry_url merge tag outputs the expected content.
+	 */
+	public function test_workflow_entry_url() {
+		$entry = $this->_create_entry();
+		$args  = array(
 			'entry' => $entry,
 		);
 
@@ -889,9 +1489,81 @@ Workflow Submitted';
 	}
 
 	/**
+	 * Tests that the workflow_entry_url token merge tag does not include the token in the returned URL when the step and assignee are not passed.
+	 */
+	public function test_workflow_entry_url_token_attr_no_step_no_assignee() {
+		$entry = $this->_create_entry();
+		$args  = array(
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_url', $args );
+
+		$text_in  = '{workflow_entry_url: token=true}';
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertNotEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Get the query string arguments.
+		$actual_query_args  = $this->_parse_workflow_url( $text_out );
+		$this->assertNotEmpty( $actual_query_args, $this->_get_message( $text_in . ' - query args' ) );
+
+		// Verify the access token is not present.
+		$access_token = rgar( $actual_query_args, 'gflow_access_token' );
+		$this->assertEmpty( $access_token, $this->_get_message( $text_in . ' - token' ) );
+	}
+
+	/**
+	 * Tests that the workflow_entry_url token merge tag does not include the token in the returned URL when the assignee is not passed.
+	 */
+	public function test_workflow_entry_url_token_attr_step_attr_no_assignee() {
+		$step_id = $this->_add_approval_step();
+		$entry   = $this->_create_entry();
+		$args    = array(
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_url', $args );
+
+		$text_in  = "{workflow_entry_url: token=true step='{$step_id}'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertNotEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Get the query string arguments.
+		$actual_query_args = $this->_parse_workflow_url( $text_out );
+		$this->assertNotEmpty( $actual_query_args, $this->_get_message( $text_in . ' - query args' ) );
+
+		// Verify the access token is not present.
+		$access_token = rgar( $actual_query_args, 'gflow_access_token' );
+		$this->assertEmpty( $access_token, $this->_get_message( $text_in . ' - token' ) );
+	}
+
+	/**
 	 * Tests that the workflow_entry_url merge tag outputs the expected content.
 	 */
-	public function test_workflow_entry_url_token() {
+	public function test_workflow_entry_url_token_attr_assignee_attr_no_step() {
+		$entry = $this->_create_entry();
+		$args  = array(
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_url', $args );
+
+		$text_in  = "{workflow_entry_url: token=true assignee='user_id|1'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertNotEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Get the query string arguments.
+		$actual_query_args = $this->_parse_workflow_url( $text_out );
+
+		// Verify the access token is not present.
+		$access_token = rgar( $actual_query_args, 'gflow_access_token' );
+		$this->assertEmpty( $access_token, $this->_get_message( $text_in . ' - token' ) );
+	}
+
+	/**
+	 * Tests that the workflow_entry_url merge tag outputs the expected content.
+	 */
+	public function test_workflow_entry_url_token_attr() {
 		$this->_add_approval_step();
 		$entry    = $this->_create_entry();
 		$step     = $this->api->get_current_step( $entry );
@@ -977,9 +1649,40 @@ Workflow Submitted';
 	}
 
 	/**
-	 * Tests that the workflow_entry_url merge tag outputs the expected content.
+	 * Tests that the workflow_inbox_url merge tag outputs the expected content when using the token, step, and assignee attributes.
 	 */
-	public function test_workflow_inbox_url_token() {
+	public function test_workflow_inbox_url_token_attr_step_attr_assignee_attr() {
+		$step_id  = $this->_add_approval_step();
+		$entry    = $this->_create_entry();
+		$step     = $this->api->get_current_step( $entry );
+		$assignee = $step->get_assignee( 'user_id|1' );
+		$args     = array(
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'workflow_url', $args );
+
+		$text_in  = "{workflow_entry_url: token=true step='{$step_id}' assignee='user_id|1'}";
+		$text_out = $merge_tag->replace( $text_in );
+		$this->assertNotEmpty( $text_out, $this->_get_message( $text_in ) );
+
+		// Get the query string arguments.
+		$actual_query_args = $this->_parse_workflow_url( $text_out );
+		$this->assertNotEmpty( $actual_query_args, $this->_get_message( $text_in . ' - query args' ) );
+
+		// Verify the access token is present.
+		$access_token = rgar( $actual_query_args, 'gflow_access_token' );
+		$this->assertNotEmpty( $access_token, $this->_get_message( $text_in ) );
+
+		// Verify the access token belongs to the correct assignee.
+		$actual_assignee = gravity_flow()->parse_token_assignee( gravity_flow()->decode_access_token( $access_token ) );
+		$this->assertEquals( $assignee->get_key(), $actual_assignee->get_key() );
+	}
+
+	/**
+	 * Tests that the workflow_entry_url merge tag outputs the expected content when using the token attribute.
+	 */
+	public function test_workflow_inbox_url_token_attr() {
 		$this->_add_approval_step();
 		$entry    = $this->_create_entry();
 		$step     = $this->api->get_current_step( $entry );
@@ -1038,6 +1741,10 @@ Workflow Submitted';
 		// Verify the link HTML matches the expected pattern.
 		$this->assertRegExp( '/<a(.*)href="([^"]*)">testing<\/a>/', $text_out, $this->_get_message( $text_in ) );
 	}
+
+
+	// # FORMATTING TEST ----------------------------------------------------------------------------------------------
+
 
 	/**
 	 * Tests that the url_encode init argument and value formatting are working.
@@ -1109,7 +1816,9 @@ line three";
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( 'nl2br-html' ) );
 	}
 
-	/* HELPERS */
+
+	// # HELPERS ------------------------------------------------------------------------------------------------------
+
 
 	/**
 	 * Returns an array of query string arguments from the supplied URL.
