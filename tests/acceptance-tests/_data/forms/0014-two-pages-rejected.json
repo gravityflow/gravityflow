@@ -465,7 +465,7 @@
             "instructionsEnable": "0",
             "instructionsValue": "Instructions: please review the values in the fields below and click on the Approve or Reject button",
             "display_fields_mode": "all_fields",
-            "assignee_notification_enabled": "1",
+            "assignee_notification_enabled": "0",
             "assignee_notification_from_name": "",
             "assignee_notification_from_email": "{admin_email}",
             "assignee_notification_reply_to": "",
@@ -478,17 +478,17 @@
             "rejection_notification_enabled": "1",
             "rejection_notification_type": "select",
             "rejection_notification_users": [
-              "role|subscriber"
+              "user_id|1"
             ],
             "rejection_notification_routing": "",
             "rejection_notification_from_name": "",
             "rejection_notification_from_email": "{admin_email}",
             "rejection_notification_reply_to": "",
             "rejection_notification_bcc": "",
-            "rejection_notification_subject": "",
-            "rejection_notification_message": "Entry {entry_id} has been rejected",
+            "rejection_notification_subject": "0014-rejection-email-mt-timeline",
+            "rejection_notification_message": "Entry has been rejected. Timeline merge tag test.\r\n\r\n{workflow_timeline}",
             "rejection_notification_disable_autoformat": "0",
-            "approval_notification_enabled": "1",
+            "approval_notification_enabled": "0",
             "approval_notification_type": "select",
             "approval_notification_users": [
               "role|subscriber"
@@ -560,7 +560,7 @@
             "display_fields_mode": "all_fields",
             "default_status": "hidden",
             "note_mode": "not_required",
-            "assignee_notification_enabled": "1",
+            "assignee_notification_enabled": "0",
             "assignee_notification_from_name": "",
             "assignee_notification_from_email": "{admin_email}",
             "assignee_notification_reply_to": "",
