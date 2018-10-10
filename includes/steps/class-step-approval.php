@@ -582,8 +582,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$note = $this->get_name() . ': ' . esc_html__( 'Reverted to step', 'gravityflow' ) . ' - ' . $step->get_label();
 				$this->add_note( $note . $this->maybe_add_user_note(), true );
 
-				// Ensure User Input assignee notification does not send if an approval revert notification exists.
-				add_filter( 'gravityflow_notification', array( $this, 'gravityflow_user_input_notification_override' ), 10, 4 );
+				//Determine whether the User Input assignee notification should send if an approval revert notification exists (Default: false)
+				add_filter( 'gravityflow_notification', array( $this, 'gravityflow_user_input_notification_send_on_revert' ), 10, 4 );
 
 				$step->start();
 				$feedback = esc_html__( 'Reverted to step:', 'gravityflow' ) . ' ' . $step->get_label();
@@ -1076,8 +1076,25 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @param array                 $entry            The current entry.
 	 * @param Gravity_Flow_Step     $step             The current step
 	 */
-	public static function gravityflow_user_input_notification_override( $notification, $form, $entry, $step ) {
+	public static function gravityflow_user_input_notification_send_on_revert( $notification, $form, $entry, $step ) {
 		if ( $step->get_type() == 'user_input' ) {
+			/**
+			 * Allows the user input step notification for assignee to be sent even when approval revert notification exists
+			 *
+			 * @since 2.3.2-dev
+			 *
+			 * @param bool                 $override      Whether the user input assignee notification should be sent
+			 * @param array                $notification  The notification object which would be sent for user input assignee
+			 * @param array                $form          The current form.
+			 * @param array                $entry         The current entry.
+			 * @param Gravity_Flow_Step    $step          The current step
+			 *
+			 * return bool
+			 */
+			$override = apply_filters( 'gravityflow_user_input_notification_send_on_revert', false, $notification, $form, $entry, $step );
+			if ( $override == true ) {
+				return $notification;
+			}
 			return false;
 		}
 		return $notification;
