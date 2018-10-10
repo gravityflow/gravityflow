@@ -796,11 +796,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 						?>
 					</label>
 				</div>
-				<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note">
-					<?php
+				<textarea id="gravityflow-note" style="width:100%;" rows="4" class="wide" name="gravityflow_note"><?php
 					echo rgar( $form, 'failed_validation' ) ? esc_textarea( rgpost( 'gravityflow_note' ) ) : '';
-					?>
-					</textarea>
+					?></textarea>
 				<?php
 				$invalid_note = ( isset( $form['workflow_note'] ) && is_array( $form['workflow_note'] ) && $form['workflow_note']['failed_validation'] );
 				if ( $invalid_note ) {
