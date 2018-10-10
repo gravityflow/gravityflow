@@ -43,8 +43,8 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 
 		</p>
 		<?php
-		$license_key_step_settings = get_option( 'gravityflow_installation_wizard_license_key' );
-		$is_valid_license_key      = $license_key_step_settings['is_valid_key'];
+		$license_key_step_settings = $this->get_step_settings( 'license_key' );
+		$is_valid_license_key      = isset( $license_key_step_settings['is_valid_key'] ) ? $license_key_step_settings['is_valid_key'] : '';
 		if ( ! $is_valid_license_key ) :
 			?>
 			<p>
