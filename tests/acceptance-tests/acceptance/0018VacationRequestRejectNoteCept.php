@@ -39,3 +39,11 @@ $I->see( 'A note is required' );
 $I->fillField( ['name' => 'gravityflow_note'], 'Dates are expired.' );
 $I->click( 'button[value=rejected]' );
 $I->see( 'Entry Rejected' );
+
+// Test the output of {workflow_note} in the page created from the user input step assignee email.
+$I->amOnPage( '/0018-assignee-email-mt-note' );
+$I->waitForText( '0018-assignee-email-mt-note', 3 );
+$I->see( 'Please review the dates.' );
+$I->see( 'Notes from manager:' );
+$I->dontSee( '{workflow_note}' );
+$I->see( 'Dates are expired.' );
