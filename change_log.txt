@@ -1,1 +1,3 @@
+- Added approval step setting for notification on revert (only displays when revert setting for user input step is selected).
+- Added filter gravityflow_user_input_notification_send_on_revert to confirm whether the user input step assignee notification should be prevented from sending when approval step revert notification exists (default false).
 - Updated the processing of the workflow to trigger before the confirmation is processed.
