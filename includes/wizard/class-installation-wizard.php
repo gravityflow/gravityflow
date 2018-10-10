@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Controls the steps for the wizard. Gravity Forms may not be available until after the Gravity Forms step.
+ *
  * Class Gravity_Flow_Installation_Wizard
  */
 class Gravity_Flow_Installation_Wizard {
