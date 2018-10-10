@@ -160,6 +160,7 @@ add_action( 'init', 'gravityflow_action_init', 0 );
 function gravityflow_action_init() {
 
 	$gravity_flow = gravity_flow();
+
 	if ( $gravity_flow ) {
 
 		if ( defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
@@ -176,20 +177,33 @@ function gravityflow_action_init() {
 			'item_id' => GRAVITY_FLOW_EDD_ITEM_ID,
 			'author'  => 'Steven Henty',
 		) );
+	}
+}
 
-		if ( isset( $_GET['page'] ) && $_GET['page'] == 'gravityflow' ) {
-			add_action( 'admin_menu', 'gravityflow_create_menu_item' );
-		}
+add_action( 'admin_init', 'gravityflow_action_admin_init' );
+
+/**
+ * Loads the installation wizard if required.
+ *
+ * @since 2.3.2
+ */
+function gravityflow_action_admin_init() {
+	$gravity_flow = gravity_flow();
+	if ( $gravity_flow  && isset( $_GET['page'] ) && $_GET['page'] == 'gravityflow') {
+		add_action( 'admin_menu', 'gravityflow_create_menu_item' );
 	} elseif ( ! is_multisite() && current_user_can( 'manage_options' ) ) {
 		// Gravity Forms isn't installed and activated.
 
 		// Add a Gravity Flow menu item
 		add_action( 'admin_menu', 'gravityflow_create_menu_item' );
-
 	}
-
 }
 
+/**
+ * Creates the menu item for the installation wizard.
+ *
+ * @since 2.3.2
+ */
 function gravityflow_create_menu_item() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
@@ -198,6 +212,11 @@ function gravityflow_create_menu_item() {
 	add_menu_page( __( 'Gravity Flow', 'gravityflow' ), __( 'Gravity Flow', 'gravityforms' ), 'manage_options', 'gravityflow', 'gravityflow_installation_wizard', gravityflow_icon(), '16.10' );
 }
 
+/**
+ * Displays the installation wizard. Callback for the Gravity Flow admin menu which is added when Gravity Forms isn't available.
+ *
+ * @since 2.3.2
+ */
 function gravityflow_installation_wizard() {
 	require_once( 'includes/wizard/class-installation-wizard.php' );
 	$wizard = new Gravity_Flow_Installation_Wizard;
@@ -205,6 +224,13 @@ function gravityflow_installation_wizard() {
 }
 
 
+/**
+ * Returns the SVG icon for use in the admin menu.
+ *
+ * @since 2.3.2
+ *
+ * @return string
+ */
 function gravityflow_icon() {
 	$svg_xml = '<?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
