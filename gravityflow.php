@@ -155,7 +155,7 @@ function gravity_flow() {
 add_action( 'init', 'gravityflow_action_init', 0 );
 
 /**
- * Initialize the EDD plugin updater & Load the installations wizard.
+ * Initialize the EDD plugin updater or prepare the installation wizard.
  */
 function gravityflow_action_init() {
 
@@ -177,20 +177,12 @@ function gravityflow_action_init() {
 			'item_id' => GRAVITY_FLOW_EDD_ITEM_ID,
 			'author'  => 'Steven Henty',
 		) );
-	}
-}
 
-add_action( 'admin_init', 'gravityflow_action_admin_init' );
+		if ( isset( $_GET['page'] ) && $_GET['page'] == 'gravityflow') {
+			// The installation wizard was initiated before Gravity Forms was activated - allow it to continue on the same page.
+			add_action( 'admin_menu', 'gravityflow_create_menu_item' );
+		}
 
-/**
- * Loads the installation wizard if required.
- *
- * @since 2.3.2
- */
-function gravityflow_action_admin_init() {
-	$gravity_flow = gravity_flow();
-	if ( $gravity_flow  && isset( $_GET['page'] ) && $_GET['page'] == 'gravityflow') {
-		add_action( 'admin_menu', 'gravityflow_create_menu_item' );
 	} elseif ( ! is_multisite() && current_user_can( 'manage_options' ) ) {
 		// Gravity Forms isn't installed and activated.
 
