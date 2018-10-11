@@ -178,7 +178,7 @@ function gravityflow_action_init() {
 			'author'  => 'Steven Henty',
 		) );
 
-		if ( isset( $_GET['page'] ) && $_GET['page'] == 'gravityflow') {
+		if ( isset( $_GET['page'] ) && $_GET['page'] == 'gravityflow-installation') {
 			// The installation wizard was initiated before Gravity Forms was activated - allow it to continue on the same page.
 			add_action( 'admin_menu', 'gravityflow_create_menu_item' );
 		}
@@ -201,7 +201,7 @@ function gravityflow_create_menu_item() {
 		return;
 	}
 
-	add_menu_page( __( 'Gravity Flow', 'gravityflow' ), __( 'Gravity Flow', 'gravityforms' ), 'manage_options', 'gravityflow', 'gravityflow_installation_wizard', gravityflow_icon(), '16.10' );
+	add_menu_page( __( 'Gravity Flow', 'gravityflow' ), __( 'Gravity Flow', 'gravityforms' ), 'manage_options', 'gravityflow-installation', 'gravityflow_installation_wizard', gravityflow_icon(), '16.10' );
 }
 
 /**
