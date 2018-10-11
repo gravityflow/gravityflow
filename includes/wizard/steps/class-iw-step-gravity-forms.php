@@ -16,12 +16,16 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 	/**
 	 * The step name.
 	 *
+	 * @since 2.3.2
+	 *
 	 * @var string
 	 */
 	protected $_name = 'gravity_forms';
 
 	/**
 	 * Displays the content for this step.
+	 *
+	 * @since 2.3.2
 	 */
 	function display() {
 
@@ -127,6 +131,8 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 	/**
 	 * Returns the title for this step.
 	 *
+	 * @since 2.3.2
+	 *
 	 * @return string
 	 */
 	function get_title() {
@@ -135,6 +141,8 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 
 	/**
 	 * Validates the posted values for this step.
+	 *
+	 * @since 2.3.2
 	 *
 	 * @return bool
 	 */
@@ -184,6 +192,8 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 	/**
 	 * Returns the summary content.
 	 *
+	 * @since 2.3.2
+	 *
 	 * @param bool $echo Indicates if the summary should be echoed.
 	 *
 	 * @return string
@@ -198,6 +208,15 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 	}
 
 
+	/**
+	 * Installs/upgrades Gravity Forms silently given the zip URL.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param $plugin_zip
+	 *
+	 * @return bool|\WP_Error
+	 */
 	function install_plugin( $plugin_zip ) {
 		include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 		include_once 'class-iw-installation-skin.php';
@@ -217,6 +236,7 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 	/**
 	 * Filters the package options before running an update.
 	 *
+	 * @since 2.3.2
 	 *
 	 * @return array
 	 */
