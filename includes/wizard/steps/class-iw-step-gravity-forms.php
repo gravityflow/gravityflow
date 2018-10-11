@@ -54,7 +54,7 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 
 					$action_required = false;
 				} else {
-					$message = esc_html__( "Gravity Forms is installed and activated. You're all set.", 'gravityflow' );
+					$message = esc_html__( "Gravity Forms is already installed and activated. You're all set.", 'gravityflow' );
 
 					$this->action_required = false;
 
