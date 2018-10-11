@@ -129,9 +129,8 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 	 */
 	public function install() {
 		if ( $this->license_key ) {
-			$gravityflow = gravity_flow();
 
-			$settings                = $gravityflow->get_app_settings();
+			$settings                = gravity_flow()->get_app_settings();
 			$settings['license_key'] = $this->license_key;
 			gravity_flow()->update_app_settings( $settings );
 
@@ -188,6 +187,14 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 	 * @return array|WP_Error The response.
 	 */
 	public function perform_edd_license_request( $edd_action, $license, $item_name_or_id = GRAVITY_FLOW_EDD_ITEM_ID ) {
+		$request_gravityforms_key = true;
+		if ( class_exists( 'GFCommon' ) ) {
+			// Only request a Gravity Forms Start license key if the current key is not valid.
+			$gravityfroms_version_info = GFCommon::get_version_info();
+			$valid_gravityforms_key = isset( $gravityfroms_version_info['is_valid_key'] ) ? $gravityfroms_version_info['is_valid_key'] : '';
+			$request_gravityforms_key = ! $valid_gravityforms_key;
+		}
+
 		// Prepare the request arguments.
 		$args = array(
 			'timeout'   => 10,
@@ -196,7 +203,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 				'edd_action'               => $edd_action,
 				'license'                  => trim( $license ),
 				'url'                      => home_url(),
-				'request_gravityforms_key' => true,
+				'request_gravityforms_key' => $request_gravityforms_key,
 			),
 		);
 
