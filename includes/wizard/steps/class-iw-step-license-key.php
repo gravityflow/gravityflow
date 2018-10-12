@@ -108,7 +108,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 				$this->set_field_validation_result( 'license_key', $message );
 				$this->is_valid_key = false;
 			} elseif ( $license_info->license === 'valid') {
-				$this->gravityforms_key          = isset( $license_info->gravityforms_key ) ? $license_info->gravityforms_key : '';
+				$this->gravityforms_key          = isset( $license_info->gravityforms_key ) && $license_info->gravityforms_key != 'not_eligible' ? $license_info->gravityforms_key : '';
 				$this->gravityforms_download_url = isset( $license_info->gravityforms_download_url ) ? $license_info->gravityforms_download_url : '';
 				$this->gravityforms_version      = isset( $license_info->gravityforms_version ) ? $license_info->gravityforms_version : '';
 				$this->update();
