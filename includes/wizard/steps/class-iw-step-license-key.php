@@ -139,6 +139,8 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 				if ( empty( $current_key ) ) {
 					GFFormsModel::save_key( $this->gravityforms_key );
 					GFCommon::cache_remote_message();
+					update_option( 'gform_pending_installation', false );
+					update_option( 'rg_gforms_currency', 'USD' );
 				}
 			}
 		}

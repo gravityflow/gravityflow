@@ -183,11 +183,6 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 			}
 		}
 
-		if ( $valid && $this->action == 'download' ) {
-			update_option( 'rg_gforms_currency', 'USD' );
-			update_option( 'gform_pending_installation', false );
-		}
-
 		return $valid;
 	}
 
