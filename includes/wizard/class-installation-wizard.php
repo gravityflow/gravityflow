@@ -235,6 +235,11 @@ class Gravity_Flow_Installation_Wizard {
 				color: #9E0B0F;
 				margin-left: 4px;
 			}
+
+			.checkbox-description{
+				font-size:14px;
+				margin-bottom: 10px;
+			}
 		</style>
 		<?php
 	}

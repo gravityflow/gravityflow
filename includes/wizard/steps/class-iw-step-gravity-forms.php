@@ -98,7 +98,7 @@ class Gravity_Flow_Installation_Wizard_Step_Gravity_Forms extends Gravity_Flow_I
 				$action_required = true;
 			} else {
 				/* translators: 1. The opening link tag 2. the closing link tag */
-				$message = sprintf( esc_html__( 'Gravity Forms is not installed. Please %1$spurchase%2$s and install Gravity Forms before continuing.', 'gravityflow' ), '<a href="https://gravityflow.io/out/gravityforms">', '</a>' );
+				$message = sprintf( esc_html__( 'Gravity Forms is not installed. Please %1$spurchase%2$s and install Gravity Forms before continuing.', 'gravityflow' ), '<a href="https://gravityflow.io/out/gravityforms" target="_blank">', '</a>' );
 				$this->disable_next_button = true;
 			}
 		}
