@@ -54,6 +54,7 @@ $I->click( 'button[value=revert]' );
 // User Input
 $I->waitForText( 'Status: Pending', 3 );
 $I->selectOption( 'input[name=input_7]', 'Scratch' );
+$I->scrollTo( [ 'css' => '#gravityflow_update_button' ] ); // needed for chromedriver
 $I->click( '#gravityflow_update_button' );
 
 // Approve 2 - Accept

@@ -583,7 +583,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				$this->add_note( $note . $this->maybe_add_user_note(), true );
 
 				//Determine whether the revert notification is set and whether the user input notification should be sent or not as a result
-				if( $this->{'revert_notification_enabled'} ) {
+				if ( $this->{'revert_notification_enabled'} ) {
 					add_filter( 'gravityflow_notification', array( $this, 'gravityflow_user_input_notification_send_on_revert' ), 10, 4 );
 				}
 
