@@ -12,7 +12,7 @@ $I = new AcceptanceTester( $scenario );
 $I->wantTo( 'Test Approval Reverts' );
 
 // Submit the form
-$I->amOnPage( '/0028-approve-and-revert' );
+$I->amOnPage( '/0034-approve-and-revert' );
 
 $I->see( 'Approve and Revert' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
@@ -29,7 +29,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 $I->click( 'Workflow' );
 $I->click( 'Inbox' );
 $I->see( 'Workflow Inbox' );
-$I->click( '0028 Approve and Revert' );
+$I->click( '0034 Approve and Revert' );
 
 // User Input
 $I->waitForText( 'Status: Pending', 3 );
@@ -67,7 +67,7 @@ $I->waitForText( 'Status: Approved', 3 );
 
 $query_assignee_notifications = new WP_Query( array(
 	'post_type' => 'post',
-	'title'     => '0028-70 - User Input - Assignee',
+	'title'     => '0034-70 - User Input - Assignee',
 ) );
 
 if ( $query_assignee_notifications->have_posts() ) {
@@ -78,7 +78,7 @@ if ( $query_assignee_notifications->have_posts() ) {
 
 $query_revert_notifications = new WP_Query( array(
 	'post_type' => 'post',
-	'title'     => '0028-72 - Approval-Revert - Second Revert',
+	'title'     => '0034-72 - Approval-Revert - Second Revert',
 ) );
 
 if ( $query_revert_notifications->have_posts() ) {
