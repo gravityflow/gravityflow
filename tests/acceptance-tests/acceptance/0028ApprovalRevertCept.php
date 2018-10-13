@@ -30,37 +30,31 @@ $I->click( '0028 Approve and Revert' );
 // User Input
 $I->waitForText( 'Status: Pending', 3 );
 $I->selectOption( 'input[name=input_7]', '10 - 20' );
-$I->scrollTo( [ 'css' => '#gravityflow_update_button' ] ); // needed for chromedriver
 $I->click( '#gravityflow_update_button' );
 
 // Approve 1 - Revert
 $I->waitForText( 'Status: Pending', 3 );
 $I->see( 'No Revert Message' );
-$I->scrollTo( [ 'css' => '.gravityflow-action-buttons' ] ); // needed for chromedriver
 $I->click( 'button[value=revert]' );
 
 // User Input
 $I->waitForText( 'Status: Pending', 3 );
 $I->selectOption( 'input[name=input_7]', '1 - 5' );
-$I->scrollTo( [ 'css' => '#gravityflow_update_button' ] ); // needed for chromedriver
 $I->click( '#gravityflow_update_button' );
 
 // Approve 2 - Revert
 $I->waitForText( 'Status: Pending', 3 );
 $I->see( 'With Revert Message' );
-$I->scrollTo( [ 'css' => '.gravityflow-action-buttons' ] ); // needed for chromedriver
 $I->click( 'button[value=revert]' );
 
 // User Input
 $I->waitForText( 'Status: Pending', 3 );
 $I->selectOption( 'input[name=input_7]', 'Scratch' );
-$I->scrollTo( [ 'css' => '#gravityflow_update_button' ] ); // needed for chromedriver
 $I->click( '#gravityflow_update_button' );
 
 // Approve 2 - Accept
 $I->waitForText( 'Status: Pending', 3 );
 $I->see( 'With Revert Message' );
-$I->scrollTo( [ 'css' => '.gravityflow-action-buttons' ] ); // needed for chromedriver
 $I->click( 'button[value=approved]' );
 
 $I->waitForText( 'Status: Approved', 3 );
