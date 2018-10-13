@@ -3,6 +3,8 @@
  * Purpose: Test that the display fields setting displays the correct fields on the workflow detail page.
  */
 
+// @group merge-tags
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test that the display fields setting displays the correct fields on the workflow detail page.' );

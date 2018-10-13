@@ -3,6 +3,8 @@
  * Purpose: Test the vacation request form with rejected note
  */
 
+// @group merge-tags
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the vacation request form with rejected note' );

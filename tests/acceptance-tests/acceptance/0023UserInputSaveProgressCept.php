@@ -3,6 +3,8 @@
  * Purpose: Test the save progress types
  */
 
+// @group merge-tags
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the save progress types for user input step' );

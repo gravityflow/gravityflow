@@ -3,6 +3,8 @@
  * Purpose: Test the two pages on the user input step
  */
 
+// @group merge-tags
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the two pages on the user input step' );
