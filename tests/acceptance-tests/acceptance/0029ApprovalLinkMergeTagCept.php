@@ -4,6 +4,8 @@
  */
 
 // @group merge-tags
+// @group step-approval
+// @group emails
 
 $I = new AcceptanceTester( $scenario );
 
@@ -14,15 +16,15 @@ $I->logOut();
 $I->resetCookie( 'gflow_access_token' );
 
 // Submit the form
-$I->amOnPage( '/0028-to-0032-link-merge-tags' );
-$I->see( '0028 to 0032 Link Merge Tags' );
+$I->amOnPage( '/0029-to-0033-link-merge-tags' );
+$I->see( '0029 to 0033 Link Merge Tags' );
 $I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 $I->click( 'View email merge tags' );
 
 // Test the output of {workflow_approve_link} in the page created from approval step assignee email.
-$I->waitForText( '0028 to 0032 MT Links', 3 );
+$I->waitForText( '0029 to 0033 MT Links', 3 );
 $I->dontSee( 'Approval Link: {workflow_approve_link}' );
 $I->see( 'Approval Link: Approve' );
 
@@ -35,6 +37,6 @@ $I->waitForText( 'INBOX', 3 );
 // Verify that the step was approved.
 $I->loginAsAdmin();
 $I->amOnWorkflowPage( 'Status' );
-$I->click( '0028 to 0032 Link Merge Tags' );
-$I->waitForText( '0028 to 0032 Link Merge Tags : Entry #' );
+$I->click( '0029 to 0033 Link Merge Tags' );
+$I->waitForText( '0029 to 0033 Link Merge Tags : Entry #' );
 $I->see( 'Status: Approved' );
