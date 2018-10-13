@@ -1,6 +1,6 @@
 {
   "0": {
-	"title": "0029 to 0033 Link Merge Tags",
+	"title": "0031 Reject Link Merge Tag",
 	"description": "",
 	"labelPlacement": "top_label",
 	"descriptionPlacement": "below",
@@ -33,7 +33,7 @@
 		"cssClass": "",
 		"inputName": "",
 		"noDuplicates": false,
-		"defaultValue": "test@test.test",
+		"defaultValue": "reject@test.test",
 		"choices": "",
 		"conditionalLogic": "",
 		"productField": "",
@@ -64,7 +64,7 @@
 		"name": "Default Confirmation",
 		"isDefault": true,
 		"type": "message",
-		"message": "Thanks for contacting us! We will get in touch with you shortly. <a href='/0029-to-0033-mt-links-{entry_id}'>View email merge tags</a>",
+		"message": "Thanks for contacting us! We will get in touch with you shortly.",
 		"url": "",
 		"pageId": "",
 		"queryString": ""
@@ -127,8 +127,8 @@
 			"assignee_notification_from_email": "{admin_email}",
 			"assignee_notification_reply_to": "",
 			"assignee_notification_bcc": "",
-			"assignee_notification_subject": "0029 to 0033 MT Links {entry_id}",
-			"assignee_notification_message": "A new entry is pending your approval. Please check your Workflow Inbox.\r\n\r\nApproval Link: {workflow_approve_link}\r\n\r\nCancel Link: {workflow_cancel_link}\r\n\r\nReject Link: {workflow_reject_link}\r\n\r\nEntry Link: {workflow_entry_link}\r\n\r\nInbox Link: {workflow_inbox_link}",
+			"assignee_notification_subject": "0031 Assignee Email",
+			"assignee_notification_message": "A new entry is pending your approval. Please check your Workflow Inbox.\r\n\r\nReject Link: {workflow_reject_link}",
 			"assignee_notification_disable_autoformat": "0",
 			"resend_assignee_emailEnable": "0",
 			"resend_assignee_emailValue": "7",
