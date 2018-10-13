@@ -4,6 +4,9 @@
  */
 
 // @group merge-tags
+// @group step-approval
+// @group step-user_input
+// @group step-notification
 
 $I = new AcceptanceTester( $scenario );
 

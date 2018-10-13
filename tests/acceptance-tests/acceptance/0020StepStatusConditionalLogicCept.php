@@ -12,6 +12,8 @@
  * - Click on the 'Approve' button
  */
 
+// @group step-approval
+
 $I = new AcceptanceTester( $scenario );
 
 $I->loginAsAdmin();

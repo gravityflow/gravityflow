@@ -3,6 +3,9 @@
  * Purpose: Test total depending on quantity
  */
 
+// @group step-approval
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test total depending on quantity' );

@@ -4,6 +4,7 @@
  */
 
 // @group merge-tags
+// @group step-user_input
 
 $I = new AcceptanceTester( $scenario );
 

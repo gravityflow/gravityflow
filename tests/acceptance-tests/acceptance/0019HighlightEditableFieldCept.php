@@ -3,6 +3,8 @@
  * Purpose: Test if editable fields highlighted on the user input step
  */
 
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test if editable fields highlighted on the user input step' );

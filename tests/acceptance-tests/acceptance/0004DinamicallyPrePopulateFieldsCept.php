@@ -3,6 +3,9 @@
  * Purpose: Test dynamically pre populate fields
  */
 
+// @group step-user_input
+// @group step-approval
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test dynamically pre populate fields' );
