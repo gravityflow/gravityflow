@@ -64,6 +64,7 @@ class Gravity_Flow_Installation_Wizard_Step_Complete extends Gravity_Flow_Instal
 
 		<?php
 		if ( ! empty( $forms ) ) : ?>
+			<h3><?php esc_html_e( 'Quick Start?', 'gravityflow' ) ?></h3>
 			<h4>
 				<span class="circle">1</span>
 				<?php
@@ -100,16 +101,53 @@ class Gravity_Flow_Installation_Wizard_Step_Complete extends Gravity_Flow_Instal
 			<?php
 		else :
 			?>
+			<h3><?php esc_html_e( 'Quick Start?', 'gravityflow' ) ?></h3>
 			<p>
 				<?php
-				$url = admin_url( 'admin.php?page=gf_new_form' );
+				$url        = admin_url( 'admin.php?page=gf_new_form' );
 				$open_a_tag = sprintf( '<a href="%s">', $url );
-				printf( esc_html__( '%sCreate a Form%s and then add your Workflow steps in the Form Settings.', 'gravityflow' ), $open_a_tag,  '</a>' );
+				printf( esc_html__( '%sCreate a Form%s and then add your Workflow steps in the Form Settings.', 'gravityflow' ), $open_a_tag, '</a>' );
 				?>
 			</p>
-			<?php
+		<?php
 		endif;
 			?>
+		<h3><?php esc_html_e( 'New to Gravity Flow?', 'gravityflow' ) ?></h3>
+		<p>
+			<?php
+			$introduction_link = '<a href="https://docs.gravityflow.io/article/50-an-introduction-to-the-features" target="_blank">';
+			$walkthrough_link = '<a href="https://docs.gravityflow.io/article/168-how-to-setup-your-first-workflow-with-gravity-flow-step-by-step" target="_blank">';
+			$close_a = '</a>';
+			/* translators: 1. The opening link tag 2. the closing link tag 3. The opening link tag 4. the closing link tag */
+			printf( esc_html__( 'Please take a few minutes to go through the %1$sintroduction to the features%2$s and the tutorial videos below. The documentation also contains a detailed guide showing %3$show to create your first workflow%4$s.', 'gravityflow' ), $introduction_link, $close_a, $walkthrough_link, $close_a );
+			?>
+		</p>
+
+		<h4>Video 1</h4>
+		<section class="video widescreen">
+			<iframe src="https://player.vimeo.com/video/168633964?title=0&amp;byline=0&amp;portrait=0" width="853" height="480" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="">
+			</iframe>
+		</section>
+		<h4>Video 2</h4>
+		<section class="video widescreen">
+			<iframe src="https://player.vimeo.com/video/168634788?title=0&amp;byline=0&amp;portrait=0" width="853" height="480" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="">
+			</iframe>
+		</section>
+		<h4>Video 3</h4>
+		<section class="video widescreen">
+			<iframe src="https://player.vimeo.com/video/200592782?title=0&amp;byline=0&amp;portrait=0" width="853" height="480" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="">
+			</iframe>
+		</section>
+		<h4>Video 4</h4>
+		<section class="video widescreen">
+			<iframe src="https://player.vimeo.com/video/203577826?title=0&amp;byline=0&amp;portrait=0" width="853" height="480" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="">
+			</iframe>
+		</section>
+		<h4>Video 5</h4>
+		<section class="video widescreen">
+			<iframe src="https://player.vimeo.com/video/202666475?title=0&amp;byline=0&amp;portrait=0" width="853" height="480" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="">
+			</iframe>
+		</section>
 	<?php
 	}
 
