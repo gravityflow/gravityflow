@@ -16,19 +16,25 @@ $I->resetCookie( 'gflow_access_token' );
 // Submit the form
 $I->amOnPage( '/0028-to-0032-link-merge-tags' );
 $I->see( '0028 to 0032 Link Merge Tags' );
-$I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
-$I->click( 'input[type=submit]' );
+$I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 $I->click( 'View email merge tags' );
 
 // Test the output of {workflow_approve_link} in the page created from approval step assignee email.
-//$I->amOnPage( '/0028-to-0032-mt-links' );
 $I->waitForText( '0028 to 0032 MT Links', 3 );
 $I->dontSee( 'Approval Link: {workflow_approve_link}' );
 $I->see( 'Approval Link: Approve' );
 
 // Test that the link token works for the email field assignee.
 $I->click( 'Approve' );
-$I->waitForText( 'Entry Approved', 3 );
-$I->see( 'Entry Approved' );
+$I->waitForText( 'INBOX', 3 );
+//$I->see( 'Entry Approved' ); // Occurs when the test is run on its own.
+//$I->see( "You don't have permission to view this entry." ); // Occurs when multiple tests run.
+
+// Verify that the step was approved.
+$I->loginAsAdmin();
+$I->amOnWorkflowPage( 'Status' );
+$I->click( '0028 to 0032 Link Merge Tags' );
+$I->waitForText( '0028 to 0032 Link Merge Tags : Entry #' );
+$I->see( 'Status: Approved' );
