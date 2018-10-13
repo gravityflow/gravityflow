@@ -309,7 +309,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'fields' => $settings_api->get_setting_notification( array(
 					'name_prefix'      => 'revert',
 					'checkbox_label'   => __( 'Send email when the entry is reverted to a user input step', 'gravityflow' ),
-					'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is reverted to a user input.', 'gravityflow' ),
+					'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is reverted to a user input. The assignee email for the user input step will not be sent as a result. ', 'gravityflow' ),
 					'default_message'  => __( 'Entry {entry_id} has been reverted', 'gravityflow' ),
 					'send_to_fields'   => true,
 					'resend_field'     => false,
@@ -584,7 +584,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 				//Determine whether the revert notification is set and whether the user input notification should be sent or not as a result
 				if ( $this->{'revert_notification_enabled'} ) {
-					add_filter( 'gravityflow_notification', array( $this, 'gravityflow_user_input_notification_send_on_revert' ), 10, 4 );
+					add_filter( 'gravityflow_notification', array( $this, 'filter_gravityflow_notification' ), 10, 4 );
 				}
 
 				$step->start();
@@ -1069,33 +1069,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	/**
 	 * Ensure User Input assignee notification does not send if an approval revert notification exists with override selected
 	 *
-	 * @since 2.3.2-dev
+	 * @since 2.3.2
 	 *
 	 * @param string                $notification     The potential notification
 	 * @param array                 $form             The current form array.
 	 * @param array                 $entry            The current entry.
 	 * @param Gravity_Flow_Step     $step             The current step
 	 */
-	public static function gravityflow_user_input_notification_send_on_revert( $notification, $form, $entry, $step ) {
-		if ( $step->get_type() == 'user_input' ) {
-			/**
-			 * Allows the user input step notification for assignee to be sent even when approval revert notification exists
-			 *
-			 * @since 2.3.2-dev
-			 *
-			 * @param bool                 $override      Whether the user input assignee notification should be sent
-			 * @param array                $notification  The notification object which would be sent for user input assignee
-			 * @param array                $form          The current form.
-			 * @param array                $entry         The current entry.
-			 * @param Gravity_Flow_Step    $step          The current step
-			 *
-			 * return bool
-			 */
-			$override = apply_filters( 'gravityflow_user_input_notification_send_on_revert', false, $notification, $form, $entry, $step );
-			if ( $override == true ) {
-				return $notification;
+	public static function filter_gravityflow_notification( $notification, $form, $entry, $step ) {
+		if ( $step->get_type() == 'user_input' )  {
+			//Ensure current user input step is the revert step selected in approval step settings
+			if( $this->revertEnable == true && $step->get_id() == $this->revertValue) {
+				return false;
 			}
-			return false;
 		}
 		return $notification;
 	}
