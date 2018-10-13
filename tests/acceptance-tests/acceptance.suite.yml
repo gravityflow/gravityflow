@@ -10,4 +10,5 @@ modules:
         - \Helper\Acceptance
         - WPLoader
         - WPWebDriver
+        - Asserts
 
