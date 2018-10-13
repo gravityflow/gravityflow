@@ -3,6 +3,9 @@
  * Purpose: Test that the outbound webhook step handles merge tag response mapping.
  */
 
+// @group step-webhook
+// @group step-approval
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test that the Outbound Webhook step handles response mapping.' );
