@@ -82,7 +82,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			'fields' => array(
 				array(
 					'name'  => 'url',
-					'class' => 'large',
+					'class' => 'large merge-tag-support',
 					'label' => esc_html__( 'Outgoing Webhook URL', 'gravityflow' ),
 					'type'  => 'text',
 				),
