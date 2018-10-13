@@ -1,1 +1,4 @@
 - Updated the processing of the workflow to trigger before the confirmation is processed.
+- Added the step merge tag attribute to allow merge tags to specify the step for which tokens must be generated. This allows feed add-ons to specify the step. For example, a Twilio or Slack message can contain a one-click approval link for the next step.
+- Fixed an edge case where the assignee attribute will remove the assignee added in the constructor and override the assignee in subsequent instances of the merge tag.
+- Fixed an issue with the integrations with the Twilio Add-On where URLs get encoded breaking workflow links.
