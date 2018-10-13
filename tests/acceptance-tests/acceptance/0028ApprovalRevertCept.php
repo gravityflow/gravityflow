@@ -3,6 +3,10 @@
  * Purpose: Test approval step reverts to user input and associated notifications
  */
 
+// @group step-user_input
+// @group step-approval
+// @group emails
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test Approval Reverts' );
