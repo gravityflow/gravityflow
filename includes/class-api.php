@@ -291,7 +291,7 @@ class Gravity_Flow_API {
 
 		timer_start();
 
-		$search_criteria = self::get_inbox_search_criteria();
+		$search_criteria = self::get_inbox_search_criteria( $args );
 
 		if ( ! empty( $search_criteria ) ) {
 			$form_ids = self::get_inbox_form_ids( $args, $search_criteria );
@@ -318,7 +318,7 @@ class Gravity_Flow_API {
 	 */
 	public static function get_inbox_entries_count( $args = array() ) {
 		$count           = 0;
-		$search_criteria = self::get_inbox_search_criteria();
+		$search_criteria = self::get_inbox_search_criteria( $args );
 
 		if ( ! empty( $search_criteria ) ) {
 			$form_ids = self::get_inbox_form_ids( $args, $search_criteria );
@@ -336,11 +336,13 @@ class Gravity_Flow_API {
 	 *
 	 * @since 2.3.2
 	 *
+	 * @param array $args The inbox configuration arguments.
+	 *
 	 * @return array
 	 */
-	public static function get_inbox_search_criteria() {
+	public static function get_inbox_search_criteria( $args = array() ) {
 		$search_criteria = array();
-		$filter_key      = self::get_inbox_filter_key();
+		$filter_key      = self::get_inbox_filter_key( $args );
 
 		if ( empty( $filter_key ) ) {
 			return $search_criteria;
@@ -382,15 +384,17 @@ class Gravity_Flow_API {
 	/**
 	 * Get the filter key for the current user.
 	 *
+	 * @param array $args The inbox configuration arguments.
+	 *
 	 * @return string
 	 */
-	public static function get_inbox_filter_key() {
-		global $current_user;
-
+	public static function get_inbox_filter_key( $args = array() ) {
 		$filter_key = '';
 
-		if ( $current_user->ID > 0 ) {
-			$filter_key = 'workflow_user_id_' . $current_user->ID;
+		if ( ! empty( $args['filter_key'] ) ) {
+			$filter_key = $args['filter_key'];
+		} elseif ( is_user_logged_in() ) {
+			$filter_key = 'workflow_user_id_' . get_current_user_id();
 		} elseif ( $token = gravity_flow()->decode_access_token() ) {
 			$filter_key = gravity_flow()->parse_token_assignee( $token )->get_status_key();
 		}

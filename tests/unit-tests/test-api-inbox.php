@@ -68,6 +68,15 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	}
 
 	/**
+	 * Tests that the filter key can be retrieved from the inbox page arguments.
+	 */
+	function test_get_filter_key_from_args() {
+		$args = array( 'filter_key' => 'my_custom_key' );
+		$key  = Gravity_Flow_API::get_inbox_filter_key( $args );
+		$this->assertEquals( 'my_custom_key', $key );
+	}
+
+	/**
 	 * Tests that the search criteria is empty when a user is not logged in and an access token is not found.
 	 */
 	function test_get_search_criteria_anonymous() {
@@ -345,6 +354,29 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 	}
 
 	/**
+	 * Tests that the expected entries are returned for the custom filter key.
+	 */
+	function test_get_inbox_entries_custom_filter_key() {
+		// Create 30 entries with half assigned to the custom filter key.
+		$expected_ids = $this->_create_entries( 'my_custom_key' );
+
+		$args               = $this->_get_form_id_args();
+		$args['filter_key'] = 'my_custom_key';
+
+		// Get the entries for the current access token.
+		$total   = 0;
+		$entries = Gravity_Flow_API::get_inbox_entries( $args, $total );
+
+		// Confirm fifteen entries were found.
+		$expected_count = 15;
+		$this->assertEquals( $expected_count, $total );
+
+		// Confirm the found entry IDs match the created IDs.
+		$actual_ids = wp_list_pluck( $entries, 'id' );
+		$this->assertEquals( $expected_ids, $actual_ids );
+	}
+
+	/**
 	 * Tests that the expected entries are returned for an access token user when the sorting arguments are overridden.
 	 */
 	function test_get_inbox_entries_access_token_sorting() {
@@ -403,6 +435,24 @@ class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
 		// Get the entries count for the current access token.
 		$this->_set_access_token();
 		$count = Gravity_Flow_API::get_inbox_entries_count( $this->_get_form_id_args() );
+
+		// Confirm fifteen entries were found.
+		$expected_count = 15;
+		$this->assertEquals( $expected_count, $count );
+	}
+
+	/**
+	 * Tests that the expected number of entries are found for a custom filter key.
+	 */
+	function test_get_inbox_entries_count_custom_filter_key() {
+		// Create 30 entries with half assigned to the custom filter key.
+		$this->_create_entries( 'my_custom_key' );
+
+		$args               = $this->_get_form_id_args();
+		$args['filter_key'] = 'my_custom_key';
+
+		// Get the entries count for the current access token.
+		$count = Gravity_Flow_API::get_inbox_entries_count( $args );
 
 		// Confirm fifteen entries were found.
 		$expected_count = 15;
