@@ -1008,7 +1008,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	 */
 	public function column_date_created( $item ) {
 		$url_entry = esc_url( $this->get_entry_url( $item ) );
-		$label     = GFCommon::format_date( $item['date_created'] );
+		$label     = Gravity_Flow_Common::format_date( $item['date_created'], '', true, true );
 		$label     = $this->filter_field_value( $label, $item, 'date_created' );
 		$link      = "<a href='{$url_entry}'>$label</a>";
 		echo $link;
@@ -1023,9 +1023,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$label = '-';
 
 		if ( ! empty( $item['workflow_timestamp'] ) ) {
-			$last_updated = date( 'Y-m-d H:i:s', $item['workflow_timestamp'] );
 			$url_entry    = esc_url( $this->get_entry_url( $item ) );
-			$last_updated = esc_html( GFCommon::format_date( $last_updated, true, 'Y/m/d' ) );
+			$last_updated = esc_html( Gravity_Flow_Common::format_date( $item['workflow_timestamp'], '', true, true ) );
 			$last_updated = $this->filter_field_value( $last_updated, $item, 'workflow_timestamp' );
 			$label        = "<a href='{$url_entry}'>$last_updated</a>";
 		}

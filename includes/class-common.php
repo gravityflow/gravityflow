@@ -165,8 +165,8 @@ class Gravity_Flow_Common {
 	 *
 	 * @return string
 	 */
-	public static function format_date( $date_or_timestamp, $format = 'd M Y g:i a', $is_human = false, $include_time = false ) {
-		$date_time = is_integer( $date_or_timestamp ) ? date( 'Y-m-d H:i:s', $date_or_timestamp ) : $date_or_timestamp;
+	public static function format_date( $date_or_timestamp, $format = '', $is_human = false, $include_time = false ) {
+		$date_time = is_numeric( $date_or_timestamp ) ? date( 'Y-m-d H:i:s', $date_or_timestamp ) : $date_or_timestamp;
 
 		return GFCommon::format_date( $date_time, $is_human, $format, $include_time );
 	}

@@ -91,9 +91,7 @@ class Gravity_Flow_Merge_Tag_Current_Step extends Gravity_Flow_Merge_Tag {
 					case 'expiration':
 						$expiration_timestamp = $current_step->get_expiration_timestamp();
 						if ( false !== $expiration_timestamp ) {
-							$expiration_date_str = date( 'Y-m-d H:i:s', $expiration_timestamp );
-							$expiration_date      = get_date_from_gmt( $expiration_date_str );
-							$value = GFCommon::format_date( $expiration_date, true, $date_format );
+							$value = Gravity_Flow_Common::format_date( $current_step->get_expiration_timestamp(), $date_format, false, true );
 						} else {
 							$value = '';
 						}
