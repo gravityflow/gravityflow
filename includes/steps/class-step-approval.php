@@ -1067,22 +1067,24 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	/**
-	 * Ensure User Input assignee notification does not send if an approval revert notification exists with override selected
+	 * Ensure User Input assignee notification does not send if an approval revert notification exists with override
+	 * selected
 	 *
 	 * @since 2.3.2
 	 *
-	 * @param string                $notification     The potential notification
-	 * @param array                 $form             The current form array.
-	 * @param array                 $entry            The current entry.
-	 * @param Gravity_Flow_Step     $step             The current step
+	 * @param string            $notification The potential notification
+	 * @param array             $form         The current form array.
+	 * @param array             $entry        The current entry.
+	 * @param Gravity_Flow_Step $step         The current step
+	 *
+	 * @return bool|string
 	 */
-	public static function filter_gravityflow_notification( $notification, $form, $entry, $step ) {
-		if ( $step->get_type() == 'user_input' )  {
-			//Ensure current user input step is the revert step selected in approval step settings
-			if( $this->revertEnable == true && $step->get_id() == $this->revertValue) {
-				return false;
-			}
+	public function filter_gravityflow_notification( $notification, $form, $entry, $step ) {
+		if ( $step->get_type() == 'user_input' && $this->revertEnable == true && $step->get_id() == $this->revertValue ) {
+			// Current user input step is the revert step selected in approval step settings so prevent the assignee email from being sent.
+			return false;
 		}
+
 		return $notification;
 	}
 }
