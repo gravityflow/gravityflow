@@ -5,7 +5,7 @@
  *
  * @group testsuite
  */
-class Tests_Gravity_Flow_Inbox extends GF_UnitTestCase {
+class Tests_Gravity_Flow_API_Inbox extends GF_UnitTestCase {
 
 	/**
 	 * @var int
