@@ -68,11 +68,13 @@ class Gravity_Flow_Merge_Tag_Current_Step extends Gravity_Flow_Merge_Tag {
 				/**
 				 * Allows the format for dates within current step merge tag to be modified.
 				 *
+				 * Returning an empty string will use the WordPress settings.
+				 *
 				 * @since 2.2.4-dev
 				 *
-				 * @param string $date_format A date format string - defaults to 'Y/m/d'
+				 * @param string $date_format A date format string - defaults to the WordPress settings.
 				 */
-				$date_format = apply_filters( 'gravityflow_date_format_current_step_merge_tag', 'Y/m/d' );
+				$date_format = apply_filters( 'gravityflow_date_format_current_step_merge_tag', '' );
 
 				switch ( $property ) :
 					case 'duration':
@@ -91,7 +93,7 @@ class Gravity_Flow_Merge_Tag_Current_Step extends Gravity_Flow_Merge_Tag {
 					case 'expiration':
 						$expiration_timestamp = $current_step->get_expiration_timestamp();
 						if ( false !== $expiration_timestamp ) {
-							$value = Gravity_Flow_Common::format_date( $current_step->get_expiration_timestamp(), $date_format, false, true );
+							$value = Gravity_Flow_Common::format_date( $expiration_timestamp, $date_format, false, true );
 						} else {
 							$value = '';
 						}
@@ -106,17 +108,12 @@ class Gravity_Flow_Merge_Tag_Current_Step extends Gravity_Flow_Merge_Tag {
 							$scheduled_timestamp = $current_step->get_schedule_timestamp();
 							switch ( $current_step->schedule_type ) {
 								case 'date':
-									$scheduled_date = strtotime($current_step->schedule_date );
-									$value = date_i18n( $date_format, $scheduled_date, false );									
+									$value = Gravity_Flow_Common::format_date( $current_step->schedule_date, $date_format, false, true );
 									break;
 								case 'date_field':
-									$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
-									$value = GFCommon::format_date( $scheduled_date_str, false, $date_format );
-									break;
 								case 'delay':
-								default:
-									$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
-									$value = GFCommon::format_date( $scheduled_date_str, false, $date_format );
+									$value = Gravity_Flow_Common::format_date( $scheduled_timestamp, $date_format, false, true );
+									break;
 							}
 						} else {
 							$value = '';
@@ -124,8 +121,7 @@ class Gravity_Flow_Merge_Tag_Current_Step extends Gravity_Flow_Merge_Tag {
 						break;
 
 					case 'start':
-						$step_date_str = date( 'Y-m-d H:i:s', $current_step->get_step_timestamp() );
-						$value = GFCommon::format_date( $step_date_str, false, $date_format );
+						$value = Gravity_Flow_Common::format_date( $current_step->get_step_timestamp(), $date_format, false, true );
 						break;
 
 					case 'type':
