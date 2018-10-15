@@ -159,7 +159,7 @@ class Gravity_Flow_Common {
 	 * @since 1.7.1-dev
 	 *
 	 * @param int|string $date_or_timestamp The unix timestamp or string in the Y-m-d H:i:s format to be formatted.
-	 * @param string     $format            The format the date/time should be returned in. Default is d M Y g:i a.
+	 * @param string     $format            The format the date/time should be returned in. Defaults to an empty string; the date and time format from the WordPress general settings.
 	 * @param bool       $is_human          Indicates if the date/time should be returned in a human readable format such as "1 hour ago". Default is false.
 	 * @param bool       $include_time      Indicates if the time should be included in the returned string. Default is false.
 	 *
