@@ -838,7 +838,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 						$offset = ( DAY_IN_SECONDS * $this->expiration_date_field_offset );
 						break;
 					case 'weeks' :
-						$offset = ( WEEK_IN_SECONDS * $this->sexpiration_date_field_offset );
+						$offset = ( WEEK_IN_SECONDS * $this->expiration_date_field_offset );
 						break;
 				}
 				if ( $this->expiration_date_field_before_after == 'before' ) {
