@@ -42,6 +42,19 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 			?>
 
 		</p>
+		<?php
+		$license_key_step_settings = $this->get_step_settings( 'license_key' );
+		$is_valid_license_key      = isset( $license_key_step_settings['is_valid_key'] ) ? $license_key_step_settings['is_valid_key'] : '';
+		if ( ! $is_valid_license_key ) :
+			?>
+			<p>
+				<strong>
+					<?php esc_html_e( 'Updates will only be available if you have entered a valid License Key', 'gravityforms' ); ?>
+				</strong>
+			</p>
+		<?php
+		endif;
+		?>
 		<div>
 			<label>
 				<input type="radio" id="background_updates_enabled" value="enabled" <?php checked( 'enabled', $this->background_updates ); ?> name="background_updates"/>
@@ -101,19 +114,21 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 	/**
 	 * Validates the posted values for this step.
 	 *
-	 * @param array $posted_values The posted values.
-	 *
 	 * @return bool
 	 */
-	function validate( $posted_values ) {
+	function validate() {
 		$valid = true;
-		if ( $this->background_updates == 'disabled' && empty( $this->accept_terms ) ) {
+		if ( $this->background_updates == 'enabled' ) {
+			$this->accept_terms = false;
+		} elseif ( empty( $this->accept_terms ) ) {
 			$this->set_field_validation_result( 'accept_terms', esc_html__( 'Please accept the terms.', 'gravityflow' ) );
 			$valid = false;
 		}
 
 		return $valid;
 	}
+
+
 
 	/**
 	 * Returns the summary content.
