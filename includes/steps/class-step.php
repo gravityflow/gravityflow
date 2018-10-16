@@ -736,6 +736,19 @@ abstract class Gravity_Flow_Step extends stdClass {
 				$expiration_timestamp = $this->get_timestamp_delay( 'expiration' );
 		}
 
+		/**
+		 * Allows the expiration timestamp to be overridden.
+		 *
+		 * @since 2.3.2
+		 *
+		 * @param int               $expiration_timestamp The current expiration timestamp (UTC).
+		 * @param string            $expiration_type      The type of expiration defined in step settings.
+		 * @param Gravity_Flow_Step $this                 The current step.
+		 *
+		 * @return int
+		 */
+		$expiration_timestamp = apply_filters( 'gravityflow_step_expiration_timestamp', $expiration_timestamp, $this->expiration_type, $this );
+
 		return $expiration_timestamp;
 	}
 
