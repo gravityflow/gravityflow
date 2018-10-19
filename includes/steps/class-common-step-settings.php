@@ -45,7 +45,7 @@ class Gravity_Flow_Common_Step_Settings {
 	 * @since 1.5.1-dev
 	 */
 	public function set_gpdf_choices() {
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
+		if ( method_exists( 'GPDFAPI', 'get_form_pdfs' ) ) {
 			$form_id    = rgget( 'id' );
 			$gpdf_feeds = GPDFAPI::get_form_pdfs( $form_id );
 
