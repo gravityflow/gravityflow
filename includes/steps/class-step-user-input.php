@@ -626,6 +626,10 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	public function validate_editable_fields( $valid, &$form ) {
 		$editable_fields = $this->get_editable_fields();
 
+		if( rgpost( 'gravityflow_status' ) == 'in_progress' ) {
+			return $valid;
+		}
+
 		$conditional_logic_enabled           = gravity_flow()->fields_have_conditional_logic( $form ) && $this->conditional_logic_editable_fields_enabled;
 		$page_load_conditional_logic_enabled = $conditional_logic_enabled && $this->conditional_logic_editable_fields_mode == 'page_load';
 		$dynamic_conditional_logic_enabled   = $conditional_logic_enabled && $this->conditional_logic_editable_fields_mode != 'page_load';
