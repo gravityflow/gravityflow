@@ -641,104 +641,25 @@ abstract class Gravity_Flow_Step extends stdClass {
 	/**
 	 * Returns the schedule timestamp (UTC) calculated from the schedule settings.
 	 *
-	 * @return int
+	 * @return bool|int
 	 */
 	public function get_schedule_timestamp() {
-
-		if ( $this->schedule_type == 'date' ) {
-
-			$this->log_debug( __METHOD__ . '() schedule_date: ' . $this->schedule_date );
-			$schedule_datetime = strtotime( $this->schedule_date );
-			$schedule_date     = date( 'Y-m-d H:i:s', $schedule_datetime );
-			$schedule_date_gmt = get_gmt_from_date( $schedule_date );
-			$schedule_datetime = strtotime( $schedule_date_gmt );
-
-			/**
-			 * Allows the scheduled date/timestamp to be custom defined.
-			 *
-			 * @since 2.0.2-dev
-			 *
-			 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
-			 * @param string               $schedule_type      The type of schedule defined in step settings.
-			 * @param Gravity_Flow_Step    $this               The current step.
-			 *
-			 * @return int
-			 */
-			$schedule_datetime = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_datetime, $this->schedule_type, $this );
-			return $schedule_datetime;
+		if ( ! $this->scheduled ) {
+			return false;
 		}
 
-		$entry = $this->get_entry();
+		switch ( $this->schedule_type ) {
+			case 'date':
+				$schedule_timestamp = $this->get_timestamp_date( 'schedule' );
+				break;
 
-		if ( $this->schedule_type == 'date_field' ) {
+			case 'date_field':
+				$schedule_timestamp = $this->get_timestamp_date_field( 'schedule' );
+				break;
 
-			$this->log_debug( __METHOD__ . '() schedule_date_field: ' . $this->schedule_date_field );
-			$schedule_date = $entry[ (string) $this->schedule_date_field ];
-			$this->log_debug( __METHOD__ . '() schedule_date: ' . $schedule_date );
-
-			$schedule_datetime = strtotime( $schedule_date );
-			$schedule_date     = date( 'Y-m-d H:i:s', $schedule_datetime );
-			$schedule_date_gmt = get_gmt_from_date( $schedule_date );
-			$schedule_datetime = strtotime( $schedule_date_gmt );
-
-			// Calculate offset.
-			if ( $this->schedule_date_field_offset ) {
-				$offset = 0;
-				switch ( $this->schedule_date_field_offset_unit ) {
-					case 'minutes' :
-						$offset = ( MINUTE_IN_SECONDS * $this->schedule_date_field_offset );
-						break;
-					case 'hours' :
-						$offset = ( HOUR_IN_SECONDS * $this->schedule_date_field_offset );
-						break;
-					case 'days' :
-						$offset = ( DAY_IN_SECONDS * $this->schedule_date_field_offset );
-						break;
-					case 'weeks' :
-						$offset = ( WEEK_IN_SECONDS * $this->schedule_date_field_offset );
-						break;
-				}
-				if ( $this->schedule_date_field_before_after == 'before' ) {
-					$schedule_datetime = $schedule_datetime - $offset;
-				} else {
-					$schedule_datetime += $offset;
-				}
-			}
-
-			/**
-			 * Allows the scheduled date/timestamp to be custom defined.
-			 *
-			 * @since 2.0.2-dev
-			 *
-			 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
-			 * @param string               $schedule_type      The type of schedule defined in step settings.
-			 * @param Gravity_Flow_Step    $this               The current step.
-			 *
-			 * @return int
-			 */
-			$schedule_datetime = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_datetime, $this->schedule_type, $this );
-			return $schedule_datetime;
-		}
-
-		$entry_timestamp = $this->get_step_timestamp();
-
-		$schedule_timestamp = $entry_timestamp;
-
-		if ( $this->schedule_delay_offset ) {
-			switch ( $this->schedule_delay_unit ) {
-				case 'minutes' :
-					$schedule_timestamp += ( MINUTE_IN_SECONDS * $this->schedule_delay_offset );
-					break;
-				case 'hours' :
-					$schedule_timestamp += ( HOUR_IN_SECONDS * $this->schedule_delay_offset );
-					break;
-				case 'days' :
-					$schedule_timestamp += ( DAY_IN_SECONDS * $this->schedule_delay_offset );
-					break;
-				case 'weeks' :
-					$schedule_timestamp += ( WEEK_IN_SECONDS * $this->schedule_delay_offset );
-					break;
-			}
+			case 'delay':
+			default:
+				$schedule_timestamp = $this->get_timestamp_delay( 'schedule' );
 		}
 
 		/**
@@ -746,13 +667,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 		 *
 		 * @since 2.0.2-dev
 		 *
-		 * @param int                  $schedule_timestamp The current scheduled timestamp (UTC)
-		 * @param string               $schedule_type      The type of schedule defined in step settings.
-		 * @param Gravity_Flow_Step    $this               The current step.
+		 * @param int               $schedule_timestamp The current scheduled timestamp (UTC)
+		 * @param string            $schedule_type      The type of schedule defined in step settings.
+		 * @param Gravity_Flow_Step $this               The current step.
 		 *
 		 * @return int
 		 */
 		$schedule_timestamp = apply_filters( 'gravityflow_step_schedule_timestamp', $schedule_timestamp, $this->schedule_type, $this );
+
 		return $schedule_timestamp;
 	}
 
@@ -791,7 +713,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns the schedule timestamp calculated from the schedule settings.
+	 * Returns the expiration timestamp calculated from the expiration settings.
 	 *
 	 * @return bool|int
 	 */
@@ -800,77 +722,143 @@ abstract class Gravity_Flow_Step extends stdClass {
 			return false;
 		}
 
-		if ( $this->expiration_type == 'date' ) {
+		switch ( $this->expiration_type ) {
+			case 'date':
+				$expiration_timestamp = $this->get_timestamp_date( 'expiration' );
+				break;
 
-			$this->log_debug( __METHOD__ . '() expiration_date: ' . $this->expiration_date );
-			$expiration_datetime = strtotime( $this->expiration_date );
-			$expiration_date     = date( 'Y-m-d H:i:s', $expiration_datetime );
-			$expiration_date_gmt = get_gmt_from_date( $expiration_date );
-			$expiration_datetime = strtotime( $expiration_date_gmt );
+			case 'date_field':
+				$expiration_timestamp = $this->get_timestamp_date_field( 'expiration' );
+				break;
 
-			return $expiration_datetime;
+			case 'delay':
+			default:
+				$expiration_timestamp = $this->get_timestamp_delay( 'expiration' );
 		}
 
-		$entry = $this->get_entry();
-
-		if ( $this->expiration_type == 'date_field' ) {
-
-			$this->log_debug( __METHOD__ . '() expiration_date_field: ' . $this->expiration_date_field );
-			$expiration_date = $entry[ (string) $this->expiration_date_field ];
-			$this->log_debug( __METHOD__ . '() expiration_date: ' . $expiration_date );
-
-			$expiration_datetime = strtotime( $expiration_date );
-			$expiration_date     = date( 'Y-m-d H:i:s', $expiration_datetime );
-			$schedule_date_gmt = get_gmt_from_date( $expiration_date );
-			$expiration_datetime = strtotime( $schedule_date_gmt );
-
-			// Calculate offset.
-			if ( $this->expiration_date_field_offset ) {
-				$offset = 0;
-				switch ( $this->expiration_date_field_offset_unit ) {
-					case 'minutes' :
-						$offset = ( MINUTE_IN_SECONDS * $this->expiration_date_field_offset );
-						break;
-					case 'hours' :
-						$offset = ( HOUR_IN_SECONDS * $this->expiration_date_field_offset );
-						break;
-					case 'days' :
-						$offset = ( DAY_IN_SECONDS * $this->expiration_date_field_offset );
-						break;
-					case 'weeks' :
-						$offset = ( WEEK_IN_SECONDS * $this->expiration_date_field_offset );
-						break;
-				}
-				if ( $this->expiration_date_field_before_after == 'before' ) {
-					$expiration_datetime = $expiration_datetime - $offset;
-				} else {
-					$expiration_datetime += $offset;
-				}
-			}
-
-			return $expiration_datetime;
-		}
-
-		$entry_timestamp = $this->get_step_timestamp();
-
-		$expiration_timestamp = $entry_timestamp;
-
-		switch ( $this->expiration_delay_unit ) {
-			case 'minutes' :
-				$expiration_timestamp += ( MINUTE_IN_SECONDS * $this->expiration_delay_offset );
-				break;
-			case 'hours' :
-				$expiration_timestamp += ( HOUR_IN_SECONDS * $this->expiration_delay_offset );
-				break;
-			case 'days' :
-				$expiration_timestamp += ( DAY_IN_SECONDS * $this->expiration_delay_offset );
-				break;
-			case 'weeks' :
-				$expiration_timestamp += ( WEEK_IN_SECONDS * $this->expiration_delay_offset );
-				break;
-		}
+		/**
+		 * Allows the expiration timestamp to be overridden.
+		 *
+		 * @since 2.3.2
+		 *
+		 * @param int               $expiration_timestamp The current expiration timestamp (UTC).
+		 * @param string            $expiration_type      The type of expiration defined in step settings.
+		 * @param Gravity_Flow_Step $this                 The current step.
+		 *
+		 * @return int
+		 */
+		$expiration_timestamp = apply_filters( 'gravityflow_step_expiration_timestamp', $expiration_timestamp, $this->expiration_type, $this );
 
 		return $expiration_timestamp;
+	}
+
+	/**
+	 * Returns the timestamp for the date based expiration or schedule.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param string $setting_type The setting type: expiration or schedule.
+	 *
+	 * @return bool|int
+	 */
+	public function get_timestamp_date( $setting_type ) {
+		if ( $this->{$setting_type . '_type'} != 'date' ) {
+			return false;
+		}
+
+		$datetime  = strtotime( $this->{$setting_type . '_date'} );
+		$date      = date( 'Y-m-d H:i:s', $datetime );
+		$date_gmt  = get_gmt_from_date( $date );
+		$timestamp = strtotime( $date_gmt );
+
+		return $timestamp;
+	}
+
+	/**
+	 * Returns the timestamp for the date field based expiration or schedule.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param string $setting_type The setting type: expiration or schedule.
+	 *
+	 * @return bool|int
+	 */
+	public function get_timestamp_date_field( $setting_type ) {
+		if ( $this->{$setting_type . '_type'} != 'date_field' ) {
+			return false;
+		}
+
+		$entry            = $this->get_entry();
+		$date_field_value = rgar( $entry, (string) $this->{$setting_type . '_date_field'} );
+
+		if ( empty( $date_field_value ) ) {
+			return false;
+		}
+
+		$datetime  = strtotime( $date_field_value );
+		$date      = date( 'Y-m-d H:i:s', $datetime );
+		$date_gmt  = get_gmt_from_date( $date );
+		$timestamp = strtotime( $date_gmt );
+
+		// Calculate offset.
+		if ( $this->{$setting_type . '_date_field_offset'} ) {
+			$offset = 0;
+			switch ( $this->{$setting_type . '_date_field_offset_unit'} ) {
+				case 'minutes' :
+					$offset = ( MINUTE_IN_SECONDS * $this->{$setting_type . '_date_field_offset'} );
+					break;
+				case 'hours' :
+					$offset = ( HOUR_IN_SECONDS * $this->{$setting_type . '_date_field_offset'} );
+					break;
+				case 'days' :
+					$offset = ( DAY_IN_SECONDS * $this->{$setting_type . '_date_field_offset'} );
+					break;
+				case 'weeks' :
+					$offset = ( WEEK_IN_SECONDS * $this->{$setting_type . '_date_field_offset'} );
+					break;
+			}
+			if ( $this->{$setting_type . '_date_field_before_after'} == 'before' ) {
+				$timestamp -= $offset;
+			} else {
+				$timestamp += $offset;
+			}
+		}
+
+		return $timestamp;
+	}
+
+	/**
+	 * Returns the timestamp for the delay based expiration or schedule.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param string $setting_type The setting type: expiration or schedule.
+	 *
+	 * @return bool|int
+	 */
+	public function get_timestamp_delay( $setting_type ) {
+		if ( $this->{$setting_type . '_type'} != 'delay' ) {
+			return false;
+		}
+
+		$timestamp = $this->get_step_timestamp();
+
+		switch ( $this->{$setting_type . '_delay_unit'} ) {
+			case 'minutes' :
+				$timestamp += ( MINUTE_IN_SECONDS * $this->{$setting_type . '_delay_offset'} );
+				break;
+			case 'hours' :
+				$timestamp += ( HOUR_IN_SECONDS * $this->{$setting_type . '_delay_offset'} );
+				break;
+			case 'days' :
+				$timestamp += ( DAY_IN_SECONDS * $this->{$setting_type . '_delay_offset'} );
+				break;
+			case 'weeks' :
+				$timestamp += ( WEEK_IN_SECONDS * $this->{$setting_type . '_delay_offset'} );
+				break;
+		}
+
+		return $timestamp;
 	}
 
 	/**

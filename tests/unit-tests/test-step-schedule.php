@@ -306,6 +306,19 @@ class Tests_Gravity_Flow_Step_Schedule extends GF_UnitTestCase {
 	}
 
 	/**
+	 * Tests that the gravityflow_step_schedule_timestamp filter overrides the timestamp.
+	 */
+	public function test_get_schedule_timestamp_filter() {
+		$step_id = $this->_add_step();
+		$step    = $this->api->get_step( $step_id );
+
+		add_filter( 'gravityflow_step_schedule_timestamp', array( $this, 'filter_timestamp' ) );
+		$output_timestamp = $step->get_schedule_timestamp();
+		remove_filter( 'gravityflow_step_schedule_timestamp', array( $this, 'filter_timestamp' ) );
+		$this->assertEquals( $this->filter_timestamp(), $output_timestamp );
+	}
+
+	/**
 	 * Tests that the steps validate_schedule() method returns the expected result for a scheduled date in the past.
 	 */
 	public function test_validate_schedule_past_date() {
@@ -366,6 +379,15 @@ class Tests_Gravity_Flow_Step_Schedule extends GF_UnitTestCase {
 		}
 
 		return $this->factory->entry->get_entry_by_id( $entry_id );
+	}
+
+	/**
+	 * Callback for the gravityflow_step_schedule_timestamp filter.
+	 *
+	 * @return int
+	 */
+	public function filter_timestamp() {
+		return 1514764800; // 2018-01-01 00:00:00
 	}
 
 }

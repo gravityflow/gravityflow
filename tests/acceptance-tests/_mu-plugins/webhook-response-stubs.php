@@ -48,10 +48,10 @@ function webhook_response_test_results( $preempt, $request, $url ) {
 			$response = array(
 				'headers'  => array( 'content_type' => 'application/json'),
 				'body'     => json_encode( array(
-								'fvQuestion'  => 'customQuestion200',
-								'fvAnswer'    => 'customAnswer200',
-								'fvRationale' => 'customRationale200',
-								'fvPreference' => 'Very Important'
+					'fvQuestion'  => 'customQuestion200',
+					'fvAnswer'    => 'customAnswer200',
+					'fvRationale' => 'customRationale200',
+					'fvPreference' => 'Very Important',
 				)),
 				'response' => array(
 					'code'    => 202,
@@ -93,7 +93,7 @@ function webhook_response_test_results( $preempt, $request, $url ) {
 					'fvQuestion'  => 'customQuestion400',
 					'fvAnswer'    => 'customAnswer400',
 					'fvRationale' => 'customRationale400',
-					'fvPreference' => 'Very Important'
+					'fvPreference' => 'Very Important',
 				)),
 				'response' => array(
 					'code'    => 402,
@@ -123,7 +123,7 @@ function webhook_response_test_results( $preempt, $request, $url ) {
 					'fvQuestion'  => 'customQuestion500',
 					'fvAnswer'    => 'customAnswer500',
 					'fvRationale' => 'customRationale500',
-					'fvPreference' => 'Very Important'
+					'fvPreference' => 'Very Important',
 				)),
 				'response' => array(
 					'code'    => 502,
@@ -132,6 +132,28 @@ function webhook_response_test_results( $preempt, $request, $url ) {
 				'cookies'  => array(),
 				'filename' => '',
 			);
+			break;
+		case '0028-mapping-merge?currency=CAD':
+			$currency = 'USD';
+			$response = array(
+				'headers'  => array(),
+				'body'     => json_encode( array(
+					'success'  => true,
+					'timestamp' => time(),
+					'source' => $currency,
+					'quotes' => array(
+						'USDCAD' => '1200',
+						'USDEUR' => '2000',
+					),
+				)),
+				'response' => array(
+					'code'    => 200,
+					'message' => 'Accepted',
+				),
+				'cookies'  => array(),
+				'filename' => '',
+			);
+
 			break;
 		case 'other':
 			$response = array(
