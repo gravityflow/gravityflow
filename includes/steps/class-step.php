@@ -1756,7 +1756,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return array
 	 */
 	public function gpdf_add_notification_attachment( $notification, $gpdf_id ) {
-		if ( ! class_exists( 'GPDFAPI' ) ) {
+		if ( ! method_exists( 'GPDFAPI', 'get_pdf' ) || ! method_exists( 'GPDFAPI', 'create_pdf' ) ) {
 			return $notification;
 		}
 

@@ -82,7 +82,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			'fields' => array(
 				array(
 					'name'  => 'url',
-					'class' => 'large',
+					'class' => 'large merge-tag-support',
 					'label' => esc_html__( 'Outgoing Webhook URL', 'gravityflow' ),
 					'type'  => 'text',
 				),
@@ -888,7 +888,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		 * Allow the entry to be modified during the response mapping of the webhook step.
 		 *
 		 * @since 2.2.4-dev
-		 * 
+		 *
 		 * @param array               $entry        The entry
 		 * @param array               $mapping      The response field mappings for outgoing webhook step.
 		 * @param array               $data         The response data
@@ -913,12 +913,17 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	 * @return array|string|WP_Error
 	 */
 	public function parse_response_value( $value, $key, $default = '' ) {
+
 		if ( ! is_array( $value ) && ! ( is_object( $value ) && $value instanceof ArrayAccess ) ) {
 			return $default;
 		}
 
 		/* translators: %s is the key used to lookup the value in the REST API response */
 		$error_message = sprintf( __( 'The key %s does not match any element in the response.', 'gravityflow' ), $key ) ;
+
+		$this->log_debug( __METHOD__ . '() - key before replacing variables: ' . $key );
+		$key = GFCommon::replace_variables( $key, $this->get_form(), $this->get_entry(), true, false, false, 'text' );
+		$this->log_debug( __METHOD__ . '() - key after replacing variables: ' . $key );
 
 		if ( strpos( $key, '\\' ) === false ) {
 			return isset( $value[ $key ] ) ? $value[ $key ] : new WP_Error( 'invalid_key', $error_message );
