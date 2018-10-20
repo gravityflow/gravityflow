@@ -33,12 +33,12 @@ $I->see( 'Current Step Type: approval' );
 $I->dontSee( 'Current Step Schedule: {current_step:schedule}' );
 $I->see( 'Current Step Schedule:' );
 $schedule = $I->grabTextFrom( '.current-step-schedule' );
-$I->assertStringStartsWith( date( 'Y/m/d' ), $schedule );
+$I->assertStringStartsWith( date( 'F j, Y' ) . ' at', $schedule );
 
 $I->dontSee( 'Current Step Expiration: {current_step:expiration}' );
 $I->see( 'Current Step Expiration:' );
 $expiration = $I->grabTextFrom( '.current-step-expiration' );
-$I->assertStringStartsWith( date( 'Y/m/d', strtotime( '+1 week' ) ), $expiration );
+$I->assertStringStartsWith( date( 'F j, Y', strtotime( '+1 week' ) ) . ' at', $expiration );
 
 // Don't wait for the cron, start the step now.
 $entry_id = $I->grabTextFrom( '.entry-id' );
