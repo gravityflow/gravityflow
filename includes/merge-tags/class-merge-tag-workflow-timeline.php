@@ -92,7 +92,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Timeline extends Gravity_Flow_Merge_Tag_Wo
 		foreach ( $notes as $note ) {
 			$step = Gravity_Flow_Common::get_timeline_note_step( $note );
 			$name = Gravity_Flow_Common::get_timeline_note_display_name( $note, $step );
-			$date = Gravity_Flow_Common::format_date( $note->date_created );
+			$date = Gravity_Flow_Common::format_date( $note->date_created, '', false, true );
 
 			$return[] = $this->format_note( $note->value, $name, $date );
 		}
