@@ -3075,16 +3075,17 @@ PRIMARY KEY  (id)
 			/**
 			 * Allows the format for dates within the entry detail workflow info box to be modified.
 			 *
-			 * @param string $date_format A date format string - defaults to 'Y/m/d'
+			 * @param string $date_format A date format string - defaults to the date format setting in the WordPress general settings.
 			 */
-			$date_format = apply_filters( 'gravityflow_date_format_entry_detail', 'Y/m/d' );
-			printf( '%s: %s', esc_html__( 'Submitted', 'gravityflow' ), esc_html( GFCommon::format_date( $entry['date_created'], true, $date_format ) ) );
+			$date_format = apply_filters( 'gravityflow_date_format_entry_detail', '' );
+			$date_created = Gravity_Flow_Common::format_date( $entry['date_created'], $date_format, false, true );
+			printf( '%s: %s', esc_html__( 'Submitted', 'gravityflow' ), esc_html( $date_created ) );
 
 			if ( ! empty( $entry['workflow_timestamp'] ) ) {
-				$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
-				if ( $entry['date_created'] != $last_updated ) {
+				$last_updated = Gravity_Flow_Common::format_date( $entry['workflow_timestamp'], $date_format, false, true );
+				if ( $date_created != $last_updated ) {
 					echo '<br /><br />';
-					esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, $date_format ) );
+					esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( $last_updated );
 				}
 			}
 
@@ -3104,10 +3105,8 @@ PRIMARY KEY  (id)
 			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
 			     && $current_step->supports_expiration() && $current_step->expiration
 			) {
-				$expiration_timestamp = $current_step->get_expiration_timestamp();
-				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
-				$expiration_date      = get_date_from_gmt( $expiration_date_str );
-				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), GFCommon::format_date( $expiration_date, true, $date_format ) );
+				$glfow_date = Gravity_Flow_Common::format_date( $current_step->get_expiration_timestamp(), $date_format, false, true );
+				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), $glfow_date );
 			}
 
 			/**

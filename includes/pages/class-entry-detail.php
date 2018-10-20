@@ -582,7 +582,7 @@ class Gravity_Flow_Entry_Detail {
 		return sprintf(
 			'<div class="gravityflow-note-header"><div class="gravityflow-note-title">%s</div><div class="gravityflow-note-meta">%s</div></div>',
 			esc_html( $display_name ),
-			esc_html( Gravity_Flow_Common::format_date( $date_created ) )
+			esc_html( Gravity_Flow_Common::format_date( $date_created, '', false, true ) )
 		);
 	}
 
