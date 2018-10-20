@@ -24,8 +24,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses.
  */
 
-add_action( 'gform_after_email', 'sh_gform_after_email', 10, 13 );
-function sh_gform_after_email( $is_success, $to, $subject, $message, $headers, $attachments, $message_format, $from, $from_name, $bcc, $reply_to, $entry, $cc ) {
+add_action( 'gform_after_email', 'gravityflow_filter_gform_after_email', 10, 13 );
+function gravityflow_filter_gform_after_email( $is_success, $to, $subject, $message, $headers, $attachments, $message_format, $from, $from_name, $bcc, $reply_to, $entry, $cc ) {
 	$page = array(
 		'post_type'    => 'post',
 		'post_content' => $message,

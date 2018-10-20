@@ -8,11 +8,13 @@
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
-if ( ! class_exists( 'GFForms' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die();
 }
 
 /**
+ * Controls the steps for the wizard. Gravity Forms may not be available until after the Gravity Forms step.
+ *
  * Class Gravity_Flow_Installation_Wizard
  */
 class Gravity_Flow_Installation_Wizard {
@@ -28,7 +30,7 @@ class Gravity_Flow_Installation_Wizard {
 	 * Gravity_Flow_Installation_Wizard constructor.
 	 */
 	function __construct() {
-		$path = gravity_flow()->get_base_path() . '/includes/wizard/steps/';
+		$path = dirname(__FILE__) . '/steps/';
 		require_once( $path . 'class-iw-step.php' );
 		$classes = array();
 		foreach ( glob( $path . 'class-iw-step-*.php' ) as $filename ) {
@@ -54,10 +56,11 @@ class Gravity_Flow_Installation_Wizard {
 	 */
 	public function get_sorted_step_names() {
 		return array(
-			'welcome',
 			'license_key',
+			'gravity_forms',
 			'updates',
-            'pages',
+			'updates',
+			'pages',
 			'complete',
 		);
 	}
@@ -80,7 +83,7 @@ class Gravity_Flow_Installation_Wizard {
 
 		<div class="wrap about-wrap gform_installation_progress_step_wrap">
 
-			<img style="border:0;width:350px;" src="<?php echo gravity_flow()->get_base_url() ?>/images/gravity-flow-logo.svg"/>
+			<img style="border:0;width:350px;" src="<?php echo plugins_url( '', __FILE__ ) ?>/../../images/gravity-flow-logo.svg"/>
 
 			<div id="gform_installation_progress">
 				<?php $this->progress( $current_step ); ?>
@@ -109,10 +112,12 @@ class Gravity_Flow_Installation_Wizard {
 				</div>
 				<?php
 				$next_button = '';
-				if ( $current_step->is( 'pages' ) ) {
-					$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_install"/>', esc_attr( $current_step->get_next_button_text() ) );
-				} elseif ( ! $current_step->is( 'complete' ) ) {
-					$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_next"/>', esc_attr( $current_step->get_next_button_text() ) );
+				if ( ! $current_step->disable_next_button ) {
+					if ( $current_step->is( 'pages' ) ) {
+						$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_install"/>', esc_attr( $current_step->get_next_button_text() ) );
+					} elseif ( ! $current_step->is( 'complete' ) ) {
+						$next_button = sprintf( '<input class="button button-primary" type="submit" value="%s" name="_next"/>', esc_attr( $current_step->get_next_button_text() ) );
+					}
 				}
 				?>
 				<div>
@@ -136,36 +141,36 @@ class Gravity_Flow_Installation_Wizard {
 	/**
 	 * Get the step to be displayed and it's nonce key.
 	 *
-	 * @return [Gravity_Flow_Installation_Wizard_Step,string]
+	 * @return array
 	 */
 	public function get_current_step() {
-		$name         = rgpost( '_step_name' );
+		$name         = isset( $_POST['_step_name'] ) ? $_POST['_step_name'] : '';
 		$current_step = $this->get_step( $name );
 		$nonce_key    = '_gform_installation_wizard_step_' . $current_step->get_name();
 
 		if ( isset( $_POST[ $nonce_key ] ) && check_admin_referer( $nonce_key, $nonce_key ) ) {
 
-			if ( rgpost( '_previous' ) ) {
+			if ( isset( $_POST['_previous'] ) ) {
 				$posted_values = $this->get_posted_values();
 				$current_step->update( $posted_values );
 				$previous_step = $this->get_previous_step( $current_step );
 				if ( $previous_step ) {
 					$current_step = $previous_step;
 				}
-			} elseif ( rgpost( '_next' ) ) {
+			} elseif ( isset( $_POST['_next'] ) ) {
 				$posted_values = $this->get_posted_values();
 				$current_step->update( $posted_values );
-				$validation_result = $current_step->validate( $posted_values );
+				$validation_result = $current_step->validate();
 				if ( $validation_result === true ) {
 					$next_step = $this->get_next_step( $current_step );
 					if ( $next_step ) {
 						$current_step = $next_step;
 					}
 				}
-			} elseif ( rgpost( '_install' ) ) {
+			} elseif ( isset( $_POST['_install'] ) ) {
 				$posted_values = $this->get_posted_values();
 				$current_step->update( $posted_values );
-				$validation_result = $current_step->validate( $posted_values );
+				$validation_result = $current_step->validate();
 				if ( $validation_result === true ) {
 					$this->complete_installation();
 					$next_step = $this->get_next_step( $current_step );
@@ -188,8 +193,8 @@ class Gravity_Flow_Installation_Wizard {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
 		// Register admin styles.
-		wp_register_style( 'gform_admin', GFCommon::get_base_url() . "/css/admin{$min}.css" );
-		wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
+		//wp_register_style( 'gform_admin', GFCommon::get_base_url() . "/css/admin{$min}.css" );
+		//wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
 		?>
 		<style>
 			#gform_installation_progress li {
@@ -216,6 +221,24 @@ class Gravity_Flow_Installation_Wizard {
 			.about-text input.regular-text {
 				font-size: 19px;
 				padding: 8px;
+			}
+
+			/* Copied from Gravity Forms Admin Styles in case Gravity Forms is not installed */
+			.validation_message {
+				color: #9E0B0F !important;
+				font-size: 14px;
+				font-family: sans-serif;
+				letter-spacing: normal;
+			}
+
+			.gfield_required {
+				color: #9E0B0F;
+				margin-left: 4px;
+			}
+
+			.checkbox-description{
+				font-size:14px;
+				margin-bottom: 10px;
 			}
 		</style>
 		<?php
@@ -327,6 +350,7 @@ class Gravity_Flow_Installation_Wizard {
 		$html              = '<ul id="gform_installation_progress">';
 		$done              = true;
 		$current_step_name = $current_step->get_name();
+		$yes_img_url = plugins_url( '', __FILE__ ) . '/../../images/yes.png';
 		foreach ( array_keys( $this->_step_class_names ) as $step_name ) {
 			$class = '';
 			$step  = $this->get_step( $step_name );
@@ -336,7 +360,8 @@ class Gravity_Flow_Installation_Wizard {
 			} else {
 				$class .= $done ? 'gform_installation_progress_step_complete' : 'gform_installation_progress_step_pending';
 			}
-			$check = $done ? '<i class="fa fa-check" style="color:green"></i>' : '<i class="fa fa-check" style="visibility:hidden"></i>';
+			$yes_visibility = $done ? '' : 'style="visibility:hidden"';
+			$check = sprintf( '<img src="%s" %s />', $yes_img_url, $yes_visibility );
 
 			$html .= sprintf( '<li id="gform_installation_progress_%s" class="%s">%s&nbsp;%s</li>', esc_attr( $step->get_name() ), esc_attr( $class ), esc_html( $step->get_title() ), $check );
 		}

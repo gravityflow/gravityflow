@@ -153,6 +153,7 @@ module.exports = function(grunt) {
                 files: [
                     { src: 'includes/**', dest: 'gravityflow/' },
                     { src: 'js/**', dest: 'gravityflow/'  },
+					{ src: 'fonts/**', dest: 'gravityflow/'  },
                     { src: 'css/**', dest: 'gravityflow/'  },
                     { src: 'images/**', dest: 'gravityflow/'  },
                     { src: 'languages/**', dest: 'gravityflow/'  },

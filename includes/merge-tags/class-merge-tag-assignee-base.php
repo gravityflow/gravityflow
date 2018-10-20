@@ -95,7 +95,6 @@ abstract class Gravity_Flow_Merge_Tag_Assignee_Base extends Gravity_Flow_Merge_T
 		if ( empty( $action ) ) {
 			return array();
 		}
-
 		return array(
 			'pages'           => array( 'inbox' ),
 			'step_id'         => $this->step->get_id(),
@@ -115,7 +114,6 @@ abstract class Gravity_Flow_Merge_Tag_Assignee_Base extends Gravity_Flow_Merge_T
 	protected function get_token( $action = '' ) {
 		$scopes               = $this->get_token_scopes( $action );
 		$expiration_timestamp = strtotime( '+' . (int) $this->get_token_expiration_days() . ' days' );
-
 		return gravity_flow()->generate_access_token( $this->assignee, $scopes, $expiration_timestamp );
 	}
 }
