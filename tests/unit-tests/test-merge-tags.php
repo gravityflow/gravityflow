@@ -236,7 +236,7 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 
 		$text_in           = '{current_step:start}';
-		$expected_text_out = '2018/10/08 at 9:30 am';
+		$expected_text_out = 'October 8, 2018 at 9:30 am';
 		gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', strtotime( '2018-10-08 09:30' ) );
 		$actual_text_out = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
@@ -291,7 +291,7 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', $timestamp );
 
 		$text_in           = '{current_step:expiration}';
-		$expected_text_out = date( 'Y/m/d \a\t g:i a', $expiration_timestamp );
+		$expected_text_out = date( 'F j, Y \a\t g:i a', $expiration_timestamp );
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 	}
@@ -319,7 +319,7 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', $timestamp );
 
 		$text_in           = '{current_step:schedule}';
-		$expected_text_out = date( 'Y/m/d \a\t g:i a', $scheduled_timestamp );
+		$expected_text_out = date( 'F j, Y \a\t g:i a', $scheduled_timestamp );
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 	}
@@ -1037,7 +1037,7 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$entry     = $this->_create_entry();
 
 		$time = time();
-		$date = date( 'd M Y g:i a', $time );
+		$date = date( 'F j, Y \a\t g:i a', $time );
 
 		// Add the notes.
 		$notes = array(
@@ -1504,7 +1504,7 @@ step 1 test note 1';
 	public function test_workflow_timeline() {
 		$this->_add_approval_step();
 		$entry          = $this->_create_entry();
-		$submitted_date = date( 'd M Y g:i a', strtotime( $entry['date_created'] ) );
+		$submitted_date = date( 'F j, Y \a\t g:i a', strtotime( $entry['date_created'] ) );
 
 		$merge_tag = $this->_get_merge_tag( 'workflow_timeline', array( 'entry' => $entry ) );
 
@@ -1515,7 +1515,7 @@ Workflow Submitted';
 		$this->assertEquals( $expected_text_out, $actual_text_out );
 
 		$this->api->restart_step( $entry );
-		$restart_date = date( 'd M Y g:i a' );
+		$restart_date = date( 'F j, Y \a\t g:i a' );
 
 		$expected_text_out = 'Workflow: ' . $restart_date . '<br />
 Workflow Step restarted.<br />
