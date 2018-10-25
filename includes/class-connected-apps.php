@@ -561,7 +561,7 @@ class Gravity_Flow_Connected_Apps {
 
 			?>
 			<div id='connected_apps_table_container'>
-				<p><?php esc_html_e( 'Note: Connected Apps is a beta feature of the Outgoing Webhook step. If you come across any issues, please submit a support request.', 'gravityflow' ); ?></p>
+				<p><?php esc_html_e( 'Note: Connected Apps can only be used in Outgoing Webhook steps.', 'gravityflow' ); ?></p>
 				<?php
 				$table->display();
 				?>
@@ -612,7 +612,7 @@ class Gravity_Flow_Connected_Apps {
 								<?php
 								esc_html_e( 'App Type', 'gravityflow' );
 								echo ' ';
-								gform_tooltip( esc_html__( 'Currently only WordPress sites using the official WordPress REST API OAuth1 plugin are supported.', 'gravityflow' ) ); ?>
+								gform_tooltip( esc_html__( 'Currently only WordPress sites using the official WordPress REST API OAuth1 plugin or Gravity Forms 2.4 are supported.', 'gravityflow' ) ); ?>
 						</th>
 						</label>
 						<td>
