@@ -3,6 +3,10 @@
  * Purpose: Test if "send to step" admin action can work after workflow completed
  */
 
+// @group step-approval
+// @group step-notification
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test if "send to step" admin action can work after workflow completed' );

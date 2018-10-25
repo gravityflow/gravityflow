@@ -200,6 +200,17 @@ class Gravity_Flow_Assignee {
 	}
 
 	/**
+	 * Return the step for this assignee.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @return Gravity_Flow_Step|bool
+	 */
+	public function get_step() {
+		return $this->step;
+	}
+
+	/**
 	 * Return the editable field IDs for this assignee.
 	 *
 	 * @return array

@@ -3,6 +3,9 @@
  * Purpose: Test that the outbound webhook step handles response mapping.
  */
 
+// @group step-user_input
+// @group step-webhook
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test that the Outbound Webhook step handles response mapping.' );

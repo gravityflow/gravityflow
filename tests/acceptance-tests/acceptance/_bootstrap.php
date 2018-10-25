@@ -79,7 +79,7 @@ if ( ! is_dir( WPMU_PLUGIN_DIR ) ) {
 };
 
 
-echo 'Copying mu plugins to ' . WP_CONTENT_DIR . '/mu-plugins';
+echo "\nCopying mu plugins to " . WP_CONTENT_DIR . '/mu-plugins';
 copy_to_dir( dirname( dirname( __FILE__ ) ) . '/_mu-plugins/*.php', WPMU_PLUGIN_DIR );
 
 

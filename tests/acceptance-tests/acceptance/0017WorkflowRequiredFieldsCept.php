@@ -3,6 +3,10 @@
  * Purpose: Test workflow required fields
  */
 
+// @group step-approval
+// @group step-user_input
+// @group step-webhook
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test workflow required fields' );

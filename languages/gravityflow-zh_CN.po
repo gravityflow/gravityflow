@@ -1,6 +1,6 @@
 # Copyright 2015-2017 Steven Henty.
 # Translators:
-# michael edi <michaeledi@163.com>, 2016
+# Edi Weigh <michaeledi@163.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"

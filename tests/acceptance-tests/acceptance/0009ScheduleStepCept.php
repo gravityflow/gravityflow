@@ -3,6 +3,8 @@
  * Purpose: Test scheduling a step
  */
 
+// @group step-notification
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test scheduling a step' );

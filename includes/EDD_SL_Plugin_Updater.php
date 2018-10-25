@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * Allows plugins to use their own update API.
  *
  * @author Easy Digital Downloads
- * @version 1.6.11
+ * @version 1.6.17
  */
 class Gravity_Flow_EDD_SL_Plugin_Updater {
 
@@ -18,6 +18,8 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 	private $version     = '';
 	private $wp_override = false;
 	private $cache_key   = '';
+
+	private $health_check_timeout = 5;
 
 	/**
 	 * Class constructor.
@@ -36,13 +38,22 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 		$this->api_url     = trailingslashit( $_api_url );
 		$this->api_data    = $_api_data;
 		$this->name        = plugin_basename( $_plugin_file );
-		$this->slug        = basename( $_plugin_file, '.php' );
+		$this->slug        = 'gravityflow-' . basename( $_plugin_file, '.php' );
 		$this->version     = $_api_data['version'];
 		$this->wp_override = isset( $_api_data['wp_override'] ) ? (bool) $_api_data['wp_override'] : false;
 		$this->beta        = ! empty( $this->api_data['beta'] ) ? true : false;
-		$this->cache_key   = md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
+		$this->cache_key   = 'edd_sl_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
 
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
+
+		/**
+		 * Fires after the $edd_plugin_data is setup.
+		 *
+		 * @since x.x.x
+		 *
+		 * @param array $edd_plugin_data Array of EDD SL plugin data.
+		 */
+		do_action( 'post_edd_sl_plugin_updater_setup', $edd_plugin_data );
 
 		// Set up hooks.
 		$this->init();
@@ -112,7 +123,7 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 
 			}
 
-			$_transient_data->last_checked           = current_time( 'timestamp' );
+			$_transient_data->last_checked           = time();
 			$_transient_data->checked[ $this->name ] = $this->version;
 
 		}
@@ -158,6 +169,19 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 			if ( false === $version_info ) {
 				$version_info = $this->api_request( 'plugin_latest_version', array( 'slug' => $this->slug, 'beta' => $this->beta ) );
 
+				// Since we disabled our filter for the transient, we aren't running our object conversion on banners, sections, or icons. Do this now:
+				if ( isset( $version_info->banners ) && ! is_array( $version_info->banners ) ) {
+					$version_info->banners = $this->convert_object_to_array( $version_info->banners );
+				}
+
+				if ( isset( $version_info->sections ) && ! is_array( $version_info->sections ) ) {
+					$version_info->sections = $this->convert_object_to_array( $version_info->sections );
+				}
+
+				if ( isset( $version_info->icons ) && ! is_array( $version_info->icons ) ) {
+					$version_info->icons = $this->convert_object_to_array( $version_info->icons );
+				}
+
 				$this->set_version_info_cache( $version_info );
 			}
 
@@ -171,7 +195,7 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 
 			}
 
-			$update_cache->last_checked = current_time( 'timestamp' );
+			$update_cache->last_checked = time();
 			$update_cache->checked[ $this->name ] = $this->version;
 
 			set_site_transient( 'update_plugins', $update_cache );
@@ -251,7 +275,8 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 			'is_ssl' => is_ssl(),
 			'fields' => array(
 				'banners' => array(),
-				'reviews' => false
+				'reviews' => false,
+				'icons'   => array(),
 			)
 		);
 
@@ -278,25 +303,41 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 
 		// Convert sections into an associative array, since we're getting an object, but Core expects an array.
 		if ( isset( $_data->sections ) && ! is_array( $_data->sections ) ) {
-			$new_sections = array();
-			foreach ( $_data->sections as $key => $key ) {
-				$new_sections[ $key ] = $key;
-			}
-
-			$_data->sections = $new_sections;
+			$_data->sections = $this->convert_object_to_array( $_data->sections );
 		}
 
 		// Convert banners into an associative array, since we're getting an object, but Core expects an array.
 		if ( isset( $_data->banners ) && ! is_array( $_data->banners ) ) {
-			$new_banners = array();
-			foreach ( $_data->banners as $key => $key ) {
-				$new_banners[ $key ] = $key;
-			}
+			$_data->banners = $this->convert_object_to_array( $_data->banners );
+		}
 
-			$_data->banners = $new_banners;
+		// Convert icons into an associative array, since we're getting an object, but Core expects an array.
+		if ( isset( $_data->icons ) && ! is_array( $_data->icons ) ) {
+			$_data->icons = $this->convert_object_to_array( $_data->icons );
 		}
 
 		return $_data;
+	}
+
+	/**
+	 * Convert some objects to arrays when injecting data into the update API
+	 *
+	 * Some data like sections, banners, and icons are expected to be an associative array, however due to the JSON
+	 * decoding, they are objects. This method allows us to pass in the object and return an associative array.
+	 *
+	 * @since 3.6.5
+	 *
+	 * @param stdClass $data
+	 *
+	 * @return array
+	 */
+	private function convert_object_to_array( $data ) {
+		$new_data = array();
+		foreach ( $data as $key => $value ) {
+			$new_data[ $key ] = $value;
+		}
+
+		return $new_data;
 	}
 
 	/**
@@ -307,11 +348,13 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 	 * @return object $array
 	 */
 	public function http_request_args( $args, $url ) {
-		// If it is an https request and we are performing a package download, disable ssl verification
+
+		$verify_ssl = $this->verify_ssl();
 		if ( strpos( $url, 'https://' ) !== false && strpos( $url, 'edd_action=package_download' ) ) {
-			$args['sslverify'] = false;
+			$args['sslverify'] = $verify_ssl;
 		}
 		return $args;
+
 	}
 
 	/**
@@ -327,7 +370,29 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 	 */
 	private function api_request( $_action, $_data ) {
 
-		global $wp_version;
+		global $wp_version, $edd_plugin_url_available;
+
+		// Do a quick status check on this domain if we haven't already checked it.
+		$store_hash = md5( $this->api_url );
+		if ( ! is_array( $edd_plugin_url_available ) || ! isset( $edd_plugin_url_available[ $store_hash ] ) ) {
+			$test_url_parts = parse_url( $this->api_url );
+
+			$scheme = ! empty( $test_url_parts['scheme'] ) ? $test_url_parts['scheme']     : 'http';
+			$host   = ! empty( $test_url_parts['host'] )   ? $test_url_parts['host']       : '';
+			$port   = ! empty( $test_url_parts['port'] )   ? ':' . $test_url_parts['port'] : '';
+
+			if ( empty( $host ) ) {
+				$edd_plugin_url_available[ $store_hash ] = false;
+			} else {
+				$test_url = $scheme . '://' . $host . $port;
+				$response = wp_remote_get( $test_url, array( 'timeout' => $this->health_check_timeout, 'sslverify' => true ) );
+				$edd_plugin_url_available[ $store_hash ] = is_wp_error( $response ) ? false : true;
+			}
+		}
+
+		if ( false === $edd_plugin_url_available[ $store_hash ] ) {
+			return;
+		}
 
 		$data = array_merge( $this->api_data, $_data );
 
@@ -335,7 +400,7 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 			return;
 		}
 
-		if( $this->api_url == trailingslashit (home_url() ) ) {
+		if( $this->api_url == trailingslashit ( home_url() ) ) {
 			return false; // Don't allow a plugin to ping itself
 		}
 
@@ -351,7 +416,8 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 			'beta'       => ! empty( $data['beta'] ),
 		);
 
-		$request = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
+		$verify_ssl = $this->verify_ssl();
+		$request    = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => $verify_ssl, 'body' => $api_params ) );
 
 		if ( ! is_wp_error( $request ) ) {
 			$request = json_decode( wp_remote_retrieve_body( $request ) );
@@ -373,6 +439,10 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 
 		if ( $request && isset( $request->banners ) ) {
 			$request->banners = maybe_unserialize( $request->banners );
+		}
+
+		if ( $request && isset( $request->icons ) ) {
+			$request->icons = maybe_unserialize( $request->icons );
 		}
 
 		if( ! empty( $request->sections ) ) {
@@ -421,7 +491,8 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 				'beta'       => ! empty( $data['beta'] )
 			);
 
-			$request = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
+			$verify_ssl = $this->verify_ssl();
+			$request    = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => $verify_ssl, 'body' => $api_params ) );
 
 			if ( ! is_wp_error( $request ) ) {
 				$version_info = json_decode( wp_remote_retrieve_body( $request ) );
@@ -444,8 +515,9 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 
 		}
 
-		if( ! empty( $version_info ) && isset( $version_info->sections['changelog'] ) ) {
-			echo '<div style="background:#fff;padding:10px;">' . $version_info->sections['changelog'] . '</div>';
+
+		if( ! empty( $version_info ) && isset( $version_info->sections->changelog ) ) {
+			echo '<div style="background:#fff;padding:10px;">' . $version_info->sections->changelog . '</div>';
 		}
 
 		exit;
@@ -459,11 +531,17 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 
 		$cache = get_option( $cache_key );
 
-		if( empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
+		if( empty( $cache['timeout'] ) || time() > $cache['timeout'] ) {
 			return false; // Cache is expired
 		}
 
-		return json_decode( $cache['value'] );
+		// We need to turn the icons into an array, thanks to WP Core forcing these into an object at some point.
+		$cache['value'] = json_decode( $cache['value'] );
+		if ( ! empty( $cache['value']->icons ) ) {
+			$cache['value']->icons = (array) $cache['value']->icons;
+		}
+
+		return $cache['value'];
 
 	}
 
@@ -474,12 +552,22 @@ class Gravity_Flow_EDD_SL_Plugin_Updater {
 		}
 
 		$data = array(
-			'timeout' => strtotime( '+3 hours', current_time( 'timestamp' ) ),
+			'timeout' => strtotime( '+3 hours', time() ),
 			'value'   => json_encode( $value )
 		);
 
-		update_option( $cache_key, $data );
+		update_option( $cache_key, $data, 'no' );
 
+	}
+
+	/**
+	 * Returns if the SSL of the store should be verified.
+	 *
+	 * @since  1.6.13
+	 * @return bool
+	 */
+	private function verify_ssl() {
+		return (bool) apply_filters( 'edd_sl_api_request_verify_ssl', true, $this );
 	}
 
 }

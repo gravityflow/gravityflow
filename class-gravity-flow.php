@@ -199,7 +199,9 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'wp_login', array( $this, 'filter_wp_login' ), 10, 2 );
 			add_action( 'gform_post_add_entry', array( $this, 'action_gform_post_add_entry' ), 10, 2 );
 
-			if ( $this->is_gravityforms_supported( '2.3.3.10' ) ) {
+			if ( $this->is_gravityforms_supported( '2.3.4.2' ) ) {
+				add_filter( 'gform_entry_pre_handle_confirmation', array( $this, 'after_submission' ), 9, 2 );
+			} elseif ( $this->is_gravityforms_supported( '2.3.3.10' ) ) {
 				add_action( 'gform_pre_handle_confirmation', array( $this, 'after_submission' ), 9, 2 );
 			} else {
 				add_action( 'gform_after_submission', array( $this, 'after_submission' ), 9, 2 );
@@ -3073,16 +3075,17 @@ PRIMARY KEY  (id)
 			/**
 			 * Allows the format for dates within the entry detail workflow info box to be modified.
 			 *
-			 * @param string $date_format A date format string - defaults to 'Y/m/d'
+			 * @param string $date_format A date format string - defaults to the date format setting in the WordPress general settings.
 			 */
-			$date_format = apply_filters( 'gravityflow_date_format_entry_detail', 'Y/m/d' );
-			printf( '%s: %s', esc_html__( 'Submitted', 'gravityflow' ), esc_html( GFCommon::format_date( $entry['date_created'], true, $date_format ) ) );
+			$date_format = apply_filters( 'gravityflow_date_format_entry_detail', '' );
+			$date_created = Gravity_Flow_Common::format_date( $entry['date_created'], $date_format, false, true );
+			printf( '%s: %s', esc_html__( 'Submitted', 'gravityflow' ), esc_html( $date_created ) );
 
 			if ( ! empty( $entry['workflow_timestamp'] ) ) {
-				$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
-				if ( $entry['date_created'] != $last_updated ) {
+				$last_updated = Gravity_Flow_Common::format_date( $entry['workflow_timestamp'], $date_format, false, true );
+				if ( $date_created != $last_updated ) {
 					echo '<br /><br />';
-					esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, $date_format ) );
+					esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( $last_updated );
 				}
 			}
 
@@ -3102,10 +3105,8 @@ PRIMARY KEY  (id)
 			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
 			     && $current_step->supports_expiration() && $current_step->expiration
 			) {
-				$expiration_timestamp = $current_step->get_expiration_timestamp();
-				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
-				$expiration_date      = get_date_from_gmt( $expiration_date_str );
-				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), GFCommon::format_date( $expiration_date, true, $date_format ) );
+				$glfow_date = Gravity_Flow_Common::format_date( $current_step->get_expiration_timestamp(), $date_format, false, true );
+				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), $glfow_date );
 			}
 
 			/**
@@ -3968,7 +3969,6 @@ PRIMARY KEY  (id)
 			$valid = $license_data && $license_data->license == 'valid' ? true : false;
 
 			return $valid;
-
 		}
 
 		/**
@@ -4037,13 +4037,16 @@ PRIMARY KEY  (id)
 		/**
 		 * Send a request to the EDD store url.
 		 *
-		 * @param string $edd_action The action to perform (check_license, activate_license or deactivate_license).
-		 * @param string $license    The license key.
-		 * @param string $item_name  The EDD item name. Defaults to the value of the GRAVITY_FLOW_EDD_ITEM_NAME constant.
+		 * @since 2.2.4 Added support for item ID as well as name.
+		 * @since unkonwn
+		 *
+		 * @param string     $edd_action      The action to perform (check_license, activate_license or deactivate_license).
+		 * @param string     $license         The license key.
+		 * @param string|int $item_name_or_id The EDD item name. Defaults to the value of the GRAVITY_FLOW_EDD_ITEM_NAME constant.
 		 *
 		 * @return array|WP_Error The response.
 		 */
-		public function perform_edd_license_request( $edd_action, $license, $item_name = GRAVITY_FLOW_EDD_ITEM_NAME ) {
+		public function perform_edd_license_request( $edd_action, $license, $item_name_or_id = GRAVITY_FLOW_EDD_ITEM_ID ) {
 			// Prepare the request arguments.
 			$args = array(
 				'timeout'   => 10,
@@ -4051,10 +4054,15 @@ PRIMARY KEY  (id)
 				'body'      => array(
 					'edd_action' => $edd_action,
 					'license'    => trim( $license ),
-					'item_name'  => urlencode( $item_name ),
 					'url'        => home_url(),
 				),
 			);
+
+			if ( is_numeric( $item_name_or_id ) ) {
+				$args['body']['item_id'] = $item_name_or_id;
+			} else {
+				$args['body']['item_name'] = urlencode( $item_name_or_id );
+			}
 
 			// Send the remote request.
 			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, $args );
@@ -4763,15 +4771,21 @@ PRIMARY KEY  (id)
 		 *
 		 * @param array $entry The current entry.
 		 * @param array $form  The current form.
+		 *
+		 * @return array|WP_Error
 		 */
 		public function after_submission( $entry, $form ) {
 			if ( ! isset( $entry['id'] ) || $entry['status'] === 'spam' ) {
-				return;
+				return $entry;
 			}
+
 			if ( isset( $entry['workflow_step'] ) ) {
 				$entry_id = absint( $entry['id'] );
 				$this->process_workflow( $form, $entry_id );
+				$entry = GFAPI::get_entry( $entry_id );
 			}
+
+			return $entry;
 		}
 
 		/**
@@ -6363,22 +6377,7 @@ AND m.meta_value='queued'";
 		 * @return string
 		 */
 		public function get_admin_icon_b64( $color = false ) {
-
-			$svg_xml = '<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 20 581 640" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
-    <g id="Layer 1" transform="matrix(1,0,0,1,-309.5,-180)">
-        <g transform="matrix(3.27114,0,0,3.27114,-738.318,-1054.55)">
-            <path d="M377.433,481.219L434.396,514.29C444.433,519.437 453.741,520.595 464.421,516.392C477.161,511.373 485.868,500.993 486.898,487.138C487.756,476.115 483.38,464.791 475.273,457.241C465.622,448.191 452.797,446.132 440.272,449.392C437.999,449.864 434.096,451.494 431.179,452.566C429.935,452.995 428.905,453.381 428.262,453.467C423.286,453.982 420.584,447.333 425.045,444.716C434.61,439.097 447.607,437.339 456.272,438.197C466.738,439.355 476.603,443.901 484.152,451.322C493.117,460.201 497.75,472.126 497.407,484.736C496.935,502.623 486.855,517.936 470.469,525.228C460.432,529.646 449.108,530.461 438.685,527.33C434.953,526.214 432.723,524.885 429.334,522.997L371.9,490.784L369.026,495.717L362.163,478.645L380.393,476.158L377.433,481.219Z" style="fill:white;"/>
-        </g>
-        <g transform="matrix(3.27114,0,0,3.27114,-738.318,-1054.55)">
-            <path d="M440.702,485.937L383.782,452.909C373.702,447.762 364.394,446.604 353.714,450.807C341.017,455.826 332.31,466.206 331.237,480.061C330.379,491.084 334.755,502.408 342.862,509.957C352.555,519.008 365.338,521.067 377.906,517.807C380.136,517.335 384.082,515.705 386.956,514.633C388.2,514.204 389.23,513.818 389.916,513.732C394.892,513.217 397.594,519.866 393.09,522.482C383.525,528.101 370.528,529.86 361.863,529.002C351.397,527.844 341.532,523.297 334.025,515.877C325.018,506.998 320.428,495.073 320.728,482.463C321.2,464.576 331.28,449.263 347.709,441.971C357.703,437.553 369.027,436.738 379.45,439.869C383.224,440.984 385.455,442.271 388.801,444.159L446.235,476.415L449.152,471.439L456.015,488.554L437.742,491.041L440.702,485.937Z" style="fill:white;"/>
-        </g>
-    </g>
-</svg>';
-
-			$icon = sprintf( 'data:image/svg+xml;base64,%s', base64_encode( $svg_xml ) );
-
+			$icon = gravityflow_icon();
 			return $icon;
 		}
 
@@ -7697,28 +7696,46 @@ AND m.meta_value='queued'";
 		 */
 		public function action_admin_notices() {
 
-			$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] );
+			$suppress_on_multisite = defined( 'GRAVITY_FLOW_LICENSE_KEY' ) || ! is_main_site();
+
+			if ( is_multisite() && $suppress_on_multisite ) {
+				return;
+			}
+
+			$pending_installation = ! is_multisite() && ( get_option( 'gravityflow_pending_installation' ) || isset( $_GET['gravityflow_installation_wizard'] ) );
+
+			if ( $pending_installation ) {
+				return;
+			}
+
+			$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] ) && isset( $_POST['_gravityflow_save_settings_nonce'] );
+
+			$license_details = false;
 
 			if ( $is_saving_license_key ) {
 				$posted_license_key = sanitize_text_field( rgpost( '_gaddon_setting_license_key' ) );
-				$license_details    = $posted_license_key ? $this->check_license( $posted_license_key ) : false;
+				if ( wp_verify_nonce( $_POST['_gravityflow_save_settings_nonce'], 'gravityflow_save_settings' ) ) {
+					$license_details = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
+				}
+				if ( $license_details ) {
+					set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
+				}
 			} else {
 				$license_details = get_transient( 'gravityflow_license_details' );
 				if ( ! $license_details ) {
 					$license_key     = defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ? GRAVITY_FLOW_LICENSE_KEY : '';
 					$license_details = $this->check_license( $license_key );
+					if ( $license_details ) {
+						set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
+					}
 				}
-			}
-
-			if ( $license_details ) {
-				set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
 			}
 
 			$license_status = $license_details ? $license_details->license : '';
 
 			if ( $license_status != 'valid' ) {
 
-				$add_buttons = ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) || ( is_multisite() && ! is_main_site() );
+				$add_buttons = ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) || ! is_multisite();
 
 				$primary_button_link = admin_url( 'admin.php?page=gravityflow_settings' );
 
@@ -7726,14 +7743,17 @@ AND m.meta_value='queued'";
 
 				switch ( $license_status ) {
 					case 'expired':
-						$message     .= esc_html__( 'Your Gravity Flow license has expired.', 'gravityflow' );
+						/* translators: %s is the title of the plugin */
+						$message     .= sprintf( esc_html__( 'Your %s license has expired.', 'gravityflow' ), $this->_title );
 						$add_buttons = false;
 						break;
 					case 'invalid':
-						$message .= esc_html__( 'Your Gravity Flow license is invalid.', 'gravityflow' );
+						/* translators: %s is the title of the plugin */
+						$message .= sprintf( esc_html__( 'Your %s license is invalid.', 'gravityflow' ), $this->_title );
 						break;
 					case 'deactivated':
-						$message .= esc_html__( 'Your Gravity Flow license is inactive.', 'gravityflow' );
+						/* translators: %s is the title of the plugin */
+						$message .= sprintf( esc_html__( 'Your %s license is inactive.', 'gravityflow' ), $this->_title );
 						break;
 					/** @noinspection PhpMissingBreakStatementInspection */
 					case '':
@@ -7742,7 +7762,8 @@ AND m.meta_value='queued'";
 					case 'inactive':
 					case 'site_inactive':
 					default:
-						$message .= esc_html__( 'Your Gravity Flow license has not been activated.', 'gravityflow' );
+						/* translators: %s is the title of the plugin */
+						$message .= sprintf( esc_html__( 'Your %s license has not been activated.', 'gravityflow' ), $this->_title );
 						break;
 				}
 
@@ -7759,10 +7780,10 @@ AND m.meta_value='queued'";
 				$key = 'gravityflow_license_notice_' . date( 'Y' ) . date( 'z' );
 
 				$notice = array(
-					'key' => $key,
+					'key'          => $key,
 					'capabilities' => 'gravityflow_settings',
-					'type' => 'error',
-					'text' => $message,
+					'type'         => 'error',
+					'text'         => $message,
 				);
 
 				$notices = array( $notice );

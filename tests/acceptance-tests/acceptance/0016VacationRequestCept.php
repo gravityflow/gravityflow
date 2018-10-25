@@ -3,6 +3,10 @@
  * Purpose: Test the vacation request form
  */
 
+// @group step-approval
+// @group step-user_input
+// @group step-notification
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the vacation request form' );

@@ -60,18 +60,10 @@ Contributors:
 * Jamie Oastler @Idealien
 * Yoren Chang @yoren
 * Jake Jackson @gravitypdf
+* WP Pro Translations (https://wp-translations.org/)
 
-Thank you also to all the translators:
+## Legal
+Gravity Flow is a legally registered trademark belonging to Steven Henty S.L. Further details: https://gravityflow.io/trademark
 
-* The team at WP Pro Translations (https://wp-translations.org/)
-* Samuel Aguilera @samuelaguilera (samuelaguilera.com)
-* FX Bénard @fxbenard (fxbenard.com)
-* Erik van Beek @ErikvanBeek (erikvanbeek.nl)
-* Alexander (Anticisco) Gladkov
-* Edi Weigh (makeii.com)
+Copyright 2015-2018 Steven Henty. All rights reserved.
 
-Thanks to [BrowserStack](https://www.browserstack.com) for automated browser testing
-
-Thank you to all my colleagues at Rocketgenius, Zack Katz (GravityView), Naomi C Bush (Gravity Plus) and Jake Jackson (Gravity PDF) for all their collaboration, advice, support and encouragement.
-
-Copyright 2015-2018 Steven Henty, S.L.

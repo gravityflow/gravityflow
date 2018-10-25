@@ -4,7 +4,7 @@
 # FX Bénard <fxb@wp-translations.org>, 2017
 # Hugo Malhoa <hugo.malhoa@gmail.com>, 2015
 # Jose Manuel Cardoso Freitas <josefreitas2@gmail.com>, 2017-2018
-# Manuela Silva <manuela.silva@sky.com>, 2017
+# MS, 2017
 # Pedro Mendonça <ped.gaspar@gmail.com>, 2017
 # Ricardo H. <rickrsh@gmail.com>, 2017
 msgid ""

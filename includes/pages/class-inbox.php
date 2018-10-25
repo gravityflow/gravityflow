@@ -400,12 +400,12 @@ class Gravity_Flow_Inbox {
 				$value = apply_filters( 'gravityflow_inbox_submitter_name', $submitter_name, $entry, $form );
 				break;
 			case 'date_created':
-				$value = GFCommon::format_date( $entry['date_created'] );
+				$date_created = Gravity_Flow_Common::format_date( $entry['date_created'], '', true, true );
+				$value = $date_created;
 				break;
 			case 'last_updated':
 				$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
-
-				$value = $entry['date_created'] != $last_updated ? GFCommon::format_date( $last_updated, true, 'Y/m/d' ) : '-';
+				$value = $entry['date_created'] != $last_updated ? Gravity_Flow_Common::format_date( $last_updated, '', true, true ) : '-';
 				break;
 			case 'workflow_step':
 				if ( isset( $entry['workflow_step'] ) ) {

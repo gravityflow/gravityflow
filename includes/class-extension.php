@@ -24,9 +24,19 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	/**
 	 * The item name used by Easy Digital Downloads.
 	 *
+	 * @deprecated 2.2.4 Use $edd_item_id instead
 	 * @var string
 	 */
 	public $edd_item_name = '';
+
+	/**
+	 * The item name used by Easy Digital Downloads.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @var string
+	 */
+	public $edd_item_id = '';
 
 	/**
 	 * If the extensions minimum requirements are met add the general hooks.
@@ -62,6 +72,8 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 			remove_filter( 'members_get_capabilities', array( $this, 'members_get_capabilities' ) );
 			add_filter( 'gravityflow_members_capabilities', array( $this, 'get_members_capabilities' ) );
 		}
+
+		add_action( 'admin_notices', array( $this, 'action_admin_notices' ) );
 	}
 
 	/**
@@ -114,7 +126,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		}
 		?>
 
-		<h3><span><?php echo $icon ?><?php echo $this->app_settings_title() ?></span></h3>
+		<h3><span><?php echo $icon ?> <?php echo $this->app_settings_title() ?></span></h3>
 
 		<?php
 
@@ -227,15 +239,9 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 		$license_data = $this->check_license( $value );
 
-		$valid = null;
-		if ( empty( $license_data ) || $license_data->license == 'invalid' ) {
-			$valid = false;
-		} elseif ( $license_data->license == 'valid' ) {
-			$valid = true;
-		}
+		$valid = $license_data && $license_data->license == 'valid' ? true : false;
 
 		return $valid;
-
 	}
 
 	/**
@@ -245,11 +251,14 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	 *
 	 * @return array|mixed|object
 	 */
-	public function check_license( $value ) {
-		$response = gravity_flow()->perform_edd_license_request( 'check_license', $value, $this->edd_item_name );
+	public function check_license( $value = '' ) {
+		if ( empty( $value ) ) {
+			$value = $this->get_app_setting( 'license_key' );
+		}
+		$item_name_or_id = empty( $this->edd_item_id ) ? $this->edd_item_name : $this->edd_item_id;
+		$response        = gravity_flow()->perform_edd_license_request( 'check_license', $value, $item_name_or_id );
 
 		return json_decode( wp_remote_retrieve_body( $response ) );
-
 	}
 
 	/**
@@ -262,7 +271,8 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		$old_license = $this->get_app_setting( 'license_key' );
 
 		if ( $old_license && $field_setting != $old_license ) {
-			$response = gravity_flow()->perform_edd_license_request( 'deactivate_license', $old_license, $this->edd_item_name );
+			$item_name_or_id = empty( $this->edd_item_id ) ? $this->edd_item_name : $this->edd_item_id;
+			$response        = gravity_flow()->perform_edd_license_request( 'deactivate_license', $old_license, $item_name_or_id );
 			$this->log_debug( __METHOD__ . '(): response: ' . print_r( $response, 1 ) );
 		}
 
@@ -271,7 +281,6 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		}
 
 		$this->activate_license( $field_setting );
-
 	}
 
 	/**
@@ -282,7 +291,8 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	 * @return array|mixed|object
 	 */
 	public function activate_license( $license_key ) {
-		$response = gravity_flow()->perform_edd_license_request( 'activate_license', $license_key, $this->edd_item_name );
+		$item_name_or_id = empty( $this->edd_item_id ) ? $this->edd_item_name : $this->edd_item_id;
+		$response        = gravity_flow()->perform_edd_license_request( 'activate_license', $license_key, $item_name_or_id );
 
 		// Force plugins page to refresh the update info.
 		set_site_transient( 'update_plugins', null );
@@ -375,4 +385,124 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 		return $links;
 	}
+
+	/**
+	 * Adds the invalid license admin notice.
+	 *
+	 * @since 2.2.4
+	 */
+	public function action_admin_notices() {
+
+		if ( is_multisite() && ! is_main_site() ) {
+			return;
+		}
+
+		$pending_installation = ! is_multisite() && ( get_option( 'gravityflow_pending_installation' ) || isset( $_GET['gravityflow_installation_wizard'] ) );
+
+		if ( $pending_installation ) {
+			return;
+		}
+
+		$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] ) && isset( $_POST[ '_' . $this->get_slug() . '_save_settings_nonce' ] );
+
+		$transient_key = $this->get_slug() . '_license_details';
+
+		$license_details = false;
+		if ( $is_saving_license_key ) {
+			$posted_license_key = sanitize_text_field( rgpost( '_gaddon_setting_license_key' ) );
+			if ( wp_verify_nonce( $_POST[ '_' . $this->get_slug() . '_save_settings_nonce' ], $this->get_slug() . '_save_settings' ) ) {
+				$license_details = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
+			}
+			if ( $license_details ) {
+				set_transient( $transient_key, $license_details, DAY_IN_SECONDS );
+			}
+		} else {
+			$license_details = get_transient( $transient_key );
+			if ( ! $license_details ) {
+				$license_details = $this->check_license();
+				if ( $license_details ) {
+					set_transient( $transient_key, $license_details, DAY_IN_SECONDS );
+				}
+			}
+		}
+
+		$license_status = $license_details ? $license_details->license : '';
+
+		if ( $license_status != 'valid' ) {
+
+			$add_buttons = ! is_multisite() || ( is_multisite() && is_main_site() );
+
+			$primary_button_link = admin_url( 'admin.php?page=gravityflow_settings&view=' . $this->get_slug() );
+
+			$message = sprintf( '<img src="%s" style="vertical-align:text-bottom;margin-right:5px;"/>', GFCommon::get_base_url() . '/images/exclamation.png' );
+
+			switch ( $license_status ) {
+				case 'expired':
+					/* translators: %s is the title of the Gravity Flow Extension */
+					$message .= sprintf( esc_html__( 'Your license for %s has expired.', 'gravityflow' ), $this->_title );
+
+					$add_buttons = false;
+					break;
+				case 'invalid':
+					/* translators: %s is the title of the Gravity Flow Extension */
+					$message .= sprintf( esc_html__( 'Your %s license is invalid.', 'gravityflow' ), $this->_title );
+					break;
+				case 'deactivated':
+					/* translators: %s is the title of the Gravity Flow Extension */
+					$message .= sprintf( esc_html__( 'Your %s license is inactive.', 'gravityflow' ), $this->_title );
+					break;
+				/** @noinspection PhpMissingBreakStatementInspection */
+				case '':
+					$license_status = 'site_inactive';
+				// break intentionally left blank
+				case 'inactive':
+				case 'site_inactive':
+				default:
+					/* translators: %s is the title of the Gravity Flow Extension */
+					$message .= sprintf( esc_html__( 'Your %s license has not been activated.', 'gravityflow' ), $this->_title );
+					break;
+			}
+
+			$message .= ' ' . esc_html__( 'This means you&rsquo;re missing out on security fixes, updates and support!', 'gravityflow' );
+
+			if ( ! empty( $this->edd_item_id ) ) {
+				$url = 'https://gravityflow.io/?p=' . $this->edd_item_id . '&utm_source=admin_notice&utm_medium=admin&utm_content=' . $license_status . '&utm_campaign=Admin%20Notice';
+			} else {
+				$url = 'https://gravityflow.io/extensions/?utm_source=admin_notice&utm_medium=admin&utm_content=' . $license_status . '&utm_campaign=Admin%20Notice';
+			}
+
+			// Show a different notice on settings page for inactive licenses (hide the buttons)
+			if ( $add_buttons && ! $this->is_extension_settings() ) {
+				$message .= '<br /><br />' . esc_html__( '%sActivate your license%s or %sget a license here%s', 'gravityflow' );
+				$message = sprintf( $message, '<a href="' . esc_url( $primary_button_link ) . '" class="button button-primary">', '</a>', '<a href="' . esc_url( $url ) . '" class="button button-secondary">', '</a>' );
+			}
+
+			$key = $this->get_slug() . '_license_notice_' . date( 'Y' ) . date( 'z' );
+
+			$notice = array(
+				'key'          => $key,
+				'capabilities' => $this->_capabilities_app_settings,
+				'type'         => 'error',
+				'text'         => $message,
+			);
+
+			$notices = array( $notice );
+
+			GFCommon::display_dismissible_message( $notices );
+		}
+	}
+	/**
+	 * Returns TRUE if the current page is the extension settings main page.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @return bool
+	 */
+	public function is_extension_settings() {
+
+		$is_extension_settings = rgget( 'page' ) == 'gravityflow_settings' && rgget( 'view' ) == $this->get_slug();
+
+		return $is_extension_settings;
+	}
+
 }

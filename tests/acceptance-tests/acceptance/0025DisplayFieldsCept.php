@@ -3,6 +3,10 @@
  * Purpose: Test that the display fields setting displays the correct fields on the workflow detail page.
  */
 
+// @group merge-tags
+// @group step-approval
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test that the display fields setting displays the correct fields on the workflow detail page.' );
@@ -58,3 +62,33 @@ $I->see( 'Section 1' );
 $I->see( 'Value 2 - Updated' );
 $I->see( 'Section 2' );
 $I->see( 'Value 3' );
+
+// Test the output of {workflow_fields} in the page created from the approval step assignee email.
+$I->amOnPage( '/0025-mt-workflow-fields' );
+$I->waitForText( '0025-mt-workflow-fields', 3 );
+$I->see( 'One' );
+$I->see( 'Value 1' );
+$I->see( 'Two' );
+$I->see( 'Value 2' );
+$I->see( 'Three' );
+$I->see( 'Value 3' );
+
+// Test the output of {workflow_fields: display=false} in the page created from the user input step assignee email.
+$I->amOnPage( '/0025-mt-workflow-fields-editable' );
+$I->waitForText( '0025-mt-workflow-fields-editable', 3 );
+$I->dontSee( 'One' );
+$I->dontSee( 'Value 1' );
+$I->see( 'Two' );
+$I->see( 'Value 2' );
+$I->dontSee( 'Three' );
+$I->dontSee( 'Value 3' );
+
+// Test the output of {workflow_fields: editable=false} in the page created from the user input step complete email.
+$I->amOnPage( '/0025-mt-workflow-fields-display' );
+$I->waitForText( '0025-mt-workflow-fields-display', 3 );
+$I->see( 'One' );
+$I->see( 'Value 1' );
+$I->see( 'Two' );
+$I->see( 'Value 2 – Updated' );
+$I->dontSee( 'Three' );
+$I->dontSee( 'Value 3' );

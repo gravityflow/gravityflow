@@ -551,7 +551,7 @@
             "instructionsEnable": "1",
             "instructionsValue": "Instructions: please review the values in the fields below and click on the Approve or Reject button",
             "display_fields_mode": "all_fields",
-            "assignee_notification_enabled": "1",
+            "assignee_notification_enabled": "0",
             "assignee_notification_from_name": "{Name (First):1.3}{Name (Last):1.6}",
             "assignee_notification_from_email": "{user:user_email}",
             "assignee_notification_reply_to": "",
@@ -563,7 +563,7 @@
             "resend_assignee_emailValue": "7",
             "resend_assignee_email_repeatEnable": "0",
             "resend_assignee_email_repeatValue": "3",
-            "rejection_notification_enabled": "1",
+            "rejection_notification_enabled": "0",
             "rejection_notification_type": "select",
             "rejection_notification_users": [
               "role|subscriber"
@@ -585,7 +585,7 @@
             "rejection_notification_subject": "Entry rejected",
             "rejection_notification_message": "Entry {entry_id} has been rejected",
             "rejection_notification_disable_autoformat": "0",
-            "approval_notification_enabled": "1",
+            "approval_notification_enabled": "0",
             "approval_notification_type": "select",
             "approval_notification_users": [
               "role|subscriber"
@@ -647,7 +647,7 @@
             "schedule_date_field": "3",
             "type": "select",
             "assignees": [
-              "role|subscriber"
+              "user_id|2"
             ],
             "editable_fields": [
               "4"
@@ -666,7 +666,7 @@
             "assignee_notification_from_email": "{admin_email}",
             "assignee_notification_reply_to": "",
             "assignee_notification_bcc": "",
-            "assignee_notification_subject": "",
+            "assignee_notification_subject": "0018-assignee-email-mt-note",
             "assignee_notification_message": "Please review the dates.\r\n\r\nNotes from manager:\r\n{workflow_note}",
             "assignee_notification_disable_autoformat": "0",
             "resend_assignee_emailEnable": "0",
