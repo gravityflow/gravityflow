@@ -36,6 +36,7 @@ $I->see( 'Workflow Inbox' );
 $I->click( 'Specific Assign' );
 
 // Approve
+$I->waitForElement( 'button[value=approved]', 3 );
 $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
 
