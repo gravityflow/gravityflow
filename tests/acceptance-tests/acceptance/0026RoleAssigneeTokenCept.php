@@ -40,6 +40,7 @@ $I->amOnPage( sanitize_title_with_dashes( '0026 Email - Role Assignee - Token - 
 $I->see( 'Open Workflow Entry Detail' );
 $I->click( 'Open Workflow Entry Detail' );
 
+$I->waitForText( 'Single Line Text', 3 );
 $I->fillField( 'Single Line Text', 'Test2' );
 $I->fillField( 'Paragraph', 'Test2' );
 $I->click( 'Submit' );

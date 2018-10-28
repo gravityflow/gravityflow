@@ -20,10 +20,11 @@ $I->fillField( 'input[name="input_1"]', 'Some text' );
 $I->selectOption( 'select[name="input_2"]', 'Second Choice' );
 // Next page
 $I->click( '.gform_page_footer .gform_next_button' );
+$I->waitForElement( 'input[name="input_4"]', 3 );
 $I->fillField( 'input[name="input_4"]', '42' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 $I->click( 'Submit' );
-$I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
+$I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 // Login to wp-admin
 $I->loginAsAdmin();
@@ -31,6 +32,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
+$I->waitForText( '0012 Test Revert User', 3 );
 $I->click( '0012 Test Revert User' );
 
 // Approve

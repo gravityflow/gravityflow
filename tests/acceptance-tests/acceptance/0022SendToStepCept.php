@@ -31,6 +31,7 @@ $I->amOnWorkflowPage( 'Inbox' );
 
 $I->amGoingTo( 'Approve the entry to complete the Approval Step.' );
 $I->click( '0022 Send To Step' );
+$I->waitForElement( 'button[value=approved]', 3 );
 $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
 $I->waitForText( 'Entry Approved', 3 );

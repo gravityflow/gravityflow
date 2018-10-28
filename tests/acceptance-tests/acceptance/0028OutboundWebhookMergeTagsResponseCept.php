@@ -27,6 +27,7 @@ $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortl
 $I->loginAsAdmin();
 
 $I->amOnWorkflowPage( 'Status' );
+$I->waitForText( '0028 Outgoing Webhook Merge Tags', 3 );
 $I->click( '0028 Outgoing Webhook Merge Tags' );
 
 $I->waitForText( 'Status: Approved', 3 );

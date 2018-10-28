@@ -26,9 +26,10 @@ $I->click( 'Submit' );
 
 
 $I->amOnWorkflowPage( 'Inbox' );
+$I->waitforText( 'Step Status Conditional Logic',3 );
 $I->click( 'Step Status Conditional Logic' );
 
-$I->waitforText( 'Approval Step' );
+$I->waitforText( 'Approval Step',3 );
 $I->see( 'Approval Step', '.gravityflow-status-box' );
 $I->click( 'Reject' );
 

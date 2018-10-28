@@ -18,7 +18,7 @@ $I->fillField( 'Single Line Text', 'testing' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 );
 $I->click( 'Submit' );
 
-$I->see( 'Thanks for contacting us! We will get in touch with you shortly.' );
+$I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 // Login to wp-admin
 $I->loginAsAdmin();

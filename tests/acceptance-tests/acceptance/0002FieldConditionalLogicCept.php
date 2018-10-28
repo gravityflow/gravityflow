@@ -33,6 +33,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
+$I->waitForText( 'Conditional Logic', 3 );
 $I->click( 'Conditional Logic' );
 
 // Approve

@@ -30,7 +30,7 @@ $I->click( 'input[type=submit]' );
 
 //$I->makeScreenshot( 'Form submitted.' );
 
-$I->see( 'Thanks for contacting us!' );
+$I->waitForText( 'Thanks for contacting us!', 3 );
 
 // Login to wp-admin
 $I->loginAsAdmin();

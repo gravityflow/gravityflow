@@ -43,7 +43,7 @@ $I->waitForElement( 'button[value=rejected]', 3 );
 $I->see( 'A note is required' );
 $I->fillField( ['name' => 'gravityflow_note'], 'Dates are expired.' );
 $I->click( 'button[value=rejected]' );
-$I->see( 'Entry Rejected' );
+$I->waitForText( 'Entry Rejected', 3 );
 
 // Test the output of {workflow_note} in the page created from the user input step assignee email.
 $I->amOnPage( '/0018-assignee-email-mt-note' );
