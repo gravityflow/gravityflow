@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Run acceptance tests
           command: |
-            docker-compose run --rm codeception run --html --xml -vvv -o "groups: ci-split-tests: [tests/acceptance-tests/acceptance/ci-split-tests]" -g ci-split-tests
+            docker-compose run --rm codeception run -c codeception-browserstack.yml --html --xml -vvv -o "groups: ci-split-tests: [tests/acceptance-tests/acceptance/ci-split-tests]" -g ci-split-tests
       - store_artifacts:
           path: ~/gravityflow/tests/acceptance-tests/_output
       - store_test_results:

@@ -8,6 +8,8 @@ services:
     environment:
       - GITHUB_TOKEN=$GITHUB_TOKEN
       - GF_KEY=$GF_KEY
+      - BROWSERSTACK_USER=$BROWSERSTACK_USER
+      - BROWSERSTACK_KEY=$BROWSERSTACK_KEY
     volumes:
       - ./:/project
       - wp-core:/wp-core

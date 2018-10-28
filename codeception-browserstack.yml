@@ -1,0 +1,80 @@
+actor: Tester
+params:
+    - env
+    - .env
+paths:
+    tests: tests/acceptance-tests
+    log: tests/acceptance-tests/_output
+    data: tests/acceptance-tests/_data
+    helpers: tests/acceptance-tests/_support
+settings:
+    bootstrap: _bootstrap.php
+    colors: true
+    memory_limit: 1024M
+modules:
+    config:
+        WPWebDriver:
+            host: '%BROWSERSTACK_USER%:%BROWSERSTACK_KEY%@hub-cloud.browserstack.com'
+            url: 'http://wordpress'
+            browser: chrome
+            port: 4444
+            window_size: '1024x768'
+            restart: true
+            wait: 0
+            adminUsername: admin
+            adminPassword: password
+            adminPath: /wp-admin
+            capabilities:
+              browserstack.local: true
+              browserstack.debug: true
+              browserstack.console: errors
+        WPLoader:
+            wpRootFolder: /wp-core
+            dbName: wordpress
+            dbHost: mysql
+            dbUser: wordpress
+            dbPassword: wordpress
+            wpDebug: false
+            tablePrefix: wp_
+            domain: wordpress
+            plugins: ['gravityforms/gravityforms.php', 'gravityflow/gravityflow.php']
+            activatePlugins: ['gravityforms/gravityforms.php', 'gravityflow/gravityflow.php']
+
+env:
+  win-chrome:
+    modules:
+      config:
+        WPWebDriver:
+          browser: 'internet explorer'
+          capabilities:
+            os: Windows
+            os_version: 10
+
+  win-ie:
+    modules:
+      config:
+        WPWebDriver:
+          browser: 'internet explorer'
+          capabilities:
+            os: Windows
+            os_version: 10
+
+  mac-safari:
+    modules:
+      config:
+        WPWebDriver:
+          browser: 'Safari'
+          window_size: 'maximize'
+          capabilities:
+            os: 'OS X'
+            os_version: 'High Sierra'
+            browserstack.safari.allowAllCookies: true
+
+  mac-chrome:
+    modules:
+      config:
+        WPWebDriver:
+          browser: 'chrome'
+          capabilities:
+            os: 'OS X'
+            os_version: 'Mojave'

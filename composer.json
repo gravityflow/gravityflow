@@ -1,23 +1,30 @@
 {
-	"name": "gravityflow",
-	"description": "Gravity Flow.",
-	"keywords": ["wordpress", "gravity forms"],
-	"type": "wordpress-plugin",
-	"homepage": "https://www.gravityflow.io",
-	"license": "GPL-3.0+",
-	"authors": [
-		{
-			"name": "stevehenty",
-			"email": "support@gravityflow.io",
-			"homepage": "https://gravityflow.io"
-		}
-	],
-	"support": {
-		"issues": "https://gravityflow.io"
-    },
-    "require-dev": {
-      "apigen/apigen": "~4.1.2",
-      "lucatume/wp-browser": "1.21",
-      "codeception/codeception": "2.3.7"
+  "name": "gravityflow",
+  "description": "Gravity Flow.",
+  "keywords": [
+    "wordpress",
+    "gravity forms"
+  ],
+  "type": "wordpress-plugin",
+  "homepage": "https://www.gravityflow.io",
+  "license": "GPL-3.0+",
+  "authors": [
+    {
+      "name": "stevehenty",
+      "email": "support@gravityflow.io",
+      "homepage": "https://gravityflow.io"
     }
+  ],
+  "support": {
+    "issues": "https://gravityflow.io"
+  },
+  "require-dev": {
+    "apigen/apigen": "~4.1.2",
+    "lucatume/wp-browser": "1.21",
+    "codeception/codeception": "2.5.0"
+  },
+  "require": {
+    "browserstack/browserstack-local": "^1.1",
+    "vlucas/phpdotenv": "^2.5"
+  }
 }

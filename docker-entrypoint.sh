@@ -55,6 +55,14 @@ else
 
 fi
 
+# Download the latest browserstack binary file
+curl -O "https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip"
+# Unzip it
+unzip -o BrowserStackLocal-linux-x64.zip
+chmod +x BrowserStackLocal
+# Run the file with user's access key
+nohup ./BrowserStackLocal --key ${BROWSERSTACK_KEY} &>/dev/null &
+
 cd /project
 
 exec "/repo/vendor/bin/codecept" "$@"

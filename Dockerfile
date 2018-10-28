@@ -10,6 +10,7 @@ RUN apt-get update && \
             libssl-dev \
             mysql-client \
             sudo less \
+            zip unzip \
         --no-install-recommends && \
         apt-get clean && \
         rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

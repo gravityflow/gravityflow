@@ -54,12 +54,12 @@ gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', str
 $I->loginAsAdmin();
 $I->amOnWorkflowPage( 'Inbox' );
 $I->click( '0038 Current Step Merge Tag' );
-$I->waitForText( '0038 Current Step Merge Tag : Entry #' );
+$I->waitForText( '0038 Current Step Merge Tag : Entry #', 3 );
 $I->see( 'Approval (Pending Approval)' );
 $I->click( 'Approve' );
-
+$I->waitForText( 'Entry Approved',3 );
 // Go to the page created from the approval email.
-$I->amOnPage( '/0038-approval-email' );
+$I->amOnPage( '/0038-approval-email/' );
 $I->see( '0038 Approval Email' );
 
 // Confirm the merge tags are replaced.
