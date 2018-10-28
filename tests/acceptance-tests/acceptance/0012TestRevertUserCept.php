@@ -20,7 +20,7 @@ $I->fillField( 'input[name="input_1"]', 'Some text' );
 $I->selectOption( 'select[name="input_2"]', 'Second Choice' );
 // Next page
 $I->click( '.gform_page_footer .gform_next_button' );
-$I->waitForElement( 'input[name="input_4"]', 3 );
+$I->waitForElement( 'input[name="input_4"]', 5 );
 $I->fillField( 'input[name="input_4"]', '42' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 $I->click( 'Submit' );
@@ -40,12 +40,13 @@ $I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
 
 // Verify number
+$I->waitForElement( 'input[name="input_4"]', 5 );
 $I->seeElement( 'input[name="input_4"]' );
 $I->fillField( 'input[name="input_4"]', '40' );
 $I->click( 'Submit' );
 
 // Revert
-$I->waitForElement( 'button[value=revert]', 3 );
+$I->waitForElement( 'button[value=revert]', 5 );
 $I->click( 'button[value=revert]' );
 
 // Update number

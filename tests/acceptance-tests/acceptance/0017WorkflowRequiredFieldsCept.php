@@ -30,6 +30,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
 $I->click( '0017 Workflow Required Fields' );
+$I->waitForText( 'Instructions: please review the values in the fields below and click on the Approve or Reject button', 3 );
 $I->see( 'Instructions: please review the values in the fields below and click on the Approve or Reject button' );
 
 $I->seeElement( 'button[value=approved]' );

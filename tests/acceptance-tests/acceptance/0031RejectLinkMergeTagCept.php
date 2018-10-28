@@ -17,6 +17,7 @@ $I->resetCookie( 'gflow_access_token' );
 
 // Submit the form
 $I->amOnPage( '/0031-reject-link-merge-tag' );
+$I->waitForText( '0031 Reject Link Merge Tag', 3 );
 $I->see( '0031 Reject Link Merge Tag' );
 $I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );

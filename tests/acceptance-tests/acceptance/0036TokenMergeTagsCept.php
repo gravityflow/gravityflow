@@ -17,6 +17,7 @@ $I->resetCookie( 'gflow_access_token' );
 
 // Submit the form
 $I->amOnPage( '/0036-token-merge-tags' );
+$I->waitForText( '0036 Token Merge Tags', 3 );
 $I->see( '0036 Token Merge Tags' );
 $I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );

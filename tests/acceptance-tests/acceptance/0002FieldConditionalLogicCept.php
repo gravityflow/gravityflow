@@ -24,6 +24,7 @@ $I->fillField( 'textarea[name=input_15]', 'Some text' );
 $I->scrollTo( [ 'css' => '.gform_page_footer .gform_next_button' ], 20, 50 ); // needed for chromedriver
 // Next page
 $I->click( '.gform_page_footer .gform_next_button' );
+$I->waitForElement( 'input[type=submit]', 3 );
 $I->click( 'input[type=submit]' );
 $I->waitForText( 'Thanks for contacting us!', 3 );
 

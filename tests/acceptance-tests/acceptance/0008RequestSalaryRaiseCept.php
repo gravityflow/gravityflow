@@ -21,7 +21,8 @@ $I->selectOption( 'select[name=input_2]', 'Third Choice' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 $I->click( 'Submit' );
 
-// trow number field error
+// Check number field error
+$I->waitForElement( 'div.validation_error', 3 );
 $I->seeElement( 'div.validation_error' );
 
 // fill number field with correct values

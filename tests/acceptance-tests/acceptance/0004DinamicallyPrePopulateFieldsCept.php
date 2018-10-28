@@ -22,6 +22,7 @@ $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromed
 
 // Next page
 $I->click( '.gform_page_footer .gform_next_button' );
+$I->waitForElement( 'textarea[name="input_6"]', 3 );
 $I->fillField( 'textarea[name="input_6"]', 'Discussion text field.' );
 $I->selectOption( 'select[name=input_8]', 'admin2 admin2' );
 

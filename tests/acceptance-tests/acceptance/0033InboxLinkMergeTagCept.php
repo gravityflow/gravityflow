@@ -29,7 +29,7 @@ $I->see( 'Inbox Link: Inbox' );
 
 // Test that the link token works for the email field assignee.
 $I->click( 'Inbox' );
-$I->waitForText( 'INBOX', 3 );
+$I->waitForText( 'INBOX', 5 );
 $I->see( '0033 Inbox Link Merge Tag', "//table[@id='gravityflow-inbox']/tbody/tr[1]/td[2]" );
 $I->see( 'Approval', "//table[@id='gravityflow-inbox']/tbody/tr[1]/td[4]" );
 $I->click( '0033 Inbox Link Merge Tag' );

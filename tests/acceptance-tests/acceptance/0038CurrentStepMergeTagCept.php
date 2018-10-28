@@ -14,6 +14,7 @@ $I->wantTo( 'Test that the current step merge tags are replaced in the form conf
 // Submit the form.
 $I->logOut();
 $I->amOnPage( '/0038-current-step-merge-tag' );
+$I->waitForText( '0038 Current Step Merge Tag', 3 );
 $I->see( '0038 Current Step Merge Tag' );
 $I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );

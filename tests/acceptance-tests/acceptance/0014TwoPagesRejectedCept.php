@@ -22,6 +22,7 @@ $I->selectOption( 'input[name=input_7]', 'Third Choice' );
 $I->scrollTo( [ 'css' => '.gform_page_footer .gform_next_button' ], 20, 50 ); // needed for chromedriver
 // Next page
 $I->click( '.gform_page_footer .gform_next_button' );
+$I->waitForElement( 'select[name=input_20]', 3 );
 $I->selectOption( 'select[name=input_20]', 'Third Choice' );
 
 //$I->makeScreenshot( 'Before form submit.' );

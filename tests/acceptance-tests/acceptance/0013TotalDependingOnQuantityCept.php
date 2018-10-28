@@ -43,6 +43,7 @@ $I->seeElement( 'button[value=rejected]' );
 $I->click( 'button[value=rejected]' );
 
 // Change quantity
+$I->waitForElement( 'input[name="input_6"]', 3 );
 $I->seeElement( 'input[name="input_6"]' );
 $I->fillField( 'input[name="input_6"]', '2' );
 $I->click( 'Submit' );

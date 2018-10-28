@@ -18,6 +18,7 @@ $I->resetCookie( 'gflow_access_token' );
 // Submit the form
 $I->amOnPage( '/0026-role-assignee-token' );
 
+$I->waitForText( '0026 Role Assignee Token', 3 );
 $I->see( '0026 Role Assignee Token' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 
