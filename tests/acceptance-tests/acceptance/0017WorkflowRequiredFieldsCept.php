@@ -48,4 +48,11 @@ $I->fillField( 'textarea[name="gravityflow_note"]', 'Second note added' );
 $I->click( 'Update' );
 $I->selectOption( 'input[name="gravityflow_status"]', 'Complete' );
 $I->click( 'Update' );
+
+$I->waitForText( 'This field is required.', 3 );
+$I->fillField( 'input[name="input_3"]', 'Required on complete' );
+$I->fillField( 'textarea[name="gravityflow_note"]', 'Final note added' );
+$I->selectOption( 'input[name="gravityflow_status"]', 'Complete' );
+$I->click( 'Update' );
+
 $I->waitForText( 'Entry updated and marked complete.', 3 );
