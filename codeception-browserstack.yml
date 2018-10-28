@@ -1,7 +1,6 @@
 actor: Tester
 params:
     - env
-    - .env
 paths:
     tests: tests/acceptance-tests
     log: tests/acceptance-tests/_output
