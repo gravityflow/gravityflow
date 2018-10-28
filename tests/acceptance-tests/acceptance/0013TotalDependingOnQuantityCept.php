@@ -52,4 +52,5 @@ $I->click( 'Submit' );
 $I->waitForText( '$44.00', 3 );
 $I->seeElement( 'button[value=approved]' );
 $I->click( 'button[value=approved]' );
+$I->waitForText( 'Entry Approved', 3 );
 $I->see( 'Entry Approved' );

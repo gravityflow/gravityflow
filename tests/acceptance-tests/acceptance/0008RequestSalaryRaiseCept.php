@@ -44,6 +44,7 @@ $I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
 
 // Send to CEO
+$I->waitForElement( 'select[name=gravityflow_admin_action]', 3 );
 $I->selectOption( 'select[name=gravityflow_admin_action]', 'CEO approval' );
 $I->click( 'Apply' );
 
@@ -52,3 +53,4 @@ $I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
 
 $I->waitForText( 'Status: Approved', 3 );
+$I->see( 'Status: Approved' );

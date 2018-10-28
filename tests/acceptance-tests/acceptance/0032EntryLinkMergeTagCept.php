@@ -30,6 +30,6 @@ $I->see( 'Entry Link: Entry' );
 
 // Test that the link token works for the email field assignee.
 $I->click( 'Entry' );
-$I->waitForText( 'INBOX', 3 );
+$I->waitForText( '0032 Entry Link Merge Tag : Entry #', 3 );
 $I->see( '0032 Entry Link Merge Tag : Entry #' );
 $I->see( 'Email: entry@test.test (Pending)' );

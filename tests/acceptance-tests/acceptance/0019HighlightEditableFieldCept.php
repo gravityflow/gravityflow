@@ -29,6 +29,7 @@ $I->amOnWorkflowPage( 'Inbox' );
 $I->click( '0019 User Input Highlight Editable Fields' );
 
 // Find 3 highlighted fields
+$I->waitForText( 'Paragraph', 3 );
 $I->see( 'Paragraph', ['css' => '.green-background label'] );
 $I->see( 'Dropdown', ['css' => '.green-background label'] );
 $I->see( 'Admin only radio required', ['css' => '.green-background label'] );

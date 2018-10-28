@@ -29,9 +29,9 @@ $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortl
 $I->loginAsAdmin();
 $I->seeInCurrentUrl( '/wp-admin/' );
 
+
 // Go to Inbox
-$I->click( 'Workflow' );
-$I->click( 'Inbox' );
+$I->amOnWorkflowPage( 'Inbox' );
 $I->see( 'Workflow Inbox' );
 $I->click( 'Specific Assign' );
 

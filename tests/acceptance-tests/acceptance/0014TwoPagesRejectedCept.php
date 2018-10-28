@@ -42,6 +42,7 @@ $I->amOnWorkflowPage( 'Inbox' );
 $I->click( '0014 Two Pages Rejected' );
 
 // Reject
+$I->waitForText( 'Reject', 3 );
 $I->click( 'Reject' );
 
 // Complete

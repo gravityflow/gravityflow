@@ -57,4 +57,5 @@ $I->click( 'Submit' );
 // Approve
 $I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
+$I->waitForText( 'Entry Approved', 3 );
 $I->see( 'Entry Approved' );

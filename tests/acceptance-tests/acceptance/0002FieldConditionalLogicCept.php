@@ -42,7 +42,7 @@ $I->waitForElement( 'button[value=approved]', 3 );
 $I->click( 'button[value=approved]' );
 
 // Check field conditional logic on the user input step
-$I->waitForText( 'Some text', 3 );
+$I->waitForText( 'Second Section - Second Choice', 3 );
 $I->see( 'Second Section - Second Choice' );
 
 $I->seeElement( 'textarea[name=input_15]' );

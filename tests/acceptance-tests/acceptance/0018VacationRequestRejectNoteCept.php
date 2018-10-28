@@ -39,7 +39,7 @@ $I->waitForElement( 'button[value=rejected]', 3 );
 $I->click( 'button[value=rejected]' );
 
 // Reject with note
-$I->waitForElement( 'button[value=rejected]', 3 );
+$I->waitForText( 'A note is required', 3 );
 $I->see( 'A note is required' );
 $I->fillField( ['name' => 'gravityflow_note'], 'Dates are expired.' );
 $I->click( 'button[value=rejected]' );

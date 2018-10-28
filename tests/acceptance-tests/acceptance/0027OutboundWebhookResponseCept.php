@@ -37,13 +37,15 @@ $I->seeInField('#input_27_2', 'Why it is the answer to the Ultimate Question of 
 $I->scrollTo( [ 'css' => 'input[type=submit]' ] );
 $I->click( 'Submit' );
 
-$I->waitForText( 'Status: Pending', 3 );
+$I->waitForText( 'Status: Pending', 5 );
+$I->scrollTo( ['css' => '.gravityflow-timeline'], 20, 50 );
 $I->see( 'https://unit-test-webhook.com/200-empty. RESPONSE: 202 Accepted (Success)' );
 $I->seeInField('#input_27_1', 'Codeception Question');
 $I->seeInField('#input_27_3', '42');
 $I->seeInField('#input_27_2', 'Why it is the answer to the Ultimate Question of Life, the Universe, and Everything');
 $I->click( 'Submit' );
 
+$I->waitForText( 'https://unit-test-webhook.com/200-0027. RESPONSE: 202 Accepted (Success)', 5 );
 $I->see( 'https://unit-test-webhook.com/200-0027. RESPONSE: 202 Accepted (Success)' );
 $I->seeInField('#input_27_1', 'customQuestion200');
 $I->seeInField('#input_27_3', 'customAnswer200');

@@ -19,6 +19,7 @@ $I = new AcceptanceTester( $scenario );
 $I->loginAsAdmin();
 
 $I->amOnPage( '/step-status-conditional-logic' );
+$I->waitforText( 'Single Line',3 );
 $I->fillField( 'Single Line', 'test' );
 $I->fillField( 'Paragraph', 'test' );
 $I->selectOption( 'User', '1' );

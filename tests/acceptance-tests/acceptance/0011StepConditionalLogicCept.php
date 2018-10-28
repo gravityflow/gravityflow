@@ -18,9 +18,10 @@ $I->selectOption( 'User', '1' );
 $I->click( 'Submit' );
 
 $I->amOnWorkflowPage( 'Inbox' );
+$I->waitforText( '0011 Step Conditional Logic', 3 );
 $I->click( '0011 Step Conditional Logic' );
 
-$I->waitforText( 'Approval if Created By ID1' );
+$I->waitforText( 'Approval if Created By ID1', 3 );
 $I->see( 'Approval if Created By ID1', '.gravityflow-status-box' );
 $I->dontSee( 'Approval if Created By ID2', '.gravityflow-status-box' );
 $I->click( 'Approve' );

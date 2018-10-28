@@ -14,12 +14,14 @@ $I->wantTo( 'Test that the token merge tags are replaced in the assignee email.'
 // Submit the form as an anonymous user.
 $I->logOut();
 $I->amOnPage( '/0037-created-by-merge-tag' );
+$I->waitForText( '0037 Created By Merge Tag', 3 );
 $I->see( '0037 Created By Merge Tag' );
 $I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 // Go to the page created from the notification step email.
 $I->amOnPage( '/0037-workflow-notification' );
+$I->waitForText( '0037 Workflow Notification', 3 );
 $I->see( '0037 Workflow Notification' );
 
 // Confirm the merge tags are replaced by empty strings when an anonymous user submits the form
