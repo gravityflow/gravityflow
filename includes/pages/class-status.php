@@ -974,9 +974,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 				$label .= '' . sprintf( '<div class="step_status_queue">(%s: %s)</div>', esc_html__( 'Queued', 'gravityflow' ), $scheduled_date );
 
-			}
-
-			if ( $step->supports_expiration() && $step->expiration ) {
+			} else if ( $step->supports_expiration() && $step->expiration ) {
 				$step->_entry = $item;
 				$expiration_timestamp = $step->get_expiration_timestamp();
 				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
