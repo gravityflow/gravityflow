@@ -21,7 +21,7 @@
   "require-dev": {
     "apigen/apigen": "~4.1.2",
     "lucatume/wp-browser": "1.21",
-    "codeception/codeception": "2.5.0"
+    "codeception/codeception": "2.3.7"
   },
   "require": {
     "browserstack/browserstack-local": "^1.1",
