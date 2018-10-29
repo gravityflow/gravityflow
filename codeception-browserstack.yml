@@ -27,6 +27,7 @@ modules:
               browserstack.local: true
               browserstack.debug: true
               browserstack.console: errors
+              browserstack.localIdentifier: 'gravityflow-%CIRCLE_NODE_INDEX%'
         WPLoader:
             wpRootFolder: /wp-core
             dbName: wordpress
