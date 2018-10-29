@@ -30,7 +30,7 @@ $I->see( 'Reject Link: Reject' );
 
 // Test that the link token works for the email field assignee.
 $I->click( 'Reject' );
-$I->waitForText( 'INBOX', 3 );
+$I->waitForText( 'inbox', 5 );
 //$I->see( 'Entry Rejected' ); // Occurs when the test is run on its own.
 //$I->see( "You don't have permission to view this entry." ); // Occurs when multiple tests run.
 

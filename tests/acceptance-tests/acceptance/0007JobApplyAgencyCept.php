@@ -58,6 +58,7 @@ $I->amOnWorkflowPage( 'Inbox' );
 $I->click( '0007 Job Apply Agency' );
 
 // Check data
+$I->waitForElement( 'input[name="input_5"]', 3 );
 $I->fillField( 'input[name="input_5"]', 'example@example.com' );
 $I->fillField( 'textarea[name="gravityflow_note"]', 'Email added' );
 $I->click( 'Submit' );
