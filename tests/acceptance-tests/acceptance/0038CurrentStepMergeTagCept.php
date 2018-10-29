@@ -43,6 +43,8 @@ $I->assertStringStartsWith( date( 'F j, Y', strtotime( '+1 week' ) ) . ' at', $e
 
 // Don't wait for the cron, start the step now.
 $entry_id = $I->grabTextFrom( '.entry-id' );
+$entry_id = intval( $entry_id );
+$I->assertNotEmpty( $entry_id );
 $entry    = GFAPI::get_entry( $entry_id );
 $form     = GFAPI::get_form( $entry['form_id'] );
 $step     = gravity_flow()->get_current_step( $form, $entry );
