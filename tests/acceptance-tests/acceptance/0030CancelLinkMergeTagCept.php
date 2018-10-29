@@ -30,7 +30,7 @@ $I->see( 'Cancel Link: Cancel Workflow' );
 
 // Test that the link token works for the email field assignee.
 $I->click( 'Cancel Workflow' );
-$I->waitForText( 'inbox', 5 );
+$I->waitForText( 'inbox', 5, '.entry-title' );
 //$I->see( 'Workflow Cancelled' ); // Occurs when the test is run on its own.
 //$I->see( "You don't have permission to view this entry." ); // Occurs when multiple tests run.
 
