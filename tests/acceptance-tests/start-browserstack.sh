@@ -3,7 +3,7 @@
 cd ../../
 
 # Run just one test
-#docker-compose run --rm codeception run -c codeception-browserstack.yml tests/acceptance-tests/acceptance/0038CurrentStepMergeTagCept.php -vvv --html --env mac-safari
+#docker-compose run --rm codeception run -c codeception-browserstack.yml tests/acceptance-tests/acceptance/0038CurrentStepMergeTagCept.php -vvv --html --env win-chrome
 
 # Run tests in a group.
 # Create groups by adding the following comment to the top of the tests
