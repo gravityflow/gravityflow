@@ -11,7 +11,3 @@ modules:
         - WPLoader
         - WPWebDriver
         - Asserts
-extensions:
-  enabled:
-  - Codeception\Extension\RunProcess:
-      sleep: 5 # wait 5 seconds for everything to get set up.
