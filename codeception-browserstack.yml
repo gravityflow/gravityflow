@@ -44,7 +44,7 @@ env:
     modules:
       config:
         WPWebDriver:
-          browser: 'internet explorer'
+          browser: 'chrome'
           capabilities:
             os: Windows
             os_version: 10
