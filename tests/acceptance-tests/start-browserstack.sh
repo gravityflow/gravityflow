@@ -11,4 +11,4 @@ cd ../../
 #docker-compose run --rm codeception run -g myGroup -vvv --html
 
 # Run all tests
-docker-compose run --rm codeception run -c codeception-browserstack.yml -vvv --html --env mac-safari
+docker-compose run --rm codeception run -c codeception-browserstack.yml -vvv --html --env win-chrome
