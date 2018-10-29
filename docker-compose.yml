@@ -10,6 +10,7 @@ services:
       - GF_KEY=$GF_KEY
       - BROWSERSTACK_USER=$BROWSERSTACK_USER
       - BROWSERSTACK_KEY=$BROWSERSTACK_KEY
+      - CIRCLE_NODE_INDEX=$CIRCLE_NODE_INDEX
     volumes:
       - ./:/project
       - wp-core:/wp-core
