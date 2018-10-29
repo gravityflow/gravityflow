@@ -61,6 +61,7 @@ curl -O "https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux
 unzip -o BrowserStackLocal-linux-x64.zip
 chmod +x BrowserStackLocal
 # Run the file with user's access key
+echo "Starting BrowserStackLocal gravityflow-${CIRCLE_NODE_INDEX}"
 nohup ./BrowserStackLocal --key ${BROWSERSTACK_KEY} --local-identifier gravityflow-${CIRCLE_NODE_INDEX} &
 
 cd /project
