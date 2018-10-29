@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     machine: true
-    parallelism: 1
+    parallelism: 4
     working_directory: ~/gravityflow
     steps:
       - checkout
