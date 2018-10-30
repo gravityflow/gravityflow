@@ -46,5 +46,5 @@ $I->fillField( 'Single Line Text', 'Test2' );
 $I->fillField( 'Paragraph', 'Test2' );
 $I->click( 'Submit' );
 
-$I->waitForText( 'Status: Approved', 3 );
+$I->waitForText( 'Status: Approved', 10 );
 $I->see( 'Status: Approved' );

@@ -36,7 +36,7 @@ $I->click( '#gravityflow_save_progress_button' );
 $I->waitForText( 'Entry updated - in progress.' );
 $I->see( 'Entry updated - in progress.' );
 $I->click( '#gravityflow_submit_button' );
-$I->waitForText( 'Entry updated and marked complete.' );
+$I->waitForText( 'Entry updated and marked complete.', 10 );
 $I->see( 'Entry updated and marked complete.' );
 
 // Test - Radio Buttons - In Progress
@@ -44,7 +44,7 @@ $I->waitForText( 'Save Progress - Radio Buttons - In Progress Default (Pending I
 $I->see( 'Save Progress - Radio Buttons - In Progress Default (Pending Input)' );
 $I->seeOptionIsSelected( 'input[name=gravityflow_status]', 'in_progress' );
 $I->click( '#gravityflow_update_button' );
-$I->waitForText( 'Entry updated - in progress.' );
+$I->waitForText( 'Entry updated - in progress.', 10 );
 $I->see( 'Entry updated - in progress.' );
 $I->click( 'input#gravityflow_complete' );
 $I->waitForElement( '#gravityflow_update_button', 3 );

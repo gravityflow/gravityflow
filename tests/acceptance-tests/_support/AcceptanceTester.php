@@ -38,6 +38,6 @@ class AcceptanceTester extends \Codeception\Actor {
 	public function amOnWorkflowPage( $page ) {
 		$I = $this;
 		$I->amOnPage( '/wp-admin/admin.php?page=gravityflow-' . strtolower( $page ) );
-		$I->waitForText( $page, 3 );
+		$I->waitForText( $page );
 	}
 }

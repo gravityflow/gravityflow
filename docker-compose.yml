@@ -2,9 +2,10 @@ version: '2'
 
 services:
   codeception:
-    image: stevehenty/gravityflow_codeception
+    image: stevehenty/gravityflow_codeception:latest
     depends_on:
       - wordpress
+      - browserstacklocal
     environment:
       - GITHUB_TOKEN=$GITHUB_TOKEN
       - GF_KEY=$GF_KEY
@@ -46,5 +47,10 @@ services:
     ports:
       - '4444'
       - '5900:5900'
+
+  browserstacklocal:
+    image: mtsmfm/browserstacklocal
+    command: --key $BROWSERSTACK_KEY --local-identifier gravityflow-$CIRCLE_NODE_INDEX
+
 volumes:
   wp-core:

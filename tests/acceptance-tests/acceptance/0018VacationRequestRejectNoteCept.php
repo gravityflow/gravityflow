@@ -24,7 +24,10 @@ $I->fillField( 'Date from', '08/17/2016' );
 $I->fillField( 'Date to', '08/18/2016' );
 $I->fillField( 'Comments', 'Comments text' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ] );
+// Close the date pickers
+$I->executeJS( 'return jQuery("input[type=submit]").focus()' );
 $I->click( 'input[type=submit]' );
+$I->waitForText( 'Thanks for contacting us' );
 
 // Login to wp-admin
 $I->loginAsAdmin();
@@ -32,7 +35,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 
 // Go to Inbox
 $I->amOnWorkflowPage( 'Inbox' );
-$I->click( 'Vacation Request' );
+$I->click( ['link' => '0018 Vacation Request Reject Note' ] );
 
 // Reject without note
 $I->waitForElement( 'button[value=rejected]', 3 );

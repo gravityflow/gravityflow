@@ -15,9 +15,7 @@ modules:
         WPWebDriver:
             host: '%BROWSERSTACK_USER%:%BROWSERSTACK_KEY%@hub-cloud.browserstack.com'
             url: 'http://wordpress'
-            browser: chrome
             port: 4444
-            window_size: '1024x768'
             restart: true
             wait: 0
             adminUsername: admin
@@ -49,7 +47,15 @@ env:
           capabilities:
             os: Windows
             os_version: 10
-
+  # Not OK
+  win-firefox:
+    modules:
+      config:
+        WPWebDriver:
+          browser: 'firefox'
+          capabilities:
+            os: Windows
+            os_version: 10
   win-ie:
     modules:
       config:
@@ -58,7 +64,7 @@ env:
           capabilities:
             os: Windows
             os_version: 10
-
+  # Not OK
   mac-safari:
     modules:
       config:
@@ -78,3 +84,28 @@ env:
           capabilities:
             os: 'OS X'
             os_version: 'Mojave'
+
+  ios:
+    modules:
+      config:
+        WPWebDriver:
+          browser: 'iPhone'
+          window_size: false
+          capabilities:
+            os: 'ios'
+            os_version: '11.0'
+            real_mobile: true
+
+  android:
+    modules:
+      config:
+        WPWebDriver:
+          browser: 'chrome'
+          window_size: false
+          capabilities:
+            device: 'Samsung Galaxy Note 8'
+            os: 'android'
+            os_version: '7.1'
+            real_mobile: true
+            unicode_keyboard: true
+            reset_keyboard: true

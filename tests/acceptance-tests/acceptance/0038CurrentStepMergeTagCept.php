@@ -45,9 +45,11 @@ $I->assertStringStartsWith( date( 'F j, Y', strtotime( '+1 week' ) ) . ' at', $e
 $entry_id = $I->grabTextFrom( '.entry-id' );
 $entry_id = intval( $entry_id );
 $I->assertNotEmpty( $entry_id );
-$entry    = GFAPI::get_entry( $entry_id );
-$form     = GFAPI::get_form( $entry['form_id'] );
-$step     = gravity_flow()->get_current_step( $form, $entry );
+$entry = GFAPI::get_entry( $entry_id );
+$I->assertArrayHasKey( 'form_id', $entry );
+$form = GFAPI::get_form( $entry['form_id'] );
+$I->assertArrayHasKey( 'id', $form );
+$step = gravity_flow()->get_current_step( $form, $entry );
 
 $step->scheduled = false;
 $step->start();

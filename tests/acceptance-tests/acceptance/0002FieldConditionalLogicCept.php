@@ -26,7 +26,7 @@ $I->scrollTo( [ 'css' => '.gform_page_footer .gform_next_button' ], 20, 50 ); //
 $I->click( '.gform_page_footer .gform_next_button' );
 $I->waitForElement( 'input[type=submit]', 3 );
 $I->click( 'input[type=submit]' );
-$I->waitForText( 'Thanks for contacting us!', 3 );
+$I->waitForText( 'Thanks for contacting us!' );
 
 // Login to wp-admin
 $I->loginAsAdmin();

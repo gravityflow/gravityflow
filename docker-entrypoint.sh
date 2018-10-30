@@ -55,14 +55,6 @@ else
 
 fi
 
-echo "Downloading the latest browserstack binary file"
-curl -O "https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip"
-# Unzip it
-unzip -o BrowserStackLocal-linux-x64.zip
-chmod +x BrowserStackLocal
-echo "Starting BrowserStackLocal"
-echo "ID gravityflow-${CIRCLE_NODE_INDEX}"
-nohup ./BrowserStackLocal --key ${BROWSERSTACK_KEY} --local-identifier gravityflow-${CIRCLE_NODE_INDEX} &
 cd /project
 
 exec "/repo/vendor/bin/codecept" "$@"
