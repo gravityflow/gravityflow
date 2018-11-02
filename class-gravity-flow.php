@@ -334,6 +334,10 @@ if ( class_exists( 'GFForms' ) ) {
 				if ( version_compare( $previous_version, '2.0.2-dev', '<' ) ) {
 					$this->upgrade_202();
 				}
+
+				if ( version_compare( $previous_version, '2.4.0-dev', '<' ) ) {
+					$this->upgrade_240();
+				}
 			}
 
 			wp_cache_flush();
@@ -489,6 +493,37 @@ PRIMARY KEY  (id)
 
 				if ( $feed_dirty ) {
 					$this->update_feed_meta( $feed['id'], $feed_meta );
+				}
+			}
+		}
+
+		/**
+		 * Migrate the Gravity PDF Select field to a Checkbox field
+		 */
+		public function upgrade_240() {
+			$steps = $this->get_steps();
+
+			foreach ( $steps as $step ) {
+				$step_dirty = false;
+				$feed_meta  = $step->get_feed_meta();
+				foreach ( $feed_meta as $key => $value ) {
+					if ( strpos( $key, 'gpdfEnable' ) !== false && $value ) {
+						$pdf_key = str_replace( 'gpdfEnable', 'gpdfValue', $key );
+						if ( isset( $feed_meta[ $pdf_key ] ) ) {
+							$pdf_id      = $feed_meta[ $pdf_key ];
+							$new_pdf_key = str_replace( 'gpdfEnable', 'gravitypdf_' . $pdf_id, $key );
+
+							unset( $feed_meta[ $key ] );
+							unset( $feed_meta[ $pdf_key ] );
+							$feed_meta[ $new_pdf_key ] = '1';
+
+							$step_dirty = true;
+						}
+					}
+				}
+
+				if ( $step_dirty ) {
+					$this->save_feed_settings( $step->get_id(), $step->get_form_id(), $feed_meta );
 				}
 			}
 		}
