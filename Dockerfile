@@ -1,4 +1,4 @@
-FROM php:7.0-cli
+FROM php:7.2-cli
 
 MAINTAINER Steve Henty steve@gravityflow.io
 
