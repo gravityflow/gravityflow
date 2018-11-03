@@ -23,6 +23,20 @@ class AcceptanceTester extends \Codeception\Actor {
 	 * Define custom actions here
 	 */
 
+    public function loginAsAdmin(){
+        $I = $this;
+        $I->amOnPage('/wp-login.php');
+        $I->wait(2);
+        $I->submitForm('#loginform', ['log' =>'admin','pwd' => 'password'], '#wp-submit');
+    }
+
+    public function loginAs( $user, $pass ){
+        $I = $this;
+        $I->amOnPage('/wp-login.php');
+        $I->wait(2);
+        $I->submitForm('#loginform', ['log' => $user,'pwd' => $pass ], '#wp-submit');
+    }
+
 	public function logOut() {
 		$I = $this;
 		$I->amOnPage( '/wp-login.php?action=logout' );
