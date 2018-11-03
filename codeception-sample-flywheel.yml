@@ -11,32 +11,33 @@ settings:
 modules:
     config:
         WPLoader:
-            wpRootFolder: /Users/steve/Pressmatic Sites/testing/app/public
-            dbName: pressmatic
+            wpRootFolder: /Users/steve/Local Sites/testing/app/public
+            dbName: local
             dbHost: 192.168.55.100:5007
             dbUser: root
             dbPassword: root
             wpDebug: true
             tablePrefix: wp_
-            domain: testing.dev
+            domain: testing.local
             plugins: ['gravityforms/gravityforms.php', 'gravityflow/gravityflow.php']
             activatePlugins: ['gravityforms/gravityforms.php', 'gravityflow/gravityflow.php']
         WPBrowser:
-            url: 'http://testing.dev'
+            url: 'http://testing.local'
             adminUsername: admin
             adminPassword: password
             adminUrl: /wp-admin
         WPDb:
-            dsn: 'mysql:host=testing.dev;dbname=pressmatic'
+            dsn: 'mysql:host=testing.local;dbname=local'
             user: root
             password: root
             populate: true
             cleanup: true
-            url: 'http://testing.dev'
+            url: 'http://testing.local'
             tablePrefix: wp_
         WPWebDriver:
-            url: 'http://testing.dev'
+            url: 'http://testing.local'
             browser: chrome
+            host: localhost
             window_size: '1524x1768'
             restart: true
             wait: 1
