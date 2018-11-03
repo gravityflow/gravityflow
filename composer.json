@@ -20,7 +20,7 @@
   },
   "require-dev": {
     "apigen/apigen": "~4.1.2",
-    "lucatume/wp-browser": "~1.21"
+    "lucatume/wp-browser": "~2.1.6"
   },
   "require": {
     "browserstack/browserstack-local": "^1.1",
