@@ -100,7 +100,7 @@ env:
             os: 'OS X'
             os_version: 'Mojave'
 
-  # OK
+  # NOT OK - flaky connections
   ios:
     modules:
       config:
