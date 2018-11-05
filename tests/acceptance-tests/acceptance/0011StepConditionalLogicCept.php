@@ -30,7 +30,6 @@ $I->waitforText( 'Approval if User Field ID1' );
 $I->see( 'Approval if User Field ID1', '.gravityflow-status-box' );
 $I->dontSee( 'Approval if User Field ID2', '.gravityflow-status-box' );
 $I->click( 'Approve' );
-$I->see( 'Entry Approved' );
-
+$I->waitforText( 'Entry Approved' );
 
 

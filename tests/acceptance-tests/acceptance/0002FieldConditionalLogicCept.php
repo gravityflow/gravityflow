@@ -14,18 +14,19 @@ $I->wantTo( 'Test the field conditional logic on the user input step' );
 // Submit the form
 $I->amOnPage( '/0002-conditional-logic' );
 
-$I->see( 'Conditional Logic' );
-$I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
+$I->see( '0002 Conditional Logic' );
+$I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 );
 $I->selectOption( 'input[name=input_7]', 'Second Choice' );
 $I->dontSeeElement( 'textarea[name=input_15]' );
 $I->checkOption( 'input[name=input_13\\.1]' );
 $I->seeElement( 'textarea[name=input_15]' );
 $I->fillField( 'textarea[name=input_15]', 'Some text' );
-$I->scrollTo( [ 'css' => '.gform_page_footer .gform_next_button' ], 20, 50 ); // needed for chromedriver
+$I->scrollTo( [ 'css' => '.gform_page_footer .gform_next_button' ], 20, 50 );
 // Next page
 $I->click( '.gform_page_footer .gform_next_button' );
-$I->waitForElement( 'input[type=submit]', 3 );
-$I->click( 'input[type=submit]' );
+$I->waitForElement( 'input[type=submit]', 30, '.gform_page_footer' );
+$I->scrollTo( [ 'css' => '.gform_page_footer' ], 20, 50 );
+$I->click( '#gform_submit_button_2' );
 $I->waitForText( 'Thanks for contacting us!' );
 
 // Login to wp-admin

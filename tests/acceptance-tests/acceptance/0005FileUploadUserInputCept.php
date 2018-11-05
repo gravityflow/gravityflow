@@ -7,6 +7,10 @@
 
 $I = new AcceptanceTester( $scenario );
 
+if ( in_array( $scenario->current('env'), array( 'android', 'ios' ) ) ) {
+    return;
+}
+
 $I->wantTo( 'Test the file upload field in the user input step' );
 
 // Submit the form

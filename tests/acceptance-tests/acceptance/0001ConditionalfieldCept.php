@@ -12,16 +12,15 @@ $I->wantTo( 'Test the field conditional logic and the numeric input validation' 
 // Submit the form
 $I->amOnPage( '/0001-conditional-field' );
 $I->waitForText( 'Conditional Field', 10, ['class' => 'gform_title'] );
-$I->scrollTo( [ 'class' => 'gform_title' ] ); // needed for chromedriver
+$I->scrollTo( [ 'class' => 'gform_title' ] );
 $I->selectOption( 'input[name=input_1]', 'Second Choice' );
 $I->seeElement('select[name="input_3"]');
 $I->selectOption( 'select[name=input_3]', 'Second Choice' );
 $I->seeElement('input[name="input_4"]');
 $I->fillField( 'input[name=input_4]', '123NAN' );
-$I->scrollTo( [ 'css' => 'input[type=submit]' ] ); // needed for chromedriver
+$I->scrollTo( [ 'css' => 'input[type=submit]' ] );
 $I->click( 'Submit' );
 
-// trow number field error
 $I->waitForElement( 'div.validation_error', 3 );
 
 // fill number field with correct values

@@ -17,7 +17,7 @@ modules:
             url: 'http://wordpress'
             port: 4444
             restart: true
-            wait: 0
+            wait: 60
             adminUsername: admin
             adminPassword: password
             adminPath: /wp-admin
@@ -39,6 +39,7 @@ modules:
             activatePlugins: ['gravityforms/gravityforms.php', 'gravityflow/gravityflow.php']
 
 env:
+  # OK
   win-chrome:
     modules:
       config:
@@ -56,6 +57,17 @@ env:
           capabilities:
             os: Windows
             os_version: 10
+
+  # Not OK - resetCookie crashes Edge
+  win-edge:
+    modules:
+      config:
+        WPWebDriver:
+          browser: 'Edge'
+          capabilities:
+            os: Windows
+            os_version: 10
+  # OK
   win-ie:
     modules:
       config:
@@ -64,6 +76,8 @@ env:
           capabilities:
             os: Windows
             os_version: 10
+            browserstack.ie.compatibility: 10001 # Version 11 run in protected mode for intranet domains.
+
   # Not OK
   mac-safari:
     modules:
@@ -76,6 +90,7 @@ env:
             os_version: 'High Sierra'
             browserstack.safari.allowAllCookies: true
 
+  # OK
   mac-chrome:
     modules:
       config:
@@ -85,6 +100,7 @@ env:
             os: 'OS X'
             os_version: 'Mojave'
 
+  # OK
   ios:
     modules:
       config:
@@ -93,9 +109,9 @@ env:
           window_size: false
           capabilities:
             os: 'ios'
-            os_version: '11.0'
+            os_version: '12.0'
             real_mobile: true
-
+  # OK
   android:
     modules:
       config:

@@ -26,15 +26,17 @@ class AcceptanceTester extends \Codeception\Actor {
     public function loginAsAdmin(){
         $I = $this;
         $I->amOnPage('/wp-login.php');
-        $I->wait(2);
+        $I->waitForElement('#loginform', 60);
         $I->submitForm('#loginform', ['log' =>'admin','pwd' => 'password'], '#wp-submit');
+        $I->waitForElement( '#wpwrap', 60, 'body.wp-admin' );
     }
 
     public function loginAs( $user, $pass ){
         $I = $this;
         $I->amOnPage('/wp-login.php');
-        $I->wait(2);
+        $I->waitForElement('#loginform', 60);
         $I->submitForm('#loginform', ['log' => $user,'pwd' => $pass ], '#wp-submit');
+        $I->waitForElement( '#wpwrap', 60, 'body.wp-admin' );
     }
 
 	public function logOut() {
@@ -52,6 +54,15 @@ class AcceptanceTester extends \Codeception\Actor {
 	public function amOnWorkflowPage( $page ) {
 		$I = $this;
 		$I->amOnPage( '/wp-admin/admin.php?page=gravityflow-' . strtolower( $page ) );
-		$I->waitForText( $page );
+        $I->waitForElement( '#wpwrap', 60, 'body.wp-admin' );
 	}
+
+    /**
+     * @param int $timeout
+     */
+    public function waitForPageLoad( $timeout = 60 )
+    {
+        $I = $this;
+        $I->waitForJS("return jQuery.active == 0;",$timeout);
+    }
 }
