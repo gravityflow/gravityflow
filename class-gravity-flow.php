@@ -612,6 +612,16 @@ PRIMARY KEY  (id)
 					),
 				),
 				array(
+					'handle'  => 'gform_field_filter',
+					'src'     => GFCommon::get_base_url() . "/js/routing-setting{$min}.js",
+					'deps'    => array( 'jquery', 'gform_datepicker_init' ),
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=0' ),
+					),
+				),
+				array(
 					'handle'   => 'gravityflow_generic_map_js',
 					'src'      => $this->get_base_url() . "/js/generic-map{$min}.js",
 					'version'  => $this->_version,
@@ -2658,6 +2668,89 @@ PRIMARY KEY  (id)
 		}
 
 		/**
+		 * Displays the setting HTML.
+		 *
+		 * @param array $field The setting properties.
+		 */
+		public function settings_html( $field ) {
+			echo $field['html'];
+		}
+
+		/**
+		 * Displays the entry filter setting.
+		 *
+		 * @since 2.4
+		 *
+		 * @param array $field  The setting properties.
+		 * @param bool $echo    Whether to output the markup.
+		 *
+		 * @return string
+		 */
+		public function settings_entry_filter( $field, $echo = true ) {
+			$form = isset( $form['form_id'] ) ? GFFormsModel::get_form_meta( $field['form_id'] ) : $this->get_current_form();
+			$filter_settings      = GFCommon::get_field_filter_settings( $form );
+			$filter_settings_json = json_encode( $filter_settings );
+			$value = $this->get_setting( $field['name'] );
+			if ( ! $value ) {
+				$value = array(
+                    'mode' => 'all',
+					'filters' => array(
+						array(
+							'field'    => 0,
+							'operator' => 'contains',
+							'value'    => '',
+						),
+					),
+				);
+
+			}
+			$value_json = json_encode( $value );
+			$text = isset( $field['filter_text'] ) ? $field['filter_text'] : esc_html__( 'Match {0} of the following criteria:', 'gravityflow' );
+			$text_json = json_encode( $text );
+			$name = $field['name'];
+			$html = "
+<div id='setting-entry-filter-{$name}' class='setting-entry-filter'>
+    <!--placeholder-->
+</div>
+<script>
+gf_vars.filterAndAny = {$text_json};
+jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$value_json});
+
+(function($){
+    $(document).ready(function () {
+         function setFilterValue(){
+         	var filterSetting = $(this).closest('.setting-entry-filter').parent(),
+                filterRows = filterSetting.find('.gform-field-filter'),
+                filters = [];
+            filterRows.each( function( i )  {
+            	var f = $(this).find('.gform-filter-field').val(),
+            	    o = $(this).find('.gform-filter-operator').val(),
+            	    v = $(this).find('.gform-filter-value').val();
+                filters.push({field : f, operator: o, value: v });
+            });
+            var input = filterSetting.find('input.gaddon-hidden'),
+                mode = filterSetting.find('select[name=mode]').val(),
+                val = {
+                    mode : mode,
+                    filters : filters
+                };
+            input.val(JSON.stringify(val));
+        };
+        $('#setting-entry-filter-{$name}').on('change', 'select[name=mode]', setFilterValue);
+	    $('#setting-entry-filter-{$name}').on('change', '.gform-filter-operator', setFilterValue);
+	    $('#setting-entry-filter-{$name}').on('change blur', '.gform-filter-value', setFilterValue);
+    });
+})(jQuery);
+</script>";
+			$hidden_field = array( 'name' => $field['name'], 'type'=> 'hidden' );
+			$html .= $this->settings_hidden( $hidden_field, false );
+			if ( $echo ) {
+				echo $html;
+			}
+			return $html;
+		}
+
+		/**
 		 * Adds columns to the list of feeds.
 		 *
 		 * Setting name => label.
@@ -4068,15 +4161,6 @@ PRIMARY KEY  (id)
 			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, $args );
 
 			return $response;
-		}
-
-		/**
-		 * Displays the setting HTML.
-		 *
-		 * @param array $field The setting properties.
-		 */
-		public function settings_html( $field ) {
-			echo $field['html'];
 		}
 
 		/**
