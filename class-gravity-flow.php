@@ -2687,7 +2687,7 @@ PRIMARY KEY  (id)
 		 * @return string
 		 */
 		public function settings_entry_filter( $field, $echo = true ) {
-			$form = isset( $form['form_id'] ) ? GFFormsModel::get_form_meta( $field['form_id'] ) : $this->get_current_form();
+			$form = isset( $field['form_id'] ) ? GFFormsModel::get_form_meta( $field['form_id'] ) : $this->get_current_form();
 			$filter_settings      = GFCommon::get_field_filter_settings( $form );
 			$filter_settings_json = json_encode( $filter_settings );
 			$value = $this->get_setting( $field['name'] );
