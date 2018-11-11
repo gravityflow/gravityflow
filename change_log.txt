@@ -1,0 +1,1 @@
+- Added the gform_order_summary filter enabling the GP eCommerce Fields Add-On to modify the location of discount and tax fields in the order summary table.
