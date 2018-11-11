@@ -3,6 +3,8 @@
  * Purpose: Test step conditional logic
  */
 
+// @group step-approval
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test step conditional logic' );

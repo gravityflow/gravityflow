@@ -1,0 +1,1186 @@
+{
+    "0": {
+        "title": "0028 Outgoing Webhook Merge Tags",
+        "description": "",
+        "labelPlacement": "top_label",
+        "descriptionPlacement": "below",
+        "button": {
+            "type": "text",
+            "text": "Submit",
+            "imageUrl": ""
+        },
+        "fields": [
+            {
+                "type": "name",
+                "id": 17,
+                "label": "Name",
+                "adminLabel": "",
+                "isRequired": false,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "visible",
+                "nameFormat": "advanced",
+                "inputs": [
+                    {
+                        "id": "17.2",
+                        "label": "Prefix",
+                        "name": "",
+                        "choices": [
+                            {
+                                "text": "Mr.",
+                                "value": "Mr.",
+                                "isSelected": false,
+                                "price": ""
+                            },
+                            {
+                                "text": "Mrs.",
+                                "value": "Mrs.",
+                                "isSelected": false,
+                                "price": ""
+                            },
+                            {
+                                "text": "Miss",
+                                "value": "Miss",
+                                "isSelected": false,
+                                "price": ""
+                            },
+                            {
+                                "text": "Ms.",
+                                "value": "Ms.",
+                                "isSelected": false,
+                                "price": ""
+                            },
+                            {
+                                "text": "Dr.",
+                                "value": "Dr.",
+                                "isSelected": false,
+                                "price": ""
+                            },
+                            {
+                                "text": "Prof.",
+                                "value": "Prof.",
+                                "isSelected": false,
+                                "price": ""
+                            },
+                            {
+                                "text": "Rev.",
+                                "value": "Rev.",
+                                "isSelected": false,
+                                "price": ""
+                            }
+                        ],
+                        "isHidden": true,
+                        "inputType": "radio"
+                    },
+                    {
+                        "id": "17.3",
+                        "label": "First",
+                        "name": ""
+                    },
+                    {
+                        "id": "17.4",
+                        "label": "Middle",
+                        "name": "",
+                        "isHidden": true
+                    },
+                    {
+                        "id": "17.6",
+                        "label": "Last",
+                        "name": ""
+                    },
+                    {
+                        "id": "17.8",
+                        "label": "Suffix",
+                        "name": "",
+                        "isHidden": true
+                    }
+                ],
+                "formId": 28,
+                "description": "",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "choices": "",
+                "conditionalLogic": "",
+                "productField": "",
+                "displayOnly": ""
+            },
+            {
+                "type": "email",
+                "id": 18,
+                "label": "Email",
+                "adminLabel": "",
+                "isRequired": false,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "visible",
+                "inputs": null,
+                "formId": 28,
+                "description": "",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "choices": "",
+                "conditionalLogic": "",
+                "productField": "",
+                "emailConfirmEnabled": "",
+                "displayOnly": "",
+                "enablePrice": ""
+            },
+            {
+                "type": "product",
+                "id": 1,
+                "label": "Logo Design",
+                "adminLabel": "",
+                "isRequired": true,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "visible",
+                "inputs": [
+                    {
+                        "id": "1.1",
+                        "label": "Name",
+                        "name": ""
+                    },
+                    {
+                        "id": "1.2",
+                        "label": "Price",
+                        "name": ""
+                    },
+                    {
+                        "id": "1.3",
+                        "label": "Quantity",
+                        "name": ""
+                    }
+                ],
+                "inputType": "singleproduct",
+                "enablePrice": null,
+                "formId": 28,
+                "description": "",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "choices": [
+                    {
+                        "text": "One Hour Whiteboard",
+                        "value": "One Hour Whiteboard",
+                        "isSelected": false,
+                        "price": "$75.00"
+                    },
+                    {
+                        "text": "Rough Clean Illustrator",
+                        "value": "Rough Clean Illustrator",
+                        "isSelected": false,
+                        "price": "$125.00"
+                    },
+                    {
+                        "text": "Polished EPS",
+                        "value": "Polished EPS",
+                        "isSelected": false,
+                        "price": "$250.00"
+                    }
+                ],
+                "conditionalLogic": "",
+                "productField": "",
+                "basePrice": "$75.00",
+                "disableQuantity": true,
+                "multipleFiles": false,
+                "maxFiles": "",
+                "calculationFormula": "",
+                "calculationRounding": "",
+                "enableCalculation": "",
+                "displayAllCategories": false,
+                "useRichTextEditor": false,
+                "displayOnly": ""
+            },
+            {
+                "type": "option",
+                "id": 2,
+                "label": "Fidelity",
+                "adminLabel": "",
+                "isRequired": true,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "visible",
+                "inputType": "select",
+                "choices": [
+                    {
+                        "text": "Whiteboard Photo",
+                        "value": "Whiteboard Photo",
+                        "isSelected": false,
+                        "price": "$25.00"
+                    },
+                    {
+                        "text": "Rough Illustrator",
+                        "value": "Rough Illustrator",
+                        "isSelected": false,
+                        "price": "$75.00"
+                    },
+                    {
+                        "text": "Polished EPS",
+                        "value": "Polished EPS",
+                        "isSelected": false,
+                        "price": "$150.00"
+                    },
+                    {
+                        "text": "Full Brand Guide",
+                        "value": "Full Brand Guide",
+                        "isSelected": false,
+                        "price": "$500.00"
+                    }
+                ],
+                "enablePrice": true,
+                "productField": 1,
+                "formId": 28,
+                "description": "",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "inputs": "",
+                "conditionalLogic": "",
+                "multipleFiles": false,
+                "maxFiles": "",
+                "calculationFormula": "",
+                "calculationRounding": "",
+                "enableCalculation": "",
+                "disableQuantity": false,
+                "displayAllCategories": false,
+                "useRichTextEditor": false,
+                "displayOnly": ""
+            },
+            {
+                "type": "total",
+                "id": 3,
+                "label": "Total",
+                "adminLabel": "",
+                "isRequired": false,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "visible",
+                "inputs": null,
+                "formId": 28,
+                "description": "",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "choices": "",
+                "conditionalLogic": "",
+                "productField": "",
+                "multipleFiles": false,
+                "maxFiles": "",
+                "calculationFormula": "",
+                "calculationRounding": "",
+                "enableCalculation": "",
+                "disableQuantity": false,
+                "displayAllCategories": false,
+                "useRichTextEditor": false,
+                "displayOnly": "",
+                "enablePrice": ""
+            },
+            {
+                "type": "text",
+                "id": 15,
+                "label": "Source",
+                "adminLabel": "",
+                "isRequired": true,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "administrative",
+                "inputs": null,
+                "formId": 28,
+                "description": "",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "USD",
+                "choices": "",
+                "conditionalLogic": "",
+                "productField": "",
+                "enablePasswordInput": "",
+                "maxLength": "",
+                "multipleFiles": false,
+                "maxFiles": "",
+                "calculationFormula": "",
+                "calculationRounding": "",
+                "enableCalculation": "",
+                "disableQuantity": false,
+                "displayAllCategories": false,
+                "useRichTextEditor": false,
+                "displayOnly": "",
+                "enablePrice": ""
+            },
+            {
+                "type": "select",
+                "id": 13,
+                "label": "Country",
+                "adminLabel": "",
+                "isRequired": true,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "visible",
+                "inputs": null,
+                "choices": [
+                    {
+                        "text": "",
+                        "value": "",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "United States",
+                        "value": "USD",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Australia",
+                        "value": "AUD",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Canadia",
+                        "value": "CAD",
+                        "isSelected": true,
+                        "price": ""
+                    },
+                    {
+                        "text": "Europe",
+                        "value": "EUR",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Mexico",
+                        "value": "MXN",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Polish Zloty",
+                        "value": "PLN",
+                        "isSelected": false,
+                        "price": ""
+                    }
+                ],
+                "formId": 28,
+                "description": "",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "conditionalLogic": "",
+                "productField": "",
+                "enablePrice": "",
+                "multipleFiles": false,
+                "maxFiles": "",
+                "calculationFormula": "",
+                "calculationRounding": "",
+                "enableCalculation": "",
+                "disableQuantity": false,
+                "displayAllCategories": false,
+                "useRichTextEditor": false,
+                "enableChoiceValue": true,
+                "displayOnly": ""
+            },
+            {
+                "type": "text",
+                "id": 16,
+                "label": "Conversion Rate",
+                "adminLabel": "",
+                "isRequired": false,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "administrative",
+                "inputs": null,
+                "formId": 28,
+                "description": "",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "choices": "",
+                "conditionalLogic": "",
+                "productField": "",
+                "enablePasswordInput": "",
+                "maxLength": "",
+                "multipleFiles": false,
+                "maxFiles": "",
+                "calculationFormula": "",
+                "calculationRounding": "",
+                "enableCalculation": "",
+                "disableQuantity": false,
+                "displayAllCategories": false,
+                "useRichTextEditor": false,
+                "displayOnly": "",
+                "enablePrice": ""
+            },
+            {
+                "type": "number",
+                "id": 14,
+                "label": "Customer Cost",
+                "adminLabel": "",
+                "isRequired": true,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "administrative",
+                "inputs": null,
+                "numberFormat": "decimal_dot",
+                "formId": 28,
+                "description": "",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "choices": "",
+                "conditionalLogic": "",
+                "enableCalculation": false,
+                "rangeMin": "",
+                "rangeMax": "",
+                "productField": "",
+                "multipleFiles": false,
+                "maxFiles": "",
+                "calculationFormula": "",
+                "calculationRounding": "",
+                "disableQuantity": false,
+                "displayAllCategories": false,
+                "useRichTextEditor": false,
+                "displayOnly": "",
+                "enablePrice": ""
+            },
+            {
+                "type": "text",
+                "id": 4,
+                "label": "Business Name",
+                "adminLabel": "",
+                "isRequired": true,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "visible",
+                "inputs": null,
+                "formId": 28,
+                "description": "",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "choices": "",
+                "conditionalLogic": "",
+                "productField": "",
+                "enablePasswordInput": "",
+                "maxLength": "",
+                "multipleFiles": false,
+                "maxFiles": "",
+                "calculationFormula": "",
+                "calculationRounding": "",
+                "enableCalculation": "",
+                "disableQuantity": false,
+                "displayAllCategories": false,
+                "useRichTextEditor": false,
+                "displayOnly": "",
+                "enablePrice": ""
+            },
+            {
+                "type": "select",
+                "id": 6,
+                "label": "Industry",
+                "adminLabel": "",
+                "isRequired": true,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "visible",
+                "inputs": null,
+                "choices": [
+                    {
+                        "text": "",
+                        "value": "",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Accounting/Finance",
+                        "value": "Accounting/Finance",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Advertising/Public Relations",
+                        "value": "Advertising/Public Relations",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Aerospace/Aviation",
+                        "value": "Aerospace/Aviation",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Arts/Entertainment/Publishing",
+                        "value": "Arts/Entertainment/Publishing",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Automotive",
+                        "value": "Automotive",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Banking/Mortgage",
+                        "value": "Banking/Mortgage",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Business Development",
+                        "value": "Business Development",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Business Opportunity",
+                        "value": "Business Opportunity",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Clerical/Administrative",
+                        "value": "Clerical/Administrative",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Construction/Facilities",
+                        "value": "Construction/Facilities",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Consumer Goods",
+                        "value": "Consumer Goods",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Customer Service",
+                        "value": "Customer Service",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Education/Training",
+                        "value": "Education/Training",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Energy/Utilities",
+                        "value": "Energy/Utilities",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Engineering",
+                        "value": "Engineering",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Government/Military",
+                        "value": "Government/Military",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Green",
+                        "value": "Green",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Healthcare",
+                        "value": "Healthcare",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Hospitality/Travel",
+                        "value": "Hospitality/Travel",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Human Resources",
+                        "value": "Human Resources",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Installation/Maintenance",
+                        "value": "Installation/Maintenance",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Insurance",
+                        "value": "Insurance",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Internet",
+                        "value": "Internet",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Job Search Aids",
+                        "value": "Job Search Aids",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Law Enforcement/Security",
+                        "value": "Law Enforcement/Security",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Legal",
+                        "value": "Legal",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Management/Executive",
+                        "value": "Management/Executive",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Manufacturing/Operations",
+                        "value": "Manufacturing/Operations",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Marketing",
+                        "value": "Marketing",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Non-Profit/Volunteer",
+                        "value": "Non-Profit/Volunteer",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Pharmaceutical/Biotech",
+                        "value": "Pharmaceutical/Biotech",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Professional Services",
+                        "value": "Professional Services",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "QA/Quality Control",
+                        "value": "QA/Quality Control",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Real Estate",
+                        "value": "Real Estate",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Restaurant/Food Service",
+                        "value": "Restaurant/Food Service",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Retail",
+                        "value": "Retail",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Sales",
+                        "value": "Sales",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Science/Research",
+                        "value": "Science/Research",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Skilled Labor",
+                        "value": "Skilled Labor",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Sports",
+                        "value": "Sports",
+                        "isSelected": true,
+                        "price": ""
+                    },
+                    {
+                        "text": "Technology",
+                        "value": "Technology",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Telecommunications",
+                        "value": "Telecommunications",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Transportation/Logistics",
+                        "value": "Transportation/Logistics",
+                        "isSelected": false,
+                        "price": ""
+                    },
+                    {
+                        "text": "Other",
+                        "value": "Other",
+                        "isSelected": false,
+                        "price": ""
+                    }
+                ],
+                "formId": 28,
+                "description": "",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "conditionalLogic": "",
+                "productField": "",
+                "enablePrice": "",
+                "multipleFiles": false,
+                "maxFiles": "",
+                "calculationFormula": "",
+                "calculationRounding": "",
+                "enableCalculation": "",
+                "disableQuantity": false,
+                "displayAllCategories": false,
+                "useRichTextEditor": false,
+                "displayOnly": ""
+            },
+            {
+                "type": "textarea",
+                "id": 9,
+                "label": "Tell us about your brand",
+                "adminLabel": "",
+                "isRequired": true,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "visible",
+                "inputs": null,
+                "formId": 28,
+                "description": "What elements are you trying to incorporate?",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "choices": "",
+                "conditionalLogic": "",
+                "productField": "",
+                "form_id": "",
+                "useRichTextEditor": false,
+                "multipleFiles": false,
+                "maxFiles": "",
+                "calculationFormula": "",
+                "calculationRounding": "",
+                "enableCalculation": "",
+                "disableQuantity": false,
+                "displayAllCategories": false,
+                "displayOnly": "",
+                "enablePrice": ""
+            },
+            {
+                "type": "fileupload",
+                "id": 10,
+                "label": "Mood Board / Reference Artwork",
+                "adminLabel": "",
+                "isRequired": false,
+                "size": "medium",
+                "errorMessage": "",
+                "visibility": "visible",
+                "inputs": null,
+                "formId": 28,
+                "description": "Any design / concept artwork that inspires you. ",
+                "allowsPrepopulate": false,
+                "inputMask": false,
+                "inputMaskValue": "",
+                "inputType": "",
+                "labelPlacement": "",
+                "descriptionPlacement": "",
+                "subLabelPlacement": "",
+                "placeholder": "",
+                "cssClass": "",
+                "inputName": "",
+                "noDuplicates": false,
+                "defaultValue": "",
+                "choices": "",
+                "conditionalLogic": "",
+                "maxFileSize": "",
+                "maxFiles": "",
+                "multipleFiles": false,
+                "allowedExtensions": "",
+                "productField": "",
+                "calculationFormula": "",
+                "calculationRounding": "",
+                "enableCalculation": "",
+                "disableQuantity": false,
+                "displayAllCategories": false,
+                "useRichTextEditor": false,
+                "displayOnly": "",
+                "enablePrice": ""
+            }
+        ],
+        "version": "2.3.3.8",
+        "id": 28,
+        "useCurrentUserAsAuthor": true,
+        "postContentTemplateEnabled": false,
+        "postTitleTemplateEnabled": false,
+        "postTitleTemplate": "",
+        "postContentTemplate": "",
+        "lastPageButton": null,
+        "pagination": null,
+        "firstPageCssClass": null,
+        "is_active": "1",
+        "date_created": "2018-09-29 18:44:27",
+        "is_trash": "0",
+        "subLabelPlacement": "below",
+        "cssClass": "",
+        "enableHoneypot": false,
+        "enableAnimation": false,
+        "save": {
+            "enabled": false,
+            "button": {
+                "type": "link",
+                "text": "Save and Continue Later"
+            }
+        },
+        "limitEntries": false,
+        "limitEntriesCount": "",
+        "limitEntriesPeriod": "",
+        "limitEntriesMessage": "",
+        "scheduleForm": false,
+        "scheduleStart": "",
+        "scheduleStartHour": "",
+        "scheduleStartMinute": "",
+        "scheduleStartAmpm": "",
+        "scheduleEnd": "",
+        "scheduleEndHour": "",
+        "scheduleEndMinute": "",
+        "scheduleEndAmpm": "",
+        "schedulePendingMessage": "",
+        "scheduleMessage": "",
+        "requireLogin": false,
+        "requireLoginMessage": "",
+        "confirmations": [
+            {
+                "id": "5ba83b4cd5323",
+                "name": "Default Confirmation",
+                "isDefault": true,
+                "type": "message",
+                "message": "Thanks for contacting us! We will get in touch with you shortly.",
+                "url": "",
+                "pageId": "",
+                "queryString": ""
+            }
+        ],
+        "notifications": [
+            {
+                "id": "5ba83b4cc8ea4",
+                "to": "{admin_email}",
+                "name": "Admin Notification",
+                "event": "form_submission",
+                "toType": "email",
+                "subject": "New submission from {form_title}",
+                "message": "{all_fields}",
+                "isActive": false
+            }
+        ],
+        "feeds": {
+            "gravityflow": [
+                {
+                    "id": "67",
+                    "form_id": "28",
+                    "is_active": "1",
+                    "feed_order": "0",
+                    "meta": {
+                        "step_name": "Currency Check",
+                        "description": "",
+                        "step_type": "webhook",
+                        "step_highlight": "0",
+                        "step_highlight_type": "color",
+                        "step_highlight_color": "#dd3333",
+                        "feed_condition_conditional_logic": "0",
+                        "feed_condition_conditional_logic_object": [],
+                        "scheduled": "0",
+                        "schedule_type": "delay",
+                        "schedule_date": "",
+                        "schedule_delay_offset": "",
+                        "schedule_delay_unit": "hours",
+                        "schedule_date_field_offset": "0",
+                        "schedule_date_field_offset_unit": "hours",
+                        "schedule_date_field_before_after": "after",
+                        "url": "http://unit-test-webhook.com/0028-mapping-merge?currency={Payment Currency:13:value}",
+                        "method": "get",
+                        "authentication": "",
+                        "requestHeaders": "",
+                        "response_body": "select_fields",
+                        "response_mappings": [
+                            {
+                                "key": "gf_custom",
+                                "value": "16",
+                                "custom_key": "quotes\\{source:15:value}{country:13:value}",
+                                "custom_value": ""
+                            }
+                        ],
+                        "destination_complete": "next",
+                        "destination_error_client": "complete",
+                        "destination_error_server": "complete",
+                        "destination_error": "complete"
+                    },
+                    "addon_slug": "gravityflow",
+                    "event_type": null
+                },
+                {
+                    "id": "68",
+                    "form_id": "28",
+                    "is_active": "1",
+                    "feed_order": "0",
+                    "meta": {
+                        "step_name": "Converted Cost Confirmation",
+                        "description": "",
+                        "step_type": "approval",
+                        "step_highlight": "0",
+                        "step_highlight_type": "color",
+                        "step_highlight_color": "#dd3333",
+                        "feed_condition_conditional_logic": "1",
+                        "feed_condition_conditional_logic_object": {
+                            "conditionalLogic": {
+                                "actionType": "show",
+                                "logicType": "all",
+                                "rules": [
+                                    {
+                                        "fieldId": "13",
+                                        "operator": "isnot",
+                                        "value": "USD"
+                                    }
+                                ]
+                            }
+                        },
+                        "scheduled": "0",
+                        "schedule_type": "delay",
+                        "schedule_date": "",
+                        "schedule_delay_offset": "",
+                        "schedule_delay_unit": "hours",
+                        "schedule_date_field_offset": "0",
+                        "schedule_date_field_offset_unit": "hours",
+                        "schedule_date_field_before_after": "after",
+                        "type": "select",
+                        "assignees": [
+                            "email_field|18"
+                        ],
+                        "routing": [
+                            {
+                                "assignee": "user_id|1",
+                                "fieldId": "0",
+                                "operator": "is",
+                                "value": "",
+                                "type": ""
+                            }
+                        ],
+                        "assignee_policy": "all",
+                        "instructionsEnable": "0",
+                        "instructionsValue": "Instructions: please review the values in the fields below and click on the Approve or Reject button",
+                        "display_fields_mode": "all_fields",
+                        "display_order_summary": "1",
+                        "assignee_notification_enabled": "1",
+                        "assignee_notification_from_name": "Joe's Design Shack",
+                        "assignee_notification_from_email": "{admin_email}",
+                        "assignee_notification_reply_to": "",
+                        "assignee_notification_bcc": "",
+                        "assignee_notification_subject": "Currency Confirmation",
+                        "assignee_notification_message": "As you are located outside the United States, Joe's Design Shack requires confirmation that you understand the price you'll pay for our great logo services is different than the original quote due to exchange rates.\r\n\r\nConverted Cost: {Customer Cost:14}\r\nExchange Rate: {Conversion Rate:16}\r\n\r\nPlease {workflow_approve_link} if you'd like Joe to do his digital magic.",
+                        "assignee_notification_disable_autoformat": "0",
+                        "resend_assignee_emailEnable": "0",
+                        "resend_assignee_emailValue": "7",
+                        "resend_assignee_email_repeatEnable": "0",
+                        "resend_assignee_email_repeatValue": "3",
+                        "rejection_notification_enabled": "0",
+                        "rejection_notification_type": "select",
+                        "rejection_notification_routing": [
+                            {
+                                "assignee": "user_id|1",
+                                "fieldId": "0",
+                                "operator": "is",
+                                "value": "",
+                                "type": ""
+                            }
+                        ],
+                        "rejection_notification_from_name": "",
+                        "rejection_notification_from_email": "{admin_email}",
+                        "rejection_notification_reply_to": "",
+                        "rejection_notification_bcc": "",
+                        "rejection_notification_subject": "",
+                        "rejection_notification_message": "Entry {entry_id} has been rejected",
+                        "rejection_notification_disable_autoformat": "0",
+                        "approval_notification_enabled": "0",
+                        "approval_notification_type": "select",
+                        "approval_notification_routing": [
+                            {
+                                "assignee": "user_id|1",
+                                "fieldId": "0",
+                                "operator": "is",
+                                "value": "",
+                                "type": ""
+                            }
+                        ],
+                        "approval_notification_from_name": "",
+                        "approval_notification_from_email": "{admin_email}",
+                        "approval_notification_reply_to": "",
+                        "approval_notification_bcc": "",
+                        "approval_notification_subject": "",
+                        "approval_notification_message": "Entry {entry_id} has been approved",
+                        "approval_notification_disable_autoformat": "0",
+                        "note_mode": "not_required",
+                        "expiration": "0",
+                        "expiration_type": "delay",
+                        "expiration_date": "",
+                        "expiration_delay_offset": "",
+                        "expiration_delay_unit": "hours",
+                        "expiration_date_field_offset": "0",
+                        "expiration_date_field_offset_unit": "hours",
+                        "expiration_date_field_before_after": "after",
+                        "status_expiration": "rejected",
+                        "destination_expired": "next",
+                        "destination_rejected": "complete",
+                        "destination_approved": "next"
+                    },
+                    "addon_slug": "gravityflow",
+                    "event_type": null
+                }
+            ]
+        }
+    },
+    "version": "2.3.3.8"
+}

@@ -50,39 +50,59 @@ class Gravity_Flow_Merge_Tag_Approve extends Gravity_Flow_Merge_Tag_Assignee_Bas
 		$matches = $this->get_matches( $text );
 
 		if ( ! empty( $matches ) ) {
+			foreach ( $matches as $match ) {
+				$full_tag       = $match[0];
+				$type           = $match[1];
+				$options_string = isset( $match[3] ) ? $match[3] : '';
 
-			if ( empty( $this->step ) || empty( $this->assignee ) ) {
-				foreach ( $matches as $match ) {
-					$full_tag = $match[0];
-					$text = str_replace( $full_tag, '', $text );
+				$a = $this->get_attributes( $options_string, array(
+					'page_id'  => gravity_flow()->get_app_setting( 'inbox_page' ),
+					'text'     => esc_html__( 'Approve', 'gravityflow' ),
+					'token'    => false,
+					'assignee' => '',
+					'step'     => '',
+				) );
+
+				$original_step = $this->step;
+
+				if ( ! empty( $a['step'] ) ) {
+					$this->step = gravity_flow()->get_step( $a['step'], $this->entry );
 				}
-				return $text;
-			}
 
-			$approve_token = $this->get_token( 'approve' );
-
-			if ( is_array( $matches ) ) {
-				foreach ( $matches as $match ) {
-					$full_tag       = $match[0];
-					$type           = $match[1];
-					$options_string = isset( $match[3] ) ? $match[3] : '';
-
-					$a = $this->get_attributes( $options_string, array(
-						'page_id' => gravity_flow()->get_app_setting( 'inbox_page' ),
-						'text'    => esc_html__( 'Approve', 'gravityflow' ),
-					) );
-
-					$approve_url = $this->get_entry_url( $a['page_id'], $approve_token );
-					$approve_url = esc_url_raw( $approve_url );
-
-					$approve_url = $this->format_value( $approve_url );
-
-					if ( $type == 'link' ) {
-						$approve_url = sprintf( '<a href="%s">%s</a>', $approve_url, $a['text'] );
-					}
-
-					$text = str_replace( $full_tag, $approve_url, $text );
+				if ( empty( $this->step ) ) {
+					$text       = str_replace( $full_tag, '', $text );
+					$this->step = $original_step;
+					continue;
 				}
+
+				$original_assignee = $this->assignee;
+
+				if ( ! empty( $a['assignee'] ) ) {
+					$this->assignee = $this->step->get_assignee( $a['assignee'] );
+				}
+
+				if ( empty( $this->assignee ) ) {
+					$text           = str_replace( $full_tag, '', $text );
+					$this->assignee = $original_assignee;
+					continue;
+				}
+
+				$approve_token = $this->get_token( 'approve' );
+
+				$approve_url = $this->get_entry_url( $a['page_id'], $approve_token );
+				$approve_url = esc_url_raw( $approve_url );
+
+				$approve_url = $this->format_value( $approve_url );
+
+				if ( $type == 'link' ) {
+					$approve_url = sprintf( '<a href="%s">%s</a>', $approve_url, $a['text'] );
+				}
+
+				$text = str_replace( $full_tag, $approve_url, $text );
+
+				$this->step = $original_step;
+
+				$this->assignee = $original_assignee;
 			}
 		}
 

@@ -3,6 +3,10 @@
  * Purpose: Test the two pages on the user input step
  */
 
+// @group merge-tags
+// @group step-approval
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the two pages on the user input step' );
@@ -10,7 +14,7 @@ $I->wantTo( 'Test the two pages on the user input step' );
 // Submit the form
 $I->amOnPage( '/0014-two-pages-rejected' );
 
-$I->makeScreenshot( 'Form loaded.' );
+//$I->makeScreenshot( 'Form loaded.' );
 
 $I->see( '0014 Two Pages Rejected' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
@@ -20,11 +24,11 @@ $I->scrollTo( [ 'css' => '.gform_page_footer .gform_next_button' ], 20, 50 ); //
 $I->click( '.gform_page_footer .gform_next_button' );
 $I->selectOption( 'select[name=input_20]', 'Third Choice' );
 
-$I->makeScreenshot( 'Before form submit.' );
+//$I->makeScreenshot( 'Before form submit.' );
 
 $I->click( 'input[type=submit]' );
 
-$I->makeScreenshot( 'Form submitted.' );
+//$I->makeScreenshot( 'Form submitted.' );
 
 $I->see( 'Thanks for contacting us!' );
 
@@ -45,3 +49,13 @@ $I->waitForText( 'Rejected request (Pending Input)', 3 );
 $I->click( 'Submit' );
 
 $I->waitForText( 'Status: Rejected', 3 );
+
+// Test the output of {workflow_timeline} in the page created from the approval step rejection email.
+$I->amOnPage( '/0014-rejection-email-mt-timeline' );
+$I->waitForText( '0014-rejection-email-mt-timeline', 3 );
+$I->see( 'Entry has been rejected. Timeline merge tag test.' );
+$I->dontSee( '{workflow_timeline}' );
+$I->see( 'admin:' );
+$I->see( 'Approval for two step form: Rejected.' );
+$I->see( 'Workflow:' );
+$I->see( 'Workflow submitted' );

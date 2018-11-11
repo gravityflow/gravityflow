@@ -3,6 +3,10 @@
  * Purpose: Test the approval steps
  */
 
+// @group step-approval
+// @group step-user_input
+// @group step-notification
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the approval steps' );

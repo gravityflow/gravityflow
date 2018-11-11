@@ -3,6 +3,8 @@
  * Purpose: Test the field conditional logic and the numeric input validation
  */
 
+// @group step-notification
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the field conditional logic and the numeric input validation' );

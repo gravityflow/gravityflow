@@ -43,6 +43,8 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 	 */
 	private $_step_values;
 
+	public $defaults = array();
+
 	/**
 	 * Gravity_Flow_Installation_Wizard_Step constructor.
 	 *
@@ -54,7 +56,7 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 		if ( empty( $this->_name ) ) {
 			throw new Exception( 'Name not set' );
 		}
-		$this->_step_values = $values;
+		$this->_step_values = empty( $values ) ? $this->defaults : $values;
 	}
 
 	/**
@@ -135,8 +137,10 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 	 *
 	 * @return array
 	 */
-	public function get_values() {
-		return $this->_step_values;
+	function get_values(){
+		$set_values = $this->_step_values ? $this->_step_values : array();
+		$values = array_merge( $this->defaults, $set_values);
+		return $values;
 	}
 
 	/**
@@ -148,12 +152,9 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 	/**
 	 * Override to validate the posted values for this step.
 	 *
-	 * @param array $posted_values The posted values.
-	 *
 	 * @return bool
 	 */
-	public function validate( $posted_values ) {
-		// Assign $this->_validation_result;.
+	public function validate() {
 		return true;
 	}
 
@@ -247,11 +248,17 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 	/**
 	 * Update the step options in the database and class property.
 	 *
-	 * @param array $values The step values.
+	 * @param array $posted_values The step values.
 	 */
-	public function update( $values ) {
-		update_option( 'gravityflow_installation_wizard_' . $this->get_name(), $values );
-		$this->_step_values = $values;
+	public function update( $posted_values = array() ) {
+
+		$step_values = $this->get_values();
+		if ( empty( $step_values ) ) {
+			$step_values = array();
+		}
+		$new_values = array_merge( $step_values, $posted_values );
+		update_option( 'gravityflow_installation_wizard_' . $this->get_name(), $new_values );
+		$this->_step_values = $new_values;
 	}
 
 	/**
@@ -277,5 +284,23 @@ abstract class Gravity_Flow_Installation_Wizard_Step extends stdClass {
 	 */
 	public function flush_values() {
 		delete_option( 'gravityflow_installation_wizard_' . $this->get_name() );
+	}
+
+	function get_posted_values() {
+
+		$posted_values = stripslashes_deep( $_POST );
+		$values        = array();
+		foreach ( $posted_values as $key => $value ) {
+			if ( strpos( $key, '_', 0 ) !== 0 ) {
+				$values[ $key ] = $value;
+			}
+		}
+		$values = array_merge( $this->defaults, $values);
+		return $values;
+	}
+
+	function get_step_settings( $step_name ) {
+		$settings = get_option( 'gravityflow_installation_wizard_' . $step_name );
+		return $settings;
 	}
 }

@@ -3,6 +3,9 @@
  * Purpose: Test the field conditional logic on the user input step
  */
 
+// @group step-approval
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the field conditional logic on the user input step' );

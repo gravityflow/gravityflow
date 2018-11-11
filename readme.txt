@@ -55,6 +55,24 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 2.3.3 =
+- Fixed an issue where delayed feeds are not delayed on Gravity Forms >2.3.4.2
+
+= 2.3.2 =
+- Added the gravityflow_step_expiration_timestamp filter.
+- Added the step merge tag attribute to allow merge tags to specify the step for which tokens must be generated. This allows feed add-ons to specify the step. For example, a Twilio or Slack message can contain a one-click approval link for the next step.
+- Updated the processing of the workflow to trigger before the confirmation is processed.
+- Updated the processing of user input step to skip required field validation when saving progress.
+- Updated the timeline date/time format to reflect format selected in WordPress general settings.
+- Updated Outgoing Webhook response mapping to parse merge tags in field keys.
+- Updated the Outgoing Webhook step settings to display merge tag dropdown with the URL field.
+- Updated the installation wizard to install Gravity Forms if it's not installed or update it if there's a newer version available.
+- Fixed an edge case where the assignee attribute will remove the assignee added in the constructor and override the assignee in subsequent instances of the merge tag.
+- Fixed an issue with the integrations with the Twilio Add-On where URLs get encoded breaking workflow links.
+- Fixed an issue with the evaluation of date field based step expiration when weeks is the selected offset unit.
+- Fixed a fatal error which can occur if Gravity PDF is activated on PHP < 5.6.
+- Fixed an issue where the "Workflow: user input" notification event is triggered before the entry has been updated which results in stale data being used when notification routing/conditional logic is evaluated and when merge tags in the notification settings are processed.
+
 = 2.3.1 =
 - Added support for deep parsing of the webhook response values. e.g. "translations\0\text"
 - Added the gravityflow_webhook_url_in_note filter to prevent the webhook URL from containing the URL. e.g. add_filter( 'gravityflow_webhook_url_in_note', '__return_false' );

@@ -3,6 +3,10 @@
  * Purpose: Test that the display fields setting displays the correct fields on the workflow detail page.
  */
 
+// @group merge-tags
+// @group step-approval
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test that the Role Assignee Token works.' );
@@ -22,6 +26,7 @@ $I->fillField( 'Paragraph', 'Test' );
 $I->click( 'input[type=submit]' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
+// Tests the {workflow_entry_link} merge tag on the page created from the approval step assignee email.
 $I->amOnPage( sanitize_title_with_dashes( '0026 Email - Role Assignee - Token - Approval' ) );
 $I->see( 'Open Workflow Entry Detail' );
 $I->click( 'Open Workflow Entry Detail' );
