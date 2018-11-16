@@ -374,8 +374,8 @@
 
 	function toggleWorkflowNotificationType(showType) {
 		var fields = {
-			select: ['workflow_notification_users\\[\\]', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat'],
-			routing: ['workflow_notification_routing', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat']
+			select: ['workflow_notification_users\\[\\]', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat', 'workflow_notification_gpdf'],
+			routing: ['workflow_notification_routing', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat', 'workflow_notification_gpdf']
 		};
 		toggleFields(fields, showType, false);
 	}
@@ -459,6 +459,7 @@
 			'editable_fields\\[\\]',
 			'routing',
 			'assignee_notification_message',
+			'workflow_notification_gpdf'
 
 		];
 		for (var i = 0; i < subSettings.length; i++) {
