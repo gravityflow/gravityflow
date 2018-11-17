@@ -1053,6 +1053,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * @param array $editable_fields The editable fields for the current user.
 	 */
 	public function save_entry( $form, &$lead, $editable_fields ) {
+	    global $wpdb;
 
 		$this->log_debug( __METHOD__ . '(): Saving entry.' );
 
@@ -1063,8 +1064,14 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			return;
 		}
 
+		$entry_meta_table = GFFormsModel::get_entry_meta_table_name();
+
+		$current_fields = $wpdb->get_results( $wpdb->prepare( "SELECT id, meta_key, item_index FROM $entry_meta_table WHERE entry_id=%d", $lead['id'] ) );
+
 		$total_fields       = array();
 		$calculation_fields = array();
+
+		GFFormsModel::begin_batch_field_operations();
 
 		/**
 		 * The field properties.
@@ -1111,14 +1118,17 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 			if ( is_array( $inputs ) ) {
 				foreach ( $inputs as $input ) {
-					$this->save_input( $form, $field, $lead, $input['id'] );
+					$this->save_input( $form, $field, $lead, $current_fields, $input['id'] );
 				}
 			} else {
-				$this->save_input( $form, $field, $lead, $field->id );
+				$this->save_input( $form, $field, $lead, $current_fields, $field->id );
 			}
 		}
 
+		$results = GFFormsModel::commit_batch_field_operations();
+
 		if ( ! empty( $calculation_fields ) ) {
+			GFFormsModel::begin_batch_field_operations();
 			$this->log_debug( __METHOD__ . '(): Saving calculation fields.' );
 
 			/**
@@ -1148,11 +1158,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 						}
 					}
 					foreach ( $inputs as $input ) {
-						$this->save_input( $form, $calculation_field, $lead, $input['id'] );
+						$this->save_input( $form, $calculation_field, $lead, $current_fields, $input['id'] );
 					}
 				} else {
-					$this->save_input( $form, $calculation_field, $lead, $calculation_field->id );
+					$this->save_input( $form, $calculation_field, $lead, $current_fields, $calculation_field->id );
 				}
+
+				$results = GFFormsModel::commit_batch_field_operations();
 			}
 		}
 
@@ -1160,7 +1172,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		// Saving total field as the last field of the form.
 		if ( ! empty( $total_fields ) ) {
+			GFFormsModel::begin_batch_field_operations();
 			$this->log_debug( __METHOD__ . '(): Saving total fields.' );
+			$results = GFFormsModel::commit_batch_field_operations();
 
 			/**
 			 * The total field properties.
@@ -1168,22 +1182,50 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			 * @var GF_Field $total_field
 			 */
 			foreach ( $total_fields as $total_field ) {
-				$this->save_input( $form, $total_field, $lead, $total_field->id );
+				$this->save_input( $form, $total_field, $lead, $current_fields, $total_field->id );
 			}
+		}
+
+		if ( method_exists( 'GFFormsModel', 'hydrate_repeaters') ) {
+			GFFormsModel::hydrate_repeaters( $lead, $form );
 		}
 	}
 
 	/**
 	 * Update the input value in the entry.
 	 *
+     * @since 2.4 added the $current_fields parameter
 	 * @since 1.5.1-dev
 	 *
-	 * @param array      $form     The form currently being processed.
-	 * @param GF_Field   $field    The current fields properties.
-	 * @param array      $entry    The entry currently being processed.
-	 * @param int|string $input_id The ID of the field or input currently being processed.
+	 * @param array      $form           The form currently being processed.
+	 * @param GF_Field   $field          The current fields properties.
+	 * @param array      $entry          The entry currently being processed.
+	 * @param array      $current_fields The array of current field values in the database.
+	 * @param int|string $input_id       The ID of the field or input currently being processed.
 	 */
-	public function save_input( $form, $field, &$entry, $input_id ) {
+	public function save_input( $form, $field, &$entry, $current_fields, $input_id ) {
+
+		if ( method_exists( 'GFFormsModel', 'hydrate_repeaters' ) && isset( $field->fields ) && is_array( $field->fields ) ) {
+			foreach( $field->fields as $sub_field ) {
+				$inputs = $sub_field->get_entry_inputs();
+				if ( is_array( $inputs ) ) {
+					foreach ( $inputs as $input ) {
+						$this->save_input( $form, $sub_field, $entry, $current_fields, $input['id'] );
+					}
+				} else {
+					$this->save_input( $form, $sub_field, $entry, $current_fields, $sub_field->id );
+				}
+				foreach ( $current_fields as $current_field ) {
+					if ( intval( $current_field->meta_key ) == $sub_field->id && ! isset( $current_field->update ) ) {
+						$current_field->delete = true;
+						$result = GFFormsModel::queue_batch_field_operation( $form, $entry, $sub_field, $current_field->id, $current_field->meta_key, '', $current_field->item_index );
+						$this->log_debug( __METHOD__ . "(): Deleting: {$field->label}(#{$sub_field->id}{$current_field->item_index} - {$field->type}). Result: " . var_export( $result, 1 ) );
+					}
+				}
+			}
+			return;
+		}
+
 		$input_name = 'input_' . str_replace( '.', '_', $input_id );
 
 		if ( $field->enableCopyValuesOption && rgpost( 'input_' . $field->id . '_copy_values_activated' ) ) {
@@ -1194,20 +1236,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$value = rgpost( $input_name );
 		}
 
-		$existing_value = rgar( $entry, $input_id );
-		$value          = GFFormsModel::maybe_trim_input( $value, $form['id'], $field );
-		$value          = GFFormsModel::prepare_value( $form, $field, $value, $input_name, $entry['id'], $entry );
-
-		if ( $existing_value != $value ) {
-			$result = GFAPI::update_entry_field( $entry['id'], $input_id, $value );
-			$this->log_debug( __METHOD__ . "(): Saving: {$field->label}(#{$input_id} - {$field->type}). Result: " . var_export( $result, 1 ) );
-			if ( $result ) {
-				$entry[ $input_id ] = $value;
-			}
-
-			if ( GFCommon::is_post_field( $field ) && ! in_array( $field->id, $this->_update_post_fields['fields'] ) ) {
-				$this->_update_post_fields['fields'][] = $field->id;
-			}
+		if ( method_exists( 'GFFormsModel', 'hydrate_repeaters' ) ) {
+			GFFormsModel::queue_save_input_value( $value, $form, $field, $entry, $current_fields, $input_id );
+		} else {
+			$entry_meta_id = GFFormsModel::get_lead_detail_id( $current_fields, $input_id );
+			$result = GFFormsModel::queue_batch_field_operation( $form, $entry, $field, $entry_meta_id, $input_id, $value );
 		}
 	}
 

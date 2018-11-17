@@ -42,7 +42,7 @@ if ( class_exists( 'GFForms' ) ) {
 		 *
 		 * @var string
 		 */
-		protected $_min_gravityforms_version = '2.1';
+		protected $_min_gravityforms_version = '2.3';
 
 		/**
 		 * The add-on slug.
