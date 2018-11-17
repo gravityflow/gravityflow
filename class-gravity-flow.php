@@ -2765,7 +2765,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
                 );
 
 				$html .= $this->settings_select( $sort_field, false );
-
+				$html .= '&nbsp;';
 				$direction_field = array(
 				        'name' => $field['name'] . 'sort_direction',
 				        'default_value' => 'DESC',
