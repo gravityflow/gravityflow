@@ -1066,7 +1066,9 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		$entry_meta_table = GFFormsModel::get_entry_meta_table_name();
 
-		$current_fields = $wpdb->get_results( $wpdb->prepare( "SELECT id, meta_key, item_index FROM $entry_meta_table WHERE entry_id=%d", $lead['id'] ) );
+		$sql = gravity_flow()->is_gravityforms_supported( '2.4-beta1' ) ? "SELECT id, meta_key, item_index FROM $entry_meta_table WHERE entry_id=%d" : "SELECT id, meta_key FROM $entry_meta_table WHERE entry_id=%d";
+
+		$current_fields = $wpdb->get_results( $wpdb->prepare( $sql, $lead['id'] ) );
 
 		$total_fields       = array();
 		$calculation_fields = array();
@@ -1174,7 +1176,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		if ( ! empty( $total_fields ) ) {
 			GFFormsModel::begin_batch_field_operations();
 			$this->log_debug( __METHOD__ . '(): Saving total fields.' );
-			$results = GFFormsModel::commit_batch_field_operations();
 
 			/**
 			 * The total field properties.
@@ -1184,9 +1185,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			foreach ( $total_fields as $total_field ) {
 				$this->save_input( $form, $total_field, $lead, $current_fields, $total_field->id );
 			}
+
+			$results = GFFormsModel::commit_batch_field_operations();
 		}
 
-		if ( method_exists( 'GFFormsModel', 'hydrate_repeaters') ) {
+		if ( gravity_flow()->is_gravityforms_supported( '2.4-beta1' ) ) {
 			GFFormsModel::hydrate_repeaters( $lead, $form );
 		}
 	}
@@ -1205,7 +1208,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 */
 	public function save_input( $form, $field, &$entry, $current_fields, $input_id ) {
 
-		if ( method_exists( 'GFFormsModel', 'hydrate_repeaters' ) && isset( $field->fields ) && is_array( $field->fields ) ) {
+		if ( gravity_flow()->is_gravityforms_supported( '2.4-beta1' ) && isset( $field->fields ) && is_array( $field->fields ) ) {
 			foreach( $field->fields as $sub_field ) {
 				$inputs = $sub_field->get_entry_inputs();
 				if ( is_array( $inputs ) ) {
@@ -1235,12 +1238,17 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		} else {
 			$value = rgpost( $input_name );
 		}
-
-		if ( method_exists( 'GFFormsModel', 'hydrate_repeaters' ) ) {
+		if ( gravity_flow()->is_gravityforms_supported( '2.4-beta1' ) ) {
 			GFFormsModel::queue_save_input_value( $value, $form, $field, $entry, $current_fields, $input_id );
 		} else {
+			$value          = GFFormsModel::maybe_trim_input( $value, $form['id'], $field );
+			$value          = GFFormsModel::prepare_value( $form, $field, $value, $input_name, $entry['id'], $entry );
 			$entry_meta_id = GFFormsModel::get_lead_detail_id( $current_fields, $input_id );
 			$result = GFFormsModel::queue_batch_field_operation( $form, $entry, $field, $entry_meta_id, $input_id, $value );
+		}
+
+		if ( GFCommon::is_post_field( $field ) && ! in_array( $field->id, $this->_update_post_fields['fields'] ) ) {
+			$this->_update_post_fields['fields'][] = $field->id;
 		}
 	}
 
