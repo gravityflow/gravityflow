@@ -2744,6 +2744,46 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 </script>";
 			$hidden_field = array( 'name' => $field['name'], 'type'=> 'hidden' );
 			$html .= $this->settings_hidden( $hidden_field, false );
+
+			if ( rgar( $field, 'show_sorting_options' ) ) {
+				$html .= '<br />' . esc_html__( 'Sort by field') . '&nbsp;';
+				$sort_field_choices = array();
+				foreach( $filter_settings as $filter_setting ) {
+				    if ( $filter_setting['key'] === '0' ) {
+				        continue;
+                    }
+					$sort_field_choices[] = array(
+					        'value' =>  $filter_setting['key'],
+                            'label' => $filter_setting['text'],
+                    );
+                }
+
+                $sort_field = array(
+                        'name' => $field['name'] . 'sort_key',
+                        'default_value' => 'entry_id',
+                        'choices' => $sort_field_choices,
+                );
+
+				$html .= $this->settings_select( $sort_field, false );
+
+				$direction_field = array(
+				        'name' => $field['name'] . 'sort_direction',
+				        'default_value' => 'DESC',
+                        'choices' => array(
+                            array(
+                                'value' => 'ASC',
+                                'label' => 'ASC',
+                            ),
+	                        array(
+		                        'value' => 'DESC',
+		                        'label' => 'DESC',
+	                        ),
+                        )
+                );
+
+				$html .= $this->settings_select( $direction_field, false );
+            }
+
 			if ( $echo ) {
 				echo $html;
 			}
