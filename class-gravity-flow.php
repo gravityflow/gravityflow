@@ -4685,7 +4685,7 @@ PRIMARY KEY  (id)
 		 * @param array $entry The entry created from the current form submission.
 		 * @param array $form  The form object used to process the current submission.
 		 *
-		 * @return null
+		 * @return void
 		 */
 		public function action_entry_created( $entry, $form ) {
 			$form_id = absint( $form['id'] );
@@ -4714,6 +4714,10 @@ PRIMARY KEY  (id)
 		 * @param array $form  The form object used to process the current submission.
 		 */
 		public function maybe_delay_workflow( $entry, $form ) {
+			if ( ! $this->get_first_step( $form['id'], $entry ) ) {
+				return;
+			}
+
 			$is_delayed = false;
 
 			if ( class_exists( 'GFPayPal' ) ) {
