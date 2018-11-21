@@ -394,7 +394,12 @@ class Gravity_Flow_Entry_Editor {
 		$posted_form_id = rgpost( 'gravityflow_submit' );
 		if ( $posted_form_id == $this->form['id'] && rgpost( 'step_id' ) == $this->step->get_id() ) {
 			// Updated or failed validation.
-			$value = GFFormsModel::get_field_value( $field );
+			if ( $field->get_input_type() == 'fileupload' && ( $field->multipleFiles || $field->is_value_submission_empty( $posted_form_id ) ) ) {
+				// Use the entry value so the field will be re-populated following progress being saved.
+				$value = GFFormsModel::get_lead_field_value( $this->entry, $field );
+			} else {
+				$value = GFFormsModel::get_field_value( $field );
+			}
 		} else {
 			$value = GFFormsModel::get_lead_field_value( $this->entry, $field );
 			if ( $field->get_input_type() == 'email' && $field->emailConfirmEnabled ) {
