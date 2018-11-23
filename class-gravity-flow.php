@@ -2751,11 +2751,18 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				foreach( $filter_settings as $filter_setting ) {
 				    if ( $filter_setting['key'] === '0' ) {
 				        continue;
-                    }
-					$sort_field_choices[] = array(
-					        'value' =>  $filter_setting['key'],
+					}
+					if( $filter_setting['key'] === 'entry_id' ) {
+						$sort_field_choices[] = array(
+					        'value' =>  'id',
                             'label' => $filter_setting['text'],
-                    );
+                    	);
+					} else {
+						$sort_field_choices[] = array(
+								'value' =>  $filter_setting['key'],
+								'label' => $filter_setting['text'],
+						);
+					}
                 }
 
                 $sort_field = array(
