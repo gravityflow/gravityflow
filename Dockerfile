@@ -10,7 +10,6 @@ RUN apt-get update && \
             libssl-dev \
             mysql-client \
             sudo less \
-            php7.2-gd \
             zip unzip \
         --no-install-recommends && \
         apt-get clean && \
