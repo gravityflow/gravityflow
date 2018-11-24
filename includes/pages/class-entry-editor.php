@@ -598,6 +598,10 @@ class Gravity_Flow_Entry_Editor {
 			$display_value = GFCommon::get_lead_field_display( $field, $value, $this->entry['currency'] );
 		}
 
+		if ( ! empty( $field->fields ) ) {
+			$html .= sprintf( '<label class="gfield_label">%s</label>', $field->label );
+		}
+
 		$display_value = apply_filters( 'gform_entry_field_value', $display_value, $field, $this->entry, $this->form );
 
 		if ( $this->display_empty_fields ) {
