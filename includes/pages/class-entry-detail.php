@@ -730,26 +730,60 @@ class Gravity_Flow_Entry_Detail {
 			}
 		}
 
-		if ( $summary_enabled ) {
-			$products = GFCommon::get_product_fields( $form, $entry );
-
-			if ( ! empty( $products['products'] ) ) {
-				$form_id               = $form['id'];
-				$product_summary_label = apply_filters( 'gform_order_label', __( 'Order', 'gravityflow' ), $form_id );
-				$product_summary_label = apply_filters( "gform_order_label_{$form_id}", $product_summary_label, $form_id );
-				?>
-				<tr>
-					<td colspan="2" class="gravityflow-order-summary"><?php echo $product_summary_label; ?></td>
-				</tr>
-				<tr>
-					<td colspan="2" class="entry-view-field-value lastrow">
-						<?php self::products_summary( $form, $entry, $products ) ?>
-					</td>
-				</tr>
-
-				<?php
-			}
+		if ( ! $summary_enabled ) {
+			return;
 		}
+
+		$products = GFCommon::get_product_fields( $form, $entry );
+
+		if ( empty( $products['products'] ) ) {
+			return;
+		}
+
+		$form_id = $form['id'];
+
+		/**
+		 * Enables the order summary label to be changed.
+		 *
+		 * @since unknown
+		 *
+		 * @param string $order_summary_label The order summary label.
+		 * @param int    $form_id             The current form ID.
+		 */
+		$order_summary_label = gf_apply_filters( array( 'gform_order_label', $form_id ), __( 'Order', 'gravityflow' ), $form_id );
+
+		ob_start();
+		?>
+		<tr>
+			<td colspan="2" class="gravityflow-order-summary"><?php echo $order_summary_label; ?></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="entry-view-field-value lastrow">
+				<?php self::products_summary( $form, $entry, $products ) ?>
+			</td>
+		</tr>
+		<?php
+		$order_summary = ob_get_clean();
+
+		/**
+		 * Enables the order summary markup to be customized.
+		 *
+		 * @since 2.3.4
+		 *
+		 * @var string $markup   The order summary markup.
+		 * @var array  $form     Current form object.
+		 * @var array  $entry    Current entry object.
+		 * @var array  $products Current order summary object.
+		 * @var string $format   Format that should be used to display the summary ('html' or 'text').
+		 */
+		$order_summary = gf_apply_filters( array( 'gform_order_summary', $form['id'] ), $order_summary, $form, $entry, $products, 'html' );
+
+		if ( class_exists( 'GP_Ecommerce_Fields' ) ) {
+			// Restore the order label class after it was changed by GPEF.
+			$order_summary = str_replace( 'entry-view-field-name', 'gravityflow-order-summary', $order_summary );
+		}
+
+		echo $order_summary;
 	}
 
 	/**

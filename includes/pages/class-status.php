@@ -355,7 +355,6 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	 */
 	public function __construct( $args = array() ) {
 
-
 		$default_args = array(
 			'singular'           => 'entry',    // Not translated - only used in class names
 			'plural'             => 'entries',  // Not translated - only used in class names
@@ -382,9 +381,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$default_bulk_actions['restart_workflow'] = esc_html__( 'Restart Workflow', 'gravityflow' );
 		}
 
-		$args['bulk_actions'] = isset ( $args['bulk_actions'] ) ? array_merge( $default_bulk_actions, $args['bulk_actions'] ) : $default_bulk_actions;
+		$args['bulk_actions'] = isset( $args['bulk_actions'] ) ? array_merge( $default_bulk_actions, $args['bulk_actions'] ) : $default_bulk_actions;
 
-		require_once( ABSPATH .'wp-admin/includes/template.php' );
+		require_once( ABSPATH . 'wp-admin/includes/template.php' );
 		if ( ! class_exists( 'WP_Screen' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/class-wp-screen.php' );
 		}
@@ -660,8 +659,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		<script>
 			(function ($) {
 				$(document).ready(function () {
-					var gformFieldFilters = <?php echo json_encode( $this->get_field_filters() ) ?>,
-						gformInitFilter = <?php echo json_encode( $this->get_init_filter_vars() ) ?>;
+					var gformFieldFilters = <?php echo json_encode( $this->get_field_filters() ); ?>,
+						gformInitFilter = <?php echo json_encode( $this->get_init_filter_vars() ); ?>;
 					var $form_select = $('#gravityflow-form-select');
 					var filterFormId = $form_select.val();
 					var $entry_filters = $('#entry_filters');
@@ -974,9 +973,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 				$label .= '' . sprintf( '<div class="step_status_queue">(%s: %s)</div>', esc_html__( 'Queued', 'gravityflow' ), $scheduled_date );
 
-			}
-
-			if ( $step->supports_expiration() && $step->expiration ) {
+			} elseif ( $step->supports_expiration() && $step->expiration ) {
 				$step->_entry = $item;
 				$expiration_timestamp = $step->get_expiration_timestamp();
 				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
@@ -1492,7 +1489,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		try {
 			$start_date = new DateTime( $start_date );
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			return '';
 		}
 
@@ -1513,7 +1510,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		try {
 			$end_date = new DateTime( $end_date );
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			return '';
 		}
 
@@ -1832,8 +1829,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$columns    = $this->get_columns();
 
 		if ( isset( $columns['workflow_final_status'] ) ) {
-			$final_status_offset = array_search('workflow_final_status',array_keys($columns)) + 1;
-			$columns = array_slice($columns, 0, $final_status_offset, true) + array('duration' => esc_html__( 'Duration', 'gravityflow' )) + array_slice($columns, $final_status_offset, NULL, true);
+			$final_status_offset = array_search( 'workflow_final_status', array_keys( $columns ) ) + 1;
+			$columns = array_slice( $columns, 0, $final_status_offset, true ) + array( 'duration' => esc_html__( 'Duration', 'gravityflow' ) ) + array_slice( $columns, $final_status_offset, NULL, true );
 		}
 
 		$export_arr = array();
@@ -1958,8 +1955,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$rows        = array();
 		$columns     = $this->get_columns();
 		if ( isset( $columns['workflow_final_status'] ) ) {
-			$final_status_offset = array_search('workflow_final_status',array_keys($columns)) + 1;
-			$columns = array_slice($columns, 0, $final_status_offset, true) + array('duration' => esc_html__( 'Duration', 'gravityflow' )) + array_slice($columns, $final_status_offset, NULL, true);
+			$final_status_offset = array_search( 'workflow_final_status', array_keys( $columns ) ) + 1;
+			$columns = array_slice( $columns, 0, $final_status_offset, true) + array( 'duration' => esc_html__( 'Duration', 'gravityflow' ) ) + array_slice( $columns, $final_status_offset, NULL, true );
 		}
 		$column_keys = array_keys( $columns );
 
@@ -1973,12 +1970,12 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 				$col_val = null;
 				if ( array_key_exists( $column_key, $item ) ) {
 					switch ( $column_key ) {
-						case 'form_id' :
+						case 'form_id':
 							$form_id = rgar( $item, 'form_id' );
 							$form = $this->get_form( $form_id );
 							$col_val = $form['title'];
-						break;
-						case 'created_by' :
+							break;
+						case 'created_by':
 							$user_id = $item['created_by'];
 							if ( $user_id ) {
 								$user         = get_user_by( 'id', $user_id );
@@ -1990,8 +1987,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 							} else {
 								$col_val = $item['ip'];
 							}
-						break;
-						case 'workflow_step' :
+							break;
+						case 'workflow_step':
 							$step_id = rgar( $item, 'workflow_step' );
 							if ( $step_id > 0 ) {
 								$step      = gravity_flow()->get_step( $step_id );
@@ -1999,22 +1996,22 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 							} else {
 								$col_val = $step_id;
 							}
-						break;
-						default :
+							break;
+						default:
 							$col_val = $item[ $column_key ];
 					}
 				} else {
 					switch ( $column_key ) {
 						case 'duration':
-							if( $item[ 'workflow_final_status' ] == 'pending' ) {
+							if ( $item['workflow_final_status'] == 'pending' ) {
 								$duration     = time() - strtotime( $item['date_created'] );
 								$duration_str = $this->format_duration( $duration );
 								$col_val = $duration_str;
 							} else {
 								$col_val = '';
 							}
-						break;
-					}	
+							break;
+					}
 				}
 
 				/**
