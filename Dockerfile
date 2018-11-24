@@ -8,6 +8,8 @@ RUN apt-get update && \
             git \
             zlib1g-dev \
             libssl-dev \
+            libfreetype6-dev \
+            libjpeg62-turbo-dev \
             libpng-dev \
             mysql-client \
             sudo less \
@@ -21,6 +23,10 @@ RUN docker-php-ext-install \
     bcmath \
     gd \
     zip
+
+RUN docker-php-ext-install -j$(nproc) iconv \
+        && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+        && docker-php-ext-install -j$(nproc) gd
 
 # Add mysql driver required for wp-browser
 RUN docker-php-ext-install mysqli
