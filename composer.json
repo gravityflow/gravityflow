@@ -23,6 +23,7 @@
     "lucatume/wp-browser": "~2.1.6"
   },
   "require": {
-    "vlucas/phpdotenv": "^2.5"
+    "vlucas/phpdotenv": "^2.5",
+    "ext-gd": "*"
   }
 }

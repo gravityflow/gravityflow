@@ -17,13 +17,13 @@ RUN apt-get update && \
 
 # Install php extensions
 RUN docker-php-ext-install \
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-        && docker-php-ext-install -j$(nproc) gd \
-        bcmath \
-        zip
+    bcmath \
+    zip
 
 # Add mysql driver required for wp-browser
 RUN docker-php-ext-install mysqli
+
+RUN docker-php-ext-install gd
 
 # Configure php
 RUN echo "date.timezone = UTC" >> /usr/local/etc/php/php.ini
