@@ -10,7 +10,6 @@ RUN apt-get update && \
             libssl-dev \
             mysql-client \
             sudo less \
-            php-gd \
             zip unzip \
         --no-install-recommends && \
         apt-get clean && \
@@ -22,7 +21,8 @@ RUN docker-php-ext-install \
     zip
 
 # Add mysql driver required for wp-browser
-RUN docker-php-ext-install mysqli
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    docker-php-ext-install mysqli
 
 # Configure php
 RUN echo "date.timezone = UTC" >> /usr/local/etc/php/php.ini
