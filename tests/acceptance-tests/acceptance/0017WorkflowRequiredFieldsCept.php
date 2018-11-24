@@ -3,6 +3,10 @@
  * Purpose: Test workflow required fields
  */
 
+// @group step-approval
+// @group step-user_input
+// @group step-webhook
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test workflow required fields' );
@@ -44,4 +48,11 @@ $I->fillField( 'textarea[name="gravityflow_note"]', 'Second note added' );
 $I->click( 'Update' );
 $I->selectOption( 'input[name="gravityflow_status"]', 'Complete' );
 $I->click( 'Update' );
+
+$I->waitForText( 'This field is required.', 3 );
+$I->fillField( 'input[name="input_3"]', 'Required on complete' );
+$I->fillField( 'textarea[name="gravityflow_note"]', 'Final note added' );
+$I->selectOption( 'input[name="gravityflow_status"]', 'Complete' );
+$I->click( 'Update' );
+
 $I->waitForText( 'Entry updated and marked complete.', 3 );

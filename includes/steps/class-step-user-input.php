@@ -673,7 +673,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 					$field_is_hidden = false;
 				}
 
-				if ( ! $field_is_hidden && $submission_is_empty && $field->isRequired ) {
+				if ( ! $field_is_hidden && $submission_is_empty && $field->isRequired && rgpost( 'gravityflow_status' ) == 'complete' ) {
 					$field->failed_validation  = true;
 					$field->validation_message = empty( $field->errorMessage ) ? esc_html__( 'This field is required.', 'gravityflow' ) : $field->errorMessage;
 					$valid                     = false;

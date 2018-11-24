@@ -3,6 +3,9 @@
  * Purpose: Test specific assign
  */
 
+// @group step-approval
+// @group step-notification
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test specific assign' );

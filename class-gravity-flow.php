@@ -3075,16 +3075,17 @@ PRIMARY KEY  (id)
 			/**
 			 * Allows the format for dates within the entry detail workflow info box to be modified.
 			 *
-			 * @param string $date_format A date format string - defaults to 'Y/m/d'
+			 * @param string $date_format A date format string - defaults to the date format setting in the WordPress general settings.
 			 */
-			$date_format = apply_filters( 'gravityflow_date_format_entry_detail', 'Y/m/d' );
-			printf( '%s: %s', esc_html__( 'Submitted', 'gravityflow' ), esc_html( GFCommon::format_date( $entry['date_created'], true, $date_format ) ) );
+			$date_format = apply_filters( 'gravityflow_date_format_entry_detail', '' );
+			$date_created = Gravity_Flow_Common::format_date( $entry['date_created'], $date_format, false, true );
+			printf( '%s: %s', esc_html__( 'Submitted', 'gravityflow' ), esc_html( $date_created ) );
 
 			if ( ! empty( $entry['workflow_timestamp'] ) ) {
-				$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
-				if ( $entry['date_created'] != $last_updated ) {
+				$last_updated = Gravity_Flow_Common::format_date( $entry['workflow_timestamp'], $date_format, false, true );
+				if ( $date_created != $last_updated ) {
 					echo '<br /><br />';
-					esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( GFCommon::format_date( $last_updated, true, $date_format ) );
+					esc_html_e( 'Last updated', 'gravityflow' ); ?>: <?php echo esc_html( $last_updated );
 				}
 			}
 
@@ -3104,10 +3105,8 @@ PRIMARY KEY  (id)
 			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
 			     && $current_step->supports_expiration() && $current_step->expiration
 			) {
-				$expiration_timestamp = $current_step->get_expiration_timestamp();
-				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
-				$expiration_date      = get_date_from_gmt( $expiration_date_str );
-				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), GFCommon::format_date( $expiration_date, true, $date_format ) );
+				$glfow_date = Gravity_Flow_Common::format_date( $current_step->get_expiration_timestamp(), $date_format, false, true );
+				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), $glfow_date );
 			}
 
 			/**
@@ -3811,40 +3810,6 @@ PRIMARY KEY  (id)
 		 * @return array
 		 */
 		public function app_settings_fields() {
-
-			$forms = GFAPI::get_forms();
-			$choices = array();
-			foreach ( $forms as $form ) {
-				$form_id = absint( $form['id'] );
-				$feeds = $this->get_feeds( $form_id );
-				if ( ! empty( $feeds ) ) {
-					$choices[] = array(
-						'label'         => esc_html( $form['title'] ),
-						'name'          => 'publish_form_' . absint( $form['id'] ),
-					);
-				}
-			}
-
-			if ( ! empty( $choices ) ) {
-				$published_forms_fields = array(
-					array(
-						'name'          => 'form_ids',
-						'label'         => esc_html__( 'Published', 'gravityflow' ),
-						'type'          => 'checkbox',
-						'choices'       => $choices,
-					),
-				);
-			} else {
-				$published_forms_fields = array(
-					array(
-						'name'          => 'no_workflows',
-						'label'         => '',
-						'type'          => 'html',
-						'html'          => esc_html__( 'No workflow steps have been added to any forms yet.', 'gravityflow' ),
-					),
-				);
-			}
-
 			$settings = array();
 
 			if ( ( ! is_multisite() || ( is_multisite() && is_main_site() ) ) && ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
@@ -3877,13 +3842,231 @@ PRIMARY KEY  (id)
 				);
 			}
 
+			$settings[] = $this->get_app_settings_fields_emails();
+			$settings[] = $this->get_app_settings_fields_pages();
+			$settings[] = $this->get_app_settings_fields_published_forms();
+
 			$settings[] = array(
+				'id'     => 'save_button',
+				'fields' => array(
+					array(
+						'id'       => 'save_button',
+						'name'     => 'save_button',
+						'type'     => 'save',
+						'value'    => __( 'Update Settings', 'gravityflow' ),
+						'messages' => array(
+							'success' => __( 'Settings updated successfully', 'gravityflow' ),
+							'error'   => __( 'There was an error while saving the settings', 'gravityflow' ),
+						),
+					),
+				)
+			);
+
+			return $settings;
+
+		}
+
+		/**
+		 * Returns an array of email related settings to be displayed on the app settings page.
+		 *
+		 * @since 2.3.4
+		 *
+		 * @return array
+		 */
+		public function get_app_settings_fields_emails() {
+
+			$settings = array(
+				'title'  => esc_html__( 'Workflow Emails', 'gravityflow' ),
+				'fields' => array(),
+			);
+
+			require_once GFCommon::get_base_path() . '/notification.php';
+			$notification_services = GFNotification::get_notification_services();
+
+			if ( count( $notification_services ) > 1 ) {
+				$service_choices = array();
+
+				foreach ( $notification_services as $key => $service ) {
+					$service_choices[] = array(
+						'label' => rgar( $service, 'label' ),
+						'value' => $key,
+						'icon'  => rgar( $service, 'image' ),
+					);
+				}
+
+				$settings['fields'][] = array(
+					'name'          => 'email_service',
+					'label'         => esc_html__( 'Email Service', 'gravityflow' ),
+					'tooltip'       => __( 'Select which service should be used to send the workflow emails. WordPress uses the server hosting your site or an active SMTP plugin.', 'gravityflow' ),
+					'type'          => 'radio',
+					'horizontal'    => true,
+					'default_value' => 'wordpress',
+					'choices'       => $service_choices,
+					'onchange'      => 'jQuery(this).parents("form").submit();',
+				);
+			}
+
+			$settings['fields'][] = array(
+				'name'          => 'from_name',
+				'label'         => esc_html__( 'From Name', 'gravityflow' ),
+				'tooltip'       => __( 'The default From Name to be used when the From Name setting is not configured on the individual steps.', 'gravityflow' ),
+				'type'          => 'text',
+				'default_value' => get_bloginfo( 'name' ),
+				'class'         => 'medium',
+			);
+
+			$settings['fields'][] = $this->get_app_settings_field_from_email();
+
+			return $settings;
+		}
+
+		/**
+		 * Returns an array of properties for the From Email setting to be displayed on the app settings page.
+		 *
+		 * @since 2.3.4
+		 *
+		 * @return array
+		 */
+		public function get_app_settings_field_from_email() {
+			$setting = array(
+				'name'                => 'from_email',
+				'label'               => esc_html__( 'From Email', 'gravityflow' ),
+				'tooltip'             => __( 'The default From Email to be used when the From Email setting is not configured on the individual steps.', 'gravityflow' ),
+				'type'                => 'text',
+				'default_value'       => get_bloginfo( 'admin_email' ),
+				'class'               => 'medium',
+				'validation_callback' => array( $this, 'validate_from_email' ),
+			);
+
+			$service = $this->get_setting( 'email_service' );
+
+			if ( $service == 'postmark' && function_exists( 'gf_postmark' ) ) {
+				$choices = array();
+
+				try {
+					$postmark = new GF_Postmark_API();
+					$postmark->set_account_token( gf_postmark()->get_plugin_setting( 'accountToken' ) );
+					$sender_signatures = $postmark->get_sender_signatures();
+
+					foreach ( $sender_signatures as $sender_signature ) {
+						$choices[] = array(
+							'label' => $sender_signature['EmailAddress'],
+							'value' => $sender_signature['EmailAddress'],
+						);
+					}
+
+					unset( $setting['default_value'], $setting['class'], $setting['validation_callback'] );
+					$setting['type']    = 'select';
+					$setting['choices'] = $choices;
+				} catch ( Exception $e ) {
+					// Do nothing. The text based setting will be used instead.
+				}
+			}
+
+			return $setting;
+		}
+
+		/**
+		 * Validates the From Name app setting.
+		 *
+		 * @since 2.3.4
+		 *
+		 * @param array  $field The setting properties.
+		 * @param string $value The setting value.
+		 */
+		public function validate_from_email( $field, $value ) {
+			if ( empty( $value ) || GFCommon::has_merge_tag( $value ) ) {
+				return;
+			}
+
+			if ( ! GFCommon::is_valid_email( $value ) ) {
+				$this->set_field_error( array( 'name' => 'from_email' ), esc_html__( 'Please enter a valid email address.', 'gravityflow' ) );
+				return;
+			}
+
+			$service = $this->get_setting( 'email_service', 'wordpress' );
+			if ( $service == 'wordpress' ) {
+				return;
+			}
+
+			$error_message = '';
+
+			if ( $service == 'mailgun' && function_exists( 'gf_mailgun' ) ) {
+				$from_domain = explode( '@', $value );
+				$from_domain = end( $from_domain );
+				if ( ! gf_mailgun()->is_valid_domain( $from_domain ) ) {
+					$error_message = sprintf(
+						esc_html__( 'From Email domain must be an %1$sactive domain%3$s. You can learn more about verifying your domain in the %2$sMailgun documentation%3$s.', 'gravityflow' ),
+						"<a href='https://mailgun.com/app/domains'>",
+						"<a href='https://documentation.mailgun.com/user_manual.html#verifying-your-domain'>",
+						'</a>'
+					);
+				}
+			}
+
+			if ( $error_message ) {
+				$this->set_field_error( array( 'name' => 'from_email' ), $error_message );
+			}
+
+		}
+
+		/**
+		 * Returns the Published Forms section of fields to be displayed on the app settings page.
+		 *
+		 * @since 2.3.4
+		 *
+		 * @return array
+		 */
+		public function get_app_settings_fields_published_forms() {
+			$forms   = GFAPI::get_forms();
+			$choices = array();
+			foreach ( $forms as $form ) {
+				$form_id = absint( $form['id'] );
+				$feeds   = $this->get_feeds( $form_id );
+				if ( ! empty( $feeds ) ) {
+					$choices[] = array(
+						'label' => esc_html( $form['title'] ),
+						'name'  => 'publish_form_' . absint( $form['id'] ),
+					);
+				}
+			}
+
+			if ( ! empty( $choices ) ) {
+				$published_forms_fields = array(
+					array(
+						'name'    => 'form_ids',
+						'label'   => esc_html__( 'Published', 'gravityflow' ),
+						'type'    => 'checkbox',
+						'choices' => $choices,
+					),
+				);
+			} else {
+				$published_forms_fields = array(
+					array(
+						'name'  => 'no_workflows',
+						'label' => '',
+						'type'  => 'html',
+						'html'  => esc_html__( 'No workflow steps have been added to any forms yet.', 'gravityflow' ),
+					),
+				);
+			}
+
+			return array(
 				'title'       => esc_html__( 'Published Workflow Forms', 'gravityflow' ),
 				'description' => esc_html__( 'Select the forms you wish to publish on the Submit page.', 'gravityflow' ),
 				'fields'      => $published_forms_fields,
 			);
+		}
 
-			$settings[] = array(
+		/**
+		 * Returns the Default Pages section of settings to be displayed on the app settings page.
+		 *
+		 * @since 2.3.4
+		 *
+		 * @return array
+		 */
+		public function get_app_settings_fields_pages() {
+			return array(
 				'title'       => esc_html__( 'Default Pages', 'gravityflow' ),
 				'description' => esc_html__( 'Select the pages which contain the following gravityflow shortcodes. For example, the inbox page selected below will be used when preparing merge tags such as {workflow_inbox_link} when the page_id attribute is not specified.', 'gravityflow' ),
 				'fields'      => array(
@@ -3904,25 +4087,6 @@ PRIMARY KEY  (id)
 					),
 				),
 			);
-
-			$settings[] = array(
-				'id'     => 'save_button',
-				'fields' => array(
-					array(
-						'id'       => 'save_button',
-						'name'     => 'save_button',
-						'type'     => 'save',
-						'value'    => __( 'Update Settings', 'gravityflow' ),
-						'messages' => array(
-							'success' => __( 'Settings updated successfully', 'gravityflow' ),
-							'error'   => __( 'There was an error while saving the settings', 'gravityflow' ),
-						),
-					),
-				)
-			);
-
-			return $settings;
-
 		}
 
 		/**
@@ -4686,7 +4850,7 @@ PRIMARY KEY  (id)
 		 * @param array $entry The entry created from the current form submission.
 		 * @param array $form  The form object used to process the current submission.
 		 *
-		 * @return null
+		 * @return void
 		 */
 		public function action_entry_created( $entry, $form ) {
 			$form_id = absint( $form['id'] );
@@ -4715,6 +4879,10 @@ PRIMARY KEY  (id)
 		 * @param array $form  The form object used to process the current submission.
 		 */
 		public function maybe_delay_workflow( $entry, $form ) {
+			if ( ! $this->get_first_step( $form['id'], $entry ) ) {
+				return;
+			}
+
 			$is_delayed = false;
 
 			if ( class_exists( 'GFPayPal' ) ) {
@@ -4738,7 +4906,9 @@ PRIMARY KEY  (id)
 
 			if ( $is_delayed ) {
 				$this->log_debug( __METHOD__ . '() - processing delayed for entry id ' . $entry['id'] );
-				if ( $this->is_gravityforms_supported( '2.3.3.10' ) ) {
+				if ( $this->is_gravityforms_supported( '2.3.4.2' ) ) {
+					remove_filter( 'gform_entry_pre_handle_confirmation', array( $this, 'after_submission' ), 9 );
+				} elseif ( $this->is_gravityforms_supported( '2.3.3.10' ) ) {
 					remove_action( 'gform_pre_handle_confirmation', array( $this, 'after_submission' ), 9 );
 				} else {
 					remove_action( 'gform_after_submission', array( $this, 'after_submission' ), 9 );
@@ -5249,21 +5419,27 @@ PRIMARY KEY  (id)
 		/**
 		 * Returns the specified app setting.
 		 *
+		 * @since 2.3.4
 		 * @since 1.4.3-dev
 		 *
 		 * @param string $setting_name The app setting to be returned.
+		 * @param null|string $default The default value to be returned when the setting does not have a value.
 		 *
 		 * @return mixed|string
 		 */
-		public function get_app_setting( $setting_name ) {
+		public function get_app_setting( $setting_name, $default = null ) {
 			$setting = parent::get_app_setting( $setting_name );
 
+			if ( ! empty( $setting ) ) {
+				return $setting;
+			}
+
 			// If a default page hasn't been configured use the admin page.
-			if ( ! $setting && in_array( $setting_name, array( 'inbox_page', 'status_page', 'submit_page' ) ) ) {
+			if ( in_array( $setting_name, array( 'inbox_page', 'status_page', 'submit_page' ) ) ) {
 				return 'admin';
 			}
 
-			return $setting;
+			return $default;
 		}
 
 		/**
@@ -6378,22 +6554,7 @@ AND m.meta_value='queued'";
 		 * @return string
 		 */
 		public function get_admin_icon_b64( $color = false ) {
-
-			$svg_xml = '<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 20 581 640" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
-    <g id="Layer 1" transform="matrix(1,0,0,1,-309.5,-180)">
-        <g transform="matrix(3.27114,0,0,3.27114,-738.318,-1054.55)">
-            <path d="M377.433,481.219L434.396,514.29C444.433,519.437 453.741,520.595 464.421,516.392C477.161,511.373 485.868,500.993 486.898,487.138C487.756,476.115 483.38,464.791 475.273,457.241C465.622,448.191 452.797,446.132 440.272,449.392C437.999,449.864 434.096,451.494 431.179,452.566C429.935,452.995 428.905,453.381 428.262,453.467C423.286,453.982 420.584,447.333 425.045,444.716C434.61,439.097 447.607,437.339 456.272,438.197C466.738,439.355 476.603,443.901 484.152,451.322C493.117,460.201 497.75,472.126 497.407,484.736C496.935,502.623 486.855,517.936 470.469,525.228C460.432,529.646 449.108,530.461 438.685,527.33C434.953,526.214 432.723,524.885 429.334,522.997L371.9,490.784L369.026,495.717L362.163,478.645L380.393,476.158L377.433,481.219Z" style="fill:white;"/>
-        </g>
-        <g transform="matrix(3.27114,0,0,3.27114,-738.318,-1054.55)">
-            <path d="M440.702,485.937L383.782,452.909C373.702,447.762 364.394,446.604 353.714,450.807C341.017,455.826 332.31,466.206 331.237,480.061C330.379,491.084 334.755,502.408 342.862,509.957C352.555,519.008 365.338,521.067 377.906,517.807C380.136,517.335 384.082,515.705 386.956,514.633C388.2,514.204 389.23,513.818 389.916,513.732C394.892,513.217 397.594,519.866 393.09,522.482C383.525,528.101 370.528,529.86 361.863,529.002C351.397,527.844 341.532,523.297 334.025,515.877C325.018,506.998 320.428,495.073 320.728,482.463C321.2,464.576 331.28,449.263 347.709,441.971C357.703,437.553 369.027,436.738 379.45,439.869C383.224,440.984 385.455,442.271 388.801,444.159L446.235,476.415L449.152,471.439L456.015,488.554L437.742,491.041L440.702,485.937Z" style="fill:white;"/>
-        </g>
-    </g>
-</svg>';
-
-			$icon = sprintf( 'data:image/svg+xml;base64,%s', base64_encode( $svg_xml ) );
-
+			$icon = gravityflow_icon();
 			return $icon;
 		}
 

@@ -3,6 +3,8 @@
  * Purpose: Test the file upload field in the user input step
  */
 
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the file upload field in the user input step' );

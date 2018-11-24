@@ -3,6 +3,8 @@
  * Purpose: Test calculations that use fields that are not editable or displayed
  */
 
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test calculations that use fields that are not editable or displayed.');

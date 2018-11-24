@@ -3,6 +3,9 @@
  * Purpose: Test the save progress types
  */
 
+// @group merge-tags
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test the save progress types for user input step' );
@@ -63,3 +66,10 @@ $I->dontSeeElement( 'input[name=gravityflow_status]' );
 $I->click( '#gravityflow_update_button' );
 $I->waitForText( 'Entry updated and marked complete.' );
 $I->see( 'Entry updated and marked complete.' );
+
+// Test the output of {assignees} in the page created from the user input step in progress email.
+$I->amOnPage( '/0023-in-progress-email-mt-assignees' );
+$I->waitForText( '0023-in-progress-email-mt-assignees', 3 );
+$I->see( 'Assignees Merge Tag Test' );
+$I->dontSee( '{assignees}' );
+$I->see( 'administrator (Pending)' );

@@ -3,6 +3,8 @@
  * Purpose: Test that calculated product fields hidden by conditional logic do not reappear in the order summary after the user input step saves the entry.
  */
 
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test that calculated product fields hidden by conditional logic do not reappear in the order summary after the user input step saves the entry.' );

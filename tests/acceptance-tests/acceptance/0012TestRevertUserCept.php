@@ -3,6 +3,9 @@
  * Purpose: Test revert user
  */
 
+// @group step-approval
+// @group step-user_input
+
 $I = new AcceptanceTester( $scenario );
 
 $I->wantTo( 'Test Revert User' );
