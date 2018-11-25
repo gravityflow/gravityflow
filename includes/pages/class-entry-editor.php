@@ -420,7 +420,7 @@ class Gravity_Flow_Entry_Editor {
 		$value = $this->get_post_image_value( $value, $field );
 		$value = $this->get_post_category_value( $value, $field );
 
-		if ( $this->step instanceof Gravity_Flow_Step_User_Input && ! empty( $field->fields ) &&  rgpost( 'gravityflow_status' ) == 'in_progress') {
+		if ( $this->step instanceof Gravity_Flow_Step_User_Input && ! empty( $field->fields ) &&  rgpost( 'gravityflow_status' ) == 'in_progress' ) {
 			// Temporarily set isRequired for all sub-fields to false to allow required fields to be saved when saving progress.
 			$this->step->set_field_property( $field, 'isRequired', false );
 			$html = $field->get_field_input( $this->form, $value, $this->entry );
