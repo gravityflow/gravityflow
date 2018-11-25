@@ -680,7 +680,15 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				} elseif ( ! $field_is_hidden && ! $submission_is_empty ) {
 					$value = GFFormsModel::get_field_value( $field );
 
-					$field->validate( $value, $form );
+					if ( ! empty( $field->fields ) &&  rgpost( 'gravityflow_status' ) == 'in_progress' ) {
+						// Temporarily set isRequired for all sub-fields to false to allow required fields to be saved when saving progress.
+						$this->set_field_property( $field, 'isRequired', false );
+						$field->validate( $value, $form );
+						$this->restore_field_property( $field, 'isRequired' );
+					} else {
+						$field->validate( $value, $form );
+					}
+
 					$custom_validation_result = gf_apply_filters( array( 'gform_field_validation', $form['id'], $field->id ), array(
 						'is_valid' => $field->failed_validation ? false : true,
 						'message'  => $field->validation_message,
@@ -697,6 +705,54 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		}
 
 		return $valid;
+	}
+
+	/**
+	 * Set the value of a field property and optionally stash the current value to be restored later in
+	 * $this->restore_field_property().
+	 *
+	 * Sets the value of sub-fields recursively.
+	 *
+	 * @since 2.4
+	 *
+	 * @param GF_Field $field
+	 * @param string   $property
+	 * @param mixed    $new_value
+	 * @param bool     $stash_previous_value
+	 */
+	public function set_field_property( $field, $property, $new_value, $stash_previous_value = true ) {
+		$value = $field->{$property};
+		if ( $stash_previous_value ) {
+			$field->set_context_property( 'gravityflow_stash_' . $property, $value );
+		}
+		$field->{$property} = $new_value;
+		if ( ! empty( $field->fields ) && is_array( $field->fields ) ) {
+			foreach ( $field->fields as $sub_field ) {
+				$this->set_field_property( $sub_field, $property, $new_value, $stash_previous_value );
+			}
+		}
+	}
+
+	/**
+	 * Set the value of a field property and optionally stash the current value to be restored later in
+	 * $this->restore_field_property().
+	 *
+	 * Sets the value of sub-fields recursively.
+	 *
+	 * @since 2.4
+	 *
+	 * @param GF_Field $field
+	 * @param string   $property
+	 */
+	public function restore_field_property( $field, $property ) {
+		$value = $field->get_context_property( 'gravityflow_stash_' . $property );
+
+		$field->{$property} = $value;
+		if ( ! empty( $field->fields ) && is_array( $field->fields ) ) {
+			foreach ( $field->fields as $sub_field ) {
+				$this->restore_field_property( $sub_field, $property );
+			}
+		}
 	}
 
 	/**
