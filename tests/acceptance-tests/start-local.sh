@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-cd ../../
-
 # Run just one test
 #./vendor/bin/codecept run -c codeception-local.yml tests/acceptance-tests/acceptance/0038CurrentStepMergeTagCept.php -vvv --html --env win-chrome
 
