@@ -54,7 +54,10 @@ class Gravity_Flow_Common_Step_Settings {
 				/* Format the PDFs in the appropriate format for use in a select field */
 				foreach ( $gpdf_feeds as $gpdf_feed ) {
 					if ( true === $gpdf_feed['active'] ) {
-						$this->_gpdf_choices[] = array( 'label' => $gpdf_feed['name'], 'value' => $gpdf_feed['id'] );
+						$this->_gpdf_choices[] = array(
+							'label' => $gpdf_feed['name'],
+							'name'  => 'notification_gravitypdf_' . $gpdf_feed['id'],
+						);
 					}
 				}
 
@@ -284,17 +287,17 @@ class Gravity_Flow_Common_Step_Settings {
 			return array();
 		}
 
+		$choices = $this->_gpdf_choices;
+		foreach( $choices as &$pdf ) {
+			$pdf['name'] = rgar( $config, 'name_prefix' ) . '_' . $pdf['name'];
+		}
+
 		return array(
 			array(
-				'name'     => rgar( $config, 'name_prefix' ) . '_notification_gpdf',
-				'label'    => '',
-				'type'     => 'checkbox_and_select',
-				'checkbox' => array(
-					'label' => esc_html__( 'Attach PDF', 'gravityflow' ),
-				),
-				'select'   => array(
-					'choices' => $this->_gpdf_choices,
-				),
+				'name'    => rgar( $config, 'name_prefix' ) . '_notification_gpdf',
+				'label'   => esc_html__( 'Attach PDF(s)', 'gravityflow' ),
+				'type'    => 'checkbox',
+				'choices' => $choices,
 			)
 		);
 	}

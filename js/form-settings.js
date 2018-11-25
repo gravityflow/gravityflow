@@ -287,7 +287,7 @@
 
 		};
 
-		var notificationTabs = ['assignee', 'rejection', 'approval', 'in_progress', 'complete'];
+		var notificationTabs = ['assignee', 'rejection', 'approval', 'in_progress', 'complete', 'revert'];
 
 		for (var i = 0; i < notificationTabs.length; i++) {
 			GravityFlowFeedSettings.initNotificationTab(notificationTabs[i]);
@@ -319,6 +319,36 @@
 				$notificationTabs.tabs('disable', 1);
 			} else {
 				$notificationTabs.tabs('enable', 1);
+			}
+		});
+
+		// Approval - Revert Email Tab
+
+		var $revertSetting = $('#revertenable');
+		if ( !$revertSetting.prop("checked")) {
+			$('#tabs-notification_tabs').tabs('disable', 3);
+
+		}
+
+		$revertSetting.change(function () {
+			var disabled = $(this).prop("checked");
+			var $notificationTabs = $('#tabs-notification_tabs');
+			if (!disabled) {
+				var $enabledSetting = $('#revert_notification_enabled');
+
+				// Disable the Revert notification if enabled.
+				if ($enabledSetting.prop('checked')) {
+					$enabledSetting.click();
+				}
+
+				// If the Revert Email tab is active switch to the Assignee Email tab.
+				if ($notificationTabs.tabs('option', 'active') === 1) {
+					$notificationTabs.tabs('option', 'active', 0);
+				}
+
+				$notificationTabs.tabs('disable', 3);
+			} else {
+				$notificationTabs.tabs('enable', 3);
 			}
 		});
 
@@ -374,8 +404,8 @@
 
 	function toggleWorkflowNotificationType(showType) {
 		var fields = {
-			select: ['workflow_notification_users\\[\\]', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat'],
-			routing: ['workflow_notification_routing', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat']
+			select: ['workflow_notification_users\\[\\]', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat', 'workflow_notification_gpdf'],
+			routing: ['workflow_notification_routing', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat', 'workflow_notification_gpdf']
 		};
 		toggleFields(fields, showType, false);
 	}
@@ -459,6 +489,7 @@
 			'editable_fields\\[\\]',
 			'routing',
 			'assignee_notification_message',
+			'workflow_notification_gpdf'
 
 		];
 		for (var i = 0; i < subSettings.length; i++) {

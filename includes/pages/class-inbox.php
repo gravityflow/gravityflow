@@ -39,15 +39,7 @@ class Gravity_Flow_Inbox {
 		}
 
 		$total_count = 0;
-
-		timer_start();
-
-		$entries = self::get_entries( $args, $total_count );
-
-		gravity_flow()->log_debug( __METHOD__ . '(): duration of get_entries: ' . timer_stop() );
-
-
-		gravity_flow()->log_debug( __METHOD__ . "(): {$total_count} pending tasks." );
+		$entries     = Gravity_Flow_API::get_inbox_entries( $args, $total_count );
 
 		if ( sizeof( $entries ) > 0 ) {
 			$columns = self::get_columns( $args );
@@ -119,26 +111,9 @@ class Gravity_Flow_Inbox {
 	}
 
 	/**
-	 * Get the filter key for the current user.
-	 *
-	 * @return string
-	 */
-	public static function get_filter_key() {
-		global $current_user;
-
-		$filter_key = '';
-
-		if ( $current_user->ID > 0 ) {
-			$filter_key = 'workflow_user_id_' . $current_user->ID;
-		} elseif ( $token = gravity_flow()->decode_access_token() ) {
-			$filter_key = gravity_flow()->parse_token_assignee( $token )->get_status_key();
-		}
-
-		return $filter_key;
-	}
-
-	/**
 	 * Get the entries to be displayed.
+	 *
+	 * @deprecated 2.3.2
 	 *
 	 * @param array $args        The inbox page arguments.
 	 * @param int   $total_count The total number of entries.
@@ -146,87 +121,9 @@ class Gravity_Flow_Inbox {
 	 * @return array
 	 */
 	public static function get_entries( $args, &$total_count ) {
-		$entries    = array();
-		$filter_key = self::get_filter_key();
+		_deprecated_function( __METHOD__, '2.3.2', 'Gravity_Flow_API::get_inbox_entries' );
 
-		gravity_flow()->log_debug( __METHOD__ . '(): $filter_key => ' . $filter_key );
-
-		if ( ! empty( $filter_key ) ) {
-			$field_filters   = array();
-			$field_filters[] = array(
-				'key'   => $filter_key,
-				'value' => 'pending',
-			);
-
-			$user_roles = gravity_flow()->get_user_roles();
-			foreach ( $user_roles as $user_role ) {
-				$field_filters[] = array(
-					'key'   => 'workflow_role_' . $user_role,
-					'value' => 'pending',
-				);
-			}
-
-			$field_filters['mode'] = 'any';
-
-			$search_criteria                  = array();
-			$search_criteria['field_filters'] = $field_filters;
-			$search_criteria['status']        = 'active';
-
-			$form_ids = $args['form_id'] ? $args['form_id'] : gravity_flow()->get_workflow_form_ids();
-
-			/**
-			 * Allows form id(s) to be adjusted to define which forms' entries are displayed in inbox table.
-			 *
-			 * Return an array of form ids for use with GFAPI.
-			 * 
-			 * @since 2.2.2-dev
-			 * 
-			 * @param array   $form_ids        The form ids
-			 * @param array   $search_criteria The search criteria
-			 */
-			$form_ids = apply_filters( 'gravityflow_form_ids_inbox', $form_ids, $search_criteria);
-
-			gravity_flow()->log_debug( __METHOD__ . '(): $form_ids => ' . print_r( $form_ids, 1 ) );
-			gravity_flow()->log_debug( __METHOD__ . '(): $search_criteria => ' . print_r( $search_criteria, 1 ) );
-
-			if ( ! empty( $form_ids ) ) {
-				$paging  = array(
-					'page_size' => 150,
-				);
-
-				/**
-				 *
-				 * @since 2.0.2
-				 *
-				 * Allows the paging criteria to be modified before entries are searched for the inbox.
-				 *
-				 * @param array $paging The paging criteria.
-				 */
-				$paging = apply_filters( 'gravityflow_inbox_paging', $paging );
-
-				$sorting = array();
-
-				/**
-				 * Allows the sorting criteria to be modified before entries are searched for the inbox.
-				 *
-				 * @param array $sorting The sorting criteria.
-				 */
-				$sorting = apply_filters( 'gravityflow_inbox_sorting', $sorting );
-
-				/**
-				 * Allows the search criteria to be modified before entries are searched for the inbox.
-				 *
-				 * @since 2.1
-				 *
-				 * @param array $sorting The search criteria.
-				 */
-				$search_criteria = apply_filters( 'gravityflow_inbox_search_criteria', $search_criteria );
-
-				$entries = GFAPI::get_entries( $form_ids, $search_criteria, $sorting, $paging, $total_count );
-			}
-		}
-
-		return $entries;
+		return Gravity_Flow_API::get_inbox_entries( $args, $total_count );
 	}
 
 	/**

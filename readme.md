@@ -34,12 +34,13 @@ If you're using VVV you can use this command:
 
 	bash tests/bin/install.sh wordpress_unit_tests root root localhost
 
-The acceptance tests are completely separate from the unit tests and do not require the unit tests to be configured. Steps to install and configure the acceptance tests:
+If you're using Local by Flywheel you can use this (change the IP address and port)
+
+    bash tests/bin/install.sh local root root 192.168.95.100:4010
+
+The acceptance tests are completely separate from the unit tests and do not require the unit tests to be configured. Ensure you have docker installed and run the following script:
  
-1. Install the dependencies: `composer install`
-2. Download and start either PhantomJS or Selenium.
-3. Copy codeception-sample-vvv.yml or codeception-sample-pressmatic.yml to codeception.yml and adjust it to point to your test site. Warning: the database will cleaned before each run.
-4. Run the tests: `./vendor/bin/codecept run`
+    bash tests/acceptance-tests/start.sh
 
 
 ## Documentation

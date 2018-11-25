@@ -611,21 +611,26 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				$headers = array();
 			}
 		}
+
 		if ( $this->authentication == 'connected_app' ) {
+
 			$app_id = $this->get_setting( 'connected_app' );
-			$connected_app      = gravityflow_connected_apps()->get_app( $app_id );
+
+			$connected_app = gravityflow_connected_apps()->get_app( $app_id );
+
 			if ( empty( $connected_app ) ) {
 				$this->log_debug( __METHOD__ . '() - Connected app not found: ' . $app_id );
 			}
-			$access_credentials = $connected_app['access_creds'];
+
+			$access_credentials = rgar( $connected_app, 'access_creds' );
 
 			require_once( dirname( __FILE__ ) . '/../class-oauth1-client.php' );
 			$this->oauth1_client = new Gravity_Flow_Oauth1_Client(
 				array(
 					'consumer_key'    => $connected_app['consumer_key'],
 					'consumer_secret' => $connected_app['consumer_secret'],
-					'token'           => $access_credentials['oauth_token'],
-					'token_secret'    => $access_credentials['oauth_token_secret'],
+					'token'           => rgar( $access_credentials, 'oauth_token' ),
+					'token_secret'    => rgar( $access_credentials, 'oauth_token_secret' ),
 				),
 				'gravi_flow_' . $connected_app['consumer_key'],
 				$this->get_setting( 'url' )
@@ -637,6 +642,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				$this->oauth1_client->config['token']        = $access_credentials['oauth_token'];
 				$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret'];
 			}
+
 			// Note we don't send the final $options[] parameter in here because our request is always sent in the body.
 			$headers['Authorization'] = $this->oauth1_client->get_full_request_header( $this->get_setting( 'url' ), $method );
 		}

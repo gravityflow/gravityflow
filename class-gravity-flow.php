@@ -42,7 +42,7 @@ if ( class_exists( 'GFForms' ) ) {
 		 *
 		 * @var string
 		 */
-		protected $_min_gravityforms_version = '2.1';
+		protected $_min_gravityforms_version = '2.3';
 
 		/**
 		 * The add-on slug.
@@ -334,6 +334,10 @@ if ( class_exists( 'GFForms' ) ) {
 				if ( version_compare( $previous_version, '2.0.2-dev', '<' ) ) {
 					$this->upgrade_202();
 				}
+
+				if ( version_compare( $previous_version, '2.4.0-dev', '<' ) ) {
+					$this->upgrade_240();
+				}
 			}
 
 			wp_cache_flush();
@@ -494,6 +498,37 @@ PRIMARY KEY  (id)
 		}
 
 		/**
+		 * Migrate the Gravity PDF Select field to a Checkbox field
+		 */
+		public function upgrade_240() {
+			$steps = $this->get_steps();
+
+			foreach ( $steps as $step ) {
+				$step_dirty = false;
+				$feed_meta  = $step->get_feed_meta();
+				foreach ( $feed_meta as $key => $value ) {
+					if ( strpos( $key, 'gpdfEnable' ) !== false && $value ) {
+						$pdf_key = str_replace( 'gpdfEnable', 'gpdfValue', $key );
+						if ( isset( $feed_meta[ $pdf_key ] ) ) {
+							$pdf_id      = $feed_meta[ $pdf_key ];
+							$new_pdf_key = str_replace( 'gpdfEnable', 'gravitypdf_' . $pdf_id, $key );
+
+							unset( $feed_meta[ $key ] );
+							unset( $feed_meta[ $pdf_key ] );
+							$feed_meta[ $new_pdf_key ] = '1';
+
+							$step_dirty = true;
+						}
+					}
+				}
+
+				if ( $step_dirty ) {
+					$this->save_feed_settings( $step->get_id(), $step->get_form_id(), $feed_meta );
+				}
+			}
+		}
+
+		/**
 		 * Enqueue the JavaScript and output the root url and the nonce.
 		 *
 		 * @return array
@@ -609,6 +644,16 @@ PRIMARY KEY  (id)
 						'formId'         => absint( rgget( 'id' ) ),
 						'mergeTagLabels' => $this->get_form_settings_js_merge_tag_labels(),
 						'assigneeSearchPlaceholder' => esc_attr__( 'Type to search', 'gravityflow' ),
+					),
+				),
+				array(
+					'handle'  => 'gform_field_filter',
+					'src'     => GFCommon::get_base_url() . "/js/routing-setting{$min}.js",
+					'deps'    => array( 'jquery', 'gform_datepicker_init' ),
+					'version' => $this->_version,
+					'enqueue' => array(
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
+						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=0' ),
 					),
 				),
 				array(
@@ -2658,6 +2703,132 @@ PRIMARY KEY  (id)
 		}
 
 		/**
+		 * Displays the setting HTML.
+		 *
+		 * @param array $field The setting properties.
+		 */
+		public function settings_html( $field ) {
+			echo $field['html'];
+		}
+
+		/**
+		 * Displays the entry filter setting.
+		 *
+		 * @since 2.4
+		 *
+		 * @param array $field  The setting properties.
+		 * @param bool $echo    Whether to output the markup.
+		 *
+		 * @return string
+		 */
+		public function settings_entry_filter( $field, $echo = true ) {
+			$form = ! empty( $field['form_id'] ) ? GFFormsModel::get_form_meta( $field['form_id'] ) : $this->get_current_form();
+			$filter_settings      = GFCommon::get_field_filter_settings( $form );
+			$filter_settings_json = json_encode( $filter_settings );
+			$value = $this->get_setting( $field['name'] );
+			if ( ! $value ) {
+				$value = array(
+                    'mode' => 'all',
+					'filters' => array(
+						array(
+							'field'    => 0,
+							'operator' => 'contains',
+							'value'    => '',
+						),
+					),
+				);
+
+			}
+			$value_json = json_encode( $value );
+			$text = isset( $field['filter_text'] ) ? $field['filter_text'] : esc_html__( 'Match {0} of the following criteria:', 'gravityflow' );
+			$text_json = json_encode( $text );
+			$name = $field['name'];
+			$html = "
+<div id='setting-entry-filter-{$name}' class='setting-entry-filter'>
+    <!--placeholder-->
+</div>
+<script>
+gf_vars.filterAndAny = {$text_json};
+jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$value_json});
+
+(function($){
+    $(document).ready(function () {
+         function setFilterValue(){
+         	var filterSetting = $(this).closest('.setting-entry-filter').parent(),
+                filterRows = filterSetting.find('.gform-field-filter'),
+                filters = [];
+            filterRows.each( function( i )  {
+            	var f = $(this).find('.gform-filter-field').val(),
+            	    o = $(this).find('.gform-filter-operator').val(),
+            	    v = $(this).find('.gform-filter-value').val();
+                filters.push({field : f, operator: o, value: v });
+            });
+            var input = filterSetting.find('input.gaddon-hidden'),
+                mode = filterSetting.find('select[name=mode]').val(),
+                val = {
+                    mode : mode,
+                    filters : filters
+                };
+            input.val(JSON.stringify(val));
+        };
+        $('#setting-entry-filter-{$name}').on('change', 'select[name=mode]', setFilterValue);
+	    $('#setting-entry-filter-{$name}').on('change', '.gform-filter-operator', setFilterValue);
+	    $('#setting-entry-filter-{$name}').on('change blur', '.gform-filter-value', setFilterValue);
+    });
+})(jQuery);
+</script>";
+			$hidden_field = array( 'name' => $field['name'], 'type'=> 'hidden' );
+			$html .= $this->settings_hidden( $hidden_field, false );
+
+			if ( rgar( $field, 'show_sorting_options' ) ) {
+				$html .= '<br />' . esc_html__( 'Sort by field') . '&nbsp;';
+				$sort_field_choices = array();
+				foreach( $filter_settings as $filter_setting ) {
+				    if ( $filter_setting['key'] === '0' ) {
+				        continue;
+					}
+
+					$filter_key = $filter_setting['key'] === 'entry_id' ? 'id' : $filter_setting['key'];
+
+					$sort_field_choices[] = array(
+						'value' => $filter_key,
+						'label' => $filter_setting['text'],
+					);
+                }
+
+                $sort_field = array(
+                        'name' => $field['name'] . 'sort_key',
+                        'default_value' => 'entry_id',
+                        'choices' => $sort_field_choices,
+                );
+
+				$html .= $this->settings_select( $sort_field, false );
+				$html .= '&nbsp;';
+				$direction_field = array(
+				        'name' => $field['name'] . 'sort_direction',
+				        'default_value' => 'DESC',
+                        'choices' => array(
+                            array(
+                                'value' => 'ASC',
+                                'label' => 'ASC',
+                            ),
+	                        array(
+		                        'value' => 'DESC',
+		                        'label' => 'DESC',
+	                        ),
+                        )
+                );
+
+				$html .= $this->settings_select( $direction_field, false );
+            }
+
+			if ( $echo ) {
+				echo $html;
+			}
+			return $html;
+		}
+
+		/**
 		 * Adds columns to the list of feeds.
 		 *
 		 * Setting name => label.
@@ -3810,40 +3981,6 @@ PRIMARY KEY  (id)
 		 * @return array
 		 */
 		public function app_settings_fields() {
-
-			$forms = GFAPI::get_forms();
-			$choices = array();
-			foreach ( $forms as $form ) {
-				$form_id = absint( $form['id'] );
-				$feeds = $this->get_feeds( $form_id );
-				if ( ! empty( $feeds ) ) {
-					$choices[] = array(
-						'label'         => esc_html( $form['title'] ),
-						'name'          => 'publish_form_' . absint( $form['id'] ),
-					);
-				}
-			}
-
-			if ( ! empty( $choices ) ) {
-				$published_forms_fields = array(
-					array(
-						'name'          => 'form_ids',
-						'label'         => esc_html__( 'Published', 'gravityflow' ),
-						'type'          => 'checkbox',
-						'choices'       => $choices,
-					),
-				);
-			} else {
-				$published_forms_fields = array(
-					array(
-						'name'          => 'no_workflows',
-						'label'         => '',
-						'type'          => 'html',
-						'html'          => esc_html__( 'No workflow steps have been added to any forms yet.', 'gravityflow' ),
-					),
-				);
-			}
-
 			$settings = array();
 
 			if ( ( ! is_multisite() || ( is_multisite() && is_main_site() ) ) && ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
@@ -3876,13 +4013,231 @@ PRIMARY KEY  (id)
 				);
 			}
 
+			$settings[] = $this->get_app_settings_fields_emails();
+			$settings[] = $this->get_app_settings_fields_pages();
+			$settings[] = $this->get_app_settings_fields_published_forms();
+
 			$settings[] = array(
+				'id'     => 'save_button',
+				'fields' => array(
+					array(
+						'id'       => 'save_button',
+						'name'     => 'save_button',
+						'type'     => 'save',
+						'value'    => __( 'Update Settings', 'gravityflow' ),
+						'messages' => array(
+							'success' => __( 'Settings updated successfully', 'gravityflow' ),
+							'error'   => __( 'There was an error while saving the settings', 'gravityflow' ),
+						),
+					),
+				)
+			);
+
+			return $settings;
+
+		}
+
+		/**
+		 * Returns an array of email related settings to be displayed on the app settings page.
+		 *
+		 * @since 2.3.4
+		 *
+		 * @return array
+		 */
+		public function get_app_settings_fields_emails() {
+
+			$settings = array(
+				'title'  => esc_html__( 'Workflow Emails', 'gravityflow' ),
+				'fields' => array(),
+			);
+
+			require_once GFCommon::get_base_path() . '/notification.php';
+			$notification_services = GFNotification::get_notification_services();
+
+			if ( count( $notification_services ) > 1 ) {
+				$service_choices = array();
+
+				foreach ( $notification_services as $key => $service ) {
+					$service_choices[] = array(
+						'label' => rgar( $service, 'label' ),
+						'value' => $key,
+						'icon'  => rgar( $service, 'image' ),
+					);
+				}
+
+				$settings['fields'][] = array(
+					'name'          => 'email_service',
+					'label'         => esc_html__( 'Email Service', 'gravityflow' ),
+					'tooltip'       => __( 'Select which service should be used to send the workflow emails. WordPress uses the server hosting your site or an active SMTP plugin.', 'gravityflow' ),
+					'type'          => 'radio',
+					'horizontal'    => true,
+					'default_value' => 'wordpress',
+					'choices'       => $service_choices,
+					'onchange'      => 'jQuery(this).parents("form").submit();',
+				);
+			}
+
+			$settings['fields'][] = array(
+				'name'          => 'from_name',
+				'label'         => esc_html__( 'From Name', 'gravityflow' ),
+				'tooltip'       => __( 'The default From Name to be used when the From Name setting is not configured on the individual steps.', 'gravityflow' ),
+				'type'          => 'text',
+				'default_value' => get_bloginfo( 'name' ),
+				'class'         => 'medium',
+			);
+
+			$settings['fields'][] = $this->get_app_settings_field_from_email();
+
+			return $settings;
+		}
+
+		/**
+		 * Returns an array of properties for the From Email setting to be displayed on the app settings page.
+		 *
+		 * @since 2.3.4
+		 *
+		 * @return array
+		 */
+		public function get_app_settings_field_from_email() {
+			$setting = array(
+				'name'                => 'from_email',
+				'label'               => esc_html__( 'From Email', 'gravityflow' ),
+				'tooltip'             => __( 'The default From Email to be used when the From Email setting is not configured on the individual steps.', 'gravityflow' ),
+				'type'                => 'text',
+				'default_value'       => get_bloginfo( 'admin_email' ),
+				'class'               => 'medium',
+				'validation_callback' => array( $this, 'validate_from_email' ),
+			);
+
+			$service = $this->get_setting( 'email_service' );
+
+			if ( $service == 'postmark' && function_exists( 'gf_postmark' ) ) {
+				$choices = array();
+
+				try {
+					$postmark = new GF_Postmark_API();
+					$postmark->set_account_token( gf_postmark()->get_plugin_setting( 'accountToken' ) );
+					$sender_signatures = $postmark->get_sender_signatures();
+
+					foreach ( $sender_signatures as $sender_signature ) {
+						$choices[] = array(
+							'label' => $sender_signature['EmailAddress'],
+							'value' => $sender_signature['EmailAddress'],
+						);
+					}
+
+					unset( $setting['default_value'], $setting['class'], $setting['validation_callback'] );
+					$setting['type']    = 'select';
+					$setting['choices'] = $choices;
+				} catch ( Exception $e ) {
+					// Do nothing. The text based setting will be used instead.
+				}
+			}
+
+			return $setting;
+		}
+
+		/**
+		 * Validates the From Name app setting.
+		 *
+		 * @since 2.3.4
+		 *
+		 * @param array  $field The setting properties.
+		 * @param string $value The setting value.
+		 */
+		public function validate_from_email( $field, $value ) {
+			if ( empty( $value ) || GFCommon::has_merge_tag( $value ) ) {
+				return;
+			}
+
+			if ( ! GFCommon::is_valid_email( $value ) ) {
+				$this->set_field_error( array( 'name' => 'from_email' ), esc_html__( 'Please enter a valid email address.', 'gravityflow' ) );
+				return;
+			}
+
+			$service = $this->get_setting( 'email_service', 'wordpress' );
+			if ( $service == 'wordpress' ) {
+				return;
+			}
+
+			$error_message = '';
+
+			if ( $service == 'mailgun' && function_exists( 'gf_mailgun' ) ) {
+				$from_domain = explode( '@', $value );
+				$from_domain = end( $from_domain );
+				if ( ! gf_mailgun()->is_valid_domain( $from_domain ) ) {
+					$error_message = sprintf(
+						esc_html__( 'From Email domain must be an %1$sactive domain%3$s. You can learn more about verifying your domain in the %2$sMailgun documentation%3$s.', 'gravityflow' ),
+						"<a href='https://mailgun.com/app/domains'>",
+						"<a href='https://documentation.mailgun.com/user_manual.html#verifying-your-domain'>",
+						'</a>'
+					);
+				}
+			}
+
+			if ( $error_message ) {
+				$this->set_field_error( array( 'name' => 'from_email' ), $error_message );
+			}
+
+		}
+
+		/**
+		 * Returns the Published Forms section of fields to be displayed on the app settings page.
+		 *
+		 * @since 2.3.4
+		 *
+		 * @return array
+		 */
+		public function get_app_settings_fields_published_forms() {
+			$forms   = GFAPI::get_forms();
+			$choices = array();
+			foreach ( $forms as $form ) {
+				$form_id = absint( $form['id'] );
+				$feeds   = $this->get_feeds( $form_id );
+				if ( ! empty( $feeds ) ) {
+					$choices[] = array(
+						'label' => esc_html( $form['title'] ),
+						'name'  => 'publish_form_' . absint( $form['id'] ),
+					);
+				}
+			}
+
+			if ( ! empty( $choices ) ) {
+				$published_forms_fields = array(
+					array(
+						'name'    => 'form_ids',
+						'label'   => esc_html__( 'Published', 'gravityflow' ),
+						'type'    => 'checkbox',
+						'choices' => $choices,
+					),
+				);
+			} else {
+				$published_forms_fields = array(
+					array(
+						'name'  => 'no_workflows',
+						'label' => '',
+						'type'  => 'html',
+						'html'  => esc_html__( 'No workflow steps have been added to any forms yet.', 'gravityflow' ),
+					),
+				);
+			}
+
+			return array(
 				'title'       => esc_html__( 'Published Workflow Forms', 'gravityflow' ),
 				'description' => esc_html__( 'Select the forms you wish to publish on the Submit page.', 'gravityflow' ),
 				'fields'      => $published_forms_fields,
 			);
+		}
 
-			$settings[] = array(
+		/**
+		 * Returns the Default Pages section of settings to be displayed on the app settings page.
+		 *
+		 * @since 2.3.4
+		 *
+		 * @return array
+		 */
+		public function get_app_settings_fields_pages() {
+			return array(
 				'title'       => esc_html__( 'Default Pages', 'gravityflow' ),
 				'description' => esc_html__( 'Select the pages which contain the following gravityflow shortcodes. For example, the inbox page selected below will be used when preparing merge tags such as {workflow_inbox_link} when the page_id attribute is not specified.', 'gravityflow' ),
 				'fields'      => array(
@@ -3903,25 +4258,6 @@ PRIMARY KEY  (id)
 					),
 				),
 			);
-
-			$settings[] = array(
-				'id'     => 'save_button',
-				'fields' => array(
-					array(
-						'id'       => 'save_button',
-						'name'     => 'save_button',
-						'type'     => 'save',
-						'value'    => __( 'Update Settings', 'gravityflow' ),
-						'messages' => array(
-							'success' => __( 'Settings updated successfully', 'gravityflow' ),
-							'error'   => __( 'There was an error while saving the settings', 'gravityflow' ),
-						),
-					),
-				)
-			);
-
-			return $settings;
-
 		}
 
 		/**
@@ -4068,15 +4404,6 @@ PRIMARY KEY  (id)
 			$response = wp_remote_post( GRAVITY_FLOW_EDD_STORE_URL, $args );
 
 			return $response;
-		}
-
-		/**
-		 * Displays the setting HTML.
-		 *
-		 * @param array $field The setting properties.
-		 */
-		public function settings_html( $field ) {
-			echo $field['html'];
 		}
 
 		/**
@@ -4685,7 +5012,7 @@ PRIMARY KEY  (id)
 		 * @param array $entry The entry created from the current form submission.
 		 * @param array $form  The form object used to process the current submission.
 		 *
-		 * @return null
+		 * @return void
 		 */
 		public function action_entry_created( $entry, $form ) {
 			$form_id = absint( $form['id'] );
@@ -4714,6 +5041,10 @@ PRIMARY KEY  (id)
 		 * @param array $form  The form object used to process the current submission.
 		 */
 		public function maybe_delay_workflow( $entry, $form ) {
+			if ( ! $this->get_first_step( $form['id'], $entry ) ) {
+				return;
+			}
+
 			$is_delayed = false;
 
 			if ( class_exists( 'GFPayPal' ) ) {
@@ -5250,21 +5581,27 @@ PRIMARY KEY  (id)
 		/**
 		 * Returns the specified app setting.
 		 *
+		 * @since 2.3.4
 		 * @since 1.4.3-dev
 		 *
 		 * @param string $setting_name The app setting to be returned.
+		 * @param null|string $default The default value to be returned when the setting does not have a value.
 		 *
 		 * @return mixed|string
 		 */
-		public function get_app_setting( $setting_name ) {
+		public function get_app_setting( $setting_name, $default = null ) {
 			$setting = parent::get_app_setting( $setting_name );
 
+			if ( ! empty( $setting ) ) {
+				return $setting;
+			}
+
 			// If a default page hasn't been configured use the admin page.
-			if ( ! $setting && in_array( $setting_name, array( 'inbox_page', 'status_page', 'submit_page' ) ) ) {
+			if ( in_array( $setting_name, array( 'inbox_page', 'status_page', 'submit_page' ) ) ) {
 				return 'admin';
 			}
 
-			return $setting;
+			return $default;
 		}
 
 		/**

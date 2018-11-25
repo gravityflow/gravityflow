@@ -936,15 +936,18 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 * @return array
 	 */
 	public function get_notification( $type ) {
-		$notification = array( 'workflow_notification_type' => $type );
+		$notification = array(
+			'workflow_notification_type' => $type,
+			'service'                    => gravity_flow()->get_app_setting( 'email_service', 'wordpress' ),
+		);
 
 		$type .= '_notification_';
 		$from_name  = $type . 'from_name';
 		$from_email = $type . 'from_email';
 		$subject    = $type . 'subject';
 
-		$notification['fromName']          = empty( $this->{$from_name} ) ? get_bloginfo() : $this->{$from_name};
-		$notification['from']              = empty( $this->{$from_email} ) ? get_bloginfo( 'admin_email' ) : $this->{$from_email};
+		$notification['fromName']          = empty( $this->{$from_name} ) ? gravity_flow()->get_app_setting( 'from_name', get_bloginfo( 'name' ) ) : $this->{$from_name};
+		$notification['from']              = empty( $this->{$from_email} ) ? gravity_flow()->get_app_setting( 'from_email', get_bloginfo( 'admin_email' ) ) : $this->{$from_email};
 		$notification['replyTo']           = $this->{$type . 'reply_to'};
 		$notification['bcc']               = $this->{$type . 'bcc'};
 		$notification['message']           = $this->{$type . 'message'};
@@ -957,10 +960,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$notification['subject'] = $this->{$subject};
 		}
 
-		if ( defined( 'PDF_EXTENDED_VERSION' ) && version_compare( PDF_EXTENDED_VERSION, '4.0-RC2', '>=' ) ) {
-			if ( $this->{$type . 'gpdfEnable'} ) {
-				$gpdf_id      = $this->{$type . 'gpdfValue'};
-				$notification = $this->gpdf_add_notification_attachment( $notification, $gpdf_id );
+		/* Attach PDF(s) if required */
+		if ( method_exists( 'GPDFAPI', 'get_form_pdfs' ) ) {
+			$form_pdfs = GPDFAPI::get_form_pdfs( $this->get_form_id() );
+			foreach ( $form_pdfs as $fprm_pdf ) {
+				$pdf_key = $type . 'gravitypdf_' . $fprm_pdf['id'];
+				if ( $this->{$pdf_key} ) {
+					$notification = $this->gpdf_add_notification_attachment( $notification, $fprm_pdf['id'] );
+				}
 			}
 		}
 

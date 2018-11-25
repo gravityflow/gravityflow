@@ -228,7 +228,7 @@ class Gravity_Flow_Oauth1_Client {
 	function full_request_params() {
 		return array(
 			'oauth_consumer_key'     => $this->config['consumer_key'],
-			'oauth_token'            => $this->config['token'],
+			'oauth_token'            => rgar( $this->config, 'token' ),
 			'oauth_nonce'            => $this->nonce(),
 			'oauth_signature_method' => 'HMAC-SHA1',
 			'oauth_timestamp'        => $this->timestamp,
@@ -316,7 +316,7 @@ class Gravity_Flow_Oauth1_Client {
 	 *
 	 * @param array $parameters Oauth parameters to be sent.
 	 *
-	 * @return array
+	 * @return string
 	 */
 	public function authorization_headers( array $parameters ) {
 		$parameters = http_build_query( $parameters, '', ', ', PHP_QUERY_RFC3986 );

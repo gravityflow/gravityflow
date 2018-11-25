@@ -275,4 +275,227 @@ class Gravity_Flow_API {
 	public function get_timeline( $entry ) {
 		return gravity_flow()->get_timeline( $entry );
 	}
+
+	/**
+	 * Returns an array of entries to be displayed in the inbox.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param array $args        The inbox configuration arguments.
+	 * @param int   $total_count The total number of entries for the current assignee.
+	 *
+	 * @return array
+	 */
+	public static function get_inbox_entries( $args = array(), &$total_count = 0 ) {
+		$entries = array();
+
+		timer_start();
+
+		$search_criteria = self::get_inbox_search_criteria( $args );
+
+		if ( ! empty( $search_criteria ) ) {
+			$form_ids = self::get_inbox_form_ids( $args, $search_criteria );
+
+			if ( ! empty( $form_ids ) ) {
+				$entries = GFAPI::get_entries( $form_ids, $search_criteria, self::get_inbox_sorting( $args ), self::get_inbox_paging( $args ), $total_count );
+			}
+		}
+
+		gravity_flow()->log_debug( __METHOD__ . '(): duration of get_entries: ' . timer_stop() );
+		gravity_flow()->log_debug( __METHOD__ . "(): {$total_count} pending tasks." );
+
+		return $entries;
+	}
+
+	/**
+	 * Returns the total number of entries currently assigned to the logged in user or access token user.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param array $args The inbox configuration arguments.
+	 *
+	 * @return int
+	 */
+	public static function get_inbox_entries_count( $args = array() ) {
+		$count           = 0;
+		$search_criteria = self::get_inbox_search_criteria( $args );
+
+		if ( ! empty( $search_criteria ) ) {
+			$form_ids = self::get_inbox_form_ids( $args, $search_criteria );
+
+			if ( ! empty( $form_ids ) ) {
+				$count = GFAPI::count_entries( $form_ids, $search_criteria );
+			}
+		}
+
+		return $count;
+	}
+
+	/**
+	 * Returns the inbox search criteria.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param array $args The inbox configuration arguments.
+	 *
+	 * @return array
+	 */
+	public static function get_inbox_search_criteria( $args = array() ) {
+		$search_criteria = array();
+		$filter_key      = self::get_inbox_filter_key( $args );
+
+		if ( empty( $filter_key ) ) {
+			return $search_criteria;
+		}
+
+		$field_filters   = array();
+		$field_filters[] = array(
+			'key'   => $filter_key,
+			'value' => 'pending',
+		);
+
+		$user_roles = gravity_flow()->get_user_roles();
+		foreach ( $user_roles as $user_role ) {
+			$field_filters[] = array(
+				'key'   => 'workflow_role_' . $user_role,
+				'value' => 'pending',
+			);
+		}
+
+		$field_filters['mode'] = 'any';
+
+		$search_criteria['field_filters'] = $field_filters;
+		$search_criteria['status']        = 'active';
+
+		/**
+		 * Allows the search criteria to be modified before entries are searched for the inbox.
+		 *
+		 * @since 2.1
+		 *
+		 * @param array $sorting The search criteria.
+		 */
+		$search_criteria = apply_filters( 'gravityflow_inbox_search_criteria', $search_criteria );
+
+		gravity_flow()->log_debug( __METHOD__ . '(): ' . print_r( $search_criteria, 1 ) );
+
+		return $search_criteria;
+	}
+
+	/**
+	 * Get the filter key for the current user.
+	 *
+	 * @param array $args The inbox configuration arguments.
+	 *
+	 * @return string
+	 */
+	public static function get_inbox_filter_key( $args = array() ) {
+		$filter_key = '';
+
+		if ( ! empty( $args['filter_key'] ) ) {
+			$filter_key = $args['filter_key'];
+		} elseif ( is_user_logged_in() ) {
+			$filter_key = 'workflow_user_id_' . get_current_user_id();
+		} elseif ( $token = gravity_flow()->decode_access_token() ) {
+			$filter_key = gravity_flow()->parse_token_assignee( $token )->get_status_key();
+		}
+
+		gravity_flow()->log_debug( __METHOD__ . '(): ' . $filter_key );
+
+		return $filter_key;
+	}
+
+	/**
+	 * Returns the IDs of the forms to be included in the inbox.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param array $args            The inbox configuration arguments.
+	 * @param array $search_criteria The inbox search criteria.
+	 *
+	 * @return array
+	 */
+	public static function get_inbox_form_ids( $args, $search_criteria ) {
+		$form_ids = ! empty( $args['form_id'] ) ? $args['form_id'] : gravity_flow()->get_workflow_form_ids();
+
+		/**
+		 * Allows form id(s) to be adjusted to define which forms' entries are displayed in inbox table.
+		 *
+		 * Return an array of form ids for use with GFAPI.
+		 *
+		 * @since 2.2.2-dev
+		 *
+		 * @param array $form_ids        The form ids
+		 * @param array $search_criteria The search criteria
+		 */
+		$form_ids = apply_filters( 'gravityflow_form_ids_inbox', $form_ids, $search_criteria );
+
+		gravity_flow()->log_debug( __METHOD__ . '(): ' . print_r( $form_ids, 1 ) );
+
+		return $form_ids;
+	}
+
+	/**
+	 * Returns the inbox paging criteria.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param array $args The inbox configuration arguments.
+	 *
+	 * @return array
+	 */
+	public static function get_inbox_paging( $args = array() ) {
+		$paging = array(
+			'page_size' => 150,
+		);
+
+		if ( ! empty( $args['paging']['page_size'] ) ) {
+			$paging['page_size'] = (int) $args['paging']['page_size'];
+		}
+
+		if ( ! empty( $args['paging']['offset'] ) ) {
+			$paging['offset'] = (int) $args['paging']['offset'];
+		}
+
+		/**
+		 * Allows the paging criteria to be modified before entries are searched for the inbox.
+		 *
+		 * @since 2.0.2
+		 *
+		 * @param array $paging The paging criteria.
+		 */
+		return apply_filters( 'gravityflow_inbox_paging', $paging );
+	}
+
+	/**
+	 * Returns the inbox sorting criteria.
+	 *
+	 * @since 2.3.2
+	 *
+	 * @param array $args The inbox configuration arguments.
+	 *
+	 * @return array
+	 */
+	public static function get_inbox_sorting( $args = array() ) {
+		$sorting = array();
+
+		if ( ! empty( $args['sorting']['key'] ) ) {
+			$sorting['key'] = $args['sorting']['key'];
+		}
+
+		if ( ! empty( $args['sorting']['direction'] ) ) {
+			$sorting['direction'] = $args['sorting']['direction'];
+		}
+
+		if ( isset( $args['sorting']['is_numeric'] ) ) {
+			$sorting['is_numeric'] = (bool) $args['sorting']['is_numeric'];
+		}
+
+		/**
+		 * Allows the sorting criteria to be modified before entries are searched for the inbox.
+		 *
+		 * @param array $sorting The sorting criteria.
+		 */
+		return apply_filters( 'gravityflow_inbox_sorting', $sorting );
+	}
+
 }

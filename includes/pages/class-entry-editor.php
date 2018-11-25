@@ -420,7 +420,15 @@ class Gravity_Flow_Entry_Editor {
 		$value = $this->get_post_image_value( $value, $field );
 		$value = $this->get_post_category_value( $value, $field );
 
-		$html = $field->get_field_input( $this->form, $value, $this->entry );
+		if ( $this->step instanceof Gravity_Flow_Step_User_Input && ! empty( $field->fields ) &&  rgpost( 'gravityflow_status' ) == 'in_progress' ) {
+			// Temporarily set isRequired for all sub-fields to false to allow required fields to be saved when saving progress.
+			$this->step->set_field_property( $field, 'isRequired', false );
+			$html = $field->get_field_input( $this->form, $value, $this->entry );
+			$this->step->restore_field_property( $field, 'isRequired' );
+		} else {
+			$html = $field->get_field_input( $this->form, $value, $this->entry );
+		}
+
 		$html .= $this->maybe_get_coupon_script( $field );
 
 		if ( $field->type === 'chainedselect' && function_exists( 'gf_chained_selects' ) ) {
@@ -596,6 +604,10 @@ class Gravity_Flow_Entry_Editor {
 			$display_value = $value[ $field->id . '.2' ];
 		} else {
 			$display_value = GFCommon::get_lead_field_display( $field, $value, $this->entry['currency'] );
+		}
+
+		if ( ! empty( $field->fields ) ) {
+			$html .= sprintf( '<label class="gfield_label">%s</label>', $field->label );
 		}
 
 		$display_value = apply_filters( 'gform_entry_field_value', $display_value, $field, $this->entry, $this->form );
