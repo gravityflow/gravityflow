@@ -268,6 +268,11 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @since 2.0.2-dev
 	 */
 	private function maybe_add_detail_page_hooks() {
+		add_filter( 'gravityflow_is_delayed_pre_process_workflow', array(
+			$this,
+			'filter_gravityflow_is_delayed_pre_process_workflow'
+		) );
+
 		if ( ! gravity_flow()->is_workflow_detail_page() ) {
 			return;
 		}
@@ -279,10 +284,6 @@ class Gravity_Flow_GP_Nested_Forms {
 			$this,
 			'filter_gravityflow_field_value_entry_editor'
 		), 10, 5 );
-		add_filter( 'gravityflow_is_delayed_pre_process_workflow', array(
-			$this,
-			'filter_gravityflow_is_delayed_pre_process_workflow'
-		) );
 		add_filter( 'gpnf_entry_url', array( $this, 'filter_gpnf_entry_url' ), 10, 3 );
 		add_filter( 'gpnf_template_args', array( $this, 'filter_gpnf_template_args' ), 10, 2 );
 
