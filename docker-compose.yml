@@ -2,7 +2,7 @@ version: '2'
 
 services:
   codeception:
-    image: stevehenty/gravityflow-codeception:latest
+    image: gravityflow/codeception:latest
     # build: .
     depends_on:
       - wordpress
