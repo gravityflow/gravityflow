@@ -226,6 +226,10 @@ class Gravity_Flow_GP_Nested_Forms {
 		}
 
 		add_filter( 'gravityflow_status_filter', array( $this, 'filter_gravityflow_status_filter' ) );
+		add_filter( 'gravityflow_is_delayed_pre_process_workflow', array(
+			$this,
+			'filter_gravityflow_is_delayed_pre_process_workflow'
+		) );
 
 		$this->maybe_add_detail_page_hooks();
 	}
@@ -268,11 +272,6 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @since 2.0.2-dev
 	 */
 	private function maybe_add_detail_page_hooks() {
-		add_filter( 'gravityflow_is_delayed_pre_process_workflow', array(
-			$this,
-			'filter_gravityflow_is_delayed_pre_process_workflow'
-		) );
-
 		if ( ! gravity_flow()->is_workflow_detail_page() ) {
 			return;
 		}
