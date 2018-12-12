@@ -1608,9 +1608,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		 * @since 2.4.1-dev
 		 * 
 		 * @param array   $search_criteria The search criteria
-		 * @param object  $this            The Status Table object
 		 */
-		$search_criteria = apply_filters( 'gravityflow_search_criteria_status', $search_criteria, $this );
+		$search_criteria = apply_filters( 'gravityflow_search_criteria_status', $search_criteria );
 
 		$orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? $_REQUEST['orderby'] : 'date_created';
 
