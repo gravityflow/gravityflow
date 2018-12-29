@@ -5370,7 +5370,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'     => true,
 				'sidebar'           => true,
 				'step_highlight'    => true,
-				'display_back_link' => true,
+				'display_back_link' => false,
 			);
 
 			return $defaults;
@@ -5423,6 +5423,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'        => $a['workflow_info'],
 				'sidebar'              => $a['sidebar'],
 				'step_highlight'       => $a['step_highlight'],
+				'display_back_link'    => $a['display_back_link'],
 			);
 
 			ob_start();

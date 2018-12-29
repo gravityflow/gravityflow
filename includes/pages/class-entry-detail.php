@@ -151,7 +151,7 @@ class Gravity_Flow_Entry_Detail {
 			'sidebar'              => true,
 			'step_status'          => true,
 			'workflow_info'        => true,
-			'display_back_link'    => true,
+			'display_back_link'    => false,
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -285,7 +285,9 @@ class Gravity_Flow_Entry_Detail {
 
 		$url = remove_query_arg( array( 'gworkflow_token', 'new_status', 'view', 'lid', 'id' ) );
 
-		printf( '<a class="back-link" href="%s">%s</a><br/><br/>', $url, esc_html__( 'Return to list', 'gravityflow' ) );
+		$url = apply_filters( 'gravityflow_back_link_entry_detail', $url, $args );
+
+		printf( '<a class="back-link" href="%s">%s</a><br/><br/>', esc_url( $url ), esc_html__( 'Return to list', 'gravityflow' ) );
 
 		return;
 	}
