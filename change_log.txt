@@ -1,1 +1,3 @@
+- Added link on entry detail page, shortcode only, to 'Return to list'
+- Added shortcode attribute 'display_back_link' to allow new 'Return to list' link on entry detail page to be hidden
 - Fixed the Gravity Perks Nested Forms Add-On integration not delaying the workflow for child entries created before the parent form is submitted.

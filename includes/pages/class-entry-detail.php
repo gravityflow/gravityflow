@@ -51,6 +51,7 @@ class Gravity_Flow_Entry_Detail {
 		<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_detail">
 
 			<?php
+			self::maybe_display_back_link( $args );
 			self::maybe_show_header( $form, $args );
 
 			$permission_granted = $check_view_entry_permissions ? self::is_permission_granted( $entry, $form, $current_step ) : true;
@@ -150,6 +151,7 @@ class Gravity_Flow_Entry_Detail {
 			'sidebar'              => true,
 			'step_status'          => true,
 			'workflow_info'        => true,
+			'display_back_link'    => true,
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -268,6 +270,26 @@ class Gravity_Flow_Entry_Detail {
 		</div>
 		<?php
 	}
+
+	/**
+	 * Displays the workflow info on the entry detail page, if enabled.
+	 *
+	 * @param array             $args         The properties for the page currently being displayed.
+	 */
+	public static function maybe_display_back_link( $args ) {
+		$display_back_link = (bool) $args['display_back_link'];
+
+		if ( ! $display_back_link || is_admin() ) {
+			return;
+		}
+
+		$url = remove_query_arg( array( 'gworkflow_token', 'new_status', 'view', 'lid', 'id' ) );
+
+		printf( '<a class="back-link" href="%s">%s</a><br/><br/>', $url, esc_html__( 'Return to list', 'gravityflow' ) );
+
+		return;
+	}
+
 
 	/**
 	 * Checks if the current user has permission to view the entry details.

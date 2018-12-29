@@ -3201,7 +3201,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					<div id="submitcomment" class="submitbox">
 						<div id="minor-publishing" class="gravityflow-status-box">
 							<?php
-
+							
 							$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
 							$this->maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args );
 
@@ -5351,25 +5351,26 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */
 		public function get_shortcode_defaults() {
 			$defaults = array(
-				'page'             => 'inbox',
-				'form'             => null,
-				'form_id'          => null,
-				'entry_id'         => null,
-				'fields'           => array(),
-				'display_all'      => null,
-				'actions_column'   => false,
-				'allow_anonymous'  => false,
-				'title'            => '',
-				'id_column'        => true,
-				'submitter_column' => true,
-				'step_column'      => true,
-				'status_column'    => true,
-				'timeline'         => true,
-				'last_updated'     => false,
-				'step_status'      => true,
-				'workflow_info'    => true,
-				'sidebar'          => true,
-				'step_highlight'   => true,
+				'page'              => 'inbox',
+				'form'              => null,
+				'form_id'           => null,
+				'entry_id'          => null,
+				'fields'            => array(),
+				'display_all'       => null,
+				'actions_column'    => false,
+				'allow_anonymous'   => false,
+				'title'             => '',
+				'id_column'         => true,
+				'submitter_column'  => true,
+				'step_column'       => true,
+				'status_column'     => true,
+				'timeline'          => true,
+				'last_updated'      => false,
+				'step_status'       => true,
+				'workflow_info'     => true,
+				'sidebar'           => true,
+				'step_highlight'    => true,
+				'display_back_link' => true,
 			);
 
 			return $defaults;
