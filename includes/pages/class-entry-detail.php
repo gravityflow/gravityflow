@@ -151,7 +151,9 @@ class Gravity_Flow_Entry_Detail {
 			'sidebar'              => true,
 			'step_status'          => true,
 			'workflow_info'        => true,
-			'display_back_link'    => false,
+			'back_link'            => false,
+			'back_link_text'       => __( 'Return to list', 'gravityflow' ),
+			'back_link_url'        => null,
 		);
 
 		$args = array_merge( $defaults, $args );
@@ -272,22 +274,38 @@ class Gravity_Flow_Entry_Detail {
 	}
 
 	/**
-	 * Displays the workflow info on the entry detail page, if enabled.
+	 * Displays the back link on entry detail page if enabled.
 	 *
-	 * @param array             $args         The properties for the page currently being displayed.
+	 * @since 2.5-dev
+	 * 
+	 * @param array   $args    The properties for the page currently being displayed.
 	 */
 	public static function maybe_display_back_link( $args ) {
-		$display_back_link = (bool) $args['display_back_link'];
+		$back_link = (bool) $args['back_link'];
+		$back_link_text = $args['back_link_text'];
+		$back_link_url = $args['back_link_url'];
 
-		if ( ! $display_back_link || is_admin() ) {
+		if ( ! $back_link || is_admin() ) {
 			return;
 		}
 
-		$url = remove_query_arg( array( 'gworkflow_token', 'new_status', 'view', 'lid', 'id' ) );
+		$url = is_null( $back_link_url ) ? remove_query_arg( array( 'gworkflow_token', 'new_status', 'view', 'lid', 'id' ) ) : $back_link_url;
 
+		/**
+		 * Allows customization of the back link
+		 *
+		 * Useful in cases where the access into entry detail page is not based out of gravityflow shortcode.
+		 *
+		 * @since 2.5-dev
+		 *
+		 * @var string $url    The customized URL to redirect user to when clicking the back link
+		 * @var array  $args   The shortcode attributes for the current page
+		 *
+		 * @return string
+		 */
 		$url = apply_filters( 'gravityflow_back_link_entry_detail', $url, $args );
 
-		printf( '<a class="back-link" href="%s">%s</a><br/><br/>', esc_url( $url ), esc_html__( 'Return to list', 'gravityflow' ) );
+		printf( '<a class="back-link" href="%s">%s</a><br/><br/>', esc_url( $url ), esc_html( $back_link_text ) );
 
 		return;
 	}
