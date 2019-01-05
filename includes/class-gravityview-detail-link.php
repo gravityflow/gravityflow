@@ -132,7 +132,7 @@ class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 
 		$url = Gravity_Flow_Common::get_workflow_url( $query_args, $page_id );
 
-		if( $page_id != 'admin' ) {
+		if ( $page_id != 'admin' ) {
 			global $post;
 			$url .= '&gvp=' . $post->ID;
 		}
