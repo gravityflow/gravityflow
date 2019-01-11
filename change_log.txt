@@ -1,1 +1,2 @@
 - Fixed the Gravity Perks Nested Forms Add-On integration not delaying the workflow for child entries created before the parent form is submitted.
+- Fixed an issue where Conditional Routing based on what values a Multiuser field contains could lead to extra users being set as step assignees.
