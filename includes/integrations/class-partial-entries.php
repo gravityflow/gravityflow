@@ -70,7 +70,7 @@ class Gravity_Flow_Partial_Entries {
 	 * @since 2.4.1
 	 */
 	public function maybe_add_hooks() {
-		if ( ! class_exists( 'GF_Partial_Entries' ) ) {
+		if ( ! class_exists( 'GF_Partial_Entries' ) || ! method_exists( 'GFFormsModel', 'maybe_add_missing_entry_meta' ) ) {
 			return;
 		}
 
@@ -83,6 +83,7 @@ class Gravity_Flow_Partial_Entries {
 
 		add_action( 'gform_partialentries_post_entry_saved', array( $this, 'maybe_trigger_workflow' ), 10, 2 );
 		add_action( 'gform_partialentries_post_entry_updated', array( $this, 'maybe_trigger_workflow' ), 10, 2 );
+		add_action( 'gravityflow_step_complete', array( $this, 'action_step_complete' ), 10, 5 );
 	}
 
 	/**
@@ -152,7 +153,7 @@ class Gravity_Flow_Partial_Entries {
 	 * @return array
 	 */
 	public function maybe_filter_entry_pre_update( $entry, $original_entry ) {
-		if ( isset( $_POST['partial_entry_id'] ) && ! empty( $entry['partial_entry_id'] ) && $this->is_workflow_enabled( $entry['form_id'] ) ) {
+		if ( ! empty( $_POST['partial_entry_id'] ) && $this->is_workflow_enabled( $entry['form_id'] ) ) {
 			gravity_flow()->log_debug( __METHOD__ . '(): Restoring workflow meta for partial entry #' . $entry['id'] );
 			$meta_keys = array_keys( gravity_flow()->get_entry_meta( array(), $entry['form_id'] ) );
 
@@ -182,6 +183,46 @@ class Gravity_Flow_Partial_Entries {
 		}
 
 		gravity_flow()->process_workflow( $form, $partial_entry['id'] );
+	}
+
+	/**
+	 * Converts the partial entry to a complete entry by deleting the partial entry meta.
+	 *
+	 * @since 2.4.1
+	 *
+	 * @param int               $step_id  The current step ID.
+	 * @param int               $entry_id The current entry ID.
+	 * @param int               $form_id  The current form ID.
+	 * @param string            $status   The step status.
+	 * @param Gravity_Flow_Step $step     The current step.
+	 */
+	public function action_step_complete( $step_id, $entry_id, $form_id, $status, $step ) {
+		$supported_step_types = array(
+			'approval',
+			'user_input',
+		);
+
+		if ( ! in_array( $step->get_type(), $supported_step_types ) ) {
+			return;
+		}
+
+		$entry = $step->get_entry();
+		if ( empty( $entry['partial_entry_id'] ) ) {
+			return;
+		}
+
+		if ( ! empty( $entry['resume_token'] ) ) {
+			gravity_flow()->log_debug( __METHOD__ . '(): Deleting draft submission.' );
+			GFFormsModel::delete_draft_submission( $entry['resume_token'] );
+		}
+
+		gravity_flow()->log_debug( __METHOD__ . '(): Deleting partial entry meta.' );
+		$add_on    = GF_Partial_Entries::get_instance();
+		$meta_keys = array_keys( $add_on->get_entry_meta( array(), $form_id ) );
+
+		foreach ( $meta_keys as $meta_key ) {
+			gform_delete_meta( $entry_id, $meta_key );
+		}
 	}
 
 }
