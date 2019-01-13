@@ -194,7 +194,7 @@ if ( class_exists( 'GFForms' ) ) {
 			add_filter( 'gform_enqueue_scripts', array( $this, 'filter_gform_enqueue_scripts' ), 10, 2 );
 			add_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_variables' ), 10, 7 );
 
-			add_filter( 'gform_is_value_match', array( $this, 'filter_value_match_multiuser'), 10, 6 );
+			add_filter( 'gform_is_value_match', array( $this, 'filter_value_match_multiuser' ), 10, 6 );
 
 			add_action( 'gform_entry_created', array( $this, 'action_entry_created' ), 8, 2 );
 			add_action( 'gform_register_init_scripts', array( $this, 'filter_gform_register_init_scripts' ), 10, 3 );
@@ -7643,21 +7643,21 @@ AND m.meta_value='queued'";
 
 		/**
 		 * Determines if a multiuser field is being used for conditional routing and has an exact value match of user ID
-		 * 
+		 *
 		 * @since 2.5
 		 *
 		 * @return bool
 		 */
 		public function filter_value_match_multiuser( $is_match, $field_value, $target_value, $operation, $source_field, $rule ) {
-			
-			if ( $source_field->type !== 'workflow_multi_user' ) {
+
+			if ( ! $source_field || $source_field->type !== 'workflow_multi_user' ) {
 				return $is_match;
 			}
 
-			if( in_array( $target_value, $field_value, true ) ) {
+			if ( in_array( $target_value, $field_value, true ) ) {
 				return true;
 			}
-			
+
 			return false;
 		}
 
