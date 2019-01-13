@@ -37,14 +37,7 @@ class Tests_Gravity_Flow_Step_Update_User extends GF_UnitTestCase {
 		$step->set_user_properties( $user );
 		// Refresh the user
 		$user = get_user_by( 'ID', 1 );
-		switch ( $expected['property'] ) {
-			case 'user_pass':
-				$this->assertTrue( wp_check_password( $expected['value'], get_user_by( 'ID', 1)->user_pass ), 1 );
-				break;
-
-			default:
-				$this->assertEquals( $expected['value'], $user->{$expected['property']} );
-		}
+		$this->assertEquals( $expected['value'], $user->{$expected['property']} );
 	}
 
 	/**
@@ -120,19 +113,6 @@ class Tests_Gravity_Flow_Step_Update_User extends GF_UnitTestCase {
 				'expected' => array(
 					'property' => 'user_email',
 					'value' => 'exmple@test.com',
-				)
-			),
-			'password' => array(
-				'settings' => array(
-					'user_source' => 'created_by',
-					'password' => '5',
-				),
-				'entry' => array(
-					'5' => 'test-password'
-				),
-				'expected' => array(
-					'property' => 'user_pass',
-					'value' => 'test-password',
 				)
 			),
 			'roles - replace' => array(

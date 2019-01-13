@@ -184,23 +184,6 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 					'tooltip'     => sprintf( '<h6>%s</h6> %s', esc_html__( 'Email Address', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s email address.', 'gravityflow' ) )
 				),
 				array(
-					'name'     => 'password',
-					'label'    => esc_html__( 'Password', 'gravityflow' ),
-					'type'     => 'field_select',
-					'class'    => 'medium',
-					'args'     => array(
-						'disable_first_choice' => true,
-						'input_types'          => array( 'password' ),
-						'append_choices'       => array(
-							array(
-								'label' => sprintf( '&mdash; %s &mdash;', esc_html__( 'Preserve current password', 'gravityflow'  ) ),
-								'value' => ''
-							)
-						)
-					),
-					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'Password', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s password.', 'gravityflow' ) )
-				),
-				array(
 					'name'     => 'roles_action',
 					'label'    => esc_html__( 'Roles', 'gravityflow' ),
 					'type'     => 'select',
@@ -639,12 +622,6 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 		if ( $this->email ) {
 			$value = gravity_flow()->get_field_value( $form, $entry, $this->email );
 			$this->update_user_property( $user->ID, 'user_email', $value );
-			$dirty = true;
-		}
-
-		if ( $this->password ) {
-			$value = gravity_flow()->get_field_value( $form, $entry, $this->password );
-			$this->update_user_property( $user->ID, 'user_pass', $value );
 			$dirty = true;
 		}
 
