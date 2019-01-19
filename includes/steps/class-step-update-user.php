@@ -22,7 +22,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 
 	/**
 	 * The step type.
-	 * 
+	 *
 	 * @since 2.5
 	 *
 	 * @var string
@@ -31,7 +31,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 
 	/**
 	 * Returns the step label.
-	 * 
+	 *
 	 * @since 2.5
 	 *
 	 * @return string
@@ -42,7 +42,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 
 	/**
 	 * Returns the HTML for the step icon.
-	 * 
+	 *
 	 * @since 2.5
 	 *
 	 * @return string
@@ -71,31 +71,37 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 					'horizontal'    => false,
 					'onchange'      => 'jQuery(this).closest("form").submit();',
 					'choices'       => array(
-						array( 'label' => __( 'Form Submitter ("Created By" field)', 'gravityflow' ), 'value' => 'created_by' ),
+						array(
+							'label' => __( 'Form Submitter ("Created By" field)', 'gravityflow' ),
+							'value' => 'created_by',
+						),
 						array( 'label' => __( 'Current User', 'gravityflow' ), 'value' => 'current_user' ),
 						array( 'label' => __( 'Select User Field', 'gravityflow' ), 'value' => 'select_user_field' ),
-						array( 'label' => __( 'Lookup User by Email Field', 'gravityflow' ), 'value' => 'select_email_field' ),
+						array(
+							'label' => __( 'Lookup User by Email Field', 'gravityflow' ),
+							'value' => 'select_email_field',
+						),
 					),
 				),
 				array(
-					'name'          => 'user_field',
-					'label'         => __( 'User Field', 'gravityflow' ),
-					'type'          => 'field_select',
-					'args'        => array(
+					'name'       => 'user_field',
+					'label'      => __( 'User Field', 'gravityflow' ),
+					'type'       => 'field_select',
+					'args'       => array(
 						'input_types' => array( 'workflow_user' ),
 					),
 					'dependency' => array(
 						'field'  => 'user_source',
 						'values' => array( 'select_user_field' ),
-					)
+					),
 				),
 				array(
-					'name'          => 'email_field',
-					'label'         => __( 'Email Field', 'gravityflow' ),
-					'type'          => 'field_select',
-					'args'        => array(
+					'name'       => 'email_field',
+					'label'      => __( 'Email Field', 'gravityflow' ),
+					'type'       => 'field_select',
+					'args'       => array(
 						'disable_first_choice' => true,
-						'input_types' => array( 'email' ),
+						'input_types'          => array( 'email' ),
 						'append_choices'       => array(
 							array( 'label' => __( 'Select an Email Field', 'gravityflow' ), 'value' => '' ),
 						),
@@ -103,58 +109,58 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 					'dependency' => array(
 						'field'  => 'user_source',
 						'values' => array( 'select_email_field' ),
-					)
+					),
 				),
 				array(
-					'name'     => 'first_name',
-					'label'    => esc_html__( 'First Name', 'gravityflow' ),
-					'type'     => 'field_select',
-					'args'     => array(
+					'name'    => 'first_name',
+					'label'   => esc_html__( 'First Name', 'gravityflow' ),
+					'type'    => 'field_select',
+					'args'    => array(
 						'disable_first_choice' => true,
-						'append_choices' => array(
+						'append_choices'       => array(
 							array(
 								'label' => sprintf( '&mdash; %s &mdash;', esc_html__( 'Preserve current first name', 'gravityflow' ) ),
 								'value' => '',
 							),
 						),
-						'callback'       => array( $this, 'is_applicable_field_for_field_select' ),
+						'callback'             => array( $this, 'is_applicable_field_for_field_select' ),
 					),
-					'class'    => 'medium',
-					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'First Name', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s first name.', 'gravityflow' ) )
+					'class'   => 'medium',
+					'tooltip' => sprintf( '<h6>%s</h6> %s', esc_html__( 'First Name', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s first name.', 'gravityflow' ) ),
 				),
 				array(
-					'name'     => 'last_name',
-					'label'    => esc_html__( 'Last Name', 'gravityflow' ),
-					'type'     => 'field_select',
-					'args'     => array(
+					'name'    => 'last_name',
+					'label'   => esc_html__( 'Last Name', 'gravityflow' ),
+					'type'    => 'field_select',
+					'args'    => array(
 						'disable_first_choice' => true,
-						'append_choices' => array(
+						'append_choices'       => array(
 							array(
 								'label' => sprintf( '&mdash; %s &mdash;', esc_html__( 'Preserve current last name', 'gravityflow' ) ),
 								'value' => '',
 							),
 						),
-						'callback' => array( $this, 'is_applicable_field_for_field_select' )
+						'callback'             => array( $this, 'is_applicable_field_for_field_select' ),
 					),
-					'class'    => 'medium',
-					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'Last Name', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s last name.', 'gravityflow' ) )
+					'class'   => 'medium',
+					'tooltip' => sprintf( '<h6>%s</h6> %s', esc_html__( 'Last Name', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s last name.', 'gravityflow' ) ),
 				),
 				array(
-					'name'     => 'nickname',
-					'label'    => esc_html__( 'Nickname', 'gravityflow' ),
-					'type'     => 'field_select',
-					'args'     => array(
+					'name'    => 'nickname',
+					'label'   => esc_html__( 'Nickname', 'gravityflow' ),
+					'type'    => 'field_select',
+					'args'    => array(
 						'disable_first_choice' => true,
-						'append_choices' => array(
+						'append_choices'       => array(
 							array(
 								'label' => sprintf( '&mdash; %s &mdash;', esc_html__( 'Preserve current nickname name', 'gravityflow' ) ),
 								'value' => '',
 							),
 						),
-						'callback' => array( $this, 'is_applicable_field_for_field_select' )
+						'callback'             => array( $this, 'is_applicable_field_for_field_select' ),
 					),
-					'class'    => 'medium',
-					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'Nickname', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s nickname.', 'gravityflow' ) )
+					'class'   => 'medium',
+					'tooltip' => sprintf( '<h6>%s</h6> %s', esc_html__( 'Nickname', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s nickname.', 'gravityflow' ) ),
 				),
 				array(
 					'name'          => 'display_name',
@@ -167,21 +173,21 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 					'tooltip'       => sprintf( '<h6>%s</h6> %s', esc_html__( 'Display Name', 'gravityflow' ), esc_html__( 'Select how the user\'s name should be displayed publicly.', 'gravityflow' ) ),
 				),
 				array(
-					'name'        => 'email',
-					'label'       => esc_html__( 'Email Address', 'gravityflow' ),
-					'type'        => 'field_select',
-					'args'        => array(
+					'name'    => 'email',
+					'label'   => esc_html__( 'Email Address', 'gravityflow' ),
+					'type'    => 'field_select',
+					'args'    => array(
 						'disable_first_choice' => true,
 						'input_types'          => array( 'email' ),
 						'append_choices'       => array(
 							array(
-								'label' =>  sprintf( '&mdash; %s &mdash;', esc_html__( 'Preserve current email', 'gravityflow'  ) ),
-								'value' => ''
-							)
-						)
+								'label' => sprintf( '&mdash; %s &mdash;', esc_html__( 'Preserve current email', 'gravityflow' ) ),
+								'value' => '',
+							),
+						),
 					),
-					'class'       => 'medium',
-					'tooltip'     => sprintf( '<h6>%s</h6> %s', esc_html__( 'Email Address', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s email address.', 'gravityflow' ) )
+					'class'   => 'medium',
+					'tooltip' => sprintf( '<h6>%s</h6> %s', esc_html__( 'Email Address', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s email address.', 'gravityflow' ) ),
 				),
 				array(
 					'name'     => 'roles_action',
@@ -201,27 +207,27 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 							'value' => 'add',
 						),
 					),
-					'onchange'      => 'jQuery(this).closest("form").submit();',
+					'onchange' => 'jQuery(this).closest("form").submit();',
 					'class'    => 'medium',
-					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'Nickname', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s roles.', 'gravityflow' ) )
+					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'Nickname', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s roles.', 'gravityflow' ) ),
 				),
 				array(
-					'name'     => 'roles',
-					'label'    => esc_html__( 'Select Roles', 'gravityflow' ),
-					'type'     => 'select',
-					'multiple' => 'multiple',
-					'class'    => 'medium',
-					'choices'  => $this->get_roles_as_choices(),
-					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'Select Roles', 'gravityflow' ), esc_html__( 'Select the role the user should be assigned.', 'gravityflow' ) ),
+					'name'       => 'roles',
+					'label'      => esc_html__( 'Select Roles', 'gravityflow' ),
+					'type'       => 'select',
+					'multiple'   => 'multiple',
+					'class'      => 'medium',
+					'choices'    => $this->get_roles_as_choices(),
+					'tooltip'    => sprintf( '<h6>%s</h6> %s', esc_html__( 'Select Roles', 'gravityflow' ), esc_html__( 'Select the role the user should be assigned.', 'gravityflow' ) ),
 					'dependency' => array(
 						'field'  => 'roles_action',
 						'values' => array( 'replace', 'add' ),
-					)
+					),
 				),
 				array(
-					'name'      => 'user_meta',
-					'label'     => esc_html__( 'User Meta', 'gravityflow' ),
-					'type'      => 'generic_map',
+					'name'        => 'user_meta',
+					'label'       => esc_html__( 'User Meta', 'gravityflow' ),
+					'type'        => 'generic_map',
 					'merge_tags'  => true,
 					'key_field'   => array(
 						'choices'     => $this->get_user_meta_choices(),
@@ -234,7 +240,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 						'placeholder'  => esc_html__( 'Custom Field Value', 'gravityflow' ),
 					),
 				),
-			)
+			),
 		);
 
 
@@ -255,10 +261,10 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 
 		$user = null;
 
-		switch( $this->user_source ) {
+		switch ( $this->user_source ) {
 			case 'created_by':
 				$entry = $this->get_entry();
-				if (  $entry['created_by'] ) {
+				if ( $entry['created_by'] ) {
 					$user = get_user_by( 'id', $entry['created_by'] );
 				}
 				break;
@@ -296,7 +302,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 	 */
 	public function get_display_name_choices() {
 		$display_name_choices = array();
-		$choices = array();
+		$choices              = array();
 
 		$choices['nickname']  = '{nickname}';
 		$choices['username']  = '{username}';
@@ -306,17 +312,16 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 		$choices['lastfirst'] = '{last name} {first name}';
 
 
-
 		foreach ( $choices as $value => $label ) {
 			$display_name_choices[] = array(
 				'label' => $label,
-				'value' => $value
+				'value' => $value,
 			);
 		}
 
-		$display_name_choices[] =  array(
-			'label' => sprintf( '&mdash; %s &mdash;', esc_html__( 'Preserve current display name', 'gravityflow'  ) ),
-			'value' => ''
+		$display_name_choices[] = array(
+			'label' => sprintf( '&mdash; %s &mdash;', esc_html__( 'Preserve current display name', 'gravityflow' ) ),
+			'value' => '',
 		);
 
 		return $display_name_choices;
@@ -333,13 +338,13 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 
 		$choices = array();
 
-		$roles   = array_reverse( get_editable_roles() );
+		$roles = array_reverse( get_editable_roles() );
 
 		foreach ( $roles as $role => $details ) {
 			$name      = translate_user_role( $details['name'] );
 			$choices[] = array(
 				'label' => $name,
-				'value' => $role
+				'value' => $role,
 			);
 		}
 
@@ -362,25 +367,25 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 			'choices' => array(
 				array(
 					'label' => esc_html__( 'Website', 'gravityflow' ),
-					'value' => 'user_url'
+					'value' => 'user_url',
 				),
 				array(
 					'label' => esc_html__( 'AIM', 'gravityflow' ),
-					'value' => 'aim'
+					'value' => 'aim',
 				),
 				array(
 					'label' => esc_html__( 'Yahoo', 'gravityflow' ),
-					'value' => 'yim'
+					'value' => 'yim',
 				),
 				array(
 					'label' => esc_html__( 'Jabber / Google Talk', 'gravityflow' ),
-					'value' => 'jabber'
+					'value' => 'jabber',
 				),
 				array(
 					'label' => esc_html__( 'Biographical Information', 'gravityflow' ),
-					'value' => 'description'
-				)
-			)
+					'value' => 'description',
+				),
+			),
 		);
 
 		// other meta
@@ -395,7 +400,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 				$keys[] = array(
 					'name'     => $key->meta_key,
 					'label'    => $key->meta_key,
-					'required' => false
+					'required' => false,
 				);
 			}
 		}
@@ -405,19 +410,19 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 		if ( ! empty( $keys ) ) {
 			$other_meta = array(
 				'label'   => esc_html__( 'Other User Meta', 'gravityflow' ),
-				'choices' => $keys
+				'choices' => $keys,
 			);
 		}
 
 		// custom option to add custom meta key
 		$add_custom_meta = array(
 			'label' => esc_html__( 'Add Custom Meta', 'gravityflow' ),
-			'value' => 'gf_custom'
+			'value' => 'gf_custom',
 		);
 
 		$empty_choice = array(
 			'label' => esc_html__( 'Select Meta Key', 'gravityflow' ),
-			'value' => ''
+			'value' => '',
 		);
 
 		$choices   = array();
@@ -516,10 +521,11 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 		}
 
 		if ( is_array( $this->user_meta ) || ! empty( $this->user_meta ) ) {
+			$wc_meta = array();
 			foreach ( $this->user_meta as $meta_key => $meta_item ) {
 				$is_custom_value = $meta_item['value'] == 'gf_custom';
 
-				$meta_key = $meta_item['key'] == 'gf_custom' ? $meta_item['custom_key'] : $meta_item['key'];
+				$meta_key   = $meta_item['key'] == 'gf_custom' ? $meta_item['custom_key'] : $meta_item['key'];
 				$meta_value = $is_custom_value ? $meta_item['custom_value'] : $meta_item['value'];
 
 				$this->log_debug( sprintf( 'Adding meta item: %s', $meta_key ) );
@@ -535,6 +541,26 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 					$value = do_shortcode( $value );
 				} else {
 					$value = gravity_flow()->get_field_value( $form, $entry, $meta_value );
+
+					if ( in_array( $meta_key, array(
+							'billing_state',
+							'shipping_state',
+						) ) && $user->billing_country == 'US' ) {
+						$field = GFFormsModel::get_field( $form, $meta_value );
+						if ( $field->get_input_type() == 'address' && $meta_value = $field->formId . '.4' ) {
+							// Save the WooCommerce US state code conversion until after the country has been updated.
+							$wc_meta[ $meta_key ] = $value;
+							continue;
+						}
+					}
+
+					if ( in_array( $meta_key, array( 'billing_country', 'shipping_country' ) ) ) {
+						$field = GFFormsModel::get_field( $form, $meta_value );
+						if ( $field->get_input_type() == 'address' && $meta_value = $field->formId . '.6' ) {
+							$value = GF_Fields::get( 'address' )->get_country_code( $value );
+						}
+					}
+
 					$this->log_debug( sprintf( 'Meta item mapped to field: %s; value: %s', $meta_value, $value ) );
 				}
 
@@ -550,28 +576,40 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 
 				$dirty = true;
 			}
-		}
 
+			// Update WooCommerce US state codes
+			foreach ( $wc_meta as $wc_key => $wc_value ) {
+				$wc_value = GF_Fields::get( 'address' )->get_us_state_code( $wc_value );
+				$this->log_debug( sprintf( 'Meta item mapped to field: %s; value: %s', $wc_key, $wc_value ) );
 
-		if ( in_array( $this->roles_action, array( 'replace', 'add' ) ) ) {
-
-			// Update roles
-
-			if ( $this->roles_action == 'replace' ) {
-				foreach ( $user->roles as $role ) {
-					$user->remove_role( $role );
-				};
+				if ( rgblank( $wc_value ) ) {
+					$result = delete_user_meta( $user->ID, $wc_key );
+				} else {
+					$result = update_user_meta( $user->ID, $wc_key, $wc_value );
+				}
+				$this->log_debug( sprintf( 'Result: %s', var_export( (bool) $result, 1 ) ) );
 			}
 
-			foreach ( $this->roles as $new_role ) {
-				$user->add_role( $new_role );
+			if ( in_array( $this->roles_action, array( 'replace', 'add' ) ) ) {
+
+				// Update roles
+
+				if ( $this->roles_action == 'replace' ) {
+					foreach ( $user->roles as $role ) {
+						$user->remove_role( $role );
+					};
+				}
+
+				foreach ( $this->roles as $new_role ) {
+					$user->add_role( $new_role );
+				}
+
+				$dirty = true;
 			}
 
-			$dirty = true;
-		}
-
-		if ( $dirty ) {
-			update_user_meta( $user->ID, '_gravityflow-update-entry-id', $entry['id'] );
+			if ( $dirty ) {
+				update_user_meta( $user->ID, '_gravityflow-update-entry-id', $entry['id'] );
+			}
 		}
 	}
 
@@ -588,7 +626,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 
 		$display_format = $this->display_name;
 
-		switch( $display_format ) {
+		switch ( $display_format ) {
 			case 'firstname':
 				$display_name = $user->first_name;
 				break;
