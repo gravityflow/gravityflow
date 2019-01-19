@@ -203,7 +203,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 					),
 					'onchange'      => 'jQuery(this).closest("form").submit();',
 					'class'    => 'medium',
-					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'Nickname', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s nickname.', 'gravityflow' ) )
+					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'Nickname', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s roles.', 'gravityflow' ) )
 				),
 				array(
 					'name'     => 'roles',
@@ -387,18 +387,16 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 
 		$keys = array();
 
-		if ( is_array( $keys ) && empty( $keys ) ) {
-			$raw_keys = $wpdb->get_results( sprintf( 'select distinct meta_key from %s where meta_key not like "%s" order by meta_key asc', $wpdb->usermeta, '\_%' ) );
-			$exclude  = array( 'user_url', 'aim', 'yim', 'jabber', 'description' );
+		$raw_keys = $wpdb->get_results( sprintf( 'select distinct meta_key from %s where meta_key not like "%s" order by meta_key asc', $wpdb->usermeta, '\_%' ) );
+		$exclude  = array( 'user_url', 'aim', 'yim', 'jabber', 'description' );
 
-			foreach ( $raw_keys as $key ) {
-				if ( ! in_array( $key->meta_key, $exclude ) ) {
-					$keys[] = array(
-						'name'     => $key->meta_key,
-						'label'    => $key->meta_key,
-						'required' => false
-					);
-				}
+		foreach ( $raw_keys as $key ) {
+			if ( ! in_array( $key->meta_key, $exclude ) ) {
+				$keys[] = array(
+					'name'     => $key->meta_key,
+					'label'    => $key->meta_key,
+					'required' => false
+				);
 			}
 		}
 
@@ -461,115 +459,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 	 */
 	public function value_mappings() {
 
-		$form = $this->get_form();
-
-		$fields = $this->get_field_map_choices( $form );
-		return $fields;
-	}
-
-	/**
-	 * Returns the field map choices.
-	 *
-	 * @since 2.5
-	 *
-	 * @param array             $form
-	 * @param null|array|string $field_type
-	 * @param null|array        $exclude_field_types
-	 *
-	 * @return array
-	 */
-	public function get_field_map_choices( $form, $field_type = null, $exclude_field_types = null ) {
-
-		$fields = array();
-
-		// Setup first choice
-		if ( rgblank( $field_type ) || ( is_array( $field_type ) && count( $field_type ) > 1 ) ) {
-
-			$first_choice_label = __( 'Select a Field', 'gravityflow' );
-
-		} else {
-
-			$type = is_array( $field_type ) ? $field_type[0] : $field_type;
-			$type = ucfirst( GF_Fields::get( $type )->get_form_editor_field_title() );
-
-			$first_choice_label = sprintf( __( 'Select a %s Field', 'gravityflow' ), $type );
-
-		}
-
-		$fields[] = array( 'value' => '', 'label' => $first_choice_label );
-
-		// if field types not restricted add the default fields and entry meta
-		if ( is_null( $field_type ) ) {
-			$fields[] = array( 'value' => 'id', 'label' => esc_html__( 'Entry ID', 'gravityflow' ) );
-			$fields[] = array( 'value' => 'date_created', 'label' => esc_html__( 'Entry Date', 'gravityflow' ) );
-			$fields[] = array( 'value' => 'ip', 'label' => esc_html__( 'User IP', 'gravityflow' ) );
-			$fields[] = array( 'value' => 'source_url', 'label' => esc_html__( 'Source Url', 'gravityflow' ) );
-			$fields[] = array( 'value' => 'created_by', 'label' => esc_html__( 'Created By', 'gravityflow' ) );
-
-			$entry_meta = GFFormsModel::get_entry_meta( $form['id'] );
-			foreach ( $entry_meta as $meta_key => $meta ) {
-				$fields[] = array( 'value' => $meta_key, 'label' => rgars( $entry_meta, "{$meta_key}/label" ) );
-			}
-		}
-
-		// Populate form fields
-		if ( is_array( $form['fields'] ) ) {
-			foreach ( $form['fields'] as $field ) {
-				$input_type = $field->get_input_type();
-				$inputs     = $field->get_entry_inputs();
-				$field_is_valid_type = ( empty( $field_type ) || ( is_array( $field_type ) && in_array( $input_type, $field_type ) ) || ( ! empty( $field_type ) && $input_type == $field_type ) );
-
-				if ( is_null( $exclude_field_types ) ) {
-					$exclude_field = false;
-				} elseif ( is_array( $exclude_field_types ) ) {
-					if ( in_array( $input_type, $exclude_field_types ) ) {
-						$exclude_field = true;
-					} else {
-						$exclude_field = false;
-					}
-				} else {
-					//not array, so should be single string
-					if ( $input_type == $exclude_field_types ) {
-						$exclude_field = true;
-					} else {
-						$exclude_field = false;
-					}
-				}
-
-				if ( is_array( $inputs ) && $field_is_valid_type && ! $exclude_field ) {
-					// If this is an address field, add full name to the list
-					if ( $input_type == 'address' ) {
-						$fields[] = array(
-							'value' => $field->id,
-							'label' => GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full', 'gravityflow' ) . ')',
-						);
-					}
-					// If this is a name field, add full name to the list
-					if ( $input_type == 'name' ) {
-						$fields[] = array(
-							'value' => $field->id,
-							'label' => GFCommon::get_label( $field ) . ' (' . esc_html__( 'Full', 'gravityflow' ) . ')',
-						);
-					}
-					// If this is a checkbox field, add to the list
-					if ( $input_type == 'checkbox' ) {
-						$fields[] = array(
-							'value' => $field->id,
-							'label' => GFCommon::get_label( $field ) . ' (' . esc_html__( 'Selected', 'gravityflow' ) . ')',
-						);
-					}
-
-					foreach ( $inputs as $input ) {
-						$fields[] = array(
-							'value' => $input['id'],
-							'label' => GFCommon::get_label( $field, $input['id'] ),
-						);
-					}
-				} elseif ( ! rgar( $field, 'displayOnly' ) && $field_is_valid_type && ! $exclude_field ) {
-					$fields[] = array( 'value' => $field->id, 'label' => GFCommon::get_label( $field ) );
-				}
-			}
-		}
+		$fields = gravity_flow()->get_field_map_choices( $this->get_form_id() );
 
 		return $fields;
 	}
