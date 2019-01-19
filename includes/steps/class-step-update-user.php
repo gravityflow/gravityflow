@@ -587,29 +587,31 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 				} else {
 					$result = update_user_meta( $user->ID, $wc_key, $wc_value );
 				}
+				$dirty = true;
 				$this->log_debug( sprintf( 'Result: %s', var_export( (bool) $result, 1 ) ) );
 			}
 
-			if ( in_array( $this->roles_action, array( 'replace', 'add' ) ) ) {
+		}
 
-				// Update roles
+		if ( in_array( $this->roles_action, array( 'replace', 'add' ) ) ) {
 
-				if ( $this->roles_action == 'replace' ) {
-					foreach ( $user->roles as $role ) {
-						$user->remove_role( $role );
-					};
-				}
+			// Update roles
 
-				foreach ( $this->roles as $new_role ) {
-					$user->add_role( $new_role );
-				}
-
-				$dirty = true;
+			if ( $this->roles_action == 'replace' ) {
+				foreach ( $user->roles as $role ) {
+					$user->remove_role( $role );
+				};
 			}
 
-			if ( $dirty ) {
-				update_user_meta( $user->ID, '_gravityflow-update-entry-id', $entry['id'] );
+			foreach ( $this->roles as $new_role ) {
+				$user->add_role( $new_role );
 			}
+
+			$dirty = true;
+		}
+
+		if ( $dirty ) {
+			update_user_meta( $user->ID, '_gravityflow-update-entry-id', $entry['id'] );
 		}
 	}
 
