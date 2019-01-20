@@ -556,7 +556,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 
 					if ( in_array( $meta_key, array( 'billing_country', 'shipping_country' ) ) ) {
 						$field = GFFormsModel::get_field( $form, $meta_value );
-						if ( $field->get_input_type() == 'address' && $meta_value = $field->formId . '.6' ) {
+						if ( $field && $field->get_input_type() == 'address' && $meta_value = $field->formId . '.6' ) {
 							$value = GF_Fields::get( 'address' )->get_country_code( $value );
 						}
 					}
