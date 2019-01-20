@@ -522,6 +522,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 
 		if ( is_array( $this->user_meta ) || ! empty( $this->user_meta ) ) {
 			$wc_meta = array();
+			$wc_active = is_plugin_active( 'woocommerce/woocommerce.php' );
 			foreach ( $this->user_meta as $meta_key => $meta_item ) {
 				$is_custom_value = $meta_item['value'] == 'gf_custom';
 
@@ -542,15 +543,14 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 				} else {
 					$value = gravity_flow()->get_field_value( $form, $entry, $meta_value );
 
-					if ( in_array( $meta_key, array(
+					if ( $wc_active && in_array( $meta_key, array(
 							'billing_state',
 							'shipping_state',
-						) ) && $user->billing_country == 'US' ) {
+						) ) ) {
 						$field = GFFormsModel::get_field( $form, $meta_value );
 						if ( $field->get_input_type() == 'address' && $meta_value = $field->formId . '.4' ) {
-							// Save the WooCommerce US state code conversion until after the country has been updated.
+							// Update the state name to the state code after the country has been updated.
 							$wc_meta[ $meta_key ] = $value;
-							continue;
 						}
 					}
 
@@ -577,20 +577,25 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 				$dirty = true;
 			}
 
-			// Update WooCommerce US state codes
-			foreach ( $wc_meta as $wc_key => $wc_value ) {
-				$wc_value = GF_Fields::get( 'address' )->get_us_state_code( $wc_value );
-				$this->log_debug( sprintf( 'Meta item mapped to field: %s; value: %s', $wc_key, $wc_value ) );
 
-				if ( rgblank( $wc_value ) ) {
-					$result = delete_user_meta( $user->ID, $wc_key );
-				} else {
-					$result = update_user_meta( $user->ID, $wc_key, $wc_value );
+			if ( $wc_active && $user->billing_country == 'US' ) {
+				// Update WooCommerce US state codes
+				foreach ( $wc_meta as $wc_key => $wc_value ) {
+					$state_code = GF_Fields::get( 'address' )->get_us_state_code( $wc_value );
+					if ( empty( $state_code ) ) {
+						$state_code = $wc_value;
+					}
+					$this->log_debug( sprintf( 'Meta item mapped to field: %s; value: %s', $wc_key, $wc_value ) );
+
+					if ( rgblank( $state_code ) ) {
+						$result = delete_user_meta( $user->ID, $wc_key );
+					} else {
+						$result = update_user_meta( $user->ID, $wc_key, $state_code );
+					}
+					$dirty = true;
+					$this->log_debug( sprintf( 'Result: %s', var_export( (bool) $result, 1 ) ) );
 				}
-				$dirty = true;
-				$this->log_debug( sprintf( 'Result: %s', var_export( (bool) $result, 1 ) ) );
 			}
-
 		}
 
 		if ( in_array( $this->roles_action, array( 'replace', 'add' ) ) ) {
