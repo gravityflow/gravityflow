@@ -280,7 +280,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 			case 'select_email_field':
 				$entry = $this->get_entry();
 				if ( $entry[ $this->email_field ] ) {
-					$user = get_user_by( 'email', $entry[ $this->user_field ] );
+					$user = get_user_by( 'email', $entry[ $this->email_field ] );
 				}
 		}
 
