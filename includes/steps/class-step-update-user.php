@@ -209,7 +209,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 					),
 					'onchange' => 'jQuery(this).closest("form").submit();',
 					'class'    => 'medium',
-					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'Nickname', 'gravityflow' ), esc_html__( 'Select the form field that should be used for the user\'s roles.', 'gravityflow' ) ),
+					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'Roles', 'gravityflow' ), esc_html__( 'Select how the user\'s roles should be updated.', 'gravityflow' ) ),
 				),
 				array(
 					'name'       => 'roles',
