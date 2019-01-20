@@ -548,7 +548,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 							'shipping_state',
 						) ) ) {
 						$field = GFFormsModel::get_field( $form, $meta_value );
-						if ( $field->get_input_type() == 'address' && $meta_value = $field->formId . '.4' ) {
+						if ( $field && $field->get_input_type() == 'address' && $meta_value = $field->formId . '.4' ) {
 							// Update the state name to the state code after the country has been updated.
 							$wc_meta[ $meta_key ] = $value;
 						}
