@@ -581,16 +581,13 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 			if ( $wc_active && $user->billing_country == 'US' ) {
 				// Update WooCommerce US state codes
 				foreach ( $wc_meta as $wc_key => $wc_value ) {
-					$state_code = GF_Fields::get( 'address' )->get_us_state_code( $wc_value );
-					if ( empty( $state_code ) ) {
-						$state_code = $wc_value;
-					}
+					$wc_value = GF_Fields::get( 'address' )->get_us_state_code( $wc_value );
 					$this->log_debug( sprintf( 'Meta item mapped to field: %s; value: %s', $wc_key, $wc_value ) );
 
-					if ( rgblank( $state_code ) ) {
+					if ( rgblank( $wc_value ) ) {
 						$result = delete_user_meta( $user->ID, $wc_key );
 					} else {
-						$result = update_user_meta( $user->ID, $wc_key, $state_code );
+						$result = update_user_meta( $user->ID, $wc_key, $wc_value );
 					}
 					$dirty = true;
 					$this->log_debug( sprintf( 'Result: %s', var_export( (bool) $result, 1 ) ) );
