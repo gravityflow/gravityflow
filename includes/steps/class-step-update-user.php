@@ -605,8 +605,10 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 				};
 			}
 
-			foreach ( $this->roles as $new_role ) {
-				$user->add_role( $new_role );
+			if ( is_array( $this->roles ) ) {
+				foreach ( $this->roles as $new_role ) {
+					$user->add_role( $new_role );
+				}
 			}
 
 			$dirty = true;
