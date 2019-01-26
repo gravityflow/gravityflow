@@ -61,10 +61,12 @@ class Gravity_Flow_Inbox {
 			</table>
 
 			<?php
-			if ( $total_count > 150 ) {
+			$page_size = (int) rgar( Gravity_Flow_API::get_inbox_paging( $args ), 'page_size', 20 );
+
+			if ( $total_count > $page_size ) {
 				echo '<br />';
 				echo '<div class="excess_entries_indicator">';
-				printf( '(Showing 150 of %d)', absint( $total_count ) );
+				printf( '(Showing %d of %d)', $page_size, absint( $total_count ) );
 				echo '</div>';
 			}
 		} else {
