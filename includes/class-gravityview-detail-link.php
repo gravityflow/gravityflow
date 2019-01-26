@@ -187,15 +187,15 @@ class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 	 * @return string
 	 */
 	function modify_entry_detail_back_link( $url, $args ) {
-		//Verify the back link is set as active on current page and the potential back link has querystring params
+		// Verify the back link is set as active on current page and the potential back link has querystring params
 		if ( $args['back_link'] == true && false !== strpos( $url, '?' ) ) {
 
-			//Parse the querystring to confirm the gvp param was added via the workflow detail link
+			// Parse the querystring to confirm the gvp param was added via the workflow detail link
 			$querystring = explode( '?', $url, 2 );
 			parse_str( end( $querystring ), $query_args );
 			if ( isset( $query_args['gvp'] ) ) {
 
-				//Confirm the gvp param is for a valid page and update the back link URL
+				// Confirm the gvp param is for a valid page and update the back link URL
 				$view_page = get_permalink( $query_args['gvp'] );
 				if ( $view_page !== false ) {
 					$url = $view_page;

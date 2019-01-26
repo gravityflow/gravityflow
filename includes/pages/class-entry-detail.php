@@ -276,7 +276,7 @@ class Gravity_Flow_Entry_Detail {
 	/**
 	 * Displays the back link on entry detail page if enabled.
 	 *
-	 * @since 2.5-dev
+	 * @since 2.5
 	 * 
 	 * @param array   $args    The properties for the page currently being displayed.
 	 */
@@ -296,7 +296,7 @@ class Gravity_Flow_Entry_Detail {
 		 *
 		 * Useful in cases where the access into entry detail page is not based out of gravityflow shortcode.
 		 *
-		 * @since 2.5-dev
+		 * @since 2.5
 		 *
 		 * @var string $url    The customized URL to redirect user to when clicking the back link
 		 * @var array  $args   The shortcode attributes for the current page
