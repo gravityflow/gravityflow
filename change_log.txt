@@ -1,0 +1,2 @@
+- Fixed the Gravity Perks Nested Forms Add-On integration not delaying the workflow for child entries created before the parent form is submitted.
+- Fix conditional assignee routing using the post category field.

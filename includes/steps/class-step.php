@@ -1901,6 +1901,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 		} else {
 			$source_field   = GFFormsModel::get_field( $form, $field_id );
 			$field_value    = empty( $entry ) ? GFFormsModel::get_field_value( $source_field, array() ) : GFFormsModel::get_lead_field_value( $entry, $source_field );
+			if ( $source_field->type == 'post_category' ) {
+				// Post category values are in the format [name]:[id] e.g. cat-1:1 but GFFormsModel::is_value_match() expects just the category ID.
+				$ary                   = explode( ':', $routing_rule['value'] );
+				$routing_rule['value'] = $ary[1];
+			}
 			$is_value_match = GFFormsModel::is_value_match( $field_value, $routing_rule['value'], $routing_rule['operator'], $source_field, $routing_rule, $form );
 		}
 

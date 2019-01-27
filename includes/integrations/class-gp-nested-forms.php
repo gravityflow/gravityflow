@@ -57,6 +57,15 @@ class Gravity_Flow_GP_Nested_Forms {
 	private $_nested_forms = array();
 
 	/**
+	 * Indicates if the current location is the workflow detail page.
+	 *
+	 * @since 2.4.1
+	 *
+	 * @var bool
+	 */
+	private $_is_workflow_detail_page = false;
+
+	/**
 	 * The instance of this class.
 	 *
 	 * @since 2.0.2-dev
@@ -89,6 +98,7 @@ class Gravity_Flow_GP_Nested_Forms {
 	 */
 	private function __construct() {
 		add_action( 'init', array( $this, 'maybe_add_hooks' ) );
+		$this->_is_workflow_detail_page = gravity_flow()->is_workflow_detail_page();
 	}
 
 	/**
@@ -226,6 +236,12 @@ class Gravity_Flow_GP_Nested_Forms {
 		}
 
 		add_filter( 'gravityflow_status_filter', array( $this, 'filter_gravityflow_status_filter' ) );
+		add_filter( 'gravityflow_is_delayed_pre_process_workflow', array(
+			$this,
+			'filter_gravityflow_is_delayed_pre_process_workflow'
+		) );
+
+		add_action( 'gform_entry_created', array( $this, 'action_entry_created' ), 8, 2 );
 
 		$this->maybe_add_detail_page_hooks();
 	}
@@ -268,7 +284,7 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @since 2.0.2-dev
 	 */
 	private function maybe_add_detail_page_hooks() {
-		if ( ! gravity_flow()->is_workflow_detail_page() ) {
+		if ( ! $this->_is_workflow_detail_page ) {
 			return;
 		}
 
@@ -279,10 +295,6 @@ class Gravity_Flow_GP_Nested_Forms {
 			$this,
 			'filter_gravityflow_field_value_entry_editor'
 		), 10, 5 );
-		add_filter( 'gravityflow_is_delayed_pre_process_workflow', array(
-			$this,
-			'filter_gravityflow_is_delayed_pre_process_workflow'
-		) );
 		add_filter( 'gpnf_entry_url', array( $this, 'filter_gpnf_entry_url' ), 10, 3 );
 		add_filter( 'gpnf_template_args', array( $this, 'filter_gpnf_template_args' ), 10, 2 );
 
@@ -549,8 +561,10 @@ class Gravity_Flow_GP_Nested_Forms {
 			$this->maybe_process_nested_form( $field, $entry );
 		}
 
-		gpnf_notification_processing()->maybe_send_child_notifications( $entry, $form );
-		gpnf_feed_processing()->process_feeds( $entry, $form );
+		if ( $this->_is_workflow_detail_page ) {
+			gpnf_notification_processing()->maybe_send_child_notifications( $entry, $form );
+			gpnf_feed_processing()->process_feeds( $entry, $form );
+		}
 	}
 
 	/**
@@ -587,9 +601,11 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @param int      $parent_entry_id   The parent entry ID.
 	 */
 	private function process_child_entry( $entry, $nested_form, $nested_form_field, $parent_entry_id ) {
-		GFCommon::create_post( $nested_form, $entry );
-		$entry_object = new GPNF_Entry( $entry );
-		$entry_object->set_parent_form( $nested_form_field->formId, $parent_entry_id );
+		if ( $this->_is_workflow_detail_page ) {
+			GFCommon::create_post( $nested_form, $entry );
+			$entry_object = new GPNF_Entry( $entry );
+			$entry_object->set_parent_form( $nested_form_field->formId, $parent_entry_id );
+		}
 
 		if ( $nested_form_field->gpnfFeedProcessing === 'child' ) {
 			return;
@@ -597,6 +613,22 @@ class Gravity_Flow_GP_Nested_Forms {
 
 		gravity_flow()->action_entry_created( $entry, $nested_form );
 		gravity_flow()->process_workflow( $nested_form, $entry['id'] );
+	}
+
+	/**
+	 * Triggers processing of any Nested Form fields on parent form submission.
+	 *
+	 * @since 2.4.1
+	 *
+	 * @param array $entry The parent entry.
+	 * @param array $form The parent form.
+	 */
+	public function action_entry_created( $entry, $form ) {
+		if ( gp_nested_forms()->is_nested_form_submission() ) {
+			return;
+		}
+
+		$this->maybe_process_nested_forms( $entry, $form );
 	}
 
 }

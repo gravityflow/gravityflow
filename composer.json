@@ -7,7 +7,7 @@
   ],
   "type": "wordpress-plugin",
   "homepage": "https://www.gravityflow.io",
-  "license": "GPL-3.0+",
+  "license": "GPL-2.0+",
   "authors": [
     {
       "name": "stevehenty",
@@ -20,10 +20,9 @@
   },
   "require-dev": {
     "apigen/apigen": "~4.1.2",
-    "lucatume/wp-browser": "~2.1.6"
+    "lucatume/wp-browser": "^2.0"
   },
   "require": {
-    "vlucas/phpdotenv": "^2.5",
-    "ext-gd": "*"
+    "vlucas/phpdotenv": "^2.5"
   }
 }

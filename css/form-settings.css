@@ -222,37 +222,6 @@ tr#gaddon-setting-row-step_type label > span > i {
     margin-top: 5px;
 }
 
-.settings-field-map-table .custom-value-reset {
-    background: url( ../images/xit.gif ) no-repeat scroll 0 0 transparent;
-    cursor:pointer;
-    display:none;
-    position:absolute;
-    text-indent:-9999px;
-    width:10px;
-    height: 10px;
-    -moz-transition: none;
-    -webkit-transition: none;
-    -o-transition: color 0 ease-in;
-    transition: none;
-}
-
-.rtl .settings-field-map-table .custom-value-reset {
-    background: url( ../images/xit.gif ) no-repeat scroll 100% 0 transparent;
-    text-indent:9999px;
-}
-
-.settings-field-map-table .custom-value-reset {
-    margin-top: 10px;
-    margin-left: 165px;
-}
-
-.rtl .settings-field-map-table .custom-value-reset {
-    margin-right: 165px;
-    margin-left: 0;
-}
-
-.settings-field-map-table .custom-value-container:hover .custom-value-reset { display:block; }
-
 .gravityflow-sub-setting{
     margin-bottom: 10px;
 }

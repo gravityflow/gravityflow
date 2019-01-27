@@ -45,7 +45,7 @@ services:
       - DBUS_SESSION_BUS_ADDRESS=/dev/null
     volumes:
       - /dev/shm:/dev/shm
-    image: selenium/standalone-chrome-debug:3.141.0-actinium
+    image: selenium/standalone-chrome-debug:3.141.59-dubnium
     ports:
       - "4444:4444"
       - '5900:5900'

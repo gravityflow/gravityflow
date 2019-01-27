@@ -21,19 +21,6 @@ modules:
             domain: acceptance-tests.dev
             plugins: ['gravityforms/gravityforms.php', 'gravityflow/gravityflow.php']
             activatePlugins: ['gravityforms/gravityforms.php', 'gravityflow/gravityflow.php']
-        WPBrowser:
-            url: 'http://acceptance-tests.dev'
-            adminUsername: admin
-            adminPassword: password
-            adminUrl: /wp-admin
-        WPDb:
-            dsn: 'mysql:host=acceptance-tests.dev;dbname=acceptance-tests'
-            user: external
-            password: external
-            populate: true
-            cleanup: true
-            url: 'http://acceptance-tests.dev'
-            tablePrefix: wp_
         WPWebDriver:
             url: 'http://acceptance-tests.dev'
             browser: chrome
