@@ -1289,6 +1289,24 @@ PRIMARY KEY  (id)
 				}
 				$status_options = $step_class->get_status_config();
 
+				if ( $step_class->supports_duedate() ) {
+					$final_status_choices = array();
+
+					foreach ( $status_options as $status_option ) {
+						$final_status_choices[] = array( 'label' => $status_option['status_label'], 'value' => $status_option['status'] );
+					}
+
+					$final_status_choices[] = array( 'label' => esc_html__( 'Due date', 'gravityflow' ), 'value' => 'duedate' );
+
+					$step_settings['fields'][] = array(
+						'name' => 'duedate',
+						'label' => esc_html__( 'Due date', 'gravityflow' ),
+						'tooltip' => esc_html__( 'Enable the due date setting to allow this step to highlight upcoming due dates. Once past the due date the entry will be highlighted to show  it has past the due date.', 'gravityflow' ),
+						'type'       => 'duedate',
+						'status_choices' => $final_status_choices,
+					);
+				}
+
 				if ( $step_class->supports_expiration() ) {
 					$final_status_choices = array();
 
@@ -1994,6 +2012,251 @@ PRIMARY KEY  (id)
 			</script>
 			<?php
 
+		}
+
+		/**
+		 * Renders the HTML for the due date setting.
+		 *
+		 * @since 2.5
+		 *
+		 * @param array $field The field properties.
+		 */
+		public function settings_duedate( $field ) {
+
+			$form = $this->get_current_form();
+
+			$duedate = array(
+				'name' => 'duedate',
+				'type' => 'checkbox',
+				'choices' => array(
+					array(
+						'label' => esc_html__( 'Set due date', 'gravityflow' ),
+						'name' => 'duedate',
+					),
+				),
+			);
+
+			$duedate_type = array(
+				'name' => 'duedate_type',
+				'type' => 'radio',
+				'horizontal' => true,
+				'default_value' => 'delay',
+				'choices' => array(
+					array(
+						'label' => esc_html__( 'Delay', 'gravityflow' ),
+						'value' => 'delay',
+					),
+					array(
+						'label' => esc_html__( 'Date', 'gravityflow' ),
+						'value' => 'date',
+					),
+				),
+			);
+
+			$date_fields = GFFormsModel::get_fields_by_type( $form, 'date' );
+
+			$date_field_choices = array();
+
+			if ( ! empty( $date_fields ) ) {
+				$duedate_type['choices'][] = array(
+					'label' => esc_html__( 'Date Field', 'gravityflow' ),
+					'value' => 'date_field',
+				);
+
+
+				foreach ( $date_fields  as $date_field ) {
+					$date_field_choices[] = array( 'value' => $date_field->id, 'label' => GFFormsModel::get_label( $date_field ) );
+				}
+			}
+
+			$duedate_date_fields = array(
+				'name' => 'duedate_date_field',
+				'label' => esc_html__( 'Due Date Field', 'gravityflow' ),
+				'choices' => $date_field_choices,
+			);
+
+			$duedate_date = array(
+				'id' => 'duedate_date',
+				'name' => 'duedate_date',
+				'placeholder' => 'yyyy-mm-dd',
+				'class' => 'datepicker datepicker_with_icon ymd_dash',
+				'label' => esc_html__( 'Due Date', 'gravityflow' ),
+				'type' => 'text',
+			);
+
+			$delay_offset_field = array(
+				'name' => 'duedate_delay_offset',
+				'class' => 'small-text',
+				'label' => esc_html__( 'Due Date', 'gravityflow' ),
+				'type' => 'text',
+			);
+
+			$unit_field = array(
+				'name' => 'duedate_delay_unit',
+				'label' => esc_html__( 'Due Date', 'gravityflow' ),
+				'default_value' => 'hours',
+				'choices' => array(
+					array(
+						'label' => esc_html__( 'Minute(s)', 'gravityflow' ),
+						'value' => 'minutes',
+					),
+					array(
+						'label' => esc_html__( 'Hour(s)', 'gravityflow' ),
+						'value' => 'hours',
+					),
+					array(
+						'label' => esc_html__( 'Day(s)', 'gravityflow' ),
+						'value' => 'days',
+					),
+					array(
+						'label' => esc_html__( 'Week(s)', 'gravityflow' ),
+						'value' => 'weeks',
+					),
+				),
+			);
+
+			
+			$duedate_highlight = array(
+				'name'     => 'duedate_highlight',
+				'type'     => 'checkbox',
+				'choices'  => array(
+					array(
+						'label'         => esc_html__( 'Highlight overdue entries', 'gravityflow' ),
+						'name'          => 'duedate_highlight',
+					),
+				),
+			);
+			
+			$duedate_highlight_type = array(
+				'name'           => 'duedate_highlight_type',
+				'type'           => 'hidden',
+				'default_value'  => 'color',
+				'required'       => true,
+			);
+
+			$duedate_highlight_color = array(
+				'name'                => 'duedate_highlight_color',
+				'id'                  => 'duedate_highlight_color',
+				'class'               => 'small-text',
+				'label'               => esc_html__( 'Color', 'gravityflow' ),
+				'type'                => 'text',
+				'default_value'       => '#dd3333',
+			);
+			
+			$this->settings_checkbox( $duedate );
+
+			$enabled = $this->get_setting( 'duedate', false );
+			$duedate_type_setting = $this->get_setting( 'duedate_type', 'delay' );
+			$duedate_style = $enabled ? '' : 'style="display:none;"';
+			$duedate_date_style = ( $duedate_type_setting == 'date' ) ? '' : 'style="display:none;"';
+			$duedate_delay_style = ( $duedate_type_setting == 'delay' ) ? '' : 'style="display:none;"';
+			$duedate_date_fields_style = ( $duedate_type_setting == 'date_field' ) ? '' : 'style="display:none;"';
+
+			?>
+			<div class="gravityflow-duedate-settings" <?php echo $duedate_style; ?> >
+				<div class="gravityflow-duedate-type-container" class="gravityflow-sub-setting">
+					<?php $this->settings_radio( $duedate_type ); ?>
+				</div>
+				<div class="gravityflow-duedate-date-container" <?php echo $duedate_date_style; ?> >
+					<?php
+					esc_html_e( 'This step has a due date on', 'gravityflow' );
+					echo '&nbsp;';
+					$this->settings_text( $duedate_date );
+					?>
+					<input type="hidden" id="gforms_calendar_icon_expiration_date" class="gform_hidden" value="<?php echo GFCommon::get_base_url() . '/images/calendar.png'; ?>" />
+				</div>
+				<div class="gravityflow-duedate-delay-container" <?php echo $duedate_delay_style; ?> class="gravityflow-sub-setting">
+					<?php
+					esc_html_e( 'This step has a due date on', 'gravityflow' );
+					echo '&nbsp;';
+					$this->settings_text( $delay_offset_field );
+					$this->settings_select( $unit_field );
+					echo '&nbsp;';
+					esc_html_e( 'after the workflow step has started.' );
+					?>
+				</div>
+				<div class="gravityflow-duedate-date-field-container" <?php echo $duedate_date_fields_style ?>>
+					<?php
+					esc_html_e( 'Due date for this step', 'gravityflow' );
+					echo '&nbsp;';
+					$delay_offset_field['name'] = 'duedate_date_field_offset';
+					$delay_offset_field['default_value'] = '0';
+					$this->settings_text( $delay_offset_field );
+					$unit_field['name'] = 'duedate_date_field_offset_unit';
+					$this->settings_select( $unit_field );
+					echo '&nbsp;';
+					$before_after_field = array(
+						'name' => 'duedate_date_field_before_after',
+						'label' => esc_html__( 'Due Date', 'gravityflow' ),
+						'default_value' => 'after',
+						'choices' => array(
+							array(
+								'label' => esc_html__( 'after', 'gravityflow' ),
+								'value' => 'after',
+							),
+							array(
+								'label' => esc_html__( 'before', 'gravityflow' ),
+								'value' => 'before',
+							),
+						),
+					);
+					$this->settings_select( $before_after_field );
+
+					$this->settings_select( $duedate_date_fields );
+
+					?>
+				</div>
+
+				<div class="gravityflow-duedate-date-field-container">
+					<?php //$this->settings_step_highlight( $duedate_highlight ); 
+					$this->settings_checkbox( $duedate_highlight );
+
+					$enabled = $this->get_setting( 'duedate_highlight', false );
+					$duedate_highlight_style = $enabled ? '' : 'style="display:none;"';
+					$duedate_highlight_type_setting = $this->get_setting( 'duedate_highlight_type', 'color' );
+					$duedate_highlight_color_style = ( $duedate_highlight_type_setting == 'color' ) ? '' : 'style="display:none;"';
+					?>
+					<div class="gravityflow-duedate-highlight-settings" <?php echo $duedate_highlight_style; ?> >
+						<div class="gravityflow-duedate-highlight-type-container">
+							<?php $this->settings_hidden( $duedate_highlight_type ); ?>
+						</div>
+						<div class="gravityflow-duedate-highlight-color-container" <?php echo $duedate_highlight_color_style; ?> >
+							<?php
+							$this->settings_text( $duedate_highlight_color );
+							?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+				(function($) {
+					$( '#duedate' ).click(function(){
+						$('.gravityflow-duedate-settings').slideToggle();
+					});
+					$( '#duedate_type0' ).click(function(){
+						$('.gravityflow-duedate-date-container').hide();
+						$('.gravityflow-duedate-delay-container').show();
+						$('.gravityflow-duedate-date-field-container').hide();
+					});
+					$( '#duedate_type1' ).click(function(){
+						$('.gravityflow-duedate-date-container').show();
+						$('.gravityflow-duedate-delay-container').hide();
+						$('.gravityflow-duedate-date-field-container').hide();
+					});
+					$( '#duedate_type2' ).click(function(){
+						$('.gravityflow-duedate-delay-container').hide();
+						$('.gravityflow-duedate-date-container').hide();
+						$('.gravityflow-duedate-date-field-container').show();
+					});
+					$( '#duedate_highlight' ).click(function(){
+						$('.gravityflow-duedate-highlight-settings').slideToggle();
+					});
+					$(document).ready(function () {
+						$("#duedate_highlight_color").wpColorPicker();
+					});
+				})(jQuery);
+			</script>
+			<?php
 		}
 
 		/**
