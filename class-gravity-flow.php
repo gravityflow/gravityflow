@@ -4791,6 +4791,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'show_header'          => true,
 				'timeline'             => true,
 				'step_highlight'       => true,
+				'due_date'             => false,
 			);
 
 			$args = array_merge( $defaults, $args );
@@ -5628,6 +5629,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'    => true,
 				'sidebar'          => true,
 				'step_highlight'   => true,
+				'due_date'         => false,
 			);
 
 			return $defaults;
@@ -5680,6 +5682,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'        => $a['workflow_info'],
 				'sidebar'              => $a['sidebar'],
 				'step_highlight'       => $a['step_highlight'],
+				'due_date'             => $a['due_date'],
 			);
 
 			ob_start();
@@ -5763,6 +5766,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'step_status'        => $a['step_status'],
 				'workflow_info'      => $a['workflow_info'],
 				'sidebar'            => $a['sidebar'],
+				'due_date'           => $a['due_date'],
 			);
 
 			if ( isset( $a['form'] ) ) {
