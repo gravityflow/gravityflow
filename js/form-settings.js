@@ -287,7 +287,7 @@
 
 		};
 
-		var notificationTabs = ['assignee', 'rejection', 'approval', 'in_progress', 'complete', 'revert', 'duedate'];
+		var notificationTabs = ['assignee', 'rejection', 'approval', 'in_progress', 'complete', 'revert', 'due_date'];
 
 		for (var i = 0; i < notificationTabs.length; i++) {
 			GravityFlowFeedSettings.initNotificationTab(notificationTabs[i]);

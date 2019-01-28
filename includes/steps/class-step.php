@@ -717,23 +717,23 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @return bool|int
 	 */
-	public function get_duedate_timestamp() {
-		if ( ! $this->duedate ) {
+	public function get_due_date_timestamp() {
+		if ( ! $this->due_date ) {
 			return false;
 		}
 
-		switch ( $this->duedate_type ) {
+		switch ( $this->due_date_type ) {
 			case 'date':
-				$duedate_timestamp = $this->get_timestamp_date( 'duedate' );
+				$due_date_timestamp = $this->get_timestamp_date( 'due_date' );
 				break;
 
 			case 'date_field':
-				$duedate_timestamp = $this->get_timestamp_date_field( 'duedate' );
+				$due_date_timestamp = $this->get_timestamp_date_field( 'due_date' );
 				break;
 
 			case 'delay':
 			default:
-				$duedate_timestamp = $this->get_timestamp_delay( 'duedate' );
+				$due_date_timestamp = $this->get_timestamp_delay( 'due_date' );
 		}
 
 		/**
@@ -741,15 +741,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 		 *
 		 * @since 2.5
 		 *
-		 * @param int               $duedate_timestamp The current expiration timestamp (UTC).
+		 * @param int               $due_date_timestamp The current expiration timestamp (UTC).
 		 * @param string            $expiration_type      The type of expiration defined in step settings.
 		 * @param Gravity_Flow_Step $this                 The current step.
 		 *
 		 * @return int
 		 */
-		$duedate_timestamp = apply_filters( 'gravityflow_step_duedate_timestamp', $duedate_timestamp, $this->duedate_type, $this );
+		$due_date_timestamp = apply_filters( 'gravityflow_step_due_date_timestamp', $due_date_timestamp, $this->due_date_type, $this );
 
-		return $duedate_timestamp;
+		return $due_date_timestamp;
 	}
 
 
@@ -794,11 +794,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns the timestamp for the date based expiration or schedule or duedate.
+	 * Returns the timestamp for the date based expiration or schedule or due date.
 	 *
 	 * @since 2.3.2
 	 *
-	 * @param string $setting_type The setting type: expiration or schedule or duedate.
+	 * @param string $setting_type The setting type: expiration or schedule or due date.
 	 *
 	 * @return bool|int
 	 */
@@ -816,11 +816,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns the timestamp for the date field based expiration or schedule or duedate.
+	 * Returns the timestamp for the date field based expiration or schedule or due date.
 	 *
 	 * @since 2.3.2
 	 *
-	 * @param string $setting_type The setting type: expiration or schedule.
+	 * @param string $setting_type The setting type: expiration or schedule or due date.
 	 *
 	 * @return bool|int
 	 */
@@ -869,11 +869,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns the timestamp for the delay based expiration or schedule or duedate.
+	 * Returns the timestamp for the delay based expiration or schedule or due date.
 	 *
 	 * @since 2.3.2
 	 *
-	 * @param string $setting_type The setting type: expiration or schedule or duedate.
+	 * @param string $setting_type The setting type: expiration or schedule or due date.
 	 *
 	 * @return bool|int
 	 */
@@ -2054,7 +2054,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @return bool
 	 */
-	public function supports_duedate() {
+	public function supports_due_date() {
 		return false;
 	}
 

@@ -207,9 +207,10 @@ tr#gaddon-setting-row-step_type label > span > i {
 .gravityflow-expiration-type-container,
 .gravityflow-expiration-delay-container,
 .gravityflow-expiration-date-container,
-.gravityflow-duedate-type-container,
-.gravityflow-duedate-delay-container,
-.gravityflow-duedate-date-container{
+.gravityflow-due-date-type-container,
+.gravityflow-due-date-delay-container,
+.gravityflow-due-date-date-container,
+.gravityflow-due-date-highlight-color-container{
     margin: 10px 0 10px 0;
 }
 
