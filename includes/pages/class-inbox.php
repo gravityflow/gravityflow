@@ -239,6 +239,28 @@ class Gravity_Flow_Inbox {
 			}
 		}
 
+		$due_date_highlight_color = '';
+		if ( isset( $entry['workflow_step'] ) ) {
+			$step = gravity_flow()->get_step( $entry['workflow_step'] );
+			if ( $step ) {
+				$meta = $step->get_feed_meta();
+
+				if ( $meta && isset( $meta['due_date_highlight'] ) && $meta['due_date_highlight'] ) {
+					if ( isset( $meta['due_date_highlight_type'] ) && $meta['due_date_highlight_type'] == 'color' ) {
+						if ( isset( $meta['due_date_highlight_color'] ) && preg_match( '/^#[a-f0-9]{6}$/i', $meta['due_date_highlight_color'] ) ) {
+							$due_date_highlight_color = $meta['due_date_highlight_color'];
+						}
+					}
+				}
+			}
+		}
+
+		if ( ! empty( $due_date_highlight_color ) && ! empty( $due_date_highlight_color ) ) {
+			$step_highlight_color = $due_date_highlight_color;
+		} elseif ( ! empty( $due_date_highlight_color ) ) {
+			$step_highlight_color = $due_date_highlight_color;
+		}
+
 		/**
 		 * Allow the Step Highlight colour to be overridden.
 		 *

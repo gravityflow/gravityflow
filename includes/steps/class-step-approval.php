@@ -152,7 +152,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 *
 	 * @return bool
 	 */
-	public function supports_duedate() {
+	public function supports_due_date() {
 		return true;
 	}
 
@@ -329,15 +329,15 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 
 		}
 
-		if ( $this->get_setting( 'duedate' ) ) {
+		if ( $this->get_setting( 'due_date' ) ) {
 			$notification_tabs['tabs'][] = array(
-				'label'  => __( 'Past Due Date Email', 'gravityflow' ),
-				'id'     => 'tab_duedate_notification',
+				'label'  => __( 'Overdue Email', 'gravityflow' ),
+				'id'     => 'tab_due_date_notification',
 				'fields' => $settings_api->get_setting_notification( array(
-					'name_prefix'      => 'duedate',
+					'name_prefix'      => 'due_date',
 					'checkbox_label'   => __( 'Send email when the entry is past its due date', 'gravityflow' ),
 					'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is past its due date.', 'gravityflow' ),
-					'default_message'  => __( 'Entry {entry_id} should be completed', 'gravityflow' ),
+					'default_message'  => __( 'Entry {entry_id} should be completed as soon as possible.', 'gravityflow' ),
 					'send_to_fields'   => true,
 					'resend_field'     => false,
 				) ),
@@ -954,8 +954,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @since 2.5
 	 *
 	 */
-	public function send_duedate_notification() {
-		$this->maybe_send_notification( 'duedate' );
+	public function send_due_date_notification() {
+		$this->maybe_send_notification( 'due_date' );
 	}
 
 	/**
