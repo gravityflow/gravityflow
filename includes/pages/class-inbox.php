@@ -107,6 +107,7 @@ class Gravity_Flow_Inbox {
 			'field_ids'            => $field_ids,
 			'detail_base_url'      => admin_url( 'admin.php?page=gravityflow-inbox&view=entry' ),
 			'last_updated'         => false,
+			'due_date'             => false,
 			'step_highlight'       => true,
 		);
 
@@ -166,6 +167,10 @@ class Gravity_Flow_Inbox {
 
 		if ( $args['last_updated'] ) {
 			$columns['last_updated'] = __( 'Last Updated', 'gravityflow' );
+		}
+
+		if ( $args['due_date'] ) {
+			$columns['due_date'] = __( 'Due Date', 'gravityflow' );
 		}
 
 		/**
@@ -349,6 +354,14 @@ class Gravity_Flow_Inbox {
 				$value = rgar( $entry, 'payment_status' );
 				if ( gravity_flow()->is_gravityforms_supported( '2.4' ) ) {
 					$value = GFCommon::get_entry_payment_status_text( $value );
+				}
+				break;
+
+			case 'due_date':
+				$api = new Gravity_Flow_API( $form['id'] );
+				$step = $api->get_current_step( $entry );
+				if ( $step ) {
+					$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', true, true );
 				}
 				break;
 			default:
