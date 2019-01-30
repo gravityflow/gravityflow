@@ -303,7 +303,7 @@ class Gravity_Flow_Entry_Detail {
 		 *
 		 * @return string
 		 */
-		$url = apply_filters( 'gravityflow_back_link_entry_detail', $url, $args );
+		$url = apply_filters( 'gravityflow_back_link_url_entry_detail', $url, $args );
 
 		printf( '<a class="back-link" href="%s">%s</a><br/><br/>', esc_url( $url ), esc_html( $back_link_text ) );
 

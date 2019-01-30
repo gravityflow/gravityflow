@@ -74,7 +74,7 @@ class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 	private function add_hooks() {
 		add_filter( 'gravityview_entry_default_fields', array( $this, 'add_entry_default_field' ), 10, 3 );
 		add_filter( 'gravityview_field_entry_value_workflow_detail_link', array( $this, 'modify_entry_value_workflow_detail_link' ), 10, 4 );
-		add_filter( 'gravityflow_back_link_entry_detail', array( $this, 'modify_entry_detail_back_link' ), 10, 2 );
+		add_filter( 'gravityflow_back_link_url_entry_detail', array( $this, 'modify_entry_detail_back_link' ), 10, 2 );
 	}
 
 	/**

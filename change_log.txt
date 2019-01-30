@@ -2,5 +2,5 @@
 - Added shortcode attribute back_link (default: false) to identify if back link should be displayed on entry detail for entries loaded via shortcode.
 - Added shortcode attribute back_link_text (default: "Return to list" translatable) to allow customization of text for back link on entry detail page.
 - Added shortcode attribute back_link_url (default: null) to allow customization of back link on entry detail page.
-- Added filter gravityflow_back_link_entry_detail to allow customization of back link on entry detail page.
+- Added filter gravityflow_back_link_url_entry_detail to allow customization of back link on entry detail page.
 - Fixed the Gravity Perks Nested Forms Add-On integration not delaying the workflow for child entries created before the parent form is submitted.
