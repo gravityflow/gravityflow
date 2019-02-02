@@ -3194,7 +3194,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					<div id="submitcomment" class="submitbox">
 						<div id="minor-publishing" class="gravityflow-status-box">
 							<?php
-
+							
 							$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
 							$this->maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args );
 
@@ -5356,29 +5356,34 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 *
 		 * @return array
 		 */
-			public function get_shortcode_defaults() {
-				$defaults = array(
-					'page'             => 'inbox',
-					'form'             => null,
-					'form_id'          => null,
-					'entry_id'         => null,
-					'fields'           => array(),
-					'display_all'      => null,
-					'actions_column'   => false,
-					'allow_anonymous'  => false,
-					'title'            => '',
-					'id_column'        => true,
-					'submitter_column' => true,
-					'step_column'      => true,
-					'status_column'    => true,
-					'timeline'         => true,
-					'last_updated'     => false,
-					'step_status'      => true,
-					'workflow_info'    => true,
-					'sidebar'          => true,
-					'step_highlight'   => true,
-					'context_key'      => '',
-				);
+
+		public function get_shortcode_defaults() {
+
+			$defaults = array(
+				'page'             => 'inbox',
+				'form'             => null,
+				'form_id'          => null,
+				'entry_id'         => null,
+				'fields'           => array(),
+				'display_all'      => null,
+				'actions_column'   => false,
+				'allow_anonymous'  => false,
+				'title'            => '',
+				'id_column'        => true,
+				'submitter_column' => true,
+				'step_column'      => true,
+				'status_column'    => true,
+				'timeline'         => true,
+				'last_updated'     => false,
+				'step_status'      => true,
+				'workflow_info'    => true,
+				'sidebar'          => true,
+				'step_highlight'   => true,
+				'back_link'        => false,
+				'back_link_text'   => __( 'Return to list', 'gravityflow' ),
+				'back_link_url'    => null,
+				'context_key'      => '',
+			);
 
 			return $defaults;
 		}
@@ -5430,6 +5435,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'    => $a['workflow_info'],
 				'sidebar'          => $a['sidebar'],
 				'step_highlight'   => $a['step_highlight'],
+				'back_link'        => $a['back_link'],
+				'back_link_text'   => $a['back_link_text'],
+				'back_link_url'    => $a['back_link_url'],
 				'context_key'      => $a['context_key'],
 			);
 
