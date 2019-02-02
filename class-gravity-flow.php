@@ -4526,6 +4526,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'show_header'          => true,
 				'timeline'             => true,
 				'step_highlight'       => true,
+				'context_key'          => 'wp-admin',
 			);
 
 			$args = array_merge( $defaults, $args );
@@ -5245,11 +5246,23 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @param array       $atts    The shortcode attributes.
 		 * @param null|string $content The shortcode content.
 		 *
-		 * @return string|void
+		 * @return string
 		 */
 		public function shortcode( $atts, $content = null ) {
 
 			$a = $this->get_shortcode_atts( $atts );
+
+			if ( $a['allow_anonymous'] || $a['display_all'] ) {
+				// Check the last modified post author can override the capabilities
+				$last_user = false;
+				if ( $last_id = get_post_meta( get_post()->ID, '_edit_last', true) ) {
+					$last_user = get_userdata( $last_id );
+				}
+				if ( ! ( $last_user && ( $last_user->has_cap( 'gravityflow_create_steps' ) || $last_user->has_cap( 'manage_options'  ) ) ) ) {
+					$a['allow_anonymous'] = false;
+					$a['display_all'] = false;
+				}
+			}
 
 			if ( ! $a['allow_anonymous'] && ! is_user_logged_in() ) {
 				if ( ! $this->validate_access_token() ) {
@@ -5260,7 +5273,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$entry_id = absint( rgget( 'lid' ) );
 
 			if ( empty( $entry_id ) && ! empty( $a['entry_id'] ) ) {
-					$entry_id = absint( $a['entry_id'] );
+				$entry_id = absint( $a['entry_id'] );
 			}
 
 			if ( ! empty( $a['form'] ) && ! empty( $entry_id ) ) {
@@ -5277,28 +5290,16 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				$html .= sprintf( '<h3>%s</h3>', $a['title'] );
 			}
 
-			if ( $a['allow_anonymous'] || $a['display_all'] ) {
-				// Check the last modified post author can override the capabilities
-				$last_user = false;
-				if ( $last_id = get_post_meta( get_post()->ID, '_edit_last', true) ) {
-					$last_user = get_userdata( $last_id );
-				}
-				if ( ! ( $last_user && ( $last_user->has_cap( 'gravityflow_create_steps' ) || $last_user->has_cap( 'manage_options'  ) ) ) ) {
-					$a['allow_anonymous'] = false;
-					$a['display_all'] = false;
-				}
-			}
-
 			switch ( $a['page'] ) {
-				case 'inbox' :
+				case 'inbox':
 					$html .= $this->get_shortcode_inbox_page( $a );
 					break;
-				case 'submit' :
+				case 'submit':
 					ob_start();
 					$this->submit_page( false );
 					$html .= ob_get_clean();
 					break;
-				case 'status' :
+				case 'status':
 					wp_enqueue_script( 'gravityflow_entry_detail' );
 					wp_enqueue_script( 'gravityflow_status_list' );
 
