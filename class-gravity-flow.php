@@ -194,6 +194,8 @@ if ( class_exists( 'GFForms' ) ) {
 			add_filter( 'gform_enqueue_scripts', array( $this, 'filter_gform_enqueue_scripts' ), 10, 2 );
 			add_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_variables' ), 10, 7 );
 
+			add_filter( 'gform_is_value_match', array( $this, 'filter_value_match_multiuser' ), 10, 6 );
+
 			add_action( 'gform_entry_created', array( $this, 'action_entry_created' ), 8, 2 );
 			add_action( 'gform_register_init_scripts', array( $this, 'filter_gform_register_init_scripts' ), 10, 3 );
 			add_action( 'wp_login', array( $this, 'filter_wp_login' ), 10, 2 );
@@ -652,15 +654,6 @@ PRIMARY KEY  (id)
 					'deps'    => array( 'jquery', 'gform_datepicker_init' ),
 					'version' => $this->_version,
 					'enqueue' => array(
-						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
-						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=0' ),
-					),
-				),
-				array(
-					'handle'   => 'gravityflow_generic_map_js',
-					'src'      => $this->get_base_url() . "/js/generic-map{$min}.js",
-					'version'  => $this->_version,
-					'enqueue'  => array(
 						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
 						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=0' ),
 					),
@@ -3201,7 +3194,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					<div id="submitcomment" class="submitbox">
 						<div id="minor-publishing" class="gravityflow-status-box">
 							<?php
-
+							
 							$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
 							$this->maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args );
 
@@ -5351,25 +5344,28 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */
 		public function get_shortcode_defaults() {
 			$defaults = array(
-				'page'             => 'inbox',
-				'form'             => null,
-				'form_id'          => null,
-				'entry_id'         => null,
-				'fields'           => array(),
-				'display_all'      => null,
-				'actions_column'   => false,
-				'allow_anonymous'  => false,
-				'title'            => '',
-				'id_column'        => true,
-				'submitter_column' => true,
-				'step_column'      => true,
-				'status_column'    => true,
-				'timeline'         => true,
-				'last_updated'     => false,
-				'step_status'      => true,
-				'workflow_info'    => true,
-				'sidebar'          => true,
-				'step_highlight'   => true,
+				'page'              => 'inbox',
+				'form'              => null,
+				'form_id'           => null,
+				'entry_id'          => null,
+				'fields'            => array(),
+				'display_all'       => null,
+				'actions_column'    => false,
+				'allow_anonymous'   => false,
+				'title'             => '',
+				'id_column'         => true,
+				'submitter_column'  => true,
+				'step_column'       => true,
+				'status_column'     => true,
+				'timeline'          => true,
+				'last_updated'      => false,
+				'step_status'       => true,
+				'workflow_info'     => true,
+				'sidebar'           => true,
+				'step_highlight'    => true,
+				'back_link'         => false,
+				'back_link_text'    => __( 'Return to list', 'gravityflow' ),
+				'back_link_url'     => null,
 			);
 
 			return $defaults;
@@ -5422,6 +5418,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'        => $a['workflow_info'],
 				'sidebar'              => $a['sidebar'],
 				'step_highlight'       => $a['step_highlight'],
+				'back_link'            => $a['back_link'],
+				'back_link_text'       => $a['back_link_text'],
+				'back_link_url'        => $a['back_link_url'],
 			);
 
 			ob_start();
@@ -7189,244 +7188,6 @@ AND m.meta_value='queued'";
 		}
 
 		/**
-		 * Display or return the markup for the generic_map field type.
-		 *
-		 * @param array     $field The field properties.
-		 * @param bool|true $echo  Should the setting markup be echoed.
-		 *
-		 * @return string
-		 */
-		public function settings_generic_map( $field, $echo = true ) {
-
-			$html = '';
-
-			// Support for dynamic field map migrations.
-			if ( isset( $field['field_map'] ) ) {
-				$field['key_choices'] = $field['field_map'];
-			}
-
-			$value_field = $key_field = $custom_key_field = $custom_value_field = $field;
-
-			// Setup key field drop down.
-			$key_field['choices'] = ( isset( $field['key_choices'] ) ) ? $field['key_choices'] : null;
-			$key_field['name']    .= '_key';
-			$key_field['class']   = 'key key_{i}';
-			$key_field['style']   = 'width:200px;';
-
-			// Setup custom key text field.
-			$custom_key_field['name']  .= '_custom_key_{i}';
-			$custom_key_field['class'] = 'custom_key custom_key_{i}';
-			$custom_key_field['value'] = '{custom_key}';
-
-			// Setup value field drop down.
-			$value_field['choices'] = ( isset( $field['value_choices'] ) ) ? $field['value_choices'] : null;
-			$value_field['name']    .= '_custom_value';
-			$value_field['class']   = 'value value_{i}';
-			$value_field['style']   = 'width:200px;';
-
-			// Setup custom value text field.
-			$custom_value_field['name']  .= '_custom_value_{i}';
-			$custom_value_field['class'] = 'custom_value custom_value_{i}';
-			$custom_value_field['value'] = '{custom_value}';
-
-			// Remove unneeded values.
-			$unneeded_values = array( 'field_map', 'key_choices', 'value_choices', 'callback' );
-			foreach ( $unneeded_values as $unneeded_value ) {
-				unset( $field[ $unneeded_value ] );
-				unset( $value_field[ $unneeded_value ] );
-				unset( $key_field[ $unneeded_value ] );
-				unset( $custom_key_field[ $unneeded_value ] );
-				unset( $custom_value_field[ $unneeded_value ] );
-			}
-
-			// Add on errors set when validation fails.
-			if ( $this->field_failed_validation( $field ) ) {
-				$html .= $this->get_error_icon( $field );
-			}
-
-			$html .= $this->get_generic_map_table( $field, $key_field, $custom_key_field, $value_field, $custom_value_field );
-			$html .= $this->settings_hidden( $field, false );
-			$html .= $this->get_generic_map_script( $field, $key_field['name'], $value_field['name'] );
-
-			if ( $echo ) {
-				echo $html;
-			}
-
-			return $html;
-
-		}
-
-		/**
-		 * Return the markup for the table containing the generic_map settings.
-		 *
-		 * @param array $field              The generic_map field properties.
-		 * @param array $key_field          The properties for the key field drop down.
-		 * @param array $custom_key_field   The properties for the key field text input.
-		 * @param array $value_field        The properties for the value field drop down.
-		 * @param array $custom_value_field The properties for the value field text input.
-		 *
-		 * @return string
-		 */
-		public function get_generic_map_table( $field, $key_field, $custom_key_field, $value_field, $custom_value_field ) {
-			$key_field_title   = isset( $field['key_field_title'] ) ? $field['key_field_title'] : esc_html__( 'Key', 'gravityflow' );
-			$value_field_title = isset( $field['value_field_title'] ) ? $field['value_field_title'] : esc_html__( 'Value', 'gravityflow' );
-
-			$html = '
-            <table class="settings-field-map-table" cellspacing="0" cellpadding="0">
-            	<thead>
-					<tr>
-						<th>' . $key_field_title . '</th>
-						<th>' . $value_field_title . '</th>
-					</tr>
-				</thead>
-                <tbody class="repeater">
-	                <tr>
-	                    ' . $this->get_generic_map_field( 'key', $key_field, $custom_key_field ) .
-			        $this->get_generic_map_field( 'value', $value_field, $custom_value_field ) . '
-						<td>
-							{buttons}
-						</td>
-	                </tr>
-                </tbody>
-            </table>';
-
-			return $html;
-		}
-
-		/**
-		 * Return the inline script for the generic_map field.
-		 *
-		 * @param array  $field            The generic_map field properties.
-		 * @param string $key_field_name   The name of the key field.
-		 * @param string $value_field_name The name of the value field.
-		 *
-		 * @return string
-		 */
-		public function get_generic_map_script( $field, $key_field_name, $value_field_name ) {
-			$limit = empty( $field['limit'] ) ? 0 : $field['limit'];
-
-			$html = "
-			<script type=\"text/javascript\">
-
-				var dynamicGenericMap" . esc_attr( $field['name'] ) . " = new GravityFlowGenericMap({
-
-					'baseURL':      '" . GFCommon::get_base_url() . "',
-					'fieldId':      '" . esc_attr( $field['name'] ) . "',
-					'fieldName':    '" . $field['name'] . "',
-					'keyFieldName': '" . $key_field_name . "',
-					'valueFieldName': '" . $value_field_name . "',
-					'limit':        '" . $limit . "'
-
-				});
-
-			</script>";
-
-			return $html;
-		}
-
-		/**
-		 * Prepares the markup for the generic_map key and value fields.
-		 *
-		 * @param string $type         The field type being prepared; key or value.
-		 * @param array  $select_field The drop down field properties.
-		 * @param array  $text_field   The text field properties.
-		 *
-		 * @return string
-		 */
-		public function get_generic_map_field( $type, $select_field, $text_field ) {
-			// Build key cell based on available field map choices.
-			if ( empty( $select_field['choices'] ) ) {
-
-				// Set key field value to "gf_custom" so custom key is used.
-				$select_field['value'] = 'gf_custom';
-
-				/* Build HTML string */
-				$html = sprintf(
-					'<td>%s<div class="custom-%s-container">%s</div></td>',
-					$this->settings_hidden( $select_field, false ),
-					$type,
-					$this->settings_text( $text_field, false )
-				);
-
-			} else {
-
-				// Ensure field map array has a custom key option.
-				$has_gf_custom = false;
-				foreach ( $select_field['choices'] as $choice ) {
-					if ( $this->is_gf_custom_choice( $choice ) ) {
-						$has_gf_custom = true;
-					}
-					if ( rgar( $choice, 'choices' ) ) {
-						foreach ( $choice['choices'] as $sub_choice ) {
-							if ( $this->is_gf_custom_choice( $sub_choice ) ) {
-								$has_gf_custom = true;
-							}
-						}
-					}
-				}
-
-				if ( ! $has_gf_custom ) {
-					$select_field = $this->maybe_add_custom_choice( $select_field, $type );
-				}
-
-				// Build HTML string.
-				$html = sprintf(
-					'<th>%s<div class="custom-%s-container"><a href="#" class="custom-%s-reset">%s</a>%s</div></th>',
-					$this->settings_select( $select_field, false ),
-					$type,
-					$type,
-					esc_html__( 'Reset', 'gravityflow' ),
-					$this->settings_text( $text_field, false )
-				);
-
-			}
-
-			return $html;
-		}
-
-		/**
-		 * Determines if the current choice is the gf_custom choice.
-		 *
-		 * @param array $choice The choice properties.
-		 *
-		 * @return bool
-		 */
-		public function is_gf_custom_choice( $choice ) {
-			if ( 'gf_custom' === rgar( $choice, 'name' ) || rgar( $choice, 'value' ) == 'gf_custom' ) {
-				return true;
-			}
-
-			return false;
-		}
-
-		/**
-		 * Adds the gf_custom choice to the field, if applicable.
-		 *
-		 * @param array  $select_field The drop down field properties.
-		 * @param string $type         The field type being prepared; key or value.
-		 *
-		 * @return array
-		 */
-		public function maybe_add_custom_choice( $select_field, $type ) {
-			if ( $type == 'key' ) {
-				$enable_custom = isset( $select_field['enable_custom_key'] ) ? (bool) $select_field['enable_custom_key'] : ! (bool) rgar( $select_field, 'disable_custom' );
-				$label         = esc_html__( 'Add Custom Key', 'gravityflow' );
-			} else {
-				$enable_custom = isset( $select_field['enable_custom_value'] ) ? (bool) $select_field['enable_custom_value'] : false;
-				$label         = esc_html__( 'Add Custom Value', 'gravityflow' );
-			}
-
-			if ( $enable_custom ) {
-				$select_field['choices'][] = array(
-					'label' => $label,
-					'value' => 'gf_custom'
-				);
-			}
-
-			return $select_field;
-		}
-
-		/**
 		 * Display or return the markup for the feed_condition field type.
 		 *
 		 * @since 1.7.1-dev Added support for logic based on the entry meta.
@@ -7637,6 +7398,26 @@ AND m.meta_value='queued'";
 			$do_action = ( $logic['logicType'] == 'all' && $match_count == sizeof( $logic['rules'] ) ) || ( $logic['logicType'] == 'any' && $match_count > 0 );
 
 			return $do_action;
+		}
+
+		/**
+		 * Determines if a multiuser field is being used for conditional routing and has an exact value match of user ID
+		 *
+		 * @since 2.5
+		 *
+		 * @return bool
+		 */
+		public function filter_value_match_multiuser( $is_match, $field_value, $target_value, $operation, $source_field, $rule ) {
+
+			if ( ! $source_field || $source_field->type !== 'workflow_multi_user' ) {
+				return $is_match;
+			}
+
+			if ( in_array( $target_value, $field_value, true ) ) {
+				return true;
+			}
+
+			return false;
 		}
 
 		/**
