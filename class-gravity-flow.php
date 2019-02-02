@@ -4703,6 +4703,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		public function status_page( $args = array() ) {
 			$defaults = array(
 				'display_header' => true,
+				'context_key'    => 'wp-admin',
 			);
 			$args = array_merge( $defaults, $args );
 			?>
@@ -5276,6 +5277,18 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				$html .= sprintf( '<h3>%s</h3>', $a['title'] );
 			}
 
+			if ( $a['allow_anonymous'] || $a['display_all'] ) {
+				// Check the last modified post author can override the capabilities
+				$last_user = false;
+				if ( $last_id = get_post_meta( get_post()->ID, '_edit_last', true) ) {
+					$last_user = get_userdata( $last_id );
+				}
+				if ( ! ( $last_user && ( $last_user->has_cap( 'gravityflow_create_steps' ) || $last_user->has_cap( 'manage_options'  ) ) ) ) {
+					$a['allow_anonymous'] = false;
+					$a['display_all'] = false;
+				}
+			}
+
 			switch ( $a['page'] ) {
 				case 'inbox' :
 					$html .= $this->get_shortcode_inbox_page( $a );
@@ -5342,28 +5355,29 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 *
 		 * @return array
 		 */
-		public function get_shortcode_defaults() {
-			$defaults = array(
-				'page'             => 'inbox',
-				'form'             => null,
-				'form_id'          => null,
-				'entry_id'         => null,
-				'fields'           => array(),
-				'display_all'      => null,
-				'actions_column'   => false,
-				'allow_anonymous'  => false,
-				'title'            => '',
-				'id_column'        => true,
-				'submitter_column' => true,
-				'step_column'      => true,
-				'status_column'    => true,
-				'timeline'         => true,
-				'last_updated'     => false,
-				'step_status'      => true,
-				'workflow_info'    => true,
-				'sidebar'          => true,
-				'step_highlight'   => true,
-			);
+			public function get_shortcode_defaults() {
+				$defaults = array(
+					'page'             => 'inbox',
+					'form'             => null,
+					'form_id'          => null,
+					'entry_id'         => null,
+					'fields'           => array(),
+					'display_all'      => null,
+					'actions_column'   => false,
+					'allow_anonymous'  => false,
+					'title'            => '',
+					'id_column'        => true,
+					'submitter_column' => true,
+					'step_column'      => true,
+					'status_column'    => true,
+					'timeline'         => true,
+					'last_updated'     => false,
+					'step_status'      => true,
+					'workflow_info'    => true,
+					'sidebar'          => true,
+					'step_highlight'   => true,
+					'context_key'      => '',
+				);
 
 			return $defaults;
 		}
@@ -5400,21 +5414,22 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			wp_enqueue_script( 'gravityflow_entry_detail' );
 			wp_enqueue_script( 'gravityflow_status_list' );
 			$args = array(
-				'form_id'              => $a['form'],
-				'entry_id'             => $a['entry_id'],
-				'id_column'            => $a['id_column'],
-				'submitter_column'     => $a['submitter_column'],
-				'step_column'          => $a['step_column'],
-				'actions_column'       => $a['actions_column'],
-				'show_header'          => false,
-				'field_ids'            => $a['fields'] ? explode( ',', $a['fields'] ) : '',
-				'detail_base_url'      => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-				'timeline'             => $a['timeline'],
-				'last_updated'         => $a['last_updated'],
-				'step_status'          => $a['step_status'],
-				'workflow_info'        => $a['workflow_info'],
-				'sidebar'              => $a['sidebar'],
-				'step_highlight'       => $a['step_highlight'],
+				'form_id'          => $a['form'],
+				'entry_id'         => $a['entry_id'],
+				'id_column'        => $a['id_column'],
+				'submitter_column' => $a['submitter_column'],
+				'step_column'      => $a['step_column'],
+				'actions_column'   => $a['actions_column'],
+				'show_header'      => false,
+				'field_ids'        => $a['fields'] ? explode( ',', $a['fields'] ) : '',
+				'detail_base_url'  => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+				'timeline'         => $a['timeline'],
+				'last_updated'     => $a['last_updated'],
+				'step_status'      => $a['step_status'],
+				'workflow_info'    => $a['workflow_info'],
+				'sidebar'          => $a['sidebar'],
+				'step_highlight'   => $a['step_highlight'],
+				'context_key'      => $a['context_key'],
 			);
 
 			ob_start();
@@ -5448,6 +5463,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'sidebar'           => $a['sidebar'],
 				'workflow_info'     => $a['workflow_info'],
 				'step_status'       => $a['step_status'],
+				'context_key'       => $a['context_key'],
 			);
 
 			$this->inbox_page( $args );
@@ -5469,7 +5485,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			ob_start();
 
 			$args = array(
-				'base_url'           => remove_query_arg( array(
+				'base_url'         => remove_query_arg( array(
 					'entry-id',
 					'form-id',
 					'start-date',
@@ -5485,19 +5501,20 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					'gravityflow-print-page-break',
 					'gravityflow-print-timelines',
 				) ),
-				'detail_base_url'    => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-				'display_header'     => false,
-				'action_url'         => 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '' ) . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
-				'field_ids'          => $a['fields'] ? explode( ',', $a['fields'] ) : '',
-				'display_all'        => $a['display_all'],
-				'id_column'          => $a['id_column'],
-				'submitter_column'   => $a['submitter_column'],
-				'step_column'        => $a['step_column'],
-				'status_column'      => $a['status_column'],
-				'last_updated'       => $a['last_updated'],
-				'step_status'        => $a['step_status'],
-				'workflow_info'      => $a['workflow_info'],
-				'sidebar'            => $a['sidebar'],
+				'detail_base_url'  => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+				'display_header'   => false,
+				'action_url'       => 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '' ) . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
+				'field_ids'        => $a['fields'] ? explode( ',', $a['fields'] ) : '',
+				'display_all'      => $a['display_all'],
+				'id_column'        => $a['id_column'],
+				'submitter_column' => $a['submitter_column'],
+				'step_column'      => $a['step_column'],
+				'status_column'    => $a['status_column'],
+				'last_updated'     => $a['last_updated'],
+				'step_status'      => $a['step_status'],
+				'workflow_info'    => $a['workflow_info'],
+				'sidebar'          => $a['sidebar'],
+				'context_key'      => $a['context_key'],
 			);
 
 			if ( isset( $a['form'] ) ) {
