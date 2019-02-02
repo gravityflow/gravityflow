@@ -163,23 +163,6 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 	}
 
 	/**
-	 * Format a note for output.
-	 *
-	 * @since 1.7.1-dev
-	 *
-	 * @param string $note_value   The note value.
-	 * @param string $display_name The note display name.
-	 * @param string $date         The note creation date.
-	 *
-	 * @return string
-	 */
-	protected function format_note( $note_value, $display_name, $date ) {
-		$separator = $display_name && $date ? ': ' : '';
-
-		return sprintf( "%s%s%s\n%s", $display_name, $separator, $date, $note_value );
-	}
-
-	/**
 	 * Get the assignee display name.
 	 *
 	 * @since 1.7.1-dev

@@ -52,7 +52,6 @@ class Gravity_Flow_Merge_Tags {
 			throw new Exception( 'The name property must be set' );
 		}
 
-
 		self::$class_names[ $merge_tag->name ] = get_class( $merge_tag );
 	}
 

@@ -2,3 +2,4 @@
 - Fixed an issue where Conditional Routing based on what values a Multiuser field contains could lead to extra users being set as step assignees.
 - Fixed conditional assignee routing using the post category field.
 - Fixed the inbox page excess entries indicator displaying a limit of 150 when the page size has been changed using the gravityflow_inbox_paging filter.
+- Fixed an issue where the API function get_timeline would not return all expected timeline values
