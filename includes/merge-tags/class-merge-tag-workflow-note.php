@@ -77,7 +77,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 						$name = $a['display_name'] ? self::get_assignee_display_name( $note['assignee_key'] ) : '';
 						$date = $a['display_date'] ? Gravity_Flow_Common::format_date( $note['timestamp'], '', false, true ) : '';
 
-						$replacement_array[] = self::format_note( $note['value'], $name, $date );
+						$replacement_array[] = Gravity_Flow_Common::format_note( $note['value'], $name, $date );
 					}
 
 					$replacement = $this->format_value( implode( "\n\n", $replacement_array ) );
