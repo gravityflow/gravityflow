@@ -1602,11 +1602,11 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		/**
 		 * Allows search_criteria to be adjusted to define which forms' entries are displayed in status table.
-		 * 
+		 *
 		 * Return an array of search_criteria for use with GFAPI.
 		 *
-		 * @since 2.4.1-dev
-		 * 
+		 * @since 2.5
+		 *
 		 * @param array   $search_criteria The search criteria
 		 */
 		$search_criteria = apply_filters( 'gravityflow_search_criteria_status', $search_criteria );
