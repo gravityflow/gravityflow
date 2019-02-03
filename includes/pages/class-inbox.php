@@ -359,7 +359,7 @@ class Gravity_Flow_Inbox {
 				$api = new Gravity_Flow_API( $form['id'] );
 				$step = $api->get_current_step( $entry );
 				if ( $step ) {
-					$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', true, true );
+					$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', true, false );
 				}
 				break;
 			default:

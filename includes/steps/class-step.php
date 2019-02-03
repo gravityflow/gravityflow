@@ -133,6 +133,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$this->_meta[ $name ] = '';
 		}
 
+		$test = $this->_meta;
+
 		return $this->_meta[ $name ];
 	}
 
@@ -713,11 +715,14 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
-	 * Returns the expiration timestamp calculated from the expiration settings.
+	 * Returns the due date timestamp calculated from the due date settings.
+	 *
+	 * @since 2.5
 	 *
 	 * @return bool|int
 	 */
 	public function get_due_date_timestamp() {
+
 		if ( ! $this->due_date ) {
 			return false;
 		}
@@ -732,8 +737,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 				break;
 
 			case 'delay':
-			default:
 				$due_date_timestamp = $this->get_timestamp_delay( 'due_date' );
+				break;
+
+			default:
+				return false;
 		}
 
 		/**

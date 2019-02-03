@@ -1290,20 +1290,11 @@ PRIMARY KEY  (id)
 				$status_options = $step_class->get_status_config();
 
 				if ( $step_class->supports_due_date() ) {
-					$final_status_choices = array();
-
-					foreach ( $status_options as $status_option ) {
-						$final_status_choices[] = array( 'label' => $status_option['status_label'], 'value' => $status_option['status'] );
-					}
-
-					$final_status_choices[] = array( 'label' => esc_html__( 'Due date', 'gravityflow' ), 'value' => 'due_date' );
-
 					$step_settings['fields'][] = array(
 						'name' => 'due_date',
 						'label' => esc_html__( 'Due date', 'gravityflow' ),
 						'tooltip' => esc_html__( 'Enable the due date setting to allow entries to be highlighted when they have passed their due dates. A notification can also be configured to be sent for overdue entries.', 'gravityflow' ),
 						'type'       => 'due_date',
-						'status_choices' => $final_status_choices,
 					);
 				}
 
