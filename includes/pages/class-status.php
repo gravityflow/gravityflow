@@ -1049,11 +1049,12 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	public function column_due_date( $item ) {
 		$step_id = rgar( $item, 'workflow_step' );
 		if ( $step_id > 0 ) {
-			$step      = gravity_flow()->get_step( $step_id );
+			$step = gravity_flow()->get_step( $step_id );
+			$step->_entry = $item;
 			if ( $step ) {
 				$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', true, false );
 			}
-			
+
 			$link  = "<a href='#'>$value</a>";
 			$output = $link;
 		} else {

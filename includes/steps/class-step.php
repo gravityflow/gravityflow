@@ -893,16 +893,16 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$timestamp = $this->get_step_timestamp();
 
 		switch ( $this->{$setting_type . '_delay_unit'} ) {
-			case 'minutes' :
+			case 'minutes':
 				$timestamp += ( MINUTE_IN_SECONDS * $this->{$setting_type . '_delay_offset'} );
 				break;
-			case 'hours' :
+			case 'hours':
 				$timestamp += ( HOUR_IN_SECONDS * $this->{$setting_type . '_delay_offset'} );
 				break;
-			case 'days' :
+			case 'days':
 				$timestamp += ( DAY_IN_SECONDS * $this->{$setting_type . '_delay_offset'} );
 				break;
-			case 'weeks' :
+			case 'weeks':
 				$timestamp += ( WEEK_IN_SECONDS * $this->{$setting_type . '_delay_offset'} );
 				break;
 		}
