@@ -220,6 +220,8 @@ class Gravity_Flow_Common {
 	 *
 	 * @since 1.7.1-dev
 	 *
+	 * @param array $entry The entry to display timeline of.
+	 *
 	 * @return string
 	 */
 	public static function get_timeline( $entry = false ) {
@@ -259,7 +261,7 @@ class Gravity_Flow_Common {
 	 *
 	 * @return string
 	 */
-	static function format_note( $note_value, $display_name, $date ) {
+	public static function format_note( $note_value, $display_name, $date ) {
 		$separator = $display_name && $date ? ': ' : '';
 
 		return sprintf( "%s%s%s\n%s", $display_name, $separator, $date, $note_value );
