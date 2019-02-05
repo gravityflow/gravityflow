@@ -3523,11 +3523,19 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			}
 
 			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
+			     && $current_step->supports_due_date() && $current_step->due_date
+			) {
+				$gflow_due_date_date = Gravity_Flow_Common::format_date( $current_step->get_due_date_timestamp(), $date_format, false, true );
+				printf( '<br /><br />%s: %s', esc_html__( 'Due Date', 'gravityflow' ), $gflow_due_date_date );
+			}
+
+			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
 			     && $current_step->supports_expiration() && $current_step->expiration
 			) {
-				$glfow_date = Gravity_Flow_Common::format_date( $current_step->get_expiration_timestamp(), $date_format, false, true );
-				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), $glfow_date );
+				$gflow_expiry_date = Gravity_Flow_Common::format_date( $current_step->get_expiration_timestamp(), $date_format, false, true );
+				printf( '<br /><br />%s: %s', esc_html__( 'Expires', 'gravityflow' ), $gflow_expiry_date );
 			}
+			
 
 			/**
 			 * Allows content to be added in the workflow box below the workflow status info.
