@@ -201,21 +201,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			),
 		);
 
-		if ( $this->get_setting( 'due_date' ) ) {
-			$notification_tabs[] = array(
-				'label'  => __( 'Past Due Date Email', 'gravityflow' ),
-				'id'     => 'tab_due_date_notification',
-				'fields' => $settings_api->get_setting_notification( array(
-					'name_prefix'      => 'due_date',
-					'checkbox_label'   => __( 'Send email when the entry is past its due date', 'gravityflow' ),
-					'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is past its due date.', 'gravityflow' ),
-					'default_message'  => __( 'Entry {entry_id} should be completed', 'gravityflow' ),
-					'send_to_fields'   => true,
-					'resend_field'     => false,
-				) ),
-			);
-		}
-
 		$settings2 = array(
 			array(
 				'name'     => 'highlight_editable_fields',
@@ -279,21 +264,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			$settings_api->get_setting_notification_tabs( $notification_tabs ),
 			$settings_api->get_setting_confirmation_messasge( esc_html__( 'Thank you.', 'gravityflow' ) ),
 		);
-
-		if ( $this->get_setting( 'due_date' ) ) {
-			$notification_tabs['tabs'][] = array(
-				'label'  => __( 'Past Due Date Email', 'gravityflow' ),
-				'id'     => 'tab_due_date_notification',
-				'fields' => $settings_api->get_setting_notification( array(
-					'name_prefix'      => 'due_date',
-					'checkbox_label'   => __( 'Send email when the entry is past its due date', 'gravityflow' ),
-					'checkbox_tooltip' => __( 'Enable this setting to send an email when the entry is past its due date.', 'gravityflow' ),
-					'default_message'  => __( 'Entry {entry_id} should be completed', 'gravityflow' ),
-					'send_to_fields'   => true,
-					'resend_field'     => false,
-				) ),
-			);
-		}
 
 		$settings['fields'] = array_merge( $settings['fields'], $settings2 );
 

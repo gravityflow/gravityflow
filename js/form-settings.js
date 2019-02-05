@@ -287,7 +287,7 @@
 
 		};
 
-		var notificationTabs = ['assignee', 'rejection', 'approval', 'in_progress', 'complete', 'revert', 'due_date'];
+		var notificationTabs = ['assignee', 'rejection', 'approval', 'in_progress', 'complete', 'revert'];
 
 		for (var i = 0; i < notificationTabs.length; i++) {
 			GravityFlowFeedSettings.initNotificationTab(notificationTabs[i]);
@@ -326,8 +326,7 @@
 
 		var $revertSetting = $('#revertenable');
 		if ( !$revertSetting.prop("checked")) {
-			$('#tabs-notification_tabs').tabs('disable', 4);
-
+			$('#tabs-notification_tabs').tabs('disable', 3);
 		}
 
 		$revertSetting.change(function () {
