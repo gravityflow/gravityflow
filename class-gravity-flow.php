@@ -8088,11 +8088,17 @@ AND m.meta_value='queued'";
 			} else {
 				$license_details = get_transient( 'gravityflow_license_details' );
 				if ( ! $license_details ) {
+					$last_check = get_option( 'gravityflow_last_license_check' );
+					if ( $last_check > time() - 5 * MINUTE_IN_SECONDS ) {
+						return;
+					}
+
 					$license_key     = defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ? GRAVITY_FLOW_LICENSE_KEY : '';
 					$license_details = $this->check_license( $license_key );
 					if ( $license_details ) {
 						$expiration = DAY_IN_SECONDS + rand( 0, DAY_IN_SECONDS );
 						set_transient( 'gravityflow_license_details', $license_details, $expiration );
+						update_option( 'gravityflow_last_license_check', time() );
 					}
 				}
 			}

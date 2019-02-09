@@ -398,6 +398,11 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	 */
 	public function action_admin_notices() {
 
+		if ( ! ( $this->edd_item_name || $this->edd_item_id ) ) {
+			// Only display the admin notice for official extensions.
+			return;
+		}
+
 		if ( is_multisite() && ! is_main_site() ) {
 			return;
 		}
@@ -425,10 +430,15 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 		} else {
 			$license_details = get_transient( $transient_key );
 			if ( ! $license_details ) {
+				$last_check = get_option( 'gravityflow_last_license_check' );
+				if ( $last_check > time() - 5 * MINUTE_IN_SECONDS ) {
+					return;
+				}
 				$license_details = $this->check_license();
 				if ( $license_details ) {
 					$expiration = DAY_IN_SECONDS + rand( 0, DAY_IN_SECONDS );
 					set_transient( $transient_key, $license_details, $expiration );
+					update_option( 'gravityflow_last_license_check', time() );
 				}
 			}
 		}
