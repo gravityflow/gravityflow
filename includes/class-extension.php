@@ -39,6 +39,15 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	public $edd_item_id = '';
 
 	/**
+	 * Counts the number of license check requests made.
+	 *
+	 * @since 2.4.2
+	 *
+	 * @var bool
+	 */
+	public static $license_check_count = 0;
+
+	/**
 	 * If the extensions minimum requirements are met add the general hooks.
 	 */
 	public function init() {
@@ -393,6 +402,15 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	 */
 	public function action_admin_notices() {
 
+		if ( ! ( $this->edd_item_name || $this->edd_item_id ) ) {
+			// Only display the admin notice for official extensions.
+			return;
+		}
+
+		if ( self::$license_check_count > 0 ) {
+			return;
+		}
+
 		if ( is_multisite() && ! is_main_site() ) {
 			return;
 		}
@@ -425,6 +443,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 					$expiration = DAY_IN_SECONDS + rand( 0, DAY_IN_SECONDS );
 					set_transient( $transient_key, $license_details, $expiration );
 				}
+				self::$license_check_count++;
 			}
 		}
 
