@@ -261,6 +261,11 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 		if ( empty( $value ) ) {
 			$value = $this->get_app_setting( 'license_key' );
 		}
+
+		if ( empty( $value ) ) {
+			return false;
+		}
+
 		$item_name_or_id = empty( $this->edd_item_id ) ? $this->edd_item_name : $this->edd_item_id;
 		$response        = gravity_flow()->perform_edd_license_request( 'check_license', $value, $item_name_or_id );
 

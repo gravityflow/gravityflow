@@ -4314,11 +4314,15 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 *
 		 * @param string $value The license key.
 		 *
-		 * @return array|object
+		 * @return array|object|false
 		 */
 		public function check_license( $value = '' ) {
 			if ( empty( $value ) ) {
 				$value = $this->get_app_setting( 'license_key' );
+			}
+
+			if ( empty( $value ) ) {
+				return false;
 			}
 
 			// Static cache to prevent multiple requests for the same license key.
