@@ -3623,19 +3623,36 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				$steps = $this->get_steps( $form_id, $entry );
 			}
 			$current_step_id = $current_step->get_id();
+			$next_potential_step = false;
 			$next_step = false;
+			
 			foreach ( $steps as $step ) {
-				if ( $next_step ) {
+				if ( $next_potential_step ) {
 					if ( $step->is_active() && $step->is_condition_met( $form ) ) {
-						return $step;
+						$next_step = $step;
+						break;
 					}
 				}
 
-				if ( $next_step == false && $current_step_id == $step->get_id() ) {
-					$next_step = true;
+				if ( $next_potential_step == false && $current_step_id == $step->get_id() ) {
+					$next_potential_step = true;
 				}
 			}
-			return false;
+			/**
+			 * Allows the next step in workflow to be customized.
+			 *
+			 * Return the next step (or false)
+			 *
+			 * @since 2.5
+			 *
+			 * @param Gravity_Flow_Step|bool $step         The next step.
+			 * @param Gravity_Flow_Step      $current_step The current step.
+			 * @param array                  $entry        The current entry array.
+			 * @param array                  $form         The current form array.
+			 * @param array                  $steps        The steps for current form.
+			 */
+			$step = apply_filters( 'gravityflow_next_step', $next_step, $current_step, $entry, $steps );
+			return $step;
 		}
 
 		/**
