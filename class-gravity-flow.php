@@ -3643,7 +3643,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			 *
 			 * Return the next step (or false)
 			 *
-			 * @since 2.5
+			 * @since 2.4.3
 			 *
 			 * @param Gravity_Flow_Step|bool $step         The next step.
 			 * @param Gravity_Flow_Step      $current_step The current step.
