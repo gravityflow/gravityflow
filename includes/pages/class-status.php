@@ -1051,12 +1051,13 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		if ( $step_id > 0 ) {
 			$step = gravity_flow()->get_step( $step_id );
 			$step->_entry = $item;
-			if ( $step ) {
+			if ( $step && $step->due_date ) {
 				$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', true, false );
+				$link  = "<a href='#'>$value</a>";
+				$output = $link;
+			} else {
+				$output = '<span class="gravityflow-empty">&dash;</span>';
 			}
-
-			$link  = "<a href='#'>$value</a>";
-			$output = $link;
 		} else {
 			$output = '<span class="gravityflow-empty">&dash;</span>';
 		}
