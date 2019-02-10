@@ -2042,6 +2042,17 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 					}
 				} else {
 					switch ( $column_key ) {
+						case 'due_date':
+							$step_id = rgar( $item, 'workflow_step' );
+							if ( $step_id > 0 ) {
+								$step = gravity_flow()->get_step( $step_id );
+								$step->_entry = $item;
+								if ( $step && $step->due_date ) {
+									$col_val = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', true, false );
+								}
+							}
+							break;
+
 						case 'duration':
 							if ( $item['workflow_final_status'] == 'pending' ) {
 								$duration     = time() - strtotime( $item['date_created'] );
