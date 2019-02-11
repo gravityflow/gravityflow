@@ -5,3 +5,6 @@
 - Added shortcode attribute back_link_url (default: null) to allow customization of back link on entry detail page.
 - Added filter gravityflow_back_link_url_entry_detail to allow customization of back link on entry detail page.
 - Added filter gravityflow_search_criteria_status to allow status page to filter on multiple field criteria.
+- Added step setting type for due date with sub-options for delay/date/field selection and row highlighting for inbox.
+- Added inbox and status attribute due_date (false by default) to show due date column.
+- Updated approval and user input step types to support due date settings.
