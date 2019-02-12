@@ -3543,32 +3543,35 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		/**
 		 * Returns the next step for the supplied entry.
 		 *
-		 * @param Gravity_Flow_Step $step The current step.
+		 * @param Gravity_Flow_Step $step The current step. Defaults to false.
 		 * @param array             $entry The current entry.
 		 * @param array             $form  The current form.
 		 *
 		 * @return bool|Gravity_Flow_Step
 		 */
-		public function get_next_step( $step, $entry, $form ) {
+		public function get_next_step( $step = false, $entry, $form ) {
+			$current_step = $step;
 			$keep_looking = true;
 			$form_id = absint( $form['id'] );
 			$steps = $this->get_steps( $form_id, $entry );
 			while ( $keep_looking && $step ) {
 
 				if ( ! $step instanceof Gravity_Flow_Step ) {
-					return false;
+					$step = false;
 				}
 
 				$next_step_id = $step->get_next_step_id();
 
 				if ( $next_step_id == 'complete' ) {
-					return false;
+					$step = false;
 				}
 
 				if ( $next_step_id == 'next' ) {
 					$step = $this->get_next_step_in_list( $form, $step, $entry, $steps );
 					$keep_looking = false;
-				} else {
+				} 
+				
+				if ( ! in_array( $next_step_id, array( 'complete', 'next' ) ) ) {
 					$step = $this->get_step( $next_step_id, $entry );
 
 					if ( empty( $step ) ) {
@@ -3583,6 +3586,20 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					}
 				}
 			}
+			/**
+			 * Allows the next step in workflow to be customized.
+			 *
+			 * Return the next step (or false)
+			 *
+			 * @since 2.4.3
+			 *
+			 * @param Gravity_Flow_Step|bool $step         The next step.
+			 * @param Gravity_Flow_Step      $current_step The current step.
+			 * @param array                  $entry        The current entry array.
+			 * @param array                  $form         The current form array.
+			 * @param array                  $steps        The steps for current form.
+			 */
+			$step = apply_filters( 'gravityflow_next_step', $step, $current_step, $entry, $steps );
 			return $step;
 		}
 
@@ -3618,41 +3635,22 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */
 		public function get_next_step_in_list( $form, $current_step, $entry, $steps = array() ) {
 			$form_id = absint( $form['id'] );
-
 			if ( empty( $steps ) ) {
 				$steps = $this->get_steps( $form_id, $entry );
 			}
 			$current_step_id = $current_step->get_id();
-			$next_potential_step = false;
 			$next_step = false;
-			
 			foreach ( $steps as $step ) {
-				if ( $next_potential_step ) {
+				if ( $next_step ) {
 					if ( $step->is_active() && $step->is_condition_met( $form ) ) {
-						$next_step = $step;
-						break;
+						return $step;
 					}
 				}
-
-				if ( $next_potential_step == false && $current_step_id == $step->get_id() ) {
-					$next_potential_step = true;
+				if ( $next_step == false && $current_step_id == $step->get_id() ) {
+					$next_step = true;
 				}
 			}
-			/**
-			 * Allows the next step in workflow to be customized.
-			 *
-			 * Return the next step (or false)
-			 *
-			 * @since 2.4.3
-			 *
-			 * @param Gravity_Flow_Step|bool $step         The next step.
-			 * @param Gravity_Flow_Step      $current_step The current step.
-			 * @param array                  $entry        The current entry array.
-			 * @param array                  $form         The current form array.
-			 * @param array                  $steps        The steps for current form.
-			 */
-			$step = apply_filters( 'gravityflow_next_step', $next_step, $current_step, $entry, $steps );
-			return $step;
+			return false;
 		}
 
 		/**
