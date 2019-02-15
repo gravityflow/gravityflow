@@ -1069,69 +1069,72 @@ PRIMARY KEY  (id)
 		 * @return array
 		 */
 		public function get_users_as_choices() {
+			static $choices;
 
-			$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
+			if ( ! isset( $choices ) ) {
+				$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
 
-			$args            = apply_filters( 'gravityflow_get_users_args', array( 'number' => 1000, 'orderby' => 'display_name' ) );
-			$accounts        = get_users( $args );
-			$account_choices = array();
-			foreach ( $accounts as $account ) {
-				$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'label' => $account->display_name );
-			}
+				$args            = apply_filters( 'gravityflow_get_users_args', array( 'number' => 1000, 'orderby' => 'display_name', 'fields' => array( 'ID', 'display_name' ) ) );
+				$accounts        = get_users( $args );
+				$account_choices = array();
+				foreach ( $accounts as $account ) {
+					$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'label' => $account->display_name );
+				}
 
-			$choices = array(
-				array(
-					'label'   => __( 'Users', 'gravityflow' ),
-					'choices' => $account_choices,
-				),
-				array(
-					'label'   => __( 'Roles', 'gravityflow' ),
-					'choices' => $role_choices,
-				),
-			);
-
-			$form_id = absint( rgget( 'id' ) );
-
-			$form = GFAPI::get_form( $form_id );
-
-			$field_choices = array();
-
-			$assignee_fields_as_choices = $this->get_assignee_fields_as_choices( $form );
-
-			if ( ! empty( $assignee_fields_as_choices ) ) {
-				$field_choices = $assignee_fields_as_choices;
-			}
-
-			$email_fields_as_choices = $this->get_email_fields_as_choices( $form );
-
-			if ( ! empty( $email_fields_as_choices ) ) {
-				$field_choices = array_merge( $field_choices, $email_fields_as_choices );
-			}
-
-
-			if ( rgar( $form, 'requireLogin' ) ) {
-				$field_choices[] = array(
-					'label' => __( 'User (Created by)', 'gravityflow' ),
-					'value' => 'entry|created_by',
+				$choices = array(
+					array(
+						'label'   => __( 'Users', 'gravityflow' ),
+						'choices' => $account_choices,
+					),
+					array(
+						'label'   => __( 'Roles', 'gravityflow' ),
+						'choices' => $role_choices,
+					),
 				);
-			}
 
-			if ( ! empty( $field_choices ) ) {
-				$choices[] = array(
-					'label'   => __( 'Fields', 'gravityflow' ),
-					'choices' => $field_choices,
-				);
-			}
+				$form_id = absint( rgget( 'id' ) );
 
-			/**
-			 * Allows the assignee choices to be modified.
-			 *
-			 * @since 2.1
-			 *
-			 * @param array $choices The assignee choices
-			 * @param array $form    The Form
-			 */
-			$choices = apply_filters( 'gravityflow_assignee_choices', $choices, $form );
+				$form = GFAPI::get_form( $form_id );
+
+				$field_choices = array();
+
+				$assignee_fields_as_choices = $this->get_assignee_fields_as_choices( $form );
+
+				if ( ! empty( $assignee_fields_as_choices ) ) {
+					$field_choices = $assignee_fields_as_choices;
+				}
+
+				$email_fields_as_choices = $this->get_email_fields_as_choices( $form );
+
+				if ( ! empty( $email_fields_as_choices ) ) {
+					$field_choices = array_merge( $field_choices, $email_fields_as_choices );
+				}
+
+
+				if ( rgar( $form, 'requireLogin' ) ) {
+					$field_choices[] = array(
+						'label' => __( 'User (Created by)', 'gravityflow' ),
+						'value' => 'entry|created_by',
+					);
+				}
+
+				if ( ! empty( $field_choices ) ) {
+					$choices[] = array(
+						'label'   => __( 'Fields', 'gravityflow' ),
+						'choices' => $field_choices,
+					);
+				}
+
+				/**
+				 * Allows the assignee choices to be modified.
+				 *
+				 * @since 2.1
+				 *
+				 * @param array $choices The assignee choices
+				 * @param array $form    The Form
+				 */
+				$choices = apply_filters( 'gravityflow_assignee_choices', $choices, $form );
+			}
 
 			return $choices;
 		}
@@ -3194,7 +3197,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					<div id="submitcomment" class="submitbox">
 						<div id="minor-publishing" class="gravityflow-status-box">
 							<?php
-							
+
 							$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
 							$this->maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args );
 
