@@ -3552,8 +3552,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		public function get_next_step( $step = false, $entry, $form ) {
 			$current_step = $step;
 			$keep_looking = true;
+
 			$form_id = absint( $form['id'] );
-			$steps = $this->get_steps( $form_id, $entry );
+			$steps   = $this->get_steps( $form_id, $entry );
+
 			while ( $keep_looking && $step ) {
 
 				if ( ! $step instanceof Gravity_Flow_Step ) {
@@ -3587,6 +3589,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					}
 				}
 			}
+
 			/**
 			 * Allows the next step in workflow to be customized.
 			 *
@@ -3601,6 +3604,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			 * @param array                  $steps        The steps for current form.
 			 */
 			$step = apply_filters( 'gravityflow_next_step', $step, $current_step, $entry, $steps );
+
 			return $step;
 		}
 
