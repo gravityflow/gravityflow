@@ -255,6 +255,11 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		if ( empty( $value ) ) {
 			$value = $this->get_app_setting( 'license_key' );
 		}
+
+		if ( empty( $value ) ) {
+			return false;
+		}
+
 		$item_name_or_id = empty( $this->edd_item_id ) ? $this->edd_item_name : $this->edd_item_id;
 		$response        = gravity_flow()->perform_edd_license_request( 'check_license', $value, $item_name_or_id );
 
@@ -393,6 +398,11 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	 */
 	public function action_admin_notices() {
 
+		if ( ! ( $this->edd_item_name || $this->edd_item_id ) ) {
+			// Only display the admin notice for official extensions.
+			return;
+		}
+
 		if ( is_multisite() && ! is_main_site() ) {
 			return;
 		}
@@ -414,14 +424,21 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 				$license_details = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
 			}
 			if ( $license_details ) {
-				set_transient( $transient_key, $license_details, DAY_IN_SECONDS );
+				$expiration = DAY_IN_SECONDS + rand( 0, DAY_IN_SECONDS );
+				set_transient( $transient_key, $license_details, $expiration );
 			}
 		} else {
 			$license_details = get_transient( $transient_key );
 			if ( ! $license_details ) {
+				$last_check = get_option( 'gravityflow_last_license_check' );
+				if ( $last_check > time() - 5 * MINUTE_IN_SECONDS ) {
+					return;
+				}
 				$license_details = $this->check_license();
 				if ( $license_details ) {
-					set_transient( $transient_key, $license_details, DAY_IN_SECONDS );
+					$expiration = DAY_IN_SECONDS + rand( 0, DAY_IN_SECONDS );
+					set_transient( $transient_key, $license_details, $expiration );
+					update_option( 'gravityflow_last_license_check', time() );
 				}
 			}
 		}

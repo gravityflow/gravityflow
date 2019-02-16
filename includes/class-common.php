@@ -216,6 +216,58 @@ class Gravity_Flow_Common {
 	}
 
 	/**
+	 * Get the content which will replace the {workflow_timeline} merge tag and response for Gravity Flow API get_timeline.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param array $entry The entry to display timeline of.
+	 *
+	 * @return string
+	 */
+	public static function get_timeline( $entry = false ) {
+
+		if ( empty( $entry ) ) {
+			return '';
+		}
+
+		$notes = Gravity_Flow_Common::get_timeline_notes( $entry );
+
+		if ( empty( $notes ) ) {
+			return '';
+		}
+
+		$return = array();
+
+		foreach ( $notes as $note ) {
+			$step = Gravity_Flow_Common::get_timeline_note_step( $note );
+			$name = Gravity_Flow_Common::get_timeline_note_display_name( $note, $step );
+			$date = Gravity_Flow_Common::format_date( $note->date_created, '', false, true );
+
+			$return[] = Gravity_Flow_Common::format_note( $note->value, $name, $date );
+		}
+
+		return implode( "\n\n", $return );
+
+	}
+
+	/**
+	 * Format a note for output.
+	 *
+	 * @since 1.7.1-dev
+	 *
+	 * @param string $note_value   The note value.
+	 * @param string $display_name The note display name.
+	 * @param string $date         The note creation date.
+	 *
+	 * @return string
+	 */
+	public static function format_note( $note_value, $display_name, $date ) {
+		$separator = $display_name && $date ? ': ' : '';
+
+		return sprintf( "%s%s%s\n%s", $display_name, $separator, $date, $note_value );
+	}
+
+	/**
 	 * Get the timeline notes for the current entry.
 	 *
 	 * @since 1.7.1-dev

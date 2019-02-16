@@ -4358,11 +4358,15 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 *
 		 * @param string $value The license key.
 		 *
-		 * @return array|object
+		 * @return array|object|false
 		 */
 		public function check_license( $value = '' ) {
 			if ( empty( $value ) ) {
 				$value = $this->get_app_setting( 'license_key' );
+			}
+
+			if ( empty( $value ) ) {
+				return false;
 			}
 
 			// Static cache to prevent multiple requests for the same license key.
@@ -7914,15 +7918,23 @@ AND m.meta_value='queued'";
 					$license_details = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
 				}
 				if ( $license_details ) {
-					set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
+					$expiration = DAY_IN_SECONDS + rand( 0, DAY_IN_SECONDS );
+					set_transient( 'gravityflow_license_details', $license_details, $expiration );
 				}
 			} else {
 				$license_details = get_transient( 'gravityflow_license_details' );
 				if ( ! $license_details ) {
+					$last_check = get_option( 'gravityflow_last_license_check' );
+					if ( $last_check > time() - 5 * MINUTE_IN_SECONDS ) {
+						return;
+					}
+
 					$license_key     = defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ? GRAVITY_FLOW_LICENSE_KEY : '';
 					$license_details = $this->check_license( $license_key );
 					if ( $license_details ) {
-						set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
+						$expiration = DAY_IN_SECONDS + rand( 0, DAY_IN_SECONDS );
+						set_transient( 'gravityflow_license_details', $license_details, $expiration );
+						update_option( 'gravityflow_last_license_check', time() );
 					}
 				}
 			}

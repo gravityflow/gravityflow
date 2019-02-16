@@ -77,7 +77,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 						$name = $a['display_name'] ? self::get_assignee_display_name( $note['assignee_key'] ) : '';
 						$date = $a['display_date'] ? Gravity_Flow_Common::format_date( $note['timestamp'], '', false, true ) : '';
 
-						$replacement_array[] = self::format_note( $note['value'], $name, $date );
+						$replacement_array[] = Gravity_Flow_Common::format_note( $note['value'], $name, $date );
 					}
 
 					$replacement = $this->format_value( implode( "\n\n", $replacement_array ) );
@@ -160,23 +160,6 @@ class Gravity_Flow_Merge_Tag_Workflow_Note extends Gravity_Flow_Merge_Tag {
 		}
 
 		return $step_id;
-	}
-
-	/**
-	 * Format a note for output.
-	 *
-	 * @since 1.7.1-dev
-	 *
-	 * @param string $note_value   The note value.
-	 * @param string $display_name The note display name.
-	 * @param string $date         The note creation date.
-	 *
-	 * @return string
-	 */
-	protected function format_note( $note_value, $display_name, $date ) {
-		$separator = $display_name && $date ? ': ' : '';
-
-		return sprintf( "%s%s%s\n%s", $display_name, $separator, $date, $note_value );
 	}
 
 	/**

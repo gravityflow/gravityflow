@@ -89,7 +89,7 @@ class Gravity_Flow_Installation_Wizard {
 				<?php $this->progress( $current_step ); ?>
 			</div>
 
-			<hr/>
+			<hr style="margin:0;"/>
 
 			<br/>
 			<h2>
@@ -360,8 +360,8 @@ class Gravity_Flow_Installation_Wizard {
 			} else {
 				$class .= $done ? 'gform_installation_progress_step_complete' : 'gform_installation_progress_step_pending';
 			}
-			$yes_visibility = $done ? '' : 'style="visibility:hidden"';
-			$check = sprintf( '<img src="%s" %s />', $yes_img_url, $yes_visibility );
+			$yes_visibility = $done ? 'style="width:20px;"' : 'style="visibility:hidden;width:20px;"';
+			$check = sprintf( '<img  src="%s" %s />', $yes_img_url, $yes_visibility );
 
 			$html .= sprintf( '<li id="gform_installation_progress_%s" class="%s">%s&nbsp;%s</li>', esc_attr( $step->get_name() ), esc_attr( $class ), esc_html( $step->get_title() ), $check );
 		}
