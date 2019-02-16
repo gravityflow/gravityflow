@@ -4288,7 +4288,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 						'name'  => 'shortcodes',
 						'label' => esc_html__( 'Shortcode Security', 'gravityflow' ),
 						'type'        => 'checkbox',
-						'description' => esc_html__( 'Important: Do not enable any of these settings unless all page/post authors are authorized.', 'gravityflow' ),
+						'description' => esc_html__( 'Important: Do not enable any of these settings unless all page authors are authorized.', 'gravityflow' ),
 						'choices'     => array(
 							array(
 								'label'   => esc_html__( 'Allow the Status shortcode to display all entries to all registered users.', 'gravityflow' ),
@@ -5307,19 +5307,29 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */
 		public function shortcode( $atts, $content = null ) {
 
+			if ( get_post()->post_type != 'page' ) {
+				return '';
+			}
+
 			$a = $this->get_shortcode_atts( $atts );
 
-			$app_settings = $this->get_app_settings();
+			if ( $a['display_all'] || $a['allow_anonymous'] ) {
 
-			if ( $a['display_all'] && ! rgar( $app_settings, 'allow_display_all_attribute' ) ) {
+				$app_settings = $this->get_app_settings();
 
-				$a['display_all'] = false;
+				if ( $a['display_all'] && ! rgar( $app_settings, 'allow_display_all_attribute' ) ) {
+
+					$a['display_all'] = false;
+				}
+
+				if ( $a['allow_anonymous'] && ! rgar( $app_settings, 'allow_allow_anonymous_attribute' ) ) {
+
+					$a['allow_anonymous'] = false;
+				}
+
 			}
 
-			if ( $a['allow_anonymous'] && ! rgar( $app_settings, 'allow_allow_anonymous_attribute' ) ) {
 
-				$a['allow_anonymous'] = false;
-			}
 
 			if ( ! $a['allow_anonymous'] && ! is_user_logged_in() ) {
 				if ( ! $this->validate_access_token() ) {
