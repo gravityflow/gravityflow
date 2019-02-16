@@ -3558,12 +3558,13 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 				if ( ! $step instanceof Gravity_Flow_Step ) {
 					$step = false;
+				} else {
+					$next_step_id = $step->get_next_step_id();
 				}
-
-				$next_step_id = $step->get_next_step_id();
 
 				if ( $next_step_id == 'complete' ) {
 					$step = false;
+					$keep_looking = false;
 				}
 
 				if ( $next_step_id == 'next' ) {
