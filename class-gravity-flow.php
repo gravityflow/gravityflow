@@ -3557,7 +3557,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			while ( $keep_looking && $step ) {
 
 				if ( ! $step instanceof Gravity_Flow_Step ) {
-					$step = false;
+					$next_step_id = $step = false;
 				} else {
 					$next_step_id = $step->get_next_step_id();
 				}
