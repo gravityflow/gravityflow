@@ -47,7 +47,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	 *
 	 * @var string
 	 */
-	//public $license_key = '';
+	public $license_key = '';
 
 	/**
 	 * If the extensions minimum requirements are met add the general hooks.
