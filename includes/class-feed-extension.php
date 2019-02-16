@@ -39,6 +39,17 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	public $edd_item_id = '';
 
 	/**
+	 * Holds the license key for the current installation.
+	 *
+	 * Set with a constant e.g. GRAVITY_FLOW_EXTENSION_LICENSE_KEY
+	 *
+	 * @since 2.2.5
+	 *
+	 * @var string
+	 */
+	public $license_key = '';
+
+	/**
 	 * If the extensions minimum requirements are met add the general hooks.
 	 */
 	public function init() {
@@ -259,7 +270,7 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	 */
 	public function check_license( $value = '' ) {
 		if ( empty( $value ) ) {
-			$value = $this->get_app_setting( 'license_key' );
+			$value = $this->license_key ? $this->license_key : $this->get_app_setting( 'license_key' );
 		}
 
 		if ( empty( $value ) ) {
@@ -441,6 +452,9 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 				}
 				$license_details = $this->check_license();
 				if ( $license_details ) {
+					if ( $this->license_key && $license_details->license == 'site_inactive' ) {
+						$license_details = $this->activate_license( $this->license_key );
+					}
 					$expiration = DAY_IN_SECONDS + rand( 0, DAY_IN_SECONDS );
 					set_transient( $transient_key, $license_details, $expiration );
 					update_option( 'gravityflow_last_license_check', time() );
