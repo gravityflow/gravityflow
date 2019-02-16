@@ -541,7 +541,7 @@ PRIMARY KEY  (id)
 		 *
 		 * @since 2.5
 		 */
-		public function upgrade_25() {
+		public function upgrade_250() {
 			$settings = $this->get_app_settings();
 
 			$settings['allow_display_all_attribute'] = true;
