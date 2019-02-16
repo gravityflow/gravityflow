@@ -21,7 +21,7 @@ $I->seeInCurrentUrl( '/wp-admin/' );
 // Validate Due Date Delay Setting
 $I->amOnWorkflowPage( 'Inbox' );
 $I->waitForText( 'Due Date Delay 7', 3 );
-$I->seeElement( '#gravityflow-inbox tr[style="border-left-color: #dd3333;"]' );
+$I->dontSeeElement( '#gravityflow-inbox tr[style="border-left-color: #dd3333;"]' );
 
 // Proceed to Next Step
 $I->click( 'Due Date Delay 7' );
