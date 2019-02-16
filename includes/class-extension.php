@@ -115,6 +115,15 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	 */
 	public function app_settings_tabs( $settings_tabs ) {
 
+		if ( $this->license_key ) {
+			$app_settings = $this->app_settings_fields();
+			$fields = ! empty( $app_settings[0]['fields'] ) ? $app_settings[0]['fields'] : array();
+			if ( is_array( $fields ) && count( $fields ) == 1 ) {
+				// This extension only has a license key setting but the license key is already set to we don't need the settings tab;
+				return $settings_tabs;
+			}
+		}
+
 		$settings_tabs[] = array(
 			'name'     => $this->_slug,
 			'label'    => $this->get_short_title(),
