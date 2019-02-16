@@ -260,10 +260,12 @@ class Gravity_Flow_Inbox {
 			}
 		}
 
-		if ( ! empty( $due_date_highlight_color ) && ! empty( $due_date_highlight_color ) ) {
-			$step_highlight_color = $due_date_highlight_color;
-		} elseif ( ! empty( $due_date_highlight_color ) ) {
-			$step_highlight_color = $due_date_highlight_color;
+		if ( ! empty( $due_date_highlight_color ) ) {
+			$step->_entry = $entry;
+			$overdue = $step->is_overdue();
+			if ( $overdue ) {
+				$step_highlight_color = $due_date_highlight_color;
+			}
 		}
 
 		/**
