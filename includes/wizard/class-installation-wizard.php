@@ -55,14 +55,18 @@ class Gravity_Flow_Installation_Wizard {
 	 * @return array
 	 */
 	public function get_sorted_step_names() {
-		return array(
-			'license_key',
+		$steps = array(
 			'gravity_forms',
 			'updates',
 			'updates',
 			'pages',
 			'complete',
 		);
+
+		if ( ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
+			array_unshift( $steps, 'license_key' );
+		}
+		return $steps;
 	}
 
 	/**
