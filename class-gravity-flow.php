@@ -1071,17 +1071,19 @@ PRIMARY KEY  (id)
 		public function get_users_as_choices() {
 			static $choices;
 
-			if ( ! isset( $choices ) ) {
+			$args = apply_filters( 'gravityflow_get_users_args', array( 'number' => 1000, 'orderby' => 'display_name', 'fields' => array( 'ID', 'display_name' ) ) );
+			$key  = md5( get_current_blog_id() . '_' . serialize( $args ) );
+
+			if ( ! isset( $choices[ $key ] ) ) {
 				$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
 
-				$args            = apply_filters( 'gravityflow_get_users_args', array( 'number' => 1000, 'orderby' => 'display_name', 'fields' => array( 'ID', 'display_name' ) ) );
 				$accounts        = get_users( $args );
 				$account_choices = array();
 				foreach ( $accounts as $account ) {
 					$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'label' => $account->display_name );
 				}
 
-				$choices = array(
+				$choices[ $key ] = array(
 					array(
 						'label'   => __( 'Users', 'gravityflow' ),
 						'choices' => $account_choices,
@@ -1119,7 +1121,7 @@ PRIMARY KEY  (id)
 				}
 
 				if ( ! empty( $field_choices ) ) {
-					$choices[] = array(
+					$choices[ $key ][] = array(
 						'label'   => __( 'Fields', 'gravityflow' ),
 						'choices' => $field_choices,
 					);
@@ -1133,10 +1135,10 @@ PRIMARY KEY  (id)
 				 * @param array $choices The assignee choices
 				 * @param array $form    The Form
 				 */
-				$choices = apply_filters( 'gravityflow_assignee_choices', $choices, $form );
+				$choices[ $key ] = apply_filters( 'gravityflow_assignee_choices', $choices[ $key ], $form );
 			}
 
-			return $choices;
+			return $choices[ $key ];
 		}
 
 		/**
