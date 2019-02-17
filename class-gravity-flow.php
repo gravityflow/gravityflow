@@ -5264,7 +5264,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$a = $this->get_shortcode_atts( $atts );
 
 			if ( ! $a['allow_anonymous'] && ! is_user_logged_in() ) {
-				if ( ! $this->validate_access_token() ) {
+				$token = $this->decode_access_token();
+				if ( ! $token ) {
 					return;
 				}
 			}
@@ -5304,7 +5305,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 					if ( rgget( 'view' ) || ! empty( $entry_id ) ) {
 						$html .= $this->get_shortcode_status_page_detail( $a );
-					} else {
+					} elseif ( is_user_logged_in() || ( $a['display_all'] && $a['display_all'] ) ) {
 						$html .= $this->get_shortcode_status_page( $a );
 					}
 			}
@@ -6358,7 +6359,7 @@ AND m.meta_value='queued'";
 		 *
 		 * @param Gravity_Flow_Assignee $assignee             The current assignee.
 		 * @param array                 $scopes               The access token scopes.
-		 * @param string                $expiration_timestamp The expiration timestamp.
+		 * @param bool|string           $expiration_timestamp The expiration timestamp.
 		 *
 		 * @return string
 		 */

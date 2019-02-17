@@ -23,7 +23,7 @@ class Gravity_Flow_Status {
 	 *
 	 * @param array $args The status page arguments.
 	 *
-	 * @return array|WP_Error
+	 * @return string|array|WP_Error
 	 */
 	public static function render( $args = array() ) {
 		wp_enqueue_script( 'gform_field_filter' );
@@ -41,6 +41,11 @@ class Gravity_Flow_Status {
 		 * @param array $args The status page and export arguments.
 		 */
 		$args = apply_filters( 'gravityflow_status_args', $args );
+
+		if ( ! is_user_logged_in() && ! $args['display_all'] && ! $args['allow_anonymous'] ) {
+			// The status list can only be viewed by logged in users or when the args are set to display all entries to anonymous users.
+			return '';
+		}
 
 		if ( $args['format'] == 'table' ) {
 			self::status_page( $args );
