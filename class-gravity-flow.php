@@ -1071,7 +1071,7 @@ PRIMARY KEY  (id)
 		public function get_users_as_choices() {
 			static $choices;
 
-			$args = apply_filters( 'gravityflow_get_users_args', array( 'orderby' => 'display_name', 'fields' => array( 'ID', 'display_name', 'login' ) ) );
+			$args = apply_filters( 'gravityflow_get_users_args', array( 'orderby' => array( 'display_name', 'user_login' ), 'fields' => array( 'ID', 'display_name', 'user_login' ) ) );
 			$key  = md5( get_current_blog_id() . '_' . serialize( $args ) );
 
 			if ( ! isset( $choices[ $key ] ) ) {
@@ -1080,7 +1080,7 @@ PRIMARY KEY  (id)
 				$accounts        = get_users( $args );
 				$account_choices = array();
 				foreach ( $accounts as $account ) {
-					$name = $account->display_name ? $account->display_name : $account->login;
+					$name = $account->display_name ? $account->display_name : $account->user_login;
 					$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'label' => $name );
 				}
 
