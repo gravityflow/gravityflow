@@ -3346,14 +3346,14 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$scheduled_timestamp = $current_step->get_schedule_timestamp();
 
 			switch ( $current_step->schedule_type ) {
-				case 'date' :
+				case 'date':
 					$scheduled_date = $current_step->schedule_date;
 					break;
-				case 'date_field' :
+				case 'date_field':
 					$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
 					$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
 					break;
-				case 'delay' :
+				case 'delay':
 				default:
 					$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
 					$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
@@ -3399,10 +3399,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 						<div id="minor-publishing" style="padding:10px;">
 							<?php wp_nonce_field( 'gravityflow_admin_action', '_gravityflow_admin_action_nonce' ); ?>
 							<select id="gravityflow-admin-action" name="gravityflow_admin_action">
-								<option value=""><?php esc_html_e( 'Select an action', 'gravityflow' ) ?></option>
+								<option value=""><?php esc_html_e( 'Select an action', 'gravityflow' ); ?></option>
 								<?php echo $this->get_admin_action_select_options( $current_step, $steps, $form, $entry ); ?>
 							</select>
-							<input type="submit" class="button " name="_gravityflow_admin_action" value="<?php esc_html_e( 'Apply', 'gravityflow' ) ?>"/>
+							<input type="submit" class="button " name="_gravityflow_admin_action" value="<?php esc_html_e( 'Apply', 'gravityflow' ); ?>"/>
 
 						</div>
 					</div>
@@ -3453,7 +3453,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					if ( ! $current_step || ( $current_step && $current_step->get_id() != $step_id ) ) {
 						$choices[] = array(
 							'label' => $step->get_name(),
-							'value' => 'send_to_step|' . $step->get_id()
+							'value' => 'send_to_step|' . $step->get_id(),
 						);
 					}
 				}
@@ -3543,13 +3543,13 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		/**
 		 * Returns the next step for the supplied entry.
 		 *
-		 * @param Gravity_Flow_Step $step The current step. Defaults to false.
+		 * @param Gravity_Flow_Step $step The current step.
 		 * @param array             $entry The current entry.
 		 * @param array             $form  The current form.
 		 *
 		 * @return bool|Gravity_Flow_Step
 		 */
-		public function get_next_step( $step = false, $entry, $form ) {
+		public function get_next_step( $step, $entry, $form ) {
 			$current_step = $step;
 			$keep_looking = true;
 
@@ -3572,8 +3572,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				if ( $next_step_id == 'next' ) {
 					$step = $this->get_next_step_in_list( $form, $step, $entry, $steps );
 					$keep_looking = false;
-				} 
-				
+				}
+
 				if ( ! in_array( $next_step_id, array( 'complete', 'next' ) ) ) {
 					$step = $this->get_step( $next_step_id, $entry );
 
