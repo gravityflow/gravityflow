@@ -5840,12 +5840,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 				if ( isset( $form['feeds']['gravityflow'] ) ) {
 					$this->import_gravityflow_feeds( $form['feeds']['gravityflow'], $form['id'] );
+					$gravityflow_feeds_imported = ! empty( $form['feeds']['gravityflow'] ) ? true : $gravityflow_feeds_imported;
 					unset( $form['feeds']['gravityflow'] );
 					if ( empty( $form['feeds'] ) ) {
 						unset( $form['feeds'] );
 					}
 					GFAPI::update_form( $form );
-					$gravityflow_feeds_imported = true;
 				}
 			}
 
