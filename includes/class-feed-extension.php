@@ -517,7 +517,7 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 			}
 
 			// Show a different notice on settings page for inactive licenses (hide the buttons)
-			if ( $add_buttons && ! $this->is_extension_settings() ) {
+			if ( ! $this->license_key && $add_buttons && ! $this->is_extension_settings() ) {
 				$message .= '<br /><br />' . esc_html__( '%sActivate your license%s or %sget a license here%s', 'gravityflow' );
 				$message = sprintf( $message, '<a href="' . esc_url( $primary_button_link ) . '" class="button button-primary">', '</a>', '<a href="' . esc_url( $url ) . '" class="button button-secondary">', '</a>' );
 			}
