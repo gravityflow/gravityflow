@@ -508,7 +508,7 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 					break;
 			}
 
-			$message .= ' ' . esc_html__( 'This means you&rsquo;re missing out on security fixes, updates and support!', 'gravityflow' );
+			$message .= ' ' . esc_html__( "This means you're missing out on security fixes, updates and support.", 'gravityflow' );
 
 			if ( ! empty( $this->edd_item_id ) ) {
 				$url = 'https://gravityflow.io/?p=' . $this->edd_item_id . '&utm_source=admin_notice&utm_medium=admin&utm_content=' . $license_status . '&utm_campaign=Admin%20Notice';
