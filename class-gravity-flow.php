@@ -1303,7 +1303,7 @@ PRIMARY KEY  (id)
 					$step_settings['fields'][] = array(
 						'name' => 'due_date',
 						'label' => esc_html__( 'Due date', 'gravityflow' ),
-						'tooltip' => esc_html__( 'Enable the due date setting to allow entries to be highlighted when they have passed their due dates. A notification can also be configured to be sent for overdue entries.', 'gravityflow' ),
+						'tooltip' => esc_html__( 'Enable the due date setting to allow entries to be highlighted when they have passed their due dates. An optional column can be set on the inbox / status pages too.', 'gravityflow' ),
 						'type'       => 'due_date',
 						'status_choices' => $final_status_choices,
 					);
@@ -2120,18 +2120,6 @@ PRIMARY KEY  (id)
 					),
 				),
 			);
-
-			
-			$due_date_highlight = array(
-				'name'     => 'due_date_highlight',
-				'type'     => 'checkbox',
-				'choices'  => array(
-					array(
-						'label'         => esc_html__( 'Highlight overdue entries', 'gravityflow' ),
-						'name'          => 'due_date_highlight',
-					),
-				),
-			);
 			
 			$due_date_highlight_type = array(
 				'name'           => 'due_date_highlight_type',
@@ -2215,22 +2203,17 @@ PRIMARY KEY  (id)
 				</div>
 				<div class="gravityflow-due-date-highlight-field-container">
 					<?php 
-					$this->settings_checkbox( $due_date_highlight );
 
-					$enabled = $this->get_setting( 'due_date_highlight', false );
-					$due_date_highlight_style = $enabled ? '' : 'style="display:none;"';
 					$due_date_highlight_type_setting = $this->get_setting( 'due_date_highlight_type', 'color' );
 					$due_date_highlight_color_style = ( $due_date_highlight_type_setting == 'color' ) ? '' : 'style="display:none;"';
 					?>
-					<div class="gravityflow-due-date-highlight-settings" <?php echo $due_date_highlight_style; ?> >
-						<div class="gravityflow-due-date-highlight-type-container">
-							<?php $this->settings_hidden( $due_date_highlight_type ); ?>
-						</div>
-						<div class="gravityflow-due-date-highlight-color-container" <?php echo $due_date_highlight_color_style; ?> >
-							<?php
+					<div class="gravityflow-due-date-highlight-type-container">
+						<?php $this->settings_hidden( $due_date_highlight_type ); ?>
+					</div>
+					<div class="gravityflow-due-date-highlight-color-container" <?php echo $due_date_highlight_color_style; ?> >
+						<?php
 							$this->settings_text( $due_date_highlight_color );
-							?>
-						</div>
+						?>
 					</div>
 				</div>
 			</div>
@@ -2253,9 +2236,6 @@ PRIMARY KEY  (id)
 						$('.gravityflow-due-date-delay-container').hide();
 						$('.gravityflow-due-date-date-container').hide();
 						$('.gravityflow-due-date-date-field-container').show();
-					});
-					$( '#due_date_highlight' ).click(function(){
-						$('.gravityflow-due-date-highlight-settings').slideToggle();
 					});
 					$(document).ready(function () {
 						$("#due_date_highlight_color").wpColorPicker();
