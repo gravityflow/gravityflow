@@ -55,6 +55,9 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 2.4.3 =
+- Fixed the styles in the installation wizard.
+
 = 2.4.2 =
 - Updated the WP E-Signature step to allow the feed to redirect to the document if processed during submission.
 - Updated the license checks to reduce load on the licensing server.

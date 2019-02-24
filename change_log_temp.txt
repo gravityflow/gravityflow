@@ -5,3 +5,4 @@
 - Added shortcode attribute back_link_url (default: null) to allow customization of back link on entry detail page.
 - Added filter gravityflow_back_link_url_entry_detail to allow customization of back link on entry detail page.
 - Added filter gravityflow_search_criteria_status to allow status page to filter on multiple field criteria.
+- Added shortcode security settings.

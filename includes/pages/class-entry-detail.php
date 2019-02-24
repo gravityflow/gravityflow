@@ -157,6 +157,16 @@ class Gravity_Flow_Entry_Detail {
 		);
 
 		$args = array_merge( $defaults, $args );
+
+		/**
+		 * Allow the entry detail arguments to be overridden.
+		 *
+		 * @since 2.5
+		 *
+		 * @param array $args The entry detail page arguments.
+		 */
+		$args = apply_filters( 'gravityflow_entry_detail_args', $args );
+
 		gravity_flow()->log_debug( __METHOD__ . '() args: ' . print_r( $args, true ) );
 
 		return $args;

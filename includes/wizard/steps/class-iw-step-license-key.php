@@ -37,44 +37,58 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 	 */
 	public function display() {
 
-		if ( ! $this->license_key && defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
-			$this->license_key = GRAVITY_FLOW_LICENSE_KEY;
-		}
 
-		?>
-		<p>
-			<?php echo sprintf( esc_html__( 'Enter your Gravity Flow License Key below. Your key unlocks access to automatic updates and support. You can find your key in your purchase confirmation email or by logging into your account area on the %sGravity Flow%s site.', 'gravityflow' ), '<a href="http://www.gravityflow.io/account">', '</a>' ); ?>
-		</p>
-		<div>
-			<input type="text" class="regular-text" id="license_key"
-			       value="<?php echo esc_attr( $this->license_key ); ?>" name="license_key"
-			       placeholder="<?php esc_attr_e( 'Enter Your License Key', 'gravityflow' ); ?>"/>
+		if ( defined( 'GRAVITY_FLOW_LICENSE_KEY' ) && GRAVITY_FLOW_LICENSE_KEY ) {
+
+			?>
+			<p>
+				<?php esc_html_e( 'Your license key has already been set.', 'gravityflow' ); ?>
+			</p>
+
 			<?php
+
 			$key_error = $this->validation_message( 'license_key', false );
 			if ( $key_error ) {
 				echo $key_error;
 			}
-			?>
-		</div>
 
-		<?php
-		$message = $this->validation_message( 'accept_terms', false );
-		if ( $message || $key_error || $this->accept_terms ) {
+		} else {
 			?>
 			<p>
-				<?php esc_html_e( "If you don't enter a valid license key, you will not be able to update Gravity Flow when important bug fixes and security enhancements are released. This can be a serious security risk for your site.", 'gravityflow' ); ?>
+				<?php echo sprintf( esc_html__( 'Enter your Gravity Flow License Key below. Your key unlocks access to automatic updates and support. You can find your key in your purchase confirmation email or by logging into your account area on the %sGravity Flow%s site.', 'gravityflow' ), '<a href="http://www.gravityflow.io/account">', '</a>' ); ?>
 			</p>
 			<div>
-				<label>
-					<input type="checkbox" id="accept_terms" value="1" <?php checked( 1, $this->accept_terms ); ?>
-					       name="accept_terms"/>
-					<?php esc_html_e( 'I understand the risks', 'gravityflow' ); ?> <span
-							class="gfield_required">*</span>
-				</label>
-				<?php echo $message ?>
+				<input type="text" class="regular-text" id="license_key"
+					   value="<?php echo esc_attr( $this->license_key ); ?>" name="license_key"
+					   placeholder="<?php esc_attr_e( 'Enter Your License Key', 'gravityflow' ); ?>"/>
+				<?php
+				$key_error = $this->validation_message( 'license_key', false );
+				if ( $key_error ) {
+					echo $key_error;
+				}
+				?>
 			</div>
+
 			<?php
+			$message = $this->validation_message( 'accept_terms', false );
+			if ( $message || $key_error || $this->accept_terms ) {
+				?>
+				<p>
+					<?php esc_html_e( "If you don't enter a valid license key, you will not be able to update Gravity Flow when important bug fixes and security enhancements are released. This can be a serious security risk for your site.", 'gravityflow' ); ?>
+				</p>
+				<div>
+					<label>
+						<input type="checkbox" id="accept_terms" value="1" <?php checked( 1, $this->accept_terms ); ?>
+							   name="accept_terms"/>
+						<?php esc_html_e( 'I understand the risks', 'gravityflow' ); ?> <span
+								class="gfield_required">*</span>
+					</label>
+					<?php echo $message ?>
+				</div>
+				<?php
+			}
 		}
+
 	}
 
 	/**
@@ -95,7 +109,7 @@ class Gravity_Flow_Installation_Wizard_Step_License_Key extends Gravity_Flow_Ins
 
 		$this->is_valid_key = true;
 
-		$license_key = $this->license_key;
+		$license_key = defined( 'GRAVITY_FLOW_LICENSE_KEY' ) && GRAVITY_FLOW_LICENSE_KEY ? GRAVITY_FLOW_LICENSE_KEY : $this->license_key;
 
 		if ( empty ( $license_key ) ) {
 			$message = esc_html__( 'Please enter a valid license key.', 'gravityflow' ) . '</span>';

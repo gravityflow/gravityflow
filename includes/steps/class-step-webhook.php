@@ -643,8 +643,15 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 				$this->oauth1_client->config['token_secret'] = $access_credentials['oauth_token_secret'];
 			}
 
-			// Note we don't send the final $options[] parameter in here because our request is always sent in the body.
-			$headers['Authorization'] = $this->oauth1_client->get_full_request_header( $this->get_setting( 'url' ), $method );
+			if ( $method == 'GET' ) {
+				$url = strtok( $url, '?' );
+				$query_str = parse_url( $url, PHP_URL_QUERY );
+				$options = wp_parse_args( $query_str );
+			} else {
+				$options = array();
+			}
+
+			$headers['Authorization'] = $this->oauth1_client->get_full_request_header( $url, $method, $options );
 		}
 
 		$args = array(
