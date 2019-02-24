@@ -7,7 +7,7 @@
  *
  * @group testsuite
  */
-class Tests_Gravity_Flow_Common_Get_Users_As_Choices extends GF_UnitTestCase {
+class Tests_Gravity_Flow_Get_Users_As_Choices extends GF_UnitTestCase {
 
 	/**
 	 * @var GF_UnitTest_Factory
