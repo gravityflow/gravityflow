@@ -1084,138 +1084,42 @@ PRIMARY KEY  (id)
 
 		/**
 		 * Returns a choices array containing users, roles, and applicable form fields.
+         *
+         * @since 2.5 Return Gravity_Flow_Common::get_users_as_choices().
+         * @since unknown
 		 *
 		 * @return array
 		 */
 		public function get_users_as_choices() {
-			static $choices;
-
-			$args = apply_filters( 'gravityflow_get_users_args', array( 'orderby' => array( 'display_name', 'user_login' ), 'fields' => array( 'ID', 'display_name', 'user_login' ) ) );
-			$key  = md5( get_current_blog_id() . '_' . serialize( $args ) );
-
-			if ( ! isset( $choices[ $key ] ) ) {
-				$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
-
-				$accounts        = get_users( $args );
-				$account_choices = array();
-				foreach ( $accounts as $account ) {
-					$name = $account->display_name ? $account->display_name : $account->user_login;
-					$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'label' => $name );
-				}
-
-				$choices[ $key ] = array(
-					array(
-						'label'   => __( 'Users', 'gravityflow' ),
-						'choices' => $account_choices,
-					),
-					array(
-						'label'   => __( 'Roles', 'gravityflow' ),
-						'choices' => $role_choices,
-					),
-				);
-
-				$form_id = absint( rgget( 'id' ) );
-
-				$form = GFAPI::get_form( $form_id );
-
-				$field_choices = array();
-
-				$assignee_fields_as_choices = $this->get_assignee_fields_as_choices( $form );
-
-				if ( ! empty( $assignee_fields_as_choices ) ) {
-					$field_choices = $assignee_fields_as_choices;
-				}
-
-				$email_fields_as_choices = $this->get_email_fields_as_choices( $form );
-
-				if ( ! empty( $email_fields_as_choices ) ) {
-					$field_choices = array_merge( $field_choices, $email_fields_as_choices );
-				}
-
-
-				if ( rgar( $form, 'requireLogin' ) ) {
-					$field_choices[] = array(
-						'label' => __( 'User (Created by)', 'gravityflow' ),
-						'value' => 'entry|created_by',
-					);
-				}
-
-				if ( ! empty( $field_choices ) ) {
-					$choices[ $key ][] = array(
-						'label'   => __( 'Fields', 'gravityflow' ),
-						'choices' => $field_choices,
-					);
-				}
-
-				/**
-				 * Allows the assignee choices to be modified.
-				 *
-				 * @since 2.1
-				 *
-				 * @param array $choices The assignee choices
-				 * @param array $form    The Form
-				 */
-				$choices[ $key ] = apply_filters( 'gravityflow_assignee_choices', $choices[ $key ], $form );
-			}
-
-			return $choices[ $key ];
+			return Gravity_Flow_Common::get_users_as_choices();
 		}
 
 		/**
 		 * Returns a choices array containing the forms assignee fields.
+         *
+         * @since 2.5 Return Gravity_Flow_Common::get_assignee_fields_as_choices( $form ).
+         * @since unknown
 		 *
 		 * @param null|array $form Null or the form to retrieve the assignee fields from.
 		 *
 		 * @return array
 		 */
 		public function get_assignee_fields_as_choices( $form = null ) {
-			if ( empty( $form ) ) {
-				$form_id = absint( rgget( 'id' ) );
-				$form = GFAPI::get_form( $form_id );
-			}
-
-			$assignee_fields = array();
-			if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
-				foreach ( $form['fields'] as $field ) {
-					/* @var GF_Field $field */
-					$type = GFFormsModel::get_input_type( $field );
-					if ( $type == 'workflow_assignee_select' ) {
-						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_field|' . $field->id );
-					} elseif ( $type == 'workflow_user' ) {
-						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_user_field|' . $field->id );
-					} elseif ( $type == 'workflow_multi_user' ) {
-						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_multi_user_field|' . $field->id );
-					} elseif ( $type == 'workflow_role' ) {
-						$assignee_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'assignee_role_field|' . $field->id );
-					}
-				}
-			}
-			return $assignee_fields;
+			return Gravity_Flow_Common::get_assignee_fields_as_choices( $form );
 		}
 
 		/**
 		 * Returns a choices array containing the forms email fields.
+         *
+         * @since 2.5 Return Gravity_Flow_Common::get_email_fields_as_choices( $form ).
+         * @since unknown
 		 *
 		 * @param null|array $form Null or the form to retrieve the email fields from.
 		 *
 		 * @return array
 		 */
 		public function get_email_fields_as_choices( $form = null ) {
-			if ( empty( $form ) ) {
-				$form_id = absint( rgget( 'id' ) );
-				$form = GFAPI::get_form( $form_id );
-			}
-
-			$email_fields = array();
-			if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
-				foreach ( $form['fields'] as $field ) {
-					/* @var GF_Field $field */
-					if ( $field->get_input_type() == 'email' ) {
-						$email_fields[] = array( 'label' => GFFormsModel::get_label( $field ), 'value' => 'email_field|' . $field->id );
-					}
-				}
-			}
-			return $email_fields;
+			return Gravity_Flow_Common::get_email_fields_as_choices( $form );
 		}
 
 		/**
