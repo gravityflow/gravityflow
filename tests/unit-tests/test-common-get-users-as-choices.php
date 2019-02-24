@@ -32,18 +32,22 @@ class Tests_Gravity_Flow_Common_Get_Users_As_Choices extends GF_UnitTestCase {
 		$this->form_id = $this->factory->form->create();
 	}
 
+	/**
+	 * After we make $choices as a static variable in `get_users_as_choices`,
+	 * we want to make sure the `gravityflow_get_users_args` filter can still work as expected.
+	 */
 	public function test_filter_gravityflow_get_users_args() {
 		$_GET['id'] = $this->form_id;
 
-		$choices_1 = Gravity_Flow_Common::get_users_as_choices();
+		$choices_1 = gravity_flow()->get_users_as_choices();
 		add_filter( 'gravityflow_get_users_args', array( $this, 'filter_get_users_arg_five' ) );
-		$choices_2 = Gravity_Flow_Common::get_users_as_choices();
+		$choices_2 = gravity_flow()->get_users_as_choices();
 		remove_filter( 'gravityflow_get_users_args', array( $this, 'filter_get_users_arg_five' ) );
-		$choices_3 = Gravity_Flow_Common::get_users_as_choices();
+		$choices_3 = gravity_flow()->get_users_as_choices();
 		add_filter( 'gravityflow_get_users_args', array( $this, 'filter_get_users_arg_ten' ) );
-		$choices_4 = Gravity_Flow_Common::get_users_as_choices();
+		$choices_4 = gravity_flow()->get_users_as_choices();
 		remove_filter( 'gravityflow_get_users_args', array( $this, 'filter_get_users_arg_ten' ) );
-		$choices_5 = Gravity_Flow_Common::get_users_as_choices();
+		$choices_5 = gravity_flow()->get_users_as_choices();
 
 		$this->assertNotEquals( $choices_1, $choices_2 );
 		$this->assertEquals( $choices_1, $choices_3 );
