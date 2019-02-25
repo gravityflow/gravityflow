@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Testing Gravity_Flow_Common::get_users_as_choices().
+ * Testing gravity_flow()->get_users_as_choices().
  *
  * @since 2.5
  *
