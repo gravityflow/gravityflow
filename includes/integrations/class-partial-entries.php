@@ -16,14 +16,14 @@ if ( ! class_exists( 'GFForms' ) ) {
  *
  * Enables workflow processing to be triggered for partial entries.
  *
- * @since 2.4.1
+ * @since 2.5
  */
 class Gravity_Flow_Partial_Entries {
 
 	/**
 	 * Indicates if workflow processing is enabled for the current form.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5
 	 *
 	 * @var null|bool
 	 */
@@ -32,7 +32,7 @@ class Gravity_Flow_Partial_Entries {
 	/**
 	 * The instance of this class.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5
 	 *
 	 * @var null|Gravity_Flow_Partial_Entries
 	 */
@@ -41,7 +41,7 @@ class Gravity_Flow_Partial_Entries {
 	/**
 	 * Returns an instance of this class, and stores it in the $_instance property.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5
 	 *
 	 * @return null|Gravity_Flow_Partial_Entries
 	 */
@@ -58,7 +58,7 @@ class Gravity_Flow_Partial_Entries {
 	 *
 	 * Adds the hooks on the init action, after the Gravity Forms Partial Entries Add-On has been loaded.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5
 	 */
 	private function __construct() {
 		add_action( 'init', array( $this, 'maybe_add_hooks' ) );
@@ -67,7 +67,7 @@ class Gravity_Flow_Partial_Entries {
 	/**
 	 * If the Partial Entries Add-On is available add the appropriate hooks.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5
 	 */
 	public function maybe_add_hooks() {
 		if ( ! class_exists( 'GF_Partial_Entries' ) || ! method_exists( 'GFFormsModel', 'maybe_add_missing_entry_meta' ) ) {
@@ -89,7 +89,7 @@ class Gravity_Flow_Partial_Entries {
 	/**
 	 * Adds the enable workflow processing field to the Partial Entries Add-On feed settings page, if the form has at least one step configured.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5
 	 *
 	 * @param array              $feed_settings_fields The Partial Entries Add-On feed settings fields.
 	 * @param GF_Partial_Entries $add_on               The current instance of the Partial Entries Add-On.
@@ -123,7 +123,7 @@ class Gravity_Flow_Partial_Entries {
 	/**
 	 * Determines if workflow processing is enabled for the current forms partial entries.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5
 	 *
 	 * @param int $form_id The current form ID.
 	 *
@@ -145,7 +145,7 @@ class Gravity_Flow_Partial_Entries {
 	 *
 	 * If the meta is not restored, the existing values in the database will be erased.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5
 	 *
 	 * @param array $entry          The entry values to be saved to the database.
 	 * @param array $original_entry The previous version of the entry.
@@ -168,7 +168,7 @@ class Gravity_Flow_Partial_Entries {
 	/**
 	 * Triggers workflow processing of the partial entry, if enabled.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5
 	 *
 	 * @param array $partial_entry The partial entry which was saved or updated.
 	 * @param array $form          The form used to create the partial entry.
@@ -188,7 +188,7 @@ class Gravity_Flow_Partial_Entries {
 	/**
 	 * Converts the partial entry to a complete entry by deleting the partial entry meta.
 	 *
-	 * @since 2.4.1
+	 * @since 2.5
 	 *
 	 * @param int               $step_id  The current step ID.
 	 * @param int               $entry_id The current entry ID.
