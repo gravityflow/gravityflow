@@ -65,12 +65,23 @@ class Gravity_Flow_Partial_Entries {
 	}
 
 	/**
+	 * Determines if Partial Entries is supported.
+	 *
+	 * @since 2.5
+	 *
+	 * @return bool
+	 */
+	public static function is_supported() {
+		return class_exists( 'GF_Partial_Entries' ) && method_exists( 'GFFormsModel', 'add_meta_to_entry' );
+	}
+
+	/**
 	 * If the Partial Entries Add-On is available add the appropriate hooks.
 	 *
 	 * @since 2.5
 	 */
 	public function maybe_add_hooks() {
-		if ( ! class_exists( 'GF_Partial_Entries' ) || ! method_exists( 'GFFormsModel', 'maybe_add_missing_entry_meta' ) ) {
+		if ( ! self::is_supported() ) {
 			return;
 		}
 
