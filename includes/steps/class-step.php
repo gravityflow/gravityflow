@@ -1013,6 +1013,33 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Sends the workflow notification, if enabled.
+	 *
+	 * @since 2.5
+	 * @since unknown
+	 */
+	public function send_workflow_notification() {
+
+		if ( ! $this->workflow_notification_enabled ) {
+			return;
+		}
+
+		$type      = 'workflow';
+		$assignees = $this->get_notification_assignees( $type );
+
+		if ( empty( $assignees ) ) {
+			return;
+		}
+
+		$notification = $this->get_notification( $type );
+		$this->send_notifications( $assignees, $notification );
+
+		$note = esc_html__( 'Sent Notification: ', 'gravityflow' ) . $this->get_name();
+		$this->add_note( $note );
+
+	}
+
+	/**
 	 * Sends the assignee email.
 	 *
 	 * @param Gravity_Flow_Assignee $assignee    The assignee properties.

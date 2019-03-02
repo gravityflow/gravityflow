@@ -127,30 +127,6 @@ class Gravity_Flow_Step_Notification extends Gravity_Flow_Step {
 	}
 
 	/**
-	 * Sends the workflow notification, if enabled.
-	 */
-	public function send_workflow_notification() {
-
-		if ( ! $this->workflow_notification_enabled ) {
-			return;
-		}
-
-		$type      = 'workflow';
-		$assignees = $this->get_notification_assignees( $type );
-
-		if ( empty( $assignees ) ) {
-			return;
-		}
-
-		$notification = $this->get_notification( $type );
-		$this->send_notifications( $assignees, $notification );
-
-		$note = esc_html__( 'Sent Notification: ', 'gravityflow' ) . $this->get_name();
-		$this->add_note( $note );
-
-	}
-
-	/**
 	 * Prevent the notifications assigned to the current step from being sent during form submission.
 	 */
 	public function intercept_submission() {
