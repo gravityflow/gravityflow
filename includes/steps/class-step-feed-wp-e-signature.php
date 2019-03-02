@@ -152,10 +152,40 @@ class Gravity_Flow_Step_Feed_Esign extends Gravity_Flow_Step_Feed_Add_On {
 	public function process_feed( $feed ) {
 		$this->_feed_id = $feed['id'];
 		add_action( 'esig_sad_document_invite_send', array( $this, 'sad_document_invite_send' ) );
-		$feed['meta']['esign_gf_logic'] = 'email';
+
+		if ( ! $this->is_redirect_supported( rgar( $feed['meta'], 'esign_gf_logic' ) ) ) {
+			$feed['meta']['esign_gf_logic'] = 'email';
+		}
+
 		parent::process_feed( $feed );
 
 		return false;
+	}
+
+	/**
+	 * Determines if the redirect action can be used for this step.
+	 *
+	 * @since 2.4.1
+	 *
+	 * @param string $action The feed action (Signing Logic); redirect or email.
+	 *
+	 * @return bool
+	 */
+	public function is_redirect_supported( $action ) {
+		if ( $action !== 'redirect'
+		     || ! class_exists( 'GFFormDisplay' )
+		     || empty( $_POST['gform_submit'] )
+		     || $_POST['gform_submit'] != $this->get_form_id()
+		     || ! did_action( 'gform_entry_created' )
+		     || did_action( 'gform_confirmation' )
+		     || ( function_exists( 'gp_nested_forms' ) && gp_nested_forms()->is_nested_form_submission() )
+		) {
+			return false;
+		}
+
+		$submission_entry = GFFormsModel::get_current_lead();
+
+		return rgar( $submission_entry, 'id' ) == $this->get_entry_id();
 	}
 
 	/**

@@ -23,7 +23,7 @@ class Gravity_Flow_Status {
 	 *
 	 * @param array $args The status page arguments.
 	 *
-	 * @return array|WP_Error
+	 * @return string|array|WP_Error
 	 */
 	public static function render( $args = array() ) {
 		wp_enqueue_script( 'gform_field_filter' );
@@ -41,6 +41,11 @@ class Gravity_Flow_Status {
 		 * @param array $args The status page and export arguments.
 		 */
 		$args = apply_filters( 'gravityflow_status_args', $args );
+
+		if ( ! is_user_logged_in() && ! $args['display_all'] && ! $args['allow_anonymous'] ) {
+			// The status list can only be viewed by logged in users or when the args are set to display all entries to anonymous users.
+			return '';
+		}
 
 		if ( $args['format'] == 'table' ) {
 			self::status_page( $args );
@@ -1599,6 +1604,17 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 
 		$search_criteria = $this->get_search_criteria();
+
+		/**
+		 * Allows search_criteria to be adjusted to define which forms' entries are displayed in status table.
+		 *
+		 * Return an array of search_criteria for use with GFAPI.
+		 *
+		 * @since 2.5
+		 *
+		 * @param array   $search_criteria The search criteria
+		 */
+		$search_criteria = apply_filters( 'gravityflow_search_criteria_status', $search_criteria );
 
 		$orderby = ( ! empty( $_REQUEST['orderby'] ) ) ? $_REQUEST['orderby'] : 'date_created';
 

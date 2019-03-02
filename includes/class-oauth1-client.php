@@ -280,9 +280,11 @@ class Gravity_Flow_Oauth1_Client {
 	public function base_string( $uri, array $parameters = array(), $http_verb = 'POST' ) {
 		ksort( $parameters );
 
-		$parameters = http_build_query( $parameters, '', '&', PHP_QUERY_RFC3986 );
+		$parameters     = $this->normalize_parameters( $parameters );
+		$query_string   = implode( '%26', $this->join_with_equals_sign( $parameters ) ); // Join with ampersand.
+		$string_to_sign = $http_verb . '&' . rawurlencode( $uri ) . '&' . $query_string;
 
-		return sprintf( '%s&%s&%s', $http_verb, rawurlencode( $uri ), rawurlencode( $parameters ) );
+		return $string_to_sign;
 	}
 
 	/**
@@ -303,9 +305,9 @@ class Gravity_Flow_Oauth1_Client {
 	/**
 	 * Hash request
 	 *
-	 * @param array $data Data to be included in the hash.
+	 * @param string $data Data to be included in the hash.
 	 *
-	 * @return array
+	 * @return string
 	 */
 	public function hash( $data ) {
 		return hash_hmac( 'sha1', $data, $this->key(), true );
@@ -322,5 +324,78 @@ class Gravity_Flow_Oauth1_Client {
 		$parameters = http_build_query( $parameters, '', ', ', PHP_QUERY_RFC3986 );
 
 		return "OAuth $parameters";
+	}
+
+	/**
+	 * Normalize each parameter by assuming each parameter may have already been
+	 * encoded, so attempt to decode, and then re-encode according to RFC 3986.
+	 *
+	 * Note both the key and value is normalized so a filter param like:
+	 *
+	 * 'filter[period]' => 'week'
+	 *
+	 * is encoded to:
+	 *
+	 * 'filter%255Bperiod%255D' => 'week'
+	 *
+	 * This conforms to the OAuth 1.0a spec which indicates the entire query string
+	 * should be URL encoded.
+	 *
+	 * @since 2.4.4
+	 *
+	 * @see rawurlencode()
+	 * @param array $parameters Un-normalized parameters.
+	 * @return array Normalized parameters.
+	 */
+	private function normalize_parameters( $parameters ) {
+		$keys       = $this->urlencode_rfc3986( array_keys( $parameters ) );
+		$values     = $this->urlencode_rfc3986( array_values( $parameters ) );
+		$parameters = array_combine( $keys, $values );
+
+		return $parameters;
+	}
+
+	/**
+	 * Creates an array of urlencoded strings out of each array key/value pairs.
+	 *
+	 * @since 2.4.4
+	 *
+	 * @param  array  $params       Array of parameters to convert.
+	 * @param  array  $query_params Array to extend.
+	 * @param  string $key          Optional Array key to append.
+	 * @return string               Array of urlencoded strings.
+	 */
+	private function join_with_equals_sign( $params, $query_params = array(), $key = '' ) {
+		foreach ( $params as $param_key => $param_value ) {
+			if ( $key ) {
+				$param_key = $key . '%5B' . $param_key . '%5D'; // Handle multi-dimensional array.
+			}
+
+			if ( is_array( $param_value ) ) {
+				$query_params = $this->join_with_equals_sign( $param_value, $query_params, $param_key );
+			} else {
+				$string         = $param_key . '=' . $param_value; // Join with equals sign.
+				$query_params[] = $this->urlencode_rfc3986( $string );
+			}
+		}
+
+		return $query_params;
+	}
+
+	/**
+	 * Encodes a value according to RFC 3986.
+	 * Supports multidimensional arrays.
+	 *
+	 * @since 2.4.4
+	 *
+	 * @param string|array $value The value to encode.
+	 * @return string|array       Encoded values.
+	 */
+	public function urlencode_rfc3986( $value ) {
+		if ( is_array( $value ) ) {
+			return array_map( array( $this, 'urlencode_rfc3986' ), $value );
+		} else {
+			return str_replace( array( '+', '%7E' ), array( ' ', '~' ), rawurlencode( $value ) );
+		}
 	}
 }

@@ -55,6 +55,22 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 2.4.3 =
+- Fixed the styles in the installation wizard.
+
+= 2.4.2 =
+- Updated the WP E-Signature step to allow the feed to redirect to the document if processed during submission.
+- Updated the license checks to reduce load on the licensing server.
+- Fixed an issue with the admin notice license checks for third-party extensions.
+
+= 2.4.1 =
+- Fixed the Gravity Perks Nested Forms Add-On integration not delaying the workflow for child entries created before the parent form is submitted.
+- Fixed an issue where Conditional Routing based on what values a Multiuser field contains could lead to extra users being set as step assignees.
+- Fixed conditional assignee routing using the post category field.
+- Fixed the inbox page excess entries indicator displaying a limit of 150 when the page size has been changed using the gravityflow_inbox_paging filter.
+- Fixed an issue where the API function get_timeline would not return all expected timeline values
+- Updated the licensing checks to expire at a random time to reduce spikes in traffic on the licensing server.
+
 = 2.4 =
 - Added approval step setting for notification on revert (only displays when revert setting for user input step is selected).
 - Added support for multiple Gravity PDFs to be sent with each email. Credit: The Team at Gravity PDF.

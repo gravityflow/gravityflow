@@ -180,7 +180,7 @@ module.exports = function(grunt) {
             apigen: {
                 command: [
                     'cd vendor/bin/',
-                    'export TMPDIR=' + process.cwd() + '/apigen_tmp',
+                    'export TMPDIR="' + process.cwd() + '/apigen_tmp"',
                     'php apigen generate --config="../../apigen.neon"'
                 ].join('&&')
             },
@@ -325,5 +325,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('translations', [ 'makepot', 'shell:transifex', 'potomo' ]);
 	grunt.registerTask('default', [ 'clean', 'string-replace', 'minimize', 'translations', 'compress', 'aws_s3:upload_zip' ]);
 	grunt.registerTask('build', [ 'clean', 'string-replace', 'minimize', 'translations', 'compress', 'dropbox', 'aws_s3:upload_zip', 'clean' ]);
-	grunt.registerTask('publish', [ 'clean', 'minimize', 'translations', 'shell:apigen', 'aws_s3:inlinedocs', 'compress', 'dropbox', 'clean' ]);
+	grunt.registerTask('publish', [ 'clean', 'minimize', 'translations', /*'shell:apigen', 'aws_s3:inlinedocs',*/ 'compress', 'dropbox', 'clean' ]);
 };

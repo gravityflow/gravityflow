@@ -167,6 +167,7 @@ if ( class_exists( 'GFForms' ) ) {
 			add_filter( 'gform_export_form', array( $this, 'filter_gform_export_form' ) );
 			add_action( 'gform_forms_post_import', array( $this, 'action_gform_forms_post_import' ) );
 			parent::pre_init();
+			add_action( 'gform_post_add_entry', array( $this, 'action_gform_post_add_entry' ), 10, 2 );
 			add_filter( 'cron_schedules', array( $this, 'filter_cron_schedule' ) );
 			if ( ! wp_next_scheduled( 'gravityflow_cron' ) ) {
 				wp_schedule_event( time(), 'fifteen_minutes', 'gravityflow_cron' );
@@ -194,10 +195,11 @@ if ( class_exists( 'GFForms' ) ) {
 			add_filter( 'gform_enqueue_scripts', array( $this, 'filter_gform_enqueue_scripts' ), 10, 2 );
 			add_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_variables' ), 10, 7 );
 
+			add_filter( 'gform_is_value_match', array( $this, 'filter_value_match_multiuser' ), 10, 6 );
+
 			add_action( 'gform_entry_created', array( $this, 'action_entry_created' ), 8, 2 );
 			add_action( 'gform_register_init_scripts', array( $this, 'filter_gform_register_init_scripts' ), 10, 3 );
 			add_action( 'wp_login', array( $this, 'filter_wp_login' ), 10, 2 );
-			add_action( 'gform_post_add_entry', array( $this, 'action_gform_post_add_entry' ), 10, 2 );
 
 			if ( $this->is_gravityforms_supported( '2.3.4.2' ) ) {
 				add_filter( 'gform_entry_pre_handle_confirmation', array( $this, 'after_submission' ), 9, 2 );
@@ -337,6 +339,10 @@ if ( class_exists( 'GFForms' ) ) {
 
 				if ( version_compare( $previous_version, '2.4.0-dev', '<' ) ) {
 					$this->upgrade_240();
+				}
+
+				if ( version_compare( $previous_version, '2.5', '<' ) ) {
+					$this->upgrade_250();
 				}
 			}
 
@@ -499,6 +505,8 @@ PRIMARY KEY  (id)
 
 		/**
 		 * Migrate the Gravity PDF Select field to a Checkbox field
+		 *
+		 * @since 2.4
 		 */
 		public function upgrade_240() {
 			$steps = $this->get_steps();
@@ -526,6 +534,19 @@ PRIMARY KEY  (id)
 					$this->save_feed_settings( $step->get_id(), $step->get_form_id(), $feed_meta );
 				}
 			}
+		}
+
+		/**
+		 * Turn on the security setting which allows shortcodes to override permissions.
+		 *
+		 * @since 2.5
+		 */
+		public function upgrade_250() {
+			$settings = $this->get_app_settings();
+
+			$settings['allow_display_all_attribute'] = true;
+			$settings['allow_allow_anonymous_attribute'] = true;
+			$this->update_app_settings( $settings );
 		}
 
 		/**
@@ -3192,7 +3213,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					<div id="submitcomment" class="submitbox">
 						<div id="minor-publishing" class="gravityflow-status-box">
 							<?php
-
+							
 							$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
 							$this->maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args );
 
@@ -4006,6 +4027,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			$settings[] = $this->get_app_settings_fields_emails();
 			$settings[] = $this->get_app_settings_fields_pages();
+			$settings[] = $this->get_app_settings_fields_security();
 			$settings[] = $this->get_app_settings_fields_published_forms();
 
 			$settings[] = array(
@@ -4252,6 +4274,39 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		}
 
 		/**
+		 * Returns the Security Settings.
+		 *
+		 * @since 2.5
+		 *
+		 * @return array
+		 */
+		public function get_app_settings_fields_security() {
+			return array(
+				'title'       => esc_html__( 'Security Options', 'gravityflow' ),
+				'fields'      => array(
+					array(
+						'name'  => 'shortcodes',
+						'label' => esc_html__( 'Shortcode Security', 'gravityflow' ),
+						'type'        => 'checkbox',
+						'description' => esc_html__( 'Important: Do not enable any of these settings unless all page authors are authorized.', 'gravityflow' ),
+						'choices'     => array(
+							array(
+								'label'   => esc_html__( 'Allow the Status shortcode to display all entries to all registered users.', 'gravityflow' ),
+								'name'    => 'allow_display_all_attribute',
+								'tooltip' => esc_html__( 'This setting allows the display_all attribute to be used in the shortcode.', 'gravityflow' ),
+							),
+							array(
+								'label'   => esc_html__( 'Allow the Status shortcode to display all entries to all anonymous users.', 'gravityflow' ),
+								'name'    => 'allow_allow_anonymous_attribute',
+								'tooltip' => esc_html__( 'This setting allows the allow_anonymous attribute to be used in the shortcode.', 'gravityflow' ),
+							),
+						),
+					),
+				),
+			);
+		}
+
+		/**
 		 * Display or return the markup for the wp_dropdown_pages field type.
 		 *
 		 * @since 1.4.3-dev
@@ -4303,11 +4358,15 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 *
 		 * @param string $value The license key.
 		 *
-		 * @return array|object
+		 * @return array|object|false
 		 */
 		public function check_license( $value = '' ) {
 			if ( empty( $value ) ) {
 				$value = $this->get_app_setting( 'license_key' );
+			}
+
+			if ( empty( $value ) ) {
+				return false;
 			}
 
 			// Static cache to prevent multiple requests for the same license key.
@@ -4524,6 +4583,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'show_header'          => true,
 				'timeline'             => true,
 				'step_highlight'       => true,
+				'context_key'          => 'wp-admin',
 			);
 
 			$args = array_merge( $defaults, $args );
@@ -4701,6 +4761,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		public function status_page( $args = array() ) {
 			$defaults = array(
 				'display_header' => true,
+				'context_key'    => 'wp-admin',
 			);
 			$args = array_merge( $defaults, $args );
 			?>
@@ -5242,14 +5303,37 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @param array       $atts    The shortcode attributes.
 		 * @param null|string $content The shortcode content.
 		 *
-		 * @return string|void
+		 * @return string
 		 */
 		public function shortcode( $atts, $content = null ) {
 
+			if ( get_post()->post_type != 'page' ) {
+				return '';
+			}
+
 			$a = $this->get_shortcode_atts( $atts );
 
+			if ( $a['display_all'] || $a['allow_anonymous'] ) {
+
+				$app_settings = $this->get_app_settings();
+
+				if ( $a['display_all'] && ! rgar( $app_settings, 'allow_display_all_attribute' ) ) {
+
+					$a['display_all'] = false;
+				}
+
+				if ( $a['allow_anonymous'] && ! rgar( $app_settings, 'allow_allow_anonymous_attribute' ) ) {
+
+					$a['allow_anonymous'] = false;
+				}
+
+			}
+
+
+
 			if ( ! $a['allow_anonymous'] && ! is_user_logged_in() ) {
-				if ( ! $this->validate_access_token() ) {
+				$token = $this->decode_access_token();
+				if ( ! $token ) {
 					return;
 				}
 			}
@@ -5257,7 +5341,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$entry_id = absint( rgget( 'lid' ) );
 
 			if ( empty( $entry_id ) && ! empty( $a['entry_id'] ) ) {
-					$entry_id = absint( $a['entry_id'] );
+				$entry_id = absint( $a['entry_id'] );
 			}
 
 			if ( ! empty( $a['form'] ) && ! empty( $entry_id ) ) {
@@ -5275,21 +5359,21 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			}
 
 			switch ( $a['page'] ) {
-				case 'inbox' :
+				case 'inbox':
 					$html .= $this->get_shortcode_inbox_page( $a );
 					break;
-				case 'submit' :
+				case 'submit':
 					ob_start();
 					$this->submit_page( false );
 					$html .= ob_get_clean();
 					break;
-				case 'status' :
+				case 'status':
 					wp_enqueue_script( 'gravityflow_entry_detail' );
 					wp_enqueue_script( 'gravityflow_status_list' );
 
 					if ( rgget( 'view' ) || ! empty( $entry_id ) ) {
 						$html .= $this->get_shortcode_status_page_detail( $a );
-					} else {
+					} elseif ( is_user_logged_in() || ( $a['display_all'] && $a['display_all'] ) ) {
 						$html .= $this->get_shortcode_status_page( $a );
 					}
 			}
@@ -5340,7 +5424,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 *
 		 * @return array
 		 */
+
 		public function get_shortcode_defaults() {
+
 			$defaults = array(
 				'page'             => 'inbox',
 				'form'             => null,
@@ -5361,6 +5447,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'    => true,
 				'sidebar'          => true,
 				'step_highlight'   => true,
+				'back_link'        => false,
+				'back_link_text'   => __( 'Return to list', 'gravityflow' ),
+				'back_link_url'    => null,
+				'context_key'      => '',
 			);
 
 			return $defaults;
@@ -5398,21 +5488,25 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			wp_enqueue_script( 'gravityflow_entry_detail' );
 			wp_enqueue_script( 'gravityflow_status_list' );
 			$args = array(
-				'form_id'              => $a['form'],
-				'entry_id'             => $a['entry_id'],
-				'id_column'            => $a['id_column'],
-				'submitter_column'     => $a['submitter_column'],
-				'step_column'          => $a['step_column'],
-				'actions_column'       => $a['actions_column'],
-				'show_header'          => false,
-				'field_ids'            => $a['fields'] ? explode( ',', $a['fields'] ) : '',
-				'detail_base_url'      => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-				'timeline'             => $a['timeline'],
-				'last_updated'         => $a['last_updated'],
-				'step_status'          => $a['step_status'],
-				'workflow_info'        => $a['workflow_info'],
-				'sidebar'              => $a['sidebar'],
-				'step_highlight'       => $a['step_highlight'],
+				'form_id'          => $a['form'],
+				'entry_id'         => $a['entry_id'],
+				'id_column'        => $a['id_column'],
+				'submitter_column' => $a['submitter_column'],
+				'step_column'      => $a['step_column'],
+				'actions_column'   => $a['actions_column'],
+				'show_header'      => false,
+				'field_ids'        => $a['fields'] ? explode( ',', $a['fields'] ) : '',
+				'detail_base_url'  => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+				'timeline'         => $a['timeline'],
+				'last_updated'     => $a['last_updated'],
+				'step_status'      => $a['step_status'],
+				'workflow_info'    => $a['workflow_info'],
+				'sidebar'          => $a['sidebar'],
+				'step_highlight'   => $a['step_highlight'],
+				'back_link'        => $a['back_link'],
+				'back_link_text'   => $a['back_link_text'],
+				'back_link_url'    => $a['back_link_url'],
+				'context_key'      => $a['context_key'],
 			);
 
 			ob_start();
@@ -5446,6 +5540,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'sidebar'           => $a['sidebar'],
 				'workflow_info'     => $a['workflow_info'],
 				'step_status'       => $a['step_status'],
+				'context_key'       => $a['context_key'],
 			);
 
 			$this->inbox_page( $args );
@@ -5467,7 +5562,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			ob_start();
 
 			$args = array(
-				'base_url'           => remove_query_arg( array(
+				'base_url'         => remove_query_arg( array(
 					'entry-id',
 					'form-id',
 					'start-date',
@@ -5483,19 +5578,20 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					'gravityflow-print-page-break',
 					'gravityflow-print-timelines',
 				) ),
-				'detail_base_url'    => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
-				'display_header'     => false,
-				'action_url'         => 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '' ) . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
-				'field_ids'          => $a['fields'] ? explode( ',', $a['fields'] ) : '',
-				'display_all'        => $a['display_all'],
-				'id_column'          => $a['id_column'],
-				'submitter_column'   => $a['submitter_column'],
-				'step_column'        => $a['step_column'],
-				'status_column'      => $a['status_column'],
-				'last_updated'       => $a['last_updated'],
-				'step_status'        => $a['step_status'],
-				'workflow_info'      => $a['workflow_info'],
-				'sidebar'            => $a['sidebar'],
+				'detail_base_url'  => add_query_arg( array( 'page' => 'gravityflow-inbox', 'view' => 'entry' ) ),
+				'display_header'   => false,
+				'action_url'       => 'http' . ( isset( $_SERVER['HTTPS'] ) ? 's' : '' ) . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?",
+				'field_ids'        => $a['fields'] ? explode( ',', $a['fields'] ) : '',
+				'display_all'      => $a['display_all'],
+				'id_column'        => $a['id_column'],
+				'submitter_column' => $a['submitter_column'],
+				'step_column'      => $a['step_column'],
+				'status_column'    => $a['status_column'],
+				'last_updated'     => $a['last_updated'],
+				'step_status'      => $a['step_status'],
+				'workflow_info'    => $a['workflow_info'],
+				'sidebar'          => $a['sidebar'],
+				'context_key'      => $a['context_key'],
 			);
 
 			if ( isset( $a['form'] ) ) {
@@ -6343,7 +6439,7 @@ AND m.meta_value='queued'";
 		 *
 		 * @param Gravity_Flow_Assignee $assignee             The current assignee.
 		 * @param array                 $scopes               The access token scopes.
-		 * @param string                $expiration_timestamp The expiration timestamp.
+		 * @param bool|string           $expiration_timestamp The expiration timestamp.
 		 *
 		 * @return string
 		 */
@@ -7393,6 +7489,26 @@ AND m.meta_value='queued'";
 		}
 
 		/**
+		 * Determines if a multiuser field is being used for conditional routing and has an exact value match of user ID
+		 *
+		 * @since 2.5
+		 *
+		 * @return bool
+		 */
+		public function filter_value_match_multiuser( $is_match, $field_value, $target_value, $operation, $source_field, $rule ) {
+
+			if ( ! $source_field || $source_field->type !== 'workflow_multi_user' ) {
+				return $is_match;
+			}
+
+			if ( in_array( $target_value, $field_value, true ) ) {
+				return true;
+			}
+
+			return false;
+		}
+
+		/**
 		 * Target for the gform_pre_replace_merge_tags filter. Replaces the workflow_timeline and created_by merge tags.
 		 *
 		 * @since 2.2.4 Added the assignee to the merge tag if the current user is an assignee.
@@ -7813,15 +7929,26 @@ AND m.meta_value='queued'";
 					$license_details = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
 				}
 				if ( $license_details ) {
-					set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
+					$expiration = DAY_IN_SECONDS + rand( 0, DAY_IN_SECONDS );
+					set_transient( 'gravityflow_license_details', $license_details, $expiration );
 				}
 			} else {
 				$license_details = get_transient( 'gravityflow_license_details' );
 				if ( ! $license_details ) {
+					$last_check = get_option( 'gravityflow_last_license_check' );
+					if ( $last_check > time() - 5 * MINUTE_IN_SECONDS ) {
+						return;
+					}
+
 					$license_key     = defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ? GRAVITY_FLOW_LICENSE_KEY : '';
 					$license_details = $this->check_license( $license_key );
 					if ( $license_details ) {
-						set_transient( 'gravityflow_license_details', $license_details, DAY_IN_SECONDS );
+						if ( defined( 'GRAVITY_FLOW_LICENSE_KEY' ) && in_array( $license_details->license, array( 'site_inactive', 'inactive' ) ) ) {
+							$license_details = $this->activate_license( GRAVITY_FLOW_LICENSE_KEY );
+						}
+						$expiration = DAY_IN_SECONDS + rand( 0, DAY_IN_SECONDS );
+						set_transient( 'gravityflow_license_details', $license_details, $expiration );
+						update_option( 'gravityflow_last_license_check', time() );
 					}
 				}
 			}
@@ -7830,7 +7957,7 @@ AND m.meta_value='queued'";
 
 			if ( $license_status != 'valid' ) {
 
-				$add_buttons = ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) || ! is_multisite();
+				$add_buttons = ! is_multisite();
 
 				$primary_button_link = admin_url( 'admin.php?page=gravityflow_settings' );
 
@@ -7862,12 +7989,12 @@ AND m.meta_value='queued'";
 						break;
 				}
 
-				$message .= ' ' . esc_html__( 'This means you&rsquo;re missing out on security fixes, updates and support!', 'gravityflow' );
+				$message .= ' ' . esc_html__( "This means you're missing out on security fixes, updates and support.", 'gravityflow' );
 
 				$url = 'https://gravityflow.io/?utm_source=admin_notice&utm_medium=admin&utm_content=' . $license_status . '&utm_campaign=Admin%20Notice#pricing';
 
 				// Show a different notice on settings page for inactive licenses (hide the buttons)
-				if ( $add_buttons && ! $this->is_app_settings() ) {
+				if ( ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) && $add_buttons && ! $this->is_app_settings() ) {
 					$message .= '<br /><br />' . esc_html__( '%sActivate your license%s or %sget a license here%s', 'gravityflow' );
 					$message = sprintf( $message, '<a href="' . esc_url( $primary_button_link ) . '" class="button button-primary">', '</a>', '<a href="' . esc_url( $url ) . '" class="button button-secondary">', '</a>' );
 				}

@@ -273,7 +273,9 @@ class Gravity_Flow_API {
 	 * @return string
 	 */
 	public function get_timeline( $entry ) {
-		return gravity_flow()->get_timeline( $entry );
+
+		return Gravity_Flow_Common::get_timeline( $entry );
+
 	}
 
 	/**

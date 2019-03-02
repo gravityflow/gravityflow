@@ -51,6 +51,7 @@ class Gravity_Flow_Entry_Detail {
 		<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_detail">
 
 			<?php
+			self::maybe_display_back_link( $args );
 			self::maybe_show_header( $form, $args );
 
 			$permission_granted = $check_view_entry_permissions ? self::is_permission_granted( $entry, $form, $current_step ) : true;
@@ -150,9 +151,22 @@ class Gravity_Flow_Entry_Detail {
 			'sidebar'              => true,
 			'step_status'          => true,
 			'workflow_info'        => true,
+			'back_link'            => false,
+			'back_link_text'       => __( 'Return to list', 'gravityflow' ),
+			'back_link_url'        => null,
 		);
 
 		$args = array_merge( $defaults, $args );
+
+		/**
+		 * Allow the entry detail arguments to be overridden.
+		 *
+		 * @since 2.5
+		 *
+		 * @param array $args The entry detail page arguments.
+		 */
+		$args = apply_filters( 'gravityflow_entry_detail_args', $args );
+
 		gravity_flow()->log_debug( __METHOD__ . '() args: ' . print_r( $args, true ) );
 
 		return $args;
@@ -268,6 +282,44 @@ class Gravity_Flow_Entry_Detail {
 		</div>
 		<?php
 	}
+
+	/**
+	 * Displays the back link on entry detail page if enabled.
+	 *
+	 * @since 2.5
+	 * 
+	 * @param array   $args    The properties for the page currently being displayed.
+	 */
+	public static function maybe_display_back_link( $args ) {
+		$back_link = (bool) $args['back_link'];
+		$back_link_text = $args['back_link_text'];
+		$back_link_url = $args['back_link_url'];
+
+		if ( ! $back_link || is_admin() ) {
+			return;
+		}
+
+		$url = is_null( $back_link_url ) ? remove_query_arg( array( 'gworkflow_token', 'new_status', 'view', 'lid', 'id' ) ) : $back_link_url;
+
+		/**
+		 * Allows customization of the back link
+		 *
+		 * Useful in cases where the access into entry detail page is not based out of gravityflow shortcode.
+		 *
+		 * @since 2.5
+		 *
+		 * @var string $url    The customized URL to redirect user to when clicking the back link
+		 * @var array  $args   The shortcode attributes for the current page
+		 *
+		 * @return string
+		 */
+		$url = apply_filters( 'gravityflow_back_link_url_entry_detail', $url, $args );
+
+		printf( '<a class="back-link" href="%s">%s</a><br/><br/>', esc_url( $url ), esc_html( $back_link_text ) );
+
+		return;
+	}
+
 
 	/**
 	 * Checks if the current user has permission to view the entry details.

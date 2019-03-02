@@ -59,46 +59,13 @@ class Gravity_Flow_Merge_Tag_Workflow_Timeline extends Gravity_Flow_Merge_Tag_Wo
 
 		if ( is_array( $matches ) && isset( $matches[0] ) ) {
 			$full_tag = $matches[0][0];
-			$timeline = $this->get_timeline();
+			$timeline = Gravity_Flow_Common::get_timeline( $this->entry );
 			$text     = str_replace( $full_tag, $this->format_value( $timeline ), $text );
 		}
 
 		return $text;
 	}
 
-	/**
-	 * Get the content which will replace the {workflow_timeline} merge tag.
-	 *
-	 * @since 1.7.1-dev
-	 *
-	 * @return string
-	 */
-	protected function get_timeline() {
-
-		if ( empty( $this->entry ) ) {
-			return '';
-		}
-
-		$entry = $this->entry;
-
-		$notes = Gravity_Flow_Common::get_timeline_notes( $entry );
-
-		if ( empty( $notes ) ) {
-			return '';
-		}
-
-		$return = array();
-
-		foreach ( $notes as $note ) {
-			$step = Gravity_Flow_Common::get_timeline_note_step( $note );
-			$name = Gravity_Flow_Common::get_timeline_note_display_name( $note, $step );
-			$date = Gravity_Flow_Common::format_date( $note->date_created, '', false, true );
-
-			$return[] = $this->format_note( $note->value, $name, $date );
-		}
-
-		return implode( "\n\n", $return );
-	}
 }
 
 Gravity_Flow_Merge_Tags::register( new Gravity_Flow_Merge_Tag_Workflow_Timeline );

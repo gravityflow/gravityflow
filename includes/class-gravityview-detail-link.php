@@ -74,6 +74,7 @@ class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 	private function add_hooks() {
 		add_filter( 'gravityview_entry_default_fields', array( $this, 'add_entry_default_field' ), 10, 3 );
 		add_filter( 'gravityview_field_entry_value_workflow_detail_link', array( $this, 'modify_entry_value_workflow_detail_link' ), 10, 4 );
+		add_filter( 'gravityflow_back_link_url_entry_detail', array( $this, 'modify_entry_detail_back_link' ), 10, 2 );
 	}
 
 	/**
@@ -131,6 +132,11 @@ class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 
 		$url = Gravity_Flow_Common::get_workflow_url( $query_args, $page_id );
 
+		if ( $page_id != 'admin' ) {
+			global $post;
+			$url .= '&gvp=' . $post->ID;
+		}
+
 		$text = $field_settings['workflow_detail_link_text'];
 
 		$output = sprintf( '<a href="%s">%s</a>', $url, $text );
@@ -169,6 +175,37 @@ class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 
 		return $add_options + $field_options;
 	}
+
+	/**
+	 * Customize the back link for pages which were accessed via Gravity View workflow detail link field.
+	 *
+	 * @param string $url       The potential back link URL.
+	 * @param array  $args      The shortcode arguments for the page where the back link is to be displayed
+	 *
+	 * @since 2.5-dev
+	 *
+	 * @return string
+	 */
+	function modify_entry_detail_back_link( $url, $args ) {
+		// Verify the back link is set as active on current page and the potential back link has querystring params
+		if ( $args['back_link'] == true && false !== strpos( $url, '?' ) ) {
+
+			// Parse the querystring to confirm the gvp param was added via the workflow detail link
+			$querystring = explode( '?', $url, 2 );
+			parse_str( end( $querystring ), $query_args );
+			if ( isset( $query_args['gvp'] ) ) {
+
+				// Confirm the gvp param is for a valid page and update the back link URL
+				$view_page = get_permalink( $query_args['gvp'] );
+				if ( $view_page !== false ) {
+					$url = $view_page;
+				}
+			}
+		}
+
+		return $url;
+	}
+
 }
 
 new Gravity_Flow_GravityView_Workflow_Detail_Link;
