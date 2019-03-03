@@ -1,3 +1,4 @@
+- Added DB performance improvements.
 - Added security enhancement.
 - Added support for license key constants in extensions.
 - Fixed an issue where workflows don't start when the entry is created before the init action.
