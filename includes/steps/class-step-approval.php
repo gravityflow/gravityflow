@@ -934,16 +934,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	/**
-	 * Triggers sending of the due date notification.
-	 *
-	 * @since 2.5
-	 *
-	 */
-	public function send_due_date_notification() {
-		$this->maybe_send_notification( 'due_date' );
-	}
-
-	/**
 	 * Provides a way for a step to process a token action before anything else. If feedback is returned it is displayed and nothing else with be rendered.
 	 *
 	 * @param array $action The action properties.

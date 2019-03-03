@@ -3514,6 +3514,13 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			}
 
 			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
+			     && $current_step->supports_due_date() && $current_step->due_date
+			) {
+				$gflow_due_date_date = Gravity_Flow_Common::format_date( $current_step->get_due_date_timestamp(), $date_format, false, true );
+				printf( '<br /><br />%s: %s', esc_html__( 'Due Date', 'gravityflow' ), $gflow_due_date_date );
+			}
+
+			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
 			     && $current_step->supports_expiration() && $current_step->expiration
 			) {
 				$glfow_date = Gravity_Flow_Common::format_date( $current_step->get_expiration_timestamp(), $date_format, false, true );
@@ -5618,7 +5625,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'back_link'         => false,
 				'back_link_text'    => __( 'Return to list', 'gravityflow' ),
 				'back_link_url'     => null,
-				'due_date'         => false,
+				'due_date'          => false,
 			);
 
 			return $defaults;

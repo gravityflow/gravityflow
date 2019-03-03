@@ -1044,17 +1044,21 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	/**
 	 * Outputs the current step due date.
 	 *
+	 * @since 2.5
+	 *
 	 * @param array $item The current entry.
 	 */
 	public function column_due_date( $item ) {
 		$step_id = rgar( $item, 'workflow_step' );
 		if ( $step_id > 0 ) {
-			$step      = gravity_flow()->get_step( $step_id );
-			if ( $step ) {
-				$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', true, true );
+			$step = gravity_flow()->get_step( $step_id );
+			$step->_entry = $item;
+			if ( $step && $step->due_date ) {
+				$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', false, true );
+				$output = "<a href='#'>$value</a>";
+			} else {
+				$output = '<span class="gravityflow-empty">&dash;</span>';
 			}
-			$link  = "<a href='#'>$value</a>";
-			$output = $link;
 		} else {
 			$output = '<span class="gravityflow-empty">&dash;</span>';
 		}
@@ -2050,6 +2054,16 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 					}
 				} else {
 					switch ( $column_key ) {
+						case 'due_date':
+							$step_id = rgar( $item, 'workflow_step' );
+							if ( $step_id > 0 ) {
+								$step = gravity_flow()->get_step( $step_id );
+								$step->_entry = $item;
+								if ( $step && $step->due_date ) {
+									$col_val = Gravity_Flow_Common::format_date( $step->get_due_date_timestamp(), 'Y-m-d H:i:s', false, false );
+								}
+							}
+							break;
 						case 'duration':
 							if ( $item['workflow_final_status'] == 'pending' ) {
 								$duration     = time() - strtotime( $item['date_created'] );
