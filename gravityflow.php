@@ -85,6 +85,7 @@ class Gravity_Flow_Bootstrap {
 		require_once( 'includes/integrations/class-gp-nested-forms.php' );
 		require_once( 'includes/integrations/class-partial-entries.php' );
 		require_once( 'includes/class-dynamic-hook.php' );
+		require_once( 'includes/class-populate-form.php' );
 
 		self::include_assignees();
 		self::include_steps();
