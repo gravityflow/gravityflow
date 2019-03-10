@@ -91,6 +91,7 @@ class Gravity_Flow_Partial_Entries {
 		), 10, 2 );
 
 		add_filter( 'gform_entry_pre_update', array( $this, 'maybe_filter_entry_pre_update' ), 10, 2 );
+		add_filter( 'gform_pre_render', array( $this, 'filter_gform_pre_render' ), 50 );
 
 		add_action( 'gform_partialentries_post_entry_saved', array( $this, 'maybe_trigger_workflow' ), 10, 2 );
 		add_action( 'gform_partialentries_post_entry_updated', array( $this, 'maybe_trigger_workflow' ), 10, 2 );
@@ -234,6 +235,70 @@ class Gravity_Flow_Partial_Entries {
 		foreach ( $meta_keys as $meta_key ) {
 			gform_delete_meta( $entry_id, $meta_key );
 		}
+	}
+
+	/**
+	 * Populates the form with the partial entry being resumed.
+	 *
+	 * @since 2.5
+	 *
+	 * @param array $form The form currently being displayed.
+	 *
+	 * @return array
+	 */
+	public function filter_gform_pre_render( $form ) {
+
+		$form_id = absint( $form['id'] );
+
+		// Abort if this is a heartbeat request or if the paging or submit buttons have been used.
+		if ( rgpost( 'action' ) == 'heartbeat' || rgpost( 'is_submit_' . $form_id ) ) {
+			return $form;
+		}
+
+		$partial_entry_id = sanitize_key( rgget( 'peid' ) );
+
+		// Abort if the partial entry id is not supplied or if workflow processing of partial entries is not enabled.
+		if ( empty( $partial_entry_id ) || ! $this->is_workflow_enabled( $form['id'] ) ) {
+			return $form;
+		}
+
+		$search_criteria = array(
+			'status'        => 'active',
+			'field_filters' => array(
+				array( 'key' => 'partial_entry_id', 'value' => $partial_entry_id ),
+			),
+		);
+
+		$entries = GFAPI::get_entries( $form['id'], $search_criteria );
+
+		// Abort if the partial entry was not found.
+		if ( empty( $entries ) ) {
+			return $form;
+		}
+
+		$entry        = $entries[0];
+		$current_step = gravity_flow()->get_current_step( $form, $entry );
+
+		// Abort if the entry is not on the correct step type.
+		if ( empty( $current_step ) || ! $current_step instanceof Gravity_Flow_Step_Wait_Partial_Entry_Submission ) {
+			return $form;
+		}
+
+		$assignee_key = $current_step->get_current_assignee_key();
+		$assignee     = $assignee_key ? $current_step->get_assignee( $assignee_key ) : false;
+
+		// Abort if the user is not the assignee.
+		if ( ! $assignee || ! $assignee->is_current_user() ) {
+			return $form;
+		}
+
+		$values = Gravity_Flow_Populate_Form::get_population_values_from_entry( $form, $entry );
+		$form   = Gravity_Flow_Populate_Form::do_population( $form, $values );
+
+		// The PE add-on will add the ID to the hidden input it adds via the form tag filter.
+		$_POST['partial_entry_id'] = $partial_entry_id;
+
+		return $form;
 	}
 
 }
