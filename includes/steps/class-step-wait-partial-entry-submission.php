@@ -97,20 +97,35 @@ class Gravity_Flow_Step_Wait_Partial_Entry_Submission extends Gravity_Flow_Step 
 	 */
 	public function get_settings() {
 		$settings_api = $this->get_common_settings_api();
-		$fields       = $settings_api->get_setting_notification( array(
-			'name_prefix'      => 'workflow',
-			'label'            => __( 'Workflow notification', 'gravityflow' ),
-			'tooltip'          => __( 'Enable this setting to send an email.', 'gravityflow' ),
-			'checkbox_label'   => __( 'Enabled', 'gravityflow' ),
-			'checkbox_tooltip' => '',
-			'send_to_fields'   => true,
-			'resend_field'     => false,
-		) );
 
-		return array(
-			'title'  => 'Notification',
-			'fields' => $fields,
+		$settings = array(
+			'title'  => $this->get_label(),
+			'fields' => array(
+				$settings_api->get_setting_assignee_type(),
+				$settings_api->get_setting_assignees(),
+				$settings_api->get_setting_assignee_routing(),
+				$settings_api->get_setting_notification_tabs( array(
+					array(
+						'label'  => __( 'Assignee email', 'gravityflow' ),
+						'id'     => 'tab_assignee_notification',
+						'fields' => $settings_api->get_setting_notification( array(
+							'checkbox_default_value' => true,
+							'default_message'        => __( 'Please resume the following form: {workflow_resume_partial_entry_link}', 'gravityflow' ),
+						) ),
+					),
+				) ),
+				array(
+					'name'          => 'submit_page',
+					'tooltip'       => __( 'Select the page to be used for the form submission. This can be the Workflow Submit Page in the WordPress Admin Dashboard or you can choose a page with either a Gravity Flow submit shortcode or a Gravity Forms shortcode.', 'gravityflow' ),
+					'label'         => __( 'Submission Page', 'gravityflow' ),
+					'type'          => 'select',
+					'default_value' => 'admin',
+					'choices'       => $this->get_page_choices(),
+				),
+			),
 		);
+
+		return $settings;
 	}
 
 	/**
@@ -121,7 +136,7 @@ class Gravity_Flow_Step_Wait_Partial_Entry_Submission extends Gravity_Flow_Step 
 	 * @return bool
 	 */
 	public function process() {
-		$this->send_workflow_notification();
+		$this->assign();
 
 		return false;
 	}
@@ -139,6 +154,33 @@ class Gravity_Flow_Step_Wait_Partial_Entry_Submission extends Gravity_Flow_Step 
 		$partial_entry_id = gform_get_meta( $this->get_entry_id(), 'partial_entry_id' );
 
 		return $partial_entry_id ? 'pending' : 'complete';
+	}
+
+	/**
+	 * Returns the choices for the Submit Page setting.
+	 *
+	 * @since 2.5
+	 *
+	 * @return array
+	 */
+	public function get_page_choices() {
+		$choices = array(
+			array(
+				'label' => __( 'Default - WordPress Admin Dashboard: Workflow Submit Page', 'gravityflow' ),
+				'value' => 'admin',
+			),
+		);
+
+		$pages = get_pages();
+
+		foreach ( $pages as $page ) {
+			$choices[] = array(
+				'label' => $page->post_title,
+				'value' => $page->ID,
+			);
+		}
+
+		return $choices;
 	}
 
 }
