@@ -7,3 +7,4 @@
 - Added filter gravityflow_back_link_url_entry_detail to allow customization of back link on entry detail page.
 - Added filter gravityflow_search_criteria_status to allow status page to filter on multiple field criteria.
 - Added shortcode security settings.
+- Added the filter gravityflow_next_step to allow customization of the next step for workflow processing (example - restart a completed user input step for new assignees to action)
