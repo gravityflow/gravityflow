@@ -6,7 +6,7 @@
  * @subpackage  Classes/Gravity_Flow_Step_Feed_ConstantContact
  * @copyright   Copyright (c) 2015-2019, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       2.5
+ * @since       2.4.5
  */
 
 if ( ! class_exists( 'GFForms' ) ) {
@@ -32,7 +32,7 @@ class Gravity_Flow_Step_Feed_ConstantContact extends Gravity_Flow_Step_Feed_Add_
 	 * @since 2.5
 	 * @var string
 	 */
-	protected $_class_name = 'GFConstantContact';
+	protected $_class_name = 'GF_ConstantContact';
 
 	/**
 	 * Returns the step label.
