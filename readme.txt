@@ -2,7 +2,7 @@
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
 Requires at least: 4.2
-Tested up to: 4.9.8
+Tested up to: 5.1
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,13 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 2.4.4 =
+- Added security enhancements.
+- Added support for license key constants in extensions.
+- Fixed an issue where workflows don't start when the entry is created before the init action.
+- Fixed an issue with the signature generation for GET requests for OAuth1.0a webhook requests for WordPress and Gravity Forms connected apps.
+- Fixed an issue where importing a form without workflow steps would incorrectly display Gravity Flow notice. Credit: Travis Lopes, ForGravity.
 
 = 2.4.3 =
 - Fixed the styles in the installation wizard.

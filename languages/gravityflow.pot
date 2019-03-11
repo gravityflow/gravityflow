@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gravityflow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2019-02-23 09:02:06+00:00\n"
+"POT-Creation-Date: 2019-03-02 16:55:46+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -397,7 +397,7 @@ msgstr ""
 
 #: class-gravity-flow.php:3246 includes/pages/class-activity.php:62
 #: includes/pages/class-activity.php:95
-#: includes/steps/class-step-webhook.php:1020
+#: includes/steps/class-step-webhook.php:1027
 msgid "Entry ID"
 msgstr ""
 
@@ -554,18 +554,18 @@ msgid "Entries per page"
 msgstr ""
 
 #: class-gravity-flow.php:3990 includes/class-extension.php:411
-#: includes/class-feed-extension.php:414
+#: includes/class-feed-extension.php:418
 msgid "Settings"
 msgstr ""
 
 #: class-gravity-flow.php:3994 includes/class-extension.php:226
-#: includes/class-feed-extension.php:224
+#: includes/class-feed-extension.php:228
 #: includes/wizard/steps/class-iw-step-license-key.php:100
 msgid "License Key"
 msgstr ""
 
 #: class-gravity-flow.php:3998 includes/class-extension.php:230
-#: includes/class-feed-extension.php:228
+#: includes/class-feed-extension.php:232
 msgid "Invalid license"
 msgstr ""
 
@@ -924,7 +924,7 @@ msgid "Add Custom Value"
 msgstr ""
 
 #: class-gravity-flow.php:7511 includes/class-common.php:88
-#: includes/steps/class-step-webhook.php:1022
+#: includes/steps/class-step-webhook.php:1029
 msgid "User IP"
 msgstr ""
 
@@ -944,7 +944,7 @@ msgstr ""
 msgid "Transaction ID"
 msgstr ""
 
-#: class-gravity-flow.php:7542 includes/steps/class-step-webhook.php:1024
+#: class-gravity-flow.php:7542 includes/steps/class-step-webhook.php:1031
 msgid "Created By"
 msgstr ""
 
@@ -1069,33 +1069,33 @@ msgid "Your %s license has expired."
 msgstr ""
 
 #: class-gravity-flow.php:8132 includes/class-extension.php:490
-#: includes/class-feed-extension.php:493
+#: includes/class-feed-extension.php:497
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
 msgid "Your %s license is invalid."
 msgstr ""
 
 #: class-gravity-flow.php:8136 includes/class-extension.php:494
-#: includes/class-feed-extension.php:497
+#: includes/class-feed-extension.php:501
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
 msgid "Your %s license is inactive."
 msgstr ""
 
 #: class-gravity-flow.php:8146 includes/class-extension.php:504
-#: includes/class-feed-extension.php:507
+#: includes/class-feed-extension.php:511
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
 msgid "Your %s license has not been activated."
 msgstr ""
 
 #: class-gravity-flow.php:8150 includes/class-extension.php:508
-#: includes/class-feed-extension.php:511
+#: includes/class-feed-extension.php:515
 msgid "This means you're missing out on security fixes, updates and support."
 msgstr ""
 
 #: class-gravity-flow.php:8156 includes/class-extension.php:518
-#: includes/class-feed-extension.php:521
+#: includes/class-feed-extension.php:525
 msgid "%sActivate your license%s or %sget a license here%s"
 msgstr ""
 
@@ -1135,7 +1135,7 @@ msgstr ""
 msgid "(Missing)"
 msgstr ""
 
-#: includes/class-common.php:91 includes/steps/class-step-webhook.php:1023
+#: includes/class-common.php:91 includes/steps/class-step-webhook.php:1030
 msgid "Source Url"
 msgstr ""
 
@@ -1280,17 +1280,17 @@ msgid ""
 "  'Cancel' to stop, 'OK' to delete."
 msgstr ""
 
-#: includes/class-extension.php:372 includes/class-feed-extension.php:375
+#: includes/class-extension.php:372 includes/class-feed-extension.php:379
 msgid ""
 "%s is not able to run because your WordPress environment has not met the "
 "minimum requirements."
 msgstr ""
 
-#: includes/class-extension.php:373 includes/class-feed-extension.php:376
+#: includes/class-extension.php:373 includes/class-feed-extension.php:380
 msgid "Please resolve the following issues to use %s:"
 msgstr ""
 
-#: includes/class-extension.php:484 includes/class-feed-extension.php:487
+#: includes/class-extension.php:484 includes/class-feed-extension.php:491
 #. translators: %s is the title of the Gravity Flow Extension
 msgid "Your license for %s has expired."
 msgstr ""
@@ -2634,37 +2634,37 @@ msgstr ""
 msgid "Select a Name"
 msgstr ""
 
-#: includes/steps/class-step-webhook.php:775
+#: includes/steps/class-step-webhook.php:782
 #. Translators: 1st placeholders is URL provided by user in step settings, 2nd
 #. placeholder is response codes from webhook execution
 msgid "Webhook sent. %1$s RESPONSE: %2$s"
 msgstr ""
 
-#: includes/steps/class-step-webhook.php:928
+#: includes/steps/class-step-webhook.php:935
 #. translators: %s is the key used to lookup the value in the REST API response
 msgid "The key %s does not match any element in the response."
 msgstr ""
 
-#: includes/steps/class-step-webhook.php:1001
+#: includes/steps/class-step-webhook.php:1008
 msgid "Select a Field"
 msgstr ""
 
-#: includes/steps/class-step-webhook.php:1009
+#: includes/steps/class-step-webhook.php:1016
 #. Translators: Placeholder is for the field type which should be selected
 msgid "Select a %s Field"
 msgstr ""
 
-#: includes/steps/class-step-webhook.php:1021
+#: includes/steps/class-step-webhook.php:1028
 msgid "Entry Date"
 msgstr ""
 
-#: includes/steps/class-step-webhook.php:1064
 #: includes/steps/class-step-webhook.php:1071
-#: includes/steps/class-step-webhook.php:1091
+#: includes/steps/class-step-webhook.php:1078
+#: includes/steps/class-step-webhook.php:1098
 msgid "Full"
 msgstr ""
 
-#: includes/steps/class-step-webhook.php:1078
+#: includes/steps/class-step-webhook.php:1085
 msgid "Selected"
 msgstr ""
 

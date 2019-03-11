@@ -1088,71 +1088,77 @@ PRIMARY KEY  (id)
 		 * @return array
 		 */
 		public function get_users_as_choices() {
+			static $choices;
 
-			$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
+			$args = apply_filters( 'gravityflow_get_users_args', array( 'orderby' => array( 'display_name', 'user_login' ), 'fields' => array( 'ID', 'display_name', 'user_login' ) ) );
+			$key  = md5( get_current_blog_id() . '_' . serialize( $args ) );
 
-			$args            = apply_filters( 'gravityflow_get_users_args', array( 'number' => 1000, 'orderby' => 'display_name' ) );
-			$accounts        = get_users( $args );
-			$account_choices = array();
-			foreach ( $accounts as $account ) {
-				$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'label' => $account->display_name );
-			}
+			if ( ! isset( $choices[ $key ] ) ) {
+				$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
 
-			$choices = array(
-				array(
-					'label'   => __( 'Users', 'gravityflow' ),
-					'choices' => $account_choices,
-				),
-				array(
-					'label'   => __( 'Roles', 'gravityflow' ),
-					'choices' => $role_choices,
-				),
-			);
+				$accounts        = get_users( $args );
+				$account_choices = array();
+				foreach ( $accounts as $account ) {
+					$name = $account->display_name ? $account->display_name : $account->user_login;
+					$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'label' => $name );
+				}
 
-			$form_id = absint( rgget( 'id' ) );
-
-			$form = GFAPI::get_form( $form_id );
-
-			$field_choices = array();
-
-			$assignee_fields_as_choices = $this->get_assignee_fields_as_choices( $form );
-
-			if ( ! empty( $assignee_fields_as_choices ) ) {
-				$field_choices = $assignee_fields_as_choices;
-			}
-
-			$email_fields_as_choices = $this->get_email_fields_as_choices( $form );
-
-			if ( ! empty( $email_fields_as_choices ) ) {
-				$field_choices = array_merge( $field_choices, $email_fields_as_choices );
-			}
-
-
-			if ( rgar( $form, 'requireLogin' ) ) {
-				$field_choices[] = array(
-					'label' => __( 'User (Created by)', 'gravityflow' ),
-					'value' => 'entry|created_by',
+				$choices[ $key ] = array(
+					array(
+						'label'   => __( 'Users', 'gravityflow' ),
+						'choices' => $account_choices,
+					),
+					array(
+						'label'   => __( 'Roles', 'gravityflow' ),
+						'choices' => $role_choices,
+					),
 				);
+
+				$form_id = absint( rgget( 'id' ) );
+
+				$form = GFAPI::get_form( $form_id );
+
+				$field_choices = array();
+
+				$assignee_fields_as_choices = $this->get_assignee_fields_as_choices( $form );
+
+				if ( ! empty( $assignee_fields_as_choices ) ) {
+					$field_choices = $assignee_fields_as_choices;
+				}
+
+				$email_fields_as_choices = $this->get_email_fields_as_choices( $form );
+
+				if ( ! empty( $email_fields_as_choices ) ) {
+					$field_choices = array_merge( $field_choices, $email_fields_as_choices );
+				}
+
+
+				if ( rgar( $form, 'requireLogin' ) ) {
+					$field_choices[] = array(
+						'label' => __( 'User (Created by)', 'gravityflow' ),
+						'value' => 'entry|created_by',
+					);
+				}
+
+				if ( ! empty( $field_choices ) ) {
+					$choices[ $key ][] = array(
+						'label'   => __( 'Fields', 'gravityflow' ),
+						'choices' => $field_choices,
+					);
+				}
+
+				/**
+				 * Allows the assignee choices to be modified.
+				 *
+				 * @since 2.1
+				 *
+				 * @param array $choices The assignee choices
+				 * @param array $form    The Form
+				 */
+				$choices[ $key ] = apply_filters( 'gravityflow_assignee_choices', $choices[ $key ], $form );
 			}
 
-			if ( ! empty( $field_choices ) ) {
-				$choices[] = array(
-					'label'   => __( 'Fields', 'gravityflow' ),
-					'choices' => $field_choices,
-				);
-			}
-
-			/**
-			 * Allows the assignee choices to be modified.
-			 *
-			 * @since 2.1
-			 *
-			 * @param array $choices The assignee choices
-			 * @param array $form    The Form
-			 */
-			$choices = apply_filters( 'gravityflow_assignee_choices', $choices, $form );
-
-			return $choices;
+			return $choices[ $key ];
 		}
 
 		/**
@@ -3213,7 +3219,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					<div id="submitcomment" class="submitbox">
 						<div id="minor-publishing" class="gravityflow-status-box">
 							<?php
-							
+
 							$this->maybe_display_entry_detail_workflow_info( $current_step, $form, $entry, $args );
 							$this->maybe_display_entry_detail_step_status( $current_step, $form, $entry, $args );
 
@@ -3340,14 +3346,14 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$scheduled_timestamp = $current_step->get_schedule_timestamp();
 
 			switch ( $current_step->schedule_type ) {
-				case 'date' :
+				case 'date':
 					$scheduled_date = $current_step->schedule_date;
 					break;
-				case 'date_field' :
+				case 'date_field':
 					$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
 					$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
 					break;
-				case 'delay' :
+				case 'delay':
 				default:
 					$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
 					$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
@@ -3393,10 +3399,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 						<div id="minor-publishing" style="padding:10px;">
 							<?php wp_nonce_field( 'gravityflow_admin_action', '_gravityflow_admin_action_nonce' ); ?>
 							<select id="gravityflow-admin-action" name="gravityflow_admin_action">
-								<option value=""><?php esc_html_e( 'Select an action', 'gravityflow' ) ?></option>
+								<option value=""><?php esc_html_e( 'Select an action', 'gravityflow' ); ?></option>
 								<?php echo $this->get_admin_action_select_options( $current_step, $steps, $form, $entry ); ?>
 							</select>
-							<input type="submit" class="button " name="_gravityflow_admin_action" value="<?php esc_html_e( 'Apply', 'gravityflow' ) ?>"/>
+							<input type="submit" class="button " name="_gravityflow_admin_action" value="<?php esc_html_e( 'Apply', 'gravityflow' ); ?>"/>
 
 						</div>
 					</div>
@@ -3447,7 +3453,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					if ( ! $current_step || ( $current_step && $current_step->get_id() != $step_id ) ) {
 						$choices[] = array(
 							'label' => $step->get_name(),
-							'value' => 'send_to_step|' . $step->get_id()
+							'value' => 'send_to_step|' . $step->get_id(),
 						);
 					}
 				}
@@ -3544,25 +3550,31 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @return bool|Gravity_Flow_Step
 		 */
 		public function get_next_step( $step, $entry, $form ) {
+			$current_step = $step;
 			$keep_looking = true;
+
 			$form_id = absint( $form['id'] );
-			$steps = $this->get_steps( $form_id, $entry );
+			$steps   = $this->get_steps( $form_id, $entry );
+
 			while ( $keep_looking && $step ) {
 
 				if ( ! $step instanceof Gravity_Flow_Step ) {
-					return false;
+					$next_step_id = $step = false;
+				} else {
+					$next_step_id = $step->get_next_step_id();
 				}
 
-				$next_step_id = $step->get_next_step_id();
-
 				if ( $next_step_id == 'complete' ) {
-					return false;
+					$step = false;
+					$keep_looking = false;
 				}
 
 				if ( $next_step_id == 'next' ) {
 					$step = $this->get_next_step_in_list( $form, $step, $entry, $steps );
 					$keep_looking = false;
-				} else {
+				}
+
+				if ( ! in_array( $next_step_id, array( 'complete', 'next' ) ) ) {
 					$step = $this->get_step( $next_step_id, $entry );
 
 					if ( empty( $step ) ) {
@@ -3577,6 +3589,22 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					}
 				}
 			}
+
+			/**
+			 * Allows the next step in workflow to be customized.
+			 *
+			 * Return the next step (or false)
+			 *
+			 * @since 2.4.3
+			 *
+			 * @param Gravity_Flow_Step|bool $step         The next step.
+			 * @param Gravity_Flow_Step      $current_step The current step.
+			 * @param array                  $entry        The current entry array.
+			 * @param array                  $form         The current form array.
+			 * @param array                  $steps        The steps for current form.
+			 */
+			$step = apply_filters( 'gravityflow_next_step', $step, $current_step, $entry, $steps );
+
 			return $step;
 		}
 
@@ -3612,7 +3640,6 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */
 		public function get_next_step_in_list( $form, $current_step, $entry, $steps = array() ) {
 			$form_id = absint( $form['id'] );
-
 			if ( empty( $steps ) ) {
 				$steps = $this->get_steps( $form_id, $entry );
 			}
@@ -3624,7 +3651,6 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 						return $step;
 					}
 				}
-
 				if ( $next_step == false && $current_step_id == $step->get_id() ) {
 					$next_step = true;
 				}
@@ -3995,7 +4021,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		public function app_settings_fields() {
 			$settings = array();
 
-			if ( ( ! is_multisite() || ( is_multisite() && is_main_site() ) ) && ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
+			if ( ! defined( 'GRAVITY_FLOW_LICENSE_KEY' ) ) {
 				$settings[] = array(
 					'title'  => esc_html__( 'Settings', 'gravityflow' ),
 					'fields' => array(
@@ -4440,7 +4466,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'body'      => array(
 					'edd_action' => $edd_action,
 					'license'    => trim( $license ),
-					'url'        => home_url(),
+					'url'        => network_home_url(),
 				),
 			);
 
@@ -5920,12 +5946,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 				if ( isset( $form['feeds']['gravityflow'] ) ) {
 					$this->import_gravityflow_feeds( $form['feeds']['gravityflow'], $form['id'] );
+					$gravityflow_feeds_imported = ! empty( $form['feeds']['gravityflow'] ) ? true : $gravityflow_feeds_imported;
 					unset( $form['feeds']['gravityflow'] );
 					if ( empty( $form['feeds'] ) ) {
 						unset( $form['feeds'] );
 					}
 					GFAPI::update_form( $form );
-					$gravityflow_feeds_imported = true;
 				}
 			}
 

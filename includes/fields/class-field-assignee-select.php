@@ -126,8 +126,8 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 		if ( $include_users ) {
 			$args = array(
-				'number'  => 1000,
-				'orderby' => 'display_name',
+				'orderby' => array( 'display_name', 'user_login' ),
+				'fields'  => array( 'ID', 'display_name', 'user_login' ),
 				'role'    => $this->gravityflowUsersRoleFilter,
 			);
 
