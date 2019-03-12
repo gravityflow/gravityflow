@@ -19,6 +19,8 @@ $I->see( '0038 Current Step Merge Tag' );
 $I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
+$timestamp = strtotime( '+1 week' );
+
 // Confirm the merge tags are replaced.
 $I->dontSee( 'Current Step: {current_step}' );
 $I->see( 'Current Step: Approval' );
@@ -39,22 +41,22 @@ $I->assertStringStartsWith( date( 'F j, Y' ) . ' at', $schedule );
 $I->dontSee( 'Current Step Expiration: {current_step:expiration}' );
 $I->see( 'Current Step Expiration:' );
 $expiration = $I->grabTextFrom( '.current-step-expiration' );
-$I->assertStringStartsWith( date( 'F j, Y', strtotime( '+1 week' ) ) . ' at', $expiration );
+$I->assertStringStartsWith( date( 'F j, Y', $timestamp ) . ' at', $expiration );
 
 $I->dontSee( 'Current Step Due Date: {current_step:due_date}' );
 $I->see( 'Current Step Due Date:' );
 $due_date = $I->grabTextFrom( '.current-step-due-date' );
-$I->assertStringStartsWith( date( 'F j, Y', strtotime( '+1 week' ) ), $due_date );
+$I->assertStringStartsWith( date( 'F j, Y', $timestamp ), $due_date );
 
 $I->dontSee( 'Current Step Due Time: {current_step:due_time}' );
 $I->see( 'Current Step Due Time:' );
 $due_time = $I->grabTextFrom( '.current-step-due-time' );
-$I->assertStringStartsWith( date( 'g:m a', strtotime( '+1 week' ) ), $due_time );
+$I->assertStringStartsWith( date( 'g:m a', $timestamp ), $due_time );
 
 $I->dontSee( 'Current Step Due Date Time: {current_step:due_date_time}' );
 $I->see( 'Current Step Due Date Time:' );
 $due_date_time = $I->grabTextFrom( '.current-step-due-date-time' );
-$I->assertStringStartsWith( date( 'F j, Y /a/t g:m a', strtotime( '+1 week' ) ), $due_date_time );
+$I->assertStringStartsWith( date( 'F j, Y /a/t g:m a', $timestamp ), $due_date_time );
 
 $I->dontSee( 'Current Step Due Status: {current_step:due_status}' );
 $I->see( 'Current Step Due Status:' );
@@ -111,17 +113,17 @@ $I->assertGreaterThanOrEqual( 3600, $duration_minutes );
 $I->dontSee( 'Current Step Due Date: {current_step:due_date}' );
 $I->see( 'Current Step Due Date:' );
 $due_date = $I->grabTextFrom( '.current-step-due-date' );
-$I->assertStringStartsWith( date( 'F j, Y', strtotime( '+1 week' ) ), $due_date );
+$I->assertStringStartsWith( date( 'F j, Y', $timestamp ), $due_date );
 
 $I->dontSee( 'Current Step Due Time: {current_step:due_time}' );
 $I->see( 'Current Step Due Time:' );
 $due_time = $I->grabTextFrom( '.current-step-due-time' );
-$I->assertStringStartsWith( date( 'g:m a', strtotime( '+1 week' ) ), $due_time );
+$I->assertStringStartsWith( date( 'g:m a', $timestamp ), $due_time );
 
 $I->dontSee( 'Current Step Due Date Time: {current_step:due_date_time}' );
 $I->see( 'Current Step Due Date Time:' );
 $due_date_time = $I->grabTextFrom( '.current-step-due-date-time' );
-$I->assertStringStartsWith( date( 'F j, Y /a/t g:m a', strtotime( '+1 week' ) ), $due_date_time );
+$I->assertStringStartsWith( date( 'F j, Y /a/t g:m a', $timestamp ), $due_date_time );
 
 $I->dontSee( 'Current Step Due Status: {current_step:due_status}' );
 $I->see( 'Current Step Due Status:' );
