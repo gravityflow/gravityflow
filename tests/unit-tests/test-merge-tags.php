@@ -296,16 +296,6 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 
-		$text_in           = '{current_step:due_time}';
-		$expected_text_out = date( 'g:m a', $timestamp );
-		$actual_text_out   = $merge_tag->replace( $text_in );
-		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
-
-		$text_in           = '{current_step:due_date_time}';
-		$expected_text_out = date( 'F j, Y \a\t g:m a', $timestamp );
-		$actual_text_out   = $merge_tag->replace( $text_in );
-		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
-
 		$text_in           = '{current_step:due_status}';
 		$expected_text_out = __( 'Overdue', 'gravityflow' );;
 		$actual_text_out   = $merge_tag->replace( $text_in );

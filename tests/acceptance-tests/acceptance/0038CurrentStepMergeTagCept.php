@@ -48,20 +48,10 @@ $I->see( 'Current Step Due Date:' );
 $due_date = $I->grabTextFrom( '.current-step-due-date' );
 $I->assertStringStartsWith( date( 'F j, Y', $timestamp ), $due_date );
 
-$I->dontSee( 'Current Step Due Time: {current_step:due_time}' );
-$I->see( 'Current Step Due Time:' );
-$due_time = $I->grabTextFrom( '.current-step-due-time' );
-$I->assertStringStartsWith( date( 'g:m a', $timestamp ), $due_time );
-
-$I->dontSee( 'Current Step Due Date Time: {current_step:due_date_time}' );
-$I->see( 'Current Step Due Date Time:' );
-$due_date_time = $I->grabTextFrom( '.current-step-due-date-time' );
-$I->assertStringStartsWith( date( 'F j, Y /a/t g:m a', $timestamp ), $due_date_time );
-
 $I->dontSee( 'Current Step Due Status: {current_step:due_status}' );
 $I->see( 'Current Step Due Status:' );
 $due_status = $I->grabTextFrom( '.current-step-due-status' );
-$I->assertStringStartsWith( 'Pending' , $due_status );
+$I->assertStringStartsWith( 'Pending', $due_status );
 
 // Don't wait for the cron, start the step now.
 $entry_id = $I->grabTextFrom( '.entry-id' );
@@ -114,16 +104,6 @@ $I->dontSee( 'Current Step Due Date: {current_step:due_date}' );
 $I->see( 'Current Step Due Date:' );
 $due_date = $I->grabTextFrom( '.current-step-due-date' );
 $I->assertStringStartsWith( date( 'F j, Y', $timestamp ), $due_date );
-
-$I->dontSee( 'Current Step Due Time: {current_step:due_time}' );
-$I->see( 'Current Step Due Time:' );
-$due_time = $I->grabTextFrom( '.current-step-due-time' );
-$I->assertStringStartsWith( date( 'g:m a', $timestamp ), $due_time );
-
-$I->dontSee( 'Current Step Due Date Time: {current_step:due_date_time}' );
-$I->see( 'Current Step Due Date Time:' );
-$due_date_time = $I->grabTextFrom( '.current-step-due-date-time' );
-$I->assertStringStartsWith( date( 'F j, Y /a/t g:m a', $timestamp ), $due_date_time );
 
 $I->dontSee( 'Current Step Due Status: {current_step:due_status}' );
 $I->see( 'Current Step Due Status:' );
