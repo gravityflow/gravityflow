@@ -45,21 +45,6 @@ class Gravity_Flow_Step_Feed_ConstantContact extends Gravity_Flow_Step_Feed_Add_
 		return 'Constant Contact';
 	}
 
-	/**
-	 * Returns the feed name.
-	 *
-	 * @since 2.5
-	 *
-	 * @param array $feed The Emma feed properties.
-	 *
-	 * @return string
-	 */
-	public function get_feed_label( $feed ) {
-		$label = $feed['meta']['feed_name'];
-
-		return $label;
-	}
-
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_ConstantContact() );
