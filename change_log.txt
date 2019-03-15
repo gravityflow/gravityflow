@@ -1,1 +1,2 @@
 - Fixed the workflows for GP Nested Forms child entries starting before some Gravity Perks extensions had updated the entries.
+- Fixed an issue that prevented conditional routing from correctly matching date field conditions.
