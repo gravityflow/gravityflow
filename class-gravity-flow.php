@@ -7651,6 +7651,13 @@ AND m.meta_value='queued'";
 		 *
 		 * @since 2.4.1
 		 *
+		 * @param bool   $is_match     Does the target field’s value match with the rule value?
+		 * @param string $field_value  The field value to use with the comparison.
+		 * @param string $target_value The value from the conditional routing rule to use with the comparison.
+		 * @param string $operation    The conditional routing rule operator.
+		 * @param object $source_field The field object for the source of the field value.
+		 * @param array  $rule         The current rule object.
+		 *
 		 * @return bool
 		 */
 		public function filter_gform_is_value_match( $is_match, $field_value, $target_value, $operation, $source_field, $rule ) {
