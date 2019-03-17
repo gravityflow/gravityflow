@@ -7667,30 +7667,38 @@ AND m.meta_value='queued'";
 			}
 
 			switch ( $source_field->type ) {
-
 				case 'workflow_multi_user':
 					if ( in_array( $target_value, $field_value, true ) ) {
 						return true;
 					}
 					break;
-				
 				case 'date':
-					if( $operation == '>' && strtotime( $field_value ) > strtotime( $target_value ) ) {
+					if ( class_exists( 'GP_Conditional_Logic_Dates' ) ) {
+						return $is_match;
+					}
+
+					$field_value = strtotime( $field_value );
+
+					if ( is_numeric( $target_value ) ) {
+						$target_value = (int)$target_value;
+					} else {
+						$target_value = strtotime( $target_value );
+					}
+					
+					if ( $operation == '>' && $field_value > $target_value ) {
 						return true;
 					}
-					if( $operation == '<' && strtotime( $field_value ) < strtotime( $target_value ) ) {
+					if ( $operation == '<' && $field_value < $target_value ) {
 						return true;
 					}
-					if( $operation == 'is' && strtotime( $field_value ) == strtotime( $target_value ) ) {
+					if ( $operation == 'is' && $field_value == $target_value ) {
 						return true;
 					}
-					if( $operation == 'isnot' && strtotime( $field_value ) != strtotime( $target_value ) ) {
+					if ( $operation == 'isnot' && $field_value != $target_value ) {
 						return true;
 					}
 					break;
-					
 			}
-
 			return false;
 		}
 
@@ -7712,7 +7720,7 @@ AND m.meta_value='queued'";
 		 */
 		public function replace_variables( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
 
-			if ( strpos( $text, '{' ) === false  || empty( $entry ) ) {
+			if ( strpos( $text, '{' ) === false || empty( $entry ) ) {
 				return $text;
 			}
 
