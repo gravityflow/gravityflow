@@ -811,7 +811,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	* @return string
 	*/
 	function filter_gform_merge_tag_webhook_raw_encode( $value, $merge_tag, $modifier, $field, $raw_value ) {
-		$value = preg_replace( '/(?<!\\\\)[\"]/', '\\"', $value );
+		$value = substr( json_encode( $value ), 1, -1 );
 		return $value;
 	}
 
