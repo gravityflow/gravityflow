@@ -5760,9 +5760,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 				$this->log_debug( __METHOD__ . '() - processing. entry id ' . $entry_id );
 
-				$step_id = $entry['workflow_step'];
-
+				$step_id          = $entry['workflow_step'];
 				$starting_step_id = $step_id;
+
+				$partial_entry_pending_start = false;
 
 				if ( empty( $step_id ) && ( empty( $entry['workflow_final_status'] ) || $entry['workflow_final_status'] == 'pending') ) {
 					$this->log_debug( __METHOD__ . '() - not yet started workflow. starting.' );
@@ -5773,6 +5774,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					if ( $step ) {
 						$step->start();
 						$this->log_debug( __METHOD__ . '() - started.' );
+					} elseif ( ! empty( $entry['partial_entry_id'] && $this->get_workflow_start_step( $form_id, $entry ) ) ) {
+						$partial_entry_pending_start = true;
+						$this->log_debug( __METHOD__ . '() - start condition not met.' );
 					} else {
 						$this->log_debug( __METHOD__ . '() - no first step.' );
 					}
@@ -5808,27 +5812,34 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$entry['workflow_step'] = $step_id;
 				}
 
-				if ( $step == false ) {
-					$this->log_debug( __METHOD__ . '() - ending workflow.' );
-					gform_delete_meta( $entry_id, 'workflow_step' );
-					$final_status = gform_get_meta( $entry_id, 'workflow_current_status' );
-					if ( empty( $final_status ) || $final_status == 'pending' ) {
-						$final_status = 'complete';
+				if ( ! $partial_entry_pending_start ) {
+					if ( $step == false ) {
+						$this->log_debug( __METHOD__ . '() - ending workflow.' );
+						gform_delete_meta( $entry_id, 'workflow_step' );
+
+						$final_status = gform_get_meta( $entry_id, 'workflow_current_status' );
+						if ( empty( $final_status ) || $final_status == 'pending' ) {
+							$final_status = 'complete';
+						}
+
+						gform_delete_meta( $entry_id, 'workflow_current_status' );
+						gform_update_meta( $entry_id, 'workflow_final_status', $final_status );
+
+						$entry_created_timestamp = strtotime( $entry['date_created'] );
+						$duration                = time() - $entry_created_timestamp;
+						$this->log_event( 'workflow', 'ended', $form['id'], $entry_id, $final_status, 0, $duration );
+
+						do_action( 'gravityflow_workflow_complete', $entry_id, $form, $final_status );
+
+						// Refresh entry after action.
+						$entry = GFAPI::get_entry( $entry_id );
+						GFAPI::send_notifications( $form, $entry, 'workflow_complete' );
+					} else {
+						$this->log_debug( __METHOD__ . '() - not ending workflow.' );
+						$step_id = $step->get_id();
+						gform_update_meta( $entry_id, 'workflow_step', $step_id );
 					}
-					gform_delete_meta( $entry_id, 'workflow_current_status' );
-					gform_update_meta( $entry_id, 'workflow_final_status', $final_status );
-					$entry_created_timestamp = strtotime( $entry['date_created'] );
-					$duration = time() - $entry_created_timestamp;
-					$this->log_event( 'workflow', 'ended', $form['id'], $entry_id, $final_status, 0, $duration );
-					do_action( 'gravityflow_workflow_complete', $entry_id, $form, $final_status );
-					// Refresh entry after action.
-					$entry = GFAPI::get_entry( $entry_id );
-					GFAPI::send_notifications( $form, $entry, 'workflow_complete' );
-				} else {
-					$this->log_debug( __METHOD__ . '() - not ending workflow.' );
-					$step_id = $step->get_id();
-					gform_update_meta( $entry_id, 'workflow_step', $step_id );
-				}
+                }
 
 				do_action( 'gravityflow_post_process_workflow', $form, $entry_id, $step_id, $starting_step_id );
 			}
