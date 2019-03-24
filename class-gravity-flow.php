@@ -544,8 +544,9 @@ PRIMARY KEY  (id)
 		public function upgrade_250() {
 			$settings = $this->get_app_settings();
 
-			$settings['allow_display_all_attribute'] = true;
+			$settings['allow_display_all_attribute']     = true;
 			$settings['allow_allow_anonymous_attribute'] = true;
+			$settings['allow_field_ids']                 = true;
 			$this->update_app_settings( $settings );
 		}
 
@@ -4850,6 +4851,11 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 								'name'    => 'allow_allow_anonymous_attribute',
 								'tooltip' => esc_html__( 'This setting allows the allow_anonymous attribute to be used in the shortcode.', 'gravityflow' ),
 							),
+							array(
+								'label'   => esc_html__( 'Allow the inbox and status tables to display field values.', 'gravityflow' ),
+								'name'    => 'allow_fields_ids',
+								'tooltip' => esc_html__( 'This setting allows the field_ids attribute to be used in the shortcode.', 'gravityflow' ),
+							),
 						),
 					),
 				),
@@ -5883,6 +5889,11 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				if ( $a['allow_anonymous'] && ! rgar( $app_settings, 'allow_allow_anonymous_attribute' ) ) {
 
 					$a['allow_anonymous'] = false;
+				}
+
+				if ( $a['fields'] && ! rgar( $app_settings, 'allow_field_ids' ) ) {
+
+					$a['fields'] = array();
 				}
 
 			}
