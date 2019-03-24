@@ -47,7 +47,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 
 		$steps = $this->api->get_steps();
 		$count_steps = count( $steps );
-		$this->assertEquals( 2, $count_steps );
+		$this->assertEquals( 3, $count_steps );
 
 		$this->_create_entries();
 		$entries = GFAPI::get_entries( $this->form_id );
@@ -115,7 +115,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 
 		$steps = $this->api->get_steps();
 		$count_steps = count( $steps );
-		$this->assertEquals( 1, $count_steps );
+		$this->assertEquals( 2, $count_steps );
 
 		$this->_create_entries();
 		$entries = GFAPI::get_entries( $this->form_id );
@@ -147,7 +147,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 
 		$steps = $this->api->get_steps();
 		$count_steps = count( $steps );
-		$this->assertEquals( 1, $count_steps );
+		$this->assertEquals( 2, $count_steps );
 
 		$this->_create_entries();
 		$entries = GFAPI::get_entries( $this->form_id );
@@ -195,7 +195,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 
 		$steps = $this->api->get_steps();
 		$count_steps = count( $steps );
-		$this->assertEquals( 2, $count_steps );
+		$this->assertEquals( 3, $count_steps );
 
 		$this->_create_entries();
 		$entries = GFAPI::get_entries( $this->form_id );
@@ -249,7 +249,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 
 		$steps = $this->api->get_steps();
 		$count_steps = count( $steps );
-		$this->assertEquals( 2, $count_steps );
+		$this->assertEquals( 3, $count_steps );
 
 		$this->_create_entries();
 		$entries = GFAPI::get_entries( $this->form_id );
@@ -312,7 +312,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 
 		$steps = $this->api->get_steps();
 		$count_steps = count( $steps );
-		$this->assertEquals( 2, $count_steps );
+		$this->assertEquals( 3, $count_steps );
 
 		$this->_create_entries();
 		$entries = GFAPI::get_entries( $this->form_id );
@@ -386,7 +386,7 @@ class Tests_Gravity_Flow_API extends GF_UnitTestCase {
 
 		$steps = $this->api->get_steps();
 		$count_steps = count( $steps );
-		$this->assertEquals( 4, $count_steps );
+		$this->assertEquals( 5, $count_steps );
 
 		$this->_create_entries();
 		$entries = GFAPI::get_entries( $this->form_id );

@@ -48,19 +48,34 @@ setup_gravity_forms_pages();
 
 // add admins
 function tests_create_testing_users() {
-	$users = array( 'admin1', 'admin2', 'admin3', 'admin4', 'admin5' );
-	foreach ( $users as $user ) {
+	$admins = array( 'admin1', 'admin2', 'admin3', 'admin4', 'admin5' );
+	foreach ( $admins as $admin ) {
 		$userData = array(
-			'user_login' => $user,
-			'first_name' => $user,
-			'last_name'  => $user,
-			'user_pass'  => $user,
-			'user_email' => $user . '@mail.com',
+			'user_login' => $admin,
+			'first_name' => $admin,
+			'last_name'  => $admin,
+			'user_pass'  => $admin,
+			'user_email' => $admin . '@mail.com',
 			'user_url'   => '',
 			'role'       => 'administrator',
 		);
 		wp_insert_user( $userData );
 	}
+	$subscribers = array( 'subscriber', 'subscriber2' );
+
+	foreach ( $subscribers as $subscriber ) {
+		$userData = array(
+			'user_login' => $subscriber,
+			'first_name' => $subscriber,
+			'last_name'  => $subscriber,
+			'user_pass'  => $subscriber,
+			'user_email' => $subscriber . '@mail.com',
+			'user_url'   => '',
+			'role'       => 'subscriber',
+		);
+		wp_insert_user( $userData );
+	}
+
 }
 
 tests_create_testing_users();

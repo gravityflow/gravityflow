@@ -49,7 +49,8 @@ class Gravity_Flow_API {
 	 * @return mixed
 	 */
 	public function add_step( $step_settings ) {
-		return GFAPI::add_feed( $this->form_id, $step_settings, 'gravityflow' );
+
+		return gravity_flow()->save_feed_settings( 0, $this->form_id, $step_settings );
 	}
 
 	/**

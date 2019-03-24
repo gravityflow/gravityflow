@@ -6,6 +6,9 @@
             return;
         }
 
+        var hasStartStep = gravityflow_feed_list_strings.hasStartStep,
+            hasCompleteStep = gravityflow_feed_list_strings.hasCompleteStep;
+
         $.each( $('.wp-list-table tbody tr'), function() { 
             $( this ).css( 'border-left', '5px solid ' + $(this).find('.step_highlight_color').css( 'background-color' ) );
         });
@@ -13,10 +16,30 @@
 
         var sortHandleMarkup = '<td class="sort-column"><i class="fa fa-bars feed-sort-handle"></i></td>';
         $('.wp-list-table thead tr, .wp-list-table tfoot tr').append('<th class="sort-column"></th>');
-        $('.wp-list-table tbody tr').append(sortHandleMarkup);
+
+        if ( hasStartStep ) {
+            $('.wp-list-table tbody tr:first')
+                .addClass('static')
+                .append('<td class="sort-column">&nbsp;</td>')
+                .find('span.duplicate, span.delete').remove()
+                .end()
+                .find('.column-is_active').html('&nbsp;');
+        }
+
+        if ( hasCompleteStep ) {
+            $('.wp-list-table tbody tr:last')
+                .addClass('static')
+                .append('<td class="sort-column">&nbsp;</td>')
+                .find('span.duplicate, span.delete').remove()
+                .end()
+                .find('.column-is_active').html('&nbsp;');
+        }
+
+        $('.wp-list-table tbody tr').not('.static').append(sortHandleMarkup);
 
         $('.wp-list-table tbody').addClass('gravityflow-reorder-mode')
             .sortable({
+                items: 'tr:not(.static)',
                 tolerance: "pointer",
                 placeholder: "step-drop-zone",
                 helper: fixHelperModified,
@@ -46,6 +69,24 @@
                             console.log( 'Error re-ordering feeds');
                             console.log( response);
                         } );
+                },
+                start: function(){
+                    $('.static', this).each(function(){
+                        var $this = $(this);
+                        $this.data('pos', $this.index());
+                    });
+                },
+                change: function(){
+                    var $sortable = $(this);
+                    var $statics = $('.static', this).detach();
+                    var $helper = $('<tr></tr>').prependTo(this);
+                    $statics.each(function(){
+                        var $this = $(this);
+                        var target = $this.data('pos');
+
+                        $this.insertAfter($('tr', $sortable).eq(target));
+                    });
+                    $helper.remove();
                 }
             });
     });

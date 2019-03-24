@@ -179,7 +179,7 @@ class Tests_Gravity_Flow_Webhooks extends GF_UnitTestCase {
 
 		$steps = $this->api->get_steps();
 		$count_steps = count( $steps );
-		$this->assertEquals( 2, $count_steps );
+		$this->assertEquals( 3, $count_steps );
 
 		$this->_create_entries();
 		$entries = GFAPI::get_entries( $this->form_id );

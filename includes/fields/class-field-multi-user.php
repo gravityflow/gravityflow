@@ -112,7 +112,8 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 		$form_id = $this->formId;
 
 		$args = array(
-			'orderby' => 'display_name',
+			'orderby' => array( 'display_name', 'user_login' ),
+			'fields'  => array( 'ID', 'display_name', 'user_login' ),
 			'role'    => $this->gravityflowUsersRoleFilter,
 		);
 

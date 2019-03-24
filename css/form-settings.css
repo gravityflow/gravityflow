@@ -229,3 +229,13 @@ tr#gaddon-setting-row-step_type label > span > i {
 .gravityflow-sub-setting{
     margin-bottom: 10px;
 }
+
+.gravityflow-instructions-setting-description{
+    margin: 10px 0 10px 0;
+    font-style: italic;
+    color: #AAA;
+}
+
+#instructionsContainer{
+    margin: 10px 0 10px 0;
+}
