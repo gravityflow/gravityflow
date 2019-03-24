@@ -4853,7 +4853,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 							),
 							array(
 								'label'   => esc_html__( 'Allow the inbox and status tables to display field values.', 'gravityflow' ),
-								'name'    => 'allow_fields_ids',
+								'name'    => 'allow_field_ids',
 								'tooltip' => esc_html__( 'This setting allows the field_ids attribute to be used in the shortcode.', 'gravityflow' ),
 							),
 						),
@@ -5877,7 +5877,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			$a = $this->get_shortcode_atts( $atts );
 
-			if ( $a['display_all'] || $a['allow_anonymous'] ) {
+			if ( $a['display_all'] || $a['allow_anonymous'] || $a['fields'] ) {
 
 				$app_settings = $this->get_app_settings();
 
@@ -5897,8 +5897,6 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				}
 
 			}
-
-
 
 			if ( ! $a['allow_anonymous'] && ! is_user_logged_in() ) {
 				$token = $this->decode_access_token();
