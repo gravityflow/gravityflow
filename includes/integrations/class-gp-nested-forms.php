@@ -241,7 +241,7 @@ class Gravity_Flow_GP_Nested_Forms {
 			'filter_gravityflow_is_delayed_pre_process_workflow'
 		) );
 
-		add_action( 'gform_entry_created', array( $this, 'action_entry_created' ), 8, 2 );
+		add_action( 'gform_after_submission', array( $this, 'action_after_submission' ), 10, 2 );
 
 		$this->maybe_add_detail_page_hooks();
 	}
@@ -623,7 +623,7 @@ class Gravity_Flow_GP_Nested_Forms {
 	 * @param array $entry The parent entry.
 	 * @param array $form The parent form.
 	 */
-	public function action_entry_created( $entry, $form ) {
+	public function action_after_submission( $entry, $form ) {
 		if ( gp_nested_forms()->is_nested_form_submission() ) {
 			return;
 		}

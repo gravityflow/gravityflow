@@ -93,11 +93,23 @@ class Gravity_Flow_Entry_Detail {
 
 								$editable_fields = array();
 
-								if ( $current_step ) {
-									$can_update      = self::can_update( $current_step );
-									$editable_fields = $can_update ? $current_step->get_editable_fields() : array();
+								$instructions_step = null;
 
-									self::maybe_show_instructions( $can_update, $display_instructions, $current_step, $form, $entry );
+								if ( $current_step ) {
+									$can_update = self::can_update( $current_step );
+									if ( $can_update ) {
+										$editable_fields = $can_update ? $current_step->get_editable_fields() : array();
+										$instructions_step = $current_step;
+									} else {
+										$instructions_step =  gravity_flow()->get_workflow_start_step( $form_id, $entry );
+									}
+
+								} else {
+									$instructions_step = gravity_flow()->get_workflow_complete_step( $form_id, $entry );
+								}
+
+								if ( $instructions_step && $display_instructions ) {
+									self::maybe_show_instructions( $instructions_step, $form, $entry );
 								}
 
 								self::entry_detail_grid( $form, $entry, $display_empty_fields, $editable_fields, $current_step );
@@ -394,31 +406,31 @@ class Gravity_Flow_Entry_Detail {
 	/**
 	 * Displays the step instructions, if appropriate.
 	 *
-	 * @param bool              $can_update           Indicates if the user can edit field values on this step.
-	 * @param bool              $display_instructions Indicates if the step instructions should be displayed.
 	 * @param Gravity_Flow_Step $current_step         The step this entry is currently on.
 	 * @param array             $form                 The current form.
 	 * @param array             $entry                The current entry.
 	 */
-	public static function maybe_show_instructions( $can_update, $display_instructions, $current_step, $form, $entry ) {
-		if ( $can_update && $display_instructions && $current_step->instructionsEnable ) {
-			$nl2br = apply_filters( 'gravityflow_auto_format_instructions', true );
-			$nl2br = apply_filters( 'gravityflow_auto_format_instructions_' . $form['id'], $nl2br );
-
-			$instructions = $current_step->instructionsValue;
-			$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, $nl2br );
-			$instructions = do_shortcode( $instructions );
-			$instructions = self::maybe_sanitize_instructions( $instructions );
-
-			?>
-			<div class="postbox gravityflow-instructions">
-				<div class="inside">
-					<?php echo $instructions; ?>
-				</div>
-			</div>
-
-			<?php
+	public static function maybe_show_instructions( $current_step, $form, $entry ) {
+		if ( ! $current_step->instructionsEnable ) {
+			return;
 		}
+		
+		$nl2br = apply_filters( 'gravityflow_auto_format_instructions', true );
+		$nl2br = apply_filters( 'gravityflow_auto_format_instructions_' . $form['id'], $nl2br );
+
+		$instructions = $current_step->instructionsValue;
+		$instructions = GFCommon::replace_variables( $instructions, $form, $entry, false, true, $nl2br );
+		$instructions = do_shortcode( $instructions );
+		$instructions = self::maybe_sanitize_instructions( $instructions );
+
+		?>
+		<div class="postbox gravityflow-instructions">
+			<div class="inside">
+				<?php echo $instructions; ?>
+			</div>
+		</div>
+
+		<?php
 	}
 
 	/**
@@ -853,6 +865,20 @@ class Gravity_Flow_Entry_Detail {
 		$field_count             = sizeof( $form['fields'] );
 		$has_product_fields      = false;
 
+		$display_fields_step = false;
+
+		$is_assignee = $current_step ? $current_step->is_user_assignee() : false;
+
+		if ( ! GFAPI::current_user_can_any( 'gravityflow_status_view_all' ) ) {
+			if ( ! $is_assignee ) {
+				if ( $current_step ) {
+					$display_fields_step = gravity_flow()->get_workflow_start_step( $form_id, $entry );
+				} else {
+					$display_fields_step = gravity_flow()->get_workflow_complete_step( $form_id, $entry );
+				}
+			}
+		}
+
 		foreach ( $form['fields'] as &$field ) {
 			/* @var GF_Field $field */
 
@@ -861,7 +887,7 @@ class Gravity_Flow_Entry_Detail {
 
 			$is_product_field = GFCommon::is_product_field( $field->type );
 
-			$display_field = self::is_display_field( $field, $current_step, $form, $entry, $is_product_field );
+			$display_field = $current_step && $is_assignee ? self::is_display_field( $field, $current_step, $form, $entry, $is_product_field ) : self::is_display_field( $field, $display_fields_step, $form, $entry, $is_product_field );
 
 			$field->gravityflow_is_display_field = $display_field;
 

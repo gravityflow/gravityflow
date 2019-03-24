@@ -77,6 +77,29 @@ class Gravity_Flow_Merge_Tag_Current_Step extends Gravity_Flow_Merge_Tag {
 				$date_format = apply_filters( 'gravityflow_date_format_current_step_merge_tag', '' );
 
 				switch ( $property ) :
+					case 'due_date':
+						$value = '';
+						if ( $current_step->supports_due_date() ) {
+							$due_date = $current_step->get_due_date_timestamp();
+							if ( $due_date ) {
+								$value = Gravity_Flow_Common::format_date( $due_date, '', false, false );
+							}
+						}
+						break;
+
+					case 'due_status':
+						$value = '';
+						$due_date = $current_step->get_due_date_timestamp();
+						if ( $due_date ) {
+							$due_status = $current_step->is_overdue();
+							if ( $due_status ) {
+								$value = __( 'Overdue', 'gravityflow' );
+							} else {
+								$value = __( 'Pending', 'gravityflow' );
+							}
+						}
+						break;
+
 					case 'duration':
 						$duration = time() - $current_step->get_step_timestamp();
 						$value = gravity_flow()->format_duration( $duration );

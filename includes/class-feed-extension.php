@@ -215,6 +215,10 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	 * @return array
 	 */
 	public function app_settings_fields() {
+		if ( $this->license_key ) {
+			return array();
+		}
+
 		return array(
 			array(
 				'title'  => $this->get_short_title(),

@@ -72,6 +72,7 @@ class Gravity_Flow_Status {
 			'status_column'        => true,
 			'last_updated'         => false,
 			'filter_hidden_fields' => array(),
+			'due_date'             => false,
 		);
 	}
 
@@ -340,6 +341,15 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	public $last_updated;
 
 	/**
+	 * Should the due date column be displayed?
+	 *
+	 * @since 2.5
+	 *
+	 * @var bool
+	 */
+	public $due_date;
+
+	/**
 	 * A cache of previously retrieved forms.
 	 *
 	 * @var array
@@ -376,6 +386,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			'step_column'        => true,
 			'status_column'      => true,
 			'last_updated'       => false,
+			'due_date'           => false,
 		);
 
 		$args = wp_parse_args( $args, $default_args );
@@ -411,6 +422,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$this->submitter_column = $args['submitter_column'];
 		$this->status_column = $args['status_column'];
 		$this->last_updated = $args['last_updated'];
+		$this->due_date = $args['due_date'];
 	}
 
 	/**
@@ -1035,6 +1047,31 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	}
 
 	/**
+	 * Outputs the current step due date.
+	 *
+	 * @since 2.5
+	 *
+	 * @param array $item The current entry.
+	 */
+	public function column_due_date( $item ) {
+		$step_id = rgar( $item, 'workflow_step' );
+		if ( $step_id > 0 ) {
+			$step = gravity_flow()->get_step( $step_id );
+			$step->_entry = $item;
+			if ( $step && $step->due_date ) {
+				$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', false, true );
+				$output = "<a href='#'>$value</a>";
+			} else {
+				$output = '<span class="gravityflow-empty">&dash;</span>';
+			}
+		} else {
+			$output = '<span class="gravityflow-empty">&dash;</span>';
+		}
+
+		echo $output;
+	}
+
+	/**
 	 * Outputs the entry payment status.
 	 *
 	 * @since 2.2.4-dev
@@ -1194,6 +1231,10 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		if ( $this->last_updated ) {
 			$columns['workflow_timestamp'] = esc_html__( 'Last Updated', 'gravityflow' );
+		}
+
+		if ( $this->due_date ) {
+			$columns['due_date'] = esc_html__( 'Due Date', 'gravityflow' );
 		}
 
 		/**
@@ -2018,6 +2059,16 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 					}
 				} else {
 					switch ( $column_key ) {
+						case 'due_date':
+							$step_id = rgar( $item, 'workflow_step' );
+							if ( $step_id > 0 ) {
+								$step = gravity_flow()->get_step( $step_id );
+								$step->_entry = $item;
+								if ( $step && $step->due_date ) {
+									$col_val = Gravity_Flow_Common::format_date( $step->get_due_date_timestamp(), 'Y-m-d H:i:s', false, false );
+								}
+							}
+							break;
 						case 'duration':
 							if ( $item['workflow_final_status'] == 'pending' ) {
 								$duration     = time() - strtotime( $item['date_created'] );

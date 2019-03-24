@@ -271,6 +271,40 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 	/**
 	 * Tests that the {current_step:expiration} merge tag outputs the expected content when the step expiration settings are configured.
 	 */
+	public function test_current_step_due_date() {
+		$timestamp = time() - 10000;
+
+		$step_id   = $this->_add_approval_step( array(
+			'due_date'            => true,
+			'due_date_type'       => 'date',
+			'due_date_date'       => date( 'y-m-d h:m a', $timestamp ),
+			'due_date_date_field' => '10',
+		) );
+		$entry   = $this->_create_entry();
+
+		gform_update_meta( $entry['id'], 'workflow_step_' . $step_id . '_timestamp', $timestamp );
+
+		$args    = array(
+			'step'  => $this->api->get_current_step( $entry ),
+			'entry' => $entry,
+		);
+
+		$merge_tag = $this->_get_merge_tag( 'current_step', $args );
+
+		$text_in           = '{current_step:due_date}';
+		$expected_text_out = date( 'F j, Y', $timestamp );
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in           = '{current_step:due_status}';
+		$expected_text_out = __( 'Overdue', 'gravityflow' );;
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+	}
+
+	/**
+	 * Tests that the {current_step:expiration} merge tag outputs the expected content when the step expiration settings are configured.
+	 */
 	public function test_current_step_expiration() {
 		$step_id = $this->_add_approval_step( array(
 			'expiration'              => true,

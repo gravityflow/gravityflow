@@ -1,4 +1,1 @@
-- Added security enhancement.
-- Added support for license key constants in extensions.
-- Fixed an issue where workflows don't start when the entry is created before the init action.
-- Fixed an issue with the signature generation for GET requests for OAuth1.0a webhook requests for WordPress and Gravity Forms connected apps.
+- Fixed the workflows for GP Nested Forms child entries starting before some Gravity Perks extensions had updated the entries.

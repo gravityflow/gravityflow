@@ -146,6 +146,17 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	}
 
 	/**
+	 * Indicates this step supports due date.
+	 *
+	 * @since 2.5
+	 *
+	 * @return bool
+	 */
+	public function supports_due_date() {
+		return true;
+	}
+
+	/**
 	 * Indicates this step supports expiration.
 	 *
 	 * @return bool

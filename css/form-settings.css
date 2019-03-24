@@ -206,7 +206,11 @@ tr#gaddon-setting-row-step_type label > span > i {
 .gravityflow-schedule-date-container,
 .gravityflow-expiration-type-container,
 .gravityflow-expiration-delay-container,
-.gravityflow-expiration-date-container{
+.gravityflow-expiration-date-container,
+.gravityflow-due-date-type-container,
+.gravityflow-due-date-delay-container,
+.gravityflow-due-date-date-container,
+.gravityflow-due-date-highlight-color-container{
     margin: 10px 0 10px 0;
 }
 
@@ -224,4 +228,14 @@ tr#gaddon-setting-row-step_type label > span > i {
 
 .gravityflow-sub-setting{
     margin-bottom: 10px;
+}
+
+.gravityflow-instructions-setting-description{
+    margin: 10px 0 10px 0;
+    font-style: italic;
+    color: #AAA;
+}
+
+#instructionsContainer{
+    margin: 10px 0 10px 0;
 }
