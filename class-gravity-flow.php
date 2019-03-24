@@ -5774,7 +5774,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					if ( $step ) {
 						$step->start();
 						$this->log_debug( __METHOD__ . '() - started.' );
-					} elseif ( ! empty( $entry['partial_entry_id'] && $this->get_workflow_start_step( $form_id, $entry ) ) ) {
+					} elseif ( ! empty( $entry['partial_entry_id'] ) && $this->get_workflow_start_step( $form_id, $entry ) ) {
 						$partial_entry_pending_start = true;
 						$this->log_debug( __METHOD__ . '() - start condition not met.' );
 					} else {
