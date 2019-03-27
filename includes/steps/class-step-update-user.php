@@ -212,7 +212,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 					'tooltip'  => sprintf( '<h6>%s</h6> %s', esc_html__( 'Roles', 'gravityflow' ), esc_html__( 'Select how the user\'s roles should be updated.', 'gravityflow' ) ),
 				),
 				array(
-					'name'       => 'roles',
+					'name'       => 'roles[]',
 					'label'      => esc_html__( 'Select Roles', 'gravityflow' ),
 					'type'       => 'select',
 					'multiple'   => 'multiple',
