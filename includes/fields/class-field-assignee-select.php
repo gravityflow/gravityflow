@@ -140,12 +140,13 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 			$account_choices = apply_filters( 'gravityflow_assignee_field_users', $account_choices, $form_id, $this );
 
 			if ( ! empty( $account_choices ) ) {
-				$users_opt_group          = new GF_Field();
-				$users_opt_group->choices = $account_choices;
+				$users_opt_group              = new GF_Field();
+				$users_opt_group->placeholder = 'None';
+				$users_opt_group->choices     = $account_choices;
 
 				$optgroups[] = array(
 					'label'   => __( 'Users', 'gravityflow' ),
-					'choices' => GFCommon::get_select_choices( $users_opt_group, $value ),
+					'choices' => GFCommon::get_select_choices( $users_opt_group, $value, false ),
 				);
 			}
 		}
@@ -156,13 +157,14 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 			$role_choices = apply_filters( 'gravityflow_assignee_field_roles', $role_choices, $form_id, $this );
 
 			if ( ! empty( $role_choices ) ) {
-				$roles_opt_group          = new GF_Field();
-				$roles_opt_group->choices = $role_choices;
+				$roles_opt_group              = new GF_Field();
+				$roles_opt_group->placeholder = 'None';
+				$roles_opt_group->choices     = $role_choices;
 
 				$optgroups[] = array(
 					'label'   => __( 'Roles', 'gravityflow' ),
 					'key'     => 'roles',
-					'choices' => GFCommon::get_select_choices( $roles_opt_group, $value ),
+					'choices' => GFCommon::get_select_choices( $roles_opt_group, $value, false ),
 				);
 			}
 		}
@@ -182,12 +184,13 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 				$fields_choices = apply_filters( 'gravityflow_assignee_field_fields', $fields_choices, $form_id, $this );
 
 				if ( ! empty( $fields_choices ) ) {
-					$fields_opt_group          = new GF_Field();
-					$fields_opt_group->choices = $fields_choices;
+					$fields_opt_group             = new GF_Field();
+					$fields_opt_group->placeholder = 'None';
+					$fields_opt_group->choices    = $fields_choices;
 
 					$optgroups[] = array(
 						'label'   => __( 'Fields', 'gravityflow' ),
-						'choices' => GFCommon::get_select_choices( $fields_opt_group, $value ),
+						'choices' => GFCommon::get_select_choices( $fields_opt_group, $value, false ),
 					);
 				}
 			}
