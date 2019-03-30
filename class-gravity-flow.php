@@ -1268,9 +1268,10 @@ PRIMARY KEY  (id)
 				$has_complete_step = true;
 			}
 
+			$form_id = absint( rgget( 'id' ) );
+
 			if ( ! ( $has_start_step && $has_complete_step ) ) {
 				// Workflows created before 2.5 don't have start or complete steps - they can be added manually.
-				$form_id = absint( rgget( 'id' ) );
 				$steps   = $this->get_steps( $form_id );
 				$has_start_step = $this->get_workflow_start_step( $form_id ) ? true : false;
 				$has_complete_step = $this->get_workflow_complete_step( $form_id ) ? true : false;
@@ -1355,6 +1356,13 @@ PRIMARY KEY  (id)
 			);
 
 			if ( $is_start_step ) {
+				if (  Gravity_Flow_Partial_Entries::get_instance()->is_workflow_enabled( $form_id ) ) {
+					/* translators: 1: number textbox 2: units of time dropdown */
+					$delay_label = esc_html__( 'Start this workflow %1$s %2$s after the form submission or after the partial entry has been created or updated.', 'gravityflow' );
+				} else {
+					/* translators: 1: number textbox 2: units of time dropdown */
+					$delay_label = esc_html__( 'Start this workflow %1$s %2$s after the form submission.', 'gravityflow' );
+				}
 				$standard_fields = array(
 					array(
 						'name'           => 'condition',
@@ -1371,7 +1379,7 @@ PRIMARY KEY  (id)
 						'checkbox_label'   => esc_html__( 'Schedule this workflow', 'gravityflow' ),
 						'date_label'       => esc_html__( 'Start this workflow on %s', 'gravityflow' ),
 						'date_field_label' => esc_html__( 'Start this workflow %1$s %2$s %3$s %4$s', 'gravityflow' ),
-						'delay_label'      => esc_html__( 'Start this workflow %1$s %2$s after the form submission.', 'gravityflow' ),
+						'delay_label'      => $delay_label,
 						'tooltip'          => esc_html__( 'Scheduling the workflow will queue entries and prevent them from starting the workflow until the specified date or until the delay period has elapsed.', 'gravityflow' )
 						                      . ' ' . esc_html__( 'Note: the schedule setting requires the WordPress Cron which is included and enabled by default unless your host has deactivated it.', 'gravityflow' ),
 
