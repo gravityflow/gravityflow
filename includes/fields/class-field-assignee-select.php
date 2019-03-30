@@ -141,6 +141,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 			if ( ! empty( $account_choices ) ) {
 				$users_opt_group              = new GF_Field();
+				//Placeholder set to None to prevents GFCommon::get_select_choices() adding an empty option when the view query arg is set to entry.
 				$users_opt_group->placeholder = 'None';
 				$users_opt_group->choices     = $account_choices;
 
@@ -158,6 +159,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 			if ( ! empty( $role_choices ) ) {
 				$roles_opt_group              = new GF_Field();
+				//Placeholder set to None to prevents GFCommon::get_select_choices() adding an empty option when the view query arg is set to entry.
 				$roles_opt_group->placeholder = 'None';
 				$roles_opt_group->choices     = $role_choices;
 
@@ -185,6 +187,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 				if ( ! empty( $fields_choices ) ) {
 					$fields_opt_group             = new GF_Field();
+					//Placeholder set to None to prevents GFCommon::get_select_choices() adding an empty option when the view query arg is set to entry.
 					$fields_opt_group->placeholder = 'None';
 					$fields_opt_group->choices    = $fields_choices;
 
