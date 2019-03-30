@@ -445,6 +445,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 	}
 
 	/**
+	 * Get required capabilities for the step.
+	 *
+	 * @since 2.5
+	 */
+	public function get_required_capabilities() {
+		return array( 'gravityflow_create_steps' );
+	}
+
+	/**
 	 * Returns the ID of the Form object for the step.
 	 *
 	 * @return int

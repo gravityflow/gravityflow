@@ -249,13 +249,29 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 	}
 
 	/**
+	 * Get required capabilities for the step.
+	 *
+	 * @since 2.5
+	 *
+	 * @return array
+	 */
+	public function get_required_capabilities() {
+		$required_capabilities = parent::get_required_capabilities();
+
+		// To update user, we require the workflow admin having the "edit_users" cap.
+		array_push( $required_capabilities, 'edit_users' );
+
+		return $required_capabilities;
+	}
+
+	/**
 	 * Processes the step and updates the user profile if the user can be found.
 	 *
 	 * @since 2.5
 	 *
 	 * @return bool
 	 */
-	function process() {
+	public function process() {
 		$this->log_debug( __METHOD__ . '(): starting' );
 
 
