@@ -117,7 +117,7 @@ class Gravity_Flow_Partial_Entries {
 					'type'       => 'checkbox',
 					'choices'    => array(
 						array(
-							'label' => esc_html__( 'Enable Processing', 'gravityflow' ),
+							'label' => esc_html__( 'Enable', 'gravityflow' ),
 							'name'  => 'enable_workflow',
 						),
 					),
