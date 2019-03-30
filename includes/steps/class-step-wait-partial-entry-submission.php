@@ -138,6 +138,10 @@ class Gravity_Flow_Step_Wait_Partial_Entry_Submission extends Gravity_Flow_Step 
 	 * @return bool
 	 */
 	public function process() {
+		if ( $this->status_evaluation() === 'complete' ) {
+			return true;
+		}
+
 		$this->assign();
 
 		return false;
