@@ -1569,6 +1569,8 @@ PRIMARY KEY  (id)
 
 			if ( $current_step ) {
 				$required_capabilities = $current_step->get_required_capabilities();
+				// Checking ALL required capabilities, one by one.
+                // In this way, we can also match the "gform_full_access" cap with other Gravity Form or Gravity Flow caps.
 				foreach ( $required_capabilities as $cap ) {
 					if ( ! $this->current_user_can_any( $cap ) ) {
 						GFCommon::add_error_message( esc_html__( "You don't have sufficient permissions to update the step settings.", 'gravityflow' ) );
