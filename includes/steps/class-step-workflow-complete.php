@@ -58,7 +58,7 @@ class Gravity_Flow_Step_Workflow_Complete extends Gravity_Flow_Step {
 	 * @return string
 	 */
 	public function get_icon_url() {
-		return '<i style="color:red;" class="fa fa-stop" aria-hidden="true"></i>';
+		return '<i style="color:black;" class="fa fa-flag-checkered" aria-hidden="true"></i>';
 	}
 
 	/**
