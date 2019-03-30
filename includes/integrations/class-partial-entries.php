@@ -71,7 +71,7 @@ class Gravity_Flow_Partial_Entries {
 	 *
 	 * @return bool
 	 */
-	public static function is_supported() {
+	public function is_supported() {
 		return class_exists( 'GF_Partial_Entries' ) && method_exists( 'GFFormsModel', 'add_meta_to_entry' );
 	}
 
@@ -81,7 +81,7 @@ class Gravity_Flow_Partial_Entries {
 	 * @since 2.5
 	 */
 	public function maybe_add_hooks() {
-		if ( ! self::is_supported() ) {
+		if ( ! $this->is_supported() ) {
 			return;
 		}
 

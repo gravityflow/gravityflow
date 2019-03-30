@@ -57,7 +57,9 @@ class Gravity_Flow_Step_Wait_Partial_Entry_Submission extends Gravity_Flow_Step 
 	 * @return bool
 	 */
 	public function is_supported() {
-		return Gravity_Flow_Partial_Entries::is_supported();
+		$integration = Gravity_Flow_Partial_Entries::get_instance();
+
+		return $integration->is_supported() && $integration->is_workflow_enabled( absint( rgget( 'id' ) ) );
 	}
 
 	/**
