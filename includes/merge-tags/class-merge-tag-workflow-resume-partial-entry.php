@@ -70,7 +70,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Resume_Partial_Entry extends Gravity_Flow_
 					$this->step = gravity_flow()->get_step( $a['step'], $this->entry );
 				}
 
-				if ( ! ( $this->step && $this->step instanceof Gravity_Flow_Step_Wait_Partial_Entry_Submission ) ) {
+				if ( ! ( $this->step && $this->step instanceof Gravity_Flow_Step_Partial_Entry_Submission ) ) {
 					$text       = str_replace( $full_tag, '', $text );
 					$this->step = $original_step;
 					continue;

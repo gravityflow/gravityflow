@@ -1,9 +1,9 @@
 <?php
 /**
- * Gravity Flow Step Wait For Partial Entry Submission
+ * Gravity Flow Step Partial Entry Submission
  *
  * @package     GravityFlow
- * @subpackage  Classes/Gravity_Flow_Step_Wait_Partial_Entry_Submission
+ * @subpackage  Classes/Gravity_Flow_Step_Partial_Entry_Submission
  * @copyright   Copyright (c) 2015-2019, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.5
@@ -14,9 +14,9 @@ if ( ! class_exists( 'GFForms' ) ) {
 }
 
 /**
- * Class Gravity_Flow_Step_Wait_Partial_Entry_Submission
+ * Class Gravity_Flow_Step_Partial_Entry_Submission
  */
-class Gravity_Flow_Step_Wait_Partial_Entry_Submission extends Gravity_Flow_Step {
+class Gravity_Flow_Step_Partial_Entry_Submission extends Gravity_Flow_Step {
 
 	/**
 	 * The step type.
@@ -25,7 +25,7 @@ class Gravity_Flow_Step_Wait_Partial_Entry_Submission extends Gravity_Flow_Step 
 	 *
 	 * @var string
 	 */
-	public $_step_type = 'wait_partial_entry_submission';
+	public $_step_type = 'partial_entry_submission';
 
 	/**
 	 * Returns the step label.
@@ -35,7 +35,7 @@ class Gravity_Flow_Step_Wait_Partial_Entry_Submission extends Gravity_Flow_Step 
 	 * @return string
 	 */
 	public function get_label() {
-		return esc_html__( 'Wait For Partial Entry Submission', 'gravityflow' );
+		return esc_html__( 'Partial Entry Submission', 'gravityflow' );
 	}
 
 	/**
@@ -238,4 +238,4 @@ class Gravity_Flow_Step_Wait_Partial_Entry_Submission extends Gravity_Flow_Step 
 
 }
 
-Gravity_Flow_Steps::register( new Gravity_Flow_Step_Wait_Partial_Entry_Submission() );
+Gravity_Flow_Steps::register( new Gravity_Flow_Step_Partial_Entry_Submission() );

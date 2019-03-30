@@ -280,7 +280,7 @@ class Gravity_Flow_Partial_Entries {
 		$current_step = gravity_flow()->get_current_step( $form, $entry );
 
 		// Abort if the entry is not on the correct step type.
-		if ( empty( $current_step ) || ! $current_step instanceof Gravity_Flow_Step_Wait_Partial_Entry_Submission ) {
+		if ( empty( $current_step ) || ! $current_step instanceof Gravity_Flow_Step_Partial_Entry_Submission ) {
 			return $form;
 		}
 
