@@ -189,6 +189,53 @@ class Gravity_Flow_Step_Wait_Partial_Entry_Submission extends Gravity_Flow_Step 
 		return $choices;
 	}
 
+	/**
+	 * Displays content inside the Workflow meta on the workflow detail page.
+	 *
+	 * @since 2.5
+	 *
+	 * @param array $form The Form array which may contain validation details.
+	 * @param array $args Additional args which may affect the display.
+	 */
+	public function workflow_detail_box( $form, $args ) {
+		$status               = esc_html__( 'Pending', 'gravityflow' );
+		$step_status = $this->get_status();
+		if ( $step_status == 'queued' ) {
+			$status = esc_html__( 'Queued', 'gravityflow' );
+		}
+		$display_step_status = (bool) $args['step_status'];
+		if ( $display_step_status ) : ?>
+			<h4>
+				<?php printf( '%s (%s)', $this->get_name(), $status ); ?>
+			</h4>
+			<div>
+				<?php $this->workflow_detail_status_box_status(); ?>
+			</div>
+		<?php endif;
+
+	}
+
+	/**
+	 * Display the assignee status in the workflow detail status box.
+	 *
+	 * @since 2.5
+	 */
+	public function workflow_detail_status_box_status() {
+		?>
+		<ul>
+			<?php
+			$assignees = $this->get_assignees();
+			foreach ( $assignees as $assignee ) {
+				$assignee_status_label = $assignee->get_status_label();
+				$assignee_status_li    = sprintf( '<li>%s</li>', $assignee_status_label );
+
+				echo $assignee_status_li;
+			}
+			?>
+		</ul>
+		<?php
+	}
+
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Wait_Partial_Entry_Submission() );
