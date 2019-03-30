@@ -1,34 +1,24 @@
-sudo: false
 dist: trusty
 language: php
 cache:
   directories:
-    - node_modules
+  - node_modules
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - 7.1
-matrix:
-  include:
-    - php: 5.2
-      dist: precise
-    - php: 5.3
-      dist: precise
-    - php: 7.2
+- 5.4
+- 5.5
+- 5.6
+- 7.0
+- 7.1
 env:
   matrix:
-    - WP_VERSION=latest WP_MULTISITE=0
-    - WP_VERSION=4.9 WP_MULTISITE=0
-    - WP_VERSION=4.8 WP_MULTISITE=0
-    - WP_VERSION=4.7 WP_MULTISITE=0
-    - WP_VERSION=4.6 WP_MULTISITE=0
-    - WP_VERSION=4.5 WP_MULTISITE=0
-    - WP_VERSION=4.4 WP_MULTISITE=0
-    - WP_VERSION=4.3 WP_MULTISITE=0
+  - WP_VERSION=latest WP_MULTISITE=0
+  - WP_VERSION=4.9 WP_MULTISITE=0
+  - WP_VERSION=4.8 WP_MULTISITE=0
+  - WP_VERSION=4.7 WP_MULTISITE=0
+  - WP_VERSION=4.6 WP_MULTISITE=0
+  - WP_VERSION=4.5 WP_MULTISITE=0
   global:
-    - WP_TRAVISCI=travis:phpunit
+  - WP_TRAVISCI=travis:phpunit
 before_script:
 - |
   # Remove Xdebug for a huge performance increase, but not from nightly or hhvm:
@@ -46,7 +36,7 @@ before_script:
   # Install the specified version of PHPUnit depending on the PHP version:
   if [[ "$WP_TRAVISCI" == "travis:phpunit" ]]; then
     case "$TRAVIS_PHP_VERSION" in
-      7.2)
+      7.2|7.3)
         echo "Using PHPUnit 6.0"
         composer global require "phpunit/phpunit=6.0.*"
         ;;
@@ -90,15 +80,35 @@ before_script:
 - grunt --version
 - git --version
 - svn --version
-- git clone https://${GFTOKEN}@github.com/gravityforms/gravityforms.git $PWD/tmp/gravityforms
-- bash tests/bin/install.sh wordpress_unit_tests root '' localhost $WP_VERSION
+- |
+  # Clone Gravity Forms and install the tests
+  if [[ "$WP_TRAVISCI" == "travis:phpunit" ]]; then
+    git clone https://${GFTOKEN}@github.com/gravityforms/gravityforms.git $PWD/tmp/gravityforms
+    bash tests/bin/install.sh wordpress_unit_tests root '' localhost $WP_VERSION
+  fi
+
 script: phpunit
 notifications:
   slack:
-    on_start: never
-    on_failure: always
-    on_success: change
-    secure: RrZ3tDCpJ4G/VmiKVgnAKaPM9vkbrq0c2Qhyxbrg6dMBQEIBzJZJnimq0VuJWzJSjtmGgQmbU8Dg54TEVNIU7zZAi2/9M1CQLRY+dH3PWBjv55+YDtXQRXiChnnR8C47dW9QPV/9EgJ2ksy7K4gIDTuhzNdVjBdPjU4xk4c2Y5sfS7F3EaWw16hXCcIL2PsksUFAtdtaCPpC/JSPS6hjQWc2Uxr4iBeVW8aZW06F9guAF12Dsp9voVZUnUZDso/aCfoqC5QPLu1G5WbYDzL+Fd0ph7W5RHP+koMW+cuFQIj6Fl0A8CfILJWhp+REQx1rxTHJgJ77oNuefv3xwcD7U6NNp1zuKYAQaJAlPYMv+rHngB1zwYdcL/VMg5k4KUUMsG3b/mN+yuW9HYfgNlYAUriE+HKECBdphCfOx5PhG0IXIfa3yVP92sH0Yo7CCQRBwfYKatLDAsTarTBAq/yFSGbeI8ivUBLp9tpG6/mxgkngPuSMtODyCm4EPC+0CuCm//ta+xOGNxxZ8Q+Rg+X7q/vlz6ygC7IMKFa7TKlCeA9dGwro9My8Os8TVBdqwjhBiIY/kMDwCNis1M4bHd7Yds2HfCq4CRJJln6+N9mEC+jjxKmtL3dB+/yWT6Hjkk9Qa4FtDHe1Dk6E7cfBDQjdKJLpNydJPxuazbInvURYnOc=
+    secure: hH7wi24qUvXh49XoGjuuMhQR0yyflKogIYHY0PBF2JyR7O8MnKBLnuU5fbfsr7QtZmZwk921Bl/S3lwAhYJNeztpvUOrOKVBnP6P7y6upVzOU5cU4rxrZRt6blOnhZX07mxuV05RLifdV3Ic0JCUFpE7ymPgb0ULR1uS35rzsOTQwM/OeCso17Wjo1yYsHFBrQ3OlpMtk9UJGI87HZI8xqFQu7ddfI+gBtWspvNnbqiWHHjDHgAn3OgXyKGGf/wgdiFHGXEfcinew/HPvND8DSuvU8DdYW8JtustcbhBzBqFZMQEbPI+Ls3Kk5pQ7LrUB2358WeRjGSPJQGHObq7P7HAo4pmkmInqvWLogZqo//6lS16/TzSVAgZHr2y6GxLTI160fNnzuDJz3EetHQSpAruICa+7luJXRT2KH+Ug+SuO+3t4jklHL7wZ5LPQQcYR44HFyj+Lo6QPwsPpfjbN07orNKZPFs2dEBhBEKfDW77oD83hdSo/oNwbCNUu9bct976VZs89AjahTXkU/mUVogeESvnV6RRVWOt+H5jPq5/rQ4aZoo4puxJOd28XeuHIr27b7I2Jd5Su4f1FBUlZxZmYG5wqqGKhi39Eln5FmghA3v+L0qmxXa71Lx340FmU7Hjq2wCMZeb89yqOInVr6NC9d8J/tOP6cjAspZcEWA=
   webhooks:
     urls:
       secure: gEfRUPngUkfJIke6ZBxED14AHlcDLoKyX+j7UJR9hHWiI9ydoBVU7X+td8sgx0oBgckDvbXdHgZl+LR7ftV5CIAhyeWTgJPny5+YsECU3+SSnL6NvwL3SGGavhhgt495NkW0fyvW2m92TqBSgcQMnDkd7Klxb+7euxOIwEKsVtVWd0UAQgr2Pkg4T35ZHtvqPFsIOdOqUB8l93H6cTl4Z1/bHHlPKWKaGMNkGca/VEP/+NIyi2uYVqcbsGR439vvOw/tJI+pn6202K0glPF7zZDjCvzZ4litSgzHh3n6C4qOciVFqvCWmC2JSFVfii5ZhrLORsvHRmph7iuiXvsrdJ+U/RydB1kP5K0ONGf9NR79ulLT07s+FNd4tRO+YHjfKtPfxpbkRMQG7IMyay2tym2cI55nw2Zm3xkgXmU33NHNczDbQujY+qs7vKnnFX4ExyPKUWFrKQMNaD3102kIf2O5jeyNOnLxokYu4yyC0thPenCsBwLysD0VLDG4Mu/Gw9kVLp7BtR4tBqzRzwf0fcXMpkmuzQlaCExJScwyk6TwpFvW/GQ4DIKAHVFagMNme2Ka3piQG88mJJuGDqcFMiWsvyBVGPb24U0SvALB8EWcceWVyJ7QDshjE1zkUjBnSTlaOzQbAxTf/19Ipd/rQnbN02mE90HN/2CV2AHlF9U=
+jobs:
+  include:
+  - php: 5.2
+    dist: precise
+  - php: 5.3
+    dist: precise
+  - php: 7.2
+  - php: 7.3
+  - stage: Extensions
+    env: WP_TRAVISCI=none
+    script: |
+      echo "TRAVIS_BRANCH=$TRAVIS_BRANCH TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST"
+      if [[ ($TRAVIS_BRANCH == master) &&
+            ($TRAVIS_PULL_REQUEST == false) ]] ; then
+        curl -LO --retry 3 https://raw.github.com/mernst/plume-lib/master/bin/trigger-travis.sh
+        sh trigger-travis.sh --pro gravityflow gravityflowformconnector $TRAVIS_ACCESS_TOKEN
+        sh trigger-travis.sh --pro gravityflow gravityflowincomingwebhook $TRAVIS_ACCESS_TOKEN
+      fi

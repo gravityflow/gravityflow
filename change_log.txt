@@ -1,2 +1,3 @@
 - Fixed the workflows for GP Nested Forms child entries starting before some Gravity Perks extensions had updated the entries.
 - Fixed the outgoing webhook for steps with raw request body defined to have merge tag values properly escaped.
+- Fixed an issue that prevented conditional routing from correctly matching date field conditions.

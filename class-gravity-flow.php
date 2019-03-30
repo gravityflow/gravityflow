@@ -195,7 +195,7 @@ if ( class_exists( 'GFForms' ) ) {
 			add_filter( 'gform_enqueue_scripts', array( $this, 'filter_gform_enqueue_scripts' ), 10, 2 );
 			add_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_variables' ), 10, 7 );
 
-			add_filter( 'gform_is_value_match', array( $this, 'filter_value_match_multiuser' ), 10, 6 );
+			add_filter( 'gform_is_value_match', array( $this, 'filter_gform_is_value_match' ), 10, 6 );
 
 			add_action( 'gform_entry_created', array( $this, 'action_entry_created' ), 8, 2 );
 			add_action( 'gform_register_init_scripts', array( $this, 'filter_gform_register_init_scripts' ), 10, 3 );
@@ -7647,22 +7647,58 @@ AND m.meta_value='queued'";
 		}
 
 		/**
-		 * Determines if a multiuser field is being used for conditional routing and has an exact value match of user ID
+		 * Determines if a non-text field types are being used for conditional routing
 		 *
-		 * @since 2.5
+		 * @since 2.4.1
+		 *
+		 * @param bool   $is_match     Does the target field’s value match with the rule value?
+		 * @param string $field_value  The field value to use with the comparison.
+		 * @param string $target_value The value from the conditional routing rule to use with the comparison.
+		 * @param string $operation    The conditional routing rule operator.
+		 * @param object $source_field The field object for the source of the field value.
+		 * @param array  $rule         The current rule object.
 		 *
 		 * @return bool
 		 */
-		public function filter_value_match_multiuser( $is_match, $field_value, $target_value, $operation, $source_field, $rule ) {
+		public function filter_gform_is_value_match( $is_match, $field_value, $target_value, $operation, $source_field, $rule ) {
 
-			if ( ! $source_field || $source_field->type !== 'workflow_multi_user' ) {
+			if ( ! $source_field || ! in_array( $source_field->type, array( 'workflow_multi_user', 'date' ) ) ) {
 				return $is_match;
 			}
 
-			if ( in_array( $target_value, $field_value, true ) ) {
-				return true;
-			}
+			switch ( $source_field->type ) {
+				case 'workflow_multi_user':
+					if ( in_array( $target_value, $field_value, true ) ) {
+						return true;
+					}
+					break;
+				case 'date':
+					if ( class_exists( 'GP_Conditional_Logic_Dates' ) ) {
+						return $is_match;
+					}
 
+					$field_value = strtotime( $field_value );
+
+					if ( is_numeric( $target_value ) ) {
+						$target_value = (int)$target_value;
+					} else {
+						$target_value = strtotime( $target_value );
+					}
+					
+					if ( $operation == '>' && $field_value > $target_value ) {
+						return true;
+					}
+					if ( $operation == '<' && $field_value < $target_value ) {
+						return true;
+					}
+					if ( $operation == 'is' && $field_value == $target_value ) {
+						return true;
+					}
+					if ( $operation == 'isnot' && $field_value != $target_value ) {
+						return true;
+					}
+					break;
+			}
 			return false;
 		}
 
@@ -7684,7 +7720,7 @@ AND m.meta_value='queued'";
 		 */
 		public function replace_variables( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
 
-			if ( strpos( $text, '{' ) === false  || empty( $entry ) ) {
+			if ( strpos( $text, '{' ) === false || empty( $entry ) ) {
 				return $text;
 			}
 

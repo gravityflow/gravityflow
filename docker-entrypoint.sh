@@ -11,8 +11,10 @@ rm -rf /wp-core/wp-content/uploads/gravity_forms
 
 # Make sure permissions are correct.
 cd /wp-core
-chown www-data:www-data wp-content
+chown -R www-data:www-data wp-content
 chmod 755 wp-content
+
+export WP_CLI_CACHE_DIR=/wp-core/.wp-cli/cache
 
 # Make sure the database is up and running.
 while ! mysqladmin ping -hmysql --silent; do
