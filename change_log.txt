@@ -1,3 +1,3 @@
 - Fixed an issue with due date column of inbox shortcode displaying a default value when no step settings had been defined.
-- Fixed an issue with due date row highlighting related to overdue calculation and step starting time.
+- Fixed an issue with the inbox incorrectly highlighting some entries as overdue.
 - Fixed the workflow stalling on the Dropbox step when there are no files to process.
