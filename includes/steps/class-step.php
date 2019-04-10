@@ -1899,6 +1899,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	/**
 	 * Returns TRUE if this step is past the defined due date.
+	 * 
+	 * @since 2.5
 	 *
 	 * @return bool
 	 */
