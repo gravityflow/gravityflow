@@ -214,6 +214,75 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	}
 
 	/**
+	 * Return the values of the field choices.
+	 *
+	 * @since 2.5
+	 *
+	 * @param bool $include_users Indicates if the users should be added as choices.
+	 * @param bool $include_roles Indicates if the roles should be added as choices.
+	 * @param bool $include_fields Indicates if the fields should be added as choices.
+	 *
+	 * @return array
+	 */
+	public function get_choices_values( $include_users = true, $include_roles = true, $include_fields = true ) {
+		$values = array();
+
+		$form_id         = $this->formId;
+		$account_choices = $role_choices = $fields_choices = $optgroups = array();
+
+		if ( $include_users ) {
+			$args = array(
+				'orderby' => array( 'display_name', 'user_login' ),
+				'fields'  => array( 'ID', 'display_name', 'user_login' ),
+				'role'    => $this->gravityflowUsersRoleFilter,
+			);
+
+			$args     = apply_filters( 'gravityflow_get_users_args_assignee_field', $args, $form_id, $this );
+			$accounts = get_users( $args );
+			foreach ( $accounts as $account ) {
+				$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'text' => $account->display_name );
+			}
+
+			$account_choices = apply_filters( 'gravityflow_assignee_field_users', $account_choices, $form_id, $this );
+
+			if ( ! empty( $account_choices ) ) {
+				$values = array_merge( wp_list_pluck( $account_choices, 'value' ), $values );
+			}
+		}
+
+		if ( $include_roles ) {
+			$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true, true );
+			$role_choices = apply_filters( 'gravityflow_assignee_field_roles', $role_choices, $form_id, $this );
+
+			if ( ! empty( $role_choices ) ) {
+				$values = array_merge( wp_list_pluck( $role_choices, 'value' ), $values );
+			}
+		}
+
+		if ( $include_fields ) {
+			$form_id = $this->formId;
+			$form    = GFAPI::get_form( $form_id );
+			if ( rgar( $form, 'requireLogin' ) ) {
+
+				$fields_choices = array(
+					array(
+						'text'  => __( 'User (Created by)', 'gravityflow' ),
+						'value' => 'entry|created_by',
+					),
+				);
+
+				$fields_choices = apply_filters( 'gravityflow_assignee_field_fields', $fields_choices, $form_id, $this );
+
+				if ( ! empty( $fields_choices ) ) {
+					$values = array_merge( wp_list_pluck( $fields_choices, 'value' ), $values );
+				}
+			}
+		}
+
+		return $values;
+	}
+
+	/**
 	 * Return the entry value for display on the entries list page.
 	 *
 	 * @param string|array $value    The field value.
@@ -342,6 +411,28 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 		$this->gravityflowAssigneeFieldShowUsers  = (bool) $this->gravityflowAssigneeFieldShowUsers;
 		$this->gravityflowAssigneeFieldShowRoles  = (bool) $this->gravityflowAssigneeFieldShowRoles;
 		$this->gravityflowAssigneeFieldShowFields = (bool) $this->gravityflowAssigneeFieldShowFields;
+	}
+
+	/**
+	 * Validate the field value. It must be one of the choices.
+	 *
+	 * Return the result (bool) by setting $this->failed_validation.
+	 * Return the validation message (string) by setting $this->validation_message.
+	 *
+	 * @param string|array $value The field value from get_value_submission().
+	 * @param array        $form  The Form Object currently being processed.
+	 */
+	public function validate( $value, $form ) {
+		$include_users  = (bool) $this->gravityflowAssigneeFieldShowUsers;
+		$include_roles  = (bool) $this->gravityflowAssigneeFieldShowRoles;
+		$include_fields = (bool) $this->gravityflowAssigneeFieldShowFields;
+
+		$values = $this->get_choices_values( $include_users, $include_roles, $include_fields );
+
+		if ( ! in_array( $value, $values, true ) ) {
+			$this->failed_validation  = true;
+			$this->validation_message = esc_html__( 'Invalid selection. Please select one of the available choices.', 'gravityflow' );
+		}
 	}
 }
 
