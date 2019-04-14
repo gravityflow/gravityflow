@@ -425,15 +425,17 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	 * @param array        $form  The Form Object currently being processed.
 	 */
 	public function validate( $value, $form ) {
-		$include_users  = (bool) $this->gravityflowAssigneeFieldShowUsers;
-		$include_roles  = (bool) $this->gravityflowAssigneeFieldShowRoles;
-		$include_fields = (bool) $this->gravityflowAssigneeFieldShowFields;
+		if ( ! empty( $value ) ) {
+			$include_users  = (bool) $this->gravityflowAssigneeFieldShowUsers;
+			$include_roles  = (bool) $this->gravityflowAssigneeFieldShowRoles;
+			$include_fields = (bool) $this->gravityflowAssigneeFieldShowFields;
 
-		$values = $this->get_choices_values( $include_users, $include_roles, $include_fields );
+			$values = $this->get_choices_values( $include_users, $include_roles, $include_fields );
 
-		if ( ! in_array( $value, $values, true ) ) {
-			$this->failed_validation  = true;
-			$this->validation_message = esc_html__( 'Invalid selection. Please select one of the available choices.', 'gravityflow' );
+			if ( ! in_array( $value, $values, true ) ) {
+				$this->failed_validation  = true;
+				$this->validation_message = esc_html__( 'Invalid selection. Please select one of the available choices.', 'gravityflow' );
+			}
 		}
 	}
 }
