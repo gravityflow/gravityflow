@@ -23,3 +23,4 @@ require $_tests_dir . '/includes/bootstrap.php';
 
 require dirname( __FILE__ ) . '/gravityforms-factory.php';
 require dirname( __FILE__ ) . '/gravityforms-testcase.php';
+require dirname( __FILE__ ) . '/gravityforms-field-testcase.php';
