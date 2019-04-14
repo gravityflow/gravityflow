@@ -280,6 +280,31 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 			$this->choices = $this->get_users_as_choices();
 		}
 	}
+
+	/**
+	 * Validate the field value. It must be one of the choices.
+	 *
+	 * Return the result (bool) by setting $this->failed_validation.
+	 * Return the validation message (string) by setting $this->validation_message.
+	 *
+	 * @sine 2.5
+	 *
+	 * @param string|array $value The field value from get_value_submission().
+	 * @param array        $form  The Form Object currently being processed.
+	 */
+	public function validate( $value, $form ) {
+
+		$values = wp_list_pluck( $this->get_users_as_choices(), 'value' );
+
+		foreach ( (array) $value as $_value ) {
+			if ( ! in_array( $_value, $values, true ) ) {
+				$this->failed_validation  = true;
+				$this->validation_message = esc_html__( 'Invalid selection. Please select one of the available choices.', 'gravityflow' );
+
+				break;
+			}
+		}
+	}
 }
 
 GF_Fields::register( new Gravity_Flow_Field_Multi_User() );
