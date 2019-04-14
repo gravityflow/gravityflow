@@ -23,6 +23,5 @@ require $_tests_dir . '/includes/bootstrap.php';
 
 $_gf_tests_dir = GFCommon::get_base_path() . '/tests';
 require $_gf_tests_dir . '/gravityforms-utils.php';
-require $_gf_tests_dir . '/gravityforms-factory.php';
 require $_gf_tests_dir . '/gravityforms-testcase.php';
 require $_gf_tests_dir . '/gravityforms-field-testcase.php';
