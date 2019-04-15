@@ -216,7 +216,7 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 	 * Return the result (bool) by setting $this->failed_validation.
 	 * Return the validation message (string) by setting $this->validation_message.
 	 *
-	 * @sine 2.5
+	 * @since 2.5.2
 	 *
 	 * @param string|array $value The field value from get_value_submission().
 	 * @param array        $form  The Form Object currently being processed.
