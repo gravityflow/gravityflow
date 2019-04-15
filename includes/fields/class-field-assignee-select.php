@@ -111,6 +111,57 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	}
 
 	/**
+	 * Get account choices.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return array|mixed|void
+	 */
+	public function get_account_choices( $form_id ) {
+		$account_choices = array();
+
+		$args = array(
+			'orderby' => array( 'display_name', 'user_login' ),
+			'fields'  => array( 'ID', 'display_name', 'user_login' ),
+			'role'    => $this->gravityflowUsersRoleFilter,
+		);
+
+		$args     = apply_filters( 'gravityflow_get_users_args_assignee_field', $args, $form_id, $this );
+		$accounts = get_users( $args );
+		foreach ( $accounts as $account ) {
+			$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'text' => $account->display_name );
+		}
+
+		$account_choices = apply_filters( 'gravityflow_assignee_field_users', $account_choices, $form_id, $this );
+
+		return $account_choices;
+	}
+
+	/**
+	 * Get fields choices.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param int $form_id Form ID.
+	 *
+	 * @return array|mixed|void
+	 */
+	public function get_fields_choices( $form_id ) {
+		$fields_choices = array(
+			array(
+				'text'  => __( 'User (Created by)', 'gravityflow' ),
+				'value' => 'entry|created_by',
+			),
+		);
+
+		$fields_choices = apply_filters( 'gravityflow_assignee_field_fields', $fields_choices, $form_id, $this );
+
+		return $fields_choices;
+	}
+
+	/**
 	 * Return the HTML markup for the field choices.
 	 *
 	 * @param string $value          The field value.
@@ -121,26 +172,14 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	 * @return string
 	 */
 	public function get_assignees_as_choices( $value, $include_users = true, $include_roles = true, $include_fields = true ) {
-		$form_id         = $this->formId;
-		$account_choices = $role_choices = $fields_choices = $optgroups = array();
+		$form_id   = $this->formId;
+		$optgroups = array();
 
 		if ( $include_users ) {
-			$args = array(
-				'orderby' => array( 'display_name', 'user_login' ),
-				'fields'  => array( 'ID', 'display_name', 'user_login' ),
-				'role'    => $this->gravityflowUsersRoleFilter,
-			);
-
-			$args     = apply_filters( 'gravityflow_get_users_args_assignee_field', $args, $form_id, $this );
-			$accounts = get_users( $args );
-			foreach ( $accounts as $account ) {
-				$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'text' => $account->display_name );
-			}
-
-			$account_choices = apply_filters( 'gravityflow_assignee_field_users', $account_choices, $form_id, $this );
+			$account_choices = $this->get_account_choices( $form_id );
 
 			if ( ! empty( $account_choices ) ) {
-				$users_opt_group              = new GF_Field();
+				$users_opt_group = new GF_Field();
 				//Placeholder set to None to prevents GFCommon::get_select_choices() adding an empty option when the view query arg is set to entry.
 				$users_opt_group->placeholder = 'None';
 				$users_opt_group->choices     = $account_choices;
@@ -158,7 +197,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 			$role_choices = apply_filters( 'gravityflow_assignee_field_roles', $role_choices, $form_id, $this );
 
 			if ( ! empty( $role_choices ) ) {
-				$roles_opt_group              = new GF_Field();
+				$roles_opt_group = new GF_Field();
 				//Placeholder set to None to prevents GFCommon::get_select_choices() adding an empty option when the view query arg is set to entry.
 				$roles_opt_group->placeholder = 'None';
 				$roles_opt_group->choices     = $role_choices;
@@ -175,21 +214,13 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 			$form_id = $this->formId;
 			$form    = GFAPI::get_form( $form_id );
 			if ( rgar( $form, 'requireLogin' ) ) {
-
-				$fields_choices = array(
-					array(
-						'text'  => __( 'User (Created by)', 'gravityflow' ),
-						'value' => 'entry|created_by',
-					),
-				);
-
-				$fields_choices = apply_filters( 'gravityflow_assignee_field_fields', $fields_choices, $form_id, $this );
+				$fields_choices = $this->get_fields_choices( $form_id );
 
 				if ( ! empty( $fields_choices ) ) {
-					$fields_opt_group             = new GF_Field();
+					$fields_opt_group = new GF_Field();
 					//Placeholder set to None to prevents GFCommon::get_select_choices() adding an empty option when the view query arg is set to entry.
 					$fields_opt_group->placeholder = 'None';
-					$fields_opt_group->choices    = $fields_choices;
+					$fields_opt_group->choices     = $fields_choices;
 
 					$optgroups[] = array(
 						'label'   => __( 'Fields', 'gravityflow' ),
@@ -227,23 +258,11 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	public function get_choices_values( $include_users = true, $include_roles = true, $include_fields = true ) {
 		$values = array();
 
-		$form_id         = $this->formId;
-		$account_choices = $role_choices = $fields_choices = $optgroups = array();
+		$form_id   = $this->formId;
+		$optgroups = array();
 
 		if ( $include_users ) {
-			$args = array(
-				'orderby' => array( 'display_name', 'user_login' ),
-				'fields'  => array( 'ID', 'display_name', 'user_login' ),
-				'role'    => $this->gravityflowUsersRoleFilter,
-			);
-
-			$args     = apply_filters( 'gravityflow_get_users_args_assignee_field', $args, $form_id, $this );
-			$accounts = get_users( $args );
-			foreach ( $accounts as $account ) {
-				$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'text' => $account->display_name );
-			}
-
-			$account_choices = apply_filters( 'gravityflow_assignee_field_users', $account_choices, $form_id, $this );
+			$account_choices = $this->get_account_choices( $form_id );
 
 			if ( ! empty( $account_choices ) ) {
 				$values = array_merge( wp_list_pluck( $account_choices, 'value' ), $values );
@@ -263,15 +282,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 			$form_id = $this->formId;
 			$form    = GFAPI::get_form( $form_id );
 			if ( rgar( $form, 'requireLogin' ) ) {
-
-				$fields_choices = array(
-					array(
-						'text'  => __( 'User (Created by)', 'gravityflow' ),
-						'value' => 'entry|created_by',
-					),
-				);
-
-				$fields_choices = apply_filters( 'gravityflow_assignee_field_fields', $fields_choices, $form_id, $this );
+				$fields_choices = $this->get_fields_choices( $form_id );
 
 				if ( ! empty( $fields_choices ) ) {
 					$values = array_merge( wp_list_pluck( $fields_choices, 'value' ), $values );
