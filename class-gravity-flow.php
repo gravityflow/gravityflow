@@ -3831,7 +3831,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
 			     && $current_step->supports_due_date() && $current_step->due_date
 			) {
-				$gflow_due_date_date = Gravity_Flow_Common::format_date( $current_step->get_due_date_timestamp(), $date_format, false, true );
+				$gflow_due_date_date = Gravity_Flow_Common::format_date( $current_step->get_due_date_timestamp(), $date_format, false, false );
 				printf( '<br /><br />%s: %s', esc_html__( 'Due Date', 'gravityflow' ), $gflow_due_date_date );
 			}
 
@@ -4876,9 +4876,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 								'tooltip' => esc_html__( 'This setting allows the allow_anonymous attribute to be used in the shortcode.', 'gravityflow' ),
 							),
 							array(
-								'label'   => esc_html__( 'Allow the inbox and status tables to display field values.', 'gravityflow' ),
+								'label'   => esc_html__( 'Allow the Inbox and Status shortcodes to display field values.', 'gravityflow' ),
 								'name'    => 'allow_field_ids',
-								'tooltip' => esc_html__( 'This setting allows the field_ids attribute to be used in the shortcode.', 'gravityflow' ),
+								'tooltip' => esc_html__( 'This setting allows the fields attribute to be used in the shortcode.', 'gravityflow' ),
 							),
 						),
 					),

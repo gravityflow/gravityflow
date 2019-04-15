@@ -45,6 +45,16 @@ class Gravity_Flow_Step_Feed_ConstantContact extends Gravity_Flow_Step_Feed_Add_
 		return 'Constant Contact';
 	}
 
+	/**
+	 * Returns the URL for the step icon.
+	 * @since 2.5
+	 *
+	 * @return string
+	 */
+	public function get_icon_url() {
+		return $this->get_base_url() . '/images/constant-contact.svg';
+	}
+
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_ConstantContact() );

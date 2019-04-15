@@ -1059,7 +1059,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$step = gravity_flow()->get_step( $step_id );
 			$step->_entry = $item;
 			if ( $step && $step->due_date ) {
-				$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', false, true );
+				$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', false, false );
 				$output = "<a href='#'>$value</a>";
 			} else {
 				$output = '<span class="gravityflow-empty">&dash;</span>';

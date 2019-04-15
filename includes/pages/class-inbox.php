@@ -150,7 +150,7 @@ class Gravity_Flow_Inbox {
 			$columns['actions'] = '';
 		}
 
-		if ( empty( $args['form_id'] ) || is_array( $args['form_id']) ) {
+		if ( empty( $args['form_id'] ) || is_array( $args['form_id'] ) ) {
 			$columns['form_title'] = __( 'Form', 'gravityflow' );
 		}
 
@@ -228,57 +228,7 @@ class Gravity_Flow_Inbox {
 		 */
 		$link = apply_filters( 'gravityflow_entry_link_inbox_table', $link, $url_entry, $entry, $args );
 
-		$step_highlight_color = '';
-		if ( array_key_exists( 'step_highlight', $columns ) && isset( $entry['workflow_step'] ) ) {
-			$step = gravity_flow()->get_step( $entry['workflow_step'] );
-			if ( $step ) {
-				$meta = $step->get_feed_meta();
-
-				if ( $meta && isset( $meta['step_highlight'] ) && $meta['step_highlight'] ) {
-					if ( isset( $meta['step_highlight_type'] ) && $meta['step_highlight_type'] == 'color' ) {
-						if ( isset( $meta['step_highlight_color'] ) && preg_match( '/^#[a-f0-9]{6}$/i', $meta['step_highlight_color'] ) ) {
-							$step_highlight_color = $meta['step_highlight_color'];
-						}
-					}
-				}
-			}
-		}
-
-		$due_date_highlight_color = '';
-		if ( isset( $entry['workflow_step'] ) ) {
-			$step = gravity_flow()->get_step( $entry['workflow_step'] );
-			if ( $step ) {
-				$meta = $step->get_feed_meta();
-
-				if ( $meta && isset( $meta['due_date_highlight_type'] ) && $meta['due_date_highlight_type'] == 'color' ) {
-					if ( isset( $meta['due_date_highlight_color'] ) && preg_match( '/^#[a-f0-9]{6}$/i', $meta['due_date_highlight_color'] ) ) {
-						$due_date_highlight_color = $meta['due_date_highlight_color'];
-					}
-				}
-			}
-		}
-
-		if ( ! empty( $due_date_highlight_color ) ) {
-			$step->_entry = $entry;
-			$overdue = $step->is_overdue();
-			if ( $overdue ) {
-				$step_highlight_color = $due_date_highlight_color;
-			}
-		}
-
-		/**
-		 * Allow the Step Highlight colour to be overridden.
-		 *
-		 * @since 1.9.2
-		 *
-		 * @param string $highlight  The highlight color (hex value) of the row currently being processed.
-		 * @param int    $form['id'] The ID of form currently being processed.
-		 * @param array  $entry      The entry object for the row currently being processed.
-		 *
-		 * @return string
-		 */
-		$step_highlight_color = apply_filters( 'gravityflow_step_highlight_color_inbox', $step_highlight_color, $form['id'], $entry );
-
+		$step_highlight_color = self::get_column_value( 'step_highlight', $form, $entry, $columns );
 		if ( strlen( $step_highlight_color ) > 0 ) {
 			echo '<tr style="border-left-color: ' . $step_highlight_color . ';">';
 		} else {
@@ -309,6 +259,36 @@ class Gravity_Flow_Inbox {
 	public static function get_column_value( $id, $form, $entry, $columns ) {
 		$value = '';
 		switch ( strtolower( $id ) ) {
+			case 'step_highlight':
+				$step_highlight_color = '';
+				if ( array_key_exists( 'step_highlight', $columns ) && isset( $entry['workflow_step'] ) ) {
+					$step = gravity_flow()->get_step( $entry['workflow_step'] );
+					if ( $step ) {
+						if ( $step->step_highlight && $step->step_highlight_type == 'color' && preg_match( '/^#[a-f0-9]{6}$/i', $step->step_highlight_color ) ) {
+							$step_highlight_color = $step->step_highlight_color;
+						}
+					}
+				}
+
+				if ( isset( $entry['workflow_step'] ) ) {
+					$step = gravity_flow()->get_step( $entry['workflow_step'], $entry );
+					if ( $step && $step->due_date && $step->is_overdue() && $step->due_date_highlight_type == 'color' && preg_match( '/^#[a-f0-9]{6}$/i', $step->due_date_highlight_color ) ) {
+						$step_highlight_color = $step->due_date_highlight_color;
+					}
+				}
+				/**
+				 * Allow the Step Highlight colour to be overridden.
+				 *
+				 * @since 1.9.2
+				 *
+				 * @param string $step_highlight_color  The highlight color (hex value) of the row currently being processed.
+				 * @param int    $form['id'] The ID of form currently being processed.
+				 * @param array  $entry      The entry object for the row currently being processed.
+				 *
+				 * @return string
+				 */
+				$value = apply_filters( 'gravityflow_step_highlight_color_inbox', $step_highlight_color, $form['id'], $entry );
+				break;
 			case 'form_title':
 				$value = rgar( $form, 'title' );
 				break;
@@ -360,8 +340,10 @@ class Gravity_Flow_Inbox {
 			case 'due_date':
 				$api = new Gravity_Flow_API( $form['id'] );
 				$step = $api->get_current_step( $entry );
-				if ( $step ) {
-					$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', true, true );
+				if ( $step && $step->due_date ) {
+					$value = Gravity_Flow_Common::format_date( date( 'Y-m-d H:i:s', $step->get_due_date_timestamp() ), '', true, false );
+				} else {
+					$value = '-';
 				}
 				break;
 			default:

@@ -55,6 +55,31 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 2.5.1 =
+- Fixed an issue where the start step settings are not displayed unless the Partial Entries Add-On is active.
+
+= 2.5 =
+- Added security enhancements.
+- Added support for the Gravity Forms Partial Entries Add-On.
+- Added DB performance improvements.
+- Added the Update User step to update a user profile - requires the edit_users capability.
+- Added link on entry detail page, shortcode only, to 'Return to list' which links user back to inbox / status page.
+- Added shortcode attribute back_link (default: false) to identify if back link should be displayed on entry detail for entries loaded via shortcode.
+- Added shortcode attribute back_link_text (default: "Return to list" translatable) to allow customization of text for back link on entry detail page.
+- Added shortcode attribute back_link_url (default: null) to allow customization of back link on entry detail page.
+- Added filter gravityflow_back_link_url_entry_detail to allow customization of back link on entry detail page.
+- Added filter gravityflow_search_criteria_status to allow status page to filter on multiple field criteria.
+- Added step setting type for due date with sub-options for delay/date/field selection and row highlighting for inbox.
+- Added the due date settings to the approval and user input steps.
+- Added inbox and status attribute due_date (false by default) to show due date column.
+- Added shortcode security settings to the Workflow->Setting page.
+- Added the filter gravityflow_next_step to allow customization of the next step for workflow processing (example - restart a completed user input step for new assignees to action)
+- Fixed the workflows for GP Nested Forms child entries starting before some Gravity Perks extensions had updated the entries.
+- Fixed an issue that prevented conditional routing from correctly matching date field conditions.
+- Fixed an issue that assignee fields with placeholder text would have invalid blank selection options on user input steps.
+- Fixed the outgoing webhook for steps with raw request body defined to have field merge tag values properly escaped.
+- Fixed an issue with the outgoing webhook step where GET requests using connected apps do not include the authorization headers.
+
 = 2.4.4 =
 - Added security enhancements.
 - Added support for license key constants in extensions.

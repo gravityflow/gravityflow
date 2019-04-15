@@ -109,25 +109,25 @@ class Gravity_Flow_Partial_Entries {
 	 * @return array
 	 */
 	public function maybe_filter_feed_settings_fields( $feed_settings_fields, $add_on ) {
-		if ( gravity_flow()->has_feed( absint( rgget( 'id' ) ) ) ) {
-			$feed_settings_fields = $add_on->add_field_after( 'warning_message', array(
-				array(
-					'name'       => 'enable_workflow',
-					'label'      => gravity_flow()->translate_navigation_label( 'workflow' ),
-					'type'       => 'checkbox',
-					'choices'    => array(
-						array(
-							'label' => esc_html__( 'Enable', 'gravityflow' ),
-							'name'  => 'enable_workflow',
-						),
+
+		$feed_settings_fields = $add_on->add_field_after( 'warning_message', array(
+			array(
+				'name'       => 'enable_workflow',
+				'label'      => gravity_flow()->translate_navigation_label( 'workflow' ),
+				'type'       => 'checkbox',
+				'choices'    => array(
+					array(
+						'label' => esc_html__( 'Enable', 'gravityflow' ),
+						'name'  => 'enable_workflow',
 					),
-					'dependency' => array(
-						'field'  => 'enable',
-						'values' => array( 1 ),
-					),
-				)
-			), $feed_settings_fields );
-		}
+				),
+				'dependency' => array(
+					'field'  => 'enable',
+					'values' => array( 1 ),
+				),
+			)
+		), $feed_settings_fields );
+
 
 		return $feed_settings_fields;
 	}
@@ -142,6 +142,11 @@ class Gravity_Flow_Partial_Entries {
 	 * @return bool
 	 */
 	public function is_workflow_enabled( $form_id ) {
+
+		if ( ! $this->is_supported() ) {
+			return false;
+		}
+
 		if ( is_null( $this->_workflow_enabled ) ) {
 			$add_on        = GF_Partial_Entries::get_instance();
 			$feed_settings = $add_on->get_feed_settings( $form_id );

@@ -1899,13 +1899,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 	/**
 	 * Returns TRUE if this step is past the defined due date.
+	 * 
+	 * @since 2.5
 	 *
 	 * @return bool
 	 */
 	public function is_overdue() {
 		$step_due_date = $this->get_due_date_timestamp();
 		$step_timestamp = $this->get_step_timestamp();
-		if ( (int) $step_due_date < (int) $step_timestamp ) {
+		if ( (int) $step_due_date < (int) time() ) {
 			return true;
 		}
 		return false;
@@ -1992,7 +1994,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		} else {
 			$source_field   = GFFormsModel::get_field( $form, $field_id );
 			$field_value    = empty( $entry ) ? GFFormsModel::get_field_value( $source_field, array() ) : GFFormsModel::get_lead_field_value( $entry, $source_field );
-			if ( $source_field->type == 'post_category' ) {
+			if ( $source_field && $source_field->type == 'post_category' ) {
 				// Post category values are in the format [name]:[id] e.g. cat-1:1 but GFFormsModel::is_value_match() expects just the category ID.
 				$ary                   = explode( ':', $routing_rule['value'] );
 				$routing_rule['value'] = $ary[1];

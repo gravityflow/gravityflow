@@ -66,15 +66,69 @@ class Gravity_Flow_Step_Feed_Dropbox extends Gravity_Flow_Step_Feed_Add_On {
 	/**
 	 * Process the feed; remove the feed from the processed feeds list;
 	 *
+	 * @since 2.5.2 Fixed the workflow stalling when there are no files to process.
+	 * @since 1.3.3
+	 *
 	 * @param array $feed The feed to be processed.
 	 *
-	 * @return bool Returning false to ensure the next step is not processed until after the files are uploaded.
+	 * @return bool Return false to ensure the next step is not processed until after the files are uploaded.
 	 */
 	public function process_feed( $feed ) {
+		if ( ! $this->has_files_to_process( $feed ) ) {
+			return true;
+		}
+
 		$feed['meta']['workflow_step'] = $this->get_id();
 		parent::process_feed( $feed );
 
 		return false;
+	}
+
+	/**
+	 * Determines if there are files to be processed by the current feed.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param array $feed The feed to be processed.
+	 *
+	 * @return bool
+	 */
+	public function has_files_to_process( $feed ) {
+		$form  = $this->get_form();
+		$entry = $this->get_entry();
+
+		/** @var GF_Field $field */
+		foreach ( $form['fields'] as $field ) {
+
+			// Skip fields of the wrong type.
+			if ( ! in_array( $field->get_input_type(), array( 'dropbox', 'fileupload' ) ) ) {
+				continue;
+			}
+
+			// Skip upload fields which are not applicable to the current feed.
+			if ( 'all' !== rgars( $feed, 'meta/fileUploadField' ) && $field->id != rgars( $feed, 'meta/fileUploadField' ) ) {
+				continue;
+			}
+
+			// Return immediately if the field has a file to process.
+			if ( ! rgempty( $field->id, $entry ) ) {
+				return true;
+			}
+
+		}
+
+		return false;
+	}
+
+	/**
+	 * Allow this step to expire.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @return bool
+	 */
+	public function supports_expiration() {
+		return true;
 	}
 
 }
