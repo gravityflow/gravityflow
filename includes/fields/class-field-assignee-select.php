@@ -256,10 +256,8 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	 * @return array
 	 */
 	public function get_choices_values( $include_users = true, $include_roles = true, $include_fields = true ) {
-		$values = array();
-
-		$form_id   = $this->formId;
-		$optgroups = array();
+		$values  = array();
+		$form_id = $this->formId;
 
 		if ( $include_users ) {
 			$account_choices = $this->get_account_choices( $form_id );
