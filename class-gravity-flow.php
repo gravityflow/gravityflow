@@ -2284,7 +2284,7 @@ PRIMARY KEY  (id)
 						),
 					);
 
-					printf( $date_field_label, $this->settings_text( $delay_offset_field, false ), $this->settings_select( $unit_field, false ), $this->settings_select( $before_after_field ), $this->settings_select( $schedule_date_fields ) );
+					printf( $date_field_label, $this->settings_text( $delay_offset_field, false ), $this->settings_select( $unit_field, false ), $this->settings_select( $before_after_field, false ), $this->settings_select( $schedule_date_fields, false ) );
 
 					?>
 				</div>
