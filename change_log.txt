@@ -1,0 +1,1 @@
+- Fixed an issue with notification step not identifying all users in a multi-user field for notification.
