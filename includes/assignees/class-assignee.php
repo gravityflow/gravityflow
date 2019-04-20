@@ -395,7 +395,7 @@ class Gravity_Flow_Assignee {
 
 			case 'assignee_multi_user_field':
 				$entry = $this->step->get_entry();
-				if ( isset( $entry[ $assignee_id ] ) ) {
+				if ( ! empty( $entry[ $assignee_id ] ) ) {
 					$user_ids = json_decode( $entry[ $assignee_id ] );
 					$users    = get_users( array( 'include' => $user_ids ) );
 				}
