@@ -340,4 +340,5 @@ Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Sliced_Invoices() );
 add_action( 'sliced_invoice_status_update', array( 'Gravity_Flow_Step_Feed_Sliced_Invoices', 'invoice_status_update' ), 10, 2 );
 
 // Detect manual invoice status update.
-add_action( 'set_object_terms', array( 'Gravity_Flow_Step_Feed_Sliced_Invoices', 'invoice_status_manual_update' ), 10, 4 );
+// Set priority to 30 because Sliced Invoices triggers `set_object_terms` with priority 20.
+add_action( 'set_object_terms', array( 'Gravity_Flow_Step_Feed_Sliced_Invoices', 'invoice_status_manual_update' ), 30, 4 );
