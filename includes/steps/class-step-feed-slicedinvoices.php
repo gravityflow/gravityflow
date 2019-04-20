@@ -329,7 +329,14 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 	 */
 	public static function invoice_status_manual_update( $object_id, $terms, $tt_ids, $taxonomy ) {
 		if ( function_exists( 'run_sliced_invoices' ) && $taxonomy === 'invoice_status' ) {
-			self::invoice_status_update( $object_id, $terms[0] );
+			if ( rgar( $terms, 'term_id' ) ) {
+				$term   = get_term( $terms['term_id'] );
+				$status = $term->slug;
+			} else {
+				$status = $terms[0];
+			}
+
+			self::invoice_status_update( $object_id, $status );
 		}
 	}
 
