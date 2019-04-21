@@ -1,0 +1,1 @@
+- Fixed an issue when Sliced Invoices status was manually updated to paid, entries weren't released from Sliced Invoices steps.
