@@ -297,7 +297,7 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 			$values = wp_list_pluck( $this->get_users_as_choices(), 'value' );
 
 			foreach ( (array) $value as $_value ) {
-				if ( ! in_array( $_value, $values, true ) ) {
+				if ( ! in_array( $_value, $values ) ) {
 					$this->failed_validation  = true;
 					$this->validation_message = esc_html__( 'Invalid selection. Please select one of the available choices.', 'gravityflow' );
 

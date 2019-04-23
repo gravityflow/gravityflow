@@ -441,7 +441,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 			$values = $this->get_choices_values( $include_users, $include_roles, $include_fields );
 
-			if ( ! in_array( $value, $values, true ) ) {
+			if ( ! in_array( $value, $values ) ) {
 				$this->failed_validation  = true;
 				$this->validation_message = esc_html__( 'Invalid selection. Please select one of the available choices.', 'gravityflow' );
 			}
