@@ -1106,7 +1106,8 @@ PRIMARY KEY  (id)
 		public function get_users_as_choices() {
 			static $choices;
 
-			$args = apply_filters( 'gravityflow_get_users_args', array( 'orderby' => array( 'display_name', 'user_login' ), 'fields' => array( 'ID', 'display_name', 'user_login' ) ) );
+			$default_args = array( 'orderby' => array( 'display_name', 'user_login' ), 'fields' => array( 'ID', 'display_name', 'user_login' ) );
+			$args = wp_parse_args( apply_filters( 'gravityflow_get_users_args', $default_args ), $default_args );
 			$key  = md5( get_current_blog_id() . '_' . serialize( $args ) );
 
 			if ( ! isset( $choices[ $key ] ) ) {
@@ -2419,7 +2420,7 @@ PRIMARY KEY  (id)
 					),
 				),
 			);
-			
+
 			$due_date_highlight_type = array(
 				'name'           => 'due_date_highlight_type',
 				'type'           => 'hidden',
@@ -2501,7 +2502,7 @@ PRIMARY KEY  (id)
 					?>
 				</div>
 				<div class="gravityflow-due-date-highlight-field-container">
-					<?php 
+					<?php
 
 					$due_date_highlight_type_setting = $this->get_setting( 'due_date_highlight_type', 'color' );
 					$due_date_highlight_color_style = ( $due_date_highlight_type_setting == 'color' ) ? '' : 'style="display:none;"';
@@ -8131,7 +8132,7 @@ AND m.meta_value='queued'";
 					} else {
 						$target_value = strtotime( $target_value );
 					}
-					
+
 					if ( $operation == '>' && $field_value > $target_value ) {
 						return true;
 					}
