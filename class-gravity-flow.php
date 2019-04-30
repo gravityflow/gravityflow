@@ -5052,9 +5052,19 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		/**
 		 * Renders the submit page.
 		 *
-		 * @param bool $admin_ui Indicates if this is the admin page.
+		 * @param bool $args Indicates if this is the admin page.
 		 */
-		public function submit_page( $admin_ui ) {
+		public function submit_page( $args ) {
+
+			$defaults = array(
+                'admin_ui' => true,
+                'form_ids' => null
+            );
+
+			$args = array_merge( $defaults, $args );
+
+			$admin_ui = $args['admin_ui'];
+
 			?>
 			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_submit">
 				<?php if ( $admin_ui ) :	?>
@@ -5068,13 +5078,17 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$this->toolbar();
 				endif;
 				require_once( $this->get_base_path() . '/includes/pages/class-submit.php' );
+				if ( is_array( $args['form_ids'] ) ) {
+					$published_form_ids = $args['form_ids'];
+				} else {
+					$published_form_ids = gravity_flow()->get_published_form_ids();
+				}
 				if ( isset( $_GET['id'] ) ) {
 					$form_id = absint( $_GET['id'] );
-					Gravity_Flow_Submit::form( $form_id );
+				    if ( in_array( $form_id, $published_form_ids ) ) {
+					    Gravity_Flow_Submit::form( $form_id );
+                    }
 				} else {
-
-					$published_form_ids = gravity_flow()->get_published_form_ids();
-
 					Gravity_Flow_Submit::list_page( $published_form_ids , $admin_ui );
 				}
 
@@ -5966,8 +5980,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$html .= $this->get_shortcode_inbox_page( $a );
 					break;
 				case 'submit':
+					$args = array(
+						'admin_ui' => false,
+						'form_ids' => $a['forms'] ? explode( ',', $a['forms'] ) : '',
+					);
 					ob_start();
-					$this->submit_page( false );
+					$this->submit_page( $args );
 					$html .= ob_get_clean();
 					break;
 				case 'status':
@@ -6033,6 +6051,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$defaults = array(
 				'page'             => 'inbox',
 				'form'             => null,
+				'forms'             => null,
 				'form_id'          => null,
 				'entry_id'         => null,
 				'fields'           => array(),
