@@ -5052,18 +5052,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		/**
 		 * Renders the submit page.
 		 *
-		 * @param bool $args Indicates if this is the admin page.
+		 * @param bool $admin_ui
+		 * @param null|array $form_ids
 		 */
-		public function submit_page( $args ) {
-
-			$defaults = array(
-                'admin_ui' => true,
-                'form_ids' => null
-            );
-
-			$args = array_merge( $defaults, $args );
-
-			$admin_ui = $args['admin_ui'];
+		public function submit_page( $admin_ui, $form_ids = null ) {
 
 			?>
 			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_submit">
@@ -5078,8 +5070,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$this->toolbar();
 				endif;
 				require_once( $this->get_base_path() . '/includes/pages/class-submit.php' );
-				if ( is_array( $args['form_ids'] ) ) {
-					$published_form_ids = $args['form_ids'];
+				if ( is_array( $form_ids ) && ! empty ( $form_ids )) {
+					$published_form_ids = $form_ids;
 				} else {
 					$published_form_ids = gravity_flow()->get_published_form_ids();
 				}
