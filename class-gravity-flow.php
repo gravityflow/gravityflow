@@ -5972,12 +5972,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$html .= $this->get_shortcode_inbox_page( $a );
 					break;
 				case 'submit':
-					$args = array(
-						'admin_ui' => false,
-						'form_ids' => $a['forms'] ? explode( ',', $a['forms'] ) : '',
-					);
+					$form_ids = $a['forms'] ? explode( ',', $a['forms'] ) : '';
 					ob_start();
-					$this->submit_page( $args );
+					$this->submit_page( false, $form_ids );
 					$html .= ob_get_clean();
 					break;
 				case 'status':
