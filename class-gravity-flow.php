@@ -6797,6 +6797,8 @@ AND m.meta_value='queued'";
 									$this->log_debug( __METHOD__ . '(): not sending first reminder to ' . $assignee->get_key() . ' for entry ' . $entry['id'] . ' because a reminder was already sent: ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $reminder_timestamp ), 'F j, Y H:i:s' ) );
 									if ( $current_step->resend_assignee_email_repeatEnable ) {
 										$repeat_days = absint( $current_step->resend_assignee_email_repeatValue );
+										//Depreciated Filter - See/Use gravityflow_assignee_email_reminder_repeat_days
+										$repeat_days = apply_filters( 'gravityflow_assignee_eamil_reminder_repeat_days', $repeat_days, $form, $entry, $current_step, $assignee );
 										/**
 										 * Allows the number of days between each assignee email reminder to be modified.
 										 *
@@ -6810,7 +6812,6 @@ AND m.meta_value='queued'";
 										 * @param Gravity_Flow_Step     $step        The current step.
 										 * @param Gravity_Flow_Assignee $assignee    The current assignee.
 										 */
-										$repeat_days = apply_filters( 'gravityflow_assignee_eamil_reminder_repeat_days', $repeat_days, $form, $entry, $current_step, $assignee );
 										$repeat_days = apply_filters( 'gravityflow_assignee_email_reminder_repeat_days', $repeat_days, $form, $entry, $current_step, $assignee );
 										if ( $repeat_days > 0 ) {
 											$repeat_trigger_timestamp = $reminder_timestamp + ( (int) $repeat_days * DAY_IN_SECONDS );
