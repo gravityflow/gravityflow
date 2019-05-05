@@ -1113,10 +1113,34 @@ PRIMARY KEY  (id)
 			if ( ! isset( $choices[ $key ] ) ) {
 				$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
 
-				$accounts        = get_users( $args );
-				$account_choices = array();
+				// Current assignees may not be available once the gravityflow_get_users_args filter changed.
+                // So we need to get them first and merge them into the user list.
+				$settings            = $this->get_feed( rgget( 'fid' ) );
+				$feed_meta           = rgar( $settings, 'meta' );
+				$current_assignees   = rgar( $feed_meta, 'assignees' );
+				$account_choices     = array();
+				$exclude_account_ids = array();
+				if ( ! empty( $current_assignees ) ) {
+					foreach ( $current_assignees as $current_assignee ) {
+						list( $string, $user_id ) = explode( '|', $current_assignee );
+						$account = get_user_by( 'id', $user_id );
+						if ( $account ) {
+							$name                  = $account->display_name ? $account->display_name : $account->user_login;
+							$account_choices[]     = array( 'value' => 'user_id|' . $account->ID, 'label' => $name );
+							$exclude_account_ids[] = $user_id;
+						}
+					}
+
+					if ( ! empty( $exclude_account_ids ) ) {
+					    // Exclude current assignees when get_users().
+						$args['exclude'] = $exclude_account_ids;
+					}
+				}
+
+				// Get a user list.
+				$accounts = get_users( $args );
 				foreach ( $accounts as $account ) {
-					$name = $account->display_name ? $account->display_name : $account->user_login;
+					$name              = $account->display_name ? $account->display_name : $account->user_login;
 					$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'label' => $name );
 				}
 
