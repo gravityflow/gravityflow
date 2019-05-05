@@ -376,41 +376,55 @@ class Gravity_Flow_Assignee {
 		$assignee_type = $this->get_type();
 		$assignee_id   = $this->get_id();
 
-		if ( $assignee_type == 'email' ) {
-			$email                = $assignee_id;
-			$notification['id']   = 'workflow_step_' . $this->step->get_id() . '_email_' . $email;
-			$notification['name'] = $notification['id'];
-			$notification['to']   = $email;
-			$message              = $this->replace_variables( $message );
-			// Call $this->step->replace_variables() for backwards compatibility
-			$notification['message'] = $this->step->replace_variables( $message, $this );
-			$this->step->send_notification( $notification );
+		switch ( $assignee_type ) {
+			case 'email':
+				$email                = $assignee_id;
+				$notification['id']   = 'workflow_step_' . $this->step->get_id() . '_email_' . $email;
+				$notification['name'] = $notification['id'];
+				$notification['to']   = $email;
+				$message              = $this->replace_variables( $message );
+				// Call $this->step->replace_variables() for backwards compatibility
+				$notification['message'] = $this->step->replace_variables( $message, $this );
+				$this->step->send_notification( $notification );
 
-			return;
+				return;
+
+			case 'role':
+				$users = get_users( array( 'role' => $assignee_id ) );
+				break;
+
+			case 'assignee_multi_user_field':
+				$entry = $this->step->get_entry();
+				if ( ! empty( $entry[ $assignee_id ] ) ) {
+					$user_ids = json_decode( $entry[ $assignee_id ] );
+					$users    = get_users( array( 'include' => $user_ids ) );
+				}
+				break;
+
+			default:
+				$users = get_users( array( 'include' => array( $assignee_id ) ) );
 		}
 
-		if ( $assignee_type == 'role' ) {
-			$users = get_users( array( 'role' => $assignee_id ) );
-		} else {
-			$users = get_users( array( 'include' => array( $assignee_id ) ) );
-		}
+		if ( isset( $users ) ) {
 
-		$this->step->log_debug( __METHOD__ . sprintf( '() sending notifications to %d users', count( $users ) ) );
+			$this->step->log_debug( __METHOD__ . sprintf( '() sending notifications to %d users', count( $users ) ) );
 
-		$user_assignee_args = array(
-			'type' => $assignee_type,
-			'id'   => $assignee_id,
-		);
-		foreach ( $users as $user ) {
-			$user_assignee_args['user'] = $user;
-			$user_assignee              = Gravity_Flow_Assignees::create( $user_assignee_args, $this->step );
-			$notification['id']         = 'workflow_step_' . $this->step->get_id() . '_user_' . $user->ID;
-			$notification['name']       = $notification['id'];
-			$notification['to']         = $user->user_email;
-			$message                    = $user_assignee->replace_variables( $message );
-			// Call $this->step->replace_variables() for backwards compatibility
-			$notification['message'] = $this->step->replace_variables( $message, $user_assignee );
-			$this->step->send_notification( $notification );
+			$user_assignee_args = array(
+				'type' => $assignee_type,
+				'id'   => $assignee_id,
+			);
+
+			foreach ( $users as $user ) {
+				$user_assignee_args['user'] = $user;
+				$user_assignee              = Gravity_Flow_Assignees::create( $user_assignee_args, $this->step );
+				$notification['id']         = 'workflow_step_' . $this->step->get_id() . '_user_' . $user->ID;
+				$notification['name']       = $notification['id'];
+				$notification['to']         = $user->user_email;
+				$message                    = $user_assignee->replace_variables( $message );
+				// Call $this->step->replace_variables() for backwards compatibility
+				$notification['message'] = $this->step->replace_variables( $message, $user_assignee );
+				$this->step->send_notification( $notification );
+			}
 		}
 	}
 

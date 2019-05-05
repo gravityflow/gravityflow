@@ -122,13 +122,13 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	public function get_account_choices( $form_id ) {
 		$account_choices = array();
 
-		$args = array(
+		$default_args = array(
 			'orderby' => array( 'display_name', 'user_login' ),
 			'fields'  => array( 'ID', 'display_name', 'user_login' ),
 			'role'    => $this->gravityflowUsersRoleFilter,
 		);
 
-		$args     = apply_filters( 'gravityflow_get_users_args_assignee_field', $args, $form_id, $this );
+		$args     = wp_parse_args( apply_filters( 'gravityflow_get_users_args_assignee_field', $default_args, $form_id, $this ), $default_args );
 		$accounts = get_users( $args );
 		foreach ( $accounts as $account ) {
 			$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'text' => $account->display_name );
@@ -441,7 +441,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 
 			$values = $this->get_choices_values( $include_users, $include_roles, $include_fields );
 
-			if ( ! in_array( $value, $values, true ) ) {
+			if ( ! in_array( $value, $values ) ) {
 				$this->failed_validation  = true;
 				$this->validation_message = esc_html__( 'Invalid selection. Please select one of the available choices.', 'gravityflow' );
 			}

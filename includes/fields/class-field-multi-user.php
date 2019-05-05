@@ -111,13 +111,13 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 	public function get_users_as_choices() {
 		$form_id = $this->formId;
 
-		$args = array(
+		$default_args = array(
 			'orderby' => array( 'display_name', 'user_login' ),
 			'fields'  => array( 'ID', 'display_name', 'user_login' ),
 			'role'    => $this->gravityflowUsersRoleFilter,
 		);
 
-		$args            = apply_filters( 'gravityflow_get_users_args_user_field', $args, $form_id, $this );
+		$args            = wp_parse_args( apply_filters( 'gravityflow_get_users_args_user_field', $default_args, $form_id, $this ), $default_args );
 		$accounts        = get_users( $args );
 		$account_choices = array();
 		foreach ( $accounts as $account ) {
@@ -297,7 +297,7 @@ class Gravity_Flow_Field_Multi_User extends GF_Field_MultiSelect {
 			$values = wp_list_pluck( $this->get_users_as_choices(), 'value' );
 
 			foreach ( (array) $value as $_value ) {
-				if ( ! in_array( $_value, $values, true ) ) {
+				if ( ! in_array( $_value, $values ) ) {
 					$this->failed_validation  = true;
 					$this->validation_message = esc_html__( 'Invalid selection. Please select one of the available choices.', 'gravityflow' );
 
