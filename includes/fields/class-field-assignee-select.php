@@ -126,6 +126,7 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 			'orderby' => array( 'display_name', 'user_login' ),
 			'fields'  => array( 'ID', 'display_name', 'user_login' ),
 			'role'    => $this->gravityflowUsersRoleFilter,
+			'number'  => 2000,
 		);
 
 		$args     = wp_parse_args( apply_filters( 'gravityflow_get_users_args_assignee_field', $default_args, $form_id, $this ), $default_args );
