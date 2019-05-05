@@ -1106,8 +1106,7 @@ PRIMARY KEY  (id)
 		public function get_users_as_choices() {
 			static $choices;
 
-			$default_args = array( 'orderby' => array( 'display_name', 'user_login' ), 'fields' => array( 'ID', 'display_name', 'user_login' ) );
-			$args = wp_parse_args( apply_filters( 'gravityflow_get_users_args', $default_args ), $default_args );
+			$args = $this->get_users_args();
 			$key  = md5( get_current_blog_id() . '_' . serialize( $args ) );
 
 			if ( ! isset( $choices[ $key ] ) ) {
@@ -8679,5 +8678,21 @@ AND m.meta_value='queued'";
 				GFCommon::display_dismissible_message( $notices );
 			}
 		}
+
+		/**
+         * Helper function to return gravityflow_get_users_args filter value.
+         *
+         * @since 2.6
+         *
+		 * @return array
+		 */
+		public function get_users_args() {
+			$default_args = array(
+				'orderby' => array( 'display_name', 'user_login' ),
+				'fields'  => array( 'ID', 'display_name', 'user_login' ),
+				'number'  => 2000,
+			);
+			return wp_parse_args( apply_filters( 'gravityflow_get_users_args', $default_args ), $default_args );
+        }
 	}
 }

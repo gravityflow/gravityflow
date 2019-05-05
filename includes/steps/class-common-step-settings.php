@@ -380,7 +380,7 @@ class Gravity_Flow_Common_Step_Settings {
 	 * @return array
 	 */
 	public function get_setting_assignees() {
-		return array(
+		$setting = array(
 			'id'       => 'assignees',
 			'name'     => 'assignees[]',
 			'tooltip'  => __( 'Users and roles fields will appear in this list. If the form contains any assignee fields they will also appear here. Click on an item to select it. The selected items will appear on the right. If you select a role then anybody from that role can approve.', 'gravityflow' ),
@@ -390,6 +390,15 @@ class Gravity_Flow_Common_Step_Settings {
 			'type'     => 'select',
 			'choices'  => $this->_account_choices,
 		);
+
+		$total_count = count_users();
+		$args        = gravity_flow()->get_users_args();
+		$number      = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
+		if ( $total_count > $number ) {
+			$setting['description'] = sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users.%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
+		}
+
+		return $setting;
 	}
 
 	/**
