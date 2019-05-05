@@ -394,7 +394,7 @@ class Gravity_Flow_Common_Step_Settings {
 		$total_count = count_users();
 		$args        = gravity_flow()->get_users_args();
 		$number      = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
-		if ( $total_count > $number ) {
+		if ( $total_count['total_users'] > $number ) {
 			$setting['description'] = sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users.%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
 		}
 
@@ -409,12 +409,21 @@ class Gravity_Flow_Common_Step_Settings {
 	 * @return array
 	 */
 	public function get_setting_assignee_routing() {
-		return array(
+		$setting = array(
 			'name'    => 'routing',
 			'tooltip' => __( 'Build assignee routing rules by adding conditions. Users and roles fields will appear in the first drop-down field. If the form contains any assignee fields they will also appear here. Select the assignee and define the condition for that assignee. Add as many routing rules as you need.', 'gravityflow' ),
 			'label'   => __( 'Routing', 'gravityflow' ),
 			'type'    => 'routing',
 		);
+
+		$total_count = count_users();
+		$args        = gravity_flow()->get_users_args();
+		$number      = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
+		if ( $total_count['total_users'] > $number ) {
+			$setting['description'] = sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users.%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
+		}
+
+		return $setting;
 	}
 
 	/**

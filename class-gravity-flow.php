@@ -1116,9 +1116,19 @@ PRIMARY KEY  (id)
                 // So we need to get them first and merge them into the user list.
 				$settings            = $this->get_feed( rgget( 'fid' ) );
 				$feed_meta           = rgar( $settings, 'meta' );
-				$current_assignees   = rgar( $feed_meta, 'assignees' );
+				$type                = rgar( $feed_meta, 'type' );
 				$account_choices     = array();
 				$exclude_account_ids = array();
+				if ( $type === 'select' ) {
+					$current_assignees = rgar( $feed_meta, 'assignees' );
+				} else {
+					$routing           = rgar( $feed_meta, 'routing' );
+					$current_assignees = array();
+					foreach ( (array) $routing as $_routing ) {
+						$current_assignees[] = $_routing['assignee'];
+					}
+				}
+
 				if ( ! empty( $current_assignees ) ) {
 					foreach ( $current_assignees as $current_assignee ) {
 						list( $string, $user_id ) = explode( '|', $current_assignee );
@@ -1131,7 +1141,7 @@ PRIMARY KEY  (id)
 					}
 
 					if ( ! empty( $exclude_account_ids ) ) {
-					    // Exclude current assignees when get_users().
+						// Exclude current assignees when get_users().
 						$args['exclude'] = $exclude_account_ids;
 					}
 				}
