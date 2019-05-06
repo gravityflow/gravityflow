@@ -1128,7 +1128,7 @@ PRIMARY KEY  (id)
 						foreach ( $routing as $_routing ) {
 							$current_assignees[] = $_routing['assignee'];
 						}
-                    }
+					}
 				}
 
 				if ( ! empty( $current_assignees ) ) {
