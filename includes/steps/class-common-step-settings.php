@@ -123,6 +123,10 @@ class Gravity_Flow_Common_Step_Settings {
 
 		$prefix = rgar( $config, 'name_prefix' );
 
+		$total_count = count_users();
+		$args        = gravity_flow()->get_users_args();
+		$number      = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
+
 		return array(
 			array(
 				'name'          => $prefix . '_notification_type',
@@ -133,20 +137,22 @@ class Gravity_Flow_Common_Step_Settings {
 				'choices'       => $this->get_type_choices(),
 			),
 			array(
-				'id'       => $prefix . '_notification_users',
-				'name'     => $prefix . '_notification_users[]',
-				'label'    => __( 'Select', 'gravityflow' ),
-				'size'     => '8',
-				'multiple' => 'multiple',
-				'type'     => 'select',
-				'choices'  => $this->_account_choices,
+				'id'          => $prefix . '_notification_users',
+				'name'        => $prefix . '_notification_users[]',
+				'label'       => __( 'Select', 'gravityflow' ),
+				'size'        => '8',
+				'multiple'    => 'multiple',
+				'type'        => 'select',
+				'choices'     => $this->_account_choices,
+				'description' => ( $total_count['total_users'] > $number ) ? sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users.%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' ) : '',
 			),
 			array(
 				'name'  => $prefix . '_notification_routing',
 				'label' => __( 'Routing', 'gravityflow' ),
 				'class' => 'large',
 				'type'  => 'user_routing',
-			)
+				'description' => ( $total_count['total_users'] > $number ) ? sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users.%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' ) : '',
+			),
 		);
 	}
 
