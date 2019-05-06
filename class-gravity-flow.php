@@ -1124,9 +1124,11 @@ PRIMARY KEY  (id)
 				} else {
 					$routing           = rgar( $feed_meta, 'routing' );
 					$current_assignees = array();
-					foreach ( (array) $routing as $_routing ) {
-						$current_assignees[] = $_routing['assignee'];
-					}
+					if ( ! empty( $routing ) ) {
+						foreach ( $routing as $_routing ) {
+							$current_assignees[] = $_routing['assignee'];
+						}
+                    }
 				}
 
 				if ( ! empty( $current_assignees ) ) {
