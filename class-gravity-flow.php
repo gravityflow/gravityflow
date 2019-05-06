@@ -1113,7 +1113,7 @@ PRIMARY KEY  (id)
 				$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
 
 				// Current assignees may not be available once the gravityflow_get_users_args filter changed.
-                // So we need to get them first and merge them into the user list.
+				// So we need to get them first and merge them into the user list.
 				$settings            = $this->get_feed( rgget( 'fid' ) );
 				$feed_meta           = rgar( $settings, 'meta' );
 				$type                = rgar( $feed_meta, 'type' );
@@ -8692,10 +8692,10 @@ AND m.meta_value='queued'";
 		}
 
 		/**
-         * Helper function to return gravityflow_get_users_args filter value.
-         *
-         * @since 2.6
-         *
+		 * Helper function to return gravityflow_get_users_args filter value.
+		 *
+		 * @since 2.6
+		 *
 		 * @return array
 		 */
 		public function get_users_args() {
@@ -8704,7 +8704,8 @@ AND m.meta_value='queued'";
 				'fields'  => array( 'ID', 'display_name', 'user_login' ),
 				'number'  => 2000,
 			);
+
 			return wp_parse_args( apply_filters( 'gravityflow_get_users_args', $default_args ), $default_args );
-        }
+		}
 	}
 }
