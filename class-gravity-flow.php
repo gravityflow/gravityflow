@@ -811,7 +811,7 @@ PRIMARY KEY  (id)
 
 			$shortcode_found = false;
 			foreach ( $wp_query->posts as $post ) {
-				if ( stripos( $post->post_content, '[gravityflow' ) !== false ) {
+				if ( stripos( $post->post_content, '[gravityflow' ) !== false || stripos( $post->post_content, '<!-- wp:gravityflow/' ) !== false ) {
 					$shortcode_found = true;
 					break;
 				}
@@ -5098,9 +5098,14 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		/**
 		 * Renders the submit page.
 		 *
-		 * @param bool $admin_ui Indicates if this is the admin page.
+		 * @since 2.6 Added the $form_ids parameter.
+		 * @since unknown
+		 *
+		 * @param bool       $admin_ui Whether to display the admin UI.
+		 * @param null|array $form_ids An array of form IDs.
 		 */
-		public function submit_page( $admin_ui ) {
+		public function submit_page( $admin_ui, $form_ids = null ) {
+
 			?>
 			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_submit">
 				<?php if ( $admin_ui ) :	?>
@@ -5114,13 +5119,17 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$this->toolbar();
 				endif;
 				require_once( $this->get_base_path() . '/includes/pages/class-submit.php' );
+				if ( is_array( $form_ids ) && ! empty ( $form_ids ) ) {
+					$published_form_ids = $form_ids;
+				} else {
+					$published_form_ids = gravity_flow()->get_published_form_ids();
+				}
 				if ( isset( $_GET['id'] ) ) {
 					$form_id = absint( $_GET['id'] );
-					Gravity_Flow_Submit::form( $form_id );
+				    if ( in_array( $form_id, $published_form_ids ) ) {
+					    Gravity_Flow_Submit::form( $form_id );
+                    }
 				} else {
-
-					$published_form_ids = gravity_flow()->get_published_form_ids();
-
 					Gravity_Flow_Submit::list_page( $published_form_ids , $admin_ui );
 				}
 
@@ -5212,6 +5221,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'step_highlight'       => true,
 				'due_date'             => false,
 				'context_key'          => 'wp-admin',
+				'back_link'            => false,
+				'back_link_text'       => __( 'Return to list', 'gravityflow' ),
+				'back_link_url'        => null,
 			);
 
 			$args = array_merge( $defaults, $args );
@@ -5963,7 +5975,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 				$app_settings = $this->get_app_settings();
 
-				if ( $a['display_all'] && ! rgar( $app_settings, 'allow_display_all_attribute' ) ) {
+				if ( $a['display_all'] && ! rgar( $app_settings, 'allow_display_all_attribute' ) && ! GFAPI::current_user_can_any( 'gravityflow_status_view_all' ) ) {
 
 					$a['display_all'] = false;
 				}
@@ -5995,8 +6007,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			if ( ! empty( $a['form'] ) && ! empty( $entry_id ) ) {
 				// Limited support for multiple shortcodes on the same page.
+				$form_id = $a['form'] ? explode( ',', $a['form'] ) : '';
+				if ( is_array( $form_id ) && count( $form_id ) === 1 ) {
+					$form_id = $form_id[0];
+				}
 				$entry = GFAPI::get_entry( $entry_id );
-				if ( is_wp_error( $entry ) || $entry['form_id'] !== $a['form'] ) {
+				if ( is_wp_error( $entry ) || ( is_array( $form_id ) && ! in_array( $entry['form_id'], $form_id ) ) || ( ! is_array( $form_id ) && $entry['form_id'] !== $a['form'] ) ) {
 					return;
 				}
 			}
@@ -6012,8 +6028,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$html .= $this->get_shortcode_inbox_page( $a );
 					break;
 				case 'submit':
+					$form_ids = $a['forms'] ? explode( ',', $a['forms'] ) : '';
 					ob_start();
-					$this->submit_page( false );
+					$this->submit_page( false, $form_ids );
 					$html .= ob_get_clean();
 					break;
 				case 'status':
@@ -6022,7 +6039,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 					if ( rgget( 'view' ) || ! empty( $entry_id ) ) {
 						$html .= $this->get_shortcode_status_page_detail( $a );
-					} elseif ( is_user_logged_in() || ( $a['display_all'] && $a['display_all'] ) ) {
+					} elseif ( is_user_logged_in() || ( $a['display_all'] && $a['allow_anonymous'] ) ) {
 						$html .= $this->get_shortcode_status_page( $a );
 					}
 			}
@@ -6079,6 +6096,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$defaults = array(
 				'page'             => 'inbox',
 				'form'             => null,
+				'forms'            => null,
 				'form_id'          => null,
 				'entry_id'         => null,
 				'fields'           => array(),
@@ -6192,7 +6210,14 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'     => $a['workflow_info'],
 				'step_status'       => $a['step_status'],
 				'context_key'       => $a['context_key'],
+				'back_link'        => $a['back_link'],
+				'back_link_text'   => $a['back_link_text'],
+				'back_link_url'    => $a['back_link_url'],
 			);
+
+			if ( is_null( $args['back_link_url' ] ) ) {
+				$args['back_link_url' ] = remove_query_arg( array( 'gworkflow_token', 'new_status', 'view', 'lid', 'id', 'page' ) );
+			}
 
 			$this->inbox_page( $args );
 			$html = ob_get_clean();
@@ -6247,8 +6272,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			);
 
 			if ( isset( $a['form'] ) ) {
+			    $form_id = $a['form'] ? explode( ',', $a['form'] ) : '';
+			    if ( is_array( $form_id ) && count( $form_id ) === 1 ) {
+				    $form_id = $form_id[0];
+                }
 				$args['constraint_filters'] = array(
-					'form_id' => $a['form'],
+					'form_id' => $form_id,
 				);
 			}
 
