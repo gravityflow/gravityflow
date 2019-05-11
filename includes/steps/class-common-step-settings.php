@@ -144,14 +144,14 @@ class Gravity_Flow_Common_Step_Settings {
 				'multiple'    => 'multiple',
 				'type'        => 'select',
 				'choices'     => $this->_account_choices,
-				'description' => ( $total_count['total_users'] > $number ) ? sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users.%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' ) : '',
+				'description' => ( $total_count['total_users'] > $number ) ? sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' ) : '',
 			),
 			array(
 				'name'  => $prefix . '_notification_routing',
 				'label' => __( 'Routing', 'gravityflow' ),
 				'class' => 'large',
 				'type'  => 'user_routing',
-				'description' => ( $total_count['total_users'] > $number ) ? sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users.%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' ) : '',
+				'description' => ( $total_count['total_users'] > $number ) ? sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' ) : '',
 			),
 		);
 	}
@@ -401,7 +401,7 @@ class Gravity_Flow_Common_Step_Settings {
 		$args        = gravity_flow()->get_users_args();
 		$number      = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
 		if ( $total_count['total_users'] > $number ) {
-			$setting['description'] = sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users.%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
+			$setting['description'] = sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
 		}
 
 		return $setting;
@@ -426,7 +426,7 @@ class Gravity_Flow_Common_Step_Settings {
 		$args        = gravity_flow()->get_users_args();
 		$number      = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
 		if ( $total_count['total_users'] > $number ) {
-			$setting['description'] = sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users.%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
+			$setting['description'] = sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
 		}
 
 		return $setting;
