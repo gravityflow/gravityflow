@@ -5166,6 +5166,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'step_highlight'       => true,
 				'due_date'             => false,
 				'context_key'          => 'wp-admin',
+				'back_link'            => false,
+				'back_link_text'       => __( 'Return to list', 'gravityflow' ),
+				'back_link_url'        => null,
 			);
 
 			$args = array_merge( $defaults, $args );
@@ -6150,7 +6153,14 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'     => $a['workflow_info'],
 				'step_status'       => $a['step_status'],
 				'context_key'       => $a['context_key'],
+				'back_link'        => $a['back_link'],
+				'back_link_text'   => $a['back_link_text'],
+				'back_link_url'    => $a['back_link_url'],
 			);
+
+			if ( is_null( $args['back_link_url' ] ) ) {
+				$args['back_link_url' ] = remove_query_arg( array( 'gworkflow_token', 'new_status', 'view', 'lid', 'id', 'page' ) );
+			}
 
 			$this->inbox_page( $args );
 			$html = ob_get_clean();
