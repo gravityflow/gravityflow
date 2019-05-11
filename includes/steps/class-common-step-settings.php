@@ -412,7 +412,8 @@ class Gravity_Flow_Common_Step_Settings {
 		$args           = gravity_flow()->get_users_args();
 		$number         = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
 		if ( $total_accounts['total_users'] > $number ) {
-			$setting['description'] = sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
+			/* translators: 1: Warning icon 2: Number of users displayed 3: Open link tag 4: Close link tag */
+			$setting['description'] = sprintf( esc_html__( '%1$s This list of users contains only the first %2$s users in your site. %3$sLearn how to remove this limit%4$s. ', 'gravityflow' ), '<i class="dashicons dashicons-warning" style="color:red;"></i> ', $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
 		}
 
 		return $setting;
