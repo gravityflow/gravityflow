@@ -6043,7 +6043,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$defaults = array(
 				'page'             => 'inbox',
 				'form'             => null,
-				'forms'             => null,
+				'forms'            => null,
 				'form_id'          => null,
 				'entry_id'         => null,
 				'fields'           => array(),
