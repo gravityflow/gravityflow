@@ -1106,23 +1106,34 @@ PRIMARY KEY  (id)
 		public function get_users_as_choices() {
 			static $choices;
 
+			$settings      = $this->get_feed( rgget( 'fid' ) );
+			$feed_meta     = rgar( $settings, 'meta' );
+			$step_type     = rgar( $feed_meta, 'step_type' );
+			$assignee_type = 'assignees';
+			if ( $step_type === 'notification' ) {
+				$assignee_type = 'workflow_notification_assignees';
+			}
+
 			$args = $this->get_users_args();
-			$key  = md5( get_current_blog_id() . '_' . serialize( $args ) );
+			$key  = md5( get_current_blog_id() . '_' . serialize( $args ) . '_' . $assignee_type );
 
 			if ( ! isset( $choices[ $key ] ) ) {
 				$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
 
 				// Current assignees may not be available once the gravityflow_get_users_args filter changed.
 				// So we need to get them first and merge them into the user list.
-				$settings            = $this->get_feed( rgget( 'fid' ) );
-				$feed_meta           = rgar( $settings, 'meta' );
-				$type                = rgar( $feed_meta, 'type' );
+				$prefix = '';
+				if ( $step_type === 'notification' ) {
+					$prefix = 'workflow_notification_';
+				}
+
+				$type                = rgar( $feed_meta, $prefix . 'type' );
 				$account_choices     = array();
 				$exclude_account_ids = array();
 				if ( $type === 'select' ) {
-					$current_assignees = rgar( $feed_meta, 'assignees' );
+					$current_assignees = rgar( $feed_meta, $prefix . 'assignees' );
 				} else {
-					$routing           = rgar( $feed_meta, 'routing' );
+					$routing           = rgar( $feed_meta, $prefix . 'routing' );
 					$current_assignees = array();
 					if ( ! empty( $routing ) ) {
 						foreach ( $routing as $_routing ) {
