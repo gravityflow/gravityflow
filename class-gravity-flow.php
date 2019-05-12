@@ -1106,45 +1106,53 @@ PRIMARY KEY  (id)
 		public function get_users_as_choices() {
 			static $choices;
 
-			$settings      = $this->get_feed( rgget( 'fid' ) );
-			$feed_meta     = rgar( $settings, 'meta' );
-			$step_type     = rgar( $feed_meta, 'step_type' );
-			$assignee_type = 'assignees';
-			if ( $step_type === 'notification' ) {
-				$assignee_type = 'workflow_notification_assignees';
-			}
-
 			$args = Gravity_Flow_Common::get_users_args();
-			$key  = md5( get_current_blog_id() . '_' . serialize( $args ) . '_' . $assignee_type );
 
-			if ( ! isset( $choices[ $key ] ) ) {
-				$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
-
-				// Current assignees may not be available once the gravityflow_get_users_args filter changed.
-				// So we need to get them first and merge them into the user list.
-				$prefix = '';
-				if ( $step_type === 'notification' ) {
-					$prefix = 'workflow_notification_';
-				}
-
-				$type                = rgar( $feed_meta, $prefix . 'type' );
-				$account_choices     = array();
+			$total_accounts = Gravity_Flow_Common::get_total_accounts();
+			if ( $total_accounts > $args['number'] ) {
+				$settings            = $this->get_feed( rgget( 'fid' ) );
+				$feed_meta           = rgar( $settings, 'meta' );
+				$notification_types  = array(
+					'workflow',
+					'assignee',
+					'rejection',
+					'approval',
+					'in_progress',
+					'complete',
+					'revert'
+				);
+				$current_users       = array();
 				$exclude_account_ids = array();
-				if ( $type === 'select' ) {
-					$current_assignees = rgar( $feed_meta, $prefix . 'assignees' );
-				} else {
-					$routing           = rgar( $feed_meta, $prefix . 'routing' );
-					$current_assignees = array();
-					if ( ! empty( $routing ) ) {
-						foreach ( $routing as $_routing ) {
-							$current_assignees[] = $_routing['assignee'];
+				$account_choices     = array();
+
+				foreach ( $notification_types as $type ) {
+					if ( rgar( $feed_meta, $type . '_notification_enabled' ) === '1' ) {
+						$_type = ( $type === 'assignee' ) ? 'type' : $type . '_notification_type';
+
+						if ( rgar( $feed_meta, $_type ) === 'select' ) {
+							$key   = ( $type === 'assignee' ) ? 'assignees' : $type . '_notification_users';
+							$value = rgar( $feed_meta, $key );
+							if ( ! empty( $value ) ) {
+								$current_users = array_merge( $current_users, $value );
+							}
+						} else {
+							$key                   = ( $type === 'assignee' ) ? 'routing' : $type . '_notification_routing';
+							$current_users_routing = rgar( $feed_meta, $key );
+							if ( ! empty( $current_users_routing ) ) {
+								$_current_users = array();
+								foreach ( $current_users_routing as $_routing ) {
+									$_current_users[] = $_routing['assignee'];
+								}
+
+								$current_users = array_merge( $current_users, $_current_users );
+							}
 						}
 					}
 				}
 
-				if ( ! empty( $current_assignees ) ) {
-					foreach ( $current_assignees as $current_assignee ) {
-						list( $string, $user_id ) = explode( '|', $current_assignee );
+				if ( ! empty( $current_users ) ) {
+					foreach ( $current_users as $current_user ) {
+						list( $string, $user_id ) = explode( '|', $current_user );
 						$account = get_user_by( 'id', $user_id );
 						if ( $account ) {
 							$name                  = $account->display_name ? $account->display_name : $account->user_login;
@@ -1158,6 +1166,12 @@ PRIMARY KEY  (id)
 						$args['exclude'] = $exclude_account_ids;
 					}
 				}
+			}
+
+			$key  = md5( get_current_blog_id() . '_' . serialize( $args ) );
+
+			if ( ! isset( $choices[ $key ] ) ) {
+				$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
 
 				// Get a user list.
 				$accounts = get_users( $args );
