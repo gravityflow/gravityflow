@@ -1106,9 +1106,10 @@ PRIMARY KEY  (id)
 		public function get_users_as_choices() {
 			static $choices;
 
-			$args = Gravity_Flow_Common::get_users_args();
+			$args            = Gravity_Flow_Common::get_users_args();
+			$total_accounts  = Gravity_Flow_Common::get_total_accounts();
+			$account_choices = array();
 
-			$total_accounts = Gravity_Flow_Common::get_total_accounts();
 			if ( $total_accounts > $args['number'] ) {
 				$settings            = $this->get_feed( rgget( 'fid' ) );
 				$feed_meta           = rgar( $settings, 'meta' );
@@ -1123,7 +1124,6 @@ PRIMARY KEY  (id)
 				);
 				$current_users       = array();
 				$exclude_account_ids = array();
-				$account_choices     = array();
 
 				foreach ( $notification_types as $type ) {
 					if ( rgar( $feed_meta, $type . '_notification_enabled' ) === '1' ) {
@@ -1179,6 +1179,8 @@ PRIMARY KEY  (id)
 					$name              = $account->display_name ? $account->display_name : $account->user_login;
 					$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'label' => $name );
 				}
+
+				usort( $account_choices, array( $this, 'sort_account_choices' ) );
 
 				$choices[ $key ] = array(
 					array(
@@ -1236,6 +1238,20 @@ PRIMARY KEY  (id)
 			}
 
 			return $choices[ $key ];
+		}
+
+		/**
+		 * The usort() callback for sorting account choices.
+         *
+         * @since 2.5.3
+		 *
+		 * @param array $a The first account choice to compare.
+		 * @param array $b The second first account choice to compare.
+		 *
+		 * @return int
+		 */
+		public function sort_account_choices( $a, $b ) {
+			return $a['label'] > $b['label'];
 		}
 
 		/**
