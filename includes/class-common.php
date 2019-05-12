@@ -446,4 +446,38 @@ class Gravity_Flow_Common {
 		return in_array( $field->id, $current_step->get_editable_fields() );
 	}
 
+	/**
+	 * Helper function to return gravityflow_get_users_args filter value.
+	 *
+	 * @since 2.5.3
+	 *
+	 * @return array
+	 */
+	public static function get_users_args() {
+		$default_args = array(
+			'orderby' => array( 'display_name', 'user_login' ),
+			'fields'  => array( 'ID', 'display_name', 'user_login' ),
+			'number'  => 2000,
+		);
+
+		return wp_parse_args( apply_filters( 'gravityflow_get_users_args', $default_args ), $default_args );
+	}
+
+	/**
+	 * Helper function to get total users.
+	 *
+	 * @since 2.5.3
+	 *
+	 * @return int
+	 */
+	public static function get_total_accounts() {
+		static $total_accounts = 0;
+
+		if ( $total_accounts === 0 ) {
+			$total_accounts = count_users();
+		}
+
+		return $total_accounts['total_users'];
+	}
+
 }

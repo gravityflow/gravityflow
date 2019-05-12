@@ -25,13 +25,6 @@ class Gravity_Flow_Common_Step_Settings {
 	private $_account_choices = array();
 
 	/**
-	 * Total user accounts.
-	 *
-	 * @var int
-	 */
-	private static $_total_accounts = 0;
-
-	/**
 	 * Choices array of active Gravity PDF feeds.
 	 *
 	 * @var array
@@ -44,10 +37,6 @@ class Gravity_Flow_Common_Step_Settings {
 	public function __construct() {
 		$this->_account_choices = gravity_flow()->get_users_as_choices();
 		$this->set_gpdf_choices();
-
-		if ( self::$_total_accounts === 0 ) {
-			self::$_total_accounts = count_users();
-		}
 	}
 
 	/**
@@ -134,9 +123,11 @@ class Gravity_Flow_Common_Step_Settings {
 
 		$prefix = rgar( $config, 'name_prefix' );
 
-		$total_accounts = self::$_total_accounts;
-		$args           = gravity_flow()->get_users_args();
+		$total_accounts = Gravity_Flow_Common::get_total_accounts();
+		$args           = Gravity_Flow_Common::get_users_args();
 		$number         = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
+		/* translators: 1: Warning icon 2: Number of users displayed 3: Open link tag 4: Close link tag */
+		$description = sprintf( esc_html__( '%1$s This list of users contains only the first %2$s users in your site. %3$sLearn how to remove this limit%4$s. ', 'gravityflow' ), '<i class="dashicons dashicons-warning" style="color:red;"></i> ', $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
 
 		return array(
 			array(
@@ -155,14 +146,14 @@ class Gravity_Flow_Common_Step_Settings {
 				'multiple'    => 'multiple',
 				'type'        => 'select',
 				'choices'     => $this->_account_choices,
-				'description' => ( $total_accounts['total_users'] > $number ) ? sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' ) : '',
+				'description' => ( $total_accounts > $number ) ? $description : '',
 			),
 			array(
-				'name'  => $prefix . '_notification_routing',
-				'label' => __( 'Routing', 'gravityflow' ),
-				'class' => 'large',
-				'type'  => 'user_routing',
-				'description' => ( $total_accounts['total_users'] > $number ) ? sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' ) : '',
+				'name'        => $prefix . '_notification_routing',
+				'label'       => __( 'Routing', 'gravityflow' ),
+				'class'       => 'large',
+				'type'        => 'user_routing',
+				'description' => ( $total_accounts > $number ) ? $description : '',
 			),
 		);
 	}
@@ -408,10 +399,10 @@ class Gravity_Flow_Common_Step_Settings {
 			'choices'  => $this->_account_choices,
 		);
 
-		$total_accounts = self::$_total_accounts;
-		$args           = gravity_flow()->get_users_args();
+		$total_accounts = Gravity_Flow_Common::get_total_accounts();
+		$args           = Gravity_Flow_Common::get_users_args();
 		$number         = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
-		if ( $total_accounts['total_users'] > $number ) {
+		if ( $total_accounts > $number ) {
 			/* translators: 1: Warning icon 2: Number of users displayed 3: Open link tag 4: Close link tag */
 			$setting['description'] = sprintf( esc_html__( '%1$s This list of users contains only the first %2$s users in your site. %3$sLearn how to remove this limit%4$s. ', 'gravityflow' ), '<i class="dashicons dashicons-warning" style="color:red;"></i> ', $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
 		}
@@ -434,11 +425,12 @@ class Gravity_Flow_Common_Step_Settings {
 			'type'    => 'routing',
 		);
 
-		$total_accounts = self::$_total_accounts;
-		$args           = gravity_flow()->get_users_args();
+		$total_accounts = Gravity_Flow_Common::get_total_accounts();
+		$args           = Gravity_Flow_Common::get_users_args();
 		$number         = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
-		if ( $total_accounts['total_users'] > $number ) {
-			$setting['description'] = sprintf( esc_html__( 'The Users list contains only the first %s users in your website. %sLearn how to show more or less users%s. ', 'gravityflow' ), $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
+		if ( $total_accounts > $number ) {
+			/* translators: 1: Warning icon 2: Number of users displayed 3: Open link tag 4: Close link tag */
+			$setting['description'] = sprintf( esc_html__( '%1$s This list of users contains only the first %2$s users in your site. %3$sLearn how to remove this limit%4$s. ', 'gravityflow' ), '<i class="dashicons dashicons-warning" style="color:red;"></i> ', $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
 		}
 
 		return $setting;
