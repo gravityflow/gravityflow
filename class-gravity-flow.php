@@ -1124,7 +1124,7 @@ PRIMARY KEY  (id)
 				);
 				$current_users       = array();
 				$exclude_account_ids = array();
-
+                // Get all types of notification users and assignees.
 				foreach ( $notification_types as $type ) {
 					if ( rgar( $feed_meta, $type . '_notification_enabled' ) === '1' ) {
 						$_type = ( $type === 'assignee' ) ? 'type' : $type . '_notification_type';
@@ -1180,7 +1180,9 @@ PRIMARY KEY  (id)
 					$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'label' => $name );
 				}
 
-				usort( $account_choices, array( $this, 'sort_account_choices' ) );
+				if ( isset( $args['exclude'] ) ) {
+					usort( $account_choices, array( $this, 'sort_account_choices' ) );
+                }
 
 				$choices[ $key ] = array(
 					array(
