@@ -9,3 +9,4 @@
 - Fixed an issue with the Status shortcode where users with the gravityflow_status_view_all capability don't see all entries when the shortcode security settings are set to disallow the display_all attribute.
 - Fixed validation issue in Assignee, User and Multi-User fields.
 - Fixed an issue with the confirmation page for users with the gravityflow_status_view_all capability when transitioning steps.
+- Fixed a PHP notice when loading feed message with AJAX.
