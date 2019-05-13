@@ -717,7 +717,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added support for step duplication.
 - Fixed an issue with the recalculation of calculated fields when not editable.
 - Fixed an issue with the display of hidden product fields.
-- Fixed an issue with the confirmation page for users with the gravityflow_view_all capability when transitioning steps.
+- Fixed an issue with the confirmation page for users with the gravityflow_status_view_all capability when transitioning steps.
 - Fixed a deprecation warning on Gravity Forms 2.0
 - Fixed an issue preventing upgrade on some Windows systems.
 - Fixed an issue with the recalculation of calculated fields hidden by conditional logic.

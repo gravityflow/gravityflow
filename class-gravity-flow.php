@@ -5300,7 +5300,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 					$next_step = $this->get_current_step( $form, $entry );
 					$current_user_assignee_key = $this->get_current_user_assignee_key();
-					if ( ( $next_step && $next_step->is_assignee( $current_user_assignee_key ) ) || $args['check_permissions'] == false || $this->current_user_can_any( 'gravityflow_view_all' ) ) {
+					if ( ( $next_step && $next_step->is_assignee( $current_user_assignee_key ) ) || $args['check_permissions'] == false || $this->current_user_can_any( 'gravityflow_status_view_all' ) ) {
 						$step = $next_step;
 					} else {
 						$args['display_instructions'] = false;
@@ -6827,18 +6827,22 @@ AND m.meta_value='queued'";
 									$this->log_debug( __METHOD__ . '(): not sending first reminder to ' . $assignee->get_key() . ' for entry ' . $entry['id'] . ' because a reminder was already sent: ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $reminder_timestamp ), 'F j, Y H:i:s' ) );
 									if ( $current_step->resend_assignee_email_repeatEnable ) {
 										$repeat_days = absint( $current_step->resend_assignee_email_repeatValue );
+										//Depreciated Filter - See/Use gravityflow_assignee_email_reminder_repeat_days
+										$repeat_days = apply_filters( 'gravityflow_assignee_eamil_reminder_repeat_days', $repeat_days, $form, $entry, $current_step, $assignee );
 										/**
 										 * Allows the number of days between each assignee email reminder to be modified.
 										 *
 										 * Return zero to deactivate the repeat reminder.
 										 *
+										 * @deprecated 2.5.3 - Fix typo of gravityflow_assignee_eamil_reminder_repeat_days (email)
+										 * 
 										 * @param int                   $repeat_days The number of days between each reminder.
 										 * @param array                 $form        The current form.
 										 * @param array                 $entry       The current entry.
 										 * @param Gravity_Flow_Step     $step        The current step.
 										 * @param Gravity_Flow_Assignee $assignee    The current assignee.
 										 */
-										$repeat_days = apply_filters( 'gravityflow_assignee_eamil_reminder_repeat_days', $repeat_days, $form, $entry, $current_step, $assignee );
+										$repeat_days = apply_filters( 'gravityflow_assignee_email_reminder_repeat_days', $repeat_days, $form, $entry, $current_step, $assignee );
 										if ( $repeat_days > 0 ) {
 											$repeat_trigger_timestamp = $reminder_timestamp + ( (int) $repeat_days * DAY_IN_SECONDS );
 											if ( time() > $repeat_trigger_timestamp ) {

@@ -872,7 +872,8 @@ class Gravity_Flow_Entry_Detail {
 		if ( ! GFAPI::current_user_can_any( 'gravityflow_status_view_all' ) ) {
 			if ( ! $is_assignee ) {
 				if ( $current_step ) {
-					$display_fields_step = gravity_flow()->get_workflow_start_step( $form_id, $entry );
+					// Display fields from current step after a POST, otherwise use the start step settings.
+					$display_fields_step = isset( $_POST ) ? $current_step : gravity_flow()->get_workflow_start_step( $form_id, $entry );
 				} else {
 					$display_fields_step = gravity_flow()->get_workflow_complete_step( $form_id, $entry );
 				}
