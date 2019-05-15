@@ -1126,26 +1126,24 @@ PRIMARY KEY  (id)
 				$exclude_account_ids = array();
                 // Get all types of notification users and assignees.
 				foreach ( $notification_types as $type ) {
-					if ( rgar( $feed_meta, $type . '_notification_enabled' ) === '1' ) {
-						$_type = ( $type === 'assignee' ) ? 'type' : $type . '_notification_type';
+					$_type = ( $type === 'assignee' ) ? 'type' : $type . '_notification_type';
 
-						if ( rgar( $feed_meta, $_type ) === 'select' ) {
-							$key   = ( $type === 'assignee' ) ? 'assignees' : $type . '_notification_users';
-							$value = rgar( $feed_meta, $key );
-							if ( ! empty( $value ) ) {
-								$current_users = array_merge( $current_users, $value );
+					if ( rgar( $feed_meta, $_type ) === 'select' ) {
+						$key   = ( $type === 'assignee' ) ? 'assignees' : $type . '_notification_users';
+						$value = rgar( $feed_meta, $key );
+						if ( ! empty( $value ) ) {
+							$current_users = array_merge( $current_users, $value );
+						}
+					} else {
+						$key                   = ( $type === 'assignee' ) ? 'routing' : $type . '_notification_routing';
+						$current_users_routing = rgar( $feed_meta, $key );
+						if ( ! empty( $current_users_routing ) ) {
+							$_current_users = array();
+							foreach ( $current_users_routing as $_routing ) {
+								$_current_users[] = $_routing['assignee'];
 							}
-						} else {
-							$key                   = ( $type === 'assignee' ) ? 'routing' : $type . '_notification_routing';
-							$current_users_routing = rgar( $feed_meta, $key );
-							if ( ! empty( $current_users_routing ) ) {
-								$_current_users = array();
-								foreach ( $current_users_routing as $_routing ) {
-									$_current_users[] = $_routing['assignee'];
-								}
 
-								$current_users = array_merge( $current_users, $_current_users );
-							}
+							$current_users = array_merge( $current_users, $_current_users );
 						}
 					}
 				}
