@@ -127,7 +127,7 @@ class Gravity_Flow_Common_Step_Settings {
 		$args           = Gravity_Flow_Common::get_users_args();
 		$number         = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
 		/* translators: 1: Warning icon 2: Number of users displayed 3: Open link tag 4: Close link tag */
-		$description = '<span class="gf_settings_description">' . sprintf( esc_html__( '%1$s This list of users contains only the first %2$s users in your site. %3$sLearn how to remove this limit%4$s. ', 'gravityflow' ), '<i class="dashicons dashicons-warning" style="color:red;"></i> ', $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' ) . '</span>';
+		$description = '<span class="gf_settings_description">' . sprintf( esc_html__( '%1$s The list of users contains only the first %2$s users in your site. %3$sLearn how to remove this limit%4$s. ', 'gravityflow' ), '<i class="dashicons dashicons-warning" style="color:red;"></i> ', $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' ) . '</span>';
 
 		return array(
 			array(
@@ -404,7 +404,7 @@ class Gravity_Flow_Common_Step_Settings {
 		$number         = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
 		if ( $total_accounts > $number ) {
 			/* translators: 1: Warning icon 2: Number of users displayed 3: Open link tag 4: Close link tag */
-			$setting['description'] = sprintf( esc_html__( '%1$s This list of users contains only the first %2$s users in your site. %3$sLearn how to remove this limit%4$s. ', 'gravityflow' ), '<i class="dashicons dashicons-warning" style="color:red;"></i> ', $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
+			$setting['description'] = sprintf( esc_html__( '%1$s The list of users contains only the first %2$s users in your site. %3$sLearn how to remove this limit%4$s. ', 'gravityflow' ), '<i class="dashicons dashicons-warning" style="color:red;"></i> ', $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
 		}
 
 		return $setting;
@@ -430,7 +430,7 @@ class Gravity_Flow_Common_Step_Settings {
 		$number         = ( isset( $args['number'] ) && $args['number'] > 0 ) ? $args['number'] : 2000;
 		if ( $total_accounts > $number ) {
 			/* translators: 1: Warning icon 2: Number of users displayed 3: Open link tag 4: Close link tag */
-			$setting['description'] = sprintf( esc_html__( '%1$s This list of users contains only the first %2$s users in your site. %3$sLearn how to remove this limit%4$s. ', 'gravityflow' ), '<i class="dashicons dashicons-warning" style="color:red;"></i> ', $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
+			$setting['description'] = sprintf( esc_html__( '%1$s The list of users contains only the first %2$s users in your site. %3$sLearn how to remove this limit%4$s. ', 'gravityflow' ), '<i class="dashicons dashicons-warning" style="color:red;"></i> ', $number, '<a href="https://docs.gravityflow.io/article/54-gravityflowgetusersargs" target="_blank">', '</a>' );
 		}
 
 		return $setting;
