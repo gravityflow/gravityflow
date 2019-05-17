@@ -149,12 +149,11 @@ class Gravity_Flow_Common_Step_Settings {
 				'after_select' => ( $total_accounts > $number ) ? $description : '',
 			),
 			array(
-				'name'         => $prefix . '_notification_routing',
-				'label'        => __( 'Routing', 'gravityflow' ),
-				'class'        => 'large',
-				'type'         => 'user_routing',
-				'description'  => ( $total_accounts > $number ) ? $description : '',
-				'after_select' => ( $total_accounts > $number ) ? $description : '',
+				'name'        => $prefix . '_notification_routing',
+				'label'       => __( 'Routing', 'gravityflow' ),
+				'class'       => 'large',
+				'type'        => 'user_routing',
+				'description' => ( $total_accounts > $number ) ? $description : '',
 			),
 		);
 	}

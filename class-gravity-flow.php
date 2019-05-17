@@ -3259,9 +3259,11 @@ PRIMARY KEY  (id)
 			$name = $field['name'];
 			$id = isset( $field['id'] ) ?  $field['id'] : 'gform_user_routing_setting_' . $name;
 
-			echo '<div class="gravityflow-user-routing" id="' . $id . '" data-field_name="_gaddon_setting_' . $name . 'user_routing" data-field_id="' . $name . '" ></div>';
+			$html  = '<div class="gravityflow-user-routing" id="' . $id . '" data-field_name="_gaddon_setting_' . $name . 'user_routing" data-field_id="' . $name . '" ></div>';
+			$html .= rgar( $field, 'description' );
+			$html .= $this->settings_hidden( $field, false );
 
-			$this->settings_hidden( $field );
+			echo $html;
 		}
 
 		/**
