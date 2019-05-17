@@ -1124,7 +1124,7 @@ PRIMARY KEY  (id)
 				);
 				$current_users       = array();
 				$exclude_account_ids = array();
-                // Get all types of notification users and assignees.
+				// Get all types of notification users and assignees.
 				foreach ( $notification_types as $type ) {
 					$_type = ( $type === 'assignee' ) ? 'type' : $type . '_notification_type';
 
@@ -1180,7 +1180,7 @@ PRIMARY KEY  (id)
 
 				if ( isset( $args['exclude'] ) ) {
 					usort( $account_choices, array( $this, 'sort_account_choices' ) );
-                }
+				}
 
 				$choices[ $key ] = array(
 					array(
@@ -1242,8 +1242,8 @@ PRIMARY KEY  (id)
 
 		/**
 		 * The usort() callback for sorting account choices.
-         *
-         * @since 2.5.3
+		 *
+		 * @since 2.5.3
 		 *
 		 * @param array $a The first account choice to compare.
 		 * @param array $b The second first account choice to compare.
