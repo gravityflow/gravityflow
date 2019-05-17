@@ -3260,7 +3260,7 @@ PRIMARY KEY  (id)
 			$id = isset( $field['id'] ) ?  $field['id'] : 'gform_user_routing_setting_' . $name;
 
 			$html  = '<div class="gravityflow-user-routing" id="' . $id . '" data-field_name="_gaddon_setting_' . $name . 'user_routing" data-field_id="' . $name . '" ></div>';
-			$html .= rgar( $field, 'description' );
+			$html .= ( $name === 'workflow_notification_routing' ) ? '' : rgar( $field, 'description' );
 			$html .= $this->settings_hidden( $field, false );
 
 			echo $html;
