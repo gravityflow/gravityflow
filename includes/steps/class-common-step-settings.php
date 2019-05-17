@@ -153,7 +153,7 @@ class Gravity_Flow_Common_Step_Settings {
 				'label'       => __( 'Routing', 'gravityflow' ),
 				'class'       => 'large',
 				'type'        => 'user_routing',
-				'after_select' => ( $total_accounts > $number ) ? $description : '',
+				'description' => ( $total_accounts > $number ) ? $description : '',
 			),
 		);
 	}
