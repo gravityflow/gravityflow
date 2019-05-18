@@ -1,3 +1,4 @@
+- Added filter gravityflow_assignee_email_reminder_repeat_days and include depreciation notice for gravityflow_assignee_eamil_reminder_repeat_days.
 - Added security enhancements.
 - Added support for the forms attribute in the submit shortcode so the workflow forms can be filtered. e.g. [gravityflow page="submit" forms="1,2,3"]
 - Added support for the back_link back_link_text and back_link_url attributes in the status shortcode.
@@ -7,4 +8,6 @@
 - Fixed an issue when Sliced Invoices status was manually updated to paid, entries weren't released from Sliced Invoices steps.
 - Fixed an issue with the Status shortcode where users with the gravityflow_status_view_all capability don't see all entries when the shortcode security settings are set to disallow the display_all attribute.
 - Fixed validation issue in Assignee, User and Multi-User fields.
+- Fixed an issue with the confirmation page for users with the gravityflow_status_view_all capability when transitioning steps.
+- Fixed a PHP notice when loading feed message with AJAX.
 - Added support for displaying the first 2,000 users in assignees and notification users fields.
