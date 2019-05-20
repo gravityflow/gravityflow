@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <ruleset name="Gravity Flow">
 
-    <config name="installed_paths" value="vendor/wp-coding-standards/wpcs" />
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*/tests/*</exclude-pattern>
 
@@ -9,5 +8,8 @@
     <rule ref="WordPress">
         <exclude name="WordPress.PHP.YodaConditions" />
     </rule>
+
+    <config name="minimum_supported_wp_version" value="4.8"/>
+
 
 </ruleset>
