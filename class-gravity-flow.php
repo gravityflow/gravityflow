@@ -5171,16 +5171,16 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					 * @since 2.5.4
 					 *
 					 * @param bool|WP_Error $can_render_form Return a boolean or a WP_Error object with a message to display to the user.
-					 * @param int  $form_id The Form ID
+					 * @param int           $form_id         The Form ID
 					 */
 					$can_render_form = apply_filters( 'gravityflow_can_render_form', $can_render_form, $form_id );
 
 					if ( is_wp_error( $can_render_form ) ) {
-					    /** @var WP_Error $can_render_form */
-					    echo $can_render_form->get_error_message();
-                    } elseif ( $can_render_form ) {
+						/** @var WP_Error $can_render_form */
+						echo $can_render_form->get_error_message();
+					} elseif ( $can_render_form ) {
 						Gravity_Flow_Submit::form( $form_id );
-                    }
+					}
 				} else {
 					Gravity_Flow_Submit::list_page( $published_form_ids, $admin_ui );
 				}
