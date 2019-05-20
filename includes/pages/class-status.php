@@ -978,43 +978,53 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	public function column_workflow_step( $item ) {
 		$step_id = rgar( $item, 'workflow_step' );
 		if ( $step_id > 0 ) {
-			$step      = gravity_flow()->get_step( $step_id );
-			$url_entry = esc_url( $this->get_entry_url( $item ) );
+			$step = gravity_flow()->get_step( $step_id );
 
-			$label = $step ? esc_html( $step->get_name() ) : '';
-			$step_status = rgar( $item, 'workflow_step_status_' . $step->get_id() );
+			if ( ! $step ) {
 
-			if ( 'queued' == $step_status ) {
+			    $label = sprintf( esc_html__( 'Step %s (deleted)', 'gravityflow' ), $step_id );
+				$output = sprintf( '<div class="gravityflow-deleted">%s</div>', $label );
 
-				$step->_entry = $item;
-				$scheduled_timestamp = $step->get_schedule_timestamp();
-				switch ( $step->schedule_type ) {
-					case 'date':
-						$scheduled_date = $step->schedule_date;
-						break;
-					case 'date_field':
-						$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
-						$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
-						break;
-					case 'delay':
-					default:
-						$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
-						$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
+			} else {
+
+				$url_entry = esc_url( $this->get_entry_url( $item ) );
+
+				$label = $step ? esc_html( $step->get_name() ) : '';
+				$step_status = rgar( $item, 'workflow_step_status_' . $step->get_id() );
+
+				if ( 'queued' == $step_status ) {
+
+					$step->_entry = $item;
+					$scheduled_timestamp = $step->get_schedule_timestamp();
+					switch ( $step->schedule_type ) {
+						case 'date':
+							$scheduled_date = $step->schedule_date;
+							break;
+						case 'date_field':
+							$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+							$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
+							break;
+						case 'delay':
+						default:
+							$scheduled_date_str = date( 'Y-m-d H:i:s', $scheduled_timestamp );
+							$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
+					}
+
+					$label .= '' . sprintf( '<div class="step_status_queue">(%s: %s)</div>', esc_html__( 'Queued', 'gravityflow' ), $scheduled_date );
+
+				} elseif ( $step->supports_expiration() && $step->expiration ) {
+					$step->_entry = $item;
+					$expiration_timestamp = $step->get_expiration_timestamp();
+					$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
+					$expiration_date      = get_date_from_gmt( $expiration_date_str );
+					$label .= sprintf( '<div class="step_status_expires">(%s: %s)</div>', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
 				}
 
-				$label .= '' . sprintf( '<div class="step_status_queue">(%s: %s)</div>', esc_html__( 'Queued', 'gravityflow' ), $scheduled_date );
+				$label = $this->filter_field_value( $label, $item, 'workflow_step' );
+				$link  = "<a href='{$url_entry}'>$label</a>";
+				$output = $link;
+            }
 
-			} elseif ( $step->supports_expiration() && $step->expiration ) {
-				$step->_entry = $item;
-				$expiration_timestamp = $step->get_expiration_timestamp();
-				$expiration_date_str  = date( 'Y-m-d H:i:s', $expiration_timestamp );
-				$expiration_date      = get_date_from_gmt( $expiration_date_str );
-				$label .= sprintf( '<div class="step_status_expires">(%s: %s)</div>', esc_html__( 'Expires', 'gravityflow' ), $expiration_date );
-			}
-
-			$label = $this->filter_field_value( $label, $item, 'workflow_step' );
-			$link  = "<a href='{$url_entry}'>$label</a>";
-			$output = $link;
 		} else {
 			$output = '<span class="gravityflow-empty">&dash;</span>';
 		}
