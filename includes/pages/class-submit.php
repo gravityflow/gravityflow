@@ -28,7 +28,7 @@ class Gravity_Flow_Submit {
 	public static function list_page( $form_ids, $is_admin ) {
 
 		if ( empty( $form_ids ) ) {
-			esc_html_e( "You haven't submitted any workflow forms yet.", 'gravityflow' );
+			esc_html_e( "No workflow forms.", 'gravityflow' );
 			return;
 		}
 

@@ -811,7 +811,7 @@ PRIMARY KEY  (id)
 
 			$shortcode_found = false;
 			foreach ( $wp_query->posts as $post ) {
-				if ( stripos( $post->post_content, '[gravityflow' ) !== false ) {
+				if ( stripos( $post->post_content, '[gravityflow' ) !== false || stripos( $post->post_content, '<!-- wp:gravityflow/' ) !== false ) {
 					$shortcode_found = true;
 					break;
 				}
@@ -1106,17 +1106,80 @@ PRIMARY KEY  (id)
 		public function get_users_as_choices() {
 			static $choices;
 
-			$args = apply_filters( 'gravityflow_get_users_args', array( 'orderby' => array( 'display_name', 'user_login' ), 'fields' => array( 'ID', 'display_name', 'user_login' ) ) );
+			$args            = Gravity_Flow_Common::get_users_args();
+			$total_accounts  = Gravity_Flow_Common::get_total_accounts();
+			$account_choices = array();
+
+			if ( $total_accounts > $args['number'] ) {
+				$settings            = $this->get_feed( rgget( 'fid' ) );
+				$feed_meta           = rgar( $settings, 'meta' );
+				$notification_types  = array(
+					'workflow',
+					'assignee',
+					'rejection',
+					'approval',
+					'in_progress',
+					'complete',
+					'revert'
+				);
+				$current_users       = array();
+				$exclude_account_ids = array();
+				// Get all types of notification users and assignees.
+				foreach ( $notification_types as $type ) {
+					$_type = ( $type === 'assignee' ) ? 'type' : $type . '_notification_type';
+
+					if ( rgar( $feed_meta, $_type ) === 'select' ) {
+						$key   = ( $type === 'assignee' ) ? 'assignees' : $type . '_notification_users';
+						$value = rgar( $feed_meta, $key );
+						if ( ! empty( $value ) ) {
+							$current_users = array_merge( $current_users, $value );
+						}
+					} else {
+						$key                   = ( $type === 'assignee' ) ? 'routing' : $type . '_notification_routing';
+						$current_users_routing = rgar( $feed_meta, $key );
+						if ( ! empty( $current_users_routing ) ) {
+							$_current_users = array();
+							foreach ( $current_users_routing as $_routing ) {
+								$_current_users[] = $_routing['assignee'];
+							}
+
+							$current_users = array_merge( $current_users, $_current_users );
+						}
+					}
+				}
+
+				if ( ! empty( $current_users ) ) {
+					foreach ( $current_users as $current_user ) {
+						list( $string, $user_id ) = explode( '|', $current_user );
+						$account = get_user_by( 'id', $user_id );
+						if ( $account ) {
+							$name                  = $account->display_name ? $account->display_name : $account->user_login;
+							$account_choices[]     = array( 'value' => 'user_id|' . $account->ID, 'label' => $name );
+							$exclude_account_ids[] = $user_id;
+						}
+					}
+
+					if ( ! empty( $exclude_account_ids ) ) {
+						// Exclude current assignees when get_users().
+						$args['exclude'] = $exclude_account_ids;
+					}
+				}
+			}
+
 			$key  = md5( get_current_blog_id() . '_' . serialize( $args ) );
 
 			if ( ! isset( $choices[ $key ] ) ) {
 				$role_choices = Gravity_Flow_Common::get_roles_as_choices( true, true );
 
-				$accounts        = get_users( $args );
-				$account_choices = array();
+				// Get a user list.
+				$accounts = get_users( $args );
 				foreach ( $accounts as $account ) {
-					$name = $account->display_name ? $account->display_name : $account->user_login;
+					$name              = $account->display_name ? $account->display_name : $account->user_login;
 					$account_choices[] = array( 'value' => 'user_id|' . $account->ID, 'label' => $name );
+				}
+
+				if ( isset( $args['exclude'] ) ) {
+					usort( $account_choices, array( $this, 'sort_account_choices' ) );
 				}
 
 				$choices[ $key ] = array(
@@ -1175,6 +1238,20 @@ PRIMARY KEY  (id)
 			}
 
 			return $choices[ $key ];
+		}
+
+		/**
+		 * The usort() callback for sorting account choices.
+		 *
+		 * @since 2.5.3
+		 *
+		 * @param array $a The first account choice to compare.
+		 * @param array $b The second first account choice to compare.
+		 *
+		 * @return int
+		 */
+		public function sort_account_choices( $a, $b ) {
+			return $a['label'] > $b['label'];
 		}
 
 		/**
@@ -2284,7 +2361,7 @@ PRIMARY KEY  (id)
 						),
 					);
 
-					printf( $date_field_label, $this->settings_text( $delay_offset_field, false ), $this->settings_select( $unit_field, false ), $this->settings_select( $before_after_field ), $this->settings_select( $schedule_date_fields ) );
+					printf( $date_field_label, $this->settings_text( $delay_offset_field, false ), $this->settings_select( $unit_field, false ), $this->settings_select( $before_after_field, false ), $this->settings_select( $schedule_date_fields, false ) );
 
 					?>
 				</div>
@@ -2419,7 +2496,7 @@ PRIMARY KEY  (id)
 					),
 				),
 			);
-			
+
 			$due_date_highlight_type = array(
 				'name'           => 'due_date_highlight_type',
 				'type'           => 'hidden',
@@ -2501,7 +2578,7 @@ PRIMARY KEY  (id)
 					?>
 				</div>
 				<div class="gravityflow-due-date-highlight-field-container">
-					<?php 
+					<?php
 
 					$due_date_highlight_type_setting = $this->get_setting( 'due_date_highlight_type', 'color' );
 					$due_date_highlight_color_style = ( $due_date_highlight_type_setting == 'color' ) ? '' : 'style="display:none;"';
@@ -3182,9 +3259,11 @@ PRIMARY KEY  (id)
 			$name = $field['name'];
 			$id = isset( $field['id'] ) ?  $field['id'] : 'gform_user_routing_setting_' . $name;
 
-			echo '<div class="gravityflow-user-routing" id="' . $id . '" data-field_name="_gaddon_setting_' . $name . 'user_routing" data-field_id="' . $name . '" ></div>';
+			$html  = '<div class="gravityflow-user-routing" id="' . $id . '" data-field_name="_gaddon_setting_' . $name . 'user_routing" data-field_id="' . $name . '" ></div>';
+			$html .= ( $name === 'workflow_notification_routing' ) ? '' : rgar( $field, 'description' );
+			$html .= $this->settings_hidden( $field, false );
 
-			$this->settings_hidden( $field );
+			echo $html;
 		}
 
 		/**
@@ -5051,9 +5130,14 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		/**
 		 * Renders the submit page.
 		 *
-		 * @param bool $admin_ui Indicates if this is the admin page.
+		 * @since 2.6 Added the $form_ids parameter.
+		 * @since unknown
+		 *
+		 * @param bool       $admin_ui Whether to display the admin UI.
+		 * @param null|array $form_ids An array of form IDs.
 		 */
-		public function submit_page( $admin_ui ) {
+		public function submit_page( $admin_ui, $form_ids = null ) {
+
 			?>
 			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_submit">
 				<?php if ( $admin_ui ) :	?>
@@ -5067,13 +5151,17 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$this->toolbar();
 				endif;
 				require_once( $this->get_base_path() . '/includes/pages/class-submit.php' );
+				if ( is_array( $form_ids ) && ! empty ( $form_ids ) ) {
+					$published_form_ids = $form_ids;
+				} else {
+					$published_form_ids = gravity_flow()->get_published_form_ids();
+				}
 				if ( isset( $_GET['id'] ) ) {
 					$form_id = absint( $_GET['id'] );
-					Gravity_Flow_Submit::form( $form_id );
+				    if ( in_array( $form_id, $published_form_ids ) ) {
+					    Gravity_Flow_Submit::form( $form_id );
+                    }
 				} else {
-
-					$published_form_ids = gravity_flow()->get_published_form_ids();
-
 					Gravity_Flow_Submit::list_page( $published_form_ids , $admin_ui );
 				}
 
@@ -5165,6 +5253,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'step_highlight'       => true,
 				'due_date'             => false,
 				'context_key'          => 'wp-admin',
+				'back_link'            => false,
+				'back_link_text'       => __( 'Return to list', 'gravityflow' ),
+				'back_link_url'        => null,
 			);
 
 			$args = array_merge( $defaults, $args );
@@ -5287,7 +5378,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 					$next_step = $this->get_current_step( $form, $entry );
 					$current_user_assignee_key = $this->get_current_user_assignee_key();
-					if ( ( $next_step && $next_step->is_assignee( $current_user_assignee_key ) ) || $args['check_permissions'] == false || $this->current_user_can_any( 'gravityflow_view_all' ) ) {
+					if ( ( $next_step && $next_step->is_assignee( $current_user_assignee_key ) ) || $args['check_permissions'] == false || $this->current_user_can_any( 'gravityflow_status_view_all' ) ) {
 						$step = $next_step;
 					} else {
 						$args['display_instructions'] = false;
@@ -5916,7 +6007,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 				$app_settings = $this->get_app_settings();
 
-				if ( $a['display_all'] && ! rgar( $app_settings, 'allow_display_all_attribute' ) ) {
+				if ( $a['display_all'] && ! rgar( $app_settings, 'allow_display_all_attribute' ) && ! GFAPI::current_user_can_any( 'gravityflow_status_view_all' ) ) {
 
 					$a['display_all'] = false;
 				}
@@ -5948,8 +6039,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			if ( ! empty( $a['form'] ) && ! empty( $entry_id ) ) {
 				// Limited support for multiple shortcodes on the same page.
+				$form_id = $a['form'] ? explode( ',', $a['form'] ) : '';
+				if ( is_array( $form_id ) && count( $form_id ) === 1 ) {
+					$form_id = $form_id[0];
+				}
 				$entry = GFAPI::get_entry( $entry_id );
-				if ( is_wp_error( $entry ) || $entry['form_id'] !== $a['form'] ) {
+				if ( is_wp_error( $entry ) || ( is_array( $form_id ) && ! in_array( $entry['form_id'], $form_id ) ) || ( ! is_array( $form_id ) && $entry['form_id'] !== $a['form'] ) ) {
 					return;
 				}
 			}
@@ -5965,8 +6060,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$html .= $this->get_shortcode_inbox_page( $a );
 					break;
 				case 'submit':
+					$form_ids = $a['forms'] ? explode( ',', $a['forms'] ) : '';
 					ob_start();
-					$this->submit_page( false );
+					$this->submit_page( false, $form_ids );
 					$html .= ob_get_clean();
 					break;
 				case 'status':
@@ -5975,7 +6071,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 					if ( rgget( 'view' ) || ! empty( $entry_id ) ) {
 						$html .= $this->get_shortcode_status_page_detail( $a );
-					} elseif ( is_user_logged_in() || ( $a['display_all'] && $a['display_all'] ) ) {
+					} elseif ( is_user_logged_in() || ( $a['display_all'] && $a['allow_anonymous'] ) ) {
 						$html .= $this->get_shortcode_status_page( $a );
 					}
 			}
@@ -6032,6 +6128,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$defaults = array(
 				'page'             => 'inbox',
 				'form'             => null,
+				'forms'            => null,
 				'form_id'          => null,
 				'entry_id'         => null,
 				'fields'           => array(),
@@ -6145,7 +6242,14 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'     => $a['workflow_info'],
 				'step_status'       => $a['step_status'],
 				'context_key'       => $a['context_key'],
+				'back_link'        => $a['back_link'],
+				'back_link_text'   => $a['back_link_text'],
+				'back_link_url'    => $a['back_link_url'],
 			);
+
+			if ( is_null( $args['back_link_url' ] ) ) {
+				$args['back_link_url' ] = remove_query_arg( array( 'gworkflow_token', 'new_status', 'view', 'lid', 'id', 'page' ) );
+			}
 
 			$this->inbox_page( $args );
 			$html = ob_get_clean();
@@ -6200,8 +6304,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			);
 
 			if ( isset( $a['form'] ) ) {
+			    $form_id = $a['form'] ? explode( ',', $a['form'] ) : '';
+			    if ( is_array( $form_id ) && count( $form_id ) === 1 ) {
+				    $form_id = $form_id[0];
+                }
 				$args['constraint_filters'] = array(
-					'form_id' => $a['form'],
+					'form_id' => $form_id,
 				);
 			}
 
@@ -6797,18 +6905,22 @@ AND m.meta_value='queued'";
 									$this->log_debug( __METHOD__ . '(): not sending first reminder to ' . $assignee->get_key() . ' for entry ' . $entry['id'] . ' because a reminder was already sent: ' . get_date_from_gmt( date( 'Y-m-d H:i:s', $reminder_timestamp ), 'F j, Y H:i:s' ) );
 									if ( $current_step->resend_assignee_email_repeatEnable ) {
 										$repeat_days = absint( $current_step->resend_assignee_email_repeatValue );
+										//Depreciated Filter - See/Use gravityflow_assignee_email_reminder_repeat_days
+										$repeat_days = apply_filters( 'gravityflow_assignee_eamil_reminder_repeat_days', $repeat_days, $form, $entry, $current_step, $assignee );
 										/**
 										 * Allows the number of days between each assignee email reminder to be modified.
 										 *
 										 * Return zero to deactivate the repeat reminder.
 										 *
+										 * @deprecated 2.5.3 - Fix typo of gravityflow_assignee_eamil_reminder_repeat_days (email)
+										 * 
 										 * @param int                   $repeat_days The number of days between each reminder.
 										 * @param array                 $form        The current form.
 										 * @param array                 $entry       The current entry.
 										 * @param Gravity_Flow_Step     $step        The current step.
 										 * @param Gravity_Flow_Assignee $assignee    The current assignee.
 										 */
-										$repeat_days = apply_filters( 'gravityflow_assignee_eamil_reminder_repeat_days', $repeat_days, $form, $entry, $current_step, $assignee );
+										$repeat_days = apply_filters( 'gravityflow_assignee_email_reminder_repeat_days', $repeat_days, $form, $entry, $current_step, $assignee );
 										if ( $repeat_days > 0 ) {
 											$repeat_trigger_timestamp = $reminder_timestamp + ( (int) $repeat_days * DAY_IN_SECONDS );
 											if ( time() > $repeat_trigger_timestamp ) {
@@ -8131,7 +8243,7 @@ AND m.meta_value='queued'";
 					} else {
 						$target_value = strtotime( $target_value );
 					}
-					
+
 					if ( $operation == '>' && $field_value > $target_value ) {
 						return true;
 					}

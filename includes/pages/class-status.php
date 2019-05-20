@@ -545,7 +545,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	 * @return string|int $filter_form_id The form ID to filter the entries by.
 	 */
 	public function form_select() {
-		if ( ! empty( $this->constraint_filters['form_id'] ) ) {
+		if ( ! empty( $this->constraint_filters['form_id'] ) && ! is_array( $this->constraint_filters['form_id'] ) ) {
 
 			printf( '<input type="hidden" name="form-id" id="gravityflow-form-select" value="%s">', esc_attr( $this->constraint_filters['form_id'] ) );
 
@@ -560,6 +560,10 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 			foreach ( $forms as $form ) {
 				$form_id = absint( $form['id'] );
+
+				if ( is_array( $this->constraint_filters['form_id'] ) && ! in_array( $form_id,  $this->constraint_filters['form_id'] ) ) {
+				    continue;
+                }
 				$steps   = gravity_flow()->get_steps( $form_id );
 				if ( ! empty( $steps ) ) {
 					$selected = selected( $filter_form_id, $form_id, false );
@@ -593,8 +597,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	public function get_field_filters() {
 		$field_filters = null;
 
+		$form_id = ! empty( $this->constraint_filters['form_id'] ) ? $this->constraint_filters['form_id'] : 0;
+
 		$forms = GFAPI::get_forms();
 		foreach ( $forms as $form ) {
+		    if ( is_array( $form_id ) && ! in_array( $form['id'], $form_id ) ) {
+		        continue;
+            }
+
+		    if ( ! empty( $form_id ) && $form['id'] != $form_id )  {
+		        continue;
+            }
+
 			$form_filters = GFCommon::get_field_filter_settings( $form );
 
 			$empty_filter = array(
@@ -1172,7 +1186,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$args = $this->get_filter_args();
 
-		if ( ! empty( $args['form-id'] ) && ! empty( $this->field_ids ) ) {
+		if ( ! empty( $args['form-id'] ) && ! is_array( $args['form-id'] ) && ! empty( $this->field_ids ) ) {
 			$form = $this->get_form( $args['form-id'] );
 
 			foreach ( $this->field_ids as $field_id ) {
@@ -1202,7 +1216,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$columns['id'] = esc_html__( 'ID', 'gravityflow' );
 		}
 		$columns['date_created'] = esc_html__( 'Date', 'gravityflow' );
-		if ( ! isset( $args['form-id'] ) ) {
+		if ( ! ( isset( $args['form-id'] ) && ! is_array( $args['form-id'] ) )  ) {
 			$columns['form_id'] = esc_html__( 'Form', 'gravityflow' );
 		}
 		if ( $this->submitter_column ) {
@@ -1217,7 +1231,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$columns['workflow_final_status'] = esc_html__( 'Status', 'gravityflow' );
 		}
 
-		$columns = Gravity_Flow_Common::get_field_columns( $columns, rgar( $args, 'form-id' ), $this->field_ids );
+        if ( ! empty( $args['form-id'] ) && ! is_array( $args['form-id'] ) ) {
+	        $columns = Gravity_Flow_Common::get_field_columns( $columns, rgar( $args, 'form-id' ), $this->field_ids );
+        }
 
 		if ( $step_id = $this->get_filter_step_id() ) {
 			unset( $columns['workflow_step'] );
@@ -1282,13 +1298,15 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$args = array();
 
-		if ( ! empty( $this->constraint_filters['form_id'] ) ) {
-			$args['form-id'] = absint( $this->constraint_filters['form_id'] );
-		} elseif ( ! empty( $_REQUEST['form-id'] ) ) {
+		if ( ! empty( $_REQUEST['form-id'] ) ) {
 			$args['form-id'] = absint( $_REQUEST['form-id'] );
+		} elseif ( ! empty( $this->constraint_filters['form_id'] ) ) {
+		    $form_id = $this->constraint_filters['form_id'];
+			$args['form-id'] = is_array( $form_id ) ? array_map( 'absint', $form_id ) : absint( $form_id );
 		}
+
 		$f = isset( $_REQUEST['f'] ) ? $_REQUEST['f'] : '';
-		if ( ! empty( $args['form-id'] ) && $f !== '' ) {
+		if ( ! empty( $args['form-id'] ) && ! is_array( $args['form-id'] ) && $f !== '' ) {
 			$form                  = $this->get_form( absint( $args['form-id'] ) );
 			$field_filters         = $this->get_field_filters_from_request( $form );
 			$args['field_filters'] = $field_filters;
@@ -1403,7 +1421,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	 */
 	public function get_field_filter_counts( $args ) {
 		if ( isset( $args['form-id'] ) ) {
-			$form_ids = absint( $args['form-id'] );
+			$form_ids = is_array( $args['form-id'] ) ? array_map( 'absint', $args['form-id'] ) : absint( $args['form-id'] );
 		} else {
 			$form_ids = $this->get_workflow_form_ids();
 		}
@@ -1452,8 +1470,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	 * @return stdClass|string
 	 */
 	public function get_form_clause( $args ) {
+		global $wpdb;
 		if ( ! empty( $args['form-id'] ) ) {
-			$form_clause = ' AND l.form_id=' . absint( $args['form-id'] );
+			$form_clause = is_array( $args['form-id'] ) ? $wpdb->prepare( ' AND l.form_id IN (%s)', join( ',', $args['form-id'] ) ) : $wpdb->prepare(' AND l.form_id=%d', absint( $args['form-id'] ) );
 		} else {
 			$form_ids = $this->get_workflow_form_ids();
 
@@ -1588,7 +1607,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	 *
 	 * @param array $item The entry.
 	 */
-	protected function single_row_columns( $item ) {
+	public function single_row_columns( $item ) {
 		list( $columns, $hidden ) = $this->get_column_info();
 
 		foreach ( $columns as $column_name => $column_display_name ) {
@@ -1627,8 +1646,10 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$filter_args = $this->get_filter_args();
 
 		if ( isset( $filter_args['form-id'] ) ) {
-			$form_ids = absint( $filter_args['form-id'] );
-			$this->apply_entry_meta( $form_ids );
+			$form_ids = is_array( $filter_args['form-id'] ) ? $filter_args['form-id'] :  absint( $filter_args['form-id'] );
+			if ( ! is_array( $filter_args['form-id'] ) ) {
+				$this->apply_entry_meta( $form_ids );
+			}
 		} else {
 			$form_ids = $this->get_workflow_form_ids();
 

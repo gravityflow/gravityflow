@@ -209,6 +209,28 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 			$this->choices = $this->get_roles_as_choices();
 		}
 	}
+
+	/**
+	 * Validate the field value. It must be one of the choices.
+	 *
+	 * Return the result (bool) by setting $this->failed_validation.
+	 * Return the validation message (string) by setting $this->validation_message.
+	 *
+	 * @since 2.5.2
+	 *
+	 * @param string|array $value The field value from get_value_submission().
+	 * @param array        $form  The Form Object currently being processed.
+	 */
+	public function validate( $value, $form ) {
+		if ( ! empty( $value ) ) {
+			$values = wp_list_pluck( $this->get_roles_as_choices(), 'value' );
+
+			if ( ! in_array( $value, $values, true ) ) {
+				$this->failed_validation  = true;
+				$this->validation_message = esc_html__( 'Invalid selection. Please select one of the available choices.', 'gravityflow' );
+			}
+		}
+	}
 }
 
 GF_Fields::register( new Gravity_Flow_Field_Role() );

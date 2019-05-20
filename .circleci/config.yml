@@ -29,26 +29,29 @@ jobs:
       - run:
           name: Trigger the Build Job for the Form Connnector Extension
           command: |
-            printf "Triggering the Build Job for the Form Connnector Extension\n\n"
+            if [[ ${CIRCLE_BRANCH} == "master" ]]; then
+                printf "Triggering the Build Job for the Form Connnector Extension\n\n"
 
-            BUILD_INFO=$(curl -X POST -H -d \
-                "{}" \
-                "https://circleci.com/api/v1/project/gravityflow/gravityflowformconnector/tree/master?circle-token=$CIRCLE_TOKEN")
+                BUILD_INFO=$(curl -X POST -H -d \
+                    "{}" \
+                    "https://circleci.com/api/v1/project/gravityflow/gravityflowformconnector/tree/master?circle-token=$CIRCLE_TOKEN")
 
-            printf "\n\nBuild triggered\n\n"
-            printf "Follow the progress of the build on \nhttps://circleci.com/gh/gravityflow/gravityflowformconnector/tree/master"
+                printf "\n\nBuild triggered\n\n"
+                printf "Follow the progress of the build on \nhttps://circleci.com/gh/gravityflow/gravityflowformconnector/tree/master"
+            fi
       - run:
           name: Trigger the Build Job for the Incoming Webhook Extension
           command: |
-            printf "Triggering the Build Job for the Incoming Webhook Extension\n\n"
+            if [[ ${CIRCLE_BRANCH} == "master" ]]; then
+              printf "Triggering the Build Job for the Incoming Webhook Extension\n\n"
 
-            BUILD_INFO=$(curl -X POST -H -d \
-                "{}" \
-                "https://circleci.com/api/v1/project/gravityflow/gravityflowincomingwebhook/tree/master?circle-token=$CIRCLE_TOKEN")
+              BUILD_INFO=$(curl -X POST -H -d \
+                  "{}" \
+                  "https://circleci.com/api/v1/project/gravityflow/gravityflowincomingwebhook/tree/master?circle-token=$CIRCLE_TOKEN")
 
-            printf "\n\nBuild triggered\n\n"
-            printf "Follow the progress of the build on \nhttps://circleci.com/gh/gravityflow/gravityflowincomingwebhook/tree/master"
-
+              printf "\n\nBuild triggered\n\n"
+              printf "Follow the progress of the build on \nhttps://circleci.com/gh/gravityflow/gravityflowincomingwebhook/tree/master"
+            fi
 workflows:
   version: 2
   core_plus_extensions:

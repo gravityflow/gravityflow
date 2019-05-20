@@ -2,7 +2,7 @@
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
 Requires at least: 4.2
-Tested up to: 5.1
+Tested up to: 5.2
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,31 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 2.5.3 =
+- Added security enhancements.
+- Added support for Gravity Flow editor blocks - coming soon!
+- Added filter gravityflow_assignee_email_reminder_repeat_days and added deprecation notice for gravityflow_assignee_eamil_reminder_repeat_days.
+- Added support for the forms attribute in the submit shortcode so the workflow forms can be filtered. e.g. [gravityflow page="submit" forms="1,2,3"]
+- Added support for the back_link back_link_text and back_link_url attributes in the status shortcode.
+- Added support for multiple forms in the status shortcode e.g. [gravityflow page="status" form="1,2,3"]
+- Added support for displaying the first 2,000 users in assignee settings.
+- Updated translations.
+- Updated the submit shortcode to display only the published workflows or the forms specified in the forms attribute.
+- Fixed an issue with notification step not identifying all users in a multi-user field for notification.
+- Fixed an issue when Sliced Invoices status was manually updated to paid, entries weren't released from Sliced Invoices steps.
+- Fixed an issue with the Status shortcode where users with the gravityflow_status_view_all capability don't see all entries when the shortcode security settings are set to disallow the display_all attribute.
+- Fixed validation issue in Assignee, User and Multi-User fields.
+- Fixed an issue with the confirmation page for users with the gravityflow_status_view_all capability when transitioning steps.
+- Fixed a PHP notice when loading feed message with AJAX.
+
+
+= 2.5.2 =
+- Added security enhancements.
+- Fixed an issue with due date column of inbox shortcode displaying a default value when no step settings had been defined.
+- Fixed an issue with the inbox incorrectly highlighting some entries as overdue.
+- Fixed the workflow stalling on the Dropbox step when there are no files to process.
+- Fixed an issue with the display of schedule date field settings.
 
 = 2.5.1 =
 - Fixed an issue where the start step settings are not displayed unless the Partial Entries Add-On is active.
@@ -710,7 +735,7 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 - Added support for step duplication.
 - Fixed an issue with the recalculation of calculated fields when not editable.
 - Fixed an issue with the display of hidden product fields.
-- Fixed an issue with the confirmation page for users with the gravityflow_view_all capability when transitioning steps.
+- Fixed an issue with the confirmation page for users with the gravityflow_status_view_all capability when transitioning steps.
 - Fixed a deprecation warning on Gravity Forms 2.0
 - Fixed an issue preventing upgrade on some Windows systems.
 - Fixed an issue with the recalculation of calculated fields hidden by conditional logic.

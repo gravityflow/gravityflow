@@ -317,8 +317,35 @@ class Gravity_Flow_Step_Feed_Sliced_Invoices extends Gravity_Flow_Step_Feed_Add_
 		}
 	}
 
+	/**
+	 * Hook function to detect manual invoice status change.
+	 *
+	 * @since 2.5.3
+	 *
+	 * @param int    $object_id  Object ID.
+	 * @param array  $terms      An array of object terms.
+	 * @param array  $tt_ids     An array of term taxonomy IDs.
+	 * @param string $taxonomy   Taxonomy slug.
+	 */
+	public static function invoice_status_manual_update( $object_id, $terms, $tt_ids, $taxonomy ) {
+		if ( function_exists( 'run_sliced_invoices' ) && $taxonomy === 'invoice_status' ) {
+			if ( rgar( $terms, 'term_id' ) ) {
+				$term   = get_term( $terms['term_id'] );
+				$status = $term->slug;
+			} else {
+				$status = $terms[0];
+			}
+
+			self::invoice_status_update( $object_id, $status );
+		}
+	}
+
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Sliced_Invoices() );
 
 add_action( 'sliced_invoice_status_update', array( 'Gravity_Flow_Step_Feed_Sliced_Invoices', 'invoice_status_update' ), 10, 2 );
+
+// Detect manual invoice status update.
+// Set priority to 30 because Sliced Invoices triggers `set_object_terms` with priority 20.
+add_action( 'set_object_terms', array( 'Gravity_Flow_Step_Feed_Sliced_Invoices', 'invoice_status_manual_update' ), 30, 4 );

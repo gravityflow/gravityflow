@@ -75,7 +75,7 @@ class Gravity_Flow_Steps {
 	 * @return Gravity_Flow_Step | bool
 	 */
 	public static function create( $feed, $entry = null ) {
-		$step_type = $feed['meta']['step_type'];
+		$step_type = rgar( $feed['meta'], 'step_type' );
 
 		if ( empty( $step_type ) || ! isset( self::$_steps[ $step_type ] ) ) {
 			return false;
