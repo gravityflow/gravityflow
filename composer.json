@@ -20,9 +20,10 @@
   },
   "require-dev": {
     "apigen/apigen": "~4.1.2",
-    "lucatume/wp-browser": "^2.0"
-  },
-  "require": {
-    "vlucas/phpdotenv": "^2.5"
+    "lucatume/wp-browser": "^2.0",
+    "squizlabs/php_codesniffer": "3.*",
+    "vlucas/phpdotenv": "^2.5",
+    "dealerdirect/phpcodesniffer-composer-installer": "~0.5.0",
+    "wp-coding-standards/wpcs": "2.1.0"
   }
 }

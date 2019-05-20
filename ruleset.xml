@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ruleset name="Gravity Flow">
+
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/tests/*</exclude-pattern>
+
+    <description>Gravity Flow rules for PHP CodeSniffer</description>
+    <rule ref="WordPress">
+        <exclude name="WordPress.PHP.YodaConditions" />
+    </rule>
+
+    <config name="minimum_supported_wp_version" value="4.8"/>
+
+
+</ruleset>
