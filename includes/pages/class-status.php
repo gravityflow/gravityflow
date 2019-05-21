@@ -982,7 +982,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 			if ( ! $step ) {
 
-			    $label = sprintf( esc_html__( 'Step %s (deleted)', 'gravityflow' ), $step_id );
+				$label  = sprintf( esc_html__( 'Step %s (deleted)', 'gravityflow' ), $step_id );
 				$output = sprintf( '<div class="gravityflow-deleted">%s</div>', $label );
 
 			} else {
