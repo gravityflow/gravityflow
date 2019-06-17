@@ -84,6 +84,10 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 		$form  = $this->get_form();
 		$entry = $this->get_entry();
 
+		// If the step is delayed, there might be several entries to be processed at the same time,
+		// don't use the stored body, or the first entry in queue will be used as the body for all entries.
+		add_filter( 'gform_zapier_use_stored_body', '__return_false' );
+
 		if ( method_exists( 'GFZapier', 'process_feed' ) ) {
 			GFZapier::process_feed( $feed, $entry, $form );
 		} else {
