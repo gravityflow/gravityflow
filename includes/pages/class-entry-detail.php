@@ -929,7 +929,7 @@ class Gravity_Flow_Entry_Detail {
 					}
 
 					if ( ! $display_field ) {
-						continue;
+						continue 2;
 					}
 
 					$value         = RGFormsModel::get_lead_field_value( $entry, $field );
