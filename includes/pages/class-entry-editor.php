@@ -613,7 +613,7 @@ class Gravity_Flow_Entry_Editor {
 		$display_value = apply_filters( 'gform_entry_field_value', $display_value, $field, $this->entry, $this->form );
 
 		if ( $this->display_empty_fields ) {
-			if ( empty( $display_value ) || $display_value === '0' ) {
+			if ( rgblank( $display_value ) ) {
 				$display_value = '&nbsp;';
 			}
 			$display_value = sprintf( '<div class="gravityflow-field-value">%s<div>', $display_value );

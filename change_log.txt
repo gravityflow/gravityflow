@@ -1,3 +1,4 @@
 - Fixed the Post Creation step creating duplicate posts when the workflow or step is restarted.
 - Fixed back link display on entry detail page to use css with class gravityflow-back-link-container instead of line breaks for spacing.
-- Fixed a PHP 7.3 compatability warning related to entry detail screen display.
+- Fixed PHP 7.3 compatability warning related to entry detail screen display.
+- Fixed number field display on user input steps when the field contained 0 value.
