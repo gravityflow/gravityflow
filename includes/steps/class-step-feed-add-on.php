@@ -216,12 +216,15 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	/**
 	 * Returns the label of the given feed.
 	 *
+	 * @since 2.5.6   Added support for feed_name.
+	 * @since unknown
+	 *
 	 * @param array $feed The add-on feed properties.
 	 *
 	 * @return string
 	 */
 	public function get_feed_label( $feed ) {
-		$label = $feed['meta']['feedName'];
+		$label = rgar( $feed['meta'], 'feed_name', rgar( $feed['meta'], 'feedName' ) );
 
 		return $label;
 	}
