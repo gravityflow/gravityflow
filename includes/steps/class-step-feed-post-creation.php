@@ -62,6 +62,55 @@ class Gravity_Flow_Step_Feed_Post_Creation extends Gravity_Flow_Step_Feed_Add_On
 
 		return $this->_class_name;
 	}
+
+	/**
+	 * Processes the given feed for the add-on.
+	 *
+	 * @since 2.5.6
+	 *
+	 * @param array $feed The add-on feed properties.
+	 *
+	 * @return bool Is feed processing complete?
+	 */
+	public function process_feed( $feed ) {
+		$post_id = $this->get_existing_post_id( (int) $feed['id'] );
+
+		if ( ! empty( $post_id ) ) {
+			$this->log_debug( sprintf( '%s() - post #%d already exists for this feed.', __METHOD__, $post_id ) );
+		} else {
+			parent::process_feed( $feed );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Returns the ID of the post previously created by the current feed.
+	 *
+	 * @since 2.5.6
+	 *
+	 * @param int $feed_id The current feed ID.
+	 *
+	 * @return int|null
+	 */
+	public function get_existing_post_id( $feed_id ) {
+		/** @var GF_Advanced_Post_Creation $add_on */
+		$add_on = $this->get_add_on_instance();
+
+		$post_ids = gform_get_meta( $this->get_entry_id(), $add_on->get_slug() . '_post_id' );
+
+		if ( is_array( $post_ids ) ) {
+			foreach ( $post_ids as $id ) {
+				$post_feed_id = (int) rgar( $id, 'feed_id' );
+				if ( $post_feed_id === $feed_id ) {
+					return $id['post_id'];
+				}
+			}
+		}
+
+		return null;
+	}
+
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Post_Creation() );

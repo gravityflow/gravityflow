@@ -327,7 +327,7 @@ class Gravity_Flow_Entry_Detail {
 		 */
 		$url = apply_filters( 'gravityflow_back_link_url_entry_detail', $url, $args );
 
-		printf( '<a class="back-link" href="%s">%s</a><br/><br/>', esc_url( $url ), esc_html( $back_link_text ) );
+		printf( '<div class="gravityflow-back-link-container"><a class="back-link" href="%s">%s</a></div>', esc_url( $url ), esc_html( $back_link_text ) );
 
 		return;
 	}
@@ -929,7 +929,7 @@ class Gravity_Flow_Entry_Detail {
 					}
 
 					if ( ! $display_field ) {
-						continue;
+						continue 2;
 					}
 
 					$value         = RGFormsModel::get_lead_field_value( $entry, $field );

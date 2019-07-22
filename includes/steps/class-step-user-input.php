@@ -223,7 +223,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 							'label' => esc_html__( 'Green Background', 'gravityflow' ),
 						),
 					),
-					'tooltip' => esc_html__( 'Fields and Sections support dynamic conditional logic. Pages do not support dynamic conditional logic so they will only be shown or hidden when the page loads.', 'gravityflow' ),
 				),
 			),
 			$settings_api->get_setting_instructions(),

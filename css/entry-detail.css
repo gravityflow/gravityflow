@@ -375,6 +375,10 @@ td.gravityflow-order-summary{
     list-style-type: decimal;
 }
 
+.gravityflow-back-link-container {
+    margin-bottom: 2em;
+}
+
 span.gf_admin_page_formid {
     background-color: #d4662c;
     border: medium none;
@@ -415,6 +419,9 @@ table#gravityflow-inbox tbody tr{
 }
 
 @media print {
+
+    .gravityflow-back-link-container { display: none; }
+
     .gravityflow-dicussion-item-hidden {
         display:block !important;
     }
