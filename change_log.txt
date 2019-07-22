@@ -2,3 +2,4 @@
 - Fixed back link display on entry detail page to use css with class gravityflow-back-link-container instead of line breaks for spacing.
 - Fixed PHP 7.3 compatability warning related to entry detail screen display.
 - Fixed number field display on user input steps when the field contained 0 value.
+- Fixed delayed Zapier steps send duplicate content from the first entry in queue.
