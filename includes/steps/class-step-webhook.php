@@ -228,7 +228,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'name'  => 'raw_body',
 					'label' => esc_html__( 'Raw Body', 'gravityflow' ),
 					'type'  => 'textarea',
-					'class' => 'fieldwidth-3 fieldheight-2',
+					'class' => 'fieldwidth-1 fieldheight-1 merge-tag-support',
 					'save_callback' => array( $this, 'save_callback_raw_body' ),
 				);
 			} else {
