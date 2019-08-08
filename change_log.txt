@@ -1,3 +1,4 @@
+- Added filter gravityflow_entry_url_inbox_table to allow customization of the link from inbox.
 - Fixed the Post Creation step creating duplicate posts when the workflow or step is restarted.
 - Fixed back link display on entry detail page to use css with class gravityflow-back-link-container instead of line breaks for spacing.
 - Fixed PHP 7.3 compatability warning related to entry detail screen display.

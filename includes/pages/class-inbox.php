@@ -217,6 +217,20 @@ class Gravity_Flow_Inbox {
 		$link      = "<a href='%s'>%s</a>";
 
 		/**
+		 * Allows the entry URL to be modified for each of the entries in the inbox table.
+		 *
+		 * @since 2.5.6
+		 *
+		 * @param string $url_entry The entry URL.
+		 * @param string $entry     The current entry.
+		 * @param string $args      The inbox page arguments.
+		 * @param array  $form      The form object for the current entry.
+		 *
+		 * @return string
+		 */
+		$url_entry = apply_filters( 'gravityflow_entry_url_inbox_table', $url_entry, $entry, $args, $form );
+
+		/**
 		 * Allows the entry link to be modified for each of the entries in the inbox table.
 		 *
 		 * @since 1.9.2
@@ -225,6 +239,8 @@ class Gravity_Flow_Inbox {
 		 * @param string $url_entry The entry URL.
 		 * @param string $entry     The current entry.
 		 * @param string $args      The inbox page arguments.
+		 *
+		 * @return string
 		 */
 		$link = apply_filters( 'gravityflow_entry_link_inbox_table', $link, $url_entry, $entry, $args );
 
