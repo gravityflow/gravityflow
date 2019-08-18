@@ -3,4 +3,5 @@
 - Fixed PHP 7.3 compatability warning related to entry detail screen display.
 - Fixed number field display on user input steps when the field contained 0 value.
 - Fixed delayed Zapier steps send duplicate content from the first entry in queue.
+- Fixed when gravityflow_form_ids_status executes to ensure entry counts + pagination counts match filtering form IDs.
 - Added Merge Tag selector to Outgoing Webhook step settings for raw request body.

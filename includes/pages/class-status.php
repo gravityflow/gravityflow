@@ -123,9 +123,9 @@ class Gravity_Flow_Status {
 				printf( '<input type="hidden" name="%s" value="%s"/>', $hidden_field, $hidden_field_value );
 			}
 
+			$table->prepare_items();
 			$table->views();
 			$table->filters();
-			$table->prepare_items();
 			?>
 		</form>
 		<form id="gravityflow-status-list" method="POST" action="">
@@ -1485,7 +1485,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$form_clause = is_array( $args['form-id'] ) ? $wpdb->prepare( ' AND l.form_id IN (%s)', join( ',', $args['form-id'] ) ) : $wpdb->prepare(' AND l.form_id=%d', absint( $args['form-id'] ) );
 		} else {
 			$form_ids = $this->get_workflow_form_ids();
-
+			/**
+			* Allows form id(s) to be adjusted to define which forms' entries are displayed in status table.
+			* 
+			* Return an array of form ids for use with GFAPI.
+			*
+			* @since 2.2.3
+			* 
+			* @param array   $form_ids        The form ids
+			* @param array   $search_criteria The search criteria
+			*/
+			$form_ids = apply_filters( 'gravityflow_form_ids_status', $form_ids, $this->get_search_criteria() );
+			
 			if ( empty( $form_ids ) ) {
 				$results            = new stdClass();
 				$results->total     = 0;
@@ -1739,6 +1750,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$this->set_pagination_args( $this->pagination_args );
 
+		$this->total_count = $total_count;
 		$this->items = $entries;
 	}
 
