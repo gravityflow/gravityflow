@@ -8187,14 +8187,16 @@ AND m.meta_value='queued'";
 		 * Fork of GFCommon::evaluate_conditional_logic which supports evaluating logic based on entry properties.
 		 *
 		 * @since 1.7.1-dev
+		 * @since 2.5.6-dev Added the optional $step and gravityflow_step_conditional_logic_match filter
 		 *
-		 * @param array $logic The conditional logic to be evaluated.
-		 * @param array $form  The current form.
-		 * @param array $entry The current entry.
+		 * @param array $logic                  The conditional logic to be evaluated.
+		 * @param array $form                   The current form.
+		 * @param array $entry                  The current entry.
+		 * @param bool|Gravity_Flow_Step $step  The current (potential) step
 		 *
 		 * @return bool
 		 */
-		public function evaluate_conditional_logic( $logic, $form, $entry ) {
+		public function evaluate_conditional_logic( $logic, $form, $entry, $step = false ) {
 			if ( ! $logic || ! is_array( rgar( $logic, 'rules' ) ) ) {
 				return true;
 			}
@@ -8221,6 +8223,20 @@ AND m.meta_value='queued'";
 			}
 
 			$do_action = ( $logic['logicType'] == 'all' && $match_count == sizeof( $logic['rules'] ) ) || ( $logic['logicType'] == 'any' && $match_count > 0 );
+
+			if( $step != false ) {
+				/**
+				* Allows the conditional logic for the step to be customized.
+				*
+				* @since 2.5.7
+				* @param bool              $do_action Should the conditional logic pass
+				* @param array             $logic The conditional logic to be evaluated.
+				* @param array             $form  The current form.
+				* @param array             $entry The current entry.
+				* @param Gravity_Flow_Step $step  The current (potential) step
+				*/
+				$do_action = apply_filters( 'gravityflow_step_conditional_logic_match', $do_action, $logic, $form, $entry, $step );
+			}
 
 			return $do_action;
 		}
