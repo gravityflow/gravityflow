@@ -2,3 +2,4 @@
 - Fixed an issue when Sliced Invoices status was manually updated to paid, entries weren't released from Sliced Invoices steps.
 - Fixed an issue with the Status shortcode where users with the gravityflow_status_view_all capability don't see all entries when the shortcode security settings are set to disallow the display_all attribute.
 - Fixed validation issue in Assignee, User and Multi-User fields
+- Added the filter gravityflow_step_conditional_logic_match to enable complex conditional logic for step execution.

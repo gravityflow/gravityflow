@@ -1386,7 +1386,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		}
 		$entry = $this->get_entry();
 
-		return gravity_flow()->evaluate_conditional_logic( $logic, $form, $entry );
+		return gravity_flow()->evaluate_conditional_logic( $logic, $form, $entry, $this );
 	}
 
 	/**
