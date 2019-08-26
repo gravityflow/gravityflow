@@ -1381,12 +1381,27 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$is_condition_enabled = rgar( $feed_meta, 'feed_condition_conditional_logic' ) == true;
 		$logic                = rgars( $feed_meta, 'feed_condition_conditional_logic_object/conditionalLogic' );
 
-		if ( ! $is_condition_enabled || empty( $logic ) ) {
-			return true;
-		}
 		$entry = $this->get_entry();
 
-		return gravity_flow()->evaluate_conditional_logic( $logic, $form, $entry, $this );
+		if ( ! $is_condition_enabled || empty( $logic ) ) {
+			$condition_met = true;
+		} else {
+			$condition_met = gravity_flow()->evaluate_conditional_logic( $logic, $form, $entry, $this );
+		}
+
+		/**
+		* Allows the determination for step conditions being met to be customized.
+		*
+		* @since 2.5.7
+		* @param bool                   $condition_met Are the step condition(s) met.
+		* @param array                  $logic         The conditional logic to be evaluated.
+		* @param array                  $form          The current form.
+		* @param array                  $entry         The current entry.
+		* @param Gravity_Flow_Step      $step          The current step.
+		*/
+		$condition_met = apply_filters( 'gravityflow_step_condition_met', $condition_met, $logic, $form, $entry, $this );
+
+		return $condition_met;
 	}
 
 	/**
