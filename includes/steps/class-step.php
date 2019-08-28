@@ -1392,7 +1392,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		/**
 		* Allows the determination for step conditions being met to be customized.
 		*
-		* @since 2.5.7
+		* @since 2.5.6
 		* @param bool                   $condition_met Are the step condition(s) met.
 		* @param array                  $logic         The conditional logic to be evaluated.
 		* @param array                  $form          The current form.
