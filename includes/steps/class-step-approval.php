@@ -583,7 +583,22 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$feedback = false;
 
 		if ( $this->revertEnable ) {
-			$step = gravity_flow()->get_step( $this->revertValue, $this->get_entry() );
+
+			$this->get_entry();
+
+			/**
+			* Allows the revert step to be modified before routing.
+			*
+			* @since 2.5.6
+			*
+			* @param string                $revert_step_id    The revert step ID from current step settings.
+			* @param array                 $entry             The current entry array.
+			* @param array                 $form              The current form array.
+			* @param Gravity_Flow_Step     $step              The current step
+			*/
+			$revert_step_id = apply_filters( 'gravityflow_approval_revert_step_id', $this->revertValue, $this->get_entry(), $this->get_form(), $this );
+
+			$step = gravity_flow()->get_step( $revert_step_id, $this->get_entry() );
 
 			if ( $step ) {
 				$this->end();
