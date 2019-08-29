@@ -8188,9 +8188,9 @@ AND m.meta_value='queued'";
 		 *
 		 * @since 1.7.1-dev
 		 *
-		 * @param array                  $logic The conditional logic to be evaluated.
-		 * @param array                  $form  The current form.
-		 * @param array                  $entry The current entry.
+		 * @param array $logic The conditional logic to be evaluated.
+		 * @param array $form  The current form.
+		 * @param array $entry The current entry.
 		 *
 		 * @return bool
 		 */
