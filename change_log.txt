@@ -4,4 +4,4 @@
 - Fixed number field display on user input steps when the field contained 0 value.
 - Fixed delayed Zapier steps send duplicate content from the first entry in queue.
 - Added Merge Tag selector to Outgoing Webhook step settings for raw request body.
-- Added the filter gravityflow_step_conditional_logic_match to enable complex conditional logic for step execution.
+- Added the filter gravityflow_step_is_condition_met to enable complex conditional logic for start (or not) a given step.

@@ -1399,7 +1399,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		* @param array                  $entry         The current entry.
 		* @param Gravity_Flow_Step      $step          The current step.
 		*/
-		$condition_met = apply_filters( 'gravityflow_step_condition_met', $condition_met, $logic, $form, $entry, $this );
+		$condition_met = apply_filters( 'gravityflow_step_is_condition_met', $condition_met, $logic, $form, $entry, $this );
 
 		return $condition_met;
 	}
