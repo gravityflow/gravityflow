@@ -123,9 +123,10 @@ class Gravity_Flow_Status {
 				printf( '<input type="hidden" name="%s" value="%s"/>', $hidden_field, $hidden_field_value );
 			}
 
-			$table->prepare_items();
 			$table->views();
 			$table->filters();
+			$table->prepare_items();
+
 			?>
 		</form>
 		<form id="gravityflow-status-list" method="POST" action="">
