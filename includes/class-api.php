@@ -225,6 +225,30 @@ class Gravity_Flow_API {
 	public function send_to_step( $entry, $step_id ) {
 		$current_step = $this->get_current_step( $entry );
 		if ( $current_step ) {
+
+			$new_step = $this->get_step( $step_id, $entry );
+			$form     = $new_step->get_form();
+
+			if ( ! $new_step->is_condition_met( $form ) ) {
+
+				$always_send_to_step = apply_filters( 'gravityflow_send_to_step_condition_met_required', false, $new_step, $current_step, $entry, $form );
+
+				if ( $always_send_to_step ) {
+
+					$feedback = sprintf( esc_html__( 'Step condition not met to send to step: %s', 'gravityflow' ), $new_step->get_name() );
+					$this->add_timeline_note( $entry['id'], $feedback );
+
+					$next_step = gravity_flow()->get_next_step( $new_step, $entry, $form );
+
+					$next_step = apply_filters( 'gravityflow_send_to_step_next_step_id', $next_step, $new_step, $current_step, $entry, $form );
+
+					if ( $next_step && $next_step->is_condition_met( $form ) ) {
+						$step_id = $next_step->get_id();
+					} else {
+						return;
+					}
+				}
+			}
 			$current_step->purge_assignees();
 			$current_step->update_step_status( 'cancelled' );
 		}
