@@ -240,7 +240,7 @@ class Gravity_Flow_API {
 
 					$next_step = gravity_flow()->get_next_step( $new_step, $entry, $form );
 
-					$next_step = apply_filters( 'gravityflow_send_to_step_next_step_id', $next_step, $new_step, $current_step, $entry, $form );
+					$next_step = apply_filters( 'gravityflow_send_to_step_next_step', $next_step, $new_step, $current_step, $entry, $form );
 
 					if ( $next_step && $next_step->is_condition_met( $form ) ) {
 						$step_id = $next_step->get_id();
