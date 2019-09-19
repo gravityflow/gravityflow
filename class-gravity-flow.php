@@ -6613,7 +6613,25 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				}
 			}
 
-			GFFormsModel::add_note( $entry_id, $user_id, $user_name, $note, 'gravityflow' );
+			/**
+			* Allows the timeline note to be customized.
+			*
+			* @since 2.5.7
+			*
+			* @param string                 $note           The message to be added to the timeline.
+			* @param int                    $entry_id       The entry of the current step.
+			* @param bool|int               $user_id        The ID of user performing the action.
+			* @param string                 $user_name      The username of user performing the action.
+			* @param bool|Gravity_Flow_Step $step           If it is a step based action the current step.
+			*
+			* @return bool|string
+			*/
+
+			$note = apply_filters( 'gravityflow_timeline_note_add', $note, $entry_id, $user_id, $user_name, false );
+
+			if ( $note ) {
+				GFFormsModel::add_note( $entry_id, $user_id, $user_name, $note, 'gravityflow' );
+			}
 		}
 
 		/**

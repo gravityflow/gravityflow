@@ -1964,7 +1964,27 @@ abstract class Gravity_Flow_Step extends stdClass {
 			}
 		}
 
-		GFFormsModel::add_note( $this->get_entry_id(), $user_id, $user_name, $note, 'gravityflow' );
+		$entry_id = $this->get_entry_id();
+
+		/**
+		 * Allows the timeline note to be customized.
+		 *
+		 * @since 2.5.7
+		 *
+		 * @param string                 $note       The message to be added to the timeline.
+		 * @param int                    $entry_id   The entry of the current step.
+		 * @param bool|int               $user_id    The ID of user performing the current step action.
+		 * @param string                 $user_name  The username of user performing the current step action.
+		 * @param bool|Gravity_Flow_Step $step       If it is a step based action the current step.
+		 *
+		 * @return bool|string
+		 */
+
+		$note = apply_filters( 'gravityflow_timeline_note_add', $note, $entry_id, $user_id, $user_name, $this );
+
+		if ( $note ) {
+			GFFormsModel::add_note( $entry_id, $user_id, $user_name, $note, 'gravityflow' );
+		}
 	}
 
 	/**
