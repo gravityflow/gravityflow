@@ -291,6 +291,18 @@ class Gravity_Flow_Common {
 
 		$notes = array_reverse( $notes );
 
+		/**
+		 * Allows the timeline notes to be modified.
+		 *
+		 * @since 2.5.7
+		 *
+		 * @param array $notes The notes for timeline of current entry.
+		 * @param array $entry The current entry.
+		 *
+		 * @return array
+		 */
+		$notes = apply_filters( 'gravityflow_timeline_notes', $notes, $entry );
+
 		return $notes;
 	}
 

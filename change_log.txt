@@ -1,1 +1,2 @@
 - Added the filter gravityflow_timeline_note_add to support customizing the potential note to add to timeline.
+- Added the filter gravityflow_timeline_notes to support customizing the display of timeline notes.
