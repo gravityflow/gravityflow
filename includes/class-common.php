@@ -294,7 +294,7 @@ class Gravity_Flow_Common {
 		/**
 		 * Allows the timeline notes to be modified.
 		 *
-		 * @since 2.5.7
+		 * @since 2.5.8
 		 *
 		 * @param array $notes The notes for timeline of current entry.
 		 * @param array $entry The current entry.
