@@ -78,7 +78,9 @@ class Gravity_Flow_Step_Feed_Post_Creation extends Gravity_Flow_Step_Feed_Add_On
 		if ( ! empty( $post_id ) ) {
 			$this->log_debug( sprintf( '%s() - post #%d already exists for this feed.', __METHOD__, $post_id ) );
 		} else {
+			add_filter( 'gravityflow_discussion_items_display_toggle', '__return_false', 99 );
 			parent::process_feed( $feed );
+			remove_filter( 'gravityflow_discussion_items_display_toggle', '__return_false', 99 );
 		}
 
 		return true;
