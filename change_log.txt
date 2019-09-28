@@ -2,3 +2,4 @@
 - Added the filter gravityflow_timeline_note_add to support customizing the potential note to add to timeline.
 - Added the filter gravityflow_timeline_notes to support customizing the display of timeline notes.
 - Fixed the "view more" link for the Discussion field being output when merge tags are processed for posts created by the Advanced Post Creation Add-On.
+- Fixed the notification tab for Revert Email on Approval step to have the workflow merge tags options.

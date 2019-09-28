@@ -515,6 +515,7 @@
 			'_gaddon_setting_assignee_notification_message',
 			'_gaddon_setting_approval_notification_message',
 			'_gaddon_setting_rejection_notification_message',
+			'_gaddon_setting_revert_notification_message',
 		];
 
 		if (supportedElementIds.indexOf(elementId) < 0) {
