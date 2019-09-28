@@ -1832,7 +1832,9 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 		$this->log_debug( __METHOD__ . '() - sending notification: ' . print_r( $notification, true ) );
 
+		add_filter( 'gform_notification_enable_cc', '__return_true' );
 		GFCommon::send_notification( $notification, $form, $entry );
+		remove_filter( 'gform_notification_enable_cc', '__return_true' );
 	}
 
 	/**
