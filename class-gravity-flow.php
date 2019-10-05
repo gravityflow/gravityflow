@@ -1721,7 +1721,8 @@ PRIMARY KEY  (id)
 					'display_fields_mode' => 'all_fields',
 					'destination_complete' => 'next',
 				);
-				$this->insert_feed( $form_id, true, $start_step_meta );
+				$start_step_id = $this->insert_feed( $form_id, true, $start_step_meta );
+				do_action( 'gform_post_save_feed_settings', $start_step_id, $form_id, $start_step_meta, $this );
 
 				$complete_step_meta = array (
 					'step_name' => __( 'Complete', 'gravityflow' ),
@@ -1730,7 +1731,8 @@ PRIMARY KEY  (id)
 					'feed_condition_conditional_logic' => '0',
 					'scheduled' => '0',
 				);
-				$this->insert_feed( $form_id, true, $complete_step_meta );
+				$complete_step_id = $this->insert_feed( $form_id, true, $complete_step_meta );
+				do_action( 'gform_post_save_feed_settings', $complete_step_id, $form_id, $complete_step_meta, $this );
 
 			}
 			return parent::save_feed_settings( $feed_id, $form_id, $settings );

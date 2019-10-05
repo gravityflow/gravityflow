@@ -191,6 +191,13 @@ class Gravity_Flow_Common_Step_Settings {
 				'type'  => 'text',
 			),
 			array(
+				'name'  => $prefix . '_notification_cc',
+				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
+				'label' => __( 'CC', 'gravityflow' ),
+				'type'  => 'text',
+				'tooltip'  => '<h6>' . __( 'Name', 'gravityflow' ) . '</h6>' . __( 'Be aware of any privacy policies your website is subject to that would apply to using the CC field. For example, GDPR indicates names and emails are private that should not be exposed.', 'gravityflow' ),
+			),
+			array(
 				'name'  => $prefix . '_notification_bcc',
 				'class' => 'fieldwidth-2 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
 				'label' => __( 'BCC', 'gravityflow' ),
