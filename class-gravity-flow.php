@@ -6924,6 +6924,10 @@ AND m.meta_value='queued'";
 					foreach ( $entries as $entry ) {
 						$current_step = $this->get_step( $entry['workflow_step'], $entry );
 
+						if ( ! $current_step ) {
+							continue;
+						}
+
 						$this->log_debug( __METHOD__ . '(): processing entry: ' . $entry['id'] );
 
 						if ( $current_step->is_expired() ) {
