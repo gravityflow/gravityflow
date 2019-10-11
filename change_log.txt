@@ -3,3 +3,5 @@
 - Fixed an issue where PHP fatal error is thrown when processing expired entries with steps that no longer exist.
 - Fixed an issue where a multi-select on User Input step settings pages would shrink to a very small width on smaller window resolutions.
 - Fixed a PHP notice which can occur when conditional logic is evaluated and the rule is not based on a form field.
+- Added filter gravityflow_send_to_step_condition_met_required to allow customization of the API send_to_step when the proposed steps conditions are not met. Default is false that API will always send to the proposed step.
+- Added filter gravityflow_send_to_step_next_step to allow customization of the API when the proposed next step has not met its step conditions. Defaults to next step after the proposed step.

@@ -231,6 +231,19 @@ class Gravity_Flow_API {
 
 			if ( ! $new_step->is_condition_met( $form ) ) {
 
+				/**
+				* Confirms whether the step conditions being met is required to send a workflow to a specific step.
+				*
+				* @since 2.5.9
+				*
+				* @param bool                   $always_send_to_step Whether to pass a workflow to a step that has failed its required conditions.
+				* @param Gravity_Flow_Step      $new_step            The proposed new step that failed its step conditions.
+				* @param Gravity_Flow_Step      $current_step        The current step.
+				* @param array                  $entry               The current entry.
+				* @param array                  $form                The current form.
+				*
+				* @return bool
+				*/
 				$always_send_to_step = apply_filters( 'gravityflow_send_to_step_condition_met_required', false, $new_step, $current_step, $entry, $form );
 
 				if ( $always_send_to_step ) {
@@ -240,6 +253,19 @@ class Gravity_Flow_API {
 
 					$next_step = gravity_flow()->get_next_step( $new_step, $entry, $form );
 
+					/**
+					* Determines what next step a workflow should proceed to instead of the selected step that failed its step conditions.
+					*
+					* @since 2.5.9
+					*
+					* @param Gravity_Flow_Step      $next_step      The next step to send the entry to. Defaults to the next step after the proposed new step.
+					* @param Gravity_Flow_Step      $new_step       The proposed new step that failed its step conditions.
+					* @param Gravity_Flow_Step      $current_step   The current step.
+					* @param array                  $entry          The current entry.
+					* @param array                  $form           The current form.
+					*
+					* @return Gravity_Flow_Step
+					*/
 					$next_step = apply_filters( 'gravityflow_send_to_step_next_step', $next_step, $new_step, $current_step, $entry, $form );
 
 					if ( $next_step && $next_step->is_condition_met( $form ) ) {
