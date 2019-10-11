@@ -236,17 +236,17 @@ class Gravity_Flow_API {
 				*
 				* @since 2.5.9
 				*
-				* @param bool                   $always_send_to_step Whether to pass a workflow to a step that has failed its required conditions.
-				* @param Gravity_Flow_Step      $new_step            The proposed new step that failed its step conditions.
-				* @param Gravity_Flow_Step      $current_step        The current step.
-				* @param array                  $entry               The current entry.
-				* @param array                  $form                The current form.
+				* @param bool                   $conditions_met_required  Whether to pass a workflow to a step that has failed its required conditions.
+				* @param Gravity_Flow_Step      $new_step                 The proposed new step that failed its step conditions.
+				* @param Gravity_Flow_Step      $current_step             The current step.
+				* @param array                  $entry                    The current entry.
+				* @param array                  $form                     The current form.
 				*
 				* @return bool
 				*/
-				$always_send_to_step = apply_filters( 'gravityflow_send_to_step_condition_met_required', false, $new_step, $current_step, $entry, $form );
+				$conditions_met_required = apply_filters( 'gravityflow_send_to_step_condition_met_required', false, $new_step, $current_step, $entry, $form );
 
-				if ( $always_send_to_step ) {
+				if ( $conditions_met_required ) {
 
 					$feedback = sprintf( esc_html__( 'Step condition not met to send to step: %s', 'gravityflow' ), $new_step->get_name() );
 					$this->add_timeline_note( $entry['id'], $feedback );
