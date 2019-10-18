@@ -251,14 +251,31 @@ class Gravity_Flow_API {
 					$feedback = sprintf( esc_html__( 'Step condition not met to send to step: %s', 'gravityflow' ), $new_step->get_name() );
 					$this->add_timeline_note( $entry['id'], $feedback );
 
-					$next_step = gravity_flow()->get_next_step( $new_step, $entry, $form );
+					$steps = gravity_flow()->get_steps( $form['id'], $entry );
+
+					$new_step_id = $new_step->get_id();
+					$check_step = false;
+					$next_step = false;
+
+					foreach ( $steps as $potential_step ) {
+						// Ensure we only start evaluating potential next steps after the provided step.
+						if ( $check_step == false && $potential_step->get_id() == $new_step_id ) {
+							$check_step = true;
+							continue;
+						}
+
+						if ( $check_step && $potential_step->is_condition_met( $form ) ) {
+							$next_step = $potential_step;
+						}
+
+					}
 
 					/**
 					* Determines what next step a workflow should proceed to instead of the selected step that failed its step conditions.
 					*
 					* @since 2.5.9
 					*
-					* @param Gravity_Flow_Step      $next_step      The next step to send the entry to. Defaults to the next step after the proposed new step.
+					* @param bool|Gravity_Flow_Step $next_step      The next step to send the entry to. Defaults to the next step after the proposed new step that meets its' start conditions.
 					* @param Gravity_Flow_Step      $new_step       The proposed new step that failed its step conditions.
 					* @param Gravity_Flow_Step      $current_step   The current step.
 					* @param array                  $entry          The current entry.
