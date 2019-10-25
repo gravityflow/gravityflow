@@ -1,1 +1,2 @@
 - Fixed incorrect feedback when user input step confirmation message content is left empty and the step is completed.
+- Fixed issue when attempting to modify step settings for a step type that is not active (plugin deactivated, incorrect permissions).

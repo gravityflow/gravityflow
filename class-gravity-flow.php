@@ -1328,6 +1328,9 @@ PRIMARY KEY  (id)
 
 			if ( $current_step_id ) {
 				$step = $this->get_step( $current_step_id );
+				if ( ! $step ) {
+					wp_die(  __( 'Step settings unavailable. The selected step type is not active.', 'gravityflow' ) );
+				}
 				$step_type = $step->get_type();
 			} else {
 				$step_type = $this->get_setting( 'step_type' );
