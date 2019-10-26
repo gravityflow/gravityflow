@@ -6925,7 +6925,7 @@ AND m.meta_value='queued'";
 						$current_step = $this->get_step( $entry['workflow_step'], $entry );
 
 						if ( ! $current_step ) {
-							$this->log_debug( __METHOD__ . '(): The step (id: ' . $entry['workflow_step'] . ') no longer exists.' );
+							$this->log_debug( __METHOD__ . '(): The step (id: ' . $entry['workflow_step'] . ') no longer exists. Skip entry id: ' . $entry['id'] );
 
 							continue;
 						}
