@@ -6170,7 +6170,6 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */
 
 		public function get_shortcode_defaults() {
-
 			$defaults = array(
 				'page'             => 'inbox',
 				'form'             => null,
@@ -6197,6 +6196,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'back_link_url'    => null,
 				'context_key'      => '',
 				'due_date'         => false,
+				'range'            => '',
+				'category'         => '',
+				'step_id'          => null,
+				'assignee'         => '',
 			);
 
 			return $defaults;
@@ -6288,9 +6291,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'     => $a['workflow_info'],
 				'step_status'       => $a['step_status'],
 				'context_key'       => $a['context_key'],
-				'back_link'        => $a['back_link'],
-				'back_link_text'   => $a['back_link_text'],
-				'back_link_url'    => $a['back_link_url'],
+				'back_link'         => $a['back_link'],
+				'back_link_text'    => $a['back_link_text'],
+				'back_link_url'     => $a['back_link_url'],
 			);
 
 			if ( is_null( $args['back_link_url' ] ) ) {
@@ -6394,14 +6397,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					'step-id',
 					'assignee',
 				) ),
-				'range'          => sanitize_text_field( rgget( 'range' ) ),
-				'form_id'        => absint( rgget( 'form-id' ) ),
-				'category'       => sanitize_text_field( rgget( 'category' ) ),
-				'step_id'        => absint( rgget( 'step-id' ) ),
-				'assignee'       => sanitize_text_field( rgget( 'assignee' ) ),
+				'form_id'        => $a['form'],
+				'range'          => $a['range'],
+				'category'       => $a['category'],
+				'step_id'        => $a['step_id'],
+				'assignee'       => $a['assignee'],
 			);
-
-			$args = wp_parse_args( $args, $a );
 
 			ob_start();
 			$this->reports_page( $args );

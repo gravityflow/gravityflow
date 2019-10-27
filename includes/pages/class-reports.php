@@ -25,6 +25,13 @@ class Gravity_Flow_Reports {
 	 */
 	public static function display( $args ) {
 
+		// Unset $args if URL param set.
+		foreach ( $args as $key => $arg ) {
+			if ( rgget( str_replace( '_', '-', $key ) ) ) {
+				unset( $args[ $key ] );
+			}
+		}
+
 		$assignee_key = sanitize_text_field( rgget( 'assignee' ) );
 		list( $assignee_type, $assignee_id ) = rgexplode( '|', $assignee_key, 2 );
 
