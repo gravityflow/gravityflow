@@ -8567,16 +8567,17 @@ AND m.meta_value='queued'";
 				return $check_entry_display;
 			}
 
+			$form_id = $entry['form_id'];
 			// Hack to ensure that the meta values for assignees are returned when rule matching in GVCommon::check_entry_display().
 			foreach ( $keys as $key ) {
-				$_fields[ $entry['form_id'] . '_' . $key ] = array( 'id' => $key );
+				$_fields[ $form_id . '_' . $key ] = array( 'id' => $key );
 			}
 
 			$entry = GVCommon::check_entry_display( $entry );
 
 			// Clean up the hack.
 			foreach ( $keys as $key ) {
-				unset( $_fields[ $entry['form_id'] . '_' . $key ] );
+				unset( $_fields[ $form_id . '_' . $key ] );
 			}
 
 			// GVCommon::check_entry_display() returns the entry if permission is granted otherwise false or maybe a WP_Error instance.
