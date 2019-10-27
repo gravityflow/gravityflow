@@ -6386,10 +6386,25 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			$args = array(
 				'display_header' => false,
+				'base_url'       => remove_query_arg( array(
+					'page',
+					'range',
+					'form-id',
+					'category',
+					'step-id',
+					'assignee',
+				) ),
+				'range'          => sanitize_text_field( rgget( 'range' ) ),
+				'form_id'        => absint( rgget( 'form-id' ) ),
+				'category'       => sanitize_text_field( rgget( 'category' ) ),
+				'step_id'        => absint( rgget( 'step-id' ) ),
+				'assignee'       => sanitize_text_field( rgget( 'assignee' ) ),
 			);
 
+			$args = wp_parse_args( $args, $a );
+
 			ob_start();
-			$this->reports_page( wp_parse_args( $a, $args ) );
+			$this->reports_page( $args );
 			$html = ob_get_clean();
 
 			return $html;
