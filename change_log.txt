@@ -1,1 +1,2 @@
 - Fixed incorrect feedback when user input step confirmation message content is left empty and the step is completed.
+- Fixed an issue where PHP fatal error is thrown in the filter_gravityview_common_get_entry_check_entry_display() method.
