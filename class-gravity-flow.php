@@ -95,7 +95,7 @@ if ( class_exists( 'GFForms' ) ) {
 			'gravityflow_reports',
 			'gravityflow_activity',
 			'gravityflow_workflow_detail_admin_actions',
-            'gravityflow_admin_actions',
+			'gravityflow_admin_actions',
 		);
 
 		/**
