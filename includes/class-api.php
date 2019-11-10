@@ -232,29 +232,28 @@ class Gravity_Flow_API {
 		}
 
 		$current_step = $this->get_current_step( $entry );
+		$new_step     = $this->get_step( $step_id, $entry );
 
-		$new_step = $this->get_step( $step_id, $entry );
+		/**
+		* Confirms whether the step conditions being met is required to send a workflow to a specific step.
+		*
+		* @since 2.5.9
+		*
+		* @param bool                   $conditions_met_required  Whether to pass a workflow to a step that has failed its required conditions.
+		* @param Gravity_Flow_Step      $new_step                 The proposed new step that failed its step conditions.
+		* @param Gravity_Flow_Step      $current_step             The current step.
+		* @param array                  $entry                    The current entry.
+		* @param array                  $form                     The current form.
+		*
+		* @return bool
+		*/
+		$conditions_met_required = apply_filters( 'gravityflow_send_to_step_condition_met_required', false, $new_step, $current_step, $entry, $form );
 
-		if ( ! $new_step->is_condition_met( $form ) ) {
+		if ( $conditions_met_required ) {
 
-			/**
-			* Confirms whether the step conditions being met is required to send a workflow to a specific step.
-			*
-			* @since 2.5.9
-			*
-			* @param bool                   $conditions_met_required  Whether to pass a workflow to a step that has failed its required conditions.
-			* @param Gravity_Flow_Step      $new_step                 The proposed new step that failed its step conditions.
-			* @param Gravity_Flow_Step      $current_step             The current step.
-			* @param array                  $entry                    The current entry.
-			* @param array                  $form                     The current form.
-			*
-			* @return bool
-			*/
-			$conditions_met_required = apply_filters( 'gravityflow_send_to_step_condition_met_required', false, $new_step, $current_step, $entry, $form );
+			if ( ! $new_step->is_condition_met( $form ) ) {
 
-			if ( $conditions_met_required ) {
-
-				$feedback = sprintf( esc_html__( 'Step condition not met to send to step: %s', 'gravityflow' ), $new_step->get_name() );
+				$feedback = sprintf( esc_html__( 'Step condition(s) not met to send to step: %s', 'gravityflow' ), $new_step->get_name() );
 				$this->add_timeline_note( $entry['id'], $feedback );
 
 				$steps = gravity_flow()->get_steps( $form['id'], $entry );
@@ -290,11 +289,17 @@ class Gravity_Flow_API {
 				*
 				* @return Gravity_Flow_Step
 				*/
-				$next_step = apply_filters( 'gravityflow_send_to_step_next_step', $next_step, $new_step, $current_step, $entry, $form );
+				$next_step = apply_filters( 'gravityflow_send_to_step_condition_not_met', $next_step, $new_step, $current_step, $entry, $form );
 
-				if ( $next_step && $next_step->is_condition_met( $form ) && $next_step->is_active() ) {
+				if ( ! $next_step || ! $next_step instanceof Gravity_Flow_Step ) {
+					return;
+				}
+
+				if ( $next_step->is_condition_met( $form ) && $next_step->is_active() ) {
 					$step_id = $next_step->get_id();
 				} else {
+					$feedback = sprintf( esc_html__( 'Step condition(s) not met to send to step: %s', 'gravityflow' ), $next_step->get_name() );
+					$this->add_timeline_note( $entry['id'], $feedback );
 					return;
 				}
 			}
