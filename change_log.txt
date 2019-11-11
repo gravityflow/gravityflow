@@ -3,3 +3,4 @@
 - Fixed an issue where PHP fatal error is thrown when processing expired entries with steps that no longer exist.
 - Fixed an issue where a multi-select on User Input step settings pages would shrink to a very small width on smaller window resolutions.
 - Fixed a PHP notice which can occur when conditional logic is evaluated and the rule is not based on a form field.
+- Updated the Members integration to include the missing Status page Admin Actions capability.

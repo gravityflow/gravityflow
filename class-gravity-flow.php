@@ -95,6 +95,7 @@ if ( class_exists( 'GFForms' ) ) {
 			'gravityflow_reports',
 			'gravityflow_activity',
 			'gravityflow_workflow_detail_admin_actions',
+			'gravityflow_admin_actions',
 		);
 
 		/**
@@ -8641,6 +8642,7 @@ AND m.meta_value='queued'";
 				'gravityflow_submit'                        => $this->translate_navigation_label( 'submit' ),
 				'gravityflow_status'                        => $status_label,
 				'gravityflow_status_view_all'               => $status_label . ' - ' . __( 'View All', 'gravityflow' ),
+				'gravityflow_admin_actions'                 => $status_label . ' - ' . __( 'Admin Actions', 'gravityflow' ),
 				'gravityflow_reports'                       => $this->translate_navigation_label( 'reports' ),
 				'gravityflow_activity'                      => $this->translate_navigation_label( 'activity' ),
 				'gravityflow_settings'                      => __( 'Manage Settings', 'gravityflow' ),
