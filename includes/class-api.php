@@ -251,7 +251,7 @@ class Gravity_Flow_API {
 
 		if ( $conditions_met_required ) {
 
-			if ( ! $new_step->is_condition_met( $form ) ) {
+			if ( $new_step && ! $new_step->is_condition_met( $form ) ) {
 
 				$feedback = sprintf( esc_html__( 'Step condition(s) not met to send to step: %s', 'gravityflow' ), $new_step->get_name() );
 				$this->add_timeline_note( $entry['id'], $feedback );
