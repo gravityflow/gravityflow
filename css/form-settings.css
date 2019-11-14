@@ -124,6 +124,7 @@ table.gform-routings tr.gform-routing-row td .repeater-buttons{
 
 .gform-routing-input-field{
     width:100%;
+	min-width: 200px;
 }
 
 #gaddon-setting-row-step_type td label{

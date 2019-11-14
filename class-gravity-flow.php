@@ -95,6 +95,7 @@ if ( class_exists( 'GFForms' ) ) {
 			'gravityflow_reports',
 			'gravityflow_activity',
 			'gravityflow_workflow_detail_admin_actions',
+			'gravityflow_admin_actions',
 		);
 
 		/**
@@ -6927,6 +6928,12 @@ AND m.meta_value='queued'";
 					foreach ( $entries as $entry ) {
 						$current_step = $this->get_step( $entry['workflow_step'], $entry );
 
+						if ( ! $current_step ) {
+							$this->log_debug( __METHOD__ . '(): The step (id: ' . $entry['workflow_step'] . ') no longer exists. Skip entry id: ' . $entry['id'] );
+
+							continue;
+						}
+
 						$this->log_debug( __METHOD__ . '(): processing entry: ' . $entry['id'] );
 
 						if ( $current_step->is_expired() ) {
@@ -8273,18 +8280,18 @@ AND m.meta_value='queued'";
 		 *
 		 * @since 2.4.1
 		 *
-		 * @param bool   $is_match     Does the target field’s value match with the rule value?
-		 * @param string $field_value  The field value to use with the comparison.
-		 * @param string $target_value The value from the conditional routing rule to use with the comparison.
-		 * @param string $operation    The conditional routing rule operator.
-		 * @param object $source_field The field object for the source of the field value.
-		 * @param array  $rule         The current rule object.
+		 * @param bool         $is_match     Does the target field’s value match with the rule value?
+		 * @param string|array $field_value  The field value to use with the comparison.
+		 * @param string       $target_value The value from the conditional routing rule to use with the comparison.
+		 * @param string       $operation    The conditional routing rule operator.
+		 * @param object       $source_field The field object for the source of the field value.
+		 * @param array        $rule         The current rule object.
 		 *
 		 * @return bool
 		 */
 		public function filter_gform_is_value_match( $is_match, $field_value, $target_value, $operation, $source_field, $rule ) {
 
-			if ( ! $source_field || ! in_array( $source_field->type, array( 'workflow_multi_user', 'date' ) ) ) {
+			if ( ! ( $source_field instanceof GF_Field ) || ! in_array( $source_field->type, array( 'workflow_multi_user', 'date' ) ) ) {
 				return $is_match;
 			}
 
@@ -8570,16 +8577,17 @@ AND m.meta_value='queued'";
 				return $check_entry_display;
 			}
 
+			$form_id = $entry['form_id'];
 			// Hack to ensure that the meta values for assignees are returned when rule matching in GVCommon::check_entry_display().
 			foreach ( $keys as $key ) {
-				$_fields[ $entry['form_id'] . '_' . $key ] = array( 'id' => $key );
+				$_fields[ $form_id . '_' . $key ] = array( 'id' => $key );
 			}
 
 			$entry = GVCommon::check_entry_display( $entry );
 
 			// Clean up the hack.
 			foreach ( $keys as $key ) {
-				unset( $_fields[ $entry['form_id'] . '_' . $key ] );
+				unset( $_fields[ $form_id . '_' . $key ] );
 			}
 
 			// GVCommon::check_entry_display() returns the entry if permission is granted otherwise false or maybe a WP_Error instance.
@@ -8637,6 +8645,7 @@ AND m.meta_value='queued'";
 				'gravityflow_submit'                        => $this->translate_navigation_label( 'submit' ),
 				'gravityflow_status'                        => $status_label,
 				'gravityflow_status_view_all'               => $status_label . ' - ' . __( 'View All', 'gravityflow' ),
+				'gravityflow_admin_actions'                 => $status_label . ' - ' . __( 'Admin Actions', 'gravityflow' ),
 				'gravityflow_reports'                       => $this->translate_navigation_label( 'reports' ),
 				'gravityflow_activity'                      => $this->translate_navigation_label( 'activity' ),
 				'gravityflow_settings'                      => __( 'Manage Settings', 'gravityflow' ),
