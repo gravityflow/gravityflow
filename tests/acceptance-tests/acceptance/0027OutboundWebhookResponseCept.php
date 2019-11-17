@@ -20,7 +20,7 @@ $I->fillField( 'Question', 'Codeception Question' );
 $I->fillField( 'Answer', '42' );
 $I->fillField( 'Rationale', 'Why it is the answer to the Ultimate Question of Life, the Universe, and Everything' );
 
-$I->click( 'input[type=submit]' );
+$I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 $I->loginAsAdmin();

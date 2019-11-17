@@ -24,7 +24,7 @@ $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 
 $I->fillField( 'Single Line Text', 'Test' );
 $I->fillField( 'Paragraph', 'Test' );
-$I->click( 'input[type=submit]' );
+$I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.' );
 
 // Tests the {workflow_entry_link} merge tag on the page created from the approval step assignee email.

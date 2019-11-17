@@ -14,7 +14,7 @@ $I->amOnPage( '/0024-hs5197-calculated-product-logic' );
 
 $I->see( '0024 HS5197 Calculated Product Logic' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
-$I->click( 'input[type=submit]' );
+$I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 // Login to wp-admin

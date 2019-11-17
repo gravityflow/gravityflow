@@ -27,7 +27,7 @@ $I->selectOption( 'select[name=input_20]', 'Third Choice' );
 
 //$I->makeScreenshot( 'Before form submit.' );
 
-$I->click( 'input[type=submit]' );
+$I->click( 'Submit' );
 
 //$I->makeScreenshot( 'Form submitted.' );
 
