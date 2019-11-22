@@ -1,3 +1,4 @@
+- Updated the Members integration to include the missing Status page Admin Actions capability.
 - Fixed incorrect feedback when user input step confirmation message content is left empty and the step is completed.
 - Fixed an issue when attempting to modify step settings for a step type that is not active (plugin deactivated, incorrect permissions).
 - Fixed an issue where PHP fatal error is thrown in the filter_gravityview_common_get_entry_check_entry_display() method.
@@ -5,4 +6,4 @@
 - Fixed an issue where a multi-select on User Input step settings pages would shrink to a very small width on smaller window resolutions.
 - Fixed a PHP notice which can occur when conditional logic is evaluated and the rule is not based on a form field.
 - Fixed an issue where workflow merge tags would not be available in the merge tag dropdown for notification content fields in certain steps.
-- Updated the Members integration to include the missing Status page Admin Actions capability.
+- Fixed an issue where revert notifications would not include the latest workflow note.
