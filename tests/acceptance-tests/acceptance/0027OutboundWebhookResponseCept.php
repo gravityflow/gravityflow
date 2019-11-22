@@ -20,7 +20,7 @@ $I->fillField( 'Question', 'Codeception Question' );
 $I->fillField( 'Answer', '42' );
 $I->fillField( 'Rationale', 'Why it is the answer to the Ultimate Question of Life, the Universe, and Everything' );
 
-$I->click( 'input[type=submit]' );
+$I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 $I->loginAsAdmin();
@@ -34,8 +34,7 @@ $I->waitForText( 'Status: Pending', 3 );
 $I->seeInField('#input_27_1', 'Codeception Question');
 $I->seeInField('#input_27_3', '42');
 $I->seeInField('#input_27_2', 'Why it is the answer to the Ultimate Question of Life, the Universe, and Everything');
-$I->scrollTo( [ 'css' => 'input[type=submit]' ] );
-$I->click( 'Submit' );
+$I->click( '#gravityflow_update_button' );
 
 $I->waitForText( 'Status: Pending', 5 );
 $I->scrollTo( ['css' => '.gravityflow-timeline'], 20, 50 );

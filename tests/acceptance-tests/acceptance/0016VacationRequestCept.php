@@ -24,7 +24,7 @@ $I->fillField( 'Date to', '08/18/2016' );
 $I->fillField( 'Comments', 'Comments text' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 );
 $I->executeJS( 'return jQuery("input[type=submit]").focus()' );
-$I->click( 'input[type=submit]' );
+$I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us' );
 
 // Login to wp-admin

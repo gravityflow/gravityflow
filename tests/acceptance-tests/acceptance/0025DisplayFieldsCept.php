@@ -16,7 +16,7 @@ $I->amOnPage( '/0025-display-fields' );
 
 $I->see( '0025 Display Fields' );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
-$I->click( 'input[type=submit]' );
+$I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 // Login to wp-admin
