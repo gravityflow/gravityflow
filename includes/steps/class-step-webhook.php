@@ -207,15 +207,19 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 							'label' => __( 'Raw request', 'gravityflow' ),
 							'value' => 'raw',
 						),
+						array(
+							'label' => __( 'None', 'gravityflow' ),
+							'value' => '',
+						),
 					),
 					'dependency' => array(
 						'field'  => 'method',
-						'values' => array( '', 'post', 'put', 'patch' ),
+						'values' => array( '', 'get', 'post', 'put', 'patch' ),
 					),
 				),
 			),
 		);
-		if ( in_array( $this->get_setting( 'method' ), array( 'post', 'put', 'patch', '' ) ) ) {
+		if ( in_array( $this->get_setting( 'method' ), array( 'get', 'post', 'put', 'patch', '' ) ) ) {
 
 			if ( $this->get_setting( 'body' ) == 'raw' ) {
 				global $_gaddon_posted_settings;
@@ -231,7 +235,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'class' => 'fieldwidth-1 fieldheight-1 merge-tag-support',
 					'save_callback' => array( $this, 'save_callback_raw_body' ),
 				);
-			} else {
+			} elseif ( $this->get_setting( 'body' ) == 'select' ) {
 
 				$settings['fields'][] = array(
 					'name'          => 'format',
