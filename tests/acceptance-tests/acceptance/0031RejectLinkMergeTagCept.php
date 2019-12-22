@@ -24,7 +24,6 @@ $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortl
 
 // Test the output of {workflow_reject_link} in the page created from approval step assignee email.
 $I->amOnPage( '/0031-assignee-email' );
-$I->see( '0031 Assignee Email' );
 $I->dontSee( 'Reject Link: {workflow_reject_link}' );
 $I->see( 'Reject Link: Reject' );
 

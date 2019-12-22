@@ -24,7 +24,6 @@ $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortl
 
 // Test the output of the URL merge tags in the page created from approval step assignee email.
 $I->amOnPage( '/0036-assignee-email' );
-$I->see( '0036 Assignee Email' );
 
 $I->dontSee( 'Approve Token: {workflow_approve_token}' );
 $I->see( 'Approve Token:' );

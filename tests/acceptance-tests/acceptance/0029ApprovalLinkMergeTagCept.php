@@ -23,7 +23,6 @@ $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortl
 
 // Test the output of {workflow_approve_link} in the page created from approval step assignee email.
 $I->amOnPage( '/0029-assignee-email' );
-$I->see( '0029 Assignee Email' );
 $I->dontSee( 'Approval Link: {workflow_approve_link}' );
 $I->see( 'Approval Link: Approve' );
 

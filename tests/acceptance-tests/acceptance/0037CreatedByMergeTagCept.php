@@ -21,8 +21,6 @@ $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortl
 
 // Go to the page created from the notification step email.
 $I->amOnPage( '/0037-workflow-notification' );
-$I->waitForText( '0037 Workflow Notification', 3 );
-$I->see( '0037 Workflow Notification' );
 
 // Confirm the merge tags are replaced by empty strings when an anonymous user submits the form
 $I->dontSee( 'Created By: {created_by}' );
@@ -55,8 +53,6 @@ $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortl
 
 // Go to the page created from the notification step email.
 $I->amOnPage( '/0037-workflow-notification-2' );
-$I->waitForText( '0037 Workflow Notification', 3 );
-$I->see( '0037 Workflow Notification' );
 
 // Confirm the merge tags are replaced with the properties of the logged in user who submitted the form.
 $I->dontSee( 'Created By: {created_by}' );
