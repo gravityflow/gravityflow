@@ -237,7 +237,7 @@ class Gravity_Flow_API {
 		/**
 		* Confirms whether the step conditions being met is required to send a workflow to a specific step.
 		*
-		* @since 2.5.9
+		* @since 2.5.10
 		*
 		* @param bool                   $conditions_met_required  Whether to pass a workflow to a step that has failed its required conditions.
 		* @param Gravity_Flow_Step      $new_step                 The proposed new step that failed its step conditions.
@@ -279,7 +279,7 @@ class Gravity_Flow_API {
 				/**
 				* Determines what next step a workflow should proceed to instead of the selected step that failed its step conditions.
 				*
-				* @since 2.5.9
+				* @since 2.5.10
 				*
 				* @param bool|Gravity_Flow_Step $next_step      The next step to send the entry to. Defaults to the next step after the proposed new step that meets its' start conditions.
 				* @param Gravity_Flow_Step      $new_step       The proposed new step that failed its step conditions.
