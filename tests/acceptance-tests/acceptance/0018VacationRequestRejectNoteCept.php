@@ -20,8 +20,8 @@ $I->fillField('First', 'Some');
 $I->fillField('Last', 'Text');
 $I->selectOption( 'Dep', 'Third Choice' );
 $I->fillField( 'Third choice text', 'Third choice text' );
-$I->fillField( 'Date from', '08/17/2016' );
-$I->fillField( 'Date to', '08/18/2016' );
+$I->appendField( 'Date from', '08/17/2016' );
+$I->appendField( 'Date to', '08/18/2016' );
 $I->fillField( 'Comments', 'Comments text' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 // Close the date pickers
