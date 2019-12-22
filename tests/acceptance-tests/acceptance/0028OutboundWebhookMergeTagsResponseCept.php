@@ -21,7 +21,7 @@ $I->fillField( 'input[name="input_17.6"]', 'Buck' );
 $I->fillField( 'input[name="input_4"]', 'Buckyballs' );
 $I->fillField( 'Tell us about your brand', 'Joe Buck has a long history of calling baseball and football games on television. Now he wants to diversify to sell the sports balls - Buckyballs!' );
 
-$I->click( 'input[type=submit]' );
+$I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );
 
 $I->loginAsAdmin();

@@ -518,6 +518,8 @@
 			'_gaddon_setting_approval_notification_message',
 			'_gaddon_setting_rejection_notification_message',
 			'_gaddon_setting_revert_notification_message',
+			'_gaddon_setting_complete_notification_message',
+			'_gaddon_setting_in_progress_notification_message',
 		];
 
 		if (supportedElementIds.indexOf(elementId) < 0) {

@@ -333,7 +333,7 @@ function gravity_flow_step_esign_signature_saved( $args ) {
 				if ( $step ) {
 					$feed  = gravity_flow()->get_feed( $feed_id );
 					$label = $step->get_feed_label( $feed );
-					$step->add_note( sprintf( esc_html__( 'Document signed: %s', 'gravityflow' ), $label ) );
+					$step->add_note( sprintf( esc_html__( 'All signatures collected for document: %s', 'gravityflow' ), $label ) );
 					$step->log_debug( __METHOD__ . '() - Feed processing complete: ' . $label );
 
 					$add_on_feeds = $step->get_processed_add_on_feeds( $entry_id );
@@ -349,4 +349,4 @@ function gravity_flow_step_esign_signature_saved( $args ) {
 	}
 }
 
-add_action( 'esig_signature_saved', 'gravity_flow_step_esign_signature_saved' );
+add_action( 'esig_all_signature_request_signed', 'gravity_flow_step_esign_signature_saved' );

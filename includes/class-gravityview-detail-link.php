@@ -152,10 +152,11 @@ class Gravity_Flow_GravityView_Workflow_Detail_Link extends GravityView_Field {
 	 * @param string $field_id      The field ID.
 	 * @param string $context       The current context.
 	 * @param string $input_type    The field input type.
+	 * @param int    $formd_id      The form ID.
 	 *
 	 * @return array
 	 */
-	function field_options( $field_options, $template_id, $field_id, $context, $input_type ) {
+	function field_options( $field_options, $template_id, $field_id, $context, $input_type, $form_id ) {
 
 		// Always a link!
 		unset( $field_options['show_as_link'], $field_options['search_filter'] );
