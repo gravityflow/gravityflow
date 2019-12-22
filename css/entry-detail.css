@@ -2,6 +2,12 @@
     text-align:right;
 }
 
+.gravityflow-hidden-field {
+    visibility: hidden;
+    position: absolute;
+    left: -9999px;
+}
+
 /* The little triangle indicator */
 .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label {
     width:100%;

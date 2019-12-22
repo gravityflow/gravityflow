@@ -40,13 +40,6 @@ class Gravity_Flow_Entry_Editor {
 	public $step;
 
 	/**
-	 * Used to help determine whether to display the order summary.
-	 *
-	 * @var bool
-	 */
-	public $has_product_fields = false;
-
-	/**
 	 * Flag set in the constructor to control the visibility of empty fields.
 	 *
 	 * @var bool
@@ -105,11 +98,13 @@ class Gravity_Flow_Entry_Editor {
 	private $_modified_form;
 
 	/**
-	 * Used to help determine whether the gform_product_total script should be output for the coupon field.
+	 * Indicates if there is an editable pricing field which requires the presence of other pricing fields to function.
+	 *
+	 * @since 2.5.10
 	 *
 	 * @var bool
 	 */
-	private $_has_editable_product_field = false;
+	private $_requires_pricing_inputs = false;
 
 	/**
 	 * Gravity_Flow_Entry_Editor constructor.
@@ -217,20 +212,12 @@ class Gravity_Flow_Entry_Editor {
 				$field->conditionalLogicFields = $conditional_logic_fields;
 			}
 
-			$field->gravityflow_is_display_field = $this->is_display_field( $field );
-
 			// Remove unneeded fields from the form to prevent JS errors resulting from scripts expecting fields to be present and visible.
 			if ( $this->can_remove_field( $field ) ) {
 				continue;
 			}
 
-			$is_product_field = GFCommon::is_product_field( $field->type );
-
-			if ( ! $this->has_product_fields && $is_product_field ) {
-				$this->has_product_fields = true;
-			}
-
-			if ( ! $this->is_editable_field( $field ) ) {
+			if ( ! $field->gravityflow_is_editable ) {
 				$content = $this->get_non_editable_field( $field );
 
 				if ( empty( $content ) ) {
@@ -246,11 +233,6 @@ class Gravity_Flow_Entry_Editor {
 
 				$field->description = null;
 				$field->maxLength   = null;
-			} else {
-				$field->gravityflow_is_editable = true;
-				if ( ! $this->_has_editable_product_field && $is_product_field && $field->type != 'total' ) {
-					$this->_has_editable_product_field = true;
-				}
 			}
 
 			if ( empty( $field->label ) ) {
@@ -296,18 +278,23 @@ class Gravity_Flow_Entry_Editor {
 				continue;
 			}
 
-			$is_applicable_field = $this->is_editable_field( $field );
+			$field->gravityflow_is_pricing_field = GFCommon::is_product_field( $field->type );
+			$field->gravityflow_is_editable      = $this->is_editable_field( $field );
 
-			if ( $is_applicable_field && $field->has_calculation() ) {
-				$this->set_calculation_dependencies( $field->calculationFormula );
+			if ( $field->gravityflow_is_editable ) {
+				$field->gravityflow_is_display_field = false;
+				if ( $field->has_calculation() ) {
+					$this->set_calculation_dependencies( $field->calculationFormula );
+				}
+
+				if ( ! $this->_requires_pricing_inputs && $this->is_dynamic_pricing_field( $field ) ) {
+					$this->_requires_pricing_inputs = true;
+				}
+			} else {
+				$field->gravityflow_is_display_field = $this->is_display_field( $field, true );
 			}
 
-			if ( ! $is_applicable_field ) {
-				// Populate the $_display_fields array.
-				$is_applicable_field = $this->is_display_field( $field, true );
-			}
-
-			if ( ! $dynamic_conditional_logic_enabled || ! $is_applicable_field ) {
+			if ( ! $dynamic_conditional_logic_enabled || ! ( $field->gravityflow_is_editable || $field->gravityflow_is_display_field ) ) {
 				// Clear the field conditional logic properties as conditional logic is not enabled for the step or the field is not for display or editable.
 				$field->conditionalLogicFields = null;
 				$field->conditionalLogic       = null;
@@ -356,6 +343,32 @@ class Gravity_Flow_Entry_Editor {
 	}
 
 	/**
+	 * Determines if the current field is a pricing field which requires other pricing fields to function.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param GF_Field $field The field object to be checked.
+	 *
+	 * @return bool
+	 */
+	public function is_dynamic_pricing_field( $field ) {
+		return in_array( $field->type, array( 'total', 'coupon', 'tax', 'discount', 'subtotal' ), true );
+	}
+
+	/**
+	 * Determines if the inputs are required for a non-editable pricing field.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param GF_Field $field The field to be checked.
+	 *
+	 * @return bool
+	 */
+	public function is_pricing_field_required( $field ) {
+		return $field->gravityflow_is_pricing_field && $this->_requires_pricing_inputs;
+	}
+
+	/**
 	 * Determines if the field can be removed from the form object.
 	 *
 	 * Fields involved in conditional logic must always be added to the form.
@@ -365,7 +378,7 @@ class Gravity_Flow_Entry_Editor {
 	 * @return bool
 	 */
 	public function can_remove_field( $field ) {
-		$can_remove_field = ! ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) || $this->is_calculation_dependency( $field ) ) && empty( $field->conditionalLogicFields );
+		$can_remove_field = ! ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) || $this->is_calculation_dependency( $field ) || $this->is_pricing_field_required( $field ) ) && empty( $field->conditionalLogicFields );
 
 		return $can_remove_field;
 	}
@@ -428,8 +441,6 @@ class Gravity_Flow_Entry_Editor {
 		} else {
 			$html = $field->get_field_input( $this->form, $value, $this->entry );
 		}
-
-		$html .= $this->maybe_get_coupon_script( $field );
 
 		if ( $field->type === 'chainedselect' && function_exists( 'gf_chained_selects' ) ) {
 			if ( ! wp_script_is( 'gform_chained_selects' ) ) {
@@ -522,23 +533,6 @@ class Gravity_Flow_Entry_Editor {
 	}
 
 	/**
-	 * Get the gform_product_total script for the coupon field when there aren't any editable product fields.
-	 *
-	 * @param GF_Field $field The field currently being processed.
-	 *
-	 * @return string
-	 */
-	public function maybe_get_coupon_script( $field ) {
-		if ( $field->type != 'coupon' || $this->_has_editable_product_field ) {
-			return '';
-		}
-
-		$total = GFCommon::get_order_total( $this->form, $this->entry );
-
-		return "<script type='text/javascript'>gform.addFilter('gform_product_total', function (total, formId) {return {$total};}, 49);</script>";
-	}
-
-	/**
 	 * Checks whether dynamic conditional logic is enabled.
 	 *
 	 * @return bool
@@ -584,7 +578,7 @@ class Gravity_Flow_Entry_Editor {
 
 		$conditional_logic_dependency = $this->_is_dynamic_conditional_logic_enabled && ! empty( $field->conditionalLogicFields );
 
-		if ( $conditional_logic_dependency || $this->is_calculation_dependency( $field ) ) {
+		if ( $conditional_logic_dependency || $this->is_calculation_dependency( $field ) || $this->is_pricing_field_required( $field ) ) {
 			$html = $field->get_field_input( $this->form, $value, $this->entry );
 		}
 
@@ -799,7 +793,8 @@ class Gravity_Flow_Entry_Editor {
 		}
 
 		if ( $this->is_hidden_field( $field ) ) {
-			$field_container = sprintf( '<li id="field_%s_%s" style="display:none;">%s</li>', $field->formId, $field->id, $this->_non_editable_field_content[ $field->id ] );
+			$content         = sprintf( '<div style="display:none;">%s</div>', $this->_non_editable_field_content[ $field->id ] );
+			$field_container = str_replace( '{FIELD_CONTENT}', $content, $field_container );
 		}
 
 		return $field_container;
@@ -828,13 +823,16 @@ class Gravity_Flow_Entry_Editor {
 	 * @return string
 	 */
 	public function filter_gform_field_css_class( $classes, $field ) {
-		$is_editable = $this->is_editable_field( $field );
-		$class       = $is_editable ? 'gravityflow-editable-field' : 'gravityflow-display-field';
-		if ( $is_editable && $this->step->highlight_editable_fields_enabled ) {
-			$class .= ' ' . $this->step->highlight_editable_fields_class;
+		if ( $field->gravityflow_is_editable ) {
+			$classes .= ' gravityflow-editable-field';
+			if ( $this->step->highlight_editable_fields_enabled ) {
+				$classes .= ' ' . $this->step->highlight_editable_fields_class;
+			}
+		} elseif ( $field->gravityflow_is_display_field ) {
+			$classes .= ' gravityflow-display-field';
+		} else {
+			$classes .= ' gravityflow-hidden-field';
 		}
-
-		$classes .= ' ' . $class;
 
 		return $classes;
 	}
