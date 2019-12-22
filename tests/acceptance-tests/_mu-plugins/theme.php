@@ -35,3 +35,6 @@ set_theme_mod( 'enable_header_search', false );
 add_action( 'wp_head', function() {
 	echo '<style>html {scroll-behavior: auto !important;} #site-content header{display: none;}</style>';
 } );
+
+// Remove comment form.
+add_filter( 'comments_open', '__return_false' );
