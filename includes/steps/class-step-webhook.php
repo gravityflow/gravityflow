@@ -206,20 +206,16 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 						array(
 							'label' => __( 'Raw request', 'gravityflow' ),
 							'value' => 'raw',
-						),
-						array(
-							'label' => __( 'None', 'gravityflow' ),
-							'value' => '',
-						),
+						)
 					),
 					'dependency' => array(
 						'field'  => 'method',
-						'values' => array( '', 'get', 'post', 'put', 'patch' ),
+						'values' => array( '', 'post', 'put', 'patch' ),
 					),
 				),
 			),
 		);
-		if ( in_array( $this->get_setting( 'method' ), array( 'get', 'post', 'put', 'patch', '' ) ) ) {
+		if ( in_array( $this->get_setting( 'method' ), array( 'post', 'put', 'patch', '' ) ) ) {
 
 			if ( $this->get_setting( 'body' ) == 'raw' ) {
 				global $_gaddon_posted_settings;
@@ -293,6 +289,18 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					),
 				);
 			}
+		} elseif ( in_array( $this->get_setting( 'method' ), array( 'get' ) ) ) {
+			$settings['fields'][] = array(
+				'name'                => 'mappings',
+				'label'               => esc_html__( 'Request Field Values', 'gravityflow' ),
+				'type'                => 'generic_map',
+				'enable_custom_key'   => false,
+				'enable_custom_value' => true,
+				'key_field_title'     => esc_html__( 'Key', 'gravityflow' ),
+				'value_field_title'   => esc_html__( 'Value', 'gravityflow' ),
+				'value_choices'       => $this->value_mappings(),
+				'tooltip'             => '<h6>' . esc_html__( 'Mapping', 'gravityflow' ) . '</h6>' . esc_html__( 'Map the fields of this form to the selected form. Values from this form will be saved in the entry in the selected form', 'gravityflow' ),
+			);
 		}
 
 		$settings['fields'][] = array(
@@ -617,6 +625,10 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			} else {
 				$headers = array();
 			}
+		} elseif ( $method == 'GET' ) {
+			$this->body_type = 'select';
+			//The body will be converted into querystring parameters for GET request by wp_remote_request
+			$body = $this->get_request_body();
 		}
 
 		if ( $this->authentication == 'connected_app' ) {
