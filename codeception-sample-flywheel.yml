@@ -19,8 +19,8 @@ modules:
             wpDebug: true
             tablePrefix: wp_
             domain: testing.local
-            plugins: ['gravityforms/gravityforms.php', 'gravityflow/gravityflow.php']
-            activatePlugins: ['gravityforms/gravityforms.php', 'gravityflow/gravityflow.php']
+            plugins: ['gravityforms/gravityforms.php', 'gravityformscoupons/coupons.php', 'gravityflow/gravityflow.php']
+            activatePlugins: ['gravityforms/gravityforms.php', 'gravityformscoupons/coupons.php', 'gravityflow/gravityflow.php']
         WPWebDriver:
             url: 'http://testing.local'
             browser: chrome

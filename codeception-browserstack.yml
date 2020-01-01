@@ -35,8 +35,8 @@ modules:
             wpDebug: false
             tablePrefix: wp_
             domain: wordpress
-            plugins: ['gravityforms/gravityforms.php', 'gravityflow/gravityflow.php']
-            activatePlugins: ['gravityforms/gravityforms.php', 'gravityflow/gravityflow.php']
+            plugins: ['gravityforms/gravityforms.php', 'gravityformscoupons/coupons.php', 'gravityflow/gravityflow.php']
+            activatePlugins: ['gravityforms/gravityforms.php', 'gravityformscoupons/coupons.php', 'gravityflow/gravityflow.php']
 
 env:
   # OK

@@ -47,6 +47,9 @@ if [ -z ${GITHUB_TOKEN} ]; then
     echo "Gravity Forms installation complete"
     wp-su gf tool verify-checksums
 
+    wp-su gf install gravityformscoupons --key=${GF_KEY} --activate --force --quiet
+    echo "Gravity Forms Coupons installation complete"
+
 else
 
     rm -rf /wp-core/wp-content/plugins/gravityforms
@@ -54,6 +57,12 @@ else
     echo "Grabbing the latest development master of Gravity Forms"
 
     git clone -b master --single-branch https://$GITHUB_TOKEN@github.com/gravityforms/gravityforms.git /wp-core/wp-content/plugins/gravityforms
+
+    rm -rf /wp-core/wp-content/plugins/gravityformscoupons
+
+    echo "Grabbing the latest development master of Gravity Forms Coupons Add-On"
+
+    git clone -b master --single-branch https://$GITHUB_TOKEN@github.com/gravityforms/gravityformscoupons.git /wp-core/wp-content/plugins/gravityformscoupons
 
 fi
 
