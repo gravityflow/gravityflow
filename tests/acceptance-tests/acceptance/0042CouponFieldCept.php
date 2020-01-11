@@ -9,7 +9,11 @@ if ( ! function_exists( 'gf_coupons' ) ) {
 
 $form_id = GFFormsModel::get_form_id( '0042 Coupon Field' );
 
-gf_coupons()->insert_feed( $form_id, true, array(
+$I = new AcceptanceTester( $scenario );
+
+$I->amGoingTo( 'Test that the Coupon field functions on the User Input step when other pricing fields are not present.' );
+
+$feed_id = gf_coupons()->insert_feed( $form_id, true, array(
 	'gravityForm'      => $form_id,
 	'couponName'       => '50 Percent Off',
 	'couponCode'       => '50OFF',
@@ -22,9 +26,7 @@ gf_coupons()->insert_feed( $form_id, true, array(
 	'usageCount'       => '',
 ) );
 
-$I = new AcceptanceTester( $scenario );
-
-$I->amGoingTo( 'Test that the Coupon field functions on the User Input step when other pricing fields are not present.' );
+$I->comment( 'Coupon 50OFF created: #' . $feed_id );
 
 $entry_id = GFAPI::add_entry( array(
 	'form_id' => $form_id,
@@ -35,10 +37,14 @@ $entry_id = GFAPI::add_entry( array(
 	'2'       => '100',
 ) );
 
+$I->comment( 'Entry created: #' . $entry_id );
+
 $I->loginAsAdmin();
 $I->amOnWorkflowPage( 'Inbox' );
 
-$I->click( '0042 Coupon Field' );
+$I->see( '0042 Coupon Field' );
+$I->see( $entry_id, 'table.gravityflow-inbox td[data-label="ID"]' );
+$I->click( $entry_id, 'table.gravityflow-inbox td[data-label="ID"]' );
 $I->waitForText( '0042 Coupon Field : Entry # ' . $entry_id, 3 );
 
 $I->seeElement( 'input.gf_coupon_code' );
