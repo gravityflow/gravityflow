@@ -1306,6 +1306,11 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 		} else {
 			$value = rgpost( $input_name );
 		}
+
+		if ( function_exists( 'gf_coupons' ) && $field instanceof GF_Field_Coupon ) {
+			$this->maybe_update_coupon_usage_counts( $value, rgar( $entry, $input_id ) );
+		}
+
 		if ( gravity_flow()->is_gravityforms_supported( '2.4-rc-1' ) ) {
 			GFFormsModel::queue_save_input_value( $value, $form, $field, $entry, $current_fields, $input_id );
 		} else {
@@ -1681,6 +1686,64 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 		if ( ! empty( $post_images ) ) {
 			gform_add_meta( $entry['id'], '_post_images', $post_images );
+		}
+	}
+
+	/**
+	 * Triggers updating of the usage counts for any applied and/or removed coupon codes.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param string $value          The current field value.
+	 * @param string $previous_value The existing entry value.
+	 */
+	public function maybe_update_coupon_usage_counts( $value, $previous_value ) {
+		$current_codes  = ! empty( $value ) ? array_map( 'trim', explode( ',', $value ) ) : array();
+		$previous_codes = ! empty( $previous_value ) ? array_map( 'trim', explode( ',', $previous_value ) ) : array();
+
+		foreach ( $current_codes as $code ) {
+			if ( ! in_array( $code, $previous_codes ) ) {
+				$this->update_coupon_usage_count( $code );
+			}
+		}
+
+		foreach ( $previous_codes as $code ) {
+			if ( ! in_array( $code, $current_codes ) ) {
+				$this->update_coupon_usage_count( $code, false );
+			}
+		}
+	}
+
+	/**
+	 * Updates the coupon usage count.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param string $code      The coupon code.
+	 * @param bool   $increment Indicates if the usage count should be incremented or decremented.
+	 */
+	public function update_coupon_usage_count( $code, $increment = true ) {
+		$feed = gf_coupons()->get_config( array( 'id' => $this->get_form_id() ), $code );
+		if ( ! $feed ) {
+			return;
+		}
+
+		$meta      = $feed['meta'];
+		$count     = empty( $meta['usageCount'] ) ? 0 : intval( $meta['usageCount'] );
+		$old_count = $count;
+		$dirty     = false;
+
+		if ( $increment ) {
+			$dirty              = true;
+			$meta['usageCount'] = ++ $count;
+		} elseif ( $count > 0 ) {
+			$dirty              = true;
+			$meta['usageCount'] = -- $count;
+		}
+
+		if ( $dirty ) {
+			gf_coupons()->log_debug( sprintf( '%s(): Updating usage count for coupon %s from %d to %d.', __METHOD__, $code, $old_count, $count ) );
+			gf_coupons()->update_feed_meta( $feed['id'], $meta );
 		}
 	}
 
