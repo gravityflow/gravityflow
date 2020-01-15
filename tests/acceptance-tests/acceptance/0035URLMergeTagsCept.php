@@ -24,7 +24,6 @@ $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortl
 
 // Test the output of the URL merge tags in the page created from approval step assignee email.
 $I->amOnPage( '/0035-assignee-email' );
-$I->see( '0035 Assignee Email' );
 
 $page_id  = gravity_flow()->get_app_setting( 'inbox_page' );
 $base_url = add_query_arg( array( 'page' => 'gravityflow-inbox' ), get_permalink( $page_id ) );

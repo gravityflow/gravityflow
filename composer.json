@@ -19,7 +19,7 @@
     "issues": "https://gravityflow.io"
   },
   "require-dev": {
-    "apigen/apigen": "~4.1.2",
+    "phpunit/phpunit": ">4.0 <7",
     "lucatume/wp-browser": "^2.0",
     "squizlabs/php_codesniffer": "3.*",
     "vlucas/phpdotenv": "^2.5",

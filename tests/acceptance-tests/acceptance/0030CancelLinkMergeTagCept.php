@@ -23,15 +23,12 @@ $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortl
 
 // Test the output of {workflow_cancel_link} in the page created from approval step assignee email.
 $I->amOnPage( '/0030-assignee-email' );
-$I->waitForText( '0030 Assignee Email', 3 );
-$I->see( '0030 Assignee Email' );
 $I->dontSee( 'Cancel Link: {workflow_cancel_link}' );
 $I->see( 'Cancel Link: Cancel Workflow' );
 
 // Test that the link token works for the email field assignee.
 $I->click( 'Cancel Workflow' );
-$I->scrollTo( [ 'css' => '.site-title' ] );
-$I->see( 'inbox' );
+
 //$I->see( 'Workflow Cancelled' ); // Occurs when the test is run on its own.
 //$I->see( "You don't have permission to view this entry." ); // Occurs when multiple tests run.
 

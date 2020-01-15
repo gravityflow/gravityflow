@@ -20,12 +20,11 @@ $I->fillField('First', 'Some');
 $I->fillField('Last', 'Text');
 $I->selectOption( 'Dep', 'Third Choice' );
 $I->fillField( 'Third choice text', 'Third choice text' );
-$I->fillField( 'Date from', '08/17/2016' );
-$I->fillField( 'Date to', '08/18/2016' );
+$I->appendField( 'Date from', '08/17/2016' );
+$I->appendField( 'Date to', '08/18/2016' );
+$I->executeJS( 'return jQuery( ".datepicker" ).datepicker( "hide" );' );
 $I->fillField( 'Comments', 'Comments text' );
-$I->scrollTo( [ 'css' => 'input[type=submit]' ] );
-// Close the date pickers
-$I->executeJS( 'return jQuery("input[type=submit]").focus()' );
+$I->scrollTo( [ 'css' => '.gform_footer' ] );
 $I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us' );
 
