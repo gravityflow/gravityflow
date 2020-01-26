@@ -1,0 +1,5 @@
+- Added support for the Gravity Forms EmailOctopus Add-On.
+- Added filter gravityflow_send_to_step_condition_met_required to allow customization of the API send_to_step when the proposed steps conditions are not met. Default is false that API will always send to the proposed step.
+- Added filter gravityflow_send_to_step_condition_not_met to allow customization of the API when the proposed next step has not met its step conditions. Defaults to next step after the proposed step.
+- Fixed a PHP notice which occurs when the shortcode is processed and WordPress isn't able to provide the current post object.
+- Fixed a PHP warning on the inbox page when a step is configured with a delay based due date and the offset setting contains non-numeric characters.

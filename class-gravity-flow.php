@@ -6043,7 +6043,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */
 		public function shortcode( $atts, $content = null ) {
 
-			if ( get_post()->post_type != 'page' ) {
+			if ( get_post_type() != 'page' ) {
 				return '';
 			}
 
