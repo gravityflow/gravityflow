@@ -1,3 +1,4 @@
+- Added support for reports in the [gravityflow] shortcode.
 - Added security enhancements.
 - Added support for the GP eCommerce Fields on the User Input Step.
 - Added support for the Gravity Forms EmailOctopus Add-On.

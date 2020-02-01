@@ -30,10 +30,13 @@ class Gravity_Flow_Activity {
 	/**
 	 * Returns the name of the Gravity Forms leads table.
 	 *
+	 * @since unknown
+	 * @since 2.5.10  Return `self::get_entry_table_name()` to be GF 2.4 compatible.
+	 *
 	 * @return string
 	 */
 	public static function get_lead_table_name() {
-		return GFFormsModel::get_lead_table_name();
+		return self::get_entry_table_name();
 	}
 
 	/**
@@ -260,6 +263,9 @@ GROUP BY a.assignee_id, a.assignee_type", $start_date );
 	/**
 	 * Get the activity log data for the given dates and assignee for all forms.
 	 *
+	 * @since unknown
+	 * @since 2.5.10  Use `self::get_entry_table_name()` to get entry table.
+	 *
 	 * @param string $assignee_type The assignee type.
 	 * @param string $assignee_id   The assignee ID.
 	 * @param string $start_date    The start date.
@@ -271,7 +277,7 @@ GROUP BY a.assignee_id, a.assignee_type", $start_date );
 		global $wpdb;
 
 		$activity_table = self::get_activity_log_table_name();
-		$lead_table     = self::get_lead_table_name();
+		$entry_table     = self::get_entry_table_name();
 
 		$form_ids = self::get_form_ids();
 		if ( empty( $form_ids ) ) {
@@ -284,7 +290,7 @@ GROUP BY a.assignee_id, a.assignee_type", $start_date );
 		$sql     = $wpdb->prepare( "
 SELECT YEAR(a.date_created) as year, MONTH(a.date_created) as month, count(a.id) as c, ROUND( AVG(a.duration) ) as av
 FROM {$activity_table} a
-INNER JOIN {$lead_table} l ON a.lead_id = l.id AND l.status = 'active'
+INNER JOIN {$entry_table} l ON a.lead_id = l.id AND l.status = 'active'
 WHERE a.log_object = 'assignee' AND a.log_event = 'status' AND a.log_value NOT IN ('pending', 'removed')
   AND a.assignee_type = %s AND a.assignee_id = %s
   AND a.date_created >= %s

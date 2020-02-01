@@ -738,7 +738,7 @@ PRIMARY KEY  (id)
 					'handle'  => 'gravityflow_reports',
 					'src'     => $this->get_base_url() . "/js/reports{$min}.js",
 					'version' => $this->_version,
-					'deps' => array( 'jquery', 'google_charts' ),
+					'deps'    => array( 'jquery', 'google_charts' ),
 					'enqueue' => array(
 						array( 'query' => 'page=gravityflow-reports' ),
 					),
@@ -6120,6 +6120,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					} elseif ( is_user_logged_in() || ( $a['display_all'] && $a['allow_anonymous'] ) ) {
 						$html .= $this->get_shortcode_status_page( $a );
 					}
+					break;
+				case 'reports':
+					$html .= $this->get_shortcode_reports_page( $a );
+					break;
 			}
 
 			/**
@@ -6170,7 +6174,6 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */
 
 		public function get_shortcode_defaults() {
-
 			$defaults = array(
 				'page'             => 'inbox',
 				'form'             => null,
@@ -6197,6 +6200,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'back_link_url'    => null,
 				'context_key'      => '',
 				'due_date'         => false,
+				'range'            => '',
+				'category'         => '',
+				'step_id'          => null,
+				'assignee'         => '',
 			);
 
 			return $defaults;
@@ -6288,9 +6295,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'workflow_info'     => $a['workflow_info'],
 				'step_status'       => $a['step_status'],
 				'context_key'       => $a['context_key'],
-				'back_link'        => $a['back_link'],
-				'back_link_text'   => $a['back_link_text'],
-				'back_link_url'    => $a['back_link_url'],
+				'back_link'         => $a['back_link'],
+				'back_link_text'    => $a['back_link_text'],
+				'back_link_url'     => $a['back_link_url'],
 			);
 
 			if ( is_null( $args['back_link_url' ] ) ) {
@@ -6364,6 +6371,45 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			}
 
 			$this->status_page( $args );
+			$html = ob_get_clean();
+
+			return $html;
+		}
+
+		/**
+		 * Get the HTML for the reports page shortcode.
+		 *
+		 * @since 2.5.9
+		 *
+		 * @param array $a The shortcode attributes.
+		 *
+		 * @return string
+		 */
+		public function get_shortcode_reports_page( $a ) {
+			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+
+			wp_enqueue_script( 'google_charts', 'https://www.google.com/jsapi',  array(), $this->_version );
+			wp_enqueue_script( 'gravityflow_reports', $this->get_base_url() . "/js/reports{$min}.js",  array( 'jquery', 'google_charts' ), $this->_version );
+
+			$args = array(
+				'display_header' => false,
+				'base_url'       => remove_query_arg( array(
+					'page',
+					'range',
+					'form-id',
+					'category',
+					'step-id',
+					'assignee',
+				) ),
+				'form_id'        => $a['form'],
+				'range'          => $a['range'],
+				'category'       => $a['category'],
+				'step_id'        => $a['step_id'],
+				'assignee'       => $a['assignee'],
+			);
+
+			ob_start();
+			$this->reports_page( $args );
 			$html = ob_get_clean();
 
 			return $html;
