@@ -563,7 +563,7 @@ PRIMARY KEY  (id)
 			$input_fields      = array();
 			$has_start_step    = false;
 			$has_complete_step = false;
-			if ( is_array( $form['fields'] ) ) {
+			if ( is_array( rgar( $form, 'fields' ) ) ) {
 				foreach ( $form['fields'] as $field ) {
 					/* @var GF_Field $field */
 					$input_fields[] = array(
