@@ -81,7 +81,7 @@ $I->click( 'button[value=approved]' );
 
 $I->logOut();
 
-$I->loginAs( 'subscriber2', 'subscriber2' );
+$I->loginAs( 'subscriber2', 'subscriber2', 3 );
 
 $I->amOnPage( '/status' );
 $I->waitForText( 'Status', 3 );

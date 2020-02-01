@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2019-08-31 19:46:43+00:00\n"
-"PO-Revision-Date: 2019-05-21 16:38+0000\n"
+"POT-Creation-Date: 2019-10-06 11:45:03+00:00\n"
+"PO-Revision-Date: 2019-10-06 15:49+0000\n"
 "Last-Translator: FX Bénard <fxb@wp-translations.org>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/gravityflow/gravityflow/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
@@ -91,18 +91,18 @@ msgstr "Användare (skapad av)"
 
 #: class-gravity-flow.php:1224
 #: includes/fields/class-field-assignee-select.php:227
-#: includes/pages/class-status.php:616
+#: includes/pages/class-status.php:617
 msgid "Fields"
 msgstr "Fält"
 
-#: class-gravity-flow.php:1401 class-gravity-flow.php:3460
+#: class-gravity-flow.php:1401 class-gravity-flow.php:3462
 msgid "Step Type"
 msgstr "Typ av steg"
 
 #: class-gravity-flow.php:1412 includes/pages/class-activity.php:65
 #: includes/pages/class-activity.php:123 includes/pages/class-inbox.php:162
 #: includes/pages/class-reports.php:265 includes/pages/class-reports.php:579
-#: includes/pages/class-status.php:1237
+#: includes/pages/class-status.php:1238
 msgid "Step"
 msgstr "Steg"
 
@@ -112,6 +112,7 @@ msgstr "Stegets ID-nr"
 
 #: class-gravity-flow.php:1419 class-gravity-flow.php:1423
 #: includes/pages/class-support.php:140
+#: includes/steps/class-common-step-settings.php:198
 #: includes/steps/class-step-webhook.php:187
 msgid "Name"
 msgstr "Namn"
@@ -213,9 +214,9 @@ msgstr "Aktivera villkor för detta steg"
 msgid "Perform this step if"
 msgstr "Utför detta steg om"
 
-#: class-gravity-flow.php:1506 class-gravity-flow.php:2276
-#: class-gravity-flow.php:2283 class-gravity-flow.php:2289
-#: class-gravity-flow.php:2350
+#: class-gravity-flow.php:1506 class-gravity-flow.php:2278
+#: class-gravity-flow.php:2285 class-gravity-flow.php:2291
+#: class-gravity-flow.php:2352
 msgid "Schedule"
 msgstr "Schema"
 
@@ -236,13 +237,13 @@ msgid ""
 "status pages too."
 msgstr "Aktivera inställningen för förfallodatum för att poster ska kunna markeras när deras förfallodatum har passerat. En valfri kolumn kan anges även på sidorna inkorg/status."
 
-#: class-gravity-flow.php:1552 class-gravity-flow.php:7732
+#: class-gravity-flow.php:1552 class-gravity-flow.php:7772
 msgid "Expired"
 msgstr "Utgånget"
 
-#: class-gravity-flow.php:1556 class-gravity-flow.php:2688
-#: class-gravity-flow.php:2695 class-gravity-flow.php:2701
-#: class-gravity-flow.php:2767
+#: class-gravity-flow.php:1556 class-gravity-flow.php:2690
+#: class-gravity-flow.php:2697 class-gravity-flow.php:2703
+#: class-gravity-flow.php:2769
 msgid "Expiration"
 msgstr "Väntetid"
 
@@ -296,7 +297,7 @@ msgstr "Du saknar tillräcklig behörighet för att uppdatera inställningarna f
 msgid "Start"
 msgstr "Start"
 
-#: class-gravity-flow.php:1727 class-gravity-flow.php:7723
+#: class-gravity-flow.php:1728 class-gravity-flow.php:7763
 #: includes/steps/class-step-user-input.php:839
 #: includes/steps/class-step-user-input.php:935
 #: includes/steps/class-step-workflow-complete.php:39
@@ -306,57 +307,57 @@ msgstr "Start"
 msgid "Complete"
 msgstr "Färdigt"
 
-#: class-gravity-flow.php:2219
+#: class-gravity-flow.php:2221
 msgid "Schedule this step"
 msgstr "Schemalägg detta steg"
 
-#: class-gravity-flow.php:2239 class-gravity-flow.php:2425
-#: class-gravity-flow.php:2651
+#: class-gravity-flow.php:2241 class-gravity-flow.php:2427
+#: class-gravity-flow.php:2653
 msgid "Delay"
 msgstr "Fördröjning"
 
-#: class-gravity-flow.php:2243 class-gravity-flow.php:2429
-#: class-gravity-flow.php:2655 includes/pages/class-activity.php:60
-#: includes/pages/class-activity.php:85 includes/pages/class-status.php:1228
+#: class-gravity-flow.php:2245 class-gravity-flow.php:2431
+#: class-gravity-flow.php:2657 includes/pages/class-activity.php:60
+#: includes/pages/class-activity.php:85 includes/pages/class-status.php:1229
 msgid "Date"
 msgstr "Datum"
 
-#: class-gravity-flow.php:2255 class-gravity-flow.php:2441
-#: class-gravity-flow.php:2667
+#: class-gravity-flow.php:2257 class-gravity-flow.php:2443
+#: class-gravity-flow.php:2669
 msgid "Date Field"
 msgstr "Datumfält"
 
-#: class-gravity-flow.php:2267
+#: class-gravity-flow.php:2269
 msgid "Schedule Date Field"
 msgstr "Datumfält för schemaläggning"
 
-#: class-gravity-flow.php:2293 class-gravity-flow.php:2482
-#: class-gravity-flow.php:2705
+#: class-gravity-flow.php:2295 class-gravity-flow.php:2484
+#: class-gravity-flow.php:2707
 msgid "Minute(s)"
 msgstr "Minut(er)"
 
-#: class-gravity-flow.php:2297 class-gravity-flow.php:2486
-#: class-gravity-flow.php:2709
+#: class-gravity-flow.php:2299 class-gravity-flow.php:2488
+#: class-gravity-flow.php:2711
 msgid "Hour(s)"
 msgstr "Timme/timmar"
 
-#: class-gravity-flow.php:2301 class-gravity-flow.php:2490
-#: class-gravity-flow.php:2713
+#: class-gravity-flow.php:2303 class-gravity-flow.php:2492
+#: class-gravity-flow.php:2715
 msgid "Day(s)"
 msgstr "Dag(ar)"
 
-#: class-gravity-flow.php:2305 class-gravity-flow.php:2494
-#: class-gravity-flow.php:2717
+#: class-gravity-flow.php:2307 class-gravity-flow.php:2496
+#: class-gravity-flow.php:2719
 msgid "Week(s)"
 msgstr "Vecka/veckor"
 
-#: class-gravity-flow.php:2326
+#: class-gravity-flow.php:2328
 msgid "Start this step on %s"
 msgstr "Starta detta steg %s"
 
 #. translators: 1. textbox input for the number of days/weeks etc. 2. select
 #. input with options for minutes/hours/days/weeks
-#: class-gravity-flow.php:2334
+#: class-gravity-flow.php:2336
 msgid "Start this step %1$s %2$s after the workflow step is triggered."
 msgstr "Starta detta steg %1$s %2$s efter aktivering av steget i arbetsflödet."
 
@@ -364,433 +365,433 @@ msgstr "Starta detta steg %1$s %2$s efter aktivering av steget i arbetsflödet."
 #. input with options for minutes/hours/days/weeks 3. select input
 #. before/after
 #. 4. select input with list of date fields
-#: class-gravity-flow.php:2341
+#: class-gravity-flow.php:2343
 msgid "Start this step %1$s %2$s %3$s %4$s"
 msgstr "Starta detta steg %1$s %2$s %3$s %4$s"
 
-#: class-gravity-flow.php:2354 class-gravity-flow.php:2565
-#: class-gravity-flow.php:2771
+#: class-gravity-flow.php:2356 class-gravity-flow.php:2567
+#: class-gravity-flow.php:2773
 msgid "after"
 msgstr "efter"
 
-#: class-gravity-flow.php:2358 class-gravity-flow.php:2569
-#: class-gravity-flow.php:2775
+#: class-gravity-flow.php:2360 class-gravity-flow.php:2571
+#: class-gravity-flow.php:2777
 msgid "before"
 msgstr "före"
 
-#: class-gravity-flow.php:2411
+#: class-gravity-flow.php:2413
 msgid "Schedule due date"
 msgstr "Schemalägg förfallodatum"
 
-#: class-gravity-flow.php:2452
+#: class-gravity-flow.php:2454
 msgid "Due Date Field"
 msgstr "Fält för förfallodatum"
 
-#: class-gravity-flow.php:2461 class-gravity-flow.php:2471
-#: class-gravity-flow.php:2477 class-gravity-flow.php:2561
-#: class-gravity-flow.php:3914 includes/pages/class-inbox.php:173
-#: includes/pages/class-status.php:1263
+#: class-gravity-flow.php:2463 class-gravity-flow.php:2473
+#: class-gravity-flow.php:2479 class-gravity-flow.php:2563
+#: class-gravity-flow.php:3916 includes/pages/class-inbox.php:173
+#: includes/pages/class-status.php:1264
 msgid "Due Date"
 msgstr "Inlämningsdatum"
 
-#: class-gravity-flow.php:2511 class-gravity-flow.php:2893
+#: class-gravity-flow.php:2513 class-gravity-flow.php:2895
 msgid "Color"
 msgstr "Färg"
 
-#: class-gravity-flow.php:2533 class-gravity-flow.php:2541
+#: class-gravity-flow.php:2535 class-gravity-flow.php:2543
 msgid "This step has a due date on"
 msgstr "Detta steg har förfallodatum"
 
-#: class-gravity-flow.php:2546 class-gravity-flow.php:2752
+#: class-gravity-flow.php:2548 class-gravity-flow.php:2754
 msgid "after the workflow step has started."
 msgstr "efter att arbetsflödessteget har startat."
 
-#: class-gravity-flow.php:2551
+#: class-gravity-flow.php:2553
 msgid "Due date for this step"
 msgstr "Förfallodatum för detta steg"
 
-#: class-gravity-flow.php:2638
+#: class-gravity-flow.php:2640
 msgid "Schedule expiration"
 msgstr "Schemalägg utgångstid"
 
-#: class-gravity-flow.php:2679
+#: class-gravity-flow.php:2681
 msgid "Expiration Date Field"
 msgstr "Datumfält för utgångstid"
 
-#: class-gravity-flow.php:2739
+#: class-gravity-flow.php:2741
 msgid "This step expires on"
 msgstr "Detta steg löper ut den"
 
-#: class-gravity-flow.php:2747
+#: class-gravity-flow.php:2749
 msgid "This step will expire"
 msgstr "Detta steg kommer att löpa ut"
 
-#: class-gravity-flow.php:2757
+#: class-gravity-flow.php:2759
 msgid "Expire this step"
 msgstr "Markera detta steg som utgånget"
 
-#: class-gravity-flow.php:2789
+#: class-gravity-flow.php:2791
 msgid "Status after expiration"
 msgstr "Status efter utgånget"
 
-#: class-gravity-flow.php:2793
+#: class-gravity-flow.php:2795
 msgid "Expiration Status"
 msgstr "Utgångsstatus"
 
-#: class-gravity-flow.php:2803 class-gravity-flow.php:2807
+#: class-gravity-flow.php:2805 class-gravity-flow.php:2809
 msgid "Next Step if Expired"
 msgstr "Nästa steg om detta löpt ut"
 
-#: class-gravity-flow.php:2874
+#: class-gravity-flow.php:2876
 msgid "Highlight this step"
 msgstr "Markera detta steg som viktigt"
 
-#: class-gravity-flow.php:3017
+#: class-gravity-flow.php:3019
 #: includes/integrations/class-partial-entries.php:120
 #: includes/steps/class-step-approval.php:277
 #: includes/steps/class-step-user-input.php:210
 msgid "Enable"
 msgstr "Aktivera"
 
-#: class-gravity-flow.php:3221
+#: class-gravity-flow.php:3223
 msgid "You must provide a color value for the active highlight to apply."
 msgstr "Du måste ange ett färgvärde som kommer att användas för märkning av aktiva viktig-markeringar."
 
-#: class-gravity-flow.php:3281 class-gravity-flow.php:5721
+#: class-gravity-flow.php:3283 class-gravity-flow.php:5723
 msgid "Workflow Complete"
 msgstr "Arbetsflödet avslutat"
 
-#: class-gravity-flow.php:3282
+#: class-gravity-flow.php:3284
 msgid "Next step in list"
 msgstr "Nästa steg i listan"
 
-#: class-gravity-flow.php:3361
+#: class-gravity-flow.php:3363
 msgid "Match {0} of the following criteria:"
 msgstr "Matcha {0} av följande kriterier:"
 
-#: class-gravity-flow.php:3402
+#: class-gravity-flow.php:3404
 msgid "Sort by field"
 msgstr "Sortera på fält"
 
-#: class-gravity-flow.php:3458
+#: class-gravity-flow.php:3460
 msgid "Step name"
 msgstr "Stegets namn"
 
-#: class-gravity-flow.php:3465
+#: class-gravity-flow.php:3467
 msgid "Entries"
 msgstr "Ärenden"
 
-#: class-gravity-flow.php:3483
+#: class-gravity-flow.php:3485
 msgid "(missing)"
 msgstr "(saknas)"
 
-#: class-gravity-flow.php:3574 includes/class-connected-apps.php:863
+#: class-gravity-flow.php:3576 includes/class-connected-apps.php:863
 #: includes/steps/class-step-feed-slicedinvoices.php:232
 msgid "Edit"
 msgstr "Redigera"
 
-#: class-gravity-flow.php:3575
+#: class-gravity-flow.php:3577
 msgid "Duplicate"
 msgstr "Dubblett"
 
-#: class-gravity-flow.php:3576
+#: class-gravity-flow.php:3578
 msgid "WARNING: You are about to delete this item."
 msgstr "VARNING: Du är på väg att radera detta objekt."
 
-#: class-gravity-flow.php:3576
+#: class-gravity-flow.php:3578
 msgid "'Cancel' to stop, 'OK' to delete."
 msgstr "”Avbryt” för att stoppa, ”OK” för att ta bort."
 
-#: class-gravity-flow.php:3576 includes/class-connected-apps.php:864
+#: class-gravity-flow.php:3578 includes/class-connected-apps.php:864
 msgid "Delete"
 msgstr "Radera"
 
-#: class-gravity-flow.php:3591
+#: class-gravity-flow.php:3593
 msgid "You don't have any steps configured. Let's go %screate one%s!"
 msgstr "Du har inte konfigurerat några steg. Vi kan väl %sskapa ett%s!"
 
-#: class-gravity-flow.php:3642 includes/pages/class-status.php:1895
-#: includes/pages/class-status.php:1900
+#: class-gravity-flow.php:3644 includes/pages/class-status.php:1896
+#: includes/pages/class-status.php:1901
 msgid "Status:"
 msgstr "Status:"
 
-#: class-gravity-flow.php:3878 includes/pages/class-activity.php:62
+#: class-gravity-flow.php:3880 includes/pages/class-activity.php:62
 #: includes/pages/class-activity.php:95
 #: includes/steps/class-step-webhook.php:1048
 msgid "Entry ID"
 msgstr "Ärende-ID"
 
-#: class-gravity-flow.php:3887 includes/pages/class-inbox.php:165
+#: class-gravity-flow.php:3889 includes/pages/class-inbox.php:165
 msgid "Submitted"
 msgstr "Inskickat"
 
-#: class-gravity-flow.php:3893
+#: class-gravity-flow.php:3895
 msgid "Last updated"
 msgstr "Senast uppdaterat"
 
-#: class-gravity-flow.php:3900
+#: class-gravity-flow.php:3902
 msgid "Submitted by"
 msgstr "Inskickat av"
 
-#: class-gravity-flow.php:3907 class-gravity-flow.php:4918
-#: class-gravity-flow.php:7689 includes/class-connected-apps.php:791
-#: includes/pages/class-status.php:1241
+#: class-gravity-flow.php:3909 class-gravity-flow.php:4920
+#: class-gravity-flow.php:7729 includes/class-connected-apps.php:791
+#: includes/pages/class-status.php:1242
 #: includes/steps/class-step-feed-slicedinvoices.php:227
 #: includes/wizard/steps/class-iw-step-pages.php:81
 msgid "Status"
 msgstr "Status"
 
-#: class-gravity-flow.php:3921 includes/pages/class-status.php:1020
+#: class-gravity-flow.php:3923 includes/pages/class-status.php:1021
 msgid "Expires"
 msgstr "Löper ut"
 
-#: class-gravity-flow.php:3967 includes/pages/class-status.php:1013
+#: class-gravity-flow.php:3969 includes/pages/class-status.php:1014
 #: includes/steps/class-step-approval.php:746
 #: includes/steps/class-step-partial-entry-submission.php:204
 #: includes/steps/class-step-user-input.php:841
 msgid "Queued"
 msgstr "Lagt i kö"
 
-#: class-gravity-flow.php:3985
+#: class-gravity-flow.php:3987
 msgid "Scheduled"
 msgstr "Schemalagt"
 
-#: class-gravity-flow.php:3996 class-gravity-flow.php:3997
-#: class-gravity-flow.php:6897 class-gravity-flow.php:6899
+#: class-gravity-flow.php:3998 class-gravity-flow.php:3999
+#: class-gravity-flow.php:6937 class-gravity-flow.php:6939
 msgid "Step expired"
 msgstr "Steget har löpt ut"
 
-#: class-gravity-flow.php:4001
+#: class-gravity-flow.php:4003
 msgid "Expired: refresh the page"
 msgstr "Utlöpt: Ladda om sidan"
 
-#: class-gravity-flow.php:4018
+#: class-gravity-flow.php:4020
 msgid "Admin"
 msgstr "Admin"
 
-#: class-gravity-flow.php:4025
+#: class-gravity-flow.php:4027
 msgid "Select an action"
 msgstr "Välj en åtgärd"
 
-#: class-gravity-flow.php:4028 includes/pages/class-status.php:492
+#: class-gravity-flow.php:4030 includes/pages/class-status.php:493
 msgid "Apply"
 msgstr "Tillämpa"
 
-#: class-gravity-flow.php:4052
+#: class-gravity-flow.php:4054
 #: includes/merge-tags/class-merge-tag-workflow-cancel.php:60
 msgid "Cancel Workflow"
 msgstr "Avbryt arbetsflödet"
 
-#: class-gravity-flow.php:4056
+#: class-gravity-flow.php:4058
 msgid "Restart this step"
 msgstr "Återstarta detta steg"
 
-#: class-gravity-flow.php:4065 includes/pages/class-status.php:397
+#: class-gravity-flow.php:4067 includes/pages/class-status.php:398
 msgid "Restart Workflow"
 msgstr "Återstarta arbetsflödet"
 
-#: class-gravity-flow.php:4088
+#: class-gravity-flow.php:4090
 msgid "Send to step:"
 msgstr "Sänd till följande steg:"
 
-#: class-gravity-flow.php:4128
+#: class-gravity-flow.php:4130
 msgid "Workflow complete"
 msgstr "Arbetsflödet fullföljt"
 
-#: class-gravity-flow.php:4138
+#: class-gravity-flow.php:4140
 msgid "View"
 msgstr "Vy"
 
-#: class-gravity-flow.php:4364
+#: class-gravity-flow.php:4366
 msgid "General"
 msgstr "Allmän"
 
-#: class-gravity-flow.php:4365 class-gravity-flow.php:6972
+#: class-gravity-flow.php:4367 class-gravity-flow.php:7012
 msgid "Gravity Flow Settings"
 msgstr "Inställningar för Gravity Flow"
 
-#: class-gravity-flow.php:4370 class-gravity-flow.php:4489
+#: class-gravity-flow.php:4372 class-gravity-flow.php:4491
 msgid "Labels"
 msgstr "Etiketter"
 
-#: class-gravity-flow.php:4375 includes/class-connected-apps.php:524
+#: class-gravity-flow.php:4377 includes/class-connected-apps.php:524
 msgid "Connected Apps"
 msgstr "Anslutna appar"
 
-#: class-gravity-flow.php:4390 class-gravity-flow.php:8600
+#: class-gravity-flow.php:4392 class-gravity-flow.php:8640
 msgid "Uninstall"
 msgstr "Avinstallera"
 
-#: class-gravity-flow.php:4455 class-gravity-flow.php:7720
-#: class-gravity-flow.php:8169
+#: class-gravity-flow.php:4457 class-gravity-flow.php:7760
+#: class-gravity-flow.php:8209
 #: includes/merge-tags/class-merge-tag-current-step.php:98
 #: includes/steps/class-step-partial-entry-submission.php:201
 #: includes/steps/class-step.php:329
 msgid "Pending"
 msgstr "Väntar"
 
-#: class-gravity-flow.php:4456 class-gravity-flow.php:7735
-#: class-gravity-flow.php:8165
+#: class-gravity-flow.php:4458 class-gravity-flow.php:7775
+#: class-gravity-flow.php:8205
 msgid "Cancelled"
 msgstr "Avbrutet"
 
-#: class-gravity-flow.php:4494
+#: class-gravity-flow.php:4496
 msgid "Navigation"
 msgstr "Navigering"
 
-#: class-gravity-flow.php:4502
+#: class-gravity-flow.php:4504
 msgid "Status Labels"
 msgstr "Statusetiketter"
 
-#: class-gravity-flow.php:4509
+#: class-gravity-flow.php:4511
 #: includes/steps/class-step-feed-user-registration.php:141
 #: includes/steps/class-step-user-input.php:1021
 msgid "Update"
 msgstr "Uppdatera"
 
-#: class-gravity-flow.php:4533
+#: class-gravity-flow.php:4535
 msgid "Invalid token"
 msgstr "Ogiltigt token"
 
-#: class-gravity-flow.php:4537
+#: class-gravity-flow.php:4539
 msgid "Token already expired"
 msgstr "Token är inte längre giltigt"
 
-#: class-gravity-flow.php:4545
+#: class-gravity-flow.php:4547
 msgid "Token revoked"
 msgstr "Token är återkallat"
 
-#: class-gravity-flow.php:4549
+#: class-gravity-flow.php:4551
 msgid "Tools"
 msgstr "Verktyg"
 
-#: class-gravity-flow.php:4565
+#: class-gravity-flow.php:4567
 msgid "Revoke a token"
 msgstr "Återkalla ett token"
 
-#: class-gravity-flow.php:4571
+#: class-gravity-flow.php:4573
 msgid "Revoke"
 msgstr "Återkalla"
 
-#: class-gravity-flow.php:4626
+#: class-gravity-flow.php:4628
 msgid "Entries per page"
 msgstr "Ärenden per sida"
 
-#: class-gravity-flow.php:4654 includes/class-extension.php:411
+#: class-gravity-flow.php:4656 includes/class-extension.php:411
 #: includes/class-feed-extension.php:418
 msgid "Settings"
 msgstr "Inställningar"
 
-#: class-gravity-flow.php:4658 includes/class-extension.php:226
+#: class-gravity-flow.php:4660 includes/class-extension.php:226
 #: includes/class-feed-extension.php:228
 #: includes/wizard/steps/class-iw-step-license-key.php:100
 msgid "License Key"
 msgstr "Licensnyckel"
 
-#: class-gravity-flow.php:4662 includes/class-extension.php:230
+#: class-gravity-flow.php:4664 includes/class-extension.php:230
 #: includes/class-feed-extension.php:232
 msgid "Invalid license"
 msgstr "Ogiltig licens"
 
-#: class-gravity-flow.php:4668
+#: class-gravity-flow.php:4670
 #: includes/wizard/steps/class-iw-step-updates.php:111
 msgid "Background Updates"
 msgstr "Bakgrundsuppdateringar"
 
-#: class-gravity-flow.php:4669
+#: class-gravity-flow.php:4671
 msgid ""
 "Set this to ON to allow Gravity Flow to download and install bug fixes and "
 "security updates automatically in the background. Requires a valid license "
 "key."
 msgstr "Ange värdet PÅ för att låta Gravity Flow ladda ned och installera felrättningar och säkerhetsuppdateringar automatiskt i bakgrunden. För detta krävs en giltig licensnyckel."
 
-#: class-gravity-flow.php:4674
+#: class-gravity-flow.php:4676
 msgid "On"
 msgstr "På"
 
-#: class-gravity-flow.php:4675
+#: class-gravity-flow.php:4677
 msgid "Off"
 msgstr "Av"
 
-#: class-gravity-flow.php:4694
+#: class-gravity-flow.php:4696
 msgid "Update Settings"
 msgstr "Uppdatera inställningar"
 
-#: class-gravity-flow.php:4696
+#: class-gravity-flow.php:4698
 msgid "Settings updated successfully"
 msgstr "Inställningarna har uppdaterats"
 
-#: class-gravity-flow.php:4697
+#: class-gravity-flow.php:4699
 msgid "There was an error while saving the settings"
 msgstr "Ett fel inträffade när inställningarna skulle sparas"
 
-#: class-gravity-flow.php:4717
+#: class-gravity-flow.php:4719
 msgid "Workflow Emails"
 msgstr "Arbetsflödets e-postmeddelanden"
 
-#: class-gravity-flow.php:4737
+#: class-gravity-flow.php:4739
 msgid "Email Service"
 msgstr "E-posttjänst"
 
-#: class-gravity-flow.php:4738
+#: class-gravity-flow.php:4740
 msgid ""
 "Select which service should be used to send the workflow emails. WordPress "
 "uses the server hosting your site or an active SMTP plugin."
 msgstr "Välj vilken tjänst som ska användas för att skicka e-post för arbetsflödet. WordPress använder servern där webbplatsen är installerad eller ett aktiverat SMTP-tillägg."
 
-#: class-gravity-flow.php:4749
+#: class-gravity-flow.php:4751
 #: includes/steps/class-common-step-settings.php:176
 msgid "From Name"
 msgstr "Från namn"
 
-#: class-gravity-flow.php:4750
+#: class-gravity-flow.php:4752
 msgid ""
 "The default From Name to be used when the From Name setting is not "
 "configured on the individual steps."
 msgstr "Standardnamnet för ”Från” som ska användas om avsändarnamn inte är konfigurerat för de enstaka stegen."
 
-#: class-gravity-flow.php:4771
+#: class-gravity-flow.php:4773
 #: includes/steps/class-common-step-settings.php:182
 msgid "From Email"
 msgstr "Från e-post"
 
-#: class-gravity-flow.php:4772
+#: class-gravity-flow.php:4774
 msgid ""
 "The default From Email to be used when the From Email setting is not "
 "configured on the individual steps."
 msgstr "Standardadress för ”Från” som ska användas om e-postadress för avsändare inte är konfigurerad för de enstaka stegen."
 
-#: class-gravity-flow.php:4821
+#: class-gravity-flow.php:4823
 msgid "Please enter a valid email address."
 msgstr "Ange en giltig e-postadress."
 
-#: class-gravity-flow.php:4837
+#: class-gravity-flow.php:4839
 msgid ""
 "From Email domain must be an %1$sactive domain%3$s. You can learn more about"
 " verifying your domain in the %2$sMailgun documentation%3$s."
 msgstr "Domänen i e-postadressen för avsändaren måste vara en %1$saktiv domän%3$s. Ta reda på mer om hur du bekräftar din domän i %2$sdokumentationen för Mailgun%3$s."
 
-#: class-gravity-flow.php:4876
+#: class-gravity-flow.php:4878
 msgid "Published"
 msgstr "Publicerat"
 
-#: class-gravity-flow.php:4887
+#: class-gravity-flow.php:4889
 msgid "No workflow steps have been added to any forms yet."
 msgstr "Inga arbetsflödessteg har ännu lagts till i något formulär."
 
-#: class-gravity-flow.php:4893
+#: class-gravity-flow.php:4895
 msgid "Published Workflow Forms"
 msgstr "Publicerade arbetsflödesformulär"
 
-#: class-gravity-flow.php:4894
+#: class-gravity-flow.php:4896
 msgid "Select the forms you wish to publish on the Submit page."
 msgstr "Välj vilka formulär du vill publicera på sidan Skicka in."
 
-#: class-gravity-flow.php:4908
+#: class-gravity-flow.php:4910
 msgid "Default Pages"
 msgstr "Standardsidor"
 
-#: class-gravity-flow.php:4909
+#: class-gravity-flow.php:4911
 msgid ""
 "Select the pages which contain the following gravityflow shortcodes. For "
 "example, the inbox page selected below will be used when preparing merge "
@@ -798,447 +799,447 @@ msgid ""
 "specified."
 msgstr "Välj de sidor som innehåller följande kortkoder för Gravity Flow. Till exempel, den sida som nedan har valts som inkorg kommer att användas för magiska taggar, såsom {workflow_inbox_link} om attributet page_id inte har angetts."
 
-#: class-gravity-flow.php:4913 class-gravity-flow.php:7687
+#: class-gravity-flow.php:4915 class-gravity-flow.php:7727
 #: includes/merge-tags/class-merge-tag-workflow-url.php:62
 #: includes/wizard/steps/class-iw-step-pages.php:61
 msgid "Inbox"
 msgstr "Inkorg"
 
-#: class-gravity-flow.php:4923 class-gravity-flow.php:7688
+#: class-gravity-flow.php:4925 class-gravity-flow.php:7728
 #: includes/steps/class-step-user-input.php:996
 #: includes/steps/class-step-user-input.php:1021
 #: includes/wizard/steps/class-iw-step-pages.php:97
 msgid "Submit"
 msgstr "Skicka"
 
-#: class-gravity-flow.php:4939
+#: class-gravity-flow.php:4941
 msgid "Security Options"
 msgstr "Säkerhetsalternativ"
 
-#: class-gravity-flow.php:4943
+#: class-gravity-flow.php:4945
 msgid "Shortcode Security"
 msgstr "Säkerhet för kortkoder"
 
-#: class-gravity-flow.php:4945
+#: class-gravity-flow.php:4947
 msgid ""
 "Important: Do not enable any of these settings unless all page editors are "
 "authorized."
 msgstr "Viktigt: Aktivera inte någon av dessa inställningar om inte alla personer som kan redigera sidor är behöriga."
 
-#: class-gravity-flow.php:4948
+#: class-gravity-flow.php:4950
 msgid ""
 "Allow the Status shortcode to display all entries to all registered users."
 msgstr "Tillåt status-kortkoden att visa alla poster för registrerade användare."
 
-#: class-gravity-flow.php:4950
+#: class-gravity-flow.php:4952
 msgid ""
 "This setting allows the display_all attribute to be used in the shortcode."
 msgstr "Denna inställning tillåter att attributet display_all används i kortkoden."
 
-#: class-gravity-flow.php:4953
+#: class-gravity-flow.php:4955
 msgid ""
 "Allow the Status shortcode to display all entries to all anonymous users."
 msgstr "Tillåt att status-kortkoden visar alla poster för anonyma användare."
 
-#: class-gravity-flow.php:4955
+#: class-gravity-flow.php:4957
 msgid ""
 "This setting allows the allow_anonymous attribute to be used in the "
 "shortcode."
 msgstr "Denna inställning tillåter att attributet allow_anonymous används i kortkoden."
 
-#: class-gravity-flow.php:4958
+#: class-gravity-flow.php:4960
 msgid "Allow the Inbox and Status shortcodes to display field values."
 msgstr "Tillåt att kortkoderna inkorg och status visar fältvärden."
 
-#: class-gravity-flow.php:4960
+#: class-gravity-flow.php:4962
 msgid "This setting allows the fields attribute to be used in the shortcode."
 msgstr "Denna inställning tillåter att attributet fält används i kortkoden."
 
-#: class-gravity-flow.php:4985
+#: class-gravity-flow.php:4987
 msgid "Select page"
 msgstr "Välj sida"
 
-#: class-gravity-flow.php:5147
+#: class-gravity-flow.php:5149
 #: includes/wizard/steps/class-iw-step-pages.php:211
 msgid "Submit a Workflow Form"
 msgstr "Skicka in ett arbetsflödesformulär"
 
-#: class-gravity-flow.php:5214
+#: class-gravity-flow.php:5216
 msgid ""
 "Important: Gravity Flow (Development Version) is missing some important "
 "files that were not included in the installation package. Consult the "
 "readme.md file for further details."
 msgstr "Viktigt: Gravity Flow (utvecklingsversionen) saknar några viktiga filer som inte fanns med i installationspaketet. Läs filen readme.md för mer information."
 
-#: class-gravity-flow.php:5277 class-gravity-flow.php:6170
+#: class-gravity-flow.php:5279 class-gravity-flow.php:6192
 #: includes/pages/class-entry-detail.php:167
 msgid "Return to list"
 msgstr "Återgå till listan"
 
-#: class-gravity-flow.php:5296
+#: class-gravity-flow.php:5298
 msgid "Oops! We could not locate your entry."
 msgstr "Aj då! Vi hittar inte ditt ärende."
 
-#: class-gravity-flow.php:5320 includes/steps/class-step-approval.php:974
+#: class-gravity-flow.php:5322 includes/steps/class-step-approval.php:974
 msgid "Error: incorrect entry."
 msgstr "Fel: Felaktigt ärende."
 
-#: class-gravity-flow.php:5326
+#: class-gravity-flow.php:5328
 msgid "Workflow Cancelled"
 msgstr "Arbetsflödet avbrutet"
 
-#: class-gravity-flow.php:5349
+#: class-gravity-flow.php:5351
 msgid "Error: This URL is no longer valid."
 msgstr "Fel: Denna URL gäller inte längre."
 
-#: class-gravity-flow.php:5418
+#: class-gravity-flow.php:5420
 #: includes/wizard/steps/class-iw-step-pages.php:209
 msgid "Workflow Inbox"
 msgstr "Inkorg för arbetsflöde"
 
-#: class-gravity-flow.php:5465
+#: class-gravity-flow.php:5467
 #: includes/wizard/steps/class-iw-step-pages.php:210
 msgid "Workflow Status"
 msgstr "Status för arbetsflöde"
 
-#: class-gravity-flow.php:5510
+#: class-gravity-flow.php:5512
 msgid "Workflow Activity"
 msgstr "Arbetsflödesaktivitet"
 
-#: class-gravity-flow.php:5556
+#: class-gravity-flow.php:5558
 msgid "Workflow Reports"
 msgstr "Arbetsflödesrapporter"
 
-#: class-gravity-flow.php:5608
+#: class-gravity-flow.php:5610
 msgid "Your inbox of pending tasks"
 msgstr "Din inkorg med väntande uppgifter"
 
-#: class-gravity-flow.php:5622
+#: class-gravity-flow.php:5624
 msgid "Submit a Workflow"
 msgstr "Skicka ett arbetsflöde"
 
-#: class-gravity-flow.php:5634
+#: class-gravity-flow.php:5636
 msgid "Your workflows"
 msgstr "Dina arbetsflöden"
 
-#: class-gravity-flow.php:5645 class-gravity-flow.php:7691
+#: class-gravity-flow.php:5647 class-gravity-flow.php:7731
 msgid "Reports"
 msgstr "Rapporter"
 
-#: class-gravity-flow.php:5656 class-gravity-flow.php:7692
+#: class-gravity-flow.php:5658 class-gravity-flow.php:7732
 msgid "Activity"
 msgstr "Aktivitet"
 
-#: class-gravity-flow.php:5687 includes/class-api.php:129
+#: class-gravity-flow.php:5689 includes/class-api.php:129
 msgid "Workflow cancelled."
 msgstr "Arbetsflödet avbrutet."
 
-#: class-gravity-flow.php:5691 class-gravity-flow.php:5703
+#: class-gravity-flow.php:5693 class-gravity-flow.php:5705
 msgid "The entry does not currently have an active step."
 msgstr "Detta ärende har för närvarande inget aktivt steg."
 
-#: class-gravity-flow.php:5700 includes/class-api.php:154
+#: class-gravity-flow.php:5702 includes/class-api.php:154
 msgid "Workflow Step restarted."
 msgstr "Steget i arbetsflödet har återstartats."
 
-#: class-gravity-flow.php:5711 includes/class-api.php:192
-#: includes/pages/class-status.php:2018
+#: class-gravity-flow.php:5713 includes/class-api.php:192
+#: includes/pages/class-status.php:2019
 msgid "Workflow restarted."
 msgstr "Arbetsflödet har återstartats."
 
-#: class-gravity-flow.php:5721 includes/class-api.php:233
+#: class-gravity-flow.php:5723 includes/class-api.php:233
 msgid "Sent to step: %s"
 msgstr "Skickat till steg: %s"
 
-#: class-gravity-flow.php:5747
+#: class-gravity-flow.php:5749
 msgid "Workflow: approved or rejected"
 msgstr "Arbetsflöde: godkänt eller avslaget"
 
-#: class-gravity-flow.php:5748
+#: class-gravity-flow.php:5750
 msgid "Workflow: user input"
 msgstr "Arbetsflöde: användarinmatning"
 
-#: class-gravity-flow.php:5749
+#: class-gravity-flow.php:5751
 msgid "Workflow: complete"
 msgstr "Arbetsflöde: avslutat"
 
-#: class-gravity-flow.php:5750
+#: class-gravity-flow.php:5752
 msgid "Workflow: cancelled"
 msgstr "Arbetsflöde: avbrutet"
 
-#: class-gravity-flow.php:6666
+#: class-gravity-flow.php:6706
 msgid ""
 "Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. "
 "If the form was imported from a different installation with different user "
 "IDs then steps may need to be reassigned."
 msgstr "Gravity Flow-steg har importerats. OBS: Kontrollera vem som är ansvarig för varje steg. Om formuläret importerats från en annan installation med andra användar-ID:n kan man behöva uppdatera vem som är ansvarig."
 
-#: class-gravity-flow.php:6981
+#: class-gravity-flow.php:7021
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
 msgstr "%sDenna åtgärd raderar ALLA inställningar för Gravity Flow%s. Om du fortsätter kommer du INTE att kunna hämta dessa inställningar."
 
-#: class-gravity-flow.php:6990
+#: class-gravity-flow.php:7030
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
 msgstr "Varning! ALLA inställningar för Gravity Flow kommer att raderas. Detta går inte att ångra. ”OK” för att radera, ”Avbryt” för att låta bli"
 
-#: class-gravity-flow.php:7496
+#: class-gravity-flow.php:7536
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d år"
 msgstr[1] "%d år"
 
-#: class-gravity-flow.php:7500
+#: class-gravity-flow.php:7540
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "% d månad"
 msgstr[1] "%d månader"
 
-#: class-gravity-flow.php:7504
+#: class-gravity-flow.php:7544
 msgid "%dd"
 msgstr "%dd"
 
-#: class-gravity-flow.php:7521
+#: class-gravity-flow.php:7561
 msgid "%dh"
 msgstr "%dh"
 
-#: class-gravity-flow.php:7526
+#: class-gravity-flow.php:7566
 msgid "%dm"
 msgstr "%dm"
 
-#: class-gravity-flow.php:7530
+#: class-gravity-flow.php:7570
 msgid "%ds"
 msgstr "%ds"
 
-#: class-gravity-flow.php:7574
+#: class-gravity-flow.php:7614
 msgid "Every Fifteen Minutes"
 msgstr "Var femtonde minut"
 
-#: class-gravity-flow.php:7599 class-gravity-flow.php:7624
+#: class-gravity-flow.php:7639 class-gravity-flow.php:7664
 msgid "Not authorized"
 msgstr "Inte behörig"
 
-#: class-gravity-flow.php:7686 class-gravity-flow.php:8391
+#: class-gravity-flow.php:7726 class-gravity-flow.php:8431
 msgid "Workflow"
 msgstr "Arbetsflöde"
 
-#: class-gravity-flow.php:7690
+#: class-gravity-flow.php:7730
 msgid "Support"
 msgstr "Support"
 
-#: class-gravity-flow.php:7726 includes/steps/class-step-approval.php:50
+#: class-gravity-flow.php:7766 includes/steps/class-step-approval.php:50
 #: includes/steps/class-step-approval.php:742
 msgid "Approved"
 msgstr "Godkänt"
 
-#: class-gravity-flow.php:7729 includes/steps/class-step-approval.php:44
+#: class-gravity-flow.php:7769 includes/steps/class-step-approval.php:44
 #: includes/steps/class-step-approval.php:744
 msgid "Rejected"
 msgstr "Avslaget"
 
-#: class-gravity-flow.php:7791
+#: class-gravity-flow.php:7831
 msgid "Oops! We couldn't find your lead. Please try again"
 msgstr "Oj då! Vi hittar inte din lead. Försök igen"
 
-#: class-gravity-flow.php:7833 includes/pages/class-entry-detail.php:200
+#: class-gravity-flow.php:7873 includes/pages/class-entry-detail.php:200
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
 msgstr "Vill du radera denna fil? ”Avbryt” för att återgå, ”OK” för att radera"
 
-#: class-gravity-flow.php:7937
+#: class-gravity-flow.php:7977
 msgid "Display all fields"
 msgstr "Visa alla fält"
 
-#: class-gravity-flow.php:7941
+#: class-gravity-flow.php:7981
 msgid "Display all fields except selected"
 msgstr "Visa alla fält utom de markerade"
 
-#: class-gravity-flow.php:7945
+#: class-gravity-flow.php:7985
 msgid "Hide all fields except selected"
 msgstr "Dölj alla fält utom de markerade"
 
-#: class-gravity-flow.php:7984
+#: class-gravity-flow.php:8024
 msgid "Except"
 msgstr "Utom"
 
-#: class-gravity-flow.php:8003
+#: class-gravity-flow.php:8043
 msgid "Order Summary"
 msgstr "Orderöversikt"
 
-#: class-gravity-flow.php:8090 includes/class-common.php:88
+#: class-gravity-flow.php:8130 includes/class-common.php:88
 #: includes/steps/class-step-webhook.php:1050
 msgid "User IP"
 msgstr "Användarens IP-adress"
 
-#: class-gravity-flow.php:8096
+#: class-gravity-flow.php:8136
 msgid "Source URL"
 msgstr "Käll-URL"
 
-#: class-gravity-flow.php:8102 includes/class-common.php:94
+#: class-gravity-flow.php:8142 includes/class-common.php:94
 msgid "Payment Status"
 msgstr "Betalningsstatus"
 
-#: class-gravity-flow.php:8109 includes/class-common.php:103
+#: class-gravity-flow.php:8149 includes/class-common.php:103
 msgid "Payment Amount"
 msgstr "Betalningsbelopp"
 
-#: class-gravity-flow.php:8115 includes/class-common.php:97
+#: class-gravity-flow.php:8155 includes/class-common.php:97
 msgid "Transaction ID"
 msgstr "Transaktions-ID"
 
-#: class-gravity-flow.php:8121 includes/steps/class-step-webhook.php:1052
+#: class-gravity-flow.php:8161 includes/steps/class-step-webhook.php:1052
 msgid "Created By"
 msgstr "Skapad av"
 
-#: class-gravity-flow.php:8145
+#: class-gravity-flow.php:8185
 msgid "Authorized"
 msgstr "Godkänd"
 
-#: class-gravity-flow.php:8149
+#: class-gravity-flow.php:8189
 msgid "Paid"
 msgstr "Betald"
 
-#: class-gravity-flow.php:8153
+#: class-gravity-flow.php:8193
 msgid "Processing"
 msgstr "Under behandling"
 
-#: class-gravity-flow.php:8157
+#: class-gravity-flow.php:8197
 msgid "Failed"
 msgstr "Misslyckades"
 
-#: class-gravity-flow.php:8161
+#: class-gravity-flow.php:8201
 msgid "Active"
 msgstr "Aktiv"
 
-#: class-gravity-flow.php:8173
+#: class-gravity-flow.php:8213
 msgid "Refunded"
 msgstr "Återbetald"
 
-#: class-gravity-flow.php:8177
+#: class-gravity-flow.php:8217
 msgid "Voided"
 msgstr "Annullerad"
 
-#: class-gravity-flow.php:8392
+#: class-gravity-flow.php:8432
 msgid "Entry Link"
 msgstr "Länk till ärende"
 
-#: class-gravity-flow.php:8393
+#: class-gravity-flow.php:8433
 msgid "Entry URL"
 msgstr "Ärende-URL"
 
-#: class-gravity-flow.php:8394
+#: class-gravity-flow.php:8434
 msgid "Inbox Link"
 msgstr "Länk till inkorgen"
 
-#: class-gravity-flow.php:8395
+#: class-gravity-flow.php:8435
 msgid "Inbox URL"
 msgstr "URL för inkorgen"
 
-#: class-gravity-flow.php:8396
+#: class-gravity-flow.php:8436
 msgid "Cancel Link"
 msgstr "Länk för avbryt"
 
-#: class-gravity-flow.php:8397
+#: class-gravity-flow.php:8437
 msgid "Cancel URL"
 msgstr "URL för Avbryt"
 
-#: class-gravity-flow.php:8398 includes/pages/class-inbox.php:412
+#: class-gravity-flow.php:8438 includes/pages/class-inbox.php:412
 #: includes/steps/class-step-approval.php:811
 #: includes/steps/class-step-user-input.php:1072
-#: includes/steps/class-step.php:1982
+#: includes/steps/class-step.php:2005
 msgid "Note"
 msgstr "Anteckning"
 
-#: class-gravity-flow.php:8399 includes/pages/class-entry-detail.php:546
+#: class-gravity-flow.php:8439 includes/pages/class-entry-detail.php:546
 msgid "Timeline"
 msgstr "Tidslinje"
 
-#: class-gravity-flow.php:8400 includes/fields/class-fields.php:103
+#: class-gravity-flow.php:8440 includes/fields/class-fields.php:103
 msgid "Assignees"
 msgstr "Ansvariga personer"
 
-#: class-gravity-flow.php:8401
+#: class-gravity-flow.php:8441
 msgid "Approve Link"
 msgstr "Länk för godkännande"
 
-#: class-gravity-flow.php:8402
+#: class-gravity-flow.php:8442
 msgid "Approve URL"
 msgstr "URL för godkännande"
 
-#: class-gravity-flow.php:8403
+#: class-gravity-flow.php:8443
 msgid "Approve Token"
 msgstr "Token för godkännande"
 
-#: class-gravity-flow.php:8404
+#: class-gravity-flow.php:8444
 msgid "Reject Link"
 msgstr "Länk för avslag"
 
-#: class-gravity-flow.php:8405
+#: class-gravity-flow.php:8445
 msgid "Reject URL"
 msgstr "URL för avslag"
 
-#: class-gravity-flow.php:8406
+#: class-gravity-flow.php:8446
 msgid "Reject Token"
 msgstr "Token för avvisande"
 
-#: class-gravity-flow.php:8453 includes/steps/class-step-update-user.php:78
+#: class-gravity-flow.php:8493 includes/steps/class-step-update-user.php:78
 msgid "Current User"
 msgstr "Aktuell användare"
 
-#: class-gravity-flow.php:8459
+#: class-gravity-flow.php:8499
 msgid "Workflow Assignee"
 msgstr "Ansvarig person i arbetsflödet"
 
-#: class-gravity-flow.php:8593
+#: class-gravity-flow.php:8633
 msgid "Entry Detail Admin Actions"
 msgstr "Adminåtgärder för ärendeuppgifter"
 
-#: class-gravity-flow.php:8596
+#: class-gravity-flow.php:8636
 msgid "View All"
 msgstr "Visa allt"
 
-#: class-gravity-flow.php:8599
+#: class-gravity-flow.php:8639
 msgid "Manage Settings"
 msgstr "Hantera inställningar"
 
-#: class-gravity-flow.php:8601
+#: class-gravity-flow.php:8641
 msgid "Manage Form Steps"
 msgstr "Hantera formulärsteg"
 
 #. translators: %s is the title of the plugin
-#: class-gravity-flow.php:8742
+#: class-gravity-flow.php:8782
 msgid "Your %s license has expired."
 msgstr "Din licens för %s har upphört att gälla."
 
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
-#: class-gravity-flow.php:8747 includes/class-extension.php:490
+#: class-gravity-flow.php:8787 includes/class-extension.php:490
 #: includes/class-feed-extension.php:497
 msgid "Your %s license is invalid."
 msgstr "Din licens för %s är ogiltig."
 
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
-#: class-gravity-flow.php:8751 includes/class-extension.php:494
+#: class-gravity-flow.php:8791 includes/class-extension.php:494
 #: includes/class-feed-extension.php:501
 msgid "Your %s license is inactive."
 msgstr "Din licens för %s är inaktiv."
 
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
-#: class-gravity-flow.php:8761 includes/class-extension.php:504
+#: class-gravity-flow.php:8801 includes/class-extension.php:504
 #: includes/class-feed-extension.php:511
 msgid "Your %s license has not been activated."
 msgstr "Din licens för %s har inte aktiverats."
 
-#: class-gravity-flow.php:8765 includes/class-extension.php:508
+#: class-gravity-flow.php:8805 includes/class-extension.php:508
 #: includes/class-feed-extension.php:515
 msgid "This means you're missing out on security fixes, updates and support."
 msgstr "Detta innebär att du går miste om säkerhetsrättningar, uppdateringar och support."
 
-#: class-gravity-flow.php:8771 includes/class-extension.php:518
+#: class-gravity-flow.php:8811 includes/class-extension.php:518
 #: includes/class-feed-extension.php:525
 msgid "%sActivate your license%s or %sget a license here%s"
 msgstr "%sAktivera din licens%s eller %sskaffa en licens här%s"
@@ -1288,7 +1289,7 @@ msgstr "URL för källa"
 msgid "Payment Date"
 msgstr "Betalningsdatum"
 
-#: includes/class-common.php:310
+#: includes/class-common.php:322
 msgid "Workflow Submitted"
 msgstr "Arbetsflöde skickat"
 
@@ -1595,7 +1596,7 @@ msgstr "Händelse-ID"
 
 #: includes/pages/class-activity.php:61 includes/pages/class-activity.php:90
 #: includes/pages/class-inbox.php:154 includes/pages/class-reports.php:145
-#: includes/pages/class-status.php:1230
+#: includes/pages/class-status.php:1231
 msgid "Form"
 msgstr "Formulär"
 
@@ -1604,13 +1605,13 @@ msgstr "Formulär"
 msgid "Event"
 msgstr "Händelse"
 
-#: includes/pages/class-activity.php:66 includes/pages/class-status.php:1933
-#: includes/pages/class-status.php:2059
+#: includes/pages/class-activity.php:66 includes/pages/class-status.php:1934
+#: includes/pages/class-status.php:2060
 msgid "Duration"
 msgstr "Varaktighet"
 
 #: includes/pages/class-activity.php:80 includes/pages/class-inbox.php:146
-#: includes/pages/class-status.php:1226
+#: includes/pages/class-status.php:1227
 msgid "ID"
 msgstr "ID"
 
@@ -1628,7 +1629,7 @@ msgid "Ajax error while deleting file."
 msgstr "Ajax-fel inträffade när fil skulle raderas."
 
 #: includes/pages/class-entry-detail.php:515
-#: includes/pages/class-status.php:394 includes/pages/class-status.php:751
+#: includes/pages/class-status.php:395 includes/pages/class-status.php:752
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -1678,11 +1679,11 @@ msgstr "Hjälp"
 msgid "No pending tasks"
 msgstr "Inga väntande uppgifter"
 
-#: includes/pages/class-inbox.php:158 includes/pages/class-status.php:1233
+#: includes/pages/class-inbox.php:158 includes/pages/class-status.php:1234
 msgid "Submitter"
 msgstr "Inskickare"
 
-#: includes/pages/class-inbox.php:169 includes/pages/class-status.php:1259
+#: includes/pages/class-inbox.php:169 includes/pages/class-status.php:1260
 msgid "Last Updated"
 msgstr "Senast uppdaterat"
 
@@ -1770,78 +1771,78 @@ msgstr "Senaste 3 månaderna"
 msgid "All Steps"
 msgstr "Alla steg"
 
-#: includes/pages/class-status.php:148
+#: includes/pages/class-status.php:149
 msgid "Export"
 msgstr "Export"
 
-#: includes/pages/class-status.php:163
+#: includes/pages/class-status.php:164
 msgid "The destination file is not writeable"
 msgstr "Målfilen är inte skrivbar"
 
-#: includes/pages/class-status.php:432
+#: includes/pages/class-status.php:433
 msgid "You haven't submitted any workflow forms yet."
 msgstr "Du har inte skickat in några arbetsflödesformulär ännu."
 
-#: includes/pages/class-status.php:455
+#: includes/pages/class-status.php:456
 msgid "All"
 msgstr "Alla"
 
-#: includes/pages/class-status.php:485
+#: includes/pages/class-status.php:486
 msgid "Start:"
 msgstr "Start:"
 
-#: includes/pages/class-status.php:486
+#: includes/pages/class-status.php:487
 msgid "End:"
 msgstr "Slut:"
 
-#: includes/pages/class-status.php:496
+#: includes/pages/class-status.php:497
 msgid "Clear Filter"
 msgstr "Rensa filter"
 
-#: includes/pages/class-status.php:499
+#: includes/pages/class-status.php:500
 msgid "Search"
 msgstr "Sök"
 
-#: includes/pages/class-status.php:537
+#: includes/pages/class-status.php:538
 msgid "yyyy-mm-dd"
 msgstr "åååå-mm-dd"
 
-#: includes/pages/class-status.php:558
+#: includes/pages/class-status.php:559
 msgid "Workflow Form"
 msgstr "Arbetsflödesformulär"
 
-#: includes/pages/class-status.php:741
+#: includes/pages/class-status.php:742
 msgid "Print all of the selected entries at once."
 msgstr "Skriv ut alla valda ärenden tillsammans."
 
-#: includes/pages/class-status.php:744
+#: includes/pages/class-status.php:745
 msgid "Include timelines"
 msgstr "Inkludera tidslinjer"
 
-#: includes/pages/class-status.php:748
+#: includes/pages/class-status.php:749
 msgid "Add page break between entries"
 msgstr "Börja varje ärende på ny sida"
 
-#: includes/pages/class-status.php:929 includes/pages/class-status.php:2083
+#: includes/pages/class-status.php:930 includes/pages/class-status.php:2084
 msgid "(deleted)"
 msgstr "(raderat)"
 
 #. translators: %s: The step ID
-#: includes/pages/class-status.php:985
+#: includes/pages/class-status.php:986
 msgid "Step %s (deleted)"
 msgstr ""
 
-#: includes/pages/class-status.php:1224
+#: includes/pages/class-status.php:1225
 msgid "Checkbox"
 msgstr "Kryssruta"
 
-#: includes/pages/class-status.php:1647
+#: includes/pages/class-status.php:1648
 #: includes/steps/class-common-step-settings.php:77
 #: includes/steps/class-common-step-settings.php:144
 msgid "Select"
 msgstr "Välj"
 
-#: includes/pages/class-status.php:2027
+#: includes/pages/class-status.php:2028
 msgid "Workflows restarted."
 msgstr "Arbetsflöden återstartade."
 
@@ -1916,7 +1917,7 @@ msgid "Bug report"
 msgstr "Felrapport"
 
 #: includes/pages/class-support.php:168
-#: includes/steps/class-common-step-settings.php:202
+#: includes/steps/class-common-step-settings.php:209
 msgid "Subject"
 msgstr "Ämne"
 
@@ -1941,8 +1942,8 @@ msgstr "Villkorad dirigering"
 #. translators: 1: Warning icon 2: Number of users displayed 3: Open link tag
 #. 4: Close link tag
 #: includes/steps/class-common-step-settings.php:130
-#: includes/steps/class-common-step-settings.php:407
-#: includes/steps/class-common-step-settings.php:433
+#: includes/steps/class-common-step-settings.php:414
+#: includes/steps/class-common-step-settings.php:440
 msgid ""
 "%1$s The list of users contains only the first %2$s users in your site. "
 "%3$sLearn how to remove this limit%4$s. "
@@ -1953,7 +1954,7 @@ msgid "Send To"
 msgstr "Skicka till"
 
 #: includes/steps/class-common-step-settings.php:153
-#: includes/steps/class-common-step-settings.php:424
+#: includes/steps/class-common-step-settings.php:431
 msgid "Routing"
 msgstr "Dirigering"
 
@@ -1962,58 +1963,69 @@ msgid "Reply To"
 msgstr "Svar till"
 
 #: includes/steps/class-common-step-settings.php:196
+msgid "CC"
+msgstr ""
+
+#: includes/steps/class-common-step-settings.php:198
+msgid ""
+"Be aware of any privacy policies your website is subject to that would apply"
+" to using the CC field. For example, GDPR indicates names and emails are "
+"private that should not be exposed."
+msgstr ""
+
+#: includes/steps/class-common-step-settings.php:203
 msgid "BCC"
 msgstr "Dold kopia"
 
-#: includes/steps/class-common-step-settings.php:208
+#: includes/steps/class-common-step-settings.php:215
 msgid "Message"
 msgstr "Meddelande"
 
-#: includes/steps/class-common-step-settings.php:218
+#: includes/steps/class-common-step-settings.php:225
 msgid "Disable auto-formatting"
 msgstr "Inaktivera automatisk formatering"
 
-#: includes/steps/class-common-step-settings.php:221
+#: includes/steps/class-common-step-settings.php:228
 msgid ""
 "Disable auto-formatting to prevent paragraph breaks being automatically "
 "inserted when using HTML to create the email message."
 msgstr "Stäng av automatisk formatering för att förhindra att överflödiga radbrott läggs in om du använder HTML för att skapa meddelandet."
 
-#: includes/steps/class-common-step-settings.php:250
+#: includes/steps/class-common-step-settings.php:257
 msgid "Send reminder"
 msgstr "Sänd påminnelse"
 
-#: includes/steps/class-common-step-settings.php:256
-#: includes/steps/class-step.php:1104
+#: includes/steps/class-common-step-settings.php:263
+#: includes/steps/class-step.php:1105
 msgid "Reminder"
 msgstr "Påminnelse"
 
-#: includes/steps/class-common-step-settings.php:258
+#: includes/steps/class-common-step-settings.php:265
 msgid "Resend the assignee email after"
 msgstr "Sänd igen till den ansvariga personens e-post efter"
 
-#: includes/steps/class-common-step-settings.php:259
-#: includes/steps/class-common-step-settings.php:275
+#: includes/steps/class-common-step-settings.php:266
+#: includes/steps/class-common-step-settings.php:282
 msgid "day(s)"
 msgstr "dag(ar)"
 
-#: includes/steps/class-common-step-settings.php:269
+#: includes/steps/class-common-step-settings.php:276
 msgid "Repeat reminder"
 msgstr "Upprepa påminnelse"
 
-#: includes/steps/class-common-step-settings.php:274
+#: includes/steps/class-common-step-settings.php:281
 msgid "Repeat every"
 msgstr "Upprepa varje"
 
-#: includes/steps/class-common-step-settings.php:306
+#: includes/steps/class-common-step-settings.php:313
 msgid "Attach PDF(s)"
 msgstr "Bifoga en eller flera PDF-filer"
 
-#: includes/steps/class-common-step-settings.php:327
+#: includes/steps/class-common-step-settings.php:334
 msgid "Send an email to the assignee"
 msgstr "Skicka e-postmeddelande till den ansvariga personen"
 
-#: includes/steps/class-common-step-settings.php:328
+#: includes/steps/class-common-step-settings.php:335
 #: includes/steps/class-step-feed-wp-e-signature.php:109
 msgid ""
 "Enable this setting to send email to each of the assignees as soon as the "
@@ -2021,19 +2033,19 @@ msgid ""
 "the users with that role will receive the email."
 msgstr "Aktivera denna inställning för att skicka e-post till alla ansvariga personer så snart ärendet har tilldelats dem. Om en roll är konfigurerad för att ta emot e-post kommer alla användare med aktuell roll att få meddelandet."
 
-#: includes/steps/class-common-step-settings.php:358
+#: includes/steps/class-common-step-settings.php:365
 msgid "Emails"
 msgstr "E-postmeddelanden"
 
-#: includes/steps/class-common-step-settings.php:359
+#: includes/steps/class-common-step-settings.php:366
 msgid "Configure the emails that should be sent for this step."
 msgstr "Konfigurera de e-postmeddelanden som ska skickas för detta steg."
 
-#: includes/steps/class-common-step-settings.php:375
+#: includes/steps/class-common-step-settings.php:382
 msgid "Assign To:"
 msgstr "Tilldela uppgift till:"
 
-#: includes/steps/class-common-step-settings.php:394
+#: includes/steps/class-common-step-settings.php:401
 msgid ""
 "Users and roles fields will appear in this list. If the form contains any "
 "assignee fields they will also appear here. Click on an item to select it. "
@@ -2041,11 +2053,11 @@ msgid ""
 "anybody from that role can approve."
 msgstr "Fält för användare och roller kommer att visas i listan. Om formuläret innehåller några fält för angivande av ansvarig person kommer även dessa fält att visas här. Klicka på dem för att välja dem. De valda objekten kommer att visas till höger. Om du väljer en roll kan vem som helst från den rollen godkänna."
 
-#: includes/steps/class-common-step-settings.php:397
+#: includes/steps/class-common-step-settings.php:404
 msgid "Select Assignees"
 msgstr "Välj ansvariga personer"
 
-#: includes/steps/class-common-step-settings.php:423
+#: includes/steps/class-common-step-settings.php:430
 msgid ""
 "Build assignee routing rules by adding conditions. Users and roles fields "
 "will appear in the first drop-down field. If the form contains any assignee "
@@ -2053,40 +2065,40 @@ msgid ""
 "condition for that assignee. Add as many routing rules as you need."
 msgstr "Bygg regler för dirigering till ansvariga personer genom att lägga till villkor. Fält med användare och roller kommer att visas i den första rullgardinslistan. Om formuläret innehåller några fält för ansvariga personer kommer även de att visas här. Välj ansvarig person och definiera villkoret för att välja denna ansvariga person. Lägg till så många dirigeringsregler du behöver."
 
-#: includes/steps/class-common-step-settings.php:451
+#: includes/steps/class-common-step-settings.php:458
 msgid "Instructions"
 msgstr "Instruktioner"
 
-#: includes/steps/class-common-step-settings.php:453
+#: includes/steps/class-common-step-settings.php:460
 msgid ""
 "Activate this setting to display instructions to the user for the current "
 "step."
 msgstr "Aktivera denna inställning för att visa instruktioner till användaren för det aktuella steget."
 
-#: includes/steps/class-common-step-settings.php:455
+#: includes/steps/class-common-step-settings.php:462
 msgid "Display instructions"
 msgstr "Visa instruktioner"
 
-#: includes/steps/class-common-step-settings.php:474
+#: includes/steps/class-common-step-settings.php:481
 #: includes/steps/class-step-workflow-complete.php:102
 msgid "Display Fields"
 msgstr "Visa fält"
 
-#: includes/steps/class-common-step-settings.php:475
+#: includes/steps/class-common-step-settings.php:482
 msgid "Select the fields to hide or display."
 msgstr "Välj vilka fält som ska döljas eller visas."
 
-#: includes/steps/class-common-step-settings.php:492
+#: includes/steps/class-common-step-settings.php:499
 msgid "Confirmation Message"
 msgstr "Bekräftelsemeddelande"
 
-#: includes/steps/class-common-step-settings.php:494
+#: includes/steps/class-common-step-settings.php:501
 msgid ""
 "Activate this setting to display a custom confirmation message to the "
 "assignee for the current step."
 msgstr "Aktivera denna inställning för att visa ett anpassat bekräftelsemeddelande till den ansvariga personen för det aktuella steget."
 
-#: includes/steps/class-common-step-settings.php:496
+#: includes/steps/class-common-step-settings.php:503
 msgid "Display a custom confirmation message"
 msgstr "Visa ett anpassat bekräftelsemeddelande"
 
@@ -3125,19 +3137,19 @@ msgstr "Ogiltig cookie nonce"
 msgid "%s: No assignees"
 msgstr "%s: ansvarig person saknas"
 
-#: includes/steps/class-step.php:1087
+#: includes/steps/class-step.php:1088
 msgid "Sent Notification: "
 msgstr "Skickad notifiering: "
 
-#: includes/steps/class-step.php:2167
+#: includes/steps/class-step.php:2190
 msgid "Processed"
 msgstr "Har behandlats"
 
-#: includes/steps/class-step.php:2251
+#: includes/steps/class-step.php:2274
 msgid "A note is required"
 msgstr "En anteckning krävs"
 
-#: includes/steps/class-step.php:2296
+#: includes/steps/class-step.php:2319
 msgid "There was a problem while updating your form."
 msgstr "Ett problem inträffade när ditt formulär skulle uppdateras."
 

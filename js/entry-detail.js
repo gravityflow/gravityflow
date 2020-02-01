@@ -5,7 +5,7 @@
 
     GravityFlowEntryDetail.displayDiscussionItemToggle = function (formId, fieldId, displayLimit) {
 
-            $toggle = $(':focus').parent();
+            $toggle = $('.field_description_below');
             $toggle.find( '.gravityflow-dicussion-item-hidden' ).slideToggle( 'fast' );
 
             var $viewMore = $toggle.children( '.gravityflow-dicussion-item-toggle-display' );

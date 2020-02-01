@@ -223,7 +223,89 @@ class Gravity_Flow_API {
 	 * @param int   $step_id The ID of the step the entry is to be sent to.
 	 */
 	public function send_to_step( $entry, $step_id ) {
+
+		$form = GFAPI::get_form( $entry['form_id'] );
+
+		if ( ! $form ) {
+			gravity_flow()->log_debug( __METHOD__ . '(): No form associated for entry. No changes made to workflow/step status.' );
+			return;
+		}
+
 		$current_step = $this->get_current_step( $entry );
+		$new_step     = $this->get_step( $step_id, $entry );
+
+		/**
+		* Confirms whether the step conditions being met is required to send a workflow to a specific step.
+		*
+		* @since 2.5.10
+		*
+		* @param bool                   $conditions_met_required  Whether to pass a workflow to a step that has failed its required conditions.
+		* @param Gravity_Flow_Step      $new_step                 The proposed new step that failed its step conditions.
+		* @param Gravity_Flow_Step      $current_step             The current step.
+		* @param array                  $entry                    The current entry.
+		* @param array                  $form                     The current form.
+		*
+		* @return bool
+		*/
+		$conditions_met_required = apply_filters( 'gravityflow_send_to_step_condition_met_required', false, $new_step, $current_step, $entry, $form );
+
+		if ( $conditions_met_required ) {
+
+			if ( $new_step && ! $new_step->is_condition_met( $form ) ) {
+
+				$feedback = sprintf( esc_html__( 'Step condition(s) not met to send to step: %s', 'gravityflow' ), $new_step->get_name() );
+				$this->add_timeline_note( $entry['id'], $feedback );
+
+				$steps = gravity_flow()->get_steps( $form['id'], $entry );
+
+				$new_step_id = $new_step->get_id();
+				$check_step = false;
+				$next_step = false;
+
+				foreach ( $steps as $potential_step ) {
+					// Ensure we only start evaluating potential next steps after the provided step.
+					if ( $check_step == false && $potential_step->get_id() == $new_step_id ) {
+						$check_step = true;
+						continue;
+					}
+
+					if ( $check_step && $potential_step->is_condition_met( $form ) && $potential_step->is_active() ) {
+						$next_step = $potential_step;
+						break;
+					}
+
+				}
+
+				/**
+				* Determines what next step a workflow should proceed to instead of the selected step that failed its step conditions.
+				*
+				* @since 2.5.10
+				*
+				* @param bool|Gravity_Flow_Step $next_step      The next step to send the entry to. Defaults to the next step after the proposed new step that meets its' start conditions.
+				* @param Gravity_Flow_Step      $new_step       The proposed new step that failed its step conditions.
+				* @param Gravity_Flow_Step      $current_step   The current step.
+				* @param array                  $entry          The current entry.
+				* @param array                  $form           The current form.
+				*
+				* @return Gravity_Flow_Step
+				*/
+				$next_step = apply_filters( 'gravityflow_send_to_step_condition_not_met', $next_step, $new_step, $current_step, $entry, $form );
+
+				if ( ! $next_step || ! $next_step instanceof Gravity_Flow_Step ) {
+					return;
+				}
+
+				if ( $next_step->is_condition_met( $form ) && $next_step->is_active() ) {
+					$step_id = $next_step->get_id();
+				} else {
+					$feedback = sprintf( esc_html__( 'Step condition(s) not met to send to step: %s', 'gravityflow' ), $next_step->get_name() );
+					$this->add_timeline_note( $entry['id'], $feedback );
+					return;
+				}
+			}
+		}
+
+		// Cancel the active step if it exists before moving to next step.
 		if ( $current_step ) {
 			$current_step->purge_assignees();
 			$current_step->update_step_status( 'cancelled' );
@@ -236,6 +318,7 @@ class Gravity_Flow_API {
 		gform_update_meta( $entry_id, 'workflow_final_status', 'pending' );
 		$new_step->start();
 		$this->process_workflow( $entry_id );
+
 	}
 
 	/**
