@@ -10,11 +10,11 @@ php:
 env:
   matrix:
     - WP_VERSION=latest WP_MULTISITE=0
-    - WP_VERSION=5.1 WP_MULTISITE=0
+    - WP_VERSION=5.2 WP_MULTISITE=0
     - WP_VERSION=5.0 WP_MULTISITE=0
+    - WP_VERSION=4.9 WP_MULTISITE=0
     - WP_VERSION=4.8 WP_MULTISITE=0
-    - WP_VERSION=4.7 WP_MULTISITE=0
-    - WP_VERSION=4.5 WP_MULTISITE=0
+    - WP_VERSION=4.6 WP_MULTISITE=0
   global:
   - WP_TRAVISCI=travis:phpunit
 before_script:
@@ -34,7 +34,11 @@ before_script:
   # Install the specified version of PHPUnit depending on the PHP version:
   if [[ "$WP_TRAVISCI" == "travis:phpunit" ]]; then
     case "$TRAVIS_PHP_VERSION" in
-      7.2|7.3)
+      7.3|7.4)
+        echo "Using PHPUnit 7.0"
+        composer global require "phpunit/phpunit=7.0.*"
+        ;;
+      7.2)
         echo "Using PHPUnit 6.0"
         composer global require "phpunit/phpunit=6.0.*"
         ;;
@@ -106,6 +110,7 @@ jobs:
     env: WP_VERSION=5.1 WP_MULTISITE=0
   - php: 7.2
   - php: 7.3
+  - php: 7.4
   - stage: Extensions
     env: WP_TRAVISCI=none
     script: |
