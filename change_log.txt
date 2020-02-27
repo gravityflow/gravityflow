@@ -6,6 +6,7 @@
 - Added filter gravityflow_send_to_step_condition_met_required to allow customization of the API send_to_step when the proposed steps conditions are not met. Default is false that API will always send to the proposed step.
 - Added filter gravityflow_send_to_step_condition_not_met to allow customization of the API when the proposed next step has not met its step conditions. Defaults to next step after the proposed step.
 - Updated Outgoing Webhook settings to allow GET requests to include request body.
+- Updated gravityflow_print_styles filter to include 2nd parameter of entry IDs.
 - Fixed an issue with the User Input Step where editable Total, Coupon, Subtotal, Tax, or Discount fields required all other pricing fields to be editable to function correctly.
 - Fixed an issue with the User Input Step where the existing Coupon field value is not restored. Requires Coupons Add-On v2.9.2 or greater.
 - Fixed an issue with the User Input Step where the Coupon usage count is not updated.
