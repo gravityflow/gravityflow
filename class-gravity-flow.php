@@ -4956,6 +4956,11 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 								'tooltip' => esc_html__( 'This setting allows the display_all attribute to be used in the shortcode.', 'gravityflow' ),
 							),
 							array(
+								'label'   => esc_html__( 'Allow the Reports shortcode to display the report chart to all registered users.', 'gravityflow' ),
+								'name'    => 'allow_reports_display_all_attribute',
+								'tooltip' => esc_html__( 'This setting allows the display_all attribute to be used in the Reports shortcode.', 'gravityflow' ),
+							),
+							array(
 								'label'   => esc_html__( 'Allow the Status shortcode to display all entries to all anonymous users.', 'gravityflow' ),
 								'name'    => 'allow_allow_anonymous_attribute',
 								'tooltip' => esc_html__( 'This setting allows the allow_anonymous attribute to be used in the shortcode.', 'gravityflow' ),
@@ -6058,7 +6063,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 				$app_settings = $this->get_app_settings();
 
-				if ( $a['display_all'] && ! rgar( $app_settings, 'allow_display_all_attribute' ) && ! GFAPI::current_user_can_any( 'gravityflow_status_view_all' ) ) {
+				if ( $a['page'] === 'status' && $a['display_all'] && ! rgar( $app_settings, 'allow_display_all_attribute' ) && ! GFAPI::current_user_can_any( 'gravityflow_status_view_all' ) ) {
+
+					$a['display_all'] = false;
+				}
+
+				if ( $a['page'] === 'reports' && $a['display_all'] && ! rgar( $app_settings, 'allow_reports_display_all_attribute' ) && ! GFAPI::current_user_can_any( 'gravityflow_reports' ) ) {
 
 					$a['display_all'] = false;
 				}
@@ -6416,7 +6426,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'category'          => $a['category'],
 				'step_id'           => $a['step_id'],
 				'assignee'          => $a['assignee'],
-				'check_permissions' => ( $a['allow_anonymous'] ) ? false : true
+				'check_permissions' => ( $a['allow_anonymous'] || $a['display_all'] ) ? false : true
 			);
 
 			ob_start();
