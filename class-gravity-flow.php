@@ -4961,6 +4961,11 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 								'tooltip' => esc_html__( 'This setting allows the allow_anonymous attribute to be used in the shortcode.', 'gravityflow' ),
 							),
 							array(
+								'label'   => esc_html__( 'Allow the Reports shortcode to display the report chart to all anonymous users.', 'gravityflow' ),
+								'name'    => 'allow_reports_allow_anonymous_attribute',
+								'tooltip' => esc_html__( 'This setting allows the allow_anonymous attribute to be used in the Reports shortcode.', 'gravityflow' ),
+							),
+							array(
 								'label'   => esc_html__( 'Allow the Inbox and Status shortcodes to display field values.', 'gravityflow' ),
 								'name'    => 'allow_field_ids',
 								'tooltip' => esc_html__( 'This setting allows the fields attribute to be used in the shortcode.', 'gravityflow' ),
@@ -6058,7 +6063,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$a['display_all'] = false;
 				}
 
-				if ( $a['allow_anonymous'] && ! rgar( $app_settings, 'allow_allow_anonymous_attribute' ) ) {
+				if ( $a['page'] === 'status' && $a['allow_anonymous'] && ! rgar( $app_settings, 'allow_allow_anonymous_attribute' ) ) {
+
+					$a['allow_anonymous'] = false;
+				}
+
+				if ( $a['page'] === 'reports' && $a['allow_anonymous'] && ! rgar( $app_settings, 'allow_reports_allow_anonymous_attribute' ) ) {
 
 					$a['allow_anonymous'] = false;
 				}
@@ -6392,8 +6402,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			wp_enqueue_script( 'gravityflow_reports', $this->get_base_url() . "/js/reports{$min}.js",  array( 'jquery', 'google_charts' ), $this->_version );
 
 			$args = array(
-				'display_header' => false,
-				'base_url'       => remove_query_arg( array(
+				'display_header'    => false,
+				'base_url'          => remove_query_arg( array(
 					'page',
 					'range',
 					'form-id',
@@ -6401,11 +6411,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					'step-id',
 					'assignee',
 				) ),
-				'form_id'        => $a['form'],
-				'range'          => $a['range'],
-				'category'       => $a['category'],
-				'step_id'        => $a['step_id'],
-				'assignee'       => $a['assignee'],
+				'form_id'           => $a['form'],
+				'range'             => $a['range'],
+				'category'          => $a['category'],
+				'step_id'           => $a['step_id'],
+				'assignee'          => $a['assignee'],
+				'check_permissions' => ( $a['allow_anonymous'] ) ? false : true
 			);
 
 			ob_start();
