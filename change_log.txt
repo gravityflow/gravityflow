@@ -5,6 +5,7 @@
 - Added support for Gravity Forms conditional shortcode within Outgoing webhook raw body requests.
 - Added filter gravityflow_send_to_step_condition_met_required to allow customization of the API send_to_step when the proposed steps conditions are not met. Default is false that API will always send to the proposed step.
 - Added filter gravityflow_send_to_step_condition_not_met to allow customization of the API when the proposed next step has not met its step conditions. Defaults to next step after the proposed step.
+- Added workflow note when the Update User step is completed.
 - Updated Outgoing Webhook settings to allow GET requests to include request body.
 - Updated gravityflow_print_styles filter to include 2nd parameter of entry IDs.
 - Fixed an issue with the User Input Step where editable Total, Coupon, Subtotal, Tax, or Discount fields required all other pricing fields to be editable to function correctly.
