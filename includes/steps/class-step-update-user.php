@@ -302,12 +302,16 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 
 		if ( ! $user ) {
 			$this->log_debug( __METHOD__ . '(): user not found. Bailing.' );
+			/* translators: %s: The step name */
 			$this->add_note( sprintf( esc_html__( '%s: User not found.', 'gravityflow' ), $this->get_name() ) );
 		} elseif ( is_multisite() && ! is_user_member_of_blog( $user->ID, get_current_blog_id() ) ) {
 			$this->log_debug( __METHOD__ . '(): user is not a member of the current site. Bailing.' );
+			/* translators: %s: The step name */
 			$this->add_note( sprintf( esc_html__( '%s: User is not a member of the current site.', 'gravityflow' ), $this->get_name() ) );
 		} else {
 			$this->set_user_properties( $user );
+			/* translators: %s: The step name */
+			$this->add_note( sprintf( esc_html__( '%s: User has been updated.', 'gravityflow' ), $this->get_name() ) );
 		}
 
 		return true;
