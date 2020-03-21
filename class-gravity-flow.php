@@ -4956,24 +4956,19 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 								'tooltip' => esc_html__( 'This setting allows the display_all attribute to be used in the shortcode.', 'gravityflow' ),
 							),
 							array(
-								'label'   => esc_html__( 'Allow the Reports shortcode to display the report chart to all registered users.', 'gravityflow' ),
-								'name'    => 'allow_reports_display_all_attribute',
-								'tooltip' => esc_html__( 'This setting allows the display_all attribute to be used in the Reports shortcode.', 'gravityflow' ),
-							),
-							array(
 								'label'   => esc_html__( 'Allow the Status shortcode to display all entries to all anonymous users.', 'gravityflow' ),
 								'name'    => 'allow_allow_anonymous_attribute',
 								'tooltip' => esc_html__( 'This setting allows the allow_anonymous attribute to be used in the shortcode.', 'gravityflow' ),
 							),
 							array(
-								'label'   => esc_html__( 'Allow the Reports shortcode to display the report chart to all anonymous users.', 'gravityflow' ),
-								'name'    => 'allow_reports_allow_anonymous_attribute',
-								'tooltip' => esc_html__( 'This setting allows the allow_anonymous attribute to be used in the Reports shortcode.', 'gravityflow' ),
-							),
-							array(
 								'label'   => esc_html__( 'Allow the Inbox and Status shortcodes to display field values.', 'gravityflow' ),
 								'name'    => 'allow_field_ids',
 								'tooltip' => esc_html__( 'This setting allows the fields attribute to be used in the shortcode.', 'gravityflow' ),
+							),
+							array(
+								'label'   => esc_html__( 'Allow the Reports shortcode to display workflow reports.', 'gravityflow' ),
+								'name'    => 'allow_display_reports',
+								'tooltip' => esc_html__( 'This setting allows the Reports shortcode to display workflow reports.', 'gravityflow' ),
 							),
 						),
 					),
@@ -6401,10 +6396,6 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			wp_enqueue_script( 'google_charts', 'https://www.google.com/jsapi',  array(), $this->_version );
 			wp_enqueue_script( 'gravityflow_reports', $this->get_base_url() . "/js/reports{$min}.js",  array( 'jquery', 'google_charts' ), $this->_version );
 
-			$app_settings    = $this->get_app_settings();
-			$display_all     = rgar( $app_settings, 'allow_reports_display_all_attribute' ) && is_user_logged_in();
-			$allow_anonymous = rgar( $app_settings, 'allow_reports_allow_anonymous_attribute' );
-
 			$args = array(
 				'display_header'    => false,
 				'base_url'          => remove_query_arg( array(
@@ -6420,7 +6411,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'category'          => $a['category'],
 				'step_id'           => $a['step_id'],
 				'assignee'          => $a['assignee'],
-				'check_permissions' => ( $display_all || $allow_anonymous ) ? false : true
+				'check_permissions' => false,
 			);
 
 			ob_start();
