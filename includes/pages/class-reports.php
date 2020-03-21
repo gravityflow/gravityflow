@@ -70,18 +70,7 @@ class Gravity_Flow_Reports {
 		 */
 		$args = apply_filters( 'gravityflow_reports_args', array_merge( $defaults, $args ) );
 
-		$is_allowed = true;
-
 		if ( $args['check_permissions'] && ! GFAPI::current_user_can_any( 'gravityflow_reports' ) ) {
-			$is_allowed = false;
-		}
-
-		// Shortcode wouldn't check permissions.
-		if ( ! $args['check_permissions'] && ! $args['allow_display_reports'] ) {
-			$is_allowed = false;
-		}
-
-		if ( ! $is_allowed ) {
 			esc_html_e( "You don't have permission to view this page", 'gravityflow' );
 			return;
 		}

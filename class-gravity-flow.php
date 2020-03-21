@@ -6414,8 +6414,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'category'              => $a['category'],
 				'step_id'               => $a['step_id'],
 				'assignee'              => $a['assignee'],
-				'check_permissions'     => false,
-				'allow_display_reports' => GFAPI::current_user_can_any( 'gravityflow_reports' ) ? true : $allow_reports,
+				'check_permissions'     => ! $allow_reports,
 			);
 
 			ob_start();
