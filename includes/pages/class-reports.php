@@ -76,10 +76,8 @@ class Gravity_Flow_Reports {
 			$is_allowed = false;
 		}
 
-		$app_settings  = gravity_flow()->get_app_settings();
-		$allow_reports = rgar( $app_settings, 'allow_display_reports' );
 		// Shortcode wouldn't check permissions.
-		if ( ! $args['check_permissions'] && ! $allow_reports && ! GFAPI::current_user_can_any( 'gravityflow_reports' ) ) {
+		if ( ! $args['check_permissions'] && ! $args['allow_display_reports'] ) {
 			$is_allowed = false;
 		}
 
