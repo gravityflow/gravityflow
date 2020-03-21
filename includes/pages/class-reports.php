@@ -61,7 +61,14 @@ class Gravity_Flow_Reports {
 			'base_url'          => admin_url( 'admin.php?page=gravityflow-reports' ),
 		);
 
-		$args = array_merge( $defaults, $args );
+		/**
+		 * Allow the reports display arguments to be overridden.
+		 *
+		 * @since 2.5.10
+		 *
+		 * @param array $args The reports display arguments.
+		 */
+		$args = apply_filters( 'gravityflow_reports_args', array_merge( $defaults, $args ) );
 
 		if ( $args['check_permissions'] && ! GFAPI::current_user_can_any( 'gravityflow_reports' ) ) {
 			esc_html_e( "You don't have permission to view this page", 'gravityflow' );

@@ -6063,22 +6063,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 				$app_settings = $this->get_app_settings();
 
-				if ( $a['page'] === 'status' && $a['display_all'] && ! rgar( $app_settings, 'allow_display_all_attribute' ) && ! GFAPI::current_user_can_any( 'gravityflow_status_view_all' ) ) {
+				if ( $a['display_all'] && ! rgar( $app_settings, 'allow_display_all_attribute' ) && ! GFAPI::current_user_can_any( 'gravityflow_status_view_all' ) ) {
 
 					$a['display_all'] = false;
 				}
 
-				if ( $a['page'] === 'reports' && $a['display_all'] && ! rgar( $app_settings, 'allow_reports_display_all_attribute' ) && ! GFAPI::current_user_can_any( 'gravityflow_reports' ) ) {
-
-					$a['display_all'] = false;
-				}
-
-				if ( $a['page'] === 'status' && $a['allow_anonymous'] && ! rgar( $app_settings, 'allow_allow_anonymous_attribute' ) ) {
-
-					$a['allow_anonymous'] = false;
-				}
-
-				if ( $a['page'] === 'reports' && $a['allow_anonymous'] && ! rgar( $app_settings, 'allow_reports_allow_anonymous_attribute' ) ) {
+				if ( $a['allow_anonymous'] && ! rgar( $app_settings, 'allow_allow_anonymous_attribute' ) ) {
 
 					$a['allow_anonymous'] = false;
 				}
@@ -6411,6 +6401,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			wp_enqueue_script( 'google_charts', 'https://www.google.com/jsapi',  array(), $this->_version );
 			wp_enqueue_script( 'gravityflow_reports', $this->get_base_url() . "/js/reports{$min}.js",  array( 'jquery', 'google_charts' ), $this->_version );
 
+			$app_settings    = $this->get_app_settings();
+			$display_all     = rgar( $app_settings, 'allow_reports_display_all_attribute' ) && is_user_logged_in();
+			$allow_anonymous = rgar( $app_settings, 'allow_reports_allow_anonymous_attribute' );
+
 			$args = array(
 				'display_header'    => false,
 				'base_url'          => remove_query_arg( array(
@@ -6426,7 +6420,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'category'          => $a['category'],
 				'step_id'           => $a['step_id'],
 				'assignee'          => $a['assignee'],
-				'check_permissions' => ( $a['allow_anonymous'] || $a['display_all'] ) ? false : true
+				'check_permissions' => ( $display_all || $allow_anonymous ) ? false : true
 			);
 
 			ob_start();
