@@ -4966,9 +4966,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 								'tooltip' => esc_html__( 'This setting allows the fields attribute to be used in the shortcode.', 'gravityflow' ),
 							),
 							array(
-								'label'   => esc_html__( 'Allow the Reports shortcode to display workflow reports.', 'gravityflow' ),
+								'label'   => esc_html__( 'Allow the Reports shortcode to display workflow reports to all registered and anonymous users.', 'gravityflow' ),
 								'name'    => 'allow_display_reports',
-								'tooltip' => esc_html__( 'This setting allows the Reports shortcode to display workflow reports.', 'gravityflow' ),
+								'tooltip' => esc_html__( 'This setting allows the Reports shortcode to display workflow reports to all registered and anonymous users.', 'gravityflow' ),
 							),
 						),
 					),
