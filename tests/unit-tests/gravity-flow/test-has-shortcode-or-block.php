@@ -25,9 +25,11 @@ class Tests_Gravity_Flow_Has_Shortcode_Or_Block extends GF_UnitTestCase {
 	public function test_reusable_block() {
 		$id = wp_insert_post( array(
 			'post_type'    => 'wp_block',
-			'post_content' => '<!-- wp:gravityflow/inbox /-->',
+			'post_content' => '<!-- WP:GRAVITYFLOW/INBOX /-->',
 		) );
 		$this->assertTrue( gravity_flow()->has_shortcode_or_block( sprintf( '<!-- wp:block {"ref":%d} /-->', $id ) ) );
+		$this->assertFalse( gravity_flow()->has_shortcode_or_block( '<!-- wp:block /-->' ) );
+		$this->assertFalse( gravity_flow()->has_shortcode_or_block( '<!-- wp:block {"ref":-1} /-->' ) );
 	}
 
 }

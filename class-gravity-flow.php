@@ -844,16 +844,11 @@ PRIMARY KEY  (id)
 			$blocks = parse_blocks( $post_content );
 
 			foreach ( $blocks as $block ) {
-				if ( rgar( $block, 'blockName' ) !== 'core/block' ) {
+				if ( rgar( $block, 'blockName' ) !== 'core/block' || empty( $block['attrs']['ref'] ) ) {
 					continue;
 				}
 
-				$ref = rgars( $block, 'attrs/ref' );
-				if ( empty( $ref ) ) {
-					continue;
-				}
-
-				$reusable_block = get_post( $ref );
+				$reusable_block = get_post( $block['attrs']['ref'] );
 				if ( empty( $reusable_block ) || $reusable_block->post_type !== 'wp_block' ) {
 					continue;
 				}
