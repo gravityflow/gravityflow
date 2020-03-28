@@ -803,21 +803,20 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * Determines if the gravityflow shortcode is used in the post content.
+		 * Determines if at least one of the posts for the current WP query contains the shortcode or block.
 		 *
 		 * @return bool
 		 */
 		public function look_for_shortcode() {
 			global $wp_query;
 
-			$shortcode_found = false;
 			foreach ( $wp_query->posts as $post ) {
-				if ( stripos( $post->post_content, '[gravityflow' ) !== false || stripos( $post->post_content, '<!-- wp:gravityflow/' ) !== false ) {
-					$shortcode_found = true;
-					break;
+				if ( $post instanceof WP_Post && $this->has_shortcode_or_block( $post->post_content ) ) {
+					return true;
 				}
 			}
-			return $shortcode_found;
+
+			return false;
 		}
 
 		/**
