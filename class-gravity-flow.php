@@ -837,7 +837,7 @@ PRIMARY KEY  (id)
 				return true;
 			}
 
-			if ( ! has_block( 'core/block' ) ) {
+			if ( ! function_exists( 'has_block' ) || ! has_block( 'core/block' ) ) {
 				return false;
 			}
 
