@@ -821,6 +821,53 @@ PRIMARY KEY  (id)
 		}
 
 		/**
+		 * Determines if the supplied post content contains the shortcode or block (also checks post content for reusable blocks).
+		 *
+		 * @since 2.5.10
+		 *
+		 * @param string $post_content The post content to be checked.
+		 *
+		 * @return bool
+		 */
+		public function has_shortcode_or_block( $post_content ) {
+			if ( empty( $post_content ) ) {
+				return false;
+			}
+
+			if ( stripos( $post_content, '[gravityflow' ) !== false || stripos( $post_content, '<!-- wp:gravityflow/' ) !== false ) {
+				return true;
+			}
+
+			if ( ! has_block( 'core/block' ) ) {
+				return false;
+			}
+
+			$blocks = parse_blocks( $post_content );
+
+			foreach ( $blocks as $block ) {
+				if ( rgar( $block, 'blockName' ) !== 'core/block' ) {
+					continue;
+				}
+
+				$ref = rgars( $block, 'attrs/ref' );
+				if ( empty( $ref ) ) {
+					continue;
+				}
+
+				$reusable_block = get_post( $ref );
+				if ( empty( $reusable_block ) || $reusable_block->post_type !== 'wp_block' ) {
+					continue;
+				}
+
+				if ( $this->has_shortcode_or_block( $reusable_block->post_content ) ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/**
 		 * Target of the nonce_user_logged_out hook.
 		 *
 		 * Sets the uid used in the logged out user nonce to the assignee key.
