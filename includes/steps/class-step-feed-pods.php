@@ -3,7 +3,7 @@
  * Gravity Flow Step Feed Pods
  *
  * @package     GravityFlow
- * @subpackage  Classes/Gravity_Flow_Step_Feed_Drip
+ * @subpackage  Classes/Gravity_Flow_Step_Feed_Pods
  * @copyright   Copyright (c) 2020, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @since       2.5.10
