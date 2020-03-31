@@ -153,9 +153,9 @@ tr#gaddon-setting-row-step_type label > span {
     -webkit-transition: all 100ms ease-in;
     -moz-transition: all 100ms ease-in;
     transition: all 100ms ease-in;
-    -webkit-filter: brightness(1.8) grayscale(1) opacity(.5);
-    -moz-filter: brightness(1.8) grayscale(1) opacity(.5);
-    filter: brightness(1.8) grayscale(1) opacity(.5);
+    -webkit-filter: brightness(1.3) grayscale(1) opacity(.5);
+    -moz-filter: brightness(1.3) grayscale(1) opacity(.5);
+    filter: brightness(1.3) grayscale(1) opacity(.5);
 }
 
 .gravityflow-disabled label{
