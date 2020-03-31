@@ -57,7 +57,7 @@ class Gravity_Flow_Step_Feed_Pods extends Gravity_Flow_Step_Feed_Add_On {
 	 * @return string
 	 */
 	public function get_icon_url() {
-		return $this->get_base_url() . '/images/pods-circle-green.png';
+		return $this->get_base_url() . '/images/pods-circle-green.svg';
 	}
 
 	/**
