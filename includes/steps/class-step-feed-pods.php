@@ -50,7 +50,7 @@ class Gravity_Flow_Step_Feed_Pods extends Gravity_Flow_Step_Feed_Add_On {
 	}
 
 	/**
-	 * Returns the HTML for the step icon.
+	 * Returns the URL for the step icon.
 	 *
 	 * @since 2.5.10
 	 *
