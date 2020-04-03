@@ -19,4 +19,4 @@
 - Fixed an issue where the report data for assignees by month is incorrect.
 - Fixed an issue where the Discussion Field view more/less effect would not operate on the Form > Entries screen (both view and edit).
 - Fixed an issue where the scripts and styles are not enqueued when using the shortcode or block in a reusable block.
-- Fixed an issue of duplicacy on Workflow steps with Gravity Forms Hub Spot Add-on and third party Hub Spot Add-on.
+- Fixed an issue in the step settings page where duplicate Workflow step icons appear for the Gravity Forms HubSpot Add-on and third-party HubSpot Add-on. IMPORTANT: check that your HubSpot workflow steps are correct after updating to this version.
