@@ -20,3 +20,4 @@
 - Fixed an issue where the Discussion Field view more/less effect would not operate on the Form > Entries screen (both view and edit).
 - Fixed an issue where the scripts and styles are not enqueued when using the shortcode or block in a reusable block.
 - Fixed an issue in the step settings page where duplicate Workflow step icons appear for the Gravity Forms HubSpot Add-on and third-party HubSpot Add-on. IMPORTANT: check that your HubSpot workflow steps are correct after updating to this version.
+- Fixed a bug with 'Schedule expiration' on Workflow step. 'Next Step if Expired' option should only appear when 'Status after expiration' is set as 'Expired'.
