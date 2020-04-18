@@ -201,6 +201,45 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 		return $is_supported;
 	}
 
+	/**
+	 * Updates the selected Zapier feed IDs in the step meta when Zapier Add-On 4.0+ migrates the feeds to the add-on framework.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param array $migrated_feeds An array of migrated Zapier feeds.
+	 */
+	public static function migrate( $migrated_feeds ) {
+		$steps = gravity_flow()->get_steps();
+
+		foreach ( $steps as $step ) {
+			if ( $step->get_type() !== 'zapier' ) {
+				continue;
+			}
+
+			$step_dirty = false;
+			$step_meta  = $step->get_feed_meta();
+
+			foreach ( $migrated_feeds as $feed ) {
+				$legacy_id = rgars( $feed, 'meta/legacy_id' );
+				if ( $legacy_id && isset( $step_meta[ 'feed_' . $legacy_id ] ) ) {
+					$step_dirty = true;
+					$enabled    = $step_meta[ 'feed_' . $legacy_id ] == '1';
+					unset( $step_meta[ 'feed_' . $legacy_id ] );
+					if ( $enabled ) {
+						$step_meta[ 'feed_' . $feed['id'] ] = '1';
+					}
+				}
+			}
+
+			if ( $step_dirty ) {
+				gravity_flow()->update_feed_meta( $step->get_id(), $step_meta );
+			}
+
+		}
+	}
+
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Zapier() );
+
+add_action( 'gform_zapier_post_migrate_feeds', array( 'Gravity_Flow_Step_Feed_Zapier', 'migrate' ) );
