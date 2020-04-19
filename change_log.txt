@@ -2,11 +2,13 @@
 - Added security enhancements.
 - Added support for the GP eCommerce Fields on the User Input Step.
 - Added support for the Gravity Forms EmailOctopus Add-On.
+- Added support for the Pods Gravity Forms Add-On.
 - Added support for Gravity Forms conditional shortcode within Outgoing webhook raw body requests.
 - Added filter gravityflow_send_to_step_condition_met_required to allow customization of the API send_to_step when the proposed steps conditions are not met. Default is false that API will always send to the proposed step.
 - Added filter gravityflow_send_to_step_condition_not_met to allow customization of the API when the proposed next step has not met its step conditions. Defaults to next step after the proposed step.
 - Added setting to allow the reports shortcode.
 - Added workflow note when the Update User step is completed.
+- Updated the Zapier step to support Gravity Forms Zapier Add-On v4.0-beta-1.1 and greater.
 - Updated Outgoing Webhook settings to allow GET requests to include request body.
 - Updated gravityflow_print_styles filter to include 2nd parameter of entry IDs.
 - Fixed an issue with the User Input Step where editable Total, Coupon, Subtotal, Tax, or Discount fields required all other pricing fields to be editable to function correctly.
@@ -20,3 +22,4 @@
 - Fixed an issue where the Discussion Field view more/less effect would not operate on the Form > Entries screen (both view and edit).
 - Fixed an issue where the scripts and styles are not enqueued when using the shortcode or block in a reusable block.
 - Fixed an issue in the step settings page where duplicate Workflow step icons appear for the Gravity Forms HubSpot Add-on and third-party HubSpot Add-on. IMPORTANT: check that your HubSpot workflow steps are correct after updating to this version.
+- Fixed a bug with 'Schedule expiration' on Workflow step. 'Next Step if Expired' option should only appear when 'Status after expiration' is set as 'Expired'.

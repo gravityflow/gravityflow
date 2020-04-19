@@ -73,7 +73,7 @@
 		$('#expiration_sub_setting_destination_expired').toggle(expiredSelected);
 		$statusExpiration.change(function () {
 			var show = $(this).val() == 'expired';
-			$('#expiration_sub_setting_destination_expired').fadeToggle(show);
+			show ? $('#expiration_sub_setting_destination_expired').show() : $('#expiration_sub_setting_destination_expired').hide();
 		});
 
 		setSubSettings();
