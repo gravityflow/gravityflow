@@ -216,22 +216,23 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 				continue;
 			}
 
-			$step_dirty = false;
+			$to_migrate = array();
 			$step_meta  = $step->get_feed_meta();
 
 			foreach ( $migrated_feeds as $feed ) {
 				$legacy_id = rgars( $feed, 'meta/legacy_id' );
 				if ( $legacy_id && isset( $step_meta[ 'feed_' . $legacy_id ] ) ) {
-					$step_dirty = true;
-					$enabled    = $step_meta[ 'feed_' . $legacy_id ] == '1';
+					$to_migrate[ $legacy_id ] = $step_meta[ 'feed_' . $legacy_id ] == '1' ? $feed['id'] : false;
 					unset( $step_meta[ 'feed_' . $legacy_id ] );
-					if ( $enabled ) {
-						$step_meta[ 'feed_' . $feed['id'] ] = '1';
-					}
 				}
 			}
 
-			if ( $step_dirty ) {
+			if ( ! empty( $to_migrate ) ) {
+				foreach ( $to_migrate as $legacy_id => $new_id ) {
+					if ( $new_id !== false ) {
+						$step_meta[ 'feed_' . $new_id ] = '1';
+					}
+				}
 				gravity_flow()->update_feed_meta( $step->get_id(), $step_meta );
 			}
 
