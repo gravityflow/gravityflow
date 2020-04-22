@@ -688,8 +688,12 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		$args = apply_filters( 'gravityflow_webhook_args_' . $this->get_form_id(), $args, $entry, $this );
 
 		$response = wp_remote_request( $url, $args );
-		$this->log_debug( __METHOD__ . '() - request: ' . print_r( $args, true ) );
-		$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response, true ) );
+		$args_adjusted = $args;
+		unset( $args_adjusted['body'] );
+		$response_adjusted = $response;
+		unset( $response_adjusted['headers'], $response_adjusted['cookies'], $response_adjusted['http_response'] );
+		$this->log_debug( __METHOD__ . '() - request: ' . print_r( $args_adjusted, true ) );
+		$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response_adjusted, true ) );
 
 		if ( is_wp_error( $response ) ) {
 			$step_status = 'error';

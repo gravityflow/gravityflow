@@ -1519,7 +1519,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 		if ( ! empty( $this->type ) ) {
 			$this->maybe_add_select_assignees();
 			$this->maybe_add_routing_assignees();
-			$this->log_debug( __METHOD__ . '(): assignees: ' . print_r( $this->get_assignee_keys(), true ) );
+			$this->log_debug( __METHOD__ . '(): assignees: ' . json_encode( $this->get_assignee_keys() ) );
 
 			/**
 			 * Allows the assignees to be modified for the step.

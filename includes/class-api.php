@@ -515,7 +515,7 @@ class Gravity_Flow_API {
 		 */
 		$form_ids = apply_filters( 'gravityflow_form_ids_inbox', $form_ids, $search_criteria );
 
-		gravity_flow()->log_debug( __METHOD__ . '(): ' . print_r( $form_ids, 1 ) );
+		gravity_flow()->log_debug( __METHOD__ . '(): ' . json_encode( $form_ids ) );
 
 		return $form_ids;
 	}

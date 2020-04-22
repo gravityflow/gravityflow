@@ -6981,7 +6981,7 @@ AND m.meta_value='queued'";
 
 			$form_ids = $this->get_workflow_form_ids();
 
-			$this->log_debug( __METHOD__ . '(): workflow form IDs: ' . print_r( $form_ids, true ) );
+			$this->log_debug( __METHOD__ . '(): workflow form IDs: ' . json_encode( $form_ids ) );
 
 			foreach ( $form_ids as $form_id ) {
 				$form = GFAPI::get_form( $form_id );
