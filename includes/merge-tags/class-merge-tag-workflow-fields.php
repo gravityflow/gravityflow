@@ -63,6 +63,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 				$modifiers = rgar( $match, 2 );
 
 				$a = $this->get_attributes( $modifiers, array(
+					'show_empty'	=> false,	// Output empty fields (for User Input step).
 					'empty'    => false, // Output empty fields.
 					'value'    => false, // Output choice values.
 					'admin'    => false, // Output admin labels.
@@ -109,8 +110,20 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 	 */
 	public function merge_tag_filter( $value, $merge_tag, $modifiers, $field ) {
 		$modifiers_array        = $field->get_modifiers();
+		$display_show_empty			= in_array( 'show_empty', $modifiers_array ) && Gravity_Flow_Common::is_editable_field( $field, $this->step );
 		$display_editable_field = in_array( 'editable', $modifiers_array ) && Gravity_Flow_Common::is_editable_field( $field, $this->step );
 		$display_display_field  = in_array( 'display', $modifiers_array ) && Gravity_Flow_Common::is_display_field( $field, $this->step, $this->form, $this->entry );
+
+		if ( in_array( 'show_empty', $modifiers_array ) ) {
+			// Only display editable fields with 'show_empty' for a User Input step.
+			if ( $display_show_empty ) {
+				$value = ' ';
+				return $value;
+			}
+			else {
+				return false;
+			}
+		}
 
 		if ( ! $display_editable_field && ! $display_display_field ) {
 			// Removing non-editable and non-display field from merge tag output.
