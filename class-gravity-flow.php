@@ -8353,6 +8353,8 @@ AND m.meta_value='queued'";
 			if ( is_array( $logic['rules'] ) ) {
 				foreach ( $logic['rules'] as $rule ) {
 
+					$rule['value'] = GFCommon::replace_variables( $rule['value'], $form, $entry, false, false, false, 'text' );
+					
 					if ( in_array( $rule['fieldId'], $entry_meta_keys ) ) {
 						$is_value_match = GFFormsModel::is_value_match( rgar( $entry, $rule['fieldId'] ), $rule['value'], $rule['operator'], null, $rule, $form );
 					} else {
