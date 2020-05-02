@@ -278,7 +278,16 @@ class Gravity_Flow_Partial_Entries {
 
 		// Abort if the partial entry was not found.
 		if ( empty( $entries ) ) {
-			return $form;
+			$empty_form = array (
+				'title'        => $form['title'],
+				'description'  => 'This partial entry was already completed!',
+				'is_active'    => '0',
+				'button'  		 => array (
+					'type' => 'text',
+					'text' => 'No data to process here.',
+				)
+			);
+			return $empty_form;
 		}
 
 		$entry        = $entries[0];
