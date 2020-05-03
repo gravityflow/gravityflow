@@ -123,7 +123,7 @@ class Gravity_Flow_Reports {
 
 		if ( empty( $args['form_id'] ) ) {
 
-			$output = self::report_all_forms( $args );
+			$output = self::report_all_forms( $args, $context );
 
 			if ( $context === 'html' ) {
 			    echo $output;
