@@ -71,7 +71,7 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 					'display'  => true, // Output the steps display fields.
 				) );
 
-				$replacement = GFCommon::get_submitted_fields( $this->form, $entry, $a['empty'], ! $a['value'], $this->format, $a['admin'], $this->name, $this->get_options_string( $a ) );
+				$replacement = GFCommon::get_submitted_fields( $this->form, $entry, $a['empty'], ! $a['value'], $this->format, $a['admin'], $this->name, $modifiers );
 				$text        = str_replace( $full_tag, $replacement, $text );
 			}
 
@@ -110,20 +110,37 @@ class Gravity_Flow_Merge_Tag_Workflow_Fields extends Gravity_Flow_Merge_Tag {
 	 */
 	public function merge_tag_filter( $value, $merge_tag, $modifiers, $field ) {
 		$modifiers_array        = $field->get_modifiers();
-		$display_show_empty			= in_array( 'show_empty', $modifiers_array ) && Gravity_Flow_Common::is_editable_field( $field, $this->step );
+
+		// default case
+		if ( $modifiers_array[0] == '' ) {
+			return $value;
+		}
+
+		$is_empty_field = false;
+		if ( $this->step->get_entry()[ $field->id ] == '' ) {
+			$is_empty_field = true;
+		}
+
+		$display_empty_field    = in_array( 'empty', $modifiers_array ) && $is_empty_field;
 		$display_editable_field = in_array( 'editable', $modifiers_array ) && Gravity_Flow_Common::is_editable_field( $field, $this->step );
 		$display_display_field  = in_array( 'display', $modifiers_array ) && Gravity_Flow_Common::is_display_field( $field, $this->step, $this->form, $this->entry );
 
-		if ( in_array( 'show_empty', $modifiers_array ) ) {
-			// Only display editable fields with 'show_empty' for a User Input step.
-			if ( $display_show_empty ) {
-				$value = ' ';
+		if ( $display_editable_field ) {
+			if ( $is_empty_field ) {
+				return ' ';
+			} else {
 				return $value;
 			}
-			else {
+		}
+
+		if ( $display_empty_field ) {
+			if ( in_array( 'editable', $modifiers_array ) ) {
 				return false;
+			} else {
+				return ' ';
 			}
 		}
+
 
 		if ( ! $display_editable_field && ! $display_display_field ) {
 			// Removing non-editable and non-display field from merge tag output.
