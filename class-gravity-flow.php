@@ -756,6 +756,16 @@ PRIMARY KEY  (id)
 						'nonce'   => $nonce,
 					),
 				),
+				array(
+					'handle' => 'gravityflow_approval',
+					'src' => $this->get_base_url() . "/js/approval-box{$min}.js",
+					'version' => $this->_version,
+					'enqueue' => array(
+						array(
+							'query' => 'page=gravityflow-inbox',
+						),
+					),
+				),
 			);
 
 			$magic = true;
@@ -782,6 +792,7 @@ PRIMARY KEY  (id)
 					wp_enqueue_script( 'gravityflow_entry_detail', $this->get_base_url() . "/js/entry-detail{$min}.js", array( 'jquery', 'sack' ), $this->_version );
 					wp_enqueue_script( 'gravityflow_status_list', $this->get_base_url() . "/js/status-list{$min}.js",  array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'gform_datepicker_init' ), $this->_version );
 					wp_enqueue_script( 'gform_field_filter', GFCommon::get_base_url() . "/js/gf_field_filter{$min}.js",  array( 'jquery', 'gform_datepicker_init' ), $this->_version );
+					wp_enqueue_script( 'gravityflow_approval', $this->get_base_url() . "/js/approval-box{$min}.js",  array(), $this->_version );
 					wp_enqueue_script( 'gravityflow_frontend', $this->get_base_url() . "/js/frontend{$min}.js",  array(), $this->_version );
 					wp_enqueue_script( 'gravityflow_inbox', $this->get_base_url() . "/js/inbox{$min}.js",  array(), $this->_version );
 
