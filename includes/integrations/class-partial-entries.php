@@ -314,7 +314,7 @@ class Gravity_Flow_Partial_Entries {
 	 * @since 2.5
 	 */
 	public function partial_entry_complete() {
-		return '<p>' . esc_html__( 'This entry has completed.', 'gravityforms' ) . '</p>';
+		return '<p>' . esc_html__( 'This entry has already been completed.', 'gravityflow' ) . '</p>';
 	}
 
 }
