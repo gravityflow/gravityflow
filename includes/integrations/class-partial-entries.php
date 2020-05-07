@@ -311,7 +311,7 @@ class Gravity_Flow_Partial_Entries {
 	/**
 	 * Returns a message to indicate that the Partial Entry was completed.
 	 *
-	 * @since 2.5
+	 * @since 2.5.10
 	 */
 	public function partial_entry_complete() {
 		return '<p>' . esc_html__( 'This entry has already been completed.', 'gravityflow' ) . '</p>';
