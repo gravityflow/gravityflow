@@ -39,6 +39,8 @@
             if (! $('body').hasClass('wp-admin')) {
                 e.preventDefault();
 
+                var reportWrapper = $(this).parents('.gravityflow_workflow_reports');
+
                 $.ajax({
                     url: ajaxurl,
                     method: 'POST',
@@ -52,7 +54,7 @@
                         if(response.status === 'error'){
                             alert(response.message);
                         } else {
-                            $('#gravityflow-reports').html(response);
+                            reportWrapper.find('#gravityflow-reports').html(response);
                             Gravity_Flow_Reports.drawCharts();
                         }
                     }
