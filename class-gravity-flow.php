@@ -7829,6 +7829,10 @@ AND m.meta_value='queued'";
 			$args = array_merge( $args, $data );
 
 			require_once( $this->get_base_path() . '/includes/pages/class-reports.php' );
+
+			$assignee_key = sanitize_text_field( rgar( $args, 'assignee' ) );
+			list( $args['assignee_type'], $args['assignee_id'] ) = rgexplode( '|', $assignee_key, 2 );
+
 			Gravity_Flow_Reports::output_reports( $args );
 			die();
 		}
