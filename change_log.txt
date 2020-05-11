@@ -26,3 +26,4 @@
 - Fixed the field filter not appearing on the status page when the form_id constraint is set to an array using the gravityflow_status_filter hook.
 - Added support for Merge Tags on Workflow Step Conditions.
 - Fixed an issue for the completed URL of Partial Entry Submission step, which was directing to a new form entry. Updated to return a message stating that the entry was already completed.
+- Added a second layer confirmation for Approval Step with a confirm box. This can be enabled on the step settings.
