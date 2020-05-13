@@ -195,14 +195,14 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			'title'  => esc_html__( 'Approval', 'gravityflow' ),
 			'fields' => array(
 				array(
-					'name'     => 'second_approval',
-					'label'    => esc_html__( 'Confirm Box', 'gravityflow' ),
+					'name'     => 'confirmation_prompt',
+					'label'    => esc_html__( 'Confirmation Prompt', 'gravityflow' ),
 					'type'     => 'checkbox',
 					'tooltip'  => esc_html__( 'Activate this setting to display a confirm box to the assignee for a second layer of Approval/Rejection Confirmation.', 'gravityflow' ),
 					'choices'  => array(
 						array(
 							'label'         => esc_html__( 'Enable Confirm Box on Approval/Rejection', 'gravityflow' ),
-							'name'          => 'second_approval',
+							'name'          => 'confirmation_prompt',
 						),
 					),
 				),
@@ -769,27 +769,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		<?php $this->workflow_detail_status_box_actions( $form ); ?>
 
 		<?php
-		if ( $this->second_approval ) {
-			?>
-			<script type="text/javascript">
-      const buttons = document.getElementsByClassName('gravityflow-action-buttons')[0].getElementsByTagName('button');
-  
-      buttons[0].addEventListener('click', function(e) {
-        const approveConfirm = confirm( "Are you sure you want to approve?" );
-        if ( !approveConfirm ) {
-          e.preventDefault();
-        }
-      });
-  
-      buttons[1].addEventListener('click', function(e) {
-        const rejectConfirm = confirm( "Are you sure you want to reject?" );
-        if ( !rejectConfirm ) {
-          e.preventDefault();
-        }
-      });        
-
-			</script>
-			<?php
+		if ( $this->confirmation_prompt ) {
+			wp_enqueue_script( 'gravityflow_approval', $this->get_base_url() . "/js/approval-box{$min}.js",  array(), $this->_version );
 		}
 	}
 
