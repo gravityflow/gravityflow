@@ -771,9 +771,29 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		<?php
 		if ( $this->confirmation_prompt ) {
 			wp_enqueue_script( 'gravityflow_approval', $this->get_base_url() . "/js/approval-box{$min}.js",  array(), $this->_version );
+
+			$confirmation_approval = array (
+				'approveMessage' => __('Are you sure you want to approve?', 'gravityflow'),
+				'rejectMessage'  => __( 'Are you sure you want to reject?', 'gravityflow' ),
+			);
+			$form_id = $form['id']; 
+			$entry = $this->get_entry();
+			$step_id = $this->get_id();
+		  /**
+		  * Allows the user to modify confirmation approval/rejection messages.
+		  *
+		  * @since 2.5.10
+		  *
+			* @param array                 $confirmation_approval The array containing approval/rejection messages.
+			* @param int                   $form_id               The current form id.
+		  * @param array                 $entry                 The current entry array.
+		  * @param int                   $step_id               The current step id.
+		  */			
+			$confirmation_approval = apply_filters( 'gravityflow_approval_confirm_prompt_message', $confirmation_approval, $form_id, $entry, $step_id ); 
+
 			wp_localize_script( 'gravityflow_approval', 'gravityflow_approval_box_strings', array(
-					'approveMessage' => __( 'Are you sure you want to approve?', 'gravityflow' ),
-					'rejectMessage'  => __( 'Are you sure you want to reject?', 'gravityflow' ),
+					'approveMessage' => __( $confirmation_approval['approveMessage'], 'gravityflow' ),
+					'rejectMessage'  => __( $confirmation_approval['rejectMessage'], 'gravityflow' ),
 				)
 			);
 		}
