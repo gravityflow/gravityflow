@@ -771,6 +771,11 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		<?php
 		if ( $this->confirmation_prompt ) {
 			wp_enqueue_script( 'gravityflow_approval', $this->get_base_url() . "/js/approval-box{$min}.js",  array(), $this->_version );
+			wp_localize_script( 'gravityflow_approval', 'gravityflow_approval_box_strings', array(
+					'approveMessage' => __( 'Are you sure you want to approve?', 'gravityflow' ),
+					'rejectMessage'  => __( 'Are you sure you want to reject?', 'gravityflow' ),
+				)
+			);
 		}
 	}
 
