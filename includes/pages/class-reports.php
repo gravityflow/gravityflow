@@ -33,6 +33,9 @@ class Gravity_Flow_Reports {
 		}
 
 		$assignee_key = sanitize_text_field( rgget( 'assignee' ) );
+		if ( ! $assignee_key ) {
+			$assignee_key = sanitize_text_field( rgar( $args, 'assignee' ) );
+        }
 		list( $assignee_type, $assignee_id ) = rgexplode( '|', $assignee_key, 2 );
 
 		$range = sanitize_key( rgget( 'range' ) );
@@ -85,19 +88,18 @@ class Gravity_Flow_Reports {
 		);
 
 		?>
-		<script>var gravityflowFilterVars = <?php echo json_encode( $filter_vars ); ?>;</script>
 
 		<?php if ( rgar( $args, 'display_filter' ) ) { ?>
-			<div id="gravityflow-reports-filter" style="margin:10px 0;">
+			<div class="gravityflow-reports-filter" data-filter='<?php echo json_encode( $filter_vars ); ?>' style='margin:10px 0;'>
 			<form method="GET" action="<?php echo esc_url( $args['base_url'] );?>">
 				<input type="hidden" value="gravityflow-reports" name="page" />
-                <input type="hidden" id="gravityflow-reports-nonce" value="<?php echo wp_create_nonce( 'gravityflow_render_reports' ); ?>" />
-                <input type="hidden" id="gravityflow-reports-args" value="<?php esc_attr_e( json_encode( $args ) ); ?>" />
+                <input type="hidden" class="gravityflow-reports-nonce" value="<?php echo wp_create_nonce( 'gravityflow_render_reports' ); ?>" />
+                <input type="hidden" class="gravityflow-reports-args" value="<?php esc_attr_e( json_encode( $args ) ); ?>" />
 				<?php self::range_drop_down( $args['range'] ); ?>
 				<?php self::form_drop_down( $args['form_id'] ); ?>
 				<?php self::category_drop_down( $args['category'] ); ?>
-				<select id="gravityflow-reports-steps" style="display:none;" name="step-id"></select>
-				<select id="gravityflow-reports-assignees" style="display:none;" name="assignee"></select>
+				<select class="gravityflow-reports-steps" style="display:none;" name="step-id"></select>
+				<select class="gravityflow-reports-assignees" style="display:none;" name="assignee"></select>
 				<input type="submit" value="<?php esc_html_e( 'Filter', 'gravityflow' )?>" class="button-secondary" />
 			</form>
 			</div>
@@ -609,7 +611,7 @@ class Gravity_Flow_Reports {
 	public static function form_drop_down( $selected_value, $echo = true ) {
 		$m = array();
 
-		$m[] = '<select id="gravityflow-form-drop-down" name="form-id">';
+		$m[] = '<select class="gravityflow-form-drop-down" name="form-id">';
 		$m[] = sprintf( '<option value="" %s>%s</option>', selected( $selected_value, '', false ) , esc_html__( 'Select A Workflow Form', 'gravityflow' ) );
 		$form_ids = self::get_form_ids();
 		foreach ( $form_ids as $form_id ) {
@@ -660,7 +662,7 @@ class Gravity_Flow_Reports {
 	 */
 	public static function category_drop_down( $selected_value, $echo = true ) {
 		$m = array();
-		$m[] = '<select id="gravityflow-reports-category" name="category" style="display:none;">';
+		$m[] = '<select class="gravityflow-reports-category" name="category" style="display:none;">';
 		$m[] = sprintf( '<option value="month" %s>%s</option>', selected( $selected_value, 'month', false ), esc_html__( 'Month', 'gravityflow' ) );
 		$m[] = sprintf( '<option value="assignee" %s >%s</option>', selected( $selected_value, 'assignee', false ), esc_html__( 'Assignee', 'gravityflow' ) );
 		$m[] = sprintf( '<option value="step" %s >%s</option>', selected( $selected_value, 'step', false ), esc_html__( 'Step', 'gravityflow' ) );

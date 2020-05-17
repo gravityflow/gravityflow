@@ -2,40 +2,42 @@
 
     "use strict";
 
-    var stepVars;
+    var gravityflowFilterVars, stepVars;
 
     $(document).ready(function () {
-        if (typeof gravityflowFilterVars === 'undefined') {
-            return;
-        }
 
-        stepVars = gravityflowFilterVars.config;
-        var selectedVars = gravityflowFilterVars.selected;
+        $('.gravityflow-reports-filter').each( function(){
+            gravityflowFilterVars = $(this).data('filter');
 
-        var formId = selectedVars.formId;
+            console.log(gravityflowFilterVars);
+            stepVars = gravityflowFilterVars.config;
+            var selectedVars = gravityflowFilterVars.selected;
 
-        $('#gravityflow-reports-category').toggle(formId ? true : false);
+            var formId = selectedVars.formId;
 
-        if ( formId ) {
-            var category = selectedVars.category;
-            if ( category == 'step' ) {
-                $('#gravityflow-reports-steps').html(getStepOptions(formId));
-                var stepId = selectedVars.stepId;
-                $('#gravityflow-reports-steps').val(stepId);
-                $('#gravityflow-reports-steps').show();
+            $(this).find('.gravityflow-reports-category').toggle(formId ? true : false);
 
-                if ( stepId ) {
-                    var assigneeVars = stepVars[formId][stepId].assignees;
+            if ( formId ) {
+                var category = selectedVars.category;
+                if ( category == 'step' ) {
+                    $(this).find('.gravityflow-reports-steps').html(getStepOptions(formId));
+                    var stepId = selectedVars.stepId;
+                    $(this).find('.gravityflow-reports-steps').val(stepId);
+                    $(this).find('.gravityflow-reports-steps').show();
 
-                    $('#gravityflow-reports-assignees').html(getAssigneeOptions( assigneeVars ) );
+                    if ( stepId ) {
+                        var assigneeVars = stepVars[formId][stepId].assignees;
 
-                    $('#gravityflow-reports-assignees').val(selectedVars.assignee);
-                    $('#gravityflow-reports-assignees').show();
+                        $(this).find('.gravityflow-reports-assignees').html(getAssigneeOptions( assigneeVars ) );
+
+                        $(this).find('.gravityflow-reports-assignees').val(selectedVars.assignee);
+                        $(this).find('.gravityflow-reports-assignees').show();
+                    }
                 }
             }
-        }
+        } );
 
-        $('#gravityflow-reports-filter form').on('submit', function(e){
+        $('.gravityflow-reports-filter form').on('submit', function(e){
             if (! $('body').hasClass('wp-admin')) {
                 e.preventDefault();
 
@@ -46,8 +48,8 @@
                     method: 'POST',
                     data: {
                         action: 'gravityflow_render_reports',
-                        nonce: $('#gravityflow-reports-nonce').val(),
-                        args: $('#gravityflow-reports-args').val(),
+                        nonce: $(this).find('.gravityflow-reports-nonce').val(),
+                        args: $(this).find('.gravityflow-reports-args').val(),
                         data: $(this).serialize()
                     },
                     success: function (response) {
@@ -62,34 +64,34 @@
             }
         });
 
-        $('#gravityflow-form-drop-down').change(function(){
-            $('#gravityflow-reports-category').toggle( this.value ? true : false);
+        $('.gravityflow-form-drop-down').change(function(){
+            $(this).nextAll('.gravityflow-reports-category').toggle( this.value ? true : false);
 
             // Reset all the other dropdowns.
             if (this.value) {
-                $('#gravityflow-reports-category').val('month');
+                $(this).nextAll('.gravityflow-reports-category').val('month');
             }
-            $('#gravityflow-reports-steps').hide();
+            $(this).nextAll('.gravityflow-reports-steps').hide();
             $('#gravityflow-reports-assignees').hide();
         });
-        $('#gravityflow-reports-category').change(function(){
-            var formId = $('#gravityflow-form-drop-down').val();
+        $('.gravityflow-reports-category').change(function(){
+            var formId = $(this).prev('.gravityflow-form-drop-down').val();
             if ( this.value == 'step' ) {
-                $('#gravityflow-reports-steps').html(getStepOptions(formId));
-                $('#gravityflow-reports-steps').show();
+                $(this).nextAll('.gravityflow-reports-steps').html(getStepOptions(formId));
+                $(this).nextAll('.gravityflow-reports-steps').show();
             } else {
                 $('#gravityflow-reports-assignees').hide();
-                $('#gravityflow-reports-steps').hide();
+                $(this).nextAll('.gravityflow-reports-steps').hide();
             }
         });
-        $('#gravityflow-reports-steps').change( function(){
+        $(this).nextAll('.gravityflow-reports-steps').change( function(){
             if ( this.value ) {
-                var formId = $('#gravityflow-form-drop-down').val();
+                var formId = $(this).prevAll('.gravityflow-form-drop-down').val();
                 var assigneeVars = stepVars[formId][this.value].assignees;
-                $('#gravityflow-reports-assignees').html(getAssigneeOptions( assigneeVars ) );
-                $('#gravityflow-reports-assignees').show();
+                $(this).nextAll('.gravityflow-reports-assignees').html(getAssigneeOptions( assigneeVars ) );
+                $(this).nextAll('.gravityflow-reports-assignees').show();
             } else {
-                $('#gravityflow-reports-assignees').hide();
+                $(this).nextAll('.gravityflow-reports-assignees').hide();
             }
         });
 
