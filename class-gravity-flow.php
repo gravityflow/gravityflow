@@ -6439,7 +6439,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		public function get_shortcode_reports_page( $a ) {
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
-			wp_enqueue_script( 'google_charts', 'https://www.google.com/jsapi',  array(), $this->_version );
+			wp_enqueue_script( 'google_charts', 'https://www.gstatic.com/charts/loader.js',  array(), $this->_version );
 			wp_enqueue_script( 'gravityflow_reports', $this->get_base_url() . "/js/reports{$min}.js",  array( 'jquery', 'google_charts' ), $this->_version );
 
 			$app_settings  = $this->get_app_settings();
