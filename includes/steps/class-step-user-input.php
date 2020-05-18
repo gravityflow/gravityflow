@@ -395,13 +395,13 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			}
 
 			/**
-				* Enables pre validation for the User Input step.
-				*
-				* @since 2.5.10
-				*
-				* @param array  $form                The current form.
-				* @param int    $form['id']          The current form ID.
-				*/
+			 * Enables pre validation for the User Input step.
+			 *
+			 * @since 2.5.10
+			 *
+			 * @param array  $form                The current form.
+			 * @param int    $form['id']          The current form ID.
+			 */
 			$form = gf_apply_filters( array( 'gform_pre_validation', $form['id'] ), $form );
 			
 			// Loading files that have been uploaded to temp folder.
