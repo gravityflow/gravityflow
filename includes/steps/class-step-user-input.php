@@ -400,7 +400,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			 * @since 2.5.10
 			 *
 			 * @param array  $form                The current form.
-			 * @param int    $form['id']          The current form ID.
 			 */
 			$form = gf_apply_filters( array( 'gform_pre_validation', $form['id'] ), $form );
 			
