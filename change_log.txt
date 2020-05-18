@@ -8,6 +8,7 @@
 - Added filter gravityflow_send_to_step_condition_not_met to allow customization of the API when the proposed next step has not met its step conditions. Defaults to next step after the proposed step.
 - Added setting to allow the reports shortcode.
 - Added workflow note when the Update User step is completed.
+- Added support for Merge Tags on Workflow Step Conditions.
 - Updated the Zapier step to support Gravity Forms Zapier Add-On v4.0-beta-1.1 and greater.
 - Updated Outgoing Webhook settings to allow GET requests to include request body.
 - Updated gravityflow_print_styles filter to include 2nd parameter of entry IDs.
@@ -24,6 +25,6 @@
 - Fixed an issue in the step settings page where duplicate Workflow step icons appear for the Gravity Forms HubSpot Add-on and third-party HubSpot Add-on. IMPORTANT: check that your HubSpot workflow steps are correct after updating to this version.
 - Fixed a bug with 'Schedule expiration' on Workflow step. 'Next Step if Expired' option should only appear when 'Status after expiration' is set as 'Expired'.
 - Fixed the field filter not appearing on the status page when the form_id constraint is set to an array using the gravityflow_status_filter hook.
-- Added support for Merge Tags on Workflow Step Conditions.
 - Fixed an issue for the completed URL of Partial Entry Submission step, which was directing to a new form entry. Updated to return a message stating that the entry was already completed.
 - Fixed an extraneous debug logging statement.
+- Fixed an issue with the Connected Apps comparing authorization value from translated text which was flagging to false.
