@@ -194,18 +194,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		$settings = array(
 			'title'  => esc_html__( 'Approval', 'gravityflow' ),
 			'fields' => array(
-				array(
-					'name'    => 'confirmation_prompt',
-					'label'   => esc_html__( 'Require Confirmation', 'gravityflow' ),
-					'type'    => 'checkbox',
-					'tooltip' => esc_html__( 'Activate this setting to display an additional browser prompt for the assignee to confirm before their approval/rejection is submitted.', 'gravityflow' ),
-					'choices' => array(
-						array(
-							'label' => esc_html__( 'Enable confirmation prompt before step submission', 'gravityflow' ),
-							'name'  => 'confirmation_prompt',
-						),
-					),
-				),
 				$settings_api->get_setting_assignee_type(),
 				$settings_api->get_setting_assignees(),
 				$settings_api->get_setting_assignee_routing(),
@@ -228,7 +216,18 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				),
 				$settings_api->get_setting_instructions( esc_html__( 'Instructions: please review the values in the fields below and click on the Approve or Reject button', 'gravityflow' ) ),
 				$settings_api->get_setting_display_fields(),
-
+				array(
+					'name'    => 'confirmation_prompt',
+					'label'   => esc_html__( 'Require Confirmation', 'gravityflow' ),
+					'type'    => 'checkbox',
+					'tooltip' => esc_html__( 'Activate this setting to display an additional browser prompt for the assignee to confirm before their approval/rejection is submitted.', 'gravityflow' ),
+					'choices' => array(
+						array(
+							'label' => esc_html__( 'Enable confirmation prompt before step submission', 'gravityflow' ),
+							'name'  => 'confirmation_prompt',
+						),
+					),
+				),
 			),
 		);
 
@@ -771,7 +770,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		<?php
 		if ( $this->confirmation_prompt ) {
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
-			wp_enqueue_script( 'gravityflow_approval', $this->get_base_url() . "/js/approval-box{$min}.js", array(), $this->_version, true );
+			wp_enqueue_script( 'gravityflow_approval', $this->get_base_url() . "/js/step-approval{$min}.js", array(), $this->_version, true );
 
 			$messages = array(
 				'approveMessage' => __( 'Are you sure you want to approve this entry?', 'gravityflow'),
