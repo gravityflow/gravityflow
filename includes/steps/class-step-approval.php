@@ -790,8 +790,8 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			$confirmation_approval = apply_filters( 'gravityflow_approval_confirm_prompt_messages', $messages, $form['id'], $this->get_entry(), $this ); 
 
 			wp_localize_script( 'gravityflow_approval', 'gravityflow_approval_confirmation_prompts', array(
-					'approveMessage' => __( $messages['approveMessage'], 'gravityflow' ),
-					'rejectMessage'  => __( $messages['rejectMessage'], 'gravityflow' ),
+					'approveMessage' => $messages['approveMessage'],
+					'rejectMessage'  => $messages['rejectMessage'],
 				)
 			);
 		}
