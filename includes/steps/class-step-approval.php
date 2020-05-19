@@ -776,7 +776,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'approveMessage' => __( 'Are you sure you want to approve this entry?', 'gravityflow'),
 				'rejectMessage'  => __( 'Are you sure you want to reject this entry?', 'gravityflow' ),
 			);
-
+			$messages['approveMessage'] = sanitize_text_field( $messages['approveMessage'] );
+			$messages['rejectMessage'] = sanitize_text_field( $messages['rejectMessage'] );
+			
 			/**
 			* Allows the user to modify the messages for approval/rejection confirmation.
 			*
