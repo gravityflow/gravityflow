@@ -758,8 +758,6 @@ PRIMARY KEY  (id)
 				),
 			);
 
-			$magic = true;
-
 			return array_merge( parent::scripts(), $scripts );
 		}
 
