@@ -415,7 +415,7 @@ class Gravity_Flow_Entry_Detail {
 			return;
 		}
 		
-		$nl2br = apply_filters( 'gravityflow_auto_format_instructions', true );
+		$nl2br = apply_filters( 'gravityflow_auto_format_instructions', false );
 		$nl2br = apply_filters( 'gravityflow_auto_format_instructions_' . $form['id'], $nl2br );
 
 		$instructions = $current_step->instructionsValue;
