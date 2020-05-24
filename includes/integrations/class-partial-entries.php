@@ -278,7 +278,9 @@ class Gravity_Flow_Partial_Entries {
 
 		// Abort if the partial entry was not found.
 		if ( empty( $entries ) ) {
-			return $form;
+			add_filter( 'gform_form_not_found_message', array( $this, 'partial_entry_complete' ), 50 );
+
+			return false;
 		}
 
 		$entry        = $entries[0];
@@ -304,6 +306,15 @@ class Gravity_Flow_Partial_Entries {
 		$_POST['partial_entry_id'] = $partial_entry_id;
 
 		return $form;
+	}
+
+	/**
+	 * Returns a message to indicate that the Partial Entry was completed.
+	 *
+	 * @since 2.5.10
+	 */
+	public function partial_entry_complete() {
+		return '<p>' . esc_html__( 'This entry has already been completed.', 'gravityflow' ) . '</p>';
 	}
 
 }
