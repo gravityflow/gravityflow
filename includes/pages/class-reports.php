@@ -35,7 +35,7 @@ class Gravity_Flow_Reports {
 		$assignee_key = sanitize_text_field( rgget( 'assignee' ) );
 		if ( ! $assignee_key ) {
 			$assignee_key = sanitize_text_field( rgar( $args, 'assignee' ) );
-        }
+		}
 		list( $assignee_type, $assignee_id ) = rgexplode( '|', $assignee_key, 2 );
 
 		$range = sanitize_key( rgget( 'range' ) );
@@ -117,8 +117,8 @@ class Gravity_Flow_Reports {
 	 *
 	 * @param array $args The arguments.
 	 * @param string $context The context of the data requested, can be 'html' or 'json'.
-     *
-     * @return array|void
+	 *
+	 * @return array|void
 	 */
 	public static function output_reports( $args, $context = 'html' ) {
 		$output = null;
@@ -128,12 +128,12 @@ class Gravity_Flow_Reports {
 			$output = self::report_all_forms( $args, $context );
 
 			if ( $context === 'html' ) {
-			    echo $output;
+				echo $output;
 
-			    return;
-            } else {
-			    return $output;
-            }
+				return;
+			} else {
+				return $output;
+			}
 		}
 
 		$form_id = $args['form_id'];
@@ -170,14 +170,14 @@ class Gravity_Flow_Reports {
 
 	/**
 	 * Output the report for all forms.
-     *
-     * @since unknown
-     * @since 2.5.10  Added the param $context.
+	 *
+	 * @since unknown
+	 * @since 2.5.10  Added the param $context.
 	 *
 	 * @param array  $args    The reports page arguments.
-     * @param string $context The context of the data requested, can be 'html' or 'json'.
-     *
-     * @return array|string
+	 * @param string $context The context of the data requested, can be 'html' or 'json'.
+	 *
+	 * @return array|string
 	 */
 	public static function report_all_forms( $args, $context = 'html' ) {
 
@@ -231,19 +231,22 @@ class Gravity_Flow_Reports {
 
 		if ( $context === 'html' ) {
 			return '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
-        } else {
-		    return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
-        }
+		} else {
+			return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
+		}
 	}
 
 	/**
 	 * Output the report for a specific form by month.
 	 *
+	 * @since unknown
+	 * @since 2.5    Changes to support the reports block.
+	 *
 	 * @param int   $form_id The form ID.
 	 * @param array $args    The reports page arguments.
 	 * @param string $context The context of the data requested, can be 'html' or 'json'.
-     *
-     * @return array|string
+	 *
+	 * @return array|string
 	 */
 	public static function report_form_by_month( $form_id, $args, $context = 'html' ) {
 
@@ -297,19 +300,22 @@ class Gravity_Flow_Reports {
 
 		if ( $context === 'html' ) {
 			return '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
-        } else {
-		    return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
-        }
+		} else {
+			return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
+		}
 	}
 
 	/**
 	 * Output the report for a specific form by step.
 	 *
+	 * @since unknown
+	 * @since 2.5    Changes to support the reports block.
+	 *
 	 * @param int   $form_id The form ID.
 	 * @param array $args    The reports page arguments.
 	 * @param string $context The context of the data requested, can be 'html' or 'json'.
-     *
-     * @return array|string
+	 *
+	 * @return array|string
 	 */
 	public static function report_form_by_step( $form_id, $args, $context = 'html' ) {
 
@@ -366,19 +372,22 @@ class Gravity_Flow_Reports {
 
 		if ( $context === 'html' ) {
 			return '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
-        } else {
-		    return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
-        }
+		} else {
+			return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
+		}
 	}
 
 	/**
 	 * Output the report for a specific step by assignee.
 	 *
+	 * @since unknown
+	 * @since 2.5    Changes to support the reports block.
+	 *
 	 * @param int   $step_id The step ID.
 	 * @param array $args    The reports page arguments.
 	 * @param string $context The context of the data requested, can be 'html' or 'json'.
-     *
-     * @return array|string
+	 *
+	 * @return array|string
 	 */
 	public static function report_step_by_assignee( $step_id, $args, $context = 'html' ) {
 
@@ -440,19 +449,22 @@ class Gravity_Flow_Reports {
 
 		if ( $context === 'html' ) {
 			return '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
-        } else {
-		    return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
-        }
+		} else {
+			return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
+		}
 	}
 
 	/**
 	 * Output the report for a specific form by assignee.
 	 *
+	 * @since unknown
+	 * @since 2.5    Changes to support the reports block.
+	 *
 	 * @param int   $form_id  The form ID.
 	 * @param array $args     The reports page arguments.
 	 * @param string $context The context of the data requested, can be 'html' or 'json'.
-     *
-     * @return array|string
+	 *
+	 * @return array|string
 	 */
 	public static function report_form_by_assignee( $form_id, $args, $context = 'html' ) {
 
@@ -512,20 +524,23 @@ class Gravity_Flow_Reports {
 
 		if ( $context === 'html' ) {
 			return '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
-        } else {
-		    return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
-        }
+		} else {
+			return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
+		}
 	}
 
 	/**
 	 * Output the report for a specific assignee by month.
 	 *
+	 * @since unknown
+	 * @since 2.5    Changes to support the reports block.
+	 *
 	 * @param string $assignee_type The assignee type.
 	 * @param string $assignee_id   The assignee ID.
 	 * @param array  $args          The reports page arguments.
 	 * @param string $context       The context of the data requested, can be 'html' or 'json'.
-     *
-     * @return array|string
+	 *
+	 * @return array|string
 	 */
 	public static function report_assignee_by_month( $assignee_type, $assignee_id, $args, $context = 'html' ) {
 
@@ -584,9 +599,9 @@ class Gravity_Flow_Reports {
 
 		if ( $context === 'html' ) {
 			return '<div id="gravityflow_chart_top_level" style="padding:20px;background-color:white;" class="gravityflow_chart" data-type="Bar" data-table="' . $data_table_json . '" data-options="' . $options_json . '""></div>';
-        } else {
-		    return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
-        }
+		} else {
+			return array( 'table' => json_encode( $chart_data ), 'options' => json_encode( $chart_options ) );
+		}
 	}
 
 	/**

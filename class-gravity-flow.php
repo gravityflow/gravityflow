@@ -7803,8 +7803,8 @@ AND m.meta_value='queued'";
 
 		/**
 		 * AJAX helper to render workflow reports.
-         *
-         * @since 2.5.10
+		 *
+		 * @since 2.5.10
 		 */
 		public function ajax_render_workflow_reports() {
 			if ( ! wp_verify_nonce( rgpost( 'nonce' ), 'gravityflow_render_reports' ) ) {
