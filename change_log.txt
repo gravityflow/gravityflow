@@ -29,3 +29,4 @@
 - Fixed an extraneous debug logging statement.
 - Fixed an issue with the Connected Apps comparing authorization value from translated text which was flagging to false.
 - Added support for filter gform_pre_validation on the User Input Step.
+- Added support to Show All Inbox entries when the count is more than 150.

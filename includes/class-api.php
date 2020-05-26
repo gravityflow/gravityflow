@@ -530,9 +530,16 @@ class Gravity_Flow_API {
 	 * @return array
 	 */
 	public static function get_inbox_paging( $args = array() ) {
-		$paging = array(
-			'page_size' => 150,
-		);
+		if ( $args['view_more'] ) {
+			$paging = array(
+				'page_size' => Gravity_Flow_API::get_inbox_entries_count( $args ),
+			);
+		}
+		else {
+			$paging = array(
+				'page_size' => 150,
+			);
+		}
 
 		if ( ! empty( $args['paging']['page_size'] ) ) {
 			$paging['page_size'] = (int) $args['paging']['page_size'];

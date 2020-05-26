@@ -13,6 +13,18 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
+session_id( 'gravityflow_session' );
+session_start();
+$current = $_SERVER['REQUEST_URI']; 
+$referer_parts = parse_url($_SERVER['HTTP_REFERER']);
+$previous =  $referer_parts["path"] . "?" . $referer_parts["query"];
+if ( $current != $previous ) {
+	$_SESSION['more-enabled'] = false;
+}
+else {
+	$_SESSION['more-enabled'] = true;
+}
+
 /**
  * Class Gravity_Flow_Inbox
  */
@@ -81,6 +93,19 @@ class Gravity_Flow_Inbox {
 			</div>
 		<?php
 		}
+
+		if ( $total_count > $page_size ) {
+			?>
+			<form method="post">
+			<input type="submit" name="view-more" value="<?php esc_html_e( 'Show All', 'gravityflow' ); ?>" />
+			<?php
+			if( isset( $_POST['view-more'] ) ) {
+				$_SESSION['more-enabled'] = true;
+			}
+			?>
+			</form>
+			<?php
+		}
 	}
 
 	/**
@@ -109,6 +134,7 @@ class Gravity_Flow_Inbox {
 			'last_updated'         => false,
 			'due_date'             => false,
 			'step_highlight'       => true,
+			'view_more'            => $_SESSION['more-enabled'],
 		);
 
 	}
