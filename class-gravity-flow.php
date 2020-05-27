@@ -6094,6 +6094,17 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			$a = $this->get_shortcode_atts( $atts );
 
+			if ( $a['count'] ) {
+				$count = Gravity_Flow_API::get_inbox_entries_count();
+
+				if ( $count ) {
+					return sprintf( '<h5>You have %d entries in your inbox.</h5>', $count );
+				}
+				else {
+					return sprintf( '<h5>No pending inbox entries.</h5>' );
+				}
+			}
+
 			if ( $a['display_all'] || $a['allow_anonymous'] || $a['fields'] ) {
 
 				$app_settings = $this->get_app_settings();
@@ -6249,6 +6260,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'category'         => '',
 				'step_id'          => null,
 				'assignee'         => '',
+				'count'            => false,
 			);
 
 			return $defaults;
