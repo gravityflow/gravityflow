@@ -776,8 +776,6 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'approveMessage' => __( 'Are you sure you want to approve this entry?', 'gravityflow'),
 				'rejectMessage'  => __( 'Are you sure you want to reject this entry?', 'gravityflow' ),
 			);
-			$messages['approveMessage'] = sanitize_text_field( $messages['approveMessage'] );
-			$messages['rejectMessage'] = sanitize_text_field( $messages['rejectMessage'] );
 			
 			/**
 			* Allows the user to modify the messages for approval/rejection confirmation.
@@ -790,6 +788,9 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			* @param int    $step     The current step.
 			*/
 			$confirmation_approval = apply_filters( 'gravityflow_approval_confirm_prompt_messages', $messages, $form['id'], $this->get_entry(), $this ); 
+			
+			$messages['approveMessage'] = wp_kses_post( $messages['approveMessage'] );
+			$messages['rejectMessage'] = wp_kses_post( $messages['rejectMessage'] );		
 
 			wp_localize_script( 'gravityflow_approval', 'gravityflow_approval_confirmation_prompts', array(
 					'approveMessage' => $messages['approveMessage'],
