@@ -172,6 +172,11 @@ class Tests_Gravity_Flow_Merge_Tags extends GF_UnitTestCase {
 		$expected_text_out = 'administrator';
 		$actual_text_out   = $merge_tag->replace( $text_in );
 		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
+
+		$text_in           = '{created_by:user_pass}';
+		$expected_text_out = '';
+		$actual_text_out   = $merge_tag->replace( $text_in );
+		$this->assertEquals( $expected_text_out, $actual_text_out, $this->_get_message( $text_in ) );
 	}
 
 
