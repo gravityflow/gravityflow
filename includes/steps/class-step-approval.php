@@ -216,7 +216,18 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				),
 				$settings_api->get_setting_instructions( esc_html__( 'Instructions: please review the values in the fields below and click on the Approve or Reject button', 'gravityflow' ) ),
 				$settings_api->get_setting_display_fields(),
-
+				array(
+					'name'    => 'confirmation_prompt',
+					'label'   => esc_html__( 'Require Confirmation', 'gravityflow' ),
+					'type'    => 'checkbox',
+					'tooltip' => esc_html__( 'Activate this setting to display an additional browser prompt for the assignee to confirm before their approval/rejection is submitted.', 'gravityflow' ),
+					'choices' => array(
+						array(
+							'label' => esc_html__( 'Enable confirmation prompt before step submission', 'gravityflow' ),
+							'name'  => 'confirmation_prompt',
+						),
+					),
+				),
 			),
 		);
 
@@ -757,7 +768,36 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 		<?php $this->workflow_detail_status_box_actions( $form ); ?>
 
 		<?php
+		if ( $this->confirmation_prompt ) {
+			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+			wp_enqueue_script( 'gravityflow_approval', $this->get_base_url() . "/js/step-approval{$min}.js", array(), $this->_version, true );
 
+			$messages = array(
+				'approveMessage' => __( 'Are you sure you want to approve this entry?', 'gravityflow'),
+				'rejectMessage'  => __( 'Are you sure you want to reject this entry?', 'gravityflow' ),
+			);
+			
+			/**
+			* Allows the user to modify the messages for approval/rejection confirmation.
+			*
+			* @since 2.5.10
+			*
+			* @param array  $messages The array containing approval/rejection messages.
+			* @param int    $form_id  The current form id.
+			* @param array  $entry    The current entry array.
+			* @param int    $step     The current step.
+			*/
+			$confirmation_approval = apply_filters( 'gravityflow_approval_confirm_prompt_messages', $messages, $form['id'], $this->get_entry(), $this ); 
+			
+			$messages['approveMessage'] = wp_kses_post( $messages['approveMessage'] );
+			$messages['rejectMessage'] = wp_kses_post( $messages['rejectMessage'] );		
+
+			wp_localize_script( 'gravityflow_approval', 'gravityflow_approval_confirmation_prompts', array(
+					'approveMessage' => $messages['approveMessage'],
+					'rejectMessage'  => $messages['rejectMessage'],
+				)
+			);
+		}
 	}
 
 	/**

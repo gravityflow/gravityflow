@@ -29,3 +29,5 @@
 - Fixed an extraneous debug logging statement.
 - Fixed an issue with the Connected Apps comparing authorization value from translated text which was flagging to false.
 - Added support for filter gform_pre_validation on the User Input Step.
+- Added a second layer confirmation for Approval Step with a confirm box. This can be enabled on the step settings.
+- Added filter gravityflow_approval_confirm_prompt_messages to allow customization of the confirmation prompt messages on the Approval Step.
