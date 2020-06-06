@@ -104,6 +104,8 @@ $settings['status_page'] = create_workflow_page( 'status' );
 $settings['submit_page'] = create_workflow_page( 'submit' );
 gravity_flow()->update_app_settings( $settings );
 
+create_workflow_page( 'reports' );
+
 /**
  * Creates a new page containing the gravityflow shortcode for the specified page type.
  *
