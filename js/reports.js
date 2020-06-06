@@ -9,7 +9,6 @@
         $('.gravityflow-reports-filter').each( function(){
             gravityflowFilterVars = $(this).data('filter');
 
-            console.log(gravityflowFilterVars);
             stepVars = gravityflowFilterVars.config;
             var selectedVars = gravityflowFilterVars.selected;
 
@@ -44,7 +43,7 @@
                 var reportWrapper = $(this).parents('.gravityflow_workflow_reports');
 
                 $.ajax({
-                    url: ajaxurl,
+                    url: gravityflow_status_list_strings.ajaxurl,
                     method: 'POST',
                     data: {
                         action: 'gravityflow_render_reports',
