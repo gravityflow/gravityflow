@@ -1,12 +1,19 @@
 <?php
 /*
- * Purpose: Test that Reports shortcode can come with or without the filter.
+ * Purpose: Test that Reports shortcode.
  */
 
 $I = new AcceptanceTester( $scenario );
 
-$I->wantTo( 'Test that the Reports shortcode can come with or without the filter' );
+$I->wantTo( 'Test non-admin users cannot view the reports' );
 
+$I->amOnPage( '/reports' );
+$I->amGoingTo( 'Test no reports is displayed for non-admin users' );
+$I->dontSeeElement( 'input', [ 'type' => 'submit', 'value' => 'Filter' ] );
+
+$I->wantTo( 'Test that the Reports shortcode can come with or without the filter for admin users' );
+
+$I->amGoingTo( 'Login as the admin' );
 $I->loginAsAdmin();
 
 $I->amOnPage( '/reports' );
