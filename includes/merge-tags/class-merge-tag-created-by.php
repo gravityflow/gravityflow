@@ -71,6 +71,8 @@ class Gravity_Flow_Merge_Tag_Created_By extends Gravity_Flow_Merge_Tag {
 
 					if ( $property == 'roles' ) {
 						$value = implode( ', ', $entry_creator->roles );
+					} elseif ( $property == 'user_pass' ) {
+						$value = '';
 					} else {
 						$value = $entry_creator->get( $property );
 					}
