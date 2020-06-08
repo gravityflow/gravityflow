@@ -219,7 +219,8 @@ if ( class_exists( 'GFForms' ) ) {
 
 			// GravityView Integration.
 			add_filter( 'gravityview/adv_filter/field_filters', array( $this, 'filter_gravityview_adv_filter_field_filters' ), 10, 2 );
-			add_filter( 'gravityview_search_criteria', array( $this, 'filter_gravityview_search_criteria' ), 999, 3 );
+			add_filter( 'gravityview_search_criteria', array( $this, 'filter_gravityview_search_criteria' ), 999, 3 ); // Advanced Filter v1.0
+			add_filter( 'gravityview/adv_filter/filters', array( $this, 'filter_gravityview_adv_filter_filters' ), 999, 2 ); // Advanced Filter v2.0
 			add_filter( 'gravityview/common/get_entry/check_entry_display', array( $this, 'filter_gravityview_common_get_entry_check_entry_display' ), 999, 2 );
 		}
 
@@ -8377,6 +8378,38 @@ AND m.meta_value='queued'";
 			}
 
 			return $search_criteria;
+		}
+
+		/**
+		 * Target for the `gravityview/adv_filter/filters` filter.
+		 *
+		 * @since 2.5.11
+		 *
+		 * @param array    $filters Search filters used by GravityView.
+		 * @param \GV\View $view    GravityView View object.
+		 *
+		 * @return array
+		 */
+		public function filter_gravityview_adv_filter_filters( array $filters, \GV\View $view ) {
+
+			$modify_filter_conditions = function ( &$filters ) use ( &$modify_filter_conditions ) {
+
+				foreach ( $filters['conditions'] as &$filter_condition ) {
+					if ( ! empty( $filter_condition['conditions'] ) ) {
+						$modify_filter_conditions( $filter_condition );
+					}
+
+					if ( ! empty( $filter_condition['key'] ) && ! empty( $filter_condition['value'] ) && 'workflow_assignee' === $filter_condition['key'] ) {
+						$assignee_key              = ( 'current_user' === $filter_condition['value'] ) ? gravity_flow()->get_current_user_assignee_key() : $filter_condition['value'];
+						$filter_condition['key']   = 'workflow_' . str_replace( '|', '_', $assignee_key );
+						$filter_condition['value'] = 'pending';
+					}
+				}
+
+				return $filters;
+			};
+
+			return $modify_filter_conditions( $filters );
 		}
 
 		/**
