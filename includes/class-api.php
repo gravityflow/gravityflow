@@ -584,4 +584,128 @@ class Gravity_Flow_API {
 		return apply_filters( 'gravityflow_inbox_sorting', $sorting );
 	}
 
+	/**
+	 * Returns an array of pending entries for the current logged in user.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param array $args The entries configuration arguments.
+	 *
+	 * @return array
+	 */	
+	public static function get_pending_entries( $args = array() ) {
+		$pending_search_criteria = self::get_pending_search_criteria();
+
+		$pending_tasks = GFAPI::get_entries( $args, $pending_search_criteria );
+
+		return $pending_tasks;
+	}
+
+	/**
+	 * Returns the total number of entries currently assigned to the logged in user which are pending.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param array $args The entries configuration arguments.
+	 *
+	 * @return int
+	 */	
+	public static function get_pending_entries_count( $args = array() ) {
+		$pending_search_criteria = self::get_pending_search_criteria();
+
+		$pending_tasks_count = GFAPI::count_entries( $args, $pending_search_criteria );
+
+		return $pending_tasks_count;
+	}
+
+	/**
+	 * Returns the pending entries search criteria.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param array $args        The inbox configuration arguments.
+	 * @param int   $total_count The total number of entries for the current assignee.
+	 *
+	 * @return array
+	 */	
+	public static function get_pending_search_criteria() {
+		$pending_search_criteria['field_filters']  = array(
+			array(
+				'key'   => 'workflow_user_id_' . get_current_user_id(),
+				'value' => 'pending',
+			),
+			array (
+				'key'   => 'workflow_final_status',
+				'value' => 'pending',
+			),
+		);
+		$pending_search_criteria['status'] = 'active';		
+
+		return $pending_search_criteria;
+	}
+
+	/**
+	 * Returns an array of complete entries for the current logged in user.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param array $args        The inbox configuration arguments.
+	 * @param int   $total_count The total number of entries for the current assignee.
+	 *
+	 * @return array
+	 */	
+	public static function get_complete_entries() {
+		$complete_search_criteria = self::get_complete_search_criteria();
+
+		$complete_tasks = GFAPI::get_entries( $args, $complete_search_criteria );
+
+		return $complete_tasks;
+	}
+
+	/**
+	 * Returns the total number of entries currently assigned to the logged in user which are complete.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param array $args        The inbox configuration arguments.
+	 * @param int   $total_count The total number of entries for the current assignee.
+	 *
+	 * @return array
+	 */	
+	public static function get_complete_entries_count() {
+		$complete_search_criteria = self::get_complete_search_criteria();
+
+		$complete_tasks_count = GFAPI::count_entries( $args, $complete_search_criteria );
+
+		return $complete_tasks_count;
+	}
+
+	/**
+	 * Returns the complete entries search criteria.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param array $args        The inbox configuration arguments.
+	 * @param int   $total_count The total number of entries for the current assignee.
+	 *
+	 * @return array
+	 */	
+	public static function get_complete_search_criteria() {
+		$complete_search_criteria['field_filters']  = array(
+			array(
+				'key'   => 'workflow_user_id_' . get_current_user_id(),
+				'operator' => 'not in',
+				'value'    => array( 'pending', 'cancelled' ),
+			),
+			array (
+				'key'      => 'workflow_final_status',
+				'operator' => 'not in',
+				'value'    => array( 'pending', 'cancelled' ),
+			),
+		);
+		$complete_search_criteria['status'] = 'active';		
+
+		return $complete_search_criteria;
+	}
+
 }
