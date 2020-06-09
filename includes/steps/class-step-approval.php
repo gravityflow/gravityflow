@@ -775,7 +775,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			$messages = array(
 				'approveMessage' => __( 'Are you sure you want to approve this entry?', 'gravityflow'),
 				'rejectMessage'  => __( 'Are you sure you want to reject this entry?', 'gravityflow' ),
-				'revertMessage'  => __( 'Are you sure you want to revert to the User Input step?', 'gravityflow' ),
+				'revertMessage'  => __( 'Are you sure you want to revert this entry?', 'gravityflow' ),
 			);
 			
 			/**
