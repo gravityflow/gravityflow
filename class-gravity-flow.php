@@ -8385,12 +8385,12 @@ AND m.meta_value='queued'";
 		 *
 		 * @since 2.5.11
 		 *
-		 * @param array    $filters Search filters used by GravityView.
-		 * @param \GV\View $view    GravityView View object.
+		 * @param array|null $filters Search filters used by GravityView.
+		 * @param \GV\View   $view    GravityView View object.
 		 *
 		 * @return array
 		 */
-		public function filter_gravityview_adv_filter_filters( array $filters, \GV\View $view ) {
+		public function filter_gravityview_adv_filter_filters( $filters, $view ) {
 
 			$modify_filter_conditions = function ( &$filters ) use ( &$modify_filter_conditions ) {
 
@@ -8409,7 +8409,7 @@ AND m.meta_value='queued'";
 				return $filters;
 			};
 
-			return $modify_filter_conditions( $filters );
+			return ! empty( $filters['conditions'] ) ? $modify_filter_conditions( $filters ) : $filters;
 		}
 
 		/**
