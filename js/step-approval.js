@@ -14,4 +14,13 @@
           e.preventDefault();
         }
       });
+
+      if (buttons.length == 3) {
+        buttons[2].addEventListener('click', function(e) {
+          var revertConfirm = confirm( gravityflow_approval_confirmation_prompts.revertMessage );
+          if ( !revertConfirm ) {
+            e.preventDefault();
+          }
+        });        
+      }
 })();

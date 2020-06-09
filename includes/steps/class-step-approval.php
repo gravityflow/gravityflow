@@ -775,6 +775,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			$messages = array(
 				'approveMessage' => __( 'Are you sure you want to approve this entry?', 'gravityflow'),
 				'rejectMessage'  => __( 'Are you sure you want to reject this entry?', 'gravityflow' ),
+				'revertMessage'  => __( 'Are you sure you want to revert to the User Input step?', 'gravityflow' ),
 			);
 			
 			/**
@@ -790,11 +791,13 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 			$confirmation_approval = apply_filters( 'gravityflow_approval_confirm_prompt_messages', $messages, $form['id'], $this->get_entry(), $this ); 
 			
 			$messages['approveMessage'] = wp_kses_post( $messages['approveMessage'] );
-			$messages['rejectMessage'] = wp_kses_post( $messages['rejectMessage'] );		
+			$messages['rejectMessage'] = wp_kses_post( $messages['rejectMessage'] );
+			$messages['revertMessage'] = wp_kses_post( $messages['revertMessage'] );		
 
 			wp_localize_script( 'gravityflow_approval', 'gravityflow_approval_confirmation_prompts', array(
 					'approveMessage' => $messages['approveMessage'],
 					'rejectMessage'  => $messages['rejectMessage'],
+					'revertMessage'  => $messages['revertMessage'],
 				)
 			);
 		}
