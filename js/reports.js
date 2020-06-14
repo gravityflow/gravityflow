@@ -83,7 +83,7 @@
                 $(this).nextAll('.gravityflow-reports-steps').hide();
             }
         });
-        $(this).nextAll('.gravityflow-reports-steps').change( function(){
+        $('.gravityflow-reports-steps').change( function(){
             if ( this.value ) {
                 var formId = $(this).prevAll('.gravityflow-form-drop-down').val();
                 var assigneeVars = stepVars[formId][this.value].assignees;
@@ -93,8 +93,6 @@
                 $(this).nextAll('.gravityflow-reports-assignees').hide();
             }
         });
-
-
     });
 
     function getStepOptions( formId ){
