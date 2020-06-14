@@ -777,19 +777,19 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 				'rejectMessage'  => __( 'Are you sure you want to reject this entry?', 'gravityflow' ),
 				'revertMessage'  => __( 'Are you sure you want to revert this entry?', 'gravityflow' ),
 			);
-			
+
 			/**
 			* Allows the user to modify the messages for approval/rejection confirmation.
 			*
 			* @since 2.5.10
 			*
-			* @param array  $messages The array containing approval/rejection messages.
-			* @param int    $form_id  The current form id.
-			* @param array  $entry    The current entry array.
-			* @param int    $step     The current step.
+			* @param array             $messages The array containing approval/rejection messages.
+			* @param int               $form_id  The current form id.
+			* @param array             $entry    The current entry array.
+			* @param Gravity_Flow_Step $step     The current step.
 			*/
 			$confirmation_approval = apply_filters( 'gravityflow_approval_confirm_prompt_messages', $messages, $form['id'], $this->get_entry(), $this ); 
-			
+
 			$messages['approveMessage'] = wp_kses_post( $messages['approveMessage'] );
 			$messages['rejectMessage'] = wp_kses_post( $messages['rejectMessage'] );
 			$messages['revertMessage'] = wp_kses_post( $messages['revertMessage'] );		

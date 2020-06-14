@@ -1,1 +1,2 @@
 - Fixed an issue with second layer confirmation for Approval Step. When the Revert to User Input step option is enabled, the Revert button was not displaying the confirm box.
+- Fixed support for latest versions of Gravity View Advanced Filters. (Thanks Vlad/MrCasual)
