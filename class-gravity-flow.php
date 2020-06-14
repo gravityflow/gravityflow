@@ -1368,7 +1368,7 @@ PRIMARY KEY  (id)
 
 			foreach ( $step_classes as $key => $step_class ) {
 				$step_type_choice = array( 'label' => $step_class->get_label(), 'value' => $step_class->get_type() );
-				$step_type_choice['icon'] = $step_class->get_icon_url();
+				$step_type_choice['icon_url'] = $step_class->get_icon_url();
 				if ( $current_step_id > 0 ) {
 					$step_type_choice['disabled'] = 'disabled';
 					$step_type_choice['div_class'] = 'gravityflow-disabled';
@@ -1403,7 +1403,7 @@ PRIMARY KEY  (id)
 			$step_type_setting = array(
 				'name'       => 'step_type',
 				'label'      => esc_html__( 'Step Type', 'gravityflow' ),
-				'type'       => 'radio',
+				'type'       => 'radio_image',
 				'horizontal' => true,
 				'required'   => true,
 				'onchange'   => 'jQuery(this).parents("form").submit();',

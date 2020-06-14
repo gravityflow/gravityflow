@@ -180,7 +180,7 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @return string
 	 */
 	public function get_icon_url() {
-		return 'fa-check';
+		return '<i class="fa fa-check" style="color:darkgreen;"></i>';
 	}
 
 	/**
