@@ -20,6 +20,12 @@ $I->amOnPage( '/reports' );
 $I->amGoingTo( 'Test the filter is displayed by default' );
 $I->seeElement( 'input', [ 'type' => 'submit', 'value' => 'Filter' ] );
 
+$I->amGoingTo( 'Test if the Assignees dropdown will show up when the category is step and a step is selected' );
+$I->selectOption( 'select[name=form-id]', '1' );
+$I->selectOption( 'select[name=category]', 'step' );
+$I->selectOption( 'select[name=step-id]', '1' );
+$I->seeOptionIsSelected( 'select[name=assignee]', 'All Assignees' );
+
 $page = get_page_by_path( 'reports' );
 wp_update_post( array( 'ID' => $page->ID, 'post_content' => '[gravityflow page="reports" display_filter="false"]' ) );
 
