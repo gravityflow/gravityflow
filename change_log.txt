@@ -1,0 +1,1 @@
+- Fixed an issue where merge tags for Confirmation Message in User Input Step evaluated to values before the workflow step.
