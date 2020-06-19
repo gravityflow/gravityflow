@@ -1,0 +1,1 @@
+- Fixed an issue where Gravity Perks Limit Dates conditions dependent on a non-editable Date field for a User Input step did not work.

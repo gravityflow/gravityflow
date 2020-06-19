@@ -107,6 +107,15 @@ class Gravity_Flow_Entry_Editor {
 	private $_requires_pricing_inputs = false;
 
 	/**
+	 * Indicates if there is an editable date field which requires the presence of other date fields to function.
+	 *
+	 * @since 2.5.12
+	 *
+	 * @var bool
+	 */
+	private $_requires_date_inputs = false;	
+
+	/**
 	 * Gravity_Flow_Entry_Editor constructor.
 	 *
 	 * @param array             $form                 The current form.
@@ -279,6 +288,7 @@ class Gravity_Flow_Entry_Editor {
 			}
 
 			$field->gravityflow_is_pricing_field = GFCommon::is_product_field( $field->type );
+			$field->gravityflow_is_date_field    = $field->type == 'date';
 			$field->gravityflow_is_editable      = $this->is_editable_field( $field );
 
 			if ( $field->gravityflow_is_editable ) {
@@ -290,6 +300,10 @@ class Gravity_Flow_Entry_Editor {
 				if ( ! $this->_requires_pricing_inputs && $this->is_dynamic_pricing_field( $field ) ) {
 					$this->_requires_pricing_inputs = true;
 				}
+
+				if ( ! $this->_requires_date_inputs && $this->is_dynamic_date_field( $field ) ) {
+					$this->_requires_date_inputs = true;
+				}			
 			} else {
 				$field->gravityflow_is_display_field = $this->is_display_field( $field, true );
 			}
@@ -369,6 +383,44 @@ class Gravity_Flow_Entry_Editor {
 	}
 
 	/**
+	 * Determines if the current field is a date field which requires other date fields to function.
+	 *
+	 * @since 2.5.12
+	 *
+	 * @param GF_Field $field The field object to be checked.
+	 *
+	 * @return bool
+	 */
+	public function is_dynamic_date_field( $field ) {
+		if ( isset( $field['gpLimitDatesminDateMod'] ) ) {
+			if ( $field['gpLimitDatesminDateMod'] != '' ) {
+				return true;
+			}
+		}
+
+		if ( isset( $field['gpLimitDatesmaxDateMod'] ) ) {
+			if ( $field['gpLimitDatesmaxDateMod'] != '' ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Determines if the inputs are required for a non-editable date field.
+	 *
+	 * @since 2.5.12
+	 *
+	 * @param GF_Field $field The field to be checked.
+	 *
+	 * @return bool
+	 */
+	public function is_date_field_required( $field ) {
+		return $field->gravityflow_is_date_field && $this->_requires_date_inputs;
+	}
+
+	/**
 	 * Determines if the field can be removed from the form object.
 	 *
 	 * Fields involved in conditional logic must always be added to the form.
@@ -378,7 +430,7 @@ class Gravity_Flow_Entry_Editor {
 	 * @return bool
 	 */
 	public function can_remove_field( $field ) {
-		$can_remove_field = ! ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) || $this->is_calculation_dependency( $field ) || $this->is_pricing_field_required( $field ) ) && empty( $field->conditionalLogicFields );
+		$can_remove_field = ! ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) || $this->is_calculation_dependency( $field ) || $this->is_pricing_field_required( $field ) || $this->is_date_field_required( $field ) ) && empty( $field->conditionalLogicFields );
 
 		return $can_remove_field;
 	}
@@ -578,7 +630,7 @@ class Gravity_Flow_Entry_Editor {
 
 		$conditional_logic_dependency = $this->_is_dynamic_conditional_logic_enabled && ! empty( $field->conditionalLogicFields );
 
-		if ( $conditional_logic_dependency || $this->is_calculation_dependency( $field ) || $this->is_pricing_field_required( $field ) ) {
+		if ( $conditional_logic_dependency || $this->is_calculation_dependency( $field ) || $this->is_pricing_field_required( $field ) || $this->is_date_field_required( $field ) ) {
 			$html = $field->get_field_input( $this->form, $value, $this->entry );
 		}
 
