@@ -68,13 +68,14 @@ class Gravity_Flow_Entry_Editor {
 	private $_display_fields = array();
 
 	/**
-	 * An array of field IDs required for use with calculations.
+	 * An array of field IDs required for use by other fields (i.e. calculation fields).
 	 *
 	 * @since 1.7.1-dev
+	 * @since 2.5.12 Renamed from $_calculation_dependencies
 	 *
 	 * @var array
 	 */
-	private $_calculation_dependencies = array();
+	private $_dependencies = array();
 
 	/**
 	 * The content to be displayed for the display fields.
@@ -306,6 +307,8 @@ class Gravity_Flow_Entry_Editor {
 
 	/**
 	 * Add the IDs of any fields in the formula to the $_calculation_dependencies array.
+	/**
+	 * Add the IDs of any fields in the formula to the $_dependencies array.
 	 *
 	 * @since 1.7.1-dev
 	 *
@@ -320,8 +323,8 @@ class Gravity_Flow_Entry_Editor {
 		if ( ! empty( $matches ) ) {
 			foreach ( $matches as $match ) {
 				$field_id = rgar( $match, 1 );
-				if ( $field_id && ! $this->is_calculation_dependency( $field_id ) ) {
-					$this->_calculation_dependencies[] = $field_id;
+				if ( $field_id && ! $this->is_dependency( $field_id ) ) {
+					$this->_dependencies[] = $field_id;
 				}
 			}
 		}
@@ -331,15 +334,31 @@ class Gravity_Flow_Entry_Editor {
 	 * Checks whether a field is required for calculations.
 	 *
 	 * @since 1.7.1-dev
+	 * @deprecated 2.5.12
 	 *
-	 * @param GF_Field|string $field The field object or field ID to be checked.
+	 * @param GF_Field|string $field_or_id The field object or field ID to be checked.
 	 *
 	 * @return bool
 	 */
-	public function is_calculation_dependency( $field ) {
-		$field_id = is_object( $field ) ? $field->id : $field;
+	public function is_calculation_dependency( $field_or_id ) {
+		_deprecated_function( __METHOD__, '2.5.12', 'Gravity_Flow_Entry_Editor::is_dependency()' );
 
-		return in_array( $field_id, $this->_calculation_dependencies );
+		return $this->is_dependency( $field_or_id );
+	}
+
+	/**
+	 * Checks whether a field is required for editable fields to function.
+	 *
+	 * @since 2.5.12
+	 *
+	 * @param GF_Field|string $field_or_id The field object or field ID to be checked.
+	 *
+	 * @return bool
+	 */
+	public function is_dependency( $field_or_id ) {
+		$field_id = is_object( $field_or_id ) ? $field_or_id->id : $field_or_id;
+
+		return in_array( $field_id, $this->_dependencies );
 	}
 
 	/**
@@ -578,7 +597,7 @@ class Gravity_Flow_Entry_Editor {
 
 		$conditional_logic_dependency = $this->_is_dynamic_conditional_logic_enabled && ! empty( $field->conditionalLogicFields );
 
-		if ( $conditional_logic_dependency || $this->is_calculation_dependency( $field ) || $this->is_pricing_field_required( $field ) ) {
+		if ( $conditional_logic_dependency || $this->is_dependency( $field ) || $this->is_pricing_field_required( $field ) ) {
 			$html = $field->get_field_input( $this->form, $value, $this->entry );
 		}
 
