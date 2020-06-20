@@ -286,6 +286,8 @@ class Gravity_Flow_Entry_Editor {
 				$field->gravityflow_is_display_field = false;
 				if ( $field->has_calculation() ) {
 					$this->set_calculation_dependencies( $field->calculationFormula );
+				} elseif ( $field->get_input_type() === 'date' && $field->dateType === 'datepicker' ) {
+					$this->set_date_field_dependencies( $field );
 				}
 
 				if ( ! $this->_requires_pricing_inputs && $this->is_dynamic_pricing_field( $field ) ) {
@@ -306,7 +308,22 @@ class Gravity_Flow_Entry_Editor {
 	}
 
 	/**
-	 * Add the IDs of any fields in the formula to the $_calculation_dependencies array.
+	 * Add the IDs of the fields GP Limit Dates depends on to the $_dependencies array.
+	 *
+	 * @since 2.5.12
+	 *
+	 * @param GF_Field_Date $field The date field being processed.
+	 */
+	public function set_date_field_dependencies( $field ) {
+		if ( ! empty( $field->gpLimitDatesminDate ) && is_numeric( $field->gpLimitDatesminDate ) && ! $this->is_dependency( $field->gpLimitDatesminDate ) ) {
+			$this->_dependencies[] = $field->gpLimitDatesminDate;
+		}
+
+		if ( ! empty( $field->gpLimitDatesmaxDate ) && is_numeric( $field->gpLimitDatesmaxDate ) && ! $this->is_dependency( $field->gpLimitDatesmaxDate ) ) {
+			$this->_dependencies[] = $field->gpLimitDatesmaxDate;
+		}
+	}
+
 	/**
 	 * Add the IDs of any fields in the formula to the $_dependencies array.
 	 *
@@ -397,7 +414,7 @@ class Gravity_Flow_Entry_Editor {
 	 * @return bool
 	 */
 	public function can_remove_field( $field ) {
-		$can_remove_field = ! ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) || $this->is_calculation_dependency( $field ) || $this->is_pricing_field_required( $field ) ) && empty( $field->conditionalLogicFields );
+		$can_remove_field = ! ( $this->is_editable_field( $field ) || $this->is_display_field( $field ) || $this->is_dependency( $field ) || $this->is_pricing_field_required( $field ) ) && empty( $field->conditionalLogicFields );
 
 		return $can_remove_field;
 	}
