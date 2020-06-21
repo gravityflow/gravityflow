@@ -10,6 +10,7 @@ php:
 env:
   matrix:
     - WP_VERSION=latest WP_MULTISITE=0
+    - WP_VERSION=5.3 WP_MULTISITE=0
     - WP_VERSION=5.2 WP_MULTISITE=0
     - WP_VERSION=5.0 WP_MULTISITE=0
     - WP_VERSION=4.9 WP_MULTISITE=0
@@ -25,11 +26,9 @@ before_script:
       phpenv config-rm xdebug.ini
     fi
 - |
-  # Export Composer's global bin dir to PATH, but not on PHP 5.2:
-  if [[ ${TRAVIS_PHP_VERSION:0:3} != "5.2" ]]; then
+  # Export Composer's global bin dir to PATH:
     composer config --list --global
     export PATH=`composer config --list --global | grep '\[home\]' | { read a; echo "${a#* }/vendor/bin:$PATH"; }`
-  fi
 - |
   # Install the specified version of PHPUnit depending on the PHP version:
   if [[ "$WP_TRAVISCI" == "travis:phpunit" ]]; then
@@ -46,13 +45,9 @@ before_script:
         echo "Using PHPUnit 5.7"
         composer global require "phpunit/phpunit=5.7.*"
         ;;
-      5.6|5.5|5.4|5.3)
+      5.6|5.5|5.4)
         echo "Using PHPUnit 4.8"
         composer global require "phpunit/phpunit=4.8.*"
-        ;;
-      5.2)
-        # Do nothing, use default PHPUnit 3.6.x
-        echo "Using default PHPUnit, hopefully 3.6"
         ;;
       *)
         echo "No PHPUnit version handling for PHP version $TRAVIS_PHP_VERSION"
@@ -62,7 +57,7 @@ before_script:
   fi
 - npm --version
 - node --version
-- nvm install 6.9.1
+- nvm install 12.16.3
 - npm install -g grunt-cli
 - npm install
 - npm prune
@@ -98,12 +93,6 @@ notifications:
       secure: gEfRUPngUkfJIke6ZBxED14AHlcDLoKyX+j7UJR9hHWiI9ydoBVU7X+td8sgx0oBgckDvbXdHgZl+LR7ftV5CIAhyeWTgJPny5+YsECU3+SSnL6NvwL3SGGavhhgt495NkW0fyvW2m92TqBSgcQMnDkd7Klxb+7euxOIwEKsVtVWd0UAQgr2Pkg4T35ZHtvqPFsIOdOqUB8l93H6cTl4Z1/bHHlPKWKaGMNkGca/VEP/+NIyi2uYVqcbsGR439vvOw/tJI+pn6202K0glPF7zZDjCvzZ4litSgzHh3n6C4qOciVFqvCWmC2JSFVfii5ZhrLORsvHRmph7iuiXvsrdJ+U/RydB1kP5K0ONGf9NR79ulLT07s+FNd4tRO+YHjfKtPfxpbkRMQG7IMyay2tym2cI55nw2Zm3xkgXmU33NHNczDbQujY+qs7vKnnFX4ExyPKUWFrKQMNaD3102kIf2O5jeyNOnLxokYu4yyC0thPenCsBwLysD0VLDG4Mu/Gw9kVLp7BtR4tBqzRzwf0fcXMpkmuzQlaCExJScwyk6TwpFvW/GQ4DIKAHVFagMNme2Ka3piQG88mJJuGDqcFMiWsvyBVGPb24U0SvALB8EWcceWVyJ7QDshjE1zkUjBnSTlaOzQbAxTf/19Ipd/rQnbN02mE90HN/2CV2AHlF9U=
 jobs:
   include:
-  - php: 5.2
-    dist: precise
-    env: WP_VERSION=5.1 WP_MULTISITE=0
-  - php: 5.3
-    dist: precise
-    env: WP_VERSION=5.1 WP_MULTISITE=0
   - php: 5.4
     env: WP_VERSION=5.1 WP_MULTISITE=0
   - php: 5.5

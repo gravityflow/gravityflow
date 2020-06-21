@@ -220,7 +220,8 @@ if ( class_exists( 'GFForms' ) ) {
 
 			// GravityView Integration.
 			add_filter( 'gravityview/adv_filter/field_filters', array( $this, 'filter_gravityview_adv_filter_field_filters' ), 10, 2 );
-			add_filter( 'gravityview_search_criteria', array( $this, 'filter_gravityview_search_criteria' ), 999, 3 );
+			add_filter( 'gravityview_search_criteria', array( $this, 'filter_gravityview_search_criteria' ), 999, 3 ); // Advanced Filter v1.0
+			add_filter( 'gravityview/adv_filter/filters', array( $this, 'filter_gravityview_adv_filter_filters' ), 999, 2 ); // Advanced Filter v2.0
 			add_filter( 'gravityview/common/get_entry/check_entry_display', array( $this, 'filter_gravityview_common_get_entry_check_entry_display' ), 999, 2 );
 		}
 
@@ -273,6 +274,9 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'wp_ajax_gravityflow_export_status', array( $this, 'ajax_export_status' ) );
 			add_action( 'wp_ajax_nopriv_gravityflow_export_status', array( $this, 'ajax_export_status' ) );
 			add_action( 'wp_ajax_gravityflow_download_export', array( $this, 'ajax_download_export' ) );
+
+			add_action( 'wp_ajax_nopriv_gravityflow_render_reports', array( $this, 'ajax_render_workflow_reports' ) );
+			add_action( 'wp_ajax_gravityflow_render_reports', array( $this, 'ajax_render_workflow_reports' ) );
 		}
 
 		/**
@@ -709,9 +713,8 @@ PRIMARY KEY  (id)
 					'version' => $this->_version,
 					'deps'    => array( 'jquery', 'sack' ),
 					'enqueue' => array(
-						array(
-							'query' => 'page=gravityflow-inbox',
-						),
+						array( 'query' => 'page=gravityflow-inbox', ),
+						array( 'query' => 'page=gf_entries', ),
 					),
 				),
 				array(
@@ -803,21 +806,62 @@ PRIMARY KEY  (id)
 		}
 
 		/**
-		 * Determines if the gravityflow shortcode is used in the post content.
+		 * Determines if at least one of the posts for the current WP query contains the shortcode or block.
 		 *
 		 * @return bool
 		 */
 		public function look_for_shortcode() {
 			global $wp_query;
 
-			$shortcode_found = false;
 			foreach ( $wp_query->posts as $post ) {
-				if ( stripos( $post->post_content, '[gravityflow' ) !== false || stripos( $post->post_content, '<!-- wp:gravityflow/' ) !== false ) {
-					$shortcode_found = true;
-					break;
+				if ( $post instanceof WP_Post && $this->has_shortcode_or_block( $post->post_content ) ) {
+					return true;
 				}
 			}
-			return $shortcode_found;
+
+			return false;
+		}
+
+		/**
+		 * Determines if the supplied post content contains the shortcode or block (also checks post content for reusable blocks).
+		 *
+		 * @since 2.5.10
+		 *
+		 * @param string $post_content The post content to be checked.
+		 *
+		 * @return bool
+		 */
+		public function has_shortcode_or_block( $post_content ) {
+			if ( empty( $post_content ) ) {
+				return false;
+			}
+
+			if ( stripos( $post_content, '[gravityflow' ) !== false || stripos( $post_content, '<!-- wp:gravityflow/' ) !== false ) {
+				return true;
+			}
+
+			if ( ! function_exists( 'has_block' ) || ! has_block( 'block', $post_content ) ) {
+				return false;
+			}
+
+			$blocks = parse_blocks( $post_content );
+
+			foreach ( $blocks as $block ) {
+				if ( rgar( $block, 'blockName' ) !== 'core/block' || empty( $block['attrs']['ref'] ) ) {
+					continue;
+				}
+
+				$reusable_block = get_post( $block['attrs']['ref'] );
+				if ( empty( $reusable_block ) || $reusable_block->post_type !== 'wp_block' ) {
+					continue;
+				}
+
+				if ( $this->has_shortcode_or_block( $reusable_block->post_content ) ) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		/**
@@ -5115,6 +5159,11 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 								'name'    => 'allow_field_ids',
 								'tooltip' => esc_html__( 'This setting allows the fields attribute to be used in the shortcode.', 'gravityflow' ),
 							),
+							array(
+								'label'   => esc_html__( 'Allow the Reports shortcode to display workflow reports to all registered and anonymous users.', 'gravityflow' ),
+								'name'    => 'allow_display_reports',
+								'tooltip' => esc_html__( 'This setting allows the Reports shortcode to display workflow reports to all registered and anonymous users.', 'gravityflow' ),
+							),
 						),
 					),
 				),
@@ -6356,6 +6405,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'category'         => '',
 				'step_id'          => null,
 				'assignee'         => '',
+				'display_filter'   => true,
 			);
 
 			return $defaults;
@@ -6540,12 +6590,15 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		public function get_shortcode_reports_page( $a ) {
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
-			wp_enqueue_script( 'google_charts', 'https://www.google.com/jsapi',  array(), $this->_version );
+			wp_enqueue_script( 'google_charts', 'https://www.gstatic.com/charts/loader.js',  array(), $this->_version );
 			wp_enqueue_script( 'gravityflow_reports', $this->get_base_url() . "/js/reports{$min}.js",  array( 'jquery', 'google_charts' ), $this->_version );
 
+			$app_settings  = $this->get_app_settings();
+			$allow_reports = rgar( $app_settings, 'allow_display_reports' );
+
 			$args = array(
-				'display_header' => false,
-				'base_url'       => remove_query_arg( array(
+				'display_header'        => false,
+				'base_url'              => remove_query_arg( array(
 					'page',
 					'range',
 					'form-id',
@@ -6553,11 +6606,13 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					'step-id',
 					'assignee',
 				) ),
-				'form_id'        => $a['form'],
-				'range'          => $a['range'],
-				'category'       => $a['category'],
-				'step_id'        => $a['step_id'],
-				'assignee'       => $a['assignee'],
+				'form_id'               => $a['form'],
+				'range'                 => $a['range'],
+				'category'              => $a['category'],
+				'step_id'               => $a['step_id'],
+				'assignee'              => $a['assignee'],
+				'display_filter'        => $a['display_filter'],
+				'check_permissions'     => ! $allow_reports,
 			);
 
 			ob_start();
@@ -7898,6 +7953,42 @@ AND m.meta_value='queued'";
 		}
 
 		/**
+		 * AJAX helper to render workflow reports.
+		 *
+		 * @since 2.5.10
+		 */
+		public function ajax_render_workflow_reports() {
+			if ( ! wp_verify_nonce( rgpost( 'nonce' ), 'gravityflow_render_reports' ) ) {
+				$response['status'] = 'error';
+				$response['message'] = __( 'Not authorized', 'gravityflow' );
+				$response_json = json_encode( $response );
+				echo $response_json;
+				die();
+			}
+
+			$args = json_decode( rgpost( 'args' ), true );
+
+			// Get values from the filter, and replace the params if they use "-" instead of "_".
+			$data = array();
+			parse_str( rgpost( 'data' ), $data );
+			foreach ( $data as $key => $arg ) {
+			    unset( $data[ $key ] );
+				$key = str_replace( '-', '_', $key );
+				$data[ $key ] = $arg;
+			}
+
+			$args = array_merge( $args, $data );
+
+			require_once( $this->get_base_path() . '/includes/pages/class-reports.php' );
+
+			$assignee_key = sanitize_text_field( rgar( $args, 'assignee' ) );
+			list( $args['assignee_type'], $args['assignee_id'] ) = rgexplode( '|', $assignee_key, 2 );
+
+			Gravity_Flow_Reports::output_reports( $args );
+			die();
+		}
+
+		/**
 		 * Returns the display label for the specified navigation label key.
 		 *
 		 * @param string $label_key The navigation label key.
@@ -8460,6 +8551,8 @@ AND m.meta_value='queued'";
 			if ( is_array( $logic['rules'] ) ) {
 				foreach ( $logic['rules'] as $rule ) {
 
+					$rule['value'] = GFCommon::replace_variables( $rule['value'], $form, $entry, false, false, false, 'text' );
+					
 					if ( in_array( $rule['fieldId'], $entry_meta_keys ) ) {
 						$is_value_match = GFFormsModel::is_value_match( rgar( $entry, $rule['fieldId'] ), $rule['value'], $rule['operator'], null, $rule, $form );
 					} else {
@@ -8557,7 +8650,9 @@ AND m.meta_value='queued'";
 				return $text;
 			}
 
+			remove_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_variables' ) );
 			$step = gravity_flow()->get_current_step( $form, $entry );
+			add_filter( 'gform_pre_replace_merge_tags', array( $this, 'replace_variables' ), 10, 7 );
 
 			$assignee = null;
 
@@ -8743,6 +8838,38 @@ AND m.meta_value='queued'";
 			}
 
 			return $search_criteria;
+		}
+
+		/**
+		 * Target for the `gravityview/adv_filter/filters` filter.
+		 *
+		 * @since 2.5.11
+		 *
+		 * @param array|null $filters Search filters used by GravityView.
+		 * @param \GV\View   $view    GravityView View object.
+		 *
+		 * @return array
+		 */
+		public function filter_gravityview_adv_filter_filters( $filters, $view ) {
+
+			$modify_filter_conditions = function ( &$filters ) use ( &$modify_filter_conditions ) {
+
+				foreach ( $filters['conditions'] as &$filter_condition ) {
+					if ( ! empty( $filter_condition['conditions'] ) ) {
+						$modify_filter_conditions( $filter_condition );
+					}
+
+					if ( ! empty( $filter_condition['key'] ) && ! empty( $filter_condition['value'] ) && 'workflow_assignee' === $filter_condition['key'] ) {
+						$assignee_key              = ( 'current_user' === $filter_condition['value'] ) ? gravity_flow()->get_current_user_assignee_key() : $filter_condition['value'];
+						$filter_condition['key']   = 'workflow_' . str_replace( '|', '_', $assignee_key );
+						$filter_condition['value'] = 'pending';
+					}
+				}
+
+				return $filters;
+			};
+
+			return ! empty( $filters['conditions'] ) ? $modify_filter_conditions( $filters ) : $filters;
 		}
 
 		/**

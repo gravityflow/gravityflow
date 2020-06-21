@@ -48,19 +48,6 @@ class Gravity_Flow_Step_Feed_HubSpot extends Gravity_Flow_Step_Feed_Add_On {
 		return 'HubSpot';
 	}
 
-	/**
-	 * Returns the class name for the add-on.
-	 *
-	 * @return string
-	 */
-	public function get_feed_add_on_class_name() {
-		if ( ! class_exists( '\BigSea\GFHubSpot\GF_HubSpot' ) ) {
-			$this->_class_name = 'GF_HubSpot';
-		}
-
-		return $this->_class_name;
-	}
-
 }
 
 Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_HubSpot() );

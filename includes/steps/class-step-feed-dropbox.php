@@ -78,7 +78,7 @@ class Gravity_Flow_Step_Feed_Dropbox extends Gravity_Flow_Step_Feed_Add_On {
 			return true;
 		}
 
-		$feed['meta']['workflow_step'] = $this->get_id();
+		gform_update_meta( $this->get_entry_id(), sprintf( 'dropbox_%d_workflow_step', $feed['id'] ), $this->get_id(), $this->get_form_id() );
 		parent::process_feed( $feed );
 
 		return false;
@@ -144,10 +144,15 @@ Gravity_Flow_Steps::register( new Gravity_Flow_Step_Feed_Dropbox() );
  */
 function gravity_flow_step_dropbox_post_upload( $feed, $entry, $form ) {
 	$workflow_is_pending = rgar( $entry, 'workflow_final_status' ) == 'pending';
-	$feed_step_id        = rgar( $feed['meta'], 'workflow_step' );
-	$entry_step_id       = rgar( $entry, 'workflow_step' );
+	$entry_step_id       = (int) rgar( $entry, 'workflow_step' );
 
-	if ( $workflow_is_pending && ! empty( $feed_step_id ) && $feed_step_id == $entry_step_id ) {
+	if ( ! $workflow_is_pending || ! $entry_step_id ) {
+		return;
+	}
+
+	$feed_step_id = (int) gform_get_meta( $entry['id'], sprintf( 'dropbox_%d_workflow_step', $feed['id'] ) );
+
+	if ( ! empty( $feed_step_id ) && $feed_step_id === $entry_step_id ) {
 		$step = Gravity_Flow_Steps::get( 'dropbox' );
 		if ( $step ) {
 			$add_on_feeds = $step->get_processed_add_on_feeds( $entry['id'] );

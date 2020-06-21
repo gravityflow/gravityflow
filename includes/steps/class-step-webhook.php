@@ -614,6 +614,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 			$body = $this->raw_body;
 			add_filter( 'gform_merge_tag_filter', array( $this, 'filter_gform_merge_tag_webhook_raw_encode' ), 40, 5 );
 			$body = GFCommon::replace_variables( $body, $this->get_form(), $entry, false, false, false, 'text' );
+			$body = do_shortcode( $body );
 			remove_filter( 'gform_merge_tag_filter', array( $this, 'filter_gform_merge_tag_webhook_raw_encode' ), 40 );
 
 			$this->log_debug( __METHOD__ . '() - got body after replace vars: ' . $body );

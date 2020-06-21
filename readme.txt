@@ -2,7 +2,7 @@
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
 Requires at least: 4.4
-Tested up to: 5.3
+Tested up to: 5.4.2
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,47 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 2.5.11 =
+- Fixed issue with merge tag evaluation that caused a fatal error involving certain conditional logic setup. Update Form Connector add-on will also be required if installed.
+- Fixed an issue with second layer confirmation for Approval Step. When the Revert to User Input step option is enabled, the Revert button was not displaying the confirm box.
+- Fixed support for latest versions of Gravity View Advanced Filters. Credit: The team at GravityView.
+- Fixed an issue with the reports shortcode/page where the "Step Assignees" dropdown was missing when "Category" is set to "Step" and a step is chosen.
+
+= 2.5.10 =
+- Added security enhancements.
+- Added support for reports in the shortcode [gravityflow page="reports"].
+- Added setting to allow the reports shortcode to display reports to display to anonymous users.
+- Added support for the Pods Gravity Forms Add-On.
+- Added support for the GP eCommerce Fields on the User Input Step.
+- Added support for the Gravity Forms EmailOctopus Add-On.
+- Added support for Merge Tags on Workflow Step Conditions.
+- Added support for Gravity Forms conditional shortcode within Outgoing webhook raw body requests.
+- Added filter gravityflow_send_to_step_condition_met_required to allow customization of the API send_to_step when the proposed steps conditions are not met. Default is false that API will always send to the proposed step.
+- Added filter gravityflow_send_to_step_condition_not_met to allow customization of the API when the proposed next step has not met its step conditions. Defaults to next step after the proposed step.
+- Added workflow note when the Update User step is completed.
+- Added support for filter gform_pre_validation on the User Input Step.
+- Added a second layer confirmation for Approval Step with a confirm box. This can be enabled in the step settings.
+- Added filter gravityflow_approval_confirm_prompt_messages to allow customization of the confirmation prompt messages on the Approval Step.
+- Updated the Zapier step to support Gravity Forms Zapier Add-On v4.0-beta-1.1 and greater.
+- Updated Outgoing Webhook settings to allow GET requests to include the request body settings as URL parameters.
+- Updated gravityflow_print_styles filter to include 2nd parameter of entry IDs.
+- Fixed an issue with the User Input Step where editable Total, Coupon, Subtotal, Tax, or Discount fields required all other pricing fields to be editable to function correctly.
+- Fixed an issue with the User Input Step where the existing Coupon field value is not restored. Requires Coupons Add-On v2.9.2 or greater.
+- Fixed an issue with the User Input Step where the Coupon usage count is not updated.
+- Fixed a PHP notice which occurs when the shortcode is processed and WordPress isn't able to provide the current post object.
+- Fixed a PHP warning on the inbox page when a step is configured with a delay based due date and the offset setting contains non-numeric characters.
+- Fixed notices with PHP 7.4.
+- Fixed an issue where the Dropbox step does not complete with Dropbox Add-On 2.4.1+.
+- Fixed an issue where the report data for assignees by month is incorrect.
+- Fixed an issue where the Discussion Field view more/less effect would not operate on the Form > Entries screen (both view and edit).
+- Fixed an issue where the scripts and styles are not enqueued when using the shortcode or block in a reusable block.
+- Fixed an issue in the step settings page where duplicate Workflow step icons appear for the Gravity Forms HubSpot Add-on and third-party HubSpot Add-on. IMPORTANT: check that your HubSpot workflow steps are correct after updating to this version.
+- Fixed a bug with 'Schedule expiration' on Workflow step. 'Next Step if Expired' option should only appear when 'Status after expiration' is set as 'Expired'.
+- Fixed the field filter not appearing on the status page when the form_id constraint is set to an array using the gravityflow_status_filter hook.
+- Fixed an issue for the completed URL of Partial Entry Submission step, which was directing to a new form entry. Updated to return a message stating that the entry was already completed.
+- Fixed an issue with the Connected Apps comparing authorization value from translated text.
+
 
 = 2.5.9 =
 - Fixed incorrect feedback when user input step confirmation message content is left empty and the step is completed.

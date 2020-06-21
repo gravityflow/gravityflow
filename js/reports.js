@@ -2,61 +2,97 @@
 
     "use strict";
 
-    var stepVars;
+    var gravityflowFilterVars, stepVars;
 
     $(document).ready(function () {
 
-        stepVars = gravityflowFilterVars.config;
-        var selectedVars = gravityflowFilterVars.selected;
+        $('.gravityflow-reports-filter').each( function(){
+            gravityflowFilterVars = $(this).data('filter');
 
-        var formId = selectedVars.formId;
+            stepVars = gravityflowFilterVars.config;
+            var selectedVars = gravityflowFilterVars.selected;
 
-        $('#gravityflow-reports-category').toggle(formId ? true : false);
+            var formId = selectedVars.formId;
 
-        if ( formId ) {
-            var category = selectedVars.category;
-            if ( category == 'step' ) {
-                $('#gravityflow-reports-steps').html(getStepOptions(formId));
-                var stepId = selectedVars.stepId;
-                $('#gravityflow-reports-steps').val(stepId);
-                $('#gravityflow-reports-steps').show();
+            $(this).find('.gravityflow-reports-category').toggle(formId ? true : false);
 
-                if ( stepId ) {
-                    var assigneeVars = stepVars[formId][stepId].assignees;
+            if ( formId ) {
+                var category = selectedVars.category;
+                if ( category == 'step' ) {
+                    $(this).find('.gravityflow-reports-steps').html(getStepOptions(formId));
+                    var stepId = selectedVars.stepId;
+                    $(this).find('.gravityflow-reports-steps').val(stepId);
+                    $(this).find('.gravityflow-reports-steps').show();
 
-                    $('#gravityflow-reports-assignees').html(getAssigneeOptions( assigneeVars ) );
+                    if ( stepId ) {
+                        var assigneeVars = stepVars[formId][stepId].assignees;
 
-                    $('#gravityflow-reports-assignees').val(selectedVars.assignee);
-                    $('#gravityflow-reports-assignees').show();
+                        $(this).find('.gravityflow-reports-assignees').html(getAssigneeOptions( assigneeVars ) );
+
+                        $(this).find('.gravityflow-reports-assignees').val(selectedVars.assignee);
+                        $(this).find('.gravityflow-reports-assignees').show();
+                    }
                 }
             }
-        }
+        } );
 
-        $('#gravityflow-form-drop-down').change(function(){
-            $('#gravityflow-reports-category').toggle( this.value ? true : false);
+        $('.gravityflow-reports-filter form').on('submit', function(e){
+            if (! $('body').hasClass('wp-admin')) {
+                e.preventDefault();
+
+                var reportWrapper = $(this).parents('.gravityflow_workflow_reports');
+
+                $.ajax({
+                    url: gravityflow_status_list_strings.ajaxurl,
+                    method: 'POST',
+                    data: {
+                        action: 'gravityflow_render_reports',
+                        nonce: $(this).find('.gravityflow-reports-nonce').val(),
+                        args: $(this).find('.gravityflow-reports-args').val(),
+                        data: $(this).serialize()
+                    },
+                    success: function (response) {
+                        if(response.status === 'error'){
+                            alert(response.message);
+                        } else {
+                            reportWrapper.find('#gravityflow-reports').html(response);
+                            Gravity_Flow_Reports.drawCharts();
+                        }
+                    }
+                });
+            }
         });
-        $('#gravityflow-reports-category').change(function(){
-            var formId = $('#gravityflow-form-drop-down').val();
+
+        $('.gravityflow-form-drop-down').change(function(){
+            $(this).nextAll('.gravityflow-reports-category').toggle( this.value ? true : false);
+
+            // Reset all the other dropdowns.
+            if (this.value) {
+                $(this).nextAll('.gravityflow-reports-category').val('month');
+            }
+            $(this).nextAll('.gravityflow-reports-steps').hide();
+            $('#gravityflow-reports-assignees').hide();
+        });
+        $('.gravityflow-reports-category').change(function(){
+            var formId = $(this).prev('.gravityflow-form-drop-down').val();
             if ( this.value == 'step' ) {
-                $('#gravityflow-reports-steps').html(getStepOptions(formId));
-                $('#gravityflow-reports-steps').show();
+                $(this).nextAll('.gravityflow-reports-steps').html(getStepOptions(formId));
+                $(this).nextAll('.gravityflow-reports-steps').show();
             } else {
                 $('#gravityflow-reports-assignees').hide();
-                $('#gravityflow-reports-steps').hide();
+                $(this).nextAll('.gravityflow-reports-steps').hide();
             }
         });
-        $('#gravityflow-reports-steps').change( function(){
+        $('.gravityflow-reports-steps').change( function(){
             if ( this.value ) {
-                var formId = $('#gravityflow-form-drop-down').val();
+                var formId = $(this).prevAll('.gravityflow-form-drop-down').val();
                 var assigneeVars = stepVars[formId][this.value].assignees;
-                $('#gravityflow-reports-assignees').html(getAssigneeOptions( assigneeVars ) );
-                $('#gravityflow-reports-assignees').show();
+                $(this).nextAll('.gravityflow-reports-assignees').html(getAssigneeOptions( assigneeVars ) );
+                $(this).nextAll('.gravityflow-reports-assignees').show();
             } else {
-                $('#gravityflow-reports-assignees').hide();
+                $(this).nextAll('.gravityflow-reports-assignees').hide();
             }
         });
-
-
     });
 
     function getStepOptions( formId ){
@@ -83,15 +119,18 @@
         $('.gravityflow_chart').each(function () {
             var $this = $(this);
             var dataTable = $this.data('table');
-            var data = google.visualization.arrayToDataTable(dataTable);
 
-            var options = $this.data('options');
+            if (typeof dataTable !== 'undefined') {
+                var data = google.visualization.arrayToDataTable(dataTable);
 
-            var chartType = $this.data('type');
+                var options = $this.data('options');
 
-            var chart = new google.charts[chartType]( this );
+                var chartType = $this.data('type');
 
-            chart.draw(data, options);
+                var chart = new google.charts[chartType]( this );
+
+                chart.draw(data, options);
+            }
         })
     }
 

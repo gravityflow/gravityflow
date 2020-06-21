@@ -602,13 +602,13 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 
 		$forms = GFAPI::get_forms();
 		foreach ( $forms as $form ) {
-		    if ( is_array( $form_id ) && ! in_array( $form['id'], $form_id ) ) {
-		        continue;
-            }
-
-		    if ( ! empty( $form_id ) && $form['id'] != $form_id )  {
-		        continue;
-            }
+			if ( ! empty( $form_id ) ) {
+				if ( is_array( $form_id ) && ! in_array( $form['id'], $form_id ) ) {
+					continue;
+				} elseif ( ! is_array( $form_id ) && $form['id'] != $form_id ) {
+					continue;
+				}
+			}
 
 			$form_filters = GFCommon::get_field_filter_settings( $form );
 

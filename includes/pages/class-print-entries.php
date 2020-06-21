@@ -192,7 +192,16 @@ class Gravity_Flow_Print_Entries {
 			<link rel='stylesheet' href='<?php echo gravity_flow()->get_base_url() ?>/css/entry-detail<?php echo $min; ?>.css' type='text/css'/>
 			<link rel='stylesheet' href='<?php echo gravity_flow()->get_base_url() ?>/css/discussion-field<?php echo $min; ?>.css' type='text/css'/>
 			<?php
-			$styles = apply_filters( 'gravityflow_print_styles', false );
+			/**
+			 * Allows the print CSS styles that are output for print entries to be customized.
+			 *
+			 * @since 2.5.10     Add $entry_ids to parameters
+			 * @since unknown
+			 *
+			 * @param array    $styles     The named CSS files to output through wp_print_styles.
+			 * @param array    $entry_ids  The current entry(ies) which are set for print / bulk print. 
+			 */
+			$styles = apply_filters( 'gravityflow_print_styles', false, $entry_ids );
 			if ( ! empty( $styles ) ) {
 				wp_print_styles( $styles );
 			}

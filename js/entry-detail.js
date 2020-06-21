@@ -4,11 +4,10 @@
     };
 
     GravityFlowEntryDetail.displayDiscussionItemToggle = function (formId, fieldId, displayLimit) {
+            $toggle = $('.gravityflow-dicussion-item-hidden');
+            $toggle.slideToggle( 'fast' );
 
-            $toggle = $('.field_description_below');
-            $toggle.find( '.gravityflow-dicussion-item-hidden' ).slideToggle( 'fast' );
-
-            var $viewMore = $toggle.children( '.gravityflow-dicussion-item-toggle-display' );
+            var $viewMore = $toggle.siblings( '.gravityflow-dicussion-item-toggle-display' );
             var oldText = $viewMore.attr( 'title' );
             var newText = $viewMore.data( 'title' );
 

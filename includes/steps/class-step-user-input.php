@@ -394,6 +394,15 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				return false;
 			}
 
+			/**
+			 * Enables pre validation for the User Input step.
+			 *
+			 * @since 2.5.10
+			 *
+			 * @param array  $form                The current form.
+			 */
+			$form = gf_apply_filters( array( 'gform_pre_validation', $form['id'] ), $form );
+			
 			// Loading files that have been uploaded to temp folder.
 			$files = GFCommon::json_decode( rgpost( 'gform_uploaded_files' ) );
 			if ( ! is_array( $files ) ) {

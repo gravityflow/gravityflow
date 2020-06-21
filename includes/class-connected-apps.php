@@ -700,9 +700,11 @@ class Gravity_Flow_Connected_Apps {
 							<td>
 								<input type="hidden" id="gflow_authorize_app_hidden_action" name="gflow_authorize_app"
 								       value="Authorize App"/>
-								<input type="submit" id="gflow_authorize_app_button" name="gflow_authorize_app"
+								<button type="submit" id="gflow_authorize_app_button" name="gflow_authorize_app"
 								       class="button primary"
-								       value="<?php esc_html_e( 'Authorize App', 'gravityflow' ); ?>"/>
+								       value="Authorize App">
+											 <?php esc_html_e( 'Authorize App', 'gravityflow' ); ?>
+								</button>
 
 							</td>
 						</tr>
