@@ -1637,9 +1637,9 @@ PRIMARY KEY  (id)
 
 		/**
 		 * Sets the _assignee_settings_md5 class property on feed validation, if there are entries on this step.
-         *
-         * @since 2.5     Add new checks for step required capabilities.
-         * @since unknown
+		 *
+		 * @since 1.0
+		 * @since 2.5     Add new checks for step required capabilities.
 		 *
 		 * @param array  $field         The field properties.
 		 * @param string $field_setting The field value.
@@ -2147,9 +2147,9 @@ PRIMARY KEY  (id)
 		/**
 		 * Renders and initializes a radio field or a collection of radio fields based on the $field array.
 		 * Images/icons are used in place of the HTML radio buttons.
-         *
-         * @since 1.0
-		 * @since 2.5.10    Change from protected to public for Gravity Forms 2.5.
+		 *
+		 * @since 1.0
+		 * @since 2.5.12   Change from protected to public for Gravity Forms 2.5.
 		 *
 		 * @param array $field Field array containing the configuration options of this field.
 		 * @param bool  $echo  True to echo the output to the screen, false to simply return the contents as a string.
@@ -2220,8 +2220,8 @@ PRIMARY KEY  (id)
 		 * Renders the HTML for the schedule setting.
 		 *
 		 * @since 1.0
-		 * @since 2.5.10    Added the $echo param.
-         *
+		 * @since 2.5.12    Added the $echo param.
+		 *
 		 * @param array $field The field properties.
 		 * @param bool  $echo  Whether to output the setting.
 		 *
@@ -2419,7 +2419,7 @@ PRIMARY KEY  (id)
 		 * Renders the HTML for the due date setting.
 		 *
 		 * @since 2.5
-		 * @since 2.5.10 Added the $echo param.
+		 * @since 2.5.12 Added the $echo param.
 		 *
 		 * @param array $field The field properties.
 		 * @param bool  $echo  Whether to output the setting.
@@ -2650,7 +2650,7 @@ PRIMARY KEY  (id)
 
 			$html .= trim( ob_get_clean() );
 
-            if ( $echo ) {
+			if ( $echo ) {
 				echo $html;
 			}
 
@@ -2659,10 +2659,10 @@ PRIMARY KEY  (id)
 
 		/**
 		 * Renders the HTML for the expiration setting.
-         *
-         *
-         * @since 1.0
-         * @since 2.5.10    Added the $echo param.
+		 *
+		 *
+		 * @since 1.0
+		 * @since 2.5.12    Added the $echo param.
 		 *
 		 * @param array $field  The field properties.
 		 * @param bool  $echo   Whether to output the setting.
@@ -2880,7 +2880,7 @@ PRIMARY KEY  (id)
 			</script>
 			<?php
 
-            $html .= trim( ob_get_clean() );
+			$html .= trim( ob_get_clean() );
 
 			if ( $echo ) {
 				echo $html;
@@ -2895,9 +2895,10 @@ PRIMARY KEY  (id)
 		 * The container will be displayed or hidden depending on the value of the step_highlight checkbox field.
 		 *
 		 * @since 1.9.2
-		 * @since 2.5.10    Added the $echo param.
+		 * @since 2.5.12    Added the $echo param.
 		 *
 		 * @param array $field The field properties.
+		 * @param bool  $echo  Whether to output the setting.
 		 *
 		 * @return string
 		 */
@@ -2963,9 +2964,10 @@ PRIMARY KEY  (id)
 		 * The container will be displayed or hidden depending on the value of the step_highlight checkbox field.
 		 *
 		 * @since 1.9.2
-		 * @since 2.5.10    Added the $echo param.
+		 * @since 2.5.12    Added the $echo param.
 		 *
 		 * @param array $field The field properties.
+		 * @param bool  $echo  Whether to output the setting.
 		 *
 		 * @return string|void
 		 */
@@ -3017,9 +3019,9 @@ PRIMARY KEY  (id)
 
 		/**
 		 * Renders the tabs setting.
-         *
+		 *
 		 * @since 1.0
-		 * @since 2.5.10    Added the $echo param.
+		 * @since 2.5.12    Added the $echo param.
 		 *
 		 * @param array $tabs_field The field properties.
 		 * @param bool  $echo       Whether to output the setting.
@@ -3307,7 +3309,7 @@ PRIMARY KEY  (id)
 		 * Renders the HTML for the visual editor setting.
 		 *
 		 * @since 1.0
-         * @since 2.5.10 Added the $echo param.
+		 * @since 2.5.12 Added the $echo param.
 		 *
 		 * @param array $field The field properties.
 		 * @param bool  $echo   Whether to output the setting.
@@ -3340,7 +3342,7 @@ PRIMARY KEY  (id)
 		 * Renders the HTML for the routing setting.
 		 *
 		 * @since 1.0
-		 * @since 2.5.10 Added the $field and $echo params.
+		 * @since 2.5.12 Added the $field and $echo params.
 		 *
 		 * @param array $field The field properties.
 		 * @param bool  $echo   Whether to output the setting.
@@ -3364,12 +3366,10 @@ PRIMARY KEY  (id)
 		 * Renders the HTML for the user routing setting.
 		 *
 		 * @since 1.0
-		 * @since 2.5.10 Added the $echo param.
+		 * @since 2.5.12 Added the $echo param.
 		 *
 		 * @param array $field The field properties.
 		 * @param bool  $echo  Whether to output the setting.
-		 *
-		 * @param array $field The field properties.
 		 *
 		 * @return string
 		 */
@@ -3391,7 +3391,7 @@ PRIMARY KEY  (id)
 		 * Renders the HTML for the step selector setting.
 		 *
 		 * @since 1.0
-		 * @since 2.5.10 Added the $echo param.
+		 * @since 2.5.12 Added the $echo param.
 		 *
 		 * @param array $field The field properties.
 		 * @param bool  $echo  Whether to output the setting.
@@ -3435,7 +3435,7 @@ PRIMARY KEY  (id)
 		 * Renders the HTML for the editable fields setting.
 		 *
 		 * @since 1.0
-		 * @since 2.5.10 Added the $echo param.
+		 * @since 2.5.12 Added the $echo param.
 		 *
 		 * @param array $field The field properties.
 		 * @param bool  $echo  Whether to output the setting.
@@ -3468,7 +3468,7 @@ PRIMARY KEY  (id)
 		 * Displays the setting HTML.
 		 *
 		 * @since 1.0
-		 * @since 2.5.10 Added the $echo param.
+		 * @since 2.5.12 Added the $echo param.
 		 *
 		 * @param array $field The field properties.
 		 * @param bool  $echo  Whether to output the setting.
