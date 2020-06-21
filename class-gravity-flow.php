@@ -590,6 +590,8 @@ PRIMARY KEY  (id)
 
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
+			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? '-legacy' : '';
+
 			$nonce = wp_create_nonce( 'wp_rest' );
 
 			$scripts = array(
@@ -670,7 +672,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_form_settings_js',
-					'src'     => $this->get_base_url() . "/js/form-settings{$min}.js",
+					'src'     => $this->get_base_url() . "/js/form-settings{$legacy}{$min}.js",
 					'deps'    => array( 'jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'gform_datepicker_init', 'gf_routing_setting' ),
 					'version' => $this->_version,
 					'enqueue' => array(
@@ -980,6 +982,8 @@ PRIMARY KEY  (id)
 
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
+			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? '-legacy' : '';
+
 			$styles = array(
 				array(
 					'handle'  => 'gform_admin',
@@ -1076,7 +1080,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_form_settings',
-					'src'     => $this->get_base_url() . "/css/form-settings{$min}.css",
+					'src'     => $this->get_base_url() . "/css/form-settings{$legacy}{$min}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
@@ -2204,9 +2208,11 @@ PRIMARY KEY  (id)
 
 			$field['type'] = 'radio'; // Making sure type is set to radio.
 
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+
 			$selected_value   = $this->get_setting( $field['name'], rgar( $field, 'default_value' ) );
 			$field_attributes = $this->get_field_attributes( $field );
-			$horizontal       = rgar( $field, 'horizontal' ) ? ' gaddon-setting-inline' : '';
+			$horizontal       = rgar( $field, 'horizontal' ) ? " {$settings_prefix}-setting-inline" : '';
 			$html             = '';
 			if ( is_array( $field['choices'] ) ) {
 				foreach ( $field['choices'] as $i => $choice ) {
@@ -2231,12 +2237,14 @@ PRIMARY KEY  (id)
 						$icon = $icon_url;
 					}
 
+					$input_name = "_{$settings_prefix}_setting_" . esc_attr( $field['name'] );
+
 					$html .= '
-	                        <div id="gaddon-setting-radio-choice-' . $choice['id'] . '" class="gaddon-setting-radio' . $div_class . $horizontal . '">
+	                        <div id="' . $settings_prefix . '-setting-radio-choice-' . $choice['id'] . '" class="' . $settings_prefix . '-setting-radio' . $div_class . $horizontal . '">
 	                        <input
 	                                id = "' . esc_attr( $choice['id'] ) . '"
 	                                type = "radio" ' .
-					         'name="_gaddon_setting_' . esc_attr( $field['name'] ) . '" ' .
+					         'name="' . $input_name . '" ' .
 					         'value="' . $radio_value . '" ' .
 					         implode( ' ', $choice_attributes ) . ' ' .
 					         $checked .
@@ -3073,12 +3081,13 @@ PRIMARY KEY  (id)
 		 * @return string
 		 */
 		public function settings_tabs( $tabs_field, $echo = true ) {
-		    ob_start();
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+			ob_start();
 			printf( '<div id="tabs-%s">', $tabs_field['name'] );
 			echo '<ul>';
 			foreach ( $tabs_field['tabs'] as $i => $tab ) {
 				$id = isset( $tab['id'] ) ? $tab['id'] : $tab['name'];
-				printf( '<li id="gaddon-setting-tab-%s">', $id );
+				printf( '<li id="%s-setting-tab-%s">', $settings_prefix, $id );
 				printf( '<a href="#tabs-%d"><span style="display:inline-block;width:10px;margin-right:5px"><i class="fa fa-check-square-o gravityflow-tab-checked" style="display:none;"></i><i class="fa fa-square-o gravityflow-tab-unchecked"></i></span>%s</a>', $i, $tab['label'] );
 				echo '</li>';
 			}
@@ -3094,7 +3103,7 @@ PRIMARY KEY  (id)
 							$tooltip_class = isset( $field['tooltip_class'] ) ? $field['tooltip_class'] : '';
 							$tooltip = gform_tooltip( $field['tooltip'], $tooltip_class, true );
 						}
-						printf( '<div id="gaddon-setting-tab-field-%s" class="gravityflow-tab-field"><div class="gravityflow-tab-field-label">%s %s</div>', $id, $field['label'], $tooltip );
+						printf( '<div id="%s-setting-tab-field-%s" class="gravityflow-tab-field"><div class="gravityflow-tab-field-label">%s %s</div>', $settings_prefix, $id, $field['label'], $tooltip );
 						call_user_func( $func, $field );
 						echo '</div>';
 					}
@@ -3364,7 +3373,8 @@ PRIMARY KEY  (id)
 
 			$default_value = rgar( $field, 'value' ) ? rgar( $field, 'value' ) : rgar( $field, 'default_value' );
 			$value         = $this->get_setting( $field['name'], $default_value );
-			$id            = '_gaddon_setting_' . $field['name'];
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+			$id            = "_{$settings_prefix}_setting_" . $field['name'];
 
 			ob_start();
 
@@ -3394,8 +3404,8 @@ PRIMARY KEY  (id)
 		 * @return string
 		 */
 		public function settings_routing( $field, $echo = true ) {
-
-			$html = '<div id="gform_routing_setting" class="gravityflow-routing" data-field_name="_gaddon_setting_routing" data-field_id="routing" ></div>';
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+			$html = '<div id="gform_routing_setting" class="gravityflow-routing" data-field_name="_' . $settings_prefix . '_setting_routing" data-field_id="routing" ></div>';
 			$field['name'] = 'routing';
 
 			$html .= $this->settings_hidden( $field, false );
@@ -3419,9 +3429,12 @@ PRIMARY KEY  (id)
 		 */
 		public function settings_user_routing( $field, $echo = true ) {
 			$name = $field['name'];
+
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+
 			$id = isset( $field['id'] ) ?  $field['id'] : 'gform_user_routing_setting_' . $name;
 
-			$html  = '<div class="gravityflow-user-routing" id="' . $id . '" data-field_name="_gaddon_setting_' . $name . 'user_routing" data-field_id="' . $name . '" ></div>';
+			$html  = '<div class="gravityflow-user-routing" id="' . $id . '" data-field_name="_' . $settings_prefix . '_setting_' . $name . 'user_routing" data-field_id="' . $name . '" ></div>';
 			$html .= ( $name === 'workflow_notification_routing' ) ? '' : rgar( $field, 'description' );
 			$html .= $this->settings_hidden( $field, false );
 
@@ -5182,11 +5195,13 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */
 		public function settings_wp_dropdown_pages( $field, $echo = true ) {
 
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+
 			$args = array(
 				'selected'         => $this->get_setting( $field['name'] ),
 				'echo'             => $echo,
-				'name'             => '_gaddon_setting_' . esc_attr( $field['name'] ),
-				'class'            => 'gaddon-setting gaddon-select',
+				'name'             => "_{$settings_prefix}_setting_" . esc_attr( $field['name'] ),
+				'class'            => "{$settings_prefix}-setting gaddon-select",
 				'show_option_none' => esc_html__( 'Select page', 'gravityflow' ),
 			);
 
@@ -9075,12 +9090,14 @@ AND m.meta_value='queued'";
 				return;
 			}
 
-			$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] ) && isset( $_POST['_gravityflow_save_settings_nonce'] );
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+
+			$is_saving_license_key = isset( $_POST[ "_{$settings_prefix}_setting_license_key" ] ) && isset( $_POST['_gravityflow_save_settings_nonce'] );
 
 			$license_details = false;
 
 			if ( $is_saving_license_key ) {
-				$posted_license_key = sanitize_text_field( rgpost( '_gaddon_setting_license_key' ) );
+				$posted_license_key = sanitize_text_field( rgpost( "_{$settings_prefix}_setting_license_key" ) );
 				if ( wp_verify_nonce( $_POST['_gravityflow_save_settings_nonce'], 'gravityflow_save_settings' ) ) {
 					$license_details = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
 				}
