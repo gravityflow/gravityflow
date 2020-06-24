@@ -1,0 +1,1 @@
+- Added the red bubble inbox count display on the WP Dashboard Workflow display.
