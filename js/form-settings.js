@@ -437,7 +437,7 @@
 	}
 
 	function toggleWorkflowNotificationSettings(enabled) {
-		var $workflowNotificationType = $('#gform-setting-workflow_notification_type');
+		var $workflowNotificationType = $('#gform_setting_workflow_notification_type');
 		$workflowNotificationType.toggle(enabled);
 		if (enabled) {
 			var selected = $workflowNotificationType.find('input[type=radio]:checked').val();
