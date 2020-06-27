@@ -209,7 +209,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 				'checkbox' => array(
 					'label'          => esc_html__( 'Enable', 'gravityflow' ),
 					'name'           => 'highlight_editable_fields_enabled',
-					'defeault_value' => '0',
+					'default_value' => '0',
 				),
 				'select'   => array(
 					'name'    => 'highlight_editable_fields_class',

@@ -233,3 +233,9 @@ table.gform-routings tr.gform-routing-row td .repeater-buttons{
 #instructionsContainer{
     margin: 10px 0 10px 0;
 }
+
+ .gform-settings__wrapper .wp-picker-container .wp-color-result.button {
+    padding: 0 0 0 30px;
+    border: 1px solid silver;
+    border-radius: 3px;
+}

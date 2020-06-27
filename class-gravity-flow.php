@@ -1567,6 +1567,9 @@ PRIMARY KEY  (id)
 
 			foreach ( $step_classes as $step_class ) {
 				$type = $step_class->get_type();
+				if ( $step_type !== $type ) {
+					continue;
+				}
 				$step_settings = $step_class->get_settings();
 				$step_settings['id'] = 'gravityflow-step-settings-' . $type;
 				$step_settings['class'] = 'gravityflow-step-settings';
@@ -5796,10 +5799,13 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * Renders the admin side toolbar.
 		 */
 		public function toolbar() {
+
+			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? true : false;
+
 			?>
 
-			<div id="gf_form_toolbar">
-				<ul id="gf_form_toolbar_links">
+			<div id="<?php echo $legacy ? 'gf_form_toolbar': 'gform-form-toolbar'; ?>">
+				<ul id="<?php echo $legacy ? 'gf_form_toolbar_links': 'gform-form-toolbar__menu'; ?>">
 
 					<?php
 
@@ -8285,7 +8291,7 @@ AND m.meta_value='queued'";
 				'label'    => '',
 				'type'     => 'select',
 				'default_value' => 'all_fields',
-				'onchange' => 'jQuery(this).siblings(".gravityflow_display_fields_selected_container").toggle(this.value != "all_fields");',
+				'onchange' => 'jQuery(this).parent().parent().find(".gravityflow_display_fields_selected_container").toggle(this.value != "all_fields");',
 				'choices' => array(
 					array(
 						'label' => __( 'Display all fields', 'gravityflow' ),

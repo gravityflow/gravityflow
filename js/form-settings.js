@@ -412,7 +412,7 @@
 
 	function toggleType(showType) {
 		var fields = {
-			select: ['assignees_', 'editable_fields', 'conditional_logic_editable_fields_enabled'],
+			select: ['assignees_', 'editable_fields_', 'conditional_logic_editable_fields_enabled'],
 			routing: ['routing', 'conditional_logic_editable_fields_enabled']
 		};
 
@@ -488,7 +488,7 @@
 			'workflow_notification_autoformat',
 
 			'assignees',
-			'editable_fields',
+			'editable_fields_',
 			'routing',
 			'assignee_notification_message',
 			'workflow_notification_gpdf'
