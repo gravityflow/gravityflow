@@ -707,6 +707,7 @@ PRIMARY KEY  (id)
 					'strings' => array(
 						'hasStartStep'    => $has_start_step,
 						'hasCompleteStep' => $has_complete_step,
+						'formId'          => $form_id,
 					),
 				),
 				array(
@@ -2348,17 +2349,19 @@ PRIMARY KEY  (id)
 			);
 
 			$delay_offset_field = array(
-				'name' => 'schedule_delay_offset',
+				'name'  => 'schedule_delay_offset',
 				'class' => 'small-text',
+				'style' => 'width:auto',
 				'label' => esc_html__( 'Schedule', 'gravityflow' ),
-				'type' => 'text',
+				'type'  => 'text',
 			);
 
 			$unit_field = array(
-				'name' => 'schedule_delay_unit',
-				'label' => esc_html__( 'Schedule', 'gravityflow' ),
+				'name'          => 'schedule_delay_unit',
+				'label'         => esc_html__( 'Schedule', 'gravityflow' ),
 				'default_value' => 'hours',
-				'choices' => array(
+				'style'         => 'width:auto',
+				'choices'       => array(
 					array(
 						'label' => esc_html__( 'Minute(s)', 'gravityflow' ),
 						'value' => 'minutes',
@@ -2548,7 +2551,7 @@ PRIMARY KEY  (id)
 
 			$delay_offset_field = array(
 				'name'      => 'due_date_delay_offset',
-				'class'     => 'small-text',
+				'style'     => 'width:auto',
 				'required'  => true,
 				'label'     => esc_html__( 'Due Date', 'gravityflow' ),
 				'type'      => 'text',
@@ -2558,6 +2561,7 @@ PRIMARY KEY  (id)
 				'name' => 'due_date_delay_unit',
 				'label' => esc_html__( 'Due Date', 'gravityflow' ),
 				'default_value' => 'hours',
+				'style'     => 'width:auto',
 				'required'      => true,
 				'choices' => array(
 					array(
@@ -2642,6 +2646,7 @@ PRIMARY KEY  (id)
 					$before_after_field = array(
 						'name' => 'due_date_date_field_before_after',
 						'label' => esc_html__( 'Due Date', 'gravityflow' ),
+						'style'     => 'width:auto',
 						'default_value' => 'after',
 						'choices' => array(
 							array(
@@ -2788,17 +2793,19 @@ PRIMARY KEY  (id)
 			);
 
 			$delay_offset_field = array(
-				'name' => 'expiration_delay_offset',
+				'name'  => 'expiration_delay_offset',
 				'class' => 'small-text',
+				'style' => 'width:auto',
 				'label' => esc_html__( 'Expiration', 'gravityflow' ),
-				'type' => 'text',
+				'type'  => 'text',
 			);
 
 			$unit_field = array(
-				'name' => 'expiration_delay_unit',
-				'label' => esc_html__( 'Expiration', 'gravityflow' ),
+				'name'          => 'expiration_delay_unit',
+				'label'         => esc_html__( 'Expiration', 'gravityflow' ),
 				'default_value' => 'hours',
-				'choices' => array(
+				'style'         => 'width:auto',
+				'choices'       => array(
 					array(
 						'label' => esc_html__( 'Minute(s)', 'gravityflow' ),
 						'value' => 'minutes',
@@ -9019,7 +9026,8 @@ AND m.meta_value='queued'";
 		 * @param string $message     The message to be displayed above the page title.
 		 */
 		public function app_tab_page_header( $tabs, $current_tab, $title, $message = '' ) {
-
+            parent::app_tab_page_header( $tabs, $current_tab, $title, $message );
+            return;
 			// Print admin styles.
 			wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
 
