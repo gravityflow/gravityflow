@@ -971,7 +971,9 @@ PRIMARY KEY  (id)
 		public function feed_list_title() {
 			$url = add_query_arg( array( 'fid' => '0' ) );
 			$url = esc_url( $url );
-			return esc_html__( 'Workflow Steps', 'gravityflow' ) . " <a class='add-new-h2' href='{$url}'>" . __( 'Add New' , 'gravityflow' ) . '</a>';
+			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? '-legacy' : '';
+			$add_new_button = $legacy ? __( 'Add New' , 'gravityflow' ) : '';
+			return esc_html__( 'Workflow Steps', 'gravityflow' ) . " <a class='add-new-h2' href='{$url}'>" . $add_new_button . '</a>';
 		}
 
 		/**
@@ -1097,6 +1099,7 @@ PRIMARY KEY  (id)
 						array( 'query' => 'page=gravityflow_settings&view=settings' ),
 						array( 'query' => 'page=gravityflow_settings&view=labels' ),
 						array( 'query' => 'page=gravityflow_settings&view=connected_apps' ),
+						array( 'query' => 'page=gravityflow_settings&view=uninstall' ),
 					),
 				),
 				array(
@@ -9026,14 +9029,16 @@ AND m.meta_value='queued'";
 		 * @param string $message     The message to be displayed above the page title.
 		 */
 		public function app_tab_page_header( $tabs, $current_tab, $title, $message = '' ) {
-            parent::app_tab_page_header( $tabs, $current_tab, $title, $message );
-            return;
-			// Print admin styles.
-			wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
+			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? true : false;
 
-			?>
+			if ( $legacy ) {
 
-			<div class="wrap <?php echo GFCommon::get_browser_class() ?>">
+				// Print admin styles.
+				wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
+
+				?>
+
+				<div class="wrap <?php echo GFCommon::get_browser_class() ?>">
 
 				<?php if ( $message ) { ?>
 					<div id="message" class="updated"><p><?php echo $message; ?></p></div>
@@ -9042,29 +9047,97 @@ AND m.meta_value='queued'";
 				<h2><?php echo esc_html( $title ) ?></h2>
 
 				<div id="gform_tab_group" class="gform_tab_group vertical_tabs">
-					<ul id="gform_tabs" class="gform_tabs">
-						<?php
-						foreach ( $tabs as $tab ) {
-							if ( isset( $tab['permission'] ) && ! $this->current_user_can_any( $tab['permission'] ) ) {
-								continue;
-							}
-							$label = isset( $tab['label'] ) ? $tab['label'] : $tab['name'];
-							?>
-							<li <?php echo urlencode( $current_tab ) == $tab['name'] ? "class='active'" : '' ?>>
-								<a href="<?php echo esc_url( add_query_arg( array(
-									'page' => 'gravityflow_settings',
-									'view' => $tab['name'],
-								), admin_url( 'admin.php' ) ) ); ?>"><?php echo esc_html( $label ) ?></a>
-							</li>
-							<?php
+				<ul id="gform_tabs" class="gform_tabs">
+					<?php
+					foreach ( $tabs as $tab ) {
+						if ( isset( $tab['permission'] ) && ! $this->current_user_can_any( $tab['permission'] ) ) {
+							continue;
 						}
+						$label = isset( $tab['label'] ) ? $tab['label'] : $tab['name'];
 						?>
-					</ul>
+						<li <?php echo urlencode( $current_tab ) == $tab['name'] ? "class='active'" : '' ?>>
+							<a href="<?php echo esc_url( add_query_arg( array(
+								'page' => 'gravityflow_settings',
+								'view' => $tab['name'],
+							), admin_url( 'admin.php' ) ) ); ?>"><?php echo esc_html( $label ) ?></a>
+						</li>
+						<?php
+					}
+					?>
+				</ul>
 
-					<div id="gform_tab_container" class="gform_tab_container">
-						<div class="gform_tab_content" id="tab_<?php esc_attr_e( $current_tab ); ?>">
+				<div id="gform_tab_container" class="gform_tab_container">
+				<div class="gform_tab_content" id="tab_<?php esc_attr_e( $current_tab ); ?>">
 
-		<?php
+				<?php
+				return;
+			}
+
+			wp_print_styles( array( 'jquery-ui-styles', 'gform_admin', 'gform_settings' ) );
+
+			?>
+
+		<div class="wrap <?php echo GFCommon::get_browser_class() ?>">
+
+			<header class="<?php echo esc_attr( $this->get_slug() ); ?>-app-settings-header">
+				<div class="<?php echo esc_attr( $this->get_slug() ); ?>-app-settings__wrapper">
+					<img width="300"
+					     src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravity-flow-logo.svg"/>
+					<div class="gform-settings-header_buttons">
+						<?php echo apply_filters( 'gform_settings_header_buttons', '' ); ?>
+					</div>
+				</div>
+			</header>
+
+			<?php if ( $message ) { ?>
+				<div id="message" class="updated"><p><?php echo $message; ?></p></div>
+			<?php } ?>
+
+			<div class="gform-settings__wrapper">
+
+			<nav class="gform-settings__navigation">
+				<?php
+				foreach ( $tabs as $tab ) {
+
+					// Check for capabilities.
+					if ( isset( $tab['permission'] ) && ! $this->current_user_can_any( $tab['permission'] ) ) {
+						continue;
+					}
+
+					// Prepare tab label, URL.
+					$label = isset( $tab['label'] ) ? $tab['label'] : $tab['name'];
+					$url   = add_query_arg( array(
+						'page' => 'gravityflow_settings',
+						'view' => $tab['name'],
+					), admin_url( 'admin.php' ) );
+
+					// Get tab icon.
+					$icon_markup = '<i class="dashicons dashicons-admin-generic"></i>';
+					if ( strpos( rgar( $tab, 'icon' ), '<svg' ) !== false ) {
+						$icon_markup = $tab['icon'];
+					} else if ( filter_var( rgar( $tab, 'icon' ), FILTER_VALIDATE_URL ) ) {
+						$icon_markup = sprintf( '<img src="%s" />', esc_attr( $tab['icon'] ) );
+					} else if ( strpos( rgar( $tab, 'icon' ), 'fa' ) === 0 ) {
+						$icon_markup = sprintf( '<i class="fa %s"></i>', esc_attr( $tab['icon'] ) );
+					} else if ( strpos( rgar( $tab, 'icon' ), 'dashicons' ) === 0 ) {
+						$icon_markup = sprintf( '<i class="dashicons %s"></i>', esc_attr( $tab['icon'] ) );
+					}
+
+					printf(
+						'<a href="%s"%s><span class="icon">%s</span> <span class="label">%s</span></a>',
+						esc_url( $url ),
+						$current_tab === $tab['name'] ? ' class="active"' : '',
+						$icon_markup,
+						esc_html( $label )
+					);
+				}
+				?>
+			</nav>
+
+		<div class="gform-settings__content" id="tab_<?php echo esc_attr( $current_tab ); ?>">
+
+			<?php
+
 		}
 
 		/**
