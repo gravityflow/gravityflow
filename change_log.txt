@@ -1,1 +1,2 @@
+- Fixed an issue where GP Limit Dates does not function on the User Input step when the min and max range is based on non-editable Date fields.
 - Fixed an issue where merge tags for Confirmation Message in User Input Step evaluated to values before the workflow step.
