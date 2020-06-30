@@ -30,23 +30,10 @@ $I->amOnWorkflowPage( 'Inbox' );
 
 // Test - Radio Button Update
 $I->click( '0045 - User Input Confirmation Message' );
-$I->waitForText( 'User Input - Radio Button (Pending Input)' );
-$I->see( 'User Input - Radio Button (Pending Input)' );
+$I->waitForText( 'User Input (Pending Input)' );
+$I->see( 'User Input (Pending Input)' );
 $I->selectOption( 'input[name=input_1]', 'Yellow' );
-$I->click( '#gravityflow_save_progress_button' );
-$I->waitForText( 'Entry updated - in progress.' );
-$I->see( 'Entry updated - in progress.' );
-$I->click( '#gravityflow_submit_button' );
-$I->waitForText( 'Entry updated and marked complete.', 10 );
-$I->see( 'Entry updated and marked complete.' );
-
-// Test - Text Update
-$I->click( '0045 - User Input Confirmation Message' );
-$I->waitForText( 'User Input - Text (Pending Input)' );
-$I->see( 'Yellow' );
-$I->dontSee( 'Blue' );
-$I->see( 'User Input - Text (Pending Input)' );
-$I->fillField( 'textarea[name="input_2"]', 'Just an imagination.' );
+$I->fillField( 'textarea[name="input_2"]', 'Just an imagination' );
 $I->click( '#gravityflow_save_progress_button' );
 $I->waitForText( 'Entry updated - in progress.' );
 $I->see( 'Entry updated - in progress.' );
@@ -56,5 +43,5 @@ $I->see( 'Entry updated and marked complete.' );
 
 // Complete
 $I->waitForText( 'Status: Complete' );
-$I->see( 'Just an imagination.' );
-$I->dontSee( 'Ozone tints the light of the sun' );
+$I->see( 'The sky color is Yellow.' );
+$I->see( 'Reason: Just an imagination.' );
