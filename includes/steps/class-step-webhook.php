@@ -691,7 +691,11 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		$args_adjusted = $args;
 		unset( $args_adjusted['body'] );
 		$response_adjusted = $response;
-		unset( $response_adjusted['headers'], $response_adjusted['cookies'], $response_adjusted['http_response'] );
+		
+		if ( ! is_wp_error( $response ) ) {
+			unset( $response_adjusted['headers'], $response_adjusted['cookies'], $response_adjusted['http_response'] );
+		}
+		
 		$this->log_debug( __METHOD__ . '() - request: ' . print_r( $args_adjusted, true ) );
 		$this->log_debug( __METHOD__ . '() - response: ' . print_r( $response_adjusted, true ) );
 
