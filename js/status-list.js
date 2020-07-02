@@ -34,7 +34,7 @@
 
         function processExport(){
             var url;
-            url = ajaxurl + '?action=gravityflow_export_status&order=asc&paged=' + page;
+            url = gravityflow_status_list_strings.ajaxurl + '?action=gravityflow_export_status&order=asc&paged=' + page;
             url += filters;
             $.getJSON(url, function(data){
                 if ( data.status =='complete' ) {

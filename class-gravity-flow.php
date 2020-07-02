@@ -7745,7 +7745,7 @@ AND m.meta_value='queued'";
 		 * Processes the Ajax status export request.
 		 */
 		public function ajax_export_status() {
-			if ( ! wp_verify_nonce( rgget( 'gravityflow_export_nonce' ), 'gravityflow_export_nonce' ) || ! GFAPI::current_user_can_any( 'gravityflow_status' ) ) {
+			if ( ! wp_verify_nonce( rgget( 'gravityflow_export_nonce' ), 'gravityflow_export_nonce' ) ) {
 				$response['status'] = 'error';
 				$response['message'] = __( 'Not authorized', 'gravityflow' );
 				$response_json = json_encode( $response );
@@ -7770,7 +7770,7 @@ AND m.meta_value='queued'";
 		 */
 		public function ajax_download_export() {
 
-			if ( ! wp_verify_nonce( rgget( 'nonce' ), 'gravityflow_download_export' ) || ! GFAPI::current_user_can_any( 'gravityflow_status' ) ) {
+			if ( ! wp_verify_nonce( rgget( 'nonce' ), 'gravityflow_download_export' ) ) {
 				$response['status'] = 'error';
 				$response['message'] = __( 'Not authorized', 'gravityflow' );
 				$response_json = json_encode( $response );

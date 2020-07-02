@@ -136,19 +136,17 @@ class Gravity_Flow_Status {
 		</form>
 
 		<?php
-		if ( is_admin() ) {
-			$str = $_SERVER['QUERY_STRING'];
-			parse_str( $str, $query_args );
+		$str = $_SERVER['QUERY_STRING'];
+		parse_str( $str, $query_args );
 
-			$remove_args = array( 'paged', '_wpnonce', '_wp_http_referer', 'action', 'action2' );
-			foreach ( $remove_args as $remove_arg_key ) {
-				unset( $query_args[ $remove_arg_key ] );
-			}
-			$query_args['gravityflow_export_nonce'] = wp_create_nonce( 'gravityflow_export_nonce' );
-			$filter_args_str                        = '&' . http_build_query( $query_args );
-			echo sprintf( '<br /><a class="gravityflow-export-status-button button" data-filter_args="%s">%s</a>', $filter_args_str, esc_html__( 'Export', 'gravityflow' ) );
-			echo sprintf( '<img class="gravityflow-spinner" src="%s" style="display:none;margin:5px"/>', GFCommon::get_base_url() . '/images/spinner.gif' );
+		$remove_args = array( 'paged', '_wpnonce', '_wp_http_referer', 'action', 'action2' );
+		foreach ( $remove_args as $remove_arg_key ) {
+			unset( $query_args[ $remove_arg_key ] );
 		}
+		$query_args['gravityflow_export_nonce'] = wp_create_nonce( 'gravityflow_export_nonce' );
+		$filter_args_str                        = '&' . http_build_query( $query_args );
+		echo sprintf( '<br /><a class="gravityflow-export-status-button button" data-filter_args="%s">%s</a>', $filter_args_str, esc_html__( 'Export', 'gravityflow' ) );
+		echo sprintf( '<img class="gravityflow-spinner" src="%s" style="display:none;margin:5px"/>', GFCommon::get_base_url() . '/images/spinner.gif' );
 	}
 
 	/**
