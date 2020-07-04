@@ -584,7 +584,7 @@
 		if (feedId > 0) {
 			var url = ajaxurl + '?action=gravityflow_feed_message&fid=' + feedId + '&id=' + gravityflow_form_settings_js_strings['formId'];
 			$.get(url, function (response) {
-				var $heading = $('#save_button');
+				var $heading = $('#gform-settings-save');
 				$heading.before(response);
 			});
 		}

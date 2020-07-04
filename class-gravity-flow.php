@@ -972,8 +972,8 @@ PRIMARY KEY  (id)
 			$url = add_query_arg( array( 'fid' => '0' ) );
 			$url = esc_url( $url );
 			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? '-legacy' : '';
-			$add_new_button = $legacy ? __( 'Add New' , 'gravityflow' ) : '';
-			return esc_html__( 'Workflow Steps', 'gravityflow' ) . " <a class='add-new-h2' href='{$url}'>" . $add_new_button . '</a>';
+			$add_new_button = $legacy ? " <a class='add-new-h2' href='{$url}'>" . __( 'Add New' , 'gravityflow' ) . '</a>': '';
+			return esc_html__( 'Workflow Steps', 'gravityflow' ) . $add_new_button ;
 		}
 
 		/**
@@ -5044,7 +5044,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			}
 
 			if ( ! GFCommon::is_valid_email( $value ) ) {
-				$this->set_field_error( array( 'name' => 'from_email' ), esc_html__( 'Please enter a valid email address.', 'gravityflow' ) );
+				$this->set_field_error( $field, esc_html__( 'Please enter a valid email address.', 'gravityflow' ) );
 				return;
 			}
 
@@ -5069,7 +5069,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			}
 
 			if ( $error_message ) {
-				$this->set_field_error( array( 'name' => 'from_email' ), $error_message );
+				$this->set_field_error( $field, $error_message );
 			}
 
 		}
@@ -5212,7 +5212,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			$args = array(
 				'selected'         => $this->get_setting( $field['name'] ),
-				'echo'             => $echo,
+				'echo'             => false,
 				'name'             => "_{$settings_prefix}_setting_" . esc_attr( $field['name'] ),
 				'class'            => "{$settings_prefix}-setting gaddon-select",
 				'show_option_none' => esc_html__( 'Select page', 'gravityflow' ),
