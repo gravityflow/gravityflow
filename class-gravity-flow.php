@@ -5965,15 +5965,20 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @param array $menu The current WP Dashboard Menu.
 		 */		
 		public function show_notification_count( $menu ) {
+			$custom_labels = get_option( 'gravityflow_app_settings_labels', array() );
+			$custom_navigation_labels = rgar( $custom_labels, 'navigation' );
+			$custom_workflow_label = rgar( $custom_navigation_labels, 'workflow' );
+			$workflow_label = $custom_workflow_label ? $custom_workflow_label : 'Workflow';
+	
 			$workflow_menu_pos = -1;
 			foreach ( $menu as $menuitem ) {
-				if( $menuitem[0] == "Workflow" ) {
+				if( $menuitem[0] == $workflow_label ) {
 					$workflow_menu_pos = array_search( $menuitem, $menu, true );
 				}
 			}
 
 			$pending_count = $this->get_workflow_count();
-			$menu[$workflow_menu_pos][0] = sprintf( __('Workflow %s'), "<span class='update-plugins count-$pending_count'><span class='plugin-count'>" . number_format_i18n($pending_count) . "</span></span>" );
+			$menu[ $workflow_menu_pos ][0] = sprintf( __( '%s %s' ), $workflow_label, "<span class='update-plugins count-$pending_count'><span class='plugin-count'>" . number_format_i18n($pending_count) . "</span></span>" );
 
 			return $menu;
 		}
