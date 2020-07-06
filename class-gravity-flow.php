@@ -218,7 +218,7 @@ if ( class_exists( 'GFForms' ) ) {
 				)
 			);
 
-			add_filter('add_menu_classes', array( $this, 'show_notification_count' ), 10);
+			add_filter( 'add_menu_classes', array( $this, 'show_notification_count' ), 10 );
 
 			// GravityView Integration.
 			add_filter( 'gravityview/adv_filter/field_filters', array( $this, 'filter_gravityview_adv_filter_field_filters' ), 10, 2 );
@@ -5962,6 +5962,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		/**
 		 * Add inbox notification count to Workflow Menu.
 		 *
+		 * @since 2.5.12
+		 * 
 		 * @param array $menu The current WP Dashboard Menu.
 		 */		
 		public function show_notification_count( $menu ) {
@@ -6541,7 +6543,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */		
 		public function get_workflow_count() {
 			$count_value = get_transient( 'gflow_inbox_count' . get_current_user_id()  );
-			if( $count_value === false) {
+			if ( $count_value === false ) {
 				$count_value = Gravity_Flow_API::get_inbox_entries_count();
 				set_transient( 'gflow_inbox_count_' . get_current_user_id() , $count_value, MINUTE_IN_SECONDS );
 			}
