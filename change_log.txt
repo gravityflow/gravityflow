@@ -1,1 +1,2 @@
+- Fixed an issue where GP Limit Dates does not function on the User Input step when the min and max range is based on non-editable Date fields.
 - Added the red bubble inbox count display on the WP Dashboard Workflow display.
