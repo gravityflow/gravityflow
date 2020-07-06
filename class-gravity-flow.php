@@ -5974,7 +5974,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 	
 			$workflow_menu_pos = -1;
 			foreach ( $menu as $menuitem ) {
-				if( $menuitem[0] == $workflow_label ) {
+				if ( $menuitem[0] == $workflow_label ) {
 					$workflow_menu_pos = array_search( $menuitem, $menu, true );
 				}
 			}
