@@ -50,42 +50,46 @@ class Gravity_Flow_Bootstrap {
 		}
 
 		if ( ! class_exists( 'Gravity_Flow_EDD_SL_Plugin_Updater' ) ) {
-			include( dirname( __FILE__ ) . '/includes/EDD_SL_Plugin_Updater.php' );
+			include dirname( __FILE__ ) . '/includes/EDD_SL_Plugin_Updater.php';
 		}
 
 		if ( ! class_exists( 'Gravity_Flow_API' ) ) {
-			include( dirname( __FILE__ ) . '/includes/class-api.php' );
+			include dirname( __FILE__ ) . '/includes/class-api.php';
 		}
 
 		if ( ! class_exists( 'Gravity_Flow_Web_API' ) ) {
-			include( dirname( __FILE__ ) . '/includes/class-web-api.php' );
+			include dirname( __FILE__ ) . '/includes/class-web-api.php';
 		}
 
 		if ( ! class_exists( 'Gravity_Flow_REST_API' ) ) {
-			include( dirname( __FILE__ ) . '/includes/class-rest-api.php' );
+			include dirname( __FILE__ ) . '/includes/class-rest-api.php';
 		}
 
 		if ( ! class_exists( 'Gravity_Flow_Extension' ) ) {
-			include( dirname( __FILE__ ) . '/includes/class-extension.php' );
+			include dirname( __FILE__ ) . '/includes/class-extension.php';
 		}
 
 		if ( ! class_exists( 'Gravity_Flow_Feed_Extension' ) ) {
-			include( dirname( __FILE__ ) . '/includes/class-feed-extension.php' );
+			include dirname( __FILE__ ) . '/includes/class-feed-extension.php';
 		}
 
 		if ( class_exists( 'GravityView_Field' ) ) {
-			include( dirname( __FILE__ ) . '/includes/class-gravityview-detail-link.php' );
+			include dirname( __FILE__ ) . '/includes/class-gravityview-detail-link.php';
 		}
 
-		require_once( dirname( __FILE__ ) . '/includes/class-common.php' );
+		require_once dirname( __FILE__ ) . '/includes/class-common.php';
 
-		require_once( 'includes/class-connected-apps.php' );
-		require_once( 'class-gravity-flow.php' );
-		require_once( 'includes/models/class-activity.php' );
-		require_once( 'includes/integrations/class-gp-nested-forms.php' );
-		require_once( 'includes/integrations/class-partial-entries.php' );
-		require_once( 'includes/class-dynamic-hook.php' );
-		require_once( 'includes/class-populate-form.php' );
+		require_once 'includes/class-connected-apps.php';
+		require_once 'class-gravity-flow.php';
+		require_once 'includes/models/class-activity.php';
+		require_once 'includes/integrations/class-gp-nested-forms.php';
+		require_once 'includes/integrations/class-partial-entries.php';
+		require_once 'includes/class-dynamic-hook.php';
+		require_once 'includes/class-populate-form.php';
+
+		if ( version_compare( GFForms::$version, '2.5-dev-1', '>=' ) ) {
+			require_once 'includes/settings/class-checkbox-textarea.php';
+		}
 
 		self::include_assignees();
 		self::include_steps();

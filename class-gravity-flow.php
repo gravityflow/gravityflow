@@ -3275,15 +3275,16 @@ PRIMARY KEY  (id)
 		 *
 		 * The text field will be hidden or displayed depending on the value of the checkbox.
 		 *
-		 * @since 1.5.1 Updated to use Gravity_Flow::settings_checkbox_and_container()
 		 * @since unknown
+		 * @since 1.5.1 Updated to use Gravity_Flow::settings_checkbox_and_container()
+		 * @since 2.6   Renamed method with legacy prefix to support Gravity Forms 2.5 Settings API.
 		 *
 		 * @param array $field The field properties.
 		 * @param bool  $echo  Indicates if the HTML should be echoed.
 		 *
 		 * @return string
 		 */
-		public function settings_checkbox_and_textarea( $field, $echo = true ) {
+		public function legacy_settings_checkbox_and_textarea( $field, $echo = true ) {
 			$field = $this->prepare_settings_checkbox_and_textarea( $field );
 
 			return $this->settings_checkbox_and_container( $field, $echo );
