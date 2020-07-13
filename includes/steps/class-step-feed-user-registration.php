@@ -93,6 +93,12 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 
 		if ( class_exists( 'GF_User_Registration' ) ) {
 
+			$disable_notification_email = isset( $feed['meta']['userActivationValue'] ) &&  ( $feed['meta']['userActivationValue'] === 'manual' );
+			
+      if ( $disable_notification_email ) {
+        add_filter( 'wpmu_signup_user_notification_email', '__return_empty_string' ); 
+			}
+						
 			parent::process_feed( $feed );
 
 			$activation_enabled = isset( $feed['meta']['userActivationEnable'] ) &&  $feed['meta']['userActivationEnable'];
