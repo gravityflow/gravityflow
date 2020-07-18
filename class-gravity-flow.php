@@ -2339,6 +2339,7 @@ PRIMARY KEY  (id)
 			$schedule_date_fields = array(
 				'name' => 'schedule_date_field',
 				'label' => esc_html__( 'Schedule Date Field', 'gravityflow' ),
+				'style' => 'width:auto',
 				'choices' => $date_field_choices,
 			);
 
@@ -2426,6 +2427,7 @@ PRIMARY KEY  (id)
 						'name' => 'schedule_date_field_before_after',
 						'label' => esc_html__( 'Schedule', 'gravityflow' ),
 						'default_value' => 'after',
+						'style' => 'width:auto',
 						'choices' => array(
 							array(
 								'label' => esc_html__( 'after', 'gravityflow' ),

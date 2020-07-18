@@ -208,7 +208,6 @@ class Gravity_Flow_Common_Step_Settings {
 				'class' => 'fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
 				'label' => __( 'Subject', 'gravityflow' ),
 				'type'  => 'text',
-
 			),
 			array(
 				'name'          => $prefix . '_notification_message',
