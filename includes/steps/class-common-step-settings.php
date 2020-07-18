@@ -456,10 +456,11 @@ class Gravity_Flow_Common_Step_Settings {
 			'name'     => 'instructions',
 			'label'    => __( 'Instructions', 'gravityflow' ),
 			'type'     => 'checkbox_and_textarea',
-			'callback' => gravity_flow()->is_gravityforms_supported( '2.5-beta-1' ) ? null : gravity_flow(), 'legacy_settings_checkbox_and_textarea',
+			'callback' => gravity_flow()->is_gravityforms_supported( '2.5-beta-1' ) ? null : array( gravity_flow(), 'legacy_settings_checkbox_and_textarea' ),
 			'tooltip'  => esc_html__( 'Activate this setting to display instructions to the user for the current step.', 'gravityflow' ),
 			'checkbox' => array(
 				'label' => esc_html__( 'Display instructions', 'gravityflow' ),
+				'default_value' => 0,
 			),
 			'textarea' => array(
 				'use_editor'    => true,

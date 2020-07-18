@@ -3643,11 +3643,11 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					);
                 }
 
-                $sort_field = array(
-                        'name' => $field['name'] . 'sort_key',
-                        'default_value' => 'entry_id',
-                        'choices' => $sort_field_choices,
-                );
+				$sort_field = array(
+					'name'          => $field['name'] . 'sort_key',
+					'default_value' => 'entry_id',
+					'choices'       => $sort_field_choices,
+				);
 
 				$html .= $this->settings_select( $sort_field, false );
 				$html .= '&nbsp;';
