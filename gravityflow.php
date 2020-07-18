@@ -66,11 +66,19 @@ class Gravity_Flow_Bootstrap {
 		}
 
 		if ( ! class_exists( 'Gravity_Flow_Extension' ) ) {
-			include dirname( __FILE__ ) . '/includes/class-extension.php';
+			if ( version_compare( GFForms::$version, '2.5-dev-1', '>=' ) ) {
+				include dirname( __FILE__ ) . '/includes/class-extension.php';
+			} else {
+				include dirname( __FILE__ ) . '/includes/legacy/class-extension.php';
+			}
 		}
 
 		if ( ! class_exists( 'Gravity_Flow_Feed_Extension' ) ) {
-			include dirname( __FILE__ ) . '/includes/class-feed-extension.php';
+			if ( version_compare( GFForms::$version, '2.5-dev-1', '>=' ) ) {
+				include dirname( __FILE__ ) . '/includes/class-feed-extension.php';
+			} else {
+				include dirname( __FILE__ ) . '/includes/legacy/class-feed-extension.php';
+			}
 		}
 
 		if ( class_exists( 'GravityView_Field' ) ) {

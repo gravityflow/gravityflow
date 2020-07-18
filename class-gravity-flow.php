@@ -1095,11 +1095,7 @@ PRIMARY KEY  (id)
 					'src'     => $this->get_base_url() . "/css/settings{$min}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
-						array( 'query' => 'page=gravityflow_settings&view=_empty_' ),
-						array( 'query' => 'page=gravityflow_settings&view=settings' ),
-						array( 'query' => 'page=gravityflow_settings&view=labels' ),
-						array( 'query' => 'page=gravityflow_settings&view=connected_apps' ),
-						array( 'query' => 'page=gravityflow_settings&view=uninstall' ),
+						array( 'query' => 'page=gravityflow_settings' ),
 					),
 				),
 				array(

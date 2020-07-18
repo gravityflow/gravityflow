@@ -12,14 +12,14 @@
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
-GFForms::include_addon_framework();
+GFForms::include_feed_addon_framework();
 
 /**
- * Class Gravity_Flow_Extension
+ * Class Gravity_Flow_Feed_Extension
  *
  * @since 1.0
  */
-abstract class Gravity_Flow_Extension_Legacy extends GFAddOn {
+abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 	/**
 	 * The item name used by Easy Digital Downloads.
@@ -117,7 +117,9 @@ abstract class Gravity_Flow_Extension_Legacy extends GFAddOn {
 
 		if ( $this->license_key ) {
 			$app_settings = $this->app_settings_fields();
-			if ( empty( $app_settings ) ) {
+			$fields = ! empty( $app_settings[0]['fields'] ) ? $app_settings[0]['fields'] : array();
+			if ( is_array( $fields ) && count( $fields ) == 1 ) {
+				// This extension only has a license key setting but the license key is already set to we don't need the settings tab;
 				return $settings_tabs;
 			}
 		}
@@ -125,7 +127,7 @@ abstract class Gravity_Flow_Extension_Legacy extends GFAddOn {
 		$settings_tabs[] = array(
 			'name'     => $this->_slug,
 			'label'    => $this->get_short_title(),
-			//'callback' => array( $this, 'app_settings_tab' ),
+			'callback' => array( $this, 'app_settings_tab' ),
 		);
 
 		return $settings_tabs;
@@ -261,9 +263,15 @@ abstract class Gravity_Flow_Extension_Legacy extends GFAddOn {
 
 		$license_data = $this->check_license( $value );
 
-		$valid = $license_data && $license_data->license == 'valid' ? true : false;
+		$valid = null;
+		if ( empty( $license_data ) || $license_data->license == 'invalid' ) {
+			$valid = false;
+		} elseif ( $license_data->license == 'valid' ) {
+			$valid = true;
+		}
 
 		return $valid;
+
 	}
 
 	/**
@@ -352,8 +360,7 @@ abstract class Gravity_Flow_Extension_Legacy extends GFAddOn {
 	}
 
 	/**
-	 * Prevent the failed requirements page being added to the Forms > Settings area.
-	 * Add the settings link to the installed plugins page.
+	 * Add the failed requirements error message.
 	 *
 	 * @since 1.7.1-dev
 	 */
@@ -546,5 +553,4 @@ abstract class Gravity_Flow_Extension_Legacy extends GFAddOn {
 
 		return $is_extension_settings;
 	}
-
 }
