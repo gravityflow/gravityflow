@@ -166,26 +166,28 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 			// Get fields.
 			$sections = $this->app_settings_fields();
-			$sections = $this->prepare_settings_sections( $sections, 'app_settings' );
+			if ( ! empty( $sections ) ) {
+				$sections = $this->prepare_settings_sections( $sections, 'app_settings' );
 
-			// Initialize new settings renderer.
-			$renderer = new Rocketgenius\Gravity_Forms\Settings(
-				array(
-					'capability'     => $this->_capabilities_app_settings,
-					'fields'         => $sections,
-					'header'         => array(
-						'icon'  => $this->app_settings_icon(),
-						'title' => $this->app_settings_title(),
-					),
-					'initial_values' => $this->get_app_settings(),
-					'save_callback'  => array( $this, 'update_app_settings' ),
-				)
-			);
+				// Initialize new settings renderer.
+				$renderer = new Rocketgenius\Gravity_Forms\Settings(
+					array(
+						'capability'     => $this->_capabilities_app_settings,
+						'fields'         => $sections,
+						'header'         => array(
+							'icon'  => $this->app_settings_icon(),
+							'title' => $this->app_settings_title(),
+						),
+						'initial_values' => $this->get_app_settings(),
+						'save_callback'  => array( $this, 'update_app_settings' ),
+					)
+				);
 
-			// Save renderer to instance.
-			$this->set_settings_renderer( $renderer );
+				// Save renderer to instance.
+				$this->set_settings_renderer( $renderer );
 
-			$this->get_settings_renderer()->render();
+				$this->get_settings_renderer()->render();
+			}
 
 			$this->render_uninstall();
 
