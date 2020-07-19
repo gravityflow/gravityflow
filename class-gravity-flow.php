@@ -1665,11 +1665,7 @@ PRIMARY KEY  (id)
 
 			if ( $current_step_id ) {
 				$current_step = $this->get_step( $current_step_id );
-				if ( empty( $current_step ) ) {
-					$warning = esc_html__( 'This step type is missing.', 'gravityflow' );
-				} elseif ( ! $current_step->is_supported() ) {
-					$warning = esc_html__( 'The plugin required by this step type is missing.', 'gravityflow' );
-				} else {
+				if ( ! empty( $current_step ) ) {
 					$entry_count = $current_step->entry_count();
 				}
 			}
