@@ -93,9 +93,16 @@ class Gravity_Flow_Step_Feed_User_Registration extends Gravity_Flow_Step_Feed_Ad
 
 		if ( class_exists( 'GF_User_Registration' ) ) {
 
-			parent::process_feed( $feed );
-
 			$activation_enabled = isset( $feed['meta']['userActivationEnable'] ) &&  $feed['meta']['userActivationEnable'];
+
+			$disable_notification_email = $activation_enabled && rgar( $feed['meta'], 'userActivationValue' ) === 'manual';
+			
+			if ( $disable_notification_email ) {
+				add_filter( 'wpmu_signup_user_notification', '__return_false', 50 );
+				add_filter( 'wpmu_signup_blog_notification', '__return_false', 50 );
+			}
+						
+			parent::process_feed( $feed );
 
 			$step_complete = ! $activation_enabled;
 

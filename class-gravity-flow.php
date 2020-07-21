@@ -5444,6 +5444,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 					$entry = GFAPI::get_entry( $entry_id ); // Refresh entry.
 
+					$feedback = GFCommon::replace_variables( $feedback, $form, $entry, false, true, true, 'html' );
+					
 					if ( substr( $feedback, 0, 3 ) !== '<p>' ) {
 						$feedback = sprintf( '<p>%s</p>', $feedback );
 					}
