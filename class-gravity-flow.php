@@ -6542,7 +6542,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @return int
 		 */		
 		public function get_workflow_count() {
-			$count_value = get_transient( 'gflow_inbox_count' . get_current_user_id()  );
+			$count_value = get_transient( 'gflow_inbox_count_' . get_current_user_id()  );
 			if ( $count_value === false ) {
 				$count_value = Gravity_Flow_API::get_inbox_entries_count();
 				set_transient( 'gflow_inbox_count_' . get_current_user_id() , $count_value, MINUTE_IN_SECONDS );
