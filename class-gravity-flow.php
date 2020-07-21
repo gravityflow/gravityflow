@@ -218,7 +218,7 @@ if ( class_exists( 'GFForms' ) ) {
 				)
 			);
 
-			add_filter( 'add_menu_classes', array( $this, 'show_notification_count' ), 10 );
+			add_filter( 'add_menu_classes', array( $this, 'show_inbox_count' ), 10 );
 
 			// GravityView Integration.
 			add_filter( 'gravityview/adv_filter/field_filters', array( $this, 'filter_gravityview_adv_filter_field_filters' ), 10, 2 );
@@ -5979,7 +5979,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				}
 			}
 
-			$pending_count = $this->get_workflow_count();
+			$pending_count = $this->get_inbox_count();
 			$menu[ $workflow_menu_pos ][0] = sprintf( __( '%s %s' ), $workflow_label, "<span class='update-plugins count-$pending_count'><span class='plugin-count'>" . number_format_i18n($pending_count) . "</span></span>" );
 
 			return $menu;
