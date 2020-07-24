@@ -3,3 +3,4 @@
 - Fixed an issue on the User Registration Step, where manual User Activation feed setting was sending email with activation link to User.
 - Fixed an issue on the User and Multi-User field 'Users Role Filter' setting display (but not filter save).
 - Added the red bubble inbox count display on the WP Dashboard Workflow menu item.
+- Changed Workflow entry detail to display all of the checkbox values with a strike on the unselected ones.

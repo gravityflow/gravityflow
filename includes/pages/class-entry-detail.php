@@ -942,13 +942,51 @@ class Gravity_Flow_Entry_Detail {
 
 						$display_value = empty( $display_value ) && $display_value !== '0' ? '&nbsp;' : $display_value;
 
-						$content = '
-                                <tr>
-                                    <td colspan="2" class="entry-view-field-name">' . esc_html( self::get_label( $field ) ) . '</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
-                                </tr>';
+						if ( $field['type'] == 'checkbox' && $display_value == '&nbsp;') {
+							$content = '
+																	<tr>
+																			<td colspan="2" class="entry-view-field-name">' . esc_html( self::get_label( $field ) ) . '</td>
+																	</tr>';
+						}
+						else {
+							$content = '
+																	<tr>
+																			<td colspan="2" class="entry-view-field-name">' . esc_html( self::get_label( $field ) ) . '</td>
+																	</tr>
+																	<tr>
+																			<td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
+																	</tr>';
+						}
+						if ( $field['type'] == 'checkbox' ) {
+							$all_html_values = $field->get_checkbox_choices();
+							$dom = new DOMDocument();
+
+							$dom->loadHTML( $all_html_values );
+							$all_li = $dom->getElementsByTagName( 'li' );
+							$all_values = array();
+							foreach ( $all_li as $li ) {
+								$all_values[] = trim( $li->nodeValue );
+							}
+
+							$dom->loadHTML( $display_value );
+							$all_li = $dom->getElementsByTagName( 'li' );
+							$selected_values = array();
+							foreach ( $all_li as $li ) {
+								$selected_values[] = trim( $li->nodeValue );
+							}
+							
+							$unselected_values = array_diff( $all_values, $selected_values );
+							if ( count($unselected_values) != 0 ) {
+								$content .= '
+								<tr>
+										<td colspan="2" class="entry-view-field-value' . $last_row . '">';
+								foreach ( $unselected_values as $unselected_value ) {
+									$content .= '<li><strike>' . $unselected_value . '</strike></li>';
+								}
+								$content .= '</td>
+								</tr>';
+							}
+						}
 
 						$content = apply_filters( 'gform_field_content', $content, $field, $value, $entry['id'], $form['id'] );
 						echo $content;
