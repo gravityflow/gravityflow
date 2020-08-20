@@ -5196,7 +5196,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		public function submit_page( $admin_ui, $form_ids = null ) {
 
 			?>
-			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_submit">
+			<div class="gravityflow_wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_submit">
 				<?php if ( $admin_ui ) :	?>
 					<h2 class="gf_admin_page_title">
 						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravity-flow-icon-cropped.svg" style="margin-right:5px;"/>
@@ -5470,7 +5470,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			} else {
 
 				?>
-				<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_detail">
+				<div class="gravityflow_wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_detail">
 					<?php if ( $args['show_header'] ) :	?>
 						<h2 class="gf_admin_page_title">
 							<img width="45" height="22" src="<?php echo $this->get_base_url(); ?>/images/gravity-flow-icon-cropped.svg" style="margin-right:5px;"/>
@@ -5516,7 +5516,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			);
 			$args = array_merge( $defaults, $args );
 			?>
-			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_status">
+			<div class="gravityflow_wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_status">
 
 				<?php if ( $args['display_header'] ) : ?>
 					<h2 class="gf_admin_page_title">
@@ -5560,7 +5560,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			);
 			$args = array_merge( $defaults, $args );
 			?>
-			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_activity">
+			<div class="gravityflow_wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_activity">
 
 				<?php if ( $args['display_header'] ) : ?>
 					<h2 class="gf_admin_page_title">
@@ -5606,7 +5606,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			);
 			$args = array_merge( $defaults, $args );
 			?>
-			<div class="wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_reports">
+			<div class="gravityflow_wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_reports">
 
 				<?php if ( $args['display_header'] ) : ?>
 					<h2 class="gf_admin_page_title">
@@ -8893,7 +8893,7 @@ AND m.meta_value='queued'";
 
 			?>
 
-			<div class="wrap <?php echo GFCommon::get_browser_class() ?>">
+			<div class="gravityflow_wrap <?php echo GFCommon::get_browser_class() ?>">
 
 				<?php if ( $message ) { ?>
 					<div id="message" class="updated"><p><?php echo $message; ?></p></div>
