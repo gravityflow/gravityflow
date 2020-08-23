@@ -292,6 +292,7 @@ if ( class_exists( 'GFForms' ) ) {
 				add_filter( 'gform_admin_pre_render', array( $this, 'delete_signature_script' ) );
 				$this->maybe_save_signature();
 			}
+			add_filter( 'query_vars', array( $this, 'filter_query_vars' ), 99 );
 		}
 
 		/**
@@ -9058,5 +9059,25 @@ AND m.meta_value='queued'";
 				GFCommon::display_dismissible_message( $notices );
 			}
 		}
+
+		/**
+		 * Removes "page" from the query vars array when accessing the inbox/detail pages to fix an issue introduced in WP 5.5 where it results in a 404.
+		 *
+		 * @since 2.5.12
+		 *
+		 * @param array $query_vars The array of allowed query variable names.
+		 *
+		 * @return array
+		 */
+		public function filter_query_vars( $query_vars ) {
+			global $wp_version;
+
+			if ( rgget( 'page' ) === 'gravityflow-inbox' && version_compare( $wp_version, '5.5', '>=' ) ) {
+				$query_vars = array_diff( $query_vars, array( 'page' ) );
+			}
+
+			return $query_vars;
+		}
+
 	}
 }
