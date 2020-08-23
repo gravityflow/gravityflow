@@ -56,8 +56,9 @@ jQuery(document).bind('gform_load_field_settings', function (event, field, form)
 	var isWorkflowUserField = field.type == 'workflow_user';
 	var isWorkflowRoleField = field.type == 'workflow_role';
 	var isWorkflowDiscussionField = field.type == 'workflow_discussion';
+	var isWorkflowMultiUserField = field.type == 'workflow_multi_user';
 
-	if ( isAssigneeField || isWorkflowUserField || isWorkflowRoleField ) {
+	if ( isAssigneeField || isWorkflowUserField || isWorkflowRoleField || isWorkflowMultiUserField ) {
 		field.choices = '';
 	}
 
@@ -73,7 +74,7 @@ jQuery(document).bind('gform_load_field_settings', function (event, field, form)
 		}
 	}
 
-	if (isAssigneeField || isWorkflowUserField) {
+	if ( isAssigneeField || isWorkflowUserField || isWorkflowMultiUserField ) {
 		jQuery('#gravityflow_users_role_filter').val(field.gravityflowUsersRoleFilter);
 	}
 

@@ -562,7 +562,6 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			if ( $this->confirmation_messageEnable && ! empty( $this->confirmation_messageValue ) ) {
 				$feedback = $this->confirmation_messageValue;
 				$feedback = $assignee->replace_variables( $feedback );
-				$feedback = GFCommon::replace_variables( $feedback, $form, $this->get_entry(), false, true, true, 'html' );
 				$feedback = do_shortcode( $feedback );
 				$feedback = wp_kses_post( $feedback );
 			} else {
