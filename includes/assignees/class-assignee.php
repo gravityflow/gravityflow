@@ -448,7 +448,7 @@ class Gravity_Flow_Assignee {
 
 		$status = $this->get_status();
 
-		if ( !rgempty( $status ) && $status != 'pending' ) {
+		if ( !rgblank( $status ) && $status != 'pending' ) {
 			return false;
 		}
 
