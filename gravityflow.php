@@ -33,6 +33,8 @@ define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 
 define( 'GRAVITY_FLOW_EDD_ITEM_ID', 1473 );
 
+define( 'GRAVITY_FLOW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
+
 add_action( 'gform_loaded', array( 'Gravity_Flow_Bootstrap', 'load' ), 1 );
 
 /**
