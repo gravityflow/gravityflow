@@ -9079,5 +9079,26 @@ AND m.meta_value='queued'";
 			return $query_vars;
 		}
 
+		/**
+		 * Updates the WordPress auto_update_plugins option to enable or disable automatic updates so the correct state is displayed on the plugins page.
+		 *
+		 * @since 2.5.12
+		 *
+		 * @param bool $is_enabled Indicates if background updates are enabled for Gravity Flow in the app settings.
+		 */
+		public function update_wp_auto_updates( $is_enabled ) {
+			$option       = 'auto_update_plugins';
+			$auto_updates = (array) get_site_option( $option, array() );
+
+			if ( $is_enabled ) {
+				$auto_updates[] = GRAVITY_FLOW_PLUGIN_BASENAME;
+				$auto_updates   = array_unique( $auto_updates );
+			} else {
+				$auto_updates = array_diff( $auto_updates, array( GRAVITY_FLOW_PLUGIN_BASENAME ) );
+			}
+
+			update_site_option( $option, $auto_updates );
+		}
+
 	}
 }
