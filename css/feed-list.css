@@ -59,3 +59,7 @@ th.column-step_highlight, td.column-step_highlight {
 }
 
 .row-actions .step_id { color: #ccc; }
+
+.gravityflow-routing {
+    text-align: left;
+}
