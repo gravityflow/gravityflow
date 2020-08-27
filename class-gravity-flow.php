@@ -330,6 +330,7 @@ if ( class_exists( 'GFForms' ) ) {
 				}
 				$settings['background_updates'] = true;
 				$this->update_app_settings( $settings );
+				$this->update_wp_auto_updates( true );
 
 			} else {
 				// Upgrade.
@@ -352,6 +353,11 @@ if ( class_exists( 'GFForms' ) ) {
 				if ( version_compare( $previous_version, '2.5', '<' ) ) {
 					$this->upgrade_250();
 				}
+
+				if ( version_compare( $previous_version, '2.5.12', '<' ) ) {
+					$this->upgrade_2512();
+				}
+
 			}
 
 			wp_cache_flush();
@@ -556,6 +562,18 @@ PRIMARY KEY  (id)
 			$settings['allow_allow_anonymous_attribute'] = true;
 			$settings['allow_field_ids']                 = true;
 			$this->update_app_settings( $settings );
+		}
+
+		/**
+		 * Populates the WordPress auto_update_plugins option, if background updates is enabled.
+		 *
+		 * @since 2.5.12
+		 */
+		public function upgrade_2512() {
+			$settings = $this->get_app_settings();
+			if ( $settings['background_updates'] ) {
+				$this->update_wp_auto_updates( true );
+			}
 		}
 
 		/**
