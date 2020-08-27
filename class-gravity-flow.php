@@ -176,6 +176,7 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'gravityflow_cron', array( $this, 'cron' ) );
 			add_action( 'wp', array( $this, 'filter_wp' ) );
+			add_action( 'update_site_option_auto_update_plugins', array( $this, 'action_update_site_option_auto_update_plugins' ), 10, 3 );
 		}
 
 		/**
@@ -9119,7 +9120,46 @@ AND m.meta_value='queued'";
 				$auto_updates = array_diff( $auto_updates, array( GRAVITY_FLOW_PLUGIN_BASENAME ) );
 			}
 
+			$callback = array( $this, 'action_update_site_option_auto_update_plugins' );
+			remove_action( 'update_site_option_auto_update_plugins', $callback );
 			update_site_option( $option, $auto_updates );
+			add_action( 'update_site_option_auto_update_plugins', $callback, 10, 3 );
+		}
+
+		/**
+		 * Updates the background updates app setting when the WordPress auto_update_plugins option is changed.
+		 *
+		 * @since 2.5.12
+		 *
+		 * @param string $option    The name of the option.
+		 * @param array  $value     The current value of the option.
+		 * @param array  $old_value The previous value of the option.
+		 */
+		public function action_update_site_option_auto_update_plugins( $option, $value, $old_value ) {
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX && ! empty( $_POST['asset'] ) && ! empty( $_POST['state'] ) ) {
+				// Option is being updated by the ajax request performed when using the enable/disable auto-updates links on the plugins page.
+				$asset = sanitize_text_field( urldecode( $_POST['asset'] ) );
+				if ( $asset !== GRAVITY_FLOW_PLUGIN_BASENAME ) {
+					return;
+				}
+
+				$is_enabled = $_POST['state'] === 'enable';
+			} else {
+				// Option is being updated by some other means.
+				$is_enabled  = in_array( GRAVITY_FLOW_PLUGIN_BASENAME, $value );
+				$was_enabled = in_array( GRAVITY_FLOW_PLUGIN_BASENAME, $old_value );
+
+				if ( $is_enabled === $was_enabled ) {
+					return;
+				}
+			}
+
+			$settings = $this->get_app_settings();
+
+			if ( $settings['background_updates'] != $is_enabled ) {
+				$settings['background_updates'] = $is_enabled;
+				$this->update_app_settings( $settings );
+			}
 		}
 
 	}
