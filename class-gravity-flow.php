@@ -6642,6 +6642,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				foreach ( $pages as $page ) {
 					$this->maybe_update_page_content( $page, $settings, $previous_settings );
 				}
+
+				if ( $settings['background_updates'] != $previous_settings['background_updates'] ) {
+					$this->update_wp_auto_updates( $settings['background_updates'] );
+				}
 			}
 
 			parent::update_app_settings( $settings );
