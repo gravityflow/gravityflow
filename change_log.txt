@@ -1,7 +1,8 @@
+- Added the red bubble inbox count display on the WP Dashboard Workflow menu item.
+- Added support for the WordPress 5.5 enable/disable auto-updates feature on the installed plugins page.
 - Fixed an issue where GP Limit Dates does not function on the User Input step when the min and max range is based on non-editable Date fields.
 - Fixed an issue where merge tags for Confirmation Message in User Input Step evaluated to values before the workflow step.
 - Fixed an issue on the User Registration Step, where manual User Activation feed setting was sending email with activation link to User.
 - Fixed an issue on the User and Multi-User field 'Users Role Filter' setting display (but not filter save).
 - Fixed an issue on front-end pages with WordPress 5.5 removing the page parameter.
 - Fixed the css classname 'wrap' by making it specific as 'gravityflow_wrap'. This avoids conflict with the css rules of themes.
-- Added the red bubble inbox count display on the WP Dashboard Workflow menu item.
