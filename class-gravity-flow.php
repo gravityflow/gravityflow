@@ -4737,8 +4737,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 						),
 						array(
 							'name'          => 'background_updates',
-							'label'         => esc_html__( 'Background Updates', 'gravityflow' ),
-							'tooltip' => __( 'Set this to ON to allow Gravity Flow to download and install bug fixes and security updates automatically in the background. Requires a valid license key.' , 'gravityflow' ),
+							'label'         => esc_html__( 'Automatic Updates', 'gravityflow' ),
+							'tooltip' => __( 'Set this to ON to allow WordPress to download and install Gravity Flow bug fixes and security updates automatically in the background. Requires a valid license key.' , 'gravityflow' ),
 							'type'          => 'radio',
 							'horizontal' => true,
 							'default_value' => false,
