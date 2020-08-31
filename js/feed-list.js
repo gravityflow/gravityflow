@@ -2,6 +2,8 @@
 
     $(document).ready(function () {
 
+        $('.colspanchange').attr('colspan',4);
+
         if ( $('table.wp-list-table tbody tr').length == 1 ) {
             return;
         }
