@@ -709,7 +709,7 @@ class Gravity_Flow_Entry_Detail {
 					<?php
 					if ( $allow_display_empty_fields ) {
 						?>
-						<input type="checkbox" <?php echo $display_empty_fields ? "checked='checked'" : '' ?> onclick="ToggleShowEmptyFields();" />&nbsp;&nbsp;
+						<input type="checkbox" id="gentry_display_empty_fields" <?php echo $display_empty_fields ? "checked='checked'" : '' ?> onclick="ToggleShowEmptyFields();" />&nbsp;&nbsp;
 						<label for="gentry_display_empty_fields"><?php _e( 'show empty fields', 'gravityflow' ) ?></label>
 					<?php
 					}
