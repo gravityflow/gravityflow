@@ -60,10 +60,15 @@ th.column-step_highlight, td.column-step_highlight {
 
 .row-actions .step_id { color: #ccc; }
 
+<<<<<<< HEAD
 .alignleft.actions.bulkactions {
     display: none;
 }
 
 .tablenav.top {
     direction: rtl;
+=======
+.gravityflow-routing {
+    text-align: left;
+>>>>>>> fix-assign-conditional-routing-formatting
 }
