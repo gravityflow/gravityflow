@@ -3703,7 +3703,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			if ( empty( $step ) || ! $step->is_supported() ) {
 
-				return '<span class="validation_error"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . $step_label . '  ' . esc_html__( '(missing)', 'gravityflow' ) . '</span>';
+				return '<span><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . $step_label . '  ' . esc_html__( '(missing)', 'gravityflow' ) . '</span>';
 			}
 
 			$icon_url  = $step->get_icon_url();
