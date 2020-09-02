@@ -454,3 +454,7 @@ table#gravityflow-inbox tbody tr{
         text-align: right;
     }
 }
+
+th > #gentry_display_empty_fields + label[for='gentry_display_empty_fields'] {
+    font-size: 12px;
+}
