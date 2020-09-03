@@ -1566,7 +1566,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * @param int          $post_id The ID of the post created from the current entry.
 	 */
 	public function set_post_tags( $value, $post_id ) {
-		$post_tags = array( $value ) ? array_values( $value ) : explode( ',', $value );
+		$post_tags = is_array( $value ) ? array_values( $value ) : explode( ',', $value );
 
 		wp_set_post_tags( $post_id, $post_tags, false );
 	}
