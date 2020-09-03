@@ -24,6 +24,15 @@ class Gravity_Flow_Field_Role extends GF_Field_Select {
 	public $type = 'workflow_role';
 
 	/**
+	 * Returns the role field's icon.
+	 *
+	 * @return string
+	 */
+	public function get_form_editor_field_icon() {
+		return 'dashicons-groups';
+	}	
+
+	/**
 	 * Adds the Workflow Fields group to the form editor.
 	 *
 	 * @param array $field_groups The properties for the field groups.
