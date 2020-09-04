@@ -1672,8 +1672,11 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function maybe_add_assignee( $args ) {
 		$assignee = $this->get_assignee( $args );
-		$id       = $assignee->get_id();
-		$key      = $assignee->get_key();
+
+		if ( $assignee ) {
+			$id       = $assignee->get_id();
+			$key      = $assignee->get_key();
+		}
 
 		if ( ! empty( $id ) && ! in_array( $key, $this->get_assignee_keys() ) ) {
 			$type = $assignee->get_type();

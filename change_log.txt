@@ -1,0 +1,1 @@
+- Fix an issue with Step Assignees on User Input Step causing a Fatal Error.
