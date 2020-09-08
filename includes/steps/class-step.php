@@ -1616,13 +1616,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$has_editable_fields = ! empty( $this->editable_fields );
 
 		foreach ( $this->assignees as $assignee_key ) {
-			$args = $this->get_assignee_args( $assignee_key );
+			if ( ! empty( $assignee_key) ) {
+				$args = $this->get_assignee_args( $assignee_key );
 
-			if ( $has_editable_fields ) {
-				$args['editable_fields'] = $this->editable_fields;
+				if ( $has_editable_fields ) {
+					$args['editable_fields'] = $this->editable_fields;
+				}
+
+				$this->maybe_add_assignee( $args );
 			}
-
-			$this->maybe_add_assignee( $args );
 		}
 	}
 
@@ -1672,11 +1674,8 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 */
 	public function maybe_add_assignee( $args ) {
 		$assignee = $this->get_assignee( $args );
-
-		if ( $assignee ) {
-			$id       = $assignee->get_id();
-			$key      = $assignee->get_key();
-		}
+		$id       = $assignee->get_id();
+		$key      = $assignee->get_key();
 
 		if ( ! empty( $id ) && ! in_array( $key, $this->get_assignee_keys() ) ) {
 			$type = $assignee->get_type();
