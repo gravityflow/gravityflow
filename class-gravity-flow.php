@@ -212,6 +212,8 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'gform_after_update_entry', array( $this, 'filter_after_update_entry' ), 10, 2 );
 
+			add_filter( 'gform_form_settings_menu', array( $this, 'filter_form_settings_menu' ), 10, 1 );
+
 			$this->add_delayed_payment_support(
 				array(
 					'option_label' => esc_html__( 'Start the Workflow once payment has been received.', 'gravityflow' ),
@@ -6138,6 +6140,21 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				$this->process_workflow( $form, $entry_id );
 			}
 		}
+
+		/**
+		 * Target for the gform_form_settings_menu hook.
+		 * Updated workflow icon.
+		 *
+		 * @param array $menu_items The form settings menu items.
+		 */		
+		function filter_form_settings_menu( $menu_items ) {
+            foreach ( $menu_items as &$menu_item ) {
+                if( $menu_item['name'] == 'gravityflow' ) {
+                    $menu_item['icon'] = esc_url( gravity_flow()->get_base_url() ) . '/images/gravity-flow-icon-cropped_gray.svg';
+                }
+            }
+            return $menu_items;
+        }
 
 		/**
 		 * Add inbox notification count to Workflow Menu.
