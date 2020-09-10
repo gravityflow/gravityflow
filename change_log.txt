@@ -1,0 +1,1 @@
+- Added filter 'gravityflow_show_inbox_count' for customization of the Gravity Flow Inbox. The Inbox count value can be disabled using it.
