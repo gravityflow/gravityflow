@@ -5990,7 +5990,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */		
 		public function show_inbox_count( $menu ) {
 
-			$show = apply_filters( 'gravityflow_show_inbox_count', $show );
+			$show = apply_filters( 'gravityflow_inbox_count_display', $show );
 			if ( isset( $show ) && ! $show ) {
 				return $menu;
 			}
