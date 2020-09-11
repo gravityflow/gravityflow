@@ -239,3 +239,7 @@ table.gform-routings tr.gform-routing-row td .repeater-buttons{
     border: 1px solid silver;
     border-radius: 3px;
 }
+
+#schedule_date {
+    width: 120px !important;
+}
