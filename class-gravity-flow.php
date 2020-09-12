@@ -3319,15 +3319,19 @@ PRIMARY KEY  (id)
 		/**
 		 * Validate the combined checkbox and textarea setting.
 		 *
-		 * @param array $field    The field properties.
-		 * @param array $settings The settings to be potentially saved.
+		 * @since unknown
+		 * @since 2.6   Renamed method with legacy prefix to support Gravity Forms 2.5 Settings API.
+		 *
+		 * @param array $field  The field properties.
+		 * @param array $value  The setting value to be potentially saved.
 		 */
-		public function validate_checkbox_and_textarea_settings( $field, $settings ) {
+		public function legacy_validate_checkbox_and_textarea_settings( $field, $value ) {
+
 			$field = $this->prepare_settings_checkbox_and_textarea( $field );
 
 			$checkbox_field = $field['checkbox'];
 			$textarea_field = $field['settings']['textarea'];
-
+			$settings = $this->get_posted_settings();
 			$this->validate_checkbox_settings( $checkbox_field, $settings );
 			$this->validate_textarea_settings( $textarea_field, $settings );
 		}
