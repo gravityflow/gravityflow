@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2020-06-07 07:40:31+00:00\n"
-"PO-Revision-Date: 2020-06-07 10:30+0000\n"
+"POT-Creation-Date: 2020-06-14 18:50:55+00:00\n"
+"PO-Revision-Date: 2020-06-14 22:40+0000\n"
 "Last-Translator: Transifex Bot <>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/gravityflow/gravityflow/language/tr_TR/)\n"
 "MIME-Version: 1.0\n"
@@ -30,256 +30,256 @@ msgstr ""
 msgid "Start the Workflow once payment has been received."
 msgstr "Ödeme alındıktan sonra iş akışını bir defa başlat."
 
-#: class-gravity-flow.php:607 includes/assignees/class-assignee.php:536
+#: class-gravity-flow.php:608 includes/assignees/class-assignee.php:536
 #: includes/fields/class-field-user.php:83
 #: includes/steps/class-step-update-user.php:68
 msgid "User"
 msgstr "Kullanıcı"
 
-#: class-gravity-flow.php:612 includes/assignees/class-assignee.php:530
+#: class-gravity-flow.php:613 includes/assignees/class-assignee.php:530
 #: includes/fields/class-field-role.php:82
 msgid "Role"
 msgstr "Rol"
 
-#: class-gravity-flow.php:617 includes/fields/class-field-discussion.php:93
+#: class-gravity-flow.php:618 includes/fields/class-field-discussion.php:93
 msgid "Discussion"
 msgstr "Tartışma"
 
-#: class-gravity-flow.php:632
+#: class-gravity-flow.php:633
 msgid "Please fill in all required fields"
 msgstr "Lütfen tüm gerekli alanları doldurun"
 
-#: class-gravity-flow.php:683
+#: class-gravity-flow.php:684
 msgid "Type to search"
 msgstr "Aramak için yazın"
 
-#: class-gravity-flow.php:937
+#: class-gravity-flow.php:938
 msgid "No results matched"
 msgstr "Eşleşen sonuç bulunamadı"
 
-#: class-gravity-flow.php:970
+#: class-gravity-flow.php:971
 msgid "Workflow Steps"
 msgstr "İş akışı adımları"
 
-#: class-gravity-flow.php:970 includes/class-connected-apps.php:529
+#: class-gravity-flow.php:971 includes/class-connected-apps.php:529
 msgid "Add New"
 msgstr "Yeni Ekle"
 
-#: class-gravity-flow.php:1123
+#: class-gravity-flow.php:1124
 msgid "Workflow Step Settings"
 msgstr "İş akışı adım ayarları"
 
-#: class-gravity-flow.php:1231
+#: class-gravity-flow.php:1232
 #: includes/fields/class-field-assignee-select.php:189
 msgid "Users"
 msgstr "Kullanıcılar"
 
-#: class-gravity-flow.php:1235
+#: class-gravity-flow.php:1236
 #: includes/fields/class-field-assignee-select.php:207
 #: includes/steps/class-step-update-user.php:194
 #: includes/steps/class-step-update-user.php:212
 msgid "Roles"
 msgstr "Roller"
 
-#: class-gravity-flow.php:1261
+#: class-gravity-flow.php:1262
 #: includes/fields/class-field-assignee-select.php:155
 msgid "User (Created by)"
 msgstr "Kullanıcı (oluşturulmuş)"
 
-#: class-gravity-flow.php:1268
+#: class-gravity-flow.php:1269
 #: includes/fields/class-field-assignee-select.php:227
 #: includes/pages/class-status.php:617
 msgid "Fields"
 msgstr "Alanlar"
 
-#: class-gravity-flow.php:1376
+#: class-gravity-flow.php:1377
 msgid "Step settings unavailable. The selected step type is not active."
 msgstr ""
 
-#: class-gravity-flow.php:1448 class-gravity-flow.php:3509
+#: class-gravity-flow.php:1449 class-gravity-flow.php:3510
 msgid "Step Type"
 msgstr "Adım türü"
 
-#: class-gravity-flow.php:1459 includes/pages/class-activity.php:65
+#: class-gravity-flow.php:1460 includes/pages/class-activity.php:65
 #: includes/pages/class-activity.php:123 includes/pages/class-inbox.php:162
 #: includes/pages/class-reports.php:338 includes/pages/class-reports.php:683
 #: includes/pages/class-status.php:1238
 msgid "Step"
 msgstr "Adım"
 
-#: class-gravity-flow.php:1459
+#: class-gravity-flow.php:1460
 msgid "Step ID #"
 msgstr "Adım no #"
 
-#: class-gravity-flow.php:1466 class-gravity-flow.php:1470
+#: class-gravity-flow.php:1467 class-gravity-flow.php:1471
 #: includes/pages/class-support.php:140
 #: includes/steps/class-common-step-settings.php:198
 #: includes/steps/class-step-webhook.php:187
 msgid "Name"
 msgstr "İsim"
 
-#: class-gravity-flow.php:1470
+#: class-gravity-flow.php:1471
 msgid "Enter a name to uniquely identify this step."
 msgstr "Bu adımı benzersiz olarak tanımlayacak bir ad girin."
 
-#: class-gravity-flow.php:1474
+#: class-gravity-flow.php:1475
 msgid "Description"
 msgstr "Açıklama"
 
 #. translators: 1: number textbox 2: units of time dropdown
-#: class-gravity-flow.php:1485
+#: class-gravity-flow.php:1486
 msgid ""
 "Start this workflow %1$s %2$s after the form submission or after the partial"
 " entry has been created or updated."
 msgstr "Bu iş akışını %1$s %2$s form gönderimi sonrası ya da kısmi girdi oluşturulduğunda veya güncellendiğinde başlat."
 
 #. translators: 1: number textbox 2: units of time dropdown
-#: class-gravity-flow.php:1488
+#: class-gravity-flow.php:1489
 msgid "Start this workflow %1$s %2$s after the form submission."
 msgstr "Bu iş akışını %1$s %2$s form gönderimi sonrası başlat."
 
-#: class-gravity-flow.php:1493
+#: class-gravity-flow.php:1494
 msgid ""
 "Build the conditional logic that should be applied to this workflow before "
 "it's allowed to be processed. If an entry does not meet the conditions then "
 "the workflow will not be processed."
 msgstr "İşlenmesine izin verilmeden önce bu iş akışına uygulanması gereken koşullu mantığı yapılandırın. Eğer hiç bir girdi koşulları sağlamıyorsa iş akışı işlenmeyecektir."
 
-#: class-gravity-flow.php:1494
+#: class-gravity-flow.php:1495
 msgid "Workflow Condition"
 msgstr "İş akışı koşulu"
 
-#: class-gravity-flow.php:1496
+#: class-gravity-flow.php:1497
 msgid "Enable Condition for this workflow"
 msgstr "Bu iş akışı için koşulu etkinleştir"
 
-#: class-gravity-flow.php:1497
+#: class-gravity-flow.php:1498
 msgid "Process this workflow if"
 msgstr "Bu iş akışını şu koşulda işle"
 
-#: class-gravity-flow.php:1501 class-gravity-flow.php:1529
+#: class-gravity-flow.php:1502 class-gravity-flow.php:1530
 msgid "Workflow Schedule"
 msgstr "İş akışı planı"
 
-#: class-gravity-flow.php:1503
+#: class-gravity-flow.php:1504
 msgid "Schedule this workflow"
 msgstr "Bu iş akışını zamanla"
 
-#: class-gravity-flow.php:1504
+#: class-gravity-flow.php:1505
 msgid "Start this workflow on %s"
 msgstr "Bu iş akışını %s ile başlat"
 
-#: class-gravity-flow.php:1505
+#: class-gravity-flow.php:1506
 msgid "Start this workflow %1$s %2$s %3$s %4$s"
 msgstr "Bu iş akışını %1$s %2$s %3$s %4$s başlat"
 
-#: class-gravity-flow.php:1507
+#: class-gravity-flow.php:1508
 msgid ""
 "Scheduling the workflow will queue entries and prevent them from starting "
 "the workflow until the specified date or until the delay period has elapsed."
 msgstr "İş akışını zamanlamak kayıtları sıraya sokar ve iş akışının belirlenen tarih yada zaman aralığından önce işlenmesine engel olur."
 
-#: class-gravity-flow.php:1508 class-gravity-flow.php:1556
+#: class-gravity-flow.php:1509 class-gravity-flow.php:1557
 msgid ""
 "Note: the schedule setting requires the WordPress Cron which is included and"
 " enabled by default unless your host has deactivated it."
 msgstr "Not: Zamanlama ayarları WordPress Cron işlevinin etkin olmasıyla çalışır, bu özellik web alanı servis sağlayıcısı tarafından özel olarak kapatılmadıysa zaten etkin olmalıdır."
 
-#: class-gravity-flow.php:1520 class-gravity-flow.php:1541
+#: class-gravity-flow.php:1521 class-gravity-flow.php:1542
 msgid ""
 "Highlighted steps will stand out in both the workflow inbox and the step "
 "list. Use highlighting to bring attention to important tasks and to help "
 "organise complex workflows."
 msgstr "Öne çıkarılmış adımlar hem akış diyagramı gelen kutusunda hem de adım listesinde kendini belli eder. Öne çıkarmayı kullanarak önemli görevlere dikkat çekin ve karışık akış diyagramlarının organize edilmesine yardımcı olun."
 
-#: class-gravity-flow.php:1538
+#: class-gravity-flow.php:1539
 msgid "Highlight"
 msgstr "Öne çıkar"
 
-#: class-gravity-flow.php:1545
+#: class-gravity-flow.php:1546
 msgid ""
 "Build the conditional logic that should be applied to this step before it's "
 "allowed to be processed. If an entry does not meet the conditions of this "
 "step it will fall on to the next step in the list."
 msgstr "Çalıştırılmadan önce bu adım için uygulanması gereken koşullu mantığı oluşturun. Eğer bir kayıt bu adımın koşullarını karşılamıyorsa bu listedeki bir sonraki adıma düşecektir."
 
-#: class-gravity-flow.php:1546
+#: class-gravity-flow.php:1547
 msgid "Condition"
 msgstr "Koşul"
 
-#: class-gravity-flow.php:1548
+#: class-gravity-flow.php:1549
 msgid "Enable Condition for this step"
 msgstr "Bu adım için koşulu etkinleştir"
 
-#: class-gravity-flow.php:1549
+#: class-gravity-flow.php:1550
 msgid "Perform this step if"
 msgstr "Bu adımı gerçekleştirme koşulları"
 
-#: class-gravity-flow.php:1553 class-gravity-flow.php:2325
-#: class-gravity-flow.php:2332 class-gravity-flow.php:2338
-#: class-gravity-flow.php:2399
+#: class-gravity-flow.php:1554 class-gravity-flow.php:2326
+#: class-gravity-flow.php:2333 class-gravity-flow.php:2339
+#: class-gravity-flow.php:2400
 msgid "Schedule"
 msgstr "Zamanla"
 
-#: class-gravity-flow.php:1555
+#: class-gravity-flow.php:1556
 msgid ""
 "Scheduling a step will queue entries and prevent them from starting this "
 "step until the specified date or until the delay period has elapsed."
 msgstr "Bir adımı zamanlamak kayıtları sıraya sokar ve bu adımın belirlenen tarih yada zaman aralığından önce işlenmesine engel olur."
 
-#: class-gravity-flow.php:1581 class-gravity-flow.php:1585
+#: class-gravity-flow.php:1582 class-gravity-flow.php:1586
 msgid "Due date"
 msgstr "Bitiş tarihi"
 
-#: class-gravity-flow.php:1586
+#: class-gravity-flow.php:1587
 msgid ""
 "Enable the due date setting to allow entries to be highlighted when they "
 "have passed their due dates. An optional column can be set on the inbox / "
 "status pages too."
 msgstr "Son tarihleri geçtiğinde girdilerin işaretlenmesi için son tarih ayarını etkinleştirin. Seçime bağlı olarak bir sütun gelen kutusunda / durum sayfalarında da belirlenebilir."
 
-#: class-gravity-flow.php:1599 class-gravity-flow.php:7918
+#: class-gravity-flow.php:1600 class-gravity-flow.php:7919
 msgid "Expired"
 msgstr "Zamanı doldu"
 
-#: class-gravity-flow.php:1603 class-gravity-flow.php:2737
-#: class-gravity-flow.php:2744 class-gravity-flow.php:2750
-#: class-gravity-flow.php:2816
+#: class-gravity-flow.php:1604 class-gravity-flow.php:2738
+#: class-gravity-flow.php:2745 class-gravity-flow.php:2751
+#: class-gravity-flow.php:2817
 msgid "Expiration"
 msgstr "Bitiş"
 
-#: class-gravity-flow.php:1604
+#: class-gravity-flow.php:1605
 msgid ""
 "Enable the expiration setting to allow this step to expire. Once expired, "
 "the entry will automatically proceed to the step configured in the Next Step"
 " setting(s) below."
 msgstr "Bu adımın sona erme tarihini belirlemek için bitiş tarihini etkinleştirin. Süresi dolan kayıt otomatik olarak aşağıda yapılandırılmış olan Sonraki Adım’a devam edecektir."
 
-#: class-gravity-flow.php:1611
+#: class-gravity-flow.php:1612
 msgid "Next step if"
 msgstr "Sonraki adıma geçme koşulları"
 
-#: class-gravity-flow.php:1627
+#: class-gravity-flow.php:1628
 msgid "Step settings updated. %sBack to the list%s or %sAdd another step%s."
 msgstr "Adım ayarları güncelleştirildi. %sListeye geri dön %s veya %sBaşka bir adım ekle%s."
 
-#: class-gravity-flow.php:1637
+#: class-gravity-flow.php:1638
 msgid "Update Step Settings"
 msgstr "Adım ayarlarını güncelle"
 
-#: class-gravity-flow.php:1640
+#: class-gravity-flow.php:1641
 msgid "There was an error while saving the step settings"
 msgstr "Adım ayarları kaydedilirken bir hata oluştu"
 
-#: class-gravity-flow.php:1661
+#: class-gravity-flow.php:1662
 msgid "This step type is missing."
 msgstr "Bu adım türü eksik."
 
-#: class-gravity-flow.php:1663
+#: class-gravity-flow.php:1664
 msgid "The plugin required by this step type is missing."
 msgstr "Bu adım türü için gerekli eklenti eksiktir."
 
-#: class-gravity-flow.php:1670
+#: class-gravity-flow.php:1671
 msgid ""
 "There is %s entry currently on this step. This entry may be affected if the "
 "settings are changed."
@@ -289,16 +289,16 @@ msgid_plural ""
 msgstr[0] "Bu adımda %s girdi var. Ayarlar değişecek olursa bu girdi etkilenebilir."
 msgstr[1] "Bu adımda %s girdi var. Ayarlar değişecek olursa bu girdiler etkilenebilir."
 
-#: class-gravity-flow.php:1708
+#: class-gravity-flow.php:1709
 msgid "You don't have sufficient permissions to update the step settings."
 msgstr "Adım ayarlarını güncellemek için yeterli izniniz yok."
 
-#: class-gravity-flow.php:1751 includes/steps/class-step-workflow-start.php:39
+#: class-gravity-flow.php:1752 includes/steps/class-step-workflow-start.php:39
 #: includes/steps/class-step-workflow-start.php:92
 msgid "Start"
 msgstr "Başla"
 
-#: class-gravity-flow.php:1775 class-gravity-flow.php:7909
+#: class-gravity-flow.php:1776 class-gravity-flow.php:7910
 #: includes/steps/class-step-user-input.php:848
 #: includes/steps/class-step-user-input.php:944
 #: includes/steps/class-step-workflow-complete.php:39
@@ -308,57 +308,57 @@ msgstr "Başla"
 msgid "Complete"
 msgstr "Tamamlandı"
 
-#: class-gravity-flow.php:2268
+#: class-gravity-flow.php:2269
 msgid "Schedule this step"
 msgstr "Bu adımı zamanla"
 
-#: class-gravity-flow.php:2288 class-gravity-flow.php:2474
-#: class-gravity-flow.php:2700
+#: class-gravity-flow.php:2289 class-gravity-flow.php:2475
+#: class-gravity-flow.php:2701
 msgid "Delay"
 msgstr "Gecikme"
 
-#: class-gravity-flow.php:2292 class-gravity-flow.php:2478
-#: class-gravity-flow.php:2704 includes/pages/class-activity.php:60
+#: class-gravity-flow.php:2293 class-gravity-flow.php:2479
+#: class-gravity-flow.php:2705 includes/pages/class-activity.php:60
 #: includes/pages/class-activity.php:85 includes/pages/class-status.php:1229
 msgid "Date"
 msgstr "Tarih"
 
-#: class-gravity-flow.php:2304 class-gravity-flow.php:2490
-#: class-gravity-flow.php:2716
+#: class-gravity-flow.php:2305 class-gravity-flow.php:2491
+#: class-gravity-flow.php:2717
 msgid "Date Field"
 msgstr "Tarih alanı"
 
-#: class-gravity-flow.php:2316
+#: class-gravity-flow.php:2317
 msgid "Schedule Date Field"
 msgstr "Tarih alanını zamanla"
 
-#: class-gravity-flow.php:2342 class-gravity-flow.php:2531
-#: class-gravity-flow.php:2754
+#: class-gravity-flow.php:2343 class-gravity-flow.php:2532
+#: class-gravity-flow.php:2755
 msgid "Minute(s)"
 msgstr "Dakika"
 
-#: class-gravity-flow.php:2346 class-gravity-flow.php:2535
-#: class-gravity-flow.php:2758
+#: class-gravity-flow.php:2347 class-gravity-flow.php:2536
+#: class-gravity-flow.php:2759
 msgid "Hour(s)"
 msgstr "Saat"
 
-#: class-gravity-flow.php:2350 class-gravity-flow.php:2539
-#: class-gravity-flow.php:2762
+#: class-gravity-flow.php:2351 class-gravity-flow.php:2540
+#: class-gravity-flow.php:2763
 msgid "Day(s)"
 msgstr "Gün"
 
-#: class-gravity-flow.php:2354 class-gravity-flow.php:2543
-#: class-gravity-flow.php:2766
+#: class-gravity-flow.php:2355 class-gravity-flow.php:2544
+#: class-gravity-flow.php:2767
 msgid "Week(s)"
 msgstr "Hafta"
 
-#: class-gravity-flow.php:2375
+#: class-gravity-flow.php:2376
 msgid "Start this step on %s"
 msgstr "Bu iş akışını %s ile başlat"
 
 #. translators: 1. textbox input for the number of days/weeks etc. 2. select
 #. input with options for minutes/hours/days/weeks
-#: class-gravity-flow.php:2383
+#: class-gravity-flow.php:2384
 msgid "Start this step %1$s %2$s after the workflow step is triggered."
 msgstr "İş akışı adımı tetiklendikten sonra bu adımı başlat %1$s %2$s."
 
@@ -366,433 +366,433 @@ msgstr "İş akışı adımı tetiklendikten sonra bu adımı başlat %1$s %2$s.
 #. input with options for minutes/hours/days/weeks 3. select input
 #. before/after
 #. 4. select input with list of date fields
-#: class-gravity-flow.php:2390
+#: class-gravity-flow.php:2391
 msgid "Start this step %1$s %2$s %3$s %4$s"
 msgstr "Bu adımı başlat %1$s %2$s %3$s %4$s"
 
-#: class-gravity-flow.php:2403 class-gravity-flow.php:2614
-#: class-gravity-flow.php:2820
+#: class-gravity-flow.php:2404 class-gravity-flow.php:2615
+#: class-gravity-flow.php:2821
 msgid "after"
 msgstr "sonra"
 
-#: class-gravity-flow.php:2407 class-gravity-flow.php:2618
-#: class-gravity-flow.php:2824
+#: class-gravity-flow.php:2408 class-gravity-flow.php:2619
+#: class-gravity-flow.php:2825
 msgid "before"
 msgstr "önce"
 
-#: class-gravity-flow.php:2460
+#: class-gravity-flow.php:2461
 msgid "Schedule due date"
 msgstr "Bitiş zamanını zamanla"
 
-#: class-gravity-flow.php:2501
+#: class-gravity-flow.php:2502
 msgid "Due Date Field"
 msgstr "Bitiş tarihi alanı"
 
-#: class-gravity-flow.php:2510 class-gravity-flow.php:2520
-#: class-gravity-flow.php:2526 class-gravity-flow.php:2610
-#: class-gravity-flow.php:3963 includes/pages/class-inbox.php:173
+#: class-gravity-flow.php:2511 class-gravity-flow.php:2521
+#: class-gravity-flow.php:2527 class-gravity-flow.php:2611
+#: class-gravity-flow.php:3964 includes/pages/class-inbox.php:173
 #: includes/pages/class-status.php:1264
 msgid "Due Date"
 msgstr "Bitiş tarihi"
 
-#: class-gravity-flow.php:2560 class-gravity-flow.php:2942
+#: class-gravity-flow.php:2561 class-gravity-flow.php:2943
 msgid "Color"
 msgstr "Renk"
 
-#: class-gravity-flow.php:2582 class-gravity-flow.php:2590
+#: class-gravity-flow.php:2583 class-gravity-flow.php:2591
 msgid "This step has a due date on"
 msgstr "Bu adımın bir bitiş tarihi var"
 
-#: class-gravity-flow.php:2595 class-gravity-flow.php:2801
+#: class-gravity-flow.php:2596 class-gravity-flow.php:2802
 msgid "after the workflow step has started."
 msgstr "iş akışı adımı başladıktan sonra."
 
-#: class-gravity-flow.php:2600
+#: class-gravity-flow.php:2601
 msgid "Due date for this step"
 msgstr "Bu adım için bitiş tarihi"
 
-#: class-gravity-flow.php:2687
+#: class-gravity-flow.php:2688
 msgid "Schedule expiration"
 msgstr "Bitiş zamanını ayarla"
 
-#: class-gravity-flow.php:2728
+#: class-gravity-flow.php:2729
 msgid "Expiration Date Field"
 msgstr "Son kullanım tarihi alanı"
 
-#: class-gravity-flow.php:2788
+#: class-gravity-flow.php:2789
 msgid "This step expires on"
 msgstr "Bu adımın bitiş zamanı"
 
-#: class-gravity-flow.php:2796
+#: class-gravity-flow.php:2797
 msgid "This step will expire"
 msgstr "Bu adımın bitiş tarihi"
 
-#: class-gravity-flow.php:2806
+#: class-gravity-flow.php:2807
 msgid "Expire this step"
 msgstr "Bu adımın biteceği tarih"
 
-#: class-gravity-flow.php:2838
+#: class-gravity-flow.php:2839
 msgid "Status after expiration"
 msgstr "Bitiş zamanından sonraki durum"
 
-#: class-gravity-flow.php:2842
+#: class-gravity-flow.php:2843
 msgid "Expiration Status"
 msgstr "Bitiş durumu"
 
-#: class-gravity-flow.php:2852 class-gravity-flow.php:2856
+#: class-gravity-flow.php:2853 class-gravity-flow.php:2857
 msgid "Next Step if Expired"
 msgstr "Zamanı dolduysa sonraki adıma geç"
 
-#: class-gravity-flow.php:2923
+#: class-gravity-flow.php:2924
 msgid "Highlight this step"
 msgstr "Bu adımı öne çıkar"
 
-#: class-gravity-flow.php:3066
+#: class-gravity-flow.php:3067
 #: includes/integrations/class-partial-entries.php:120
 #: includes/steps/class-step-approval.php:288
 #: includes/steps/class-step-user-input.php:210
 msgid "Enable"
 msgstr "Etkinleştir"
 
-#: class-gravity-flow.php:3270
+#: class-gravity-flow.php:3271
 msgid "You must provide a color value for the active highlight to apply."
 msgstr "Etkin öne çıkarmaya uygulanması için bir renk değeri sağlamalısınız."
 
-#: class-gravity-flow.php:3330 class-gravity-flow.php:5775
+#: class-gravity-flow.php:3331 class-gravity-flow.php:5776
 msgid "Workflow Complete"
 msgstr "İş akışı tamamlandı"
 
-#: class-gravity-flow.php:3331
+#: class-gravity-flow.php:3332
 msgid "Next step in list"
 msgstr "Listedeki bir sonraki adım"
 
-#: class-gravity-flow.php:3410
+#: class-gravity-flow.php:3411
 msgid "Match {0} of the following criteria:"
 msgstr "Şu kriterle {0}. eşleşme:"
 
-#: class-gravity-flow.php:3451
+#: class-gravity-flow.php:3452
 msgid "Sort by field"
 msgstr "Alana göre sırala"
 
-#: class-gravity-flow.php:3507
+#: class-gravity-flow.php:3508
 msgid "Step name"
 msgstr "Adım adı"
 
-#: class-gravity-flow.php:3514
+#: class-gravity-flow.php:3515
 msgid "Entries"
 msgstr "Kayıtlar"
 
-#: class-gravity-flow.php:3532
+#: class-gravity-flow.php:3533
 msgid "(missing)"
 msgstr "(eksik)"
 
-#: class-gravity-flow.php:3623 includes/class-connected-apps.php:865
+#: class-gravity-flow.php:3624 includes/class-connected-apps.php:865
 #: includes/steps/class-step-feed-slicedinvoices.php:232
 msgid "Edit"
 msgstr "Düzenle"
 
-#: class-gravity-flow.php:3624
+#: class-gravity-flow.php:3625
 msgid "Duplicate"
 msgstr "Mükerrer"
 
-#: class-gravity-flow.php:3625
+#: class-gravity-flow.php:3626
 msgid "WARNING: You are about to delete this item."
 msgstr "UYARI: Bu öğeyi silmek üzeresiniz."
 
-#: class-gravity-flow.php:3625
+#: class-gravity-flow.php:3626
 msgid "'Cancel' to stop, 'OK' to delete."
 msgstr "Durmak için 'İptal', silmek için 'Tamam'."
 
-#: class-gravity-flow.php:3625 includes/class-connected-apps.php:866
+#: class-gravity-flow.php:3626 includes/class-connected-apps.php:866
 msgid "Delete"
 msgstr "Sil"
 
-#: class-gravity-flow.php:3640
+#: class-gravity-flow.php:3641
 msgid "You don't have any steps configured. Let's go %screate one%s!"
 msgstr "Yapılandırılmış herhangi bir adım yok. Yeni bir adım %soluşturalım%s!"
 
-#: class-gravity-flow.php:3691 includes/pages/class-status.php:1896
+#: class-gravity-flow.php:3692 includes/pages/class-status.php:1896
 #: includes/pages/class-status.php:1901
 msgid "Status:"
 msgstr "Durum:"
 
-#: class-gravity-flow.php:3927 includes/pages/class-activity.php:62
+#: class-gravity-flow.php:3928 includes/pages/class-activity.php:62
 #: includes/pages/class-activity.php:95
 #: includes/steps/class-step-webhook.php:1065
 msgid "Entry ID"
 msgstr "Kayıt no"
 
-#: class-gravity-flow.php:3936 includes/pages/class-inbox.php:165
+#: class-gravity-flow.php:3937 includes/pages/class-inbox.php:165
 msgid "Submitted"
 msgstr "Gönderim tarihi"
 
-#: class-gravity-flow.php:3942
+#: class-gravity-flow.php:3943
 msgid "Last updated"
 msgstr "Son güncelleme tarihi"
 
-#: class-gravity-flow.php:3949
+#: class-gravity-flow.php:3950
 msgid "Submitted by"
 msgstr "Gönderen"
 
-#: class-gravity-flow.php:3956 class-gravity-flow.php:4967
-#: class-gravity-flow.php:7875 includes/class-connected-apps.php:793
+#: class-gravity-flow.php:3957 class-gravity-flow.php:4968
+#: class-gravity-flow.php:7876 includes/class-connected-apps.php:793
 #: includes/pages/class-status.php:1242
 #: includes/steps/class-step-feed-slicedinvoices.php:227
 #: includes/wizard/steps/class-iw-step-pages.php:81
 msgid "Status"
 msgstr "Durum"
 
-#: class-gravity-flow.php:3970 includes/pages/class-status.php:1021
+#: class-gravity-flow.php:3971 includes/pages/class-status.php:1021
 msgid "Expires"
 msgstr "Bitiş"
 
-#: class-gravity-flow.php:4016 includes/pages/class-status.php:1014
+#: class-gravity-flow.php:4017 includes/pages/class-status.php:1014
 #: includes/steps/class-step-approval.php:757
 #: includes/steps/class-step-partial-entry-submission.php:204
 #: includes/steps/class-step-user-input.php:850
 msgid "Queued"
 msgstr "Sıraya alındı"
 
-#: class-gravity-flow.php:4034
+#: class-gravity-flow.php:4035
 msgid "Scheduled"
 msgstr "Zamanlandı"
 
-#: class-gravity-flow.php:4045 class-gravity-flow.php:4046
-#: class-gravity-flow.php:7047 class-gravity-flow.php:7049
+#: class-gravity-flow.php:4046 class-gravity-flow.php:4047
+#: class-gravity-flow.php:7048 class-gravity-flow.php:7050
 msgid "Step expired"
 msgstr "Adım süresi doldu"
 
-#: class-gravity-flow.php:4050
+#: class-gravity-flow.php:4051
 msgid "Expired: refresh the page"
 msgstr "Süresi doldu: sayfayı yenileyin"
 
-#: class-gravity-flow.php:4067
+#: class-gravity-flow.php:4068
 msgid "Admin"
 msgstr "Yönetici"
 
-#: class-gravity-flow.php:4074
+#: class-gravity-flow.php:4075
 msgid "Select an action"
 msgstr "Eylem seçin"
 
-#: class-gravity-flow.php:4077 includes/pages/class-status.php:493
+#: class-gravity-flow.php:4078 includes/pages/class-status.php:493
 msgid "Apply"
 msgstr "Uygula"
 
-#: class-gravity-flow.php:4101
+#: class-gravity-flow.php:4102
 #: includes/merge-tags/class-merge-tag-workflow-cancel.php:60
 msgid "Cancel Workflow"
 msgstr "İş akışını iptal et"
 
-#: class-gravity-flow.php:4105
+#: class-gravity-flow.php:4106
 msgid "Restart this step"
 msgstr "Bu adım yeniden başlatın"
 
-#: class-gravity-flow.php:4114 includes/pages/class-status.php:398
+#: class-gravity-flow.php:4115 includes/pages/class-status.php:398
 msgid "Restart Workflow"
 msgstr "İş akışını yeniden başlatın"
 
-#: class-gravity-flow.php:4137
+#: class-gravity-flow.php:4138
 msgid "Send to step:"
 msgstr "Şu adıma atla:"
 
-#: class-gravity-flow.php:4177
+#: class-gravity-flow.php:4178
 msgid "Workflow complete"
 msgstr "İş akışı tamamlandı"
 
-#: class-gravity-flow.php:4187
+#: class-gravity-flow.php:4188
 msgid "View"
 msgstr "Görüntüle"
 
-#: class-gravity-flow.php:4413
+#: class-gravity-flow.php:4414
 msgid "General"
 msgstr "Genel"
 
-#: class-gravity-flow.php:4414 class-gravity-flow.php:7122
+#: class-gravity-flow.php:4415 class-gravity-flow.php:7123
 msgid "Gravity Flow Settings"
 msgstr "Gravity Flow ayarları"
 
-#: class-gravity-flow.php:4419 class-gravity-flow.php:4538
+#: class-gravity-flow.php:4420 class-gravity-flow.php:4539
 msgid "Labels"
 msgstr "Etiketler"
 
-#: class-gravity-flow.php:4424 includes/class-connected-apps.php:524
+#: class-gravity-flow.php:4425 includes/class-connected-apps.php:524
 msgid "Connected Apps"
 msgstr "Bağlanmış uygulamalar"
 
-#: class-gravity-flow.php:4439 class-gravity-flow.php:8790
+#: class-gravity-flow.php:4440 class-gravity-flow.php:8825
 msgid "Uninstall"
 msgstr "Kaldır"
 
-#: class-gravity-flow.php:4504 class-gravity-flow.php:7906
-#: class-gravity-flow.php:8355
+#: class-gravity-flow.php:4505 class-gravity-flow.php:7907
+#: class-gravity-flow.php:8356
 #: includes/merge-tags/class-merge-tag-current-step.php:98
 #: includes/steps/class-step-partial-entry-submission.php:201
 #: includes/steps/class-step.php:329
 msgid "Pending"
 msgstr "Beklemede"
 
-#: class-gravity-flow.php:4505 class-gravity-flow.php:7921
-#: class-gravity-flow.php:8351
+#: class-gravity-flow.php:4506 class-gravity-flow.php:7922
+#: class-gravity-flow.php:8352
 msgid "Cancelled"
 msgstr "İptal Edildi"
 
-#: class-gravity-flow.php:4543
+#: class-gravity-flow.php:4544
 msgid "Navigation"
 msgstr "Gezinme"
 
-#: class-gravity-flow.php:4551
+#: class-gravity-flow.php:4552
 msgid "Status Labels"
 msgstr "Durum etiketleri"
 
-#: class-gravity-flow.php:4558
+#: class-gravity-flow.php:4559
 #: includes/steps/class-step-feed-user-registration.php:141
 #: includes/steps/class-step-user-input.php:1030
 msgid "Update"
 msgstr "Güncelle"
 
-#: class-gravity-flow.php:4582
+#: class-gravity-flow.php:4583
 msgid "Invalid token"
 msgstr "Geçersiz jeton"
 
-#: class-gravity-flow.php:4586
+#: class-gravity-flow.php:4587
 msgid "Token already expired"
 msgstr "Jeton süresi zaten dolmuş"
 
-#: class-gravity-flow.php:4594
+#: class-gravity-flow.php:4595
 msgid "Token revoked"
 msgstr "Jeton geçersiz"
 
-#: class-gravity-flow.php:4598
+#: class-gravity-flow.php:4599
 msgid "Tools"
 msgstr "Araçlar"
 
-#: class-gravity-flow.php:4614
+#: class-gravity-flow.php:4615
 msgid "Revoke a token"
 msgstr "Jetonu iptal et"
 
-#: class-gravity-flow.php:4620
+#: class-gravity-flow.php:4621
 msgid "Revoke"
 msgstr "İptal et"
 
-#: class-gravity-flow.php:4675
+#: class-gravity-flow.php:4676
 msgid "Entries per page"
 msgstr "Sayfa başı kayıt sayısı"
 
-#: class-gravity-flow.php:4703 includes/class-extension.php:411
+#: class-gravity-flow.php:4704 includes/class-extension.php:411
 #: includes/class-feed-extension.php:418
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: class-gravity-flow.php:4707 includes/class-extension.php:226
+#: class-gravity-flow.php:4708 includes/class-extension.php:226
 #: includes/class-feed-extension.php:228
 #: includes/wizard/steps/class-iw-step-license-key.php:100
 msgid "License Key"
 msgstr "Lisans anahtarı"
 
-#: class-gravity-flow.php:4711 includes/class-extension.php:230
+#: class-gravity-flow.php:4712 includes/class-extension.php:230
 #: includes/class-feed-extension.php:232
 msgid "Invalid license"
 msgstr "Geçersiz lisans"
 
-#: class-gravity-flow.php:4717
+#: class-gravity-flow.php:4718
 #: includes/wizard/steps/class-iw-step-updates.php:111
 msgid "Background Updates"
 msgstr "Arka plan güncellemeleri"
 
-#: class-gravity-flow.php:4718
+#: class-gravity-flow.php:4719
 msgid ""
 "Set this to ON to allow Gravity Flow to download and install bug fixes and "
 "security updates automatically in the background. Requires a valid license "
 "key."
 msgstr "Gravity Flow’un arka planda otomatik olarak hata düzeltmelerini ve güvenlik güncellemelerini indirip kurmasına izin vermek için bunu AÇIK konumuna getirin. Geçerli bir lisans anahtarı gerektirir."
 
-#: class-gravity-flow.php:4723
+#: class-gravity-flow.php:4724
 msgid "On"
 msgstr "Açık"
 
-#: class-gravity-flow.php:4724
+#: class-gravity-flow.php:4725
 msgid "Off"
 msgstr "Kapalı"
 
-#: class-gravity-flow.php:4743
+#: class-gravity-flow.php:4744
 msgid "Update Settings"
 msgstr "Ayarları güncelle"
 
-#: class-gravity-flow.php:4745
+#: class-gravity-flow.php:4746
 msgid "Settings updated successfully"
 msgstr "Ayarlar başarıyla güncellendi"
 
-#: class-gravity-flow.php:4746
+#: class-gravity-flow.php:4747
 msgid "There was an error while saving the settings"
 msgstr "Ayarlar kaydedilirken bir hata oluştu"
 
-#: class-gravity-flow.php:4766
+#: class-gravity-flow.php:4767
 msgid "Workflow Emails"
 msgstr "İş akışı e-postaları"
 
-#: class-gravity-flow.php:4786
+#: class-gravity-flow.php:4787
 msgid "Email Service"
 msgstr "E-posta servisi"
 
-#: class-gravity-flow.php:4787
+#: class-gravity-flow.php:4788
 msgid ""
 "Select which service should be used to send the workflow emails. WordPress "
 "uses the server hosting your site or an active SMTP plugin."
 msgstr "İş akışı e-postalarının gönderilmesi için kullanılacak servisi seçin. WordPress sunucunusun bulundurma servisini ya da etkin bir SMTP eklentisini kullanır."
 
-#: class-gravity-flow.php:4798
+#: class-gravity-flow.php:4799
 #: includes/steps/class-common-step-settings.php:176
 msgid "From Name"
 msgstr "Gönderen Adı"
 
-#: class-gravity-flow.php:4799
+#: class-gravity-flow.php:4800
 msgid ""
 "The default From Name to be used when the From Name setting is not "
 "configured on the individual steps."
 msgstr "İlgili adımlarda gönderici adı ayarı yapılmadığında varsayılan gönderici adı kullanılacaktır."
 
-#: class-gravity-flow.php:4820
+#: class-gravity-flow.php:4821
 #: includes/steps/class-common-step-settings.php:182
 msgid "From Email"
 msgstr "Gönderen E-Posta"
 
-#: class-gravity-flow.php:4821
+#: class-gravity-flow.php:4822
 msgid ""
 "The default From Email to be used when the From Email setting is not "
 "configured on the individual steps."
 msgstr "İlgili adımlarda gönderici e-postası ayarı yapılmadığında varsayılan gönderici e-postası kullanılacaktır."
 
-#: class-gravity-flow.php:4870
+#: class-gravity-flow.php:4871
 msgid "Please enter a valid email address."
 msgstr "Lütfen geçerli bir e-posta adresi girin."
 
-#: class-gravity-flow.php:4886
+#: class-gravity-flow.php:4887
 msgid ""
 "From Email domain must be an %1$sactive domain%3$s. You can learn more about"
 " verifying your domain in the %2$sMailgun documentation%3$s."
 msgstr "Gönderici e-posta alan adı %1$setkin bir alan adı%3s olmalıdır. Alan adınızı nasıl doğrulayacağınızı %2$sMailgun belgelerinden%3$s öğrenebilirsiniz."
 
-#: class-gravity-flow.php:4925
+#: class-gravity-flow.php:4926
 msgid "Published"
 msgstr "Yayınlanan"
 
-#: class-gravity-flow.php:4936
+#: class-gravity-flow.php:4937
 msgid "No workflow steps have been added to any forms yet."
 msgstr "Herhangi bir forma eklenmiş iş akışı adımı yok."
 
-#: class-gravity-flow.php:4942
+#: class-gravity-flow.php:4943
 msgid "Published Workflow Forms"
 msgstr "Yayınlanmış iş akış formları"
 
-#: class-gravity-flow.php:4943
+#: class-gravity-flow.php:4944
 msgid "Select the forms you wish to publish on the Submit page."
 msgstr "Gönderme sayfasında yayınlamak istediğiniz formları seçin."
 
-#: class-gravity-flow.php:4957
+#: class-gravity-flow.php:4958
 msgid "Default Pages"
 msgstr "Varsayılan sayfalar"
 
-#: class-gravity-flow.php:4958
+#: class-gravity-flow.php:4959
 msgid ""
 "Select the pages which contain the following gravityflow shortcodes. For "
 "example, the inbox page selected below will be used when preparing merge "
@@ -800,464 +800,464 @@ msgid ""
 "specified."
 msgstr "Aşağıdan gravityflow kısakod içeren sayfaları seçin. Örneğin, aşağıdan seçeceğiniz gelen kutusu sayfası page_id özniteliği belirtlimediği zaman  {workflow_inbox_link} gibi kaynaşma etiketleri hazırlanırken kullanılır."
 
-#: class-gravity-flow.php:4962 class-gravity-flow.php:7873
+#: class-gravity-flow.php:4963 class-gravity-flow.php:7874
 #: includes/merge-tags/class-merge-tag-workflow-url.php:62
 #: includes/wizard/steps/class-iw-step-pages.php:61
 msgid "Inbox"
 msgstr "Gelen kutusu"
 
-#: class-gravity-flow.php:4972 class-gravity-flow.php:7874
+#: class-gravity-flow.php:4973 class-gravity-flow.php:7875
 #: includes/steps/class-step-user-input.php:1005
 #: includes/steps/class-step-user-input.php:1030
 #: includes/wizard/steps/class-iw-step-pages.php:97
 msgid "Submit"
 msgstr "Gönder"
 
-#: class-gravity-flow.php:4988
+#: class-gravity-flow.php:4989
 msgid "Security Options"
 msgstr "Güvenlik seçenekleri"
 
-#: class-gravity-flow.php:4992
+#: class-gravity-flow.php:4993
 msgid "Shortcode Security"
 msgstr "Kısa kod güvenliği"
 
-#: class-gravity-flow.php:4994
+#: class-gravity-flow.php:4995
 msgid ""
 "Important: Do not enable any of these settings unless all page editors are "
 "authorized."
 msgstr "Önemli: tüm sayfa düzenleyicileri yetkilendirilmediği sürece bu ayarların hiçbirini etkinleştirmeyin."
 
-#: class-gravity-flow.php:4997
+#: class-gravity-flow.php:4998
 msgid ""
 "Allow the Status shortcode to display all entries to all registered users."
 msgstr "Durum kısa kodunun tüm kayıtlı kullacılara tüm girdileri göstermesine izin ver."
 
-#: class-gravity-flow.php:4999
+#: class-gravity-flow.php:5000
 msgid ""
 "This setting allows the display_all attribute to be used in the shortcode."
 msgstr "Bu ayar kısa kodda display_all ayarının kullanılabilmesini salar."
 
-#: class-gravity-flow.php:5002
+#: class-gravity-flow.php:5003
 msgid ""
 "Allow the Status shortcode to display all entries to all anonymous users."
 msgstr "Durum kısa kodunun tüm anonim kullacılara tüm girdileri göstermesine izin ver."
 
-#: class-gravity-flow.php:5004
+#: class-gravity-flow.php:5005
 msgid ""
 "This setting allows the allow_anonymous attribute to be used in the "
 "shortcode."
 msgstr "Bu ayar kısa kodda allow_anonymous ayarının kullanılabilmesini salar."
 
-#: class-gravity-flow.php:5007
+#: class-gravity-flow.php:5008
 msgid "Allow the Inbox and Status shortcodes to display field values."
 msgstr "Gelen kutusu ve Durum kısa kodlarının alan değerlerini göstermesine izin ver."
 
-#: class-gravity-flow.php:5009
+#: class-gravity-flow.php:5010
 msgid "This setting allows the fields attribute to be used in the shortcode."
 msgstr "Bu ayar alan özniteliğinin kısa kod içinde kullanılabilmesini sağlar."
 
-#: class-gravity-flow.php:5012
+#: class-gravity-flow.php:5013
 msgid ""
 "Allow the Reports shortcode to display workflow reports to all registered "
 "and anonymous users."
 msgstr ""
 
-#: class-gravity-flow.php:5014
+#: class-gravity-flow.php:5015
 msgid ""
 "This setting allows the Reports shortcode to display workflow reports to all"
 " registered and anonymous users."
 msgstr ""
 
-#: class-gravity-flow.php:5039
+#: class-gravity-flow.php:5040
 msgid "Select page"
 msgstr "Sayfa seç"
 
-#: class-gravity-flow.php:5201
+#: class-gravity-flow.php:5202
 #: includes/wizard/steps/class-iw-step-pages.php:211
 msgid "Submit a Workflow Form"
 msgstr "Bir iş akışı formu gönderin"
 
-#: class-gravity-flow.php:5268
+#: class-gravity-flow.php:5269
 msgid ""
 "Important: Gravity Flow (Development Version) is missing some important "
 "files that were not included in the installation package. Consult the "
 "readme.md file for further details."
 msgstr "Önemli: Gravity Flow (Geliştirme Sürümü) yükleme paketinde bulunmayan bazı önemli dosyalar eksik. Daha fazla bilgi için readme.md dosyasına başvurun."
 
-#: class-gravity-flow.php:5331 class-gravity-flow.php:6247
+#: class-gravity-flow.php:5332 class-gravity-flow.php:6248
 #: includes/pages/class-entry-detail.php:167
 msgid "Return to list"
 msgstr "Listeye dön"
 
-#: class-gravity-flow.php:5350
+#: class-gravity-flow.php:5351
 msgid "Oops! We could not locate your entry."
 msgstr "Tüh! Kaydınız bulunamadı."
 
-#: class-gravity-flow.php:5374 includes/steps/class-step-approval.php:1014
+#: class-gravity-flow.php:5375 includes/steps/class-step-approval.php:1017
 msgid "Error: incorrect entry."
 msgstr "Hata: yanlış girdi."
 
-#: class-gravity-flow.php:5380
+#: class-gravity-flow.php:5381
 msgid "Workflow Cancelled"
 msgstr "İş akışı iptal edildi"
 
-#: class-gravity-flow.php:5403
+#: class-gravity-flow.php:5404
 msgid "Error: This URL is no longer valid."
 msgstr "Hata: Bu URL artık geçerli değil."
 
-#: class-gravity-flow.php:5472
+#: class-gravity-flow.php:5473
 #: includes/wizard/steps/class-iw-step-pages.php:209
 msgid "Workflow Inbox"
 msgstr "İş akışı gelen kutusu"
 
-#: class-gravity-flow.php:5519
+#: class-gravity-flow.php:5520
 #: includes/wizard/steps/class-iw-step-pages.php:210
 msgid "Workflow Status"
 msgstr "İş akışı durumu"
 
-#: class-gravity-flow.php:5564
+#: class-gravity-flow.php:5565
 msgid "Workflow Activity"
 msgstr "İş akışı etkinliği"
 
-#: class-gravity-flow.php:5610
+#: class-gravity-flow.php:5611
 msgid "Workflow Reports"
 msgstr "İş akışı raporları"
 
-#: class-gravity-flow.php:5662
+#: class-gravity-flow.php:5663
 msgid "Your inbox of pending tasks"
 msgstr "Kutunuzda bekleyen görevler"
 
-#: class-gravity-flow.php:5676
+#: class-gravity-flow.php:5677
 msgid "Submit a Workflow"
 msgstr "Bir iş akışı gönderin"
 
-#: class-gravity-flow.php:5688
+#: class-gravity-flow.php:5689
 msgid "Your workflows"
 msgstr "İş akışlarınız"
 
-#: class-gravity-flow.php:5699 class-gravity-flow.php:7877
+#: class-gravity-flow.php:5700 class-gravity-flow.php:7878
 msgid "Reports"
 msgstr "Raporlar"
 
-#: class-gravity-flow.php:5710 class-gravity-flow.php:7878
+#: class-gravity-flow.php:5711 class-gravity-flow.php:7879
 msgid "Activity"
 msgstr "Etkinlik"
 
-#: class-gravity-flow.php:5741 includes/class-api.php:129
+#: class-gravity-flow.php:5742 includes/class-api.php:129
 msgid "Workflow cancelled."
 msgstr "İş akışı iptal edildi."
 
-#: class-gravity-flow.php:5745 class-gravity-flow.php:5757
+#: class-gravity-flow.php:5746 class-gravity-flow.php:5758
 msgid "The entry does not currently have an active step."
 msgstr "Bu kaydın geçerli etkin bir adımı yok."
 
-#: class-gravity-flow.php:5754 includes/class-api.php:154
+#: class-gravity-flow.php:5755 includes/class-api.php:154
 msgid "Workflow Step restarted."
 msgstr "İş akışı adım yeniden başlatıldı."
 
-#: class-gravity-flow.php:5765 includes/class-api.php:192
+#: class-gravity-flow.php:5766 includes/class-api.php:192
 #: includes/pages/class-status.php:2019
 msgid "Workflow restarted."
 msgstr "İş akışı yeniden başlatıldı."
 
-#: class-gravity-flow.php:5775 includes/class-api.php:315
+#: class-gravity-flow.php:5776 includes/class-api.php:315
 msgid "Sent to step: %s"
 msgstr "Şu adıma gönder: %s"
 
-#: class-gravity-flow.php:5801
+#: class-gravity-flow.php:5802
 msgid "Workflow: approved or rejected"
 msgstr "İş akışı: onaylayan veya reddedilen"
 
-#: class-gravity-flow.php:5802
+#: class-gravity-flow.php:5803
 msgid "Workflow: user input"
 msgstr "İş akışı: kullanıcı girişi"
 
-#: class-gravity-flow.php:5803
+#: class-gravity-flow.php:5804
 msgid "Workflow: complete"
 msgstr "İş akışı: tamamlanan"
 
-#: class-gravity-flow.php:5804
+#: class-gravity-flow.php:5805
 msgid "Workflow: cancelled"
 msgstr "İş akışı: iptal edildi"
 
-#: class-gravity-flow.php:6810
+#: class-gravity-flow.php:6811
 msgid ""
 "Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. "
 "If the form was imported from a different installation with different user "
 "IDs then steps may need to be reassigned."
 msgstr "Gravity Flow adımları içe aktarıldı. ÖNEMLİ: Her adım için görevli kullanıcıları tekrar kontrol edin. Eğer form farklı bir kurulumdan farklı kullanıcı NO içeriği ile aktarıldıysa her adım için atanan görevlileri tekrar gözden geçirmelisiniz."
 
-#: class-gravity-flow.php:7131
+#: class-gravity-flow.php:7132
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
 msgstr "%sBu işlem TÜM Gravity Flow ayarlarını%s siler. Devam ederseniz bu ayarları geri alma şansınız OLMAYACAKTIR."
 
-#: class-gravity-flow.php:7140
+#: class-gravity-flow.php:7141
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
 msgstr "Dikkat! TÜM Gravity Flow verisi silinecektir. Bu geri alınamaz.  Silmek için ‘Tamam’, durdurmak için ‘Vazgeç’ düğmesine basınız"
 
-#: class-gravity-flow.php:7646
+#: class-gravity-flow.php:7647
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d yıl"
 msgstr[1] "%d yıl"
 
-#: class-gravity-flow.php:7650
+#: class-gravity-flow.php:7651
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%s ay"
 msgstr[1] "%s ay"
 
-#: class-gravity-flow.php:7654
+#: class-gravity-flow.php:7655
 msgid "%dd"
 msgstr "%dg"
 
-#: class-gravity-flow.php:7671
+#: class-gravity-flow.php:7672
 msgid "%dh"
 msgstr "%ds"
 
-#: class-gravity-flow.php:7676
+#: class-gravity-flow.php:7677
 msgid "%dm"
 msgstr "%dd"
 
-#: class-gravity-flow.php:7680
+#: class-gravity-flow.php:7681
 msgid "%ds"
 msgstr "%ds"
 
-#: class-gravity-flow.php:7724
+#: class-gravity-flow.php:7725
 msgid "Every Fifteen Minutes"
 msgstr "Her on beş dakikada bir"
 
-#: class-gravity-flow.php:7749 class-gravity-flow.php:7774
-#: class-gravity-flow.php:7810
+#: class-gravity-flow.php:7750 class-gravity-flow.php:7775
+#: class-gravity-flow.php:7811
 msgid "Not authorized"
 msgstr "Yetkili değil"
 
-#: class-gravity-flow.php:7872 class-gravity-flow.php:8579
+#: class-gravity-flow.php:7873 class-gravity-flow.php:8582
 msgid "Workflow"
 msgstr "İş akışı"
 
-#: class-gravity-flow.php:7876
+#: class-gravity-flow.php:7877
 msgid "Support"
 msgstr "Destek"
 
-#: class-gravity-flow.php:7912 includes/steps/class-step-approval.php:50
+#: class-gravity-flow.php:7913 includes/steps/class-step-approval.php:50
 #: includes/steps/class-step-approval.php:753
 msgid "Approved"
 msgstr "Onaylandı"
 
-#: class-gravity-flow.php:7915 includes/steps/class-step-approval.php:44
+#: class-gravity-flow.php:7916 includes/steps/class-step-approval.php:44
 #: includes/steps/class-step-approval.php:755
 msgid "Rejected"
 msgstr "Reddedildi"
 
-#: class-gravity-flow.php:7977
+#: class-gravity-flow.php:7978
 msgid "Oops! We couldn't find your lead. Please try again"
 msgstr "Tüh! Başvurunuzu bulamadık. Lütfen tekrar deneyin"
 
-#: class-gravity-flow.php:8019 includes/pages/class-entry-detail.php:200
+#: class-gravity-flow.php:8020 includes/pages/class-entry-detail.php:200
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
 msgstr "Bu dosyayı silmek istiyor musunuz? “İptal” ile durdur. “Tamam” ile sil"
 
-#: class-gravity-flow.php:8123
+#: class-gravity-flow.php:8124
 msgid "Display all fields"
 msgstr "Tüm alanları göster"
 
-#: class-gravity-flow.php:8127
+#: class-gravity-flow.php:8128
 msgid "Display all fields except selected"
 msgstr "Seçililer hariç tüm alanları göster"
 
-#: class-gravity-flow.php:8131
+#: class-gravity-flow.php:8132
 msgid "Hide all fields except selected"
 msgstr "Seçili olanlar dışında tüm alanları gizleyin"
 
-#: class-gravity-flow.php:8170
+#: class-gravity-flow.php:8171
 msgid "Except"
 msgstr "Dışında"
 
-#: class-gravity-flow.php:8189
+#: class-gravity-flow.php:8190
 msgid "Order Summary"
 msgstr "Sipariş özeti"
 
-#: class-gravity-flow.php:8276 includes/class-common.php:88
+#: class-gravity-flow.php:8277 includes/class-common.php:88
 #: includes/steps/class-step-webhook.php:1067
 msgid "User IP"
 msgstr "Kullanıcı IP"
 
-#: class-gravity-flow.php:8282
+#: class-gravity-flow.php:8283
 msgid "Source URL"
 msgstr "Kaynak URL"
 
-#: class-gravity-flow.php:8288 includes/class-common.php:94
+#: class-gravity-flow.php:8289 includes/class-common.php:94
 msgid "Payment Status"
 msgstr "Ödeme durumu"
 
-#: class-gravity-flow.php:8295 includes/class-common.php:103
+#: class-gravity-flow.php:8296 includes/class-common.php:103
 msgid "Payment Amount"
 msgstr "Ödeme miktarı"
 
-#: class-gravity-flow.php:8301 includes/class-common.php:97
+#: class-gravity-flow.php:8302 includes/class-common.php:97
 msgid "Transaction ID"
 msgstr "İşlem no"
 
-#: class-gravity-flow.php:8307 includes/steps/class-step-webhook.php:1069
+#: class-gravity-flow.php:8308 includes/steps/class-step-webhook.php:1069
 msgid "Created By"
 msgstr "Oluşturan"
 
-#: class-gravity-flow.php:8331
+#: class-gravity-flow.php:8332
 msgid "Authorized"
 msgstr "Yetkili"
 
-#: class-gravity-flow.php:8335
+#: class-gravity-flow.php:8336
 msgid "Paid"
 msgstr "Ödendi"
 
-#: class-gravity-flow.php:8339
+#: class-gravity-flow.php:8340
 msgid "Processing"
 msgstr "İşleniyor"
 
-#: class-gravity-flow.php:8343
+#: class-gravity-flow.php:8344
 msgid "Failed"
 msgstr "Başarısız"
 
-#: class-gravity-flow.php:8347
+#: class-gravity-flow.php:8348
 msgid "Active"
 msgstr "Aktif"
 
-#: class-gravity-flow.php:8359
+#: class-gravity-flow.php:8360
 msgid "Refunded"
 msgstr "İade Edildi"
 
-#: class-gravity-flow.php:8363
+#: class-gravity-flow.php:8364
 msgid "Voided"
 msgstr "Kaldırıldı"
 
-#: class-gravity-flow.php:8580
+#: class-gravity-flow.php:8583
 msgid "Entry Link"
 msgstr "Kayıt bağlantısı"
 
-#: class-gravity-flow.php:8581
+#: class-gravity-flow.php:8584
 msgid "Entry URL"
 msgstr "Kayıt URL"
 
-#: class-gravity-flow.php:8582
+#: class-gravity-flow.php:8585
 msgid "Inbox Link"
 msgstr "Gelen kutusu bağlantısı"
 
-#: class-gravity-flow.php:8583
+#: class-gravity-flow.php:8586
 msgid "Inbox URL"
 msgstr "Gelen kutusu URL"
 
-#: class-gravity-flow.php:8584
+#: class-gravity-flow.php:8587
 msgid "Cancel Link"
 msgstr "İptal bağlantısı"
 
-#: class-gravity-flow.php:8585
+#: class-gravity-flow.php:8588
 msgid "Cancel URL"
 msgstr "İptal URL"
 
-#: class-gravity-flow.php:8586 includes/pages/class-inbox.php:412
-#: includes/steps/class-step-approval.php:851
+#: class-gravity-flow.php:8589 includes/pages/class-inbox.php:412
+#: includes/steps/class-step-approval.php:854
 #: includes/steps/class-step-user-input.php:1081
 #: includes/steps/class-step.php:2006
 msgid "Note"
 msgstr "Not"
 
-#: class-gravity-flow.php:8587 includes/pages/class-entry-detail.php:546
+#: class-gravity-flow.php:8590 includes/pages/class-entry-detail.php:546
 msgid "Timeline"
 msgstr "Zaman çizelgesi"
 
-#: class-gravity-flow.php:8588 includes/fields/class-fields.php:103
+#: class-gravity-flow.php:8591 includes/fields/class-fields.php:103
 msgid "Assignees"
 msgstr "Atananlar"
 
-#: class-gravity-flow.php:8589
+#: class-gravity-flow.php:8592
 msgid "Approve Link"
 msgstr "Onaylama bağlantısı"
 
-#: class-gravity-flow.php:8590
+#: class-gravity-flow.php:8593
 msgid "Approve URL"
 msgstr "Onaylama URL"
 
-#: class-gravity-flow.php:8591
+#: class-gravity-flow.php:8594
 msgid "Approve Token"
 msgstr "Onaylama jetonu"
 
-#: class-gravity-flow.php:8592
+#: class-gravity-flow.php:8595
 msgid "Reject Link"
 msgstr "Reddet bağlantısı"
 
-#: class-gravity-flow.php:8593
+#: class-gravity-flow.php:8596
 msgid "Reject URL"
 msgstr "Reddet Url"
 
-#: class-gravity-flow.php:8594
+#: class-gravity-flow.php:8597
 msgid "Reject Token"
 msgstr "Reddet jetonu"
 
-#: class-gravity-flow.php:8641 includes/steps/class-step-update-user.php:78
+#: class-gravity-flow.php:8644 includes/steps/class-step-update-user.php:78
 msgid "Current User"
 msgstr "Geçerli kullanıcı"
 
-#: class-gravity-flow.php:8647
+#: class-gravity-flow.php:8650
 msgid "Workflow Assignee"
 msgstr "İş akışı görevlisi"
 
-#: class-gravity-flow.php:8782
+#: class-gravity-flow.php:8817
 msgid "Entry Detail Admin Actions"
 msgstr "Kayıt detayı yönetici eylemleri"
 
-#: class-gravity-flow.php:8785
+#: class-gravity-flow.php:8820
 msgid "View All"
 msgstr "Tümünü görüntüle"
 
-#: class-gravity-flow.php:8786
+#: class-gravity-flow.php:8821
 msgid "Admin Actions"
 msgstr ""
 
-#: class-gravity-flow.php:8789
+#: class-gravity-flow.php:8824
 msgid "Manage Settings"
 msgstr "Ayarları yönet"
 
-#: class-gravity-flow.php:8791
+#: class-gravity-flow.php:8826
 msgid "Manage Form Steps"
 msgstr "Form adımlarını yönet"
 
 #. translators: %s is the title of the plugin
-#: class-gravity-flow.php:8932
+#: class-gravity-flow.php:8967
 msgid "Your %s license has expired."
 msgstr "%s lisansınızın süresi dolmuş."
 
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
-#: class-gravity-flow.php:8937 includes/class-extension.php:490
+#: class-gravity-flow.php:8972 includes/class-extension.php:490
 #: includes/class-feed-extension.php:497
 msgid "Your %s license is invalid."
 msgstr "%s lisansınız geçersiz."
 
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
-#: class-gravity-flow.php:8941 includes/class-extension.php:494
+#: class-gravity-flow.php:8976 includes/class-extension.php:494
 #: includes/class-feed-extension.php:501
 msgid "Your %s license is inactive."
 msgstr "%s lisansınız etkin değil."
 
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
-#: class-gravity-flow.php:8951 includes/class-extension.php:504
+#: class-gravity-flow.php:8986 includes/class-extension.php:504
 #: includes/class-feed-extension.php:511
 msgid "Your %s license has not been activated."
 msgstr "%s lisansınız etkinleştirilmemiş."
 
-#: class-gravity-flow.php:8955 includes/class-extension.php:508
+#: class-gravity-flow.php:8990 includes/class-extension.php:508
 #: includes/class-feed-extension.php:515
 msgid "This means you're missing out on security fixes, updates and support."
 msgstr "Güvenlik düzeltmeleri, güncellemeler ve desteği kaçırıyorsunuz anlamına geliyor."
 
-#: class-gravity-flow.php:8961 includes/class-extension.php:518
+#: class-gravity-flow.php:8996 includes/class-extension.php:518
 #: includes/class-feed-extension.php:525
 msgid "%sActivate your license%s or %sget a license here%s"
 msgstr "%sLisansınızı etkinleştirin%s ya da %sburadan bir lisans edinin%s"
@@ -1594,13 +1594,13 @@ msgstr "Zamanı geçmiş"
 
 #: includes/merge-tags/class-merge-tag-workflow-approve.php:60
 #: includes/steps/class-step-approval.php:67
-#: includes/steps/class-step-approval.php:885
+#: includes/steps/class-step-approval.php:888
 msgid "Approve"
 msgstr "Onayla"
 
 #: includes/merge-tags/class-merge-tag-workflow-reject.php:60
 #: includes/steps/class-step-approval.php:78
-#: includes/steps/class-step-approval.php:902
+#: includes/steps/class-step-approval.php:905
 msgid "Reject"
 msgstr "Reddet"
 
@@ -2372,11 +2372,15 @@ msgstr ""
 msgid "Are you sure you want to reject this entry?"
 msgstr ""
 
-#: includes/steps/class-step-approval.php:920
+#: includes/steps/class-step-approval.php:778
+msgid "Are you sure you want to revert this entry?"
+msgstr ""
+
+#: includes/steps/class-step-approval.php:923
 msgid "Revert"
 msgstr "Geri al"
 
-#: includes/steps/class-step-approval.php:1019
+#: includes/steps/class-step-approval.php:1022
 msgid "Error: step already processed."
 msgstr "Hata: adım önceden işlenmiş."
 

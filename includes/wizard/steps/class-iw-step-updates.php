@@ -32,13 +32,13 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 		?>
 		<p>
 			<?php
-			esc_html_e( 'Gravity Flow will download important bug fixes, security enhancements and plugin updates automatically. Updates are extremely important to the security of your WordPress site.', 'gravityflow' );
+			esc_html_e( 'WordPress will automatically install important Gravity Flow bug fixes, security enhancements and plugin updates. Updates are extremely important to the security of your site.', 'gravityflow' );
 			?>
 		</p>
 		<p>
 
 			<?php
-			esc_html_e( 'This feature is activated by default unless you opt to disable it below. We only recommend disabling background updates if you intend on managing updates manually. A valid license is required for background updates.', 'gravityflow' );
+			esc_html_e( 'This feature is activated by default unless you opt to disable it below. We only recommend disabling automatic updates if you intend on managing updates manually. A valid license is required for automatic updates.', 'gravityflow' );
 			?>
 
 		</p>
@@ -58,13 +58,13 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 		<div>
 			<label>
 				<input type="radio" id="background_updates_enabled" value="enabled" <?php checked( 'enabled', $this->background_updates ); ?> name="background_updates"/>
-				<?php esc_html_e( 'Keep background updates enabled', 'gravityflow' ); ?>
+				<?php esc_html_e( 'Keep automatic updates enabled', 'gravityflow' ); ?>
 			</label>
 		</div>
 		<div>
 			<label>
 				<input type="radio" id="background_updates_disabled" value="disabled" <?php checked( 'disabled', $this->background_updates ); ?> name="background_updates"/>
-				<?php esc_html_e( 'Turn off background updates', 'gravityflow' ); ?>
+				<?php esc_html_e( 'Turn off automatic updates', 'gravityflow' ); ?>
 			</label>
 		</div>
 		<div id="accept_terms_container" style="display:none;">
@@ -73,7 +73,7 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 				<h3><i class="fa fa-exclamation-triangle gf_invalid"></i> <?php _e( 'Are you sure?', 'gravityflow' ); ?>
 				</h3>
 				<p>
-					<strong><?php esc_html_e( 'By disabling background updates your site may not get critical bug fixes and security enhancements. We only recommend doing this if you are experienced at managing a WordPress site and accept the risks involved in manually keeping your WordPress site updated.', 'gravityflow' ); ?></strong>
+					<strong><?php esc_html_e( 'By disabling automatic updates your site may not get critical bug fixes and security enhancements. We only recommend doing this if you are experienced at managing a WordPress site and accept the risks involved in manually keeping your WordPress site updated.', 'gravityflow' ); ?></strong>
 				</p>
 			</div>
 			<label>
@@ -108,7 +108,7 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 	 * @return string
 	 */
 	function get_title() {
-		return esc_html__( 'Background Updates', 'gravityflow' );
+		return esc_html__( 'Automatic Updates', 'gravityflow' );
 	}
 
 	/**
@@ -154,6 +154,6 @@ class Gravity_Flow_Installation_Wizard_Step_Updates extends Gravity_Flow_Install
 		$settings = $gravityflow->get_app_settings();
 		$settings['background_updates'] = $this->background_updates !== 'disabled';
 		gravity_flow()->update_app_settings( $settings );
-
+		$gravityflow->update_wp_auto_updates( $settings['background_updates'] );
 	}
 }

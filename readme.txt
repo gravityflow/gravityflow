@@ -2,7 +2,7 @@
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
 Requires at least: 4.4
-Tested up to: 5.4.2
+Tested up to: 5.5
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,18 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 2.5.12 =
+- Added the red bubble inbox count display on the WP Dashboard Workflow menu item.
+- Added support for the WordPress 5.5 enable/disable auto-updates feature on the installed plugins page.
+- Updated the CSS classname 'wrap' by making it specific as 'gravityflow_wrap'. This avoids conflicts with the CSS rules of some themes.
+- Fixed an issue where GP Limit Dates does not function on the User Input step when the min and max range is based on non-editable Date fields.
+- Fixed an issue where merge tags for the Confirmation Message in the User Input Step are evaluated before the workflow step completes.
+- Fixed an issue on the User Registration Step, where manual User Activation feed setting was sending email with activation link to User.
+- Fixed an issue on the User and Multi-User field 'Users Role Filter' setting display (but not filter save).
+- Fixed an issue on front-end pages with WordPress 5.5 removing the page parameter.
+- Fixed an issue where combination of inbox shortcode arguments would prevent role based assignees from accessing submit button.
+
 
 = 2.5.11 =
 - Fixed issue with merge tag evaluation that caused a fatal error involving certain conditional logic setup. Update Form Connector add-on will also be required if installed.

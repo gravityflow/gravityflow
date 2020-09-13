@@ -176,6 +176,7 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'gravityflow_cron', array( $this, 'cron' ) );
 			add_action( 'wp', array( $this, 'filter_wp' ) );
+			add_action( 'update_site_option_auto_update_plugins', array( $this, 'action_update_site_option_auto_update_plugins' ), 10, 3 );
 		}
 
 		/**
@@ -294,6 +295,7 @@ if ( class_exists( 'GFForms' ) ) {
 				add_filter( 'gform_admin_pre_render', array( $this, 'delete_signature_script' ) );
 				$this->maybe_save_signature();
 			}
+			add_filter( 'query_vars', array( $this, 'filter_query_vars' ), 99 );
 		}
 
 		/**
@@ -331,6 +333,7 @@ if ( class_exists( 'GFForms' ) ) {
 				}
 				$settings['background_updates'] = true;
 				$this->update_app_settings( $settings );
+				$this->update_wp_auto_updates( true );
 
 			} else {
 				// Upgrade.
@@ -353,6 +356,11 @@ if ( class_exists( 'GFForms' ) ) {
 				if ( version_compare( $previous_version, '2.5', '<' ) ) {
 					$this->upgrade_250();
 				}
+
+				if ( version_compare( $previous_version, '2.5.12', '<' ) ) {
+					$this->upgrade_2512();
+				}
+
 			}
 
 			wp_cache_flush();
@@ -557,6 +565,18 @@ PRIMARY KEY  (id)
 			$settings['allow_allow_anonymous_attribute'] = true;
 			$settings['allow_field_ids']                 = true;
 			$this->update_app_settings( $settings );
+		}
+
+		/**
+		 * Populates the WordPress auto_update_plugins option, if background updates is enabled.
+		 *
+		 * @since 2.5.12
+		 */
+		public function upgrade_2512() {
+			$settings = $this->get_app_settings();
+			if ( $settings['background_updates'] ) {
+				$this->update_wp_auto_updates( true );
+			}
 		}
 
 		/**
@@ -4894,8 +4914,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 						),
 						array(
 							'name'          => 'background_updates',
-							'label'         => esc_html__( 'Background Updates', 'gravityflow' ),
-							'tooltip' => __( 'Set this to ON to allow Gravity Flow to download and install bug fixes and security updates automatically in the background. Requires a valid license key.' , 'gravityflow' ),
+							'label'         => esc_html__( 'Automatic Updates', 'gravityflow' ),
+							'tooltip' => __( 'Set this to ON to allow WordPress to download and install Gravity Flow bug fixes and security updates automatically in the background. Requires a valid license key.' , 'gravityflow' ),
 							'type'          => 'radio',
 							'horizontal' => true,
 							'default_value' => false,
@@ -6821,6 +6841,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 				foreach ( $pages as $page ) {
 					$this->maybe_update_page_content( $page, $settings, $previous_settings );
+				}
+
+				if ( $settings['background_updates'] != $previous_settings['background_updates'] ) {
+					$this->update_wp_auto_updates( $settings['background_updates'] );
 				}
 			}
 
@@ -9336,5 +9360,85 @@ AND m.meta_value='queued'";
 				GFCommon::display_dismissible_message( $notices );
 			}
 		}
+
+		/**
+		 * Removes "page" from the query vars array when accessing the inbox/detail pages to fix an issue introduced in WP 5.5 where it results in a 404.
+		 *
+		 * @since 2.5.12
+		 *
+		 * @param array $query_vars The array of allowed query variable names.
+		 *
+		 * @return array
+		 */
+		public function filter_query_vars( $query_vars ) {
+			global $wp_version;
+
+			if ( rgget( 'page' ) === 'gravityflow-inbox' && version_compare( $wp_version, '5.5', '>=' ) ) {
+				$query_vars = array_diff( $query_vars, array( 'page' ) );
+			}
+
+			return $query_vars;
+		}
+
+		/**
+		 * Updates the WordPress auto_update_plugins option to enable or disable automatic updates so the correct state is displayed on the plugins page.
+		 *
+		 * @since 2.5.12
+		 *
+		 * @param bool $is_enabled Indicates if background updates are enabled for Gravity Flow in the app settings.
+		 */
+		public function update_wp_auto_updates( $is_enabled ) {
+			$option       = 'auto_update_plugins';
+			$auto_updates = (array) get_site_option( $option, array() );
+
+			if ( $is_enabled ) {
+				$auto_updates[] = GRAVITY_FLOW_PLUGIN_BASENAME;
+				$auto_updates   = array_unique( $auto_updates );
+			} else {
+				$auto_updates = array_diff( $auto_updates, array( GRAVITY_FLOW_PLUGIN_BASENAME ) );
+			}
+
+			$callback = array( $this, 'action_update_site_option_auto_update_plugins' );
+			remove_action( 'update_site_option_auto_update_plugins', $callback );
+			update_site_option( $option, $auto_updates );
+			add_action( 'update_site_option_auto_update_plugins', $callback, 10, 3 );
+		}
+
+		/**
+		 * Updates the background updates app setting when the WordPress auto_update_plugins option is changed.
+		 *
+		 * @since 2.5.12
+		 *
+		 * @param string $option    The name of the option.
+		 * @param array  $value     The current value of the option.
+		 * @param array  $old_value The previous value of the option.
+		 */
+		public function action_update_site_option_auto_update_plugins( $option, $value, $old_value ) {
+			if ( defined( 'DOING_AJAX' ) && DOING_AJAX && ! empty( $_POST['asset'] ) && ! empty( $_POST['state'] ) ) {
+				// Option is being updated by the ajax request performed when using the enable/disable auto-updates links on the plugins page.
+				$asset = sanitize_text_field( urldecode( $_POST['asset'] ) );
+				if ( $asset !== GRAVITY_FLOW_PLUGIN_BASENAME ) {
+					return;
+				}
+
+				$is_enabled = $_POST['state'] === 'enable';
+			} else {
+				// Option is being updated by some other means.
+				$is_enabled  = in_array( GRAVITY_FLOW_PLUGIN_BASENAME, $value );
+				$was_enabled = in_array( GRAVITY_FLOW_PLUGIN_BASENAME, $old_value );
+
+				if ( $is_enabled === $was_enabled ) {
+					return;
+				}
+			}
+
+			$settings = $this->get_app_settings();
+
+			if ( $settings['background_updates'] != $is_enabled ) {
+				$settings['background_updates'] = $is_enabled;
+				$this->update_app_settings( $settings );
+			}
+		}
+
 	}
 }

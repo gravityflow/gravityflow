@@ -3,7 +3,7 @@
 Plugin Name: Gravity Flow
 Plugin URI: https://gravityflow.io
 Description: Build Workflow Applications with Gravity Forms.
-Version: 2.5.12-dev
+Version: 2.5.13-dev
 Author: Gravity Flow
 Author URI: https://gravityflow.io
 License: GPL-2.0+
@@ -27,11 +27,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses.
  */
 
-define( 'GRAVITY_FLOW_VERSION', '2.5.12-dev' );
+define( 'GRAVITY_FLOW_VERSION', '2.5.13-dev' );
 
 define( 'GRAVITY_FLOW_EDD_STORE_URL', 'https://gravityflow.io' );
 
 define( 'GRAVITY_FLOW_EDD_ITEM_ID', 1473 );
+
+define( 'GRAVITY_FLOW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 add_action( 'gform_loaded', array( 'Gravity_Flow_Bootstrap', 'load' ), 1 );
 

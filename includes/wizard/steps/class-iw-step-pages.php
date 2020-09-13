@@ -35,7 +35,7 @@ class Gravity_Flow_Installation_Wizard_Step_Pages extends Gravity_Flow_Installat
 			// First run.
 			$this->workflow_pages = 'admin';
 		};
-		echo '<p>' . esc_html__( "Users can access workflowws via the front-end of your site and/or from the built-in WordPress admin pages (Workflow menu). If you would like your users to access via the front-end of your site then you'll need to add some pages.", 'gravityflow' ) . '</p>';
+		echo '<p>' . esc_html__( "Users can access workflows via the front-end of your site and/or from the built-in WordPress admin pages (Workflow menu). If you would like your users to access via the front-end of your site then you'll need to add some pages.", 'gravityflow' ) . '</p>';
 
 		/* translators: 1. The opening link tag 2. the closing link tag */
 		echo '<p>' . sprintf( esc_html__( 'Would you like to create custom inbox, status, and submit pages now? The pages will contain the %s[gravityflow]%s shortcode.', 'gravityflow' ), '<a href="http://docs.gravityflow.io/article/36-the-shortcode" target="_blank">', '</a>' ) . '</p>';
