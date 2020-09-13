@@ -1522,6 +1522,7 @@ PRIMARY KEY  (id)
 						'tooltip'        => esc_html__( "Build the conditional logic that should be applied to this workflow before it's allowed to be processed. If an entry does not meet the conditions then the workflow will not be processed.", 'gravityflow' ),
 						'label'          => esc_html__( 'Workflow Condition', 'gravityflow' ),
 						'type'           => 'feed_condition',
+						'callback'       => array( $this, 'settings_feed_condition' ),
 						'checkbox_label' => esc_html__( 'Enable Condition for this workflow', 'gravityflow' ),
 						'instructions'   => esc_html__( 'Process this workflow if', 'gravityflow' ),
 					),
@@ -1574,6 +1575,7 @@ PRIMARY KEY  (id)
 						'tooltip'        => esc_html__( "Build the conditional logic that should be applied to this step before it's allowed to be processed. If an entry does not meet the conditions of this step it will fall on to the next step in the list.", 'gravityflow' ),
 						'label'          => esc_html__( 'Condition', 'gravityflow' ),
 						'type'           => 'feed_condition',
+						'callback'       => array( $this, 'settings_feed_condition' ),
 						'checkbox_label' => esc_html__( 'Enable Condition for this step', 'gravityflow' ),
 						'instructions'   => esc_html__( 'Perform this step if', 'gravityflow' ),
 					),
@@ -8489,7 +8491,16 @@ AND m.meta_value='queued'";
 			$entry_meta  = array_merge( $this->get_feed_condition_entry_meta(), $this->get_feed_condition_entry_properties() );
 			$find        = 'var feedCondition';
 			$replacement = sprintf( 'var entry_meta = %s; %s', json_encode( $entry_meta ), $find );
-			$html        = str_replace( $find, $replacement, parent::settings_feed_condition( $field, false ) );
+
+			if ( $this->is_gravityforms_supported( '2.5-beta-1' ) ) {
+				$renderer = $this->get_settings_renderer();
+				$field = new \Rocketgenius\Gravity_Forms\Settings\Fields\Conditional_Logic( $field, $renderer );
+				$base_html = $field->markup();
+			} else {
+				$base_html = parent::settings_feed_condition( $field, false );
+			}
+
+			$html = str_replace( $find, $replacement, $base_html );
 
 			if ( $echo ) {
 				echo $html;
