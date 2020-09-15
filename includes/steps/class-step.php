@@ -1616,13 +1616,15 @@ abstract class Gravity_Flow_Step extends stdClass {
 		$has_editable_fields = ! empty( $this->editable_fields );
 
 		foreach ( $this->assignees as $assignee_key ) {
-			$args = $this->get_assignee_args( $assignee_key );
+			if ( ! empty( $assignee_key) ) {
+				$args = $this->get_assignee_args( $assignee_key );
 
-			if ( $has_editable_fields ) {
-				$args['editable_fields'] = $this->editable_fields;
+				if ( $has_editable_fields ) {
+					$args['editable_fields'] = $this->editable_fields;
+				}
+
+				$this->maybe_add_assignee( $args );
 			}
-
-			$this->maybe_add_assignee( $args );
 		}
 	}
 
