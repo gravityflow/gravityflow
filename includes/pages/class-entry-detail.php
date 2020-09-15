@@ -942,7 +942,7 @@ class Gravity_Flow_Entry_Detail {
 
 						$display_value = empty( $display_value ) && $display_value !== '0' ? '&nbsp;' : $display_value;
 
-						if ( $field['type'] == 'checkbox' && $display_value == '&nbsp;') {
+						if ( $field->get_input_type() == 'checkbox' && $display_value == '&nbsp;') {
 							$content = '
 																	<tr>
 																			<td colspan="2" class="entry-view-field-name">' . esc_html( self::get_label( $field ) ) . '</td>
@@ -957,8 +957,8 @@ class Gravity_Flow_Entry_Detail {
 																			<td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
 																	</tr>';
 						}
-						if ( $field['type'] == 'checkbox' ) {
-							$all_html_values = $field->get_checkbox_choices();
+						if ( $field->get_input_type() == 'checkbox' ) {
+							$all_html_values = $field->get_checkbox_choices( $value, '' );
 							$dom = new DOMDocument();
 
 							$dom->loadHTML( $all_html_values );
@@ -981,7 +981,7 @@ class Gravity_Flow_Entry_Detail {
 								<tr>
 										<td colspan="2" class="entry-view-field-value' . $last_row . '">';
 								foreach ( $unselected_values as $unselected_value ) {
-									$content .= '<li><strike>' . $unselected_value . '</strike></li>';
+									$content .= '<li><span style="text-decoration: line-through;">' . $unselected_value . '</span></li>';
 								}
 								$content .= '</td>
 								</tr>';
