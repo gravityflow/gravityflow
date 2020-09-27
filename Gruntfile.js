@@ -23,14 +23,9 @@ module.exports = function(grunt) {
 				"bucket" : process.env.AWS_S3_BUCKET_UPLOAD_ZIP,
 				"region" : process.env.AWS_DEFAULT_REGION
 			},
-			"slackUpload" : {
-				"token" : process.env.SLACK_TOKEN_UPLOAD,
-				"channel" : process.env.SLACK_CHANNEL_UPLOAD
+			"slack" : {
+				"url" : process.env.SLACK_URL,
 			},
-			"slackNotification" : {
-				"token" : process.env.SLACK_NOTIFICATION_TOKEN,
-				"channel" : process.env.SLACK_CHANNEL_NOTIFICATION
-			}
 		};
 	}
     var gfVersion = '';
@@ -247,45 +242,39 @@ module.exports = function(grunt) {
             }
         },
 
-		slack_notifier: {
-			notification: {
-				options: {
-					token: config.slackNotification.token,
-					channel: '#builds',
-					text: 'New Build for Gravity Flow v' + grunt.getPluginVersion(false),
-					username: 'Gravity Flow',
-					as_user: false,
-					link_names: true,
-					attachments: [
-						{
-							'fallback': 'New Gravity Flow Build.',
-							'color': '#36a64f',
-							'pretext': '',
-							'title': 'Download',
-							'title_link': 'https://s3.amazonaws.com/' + config.s3UploadZip.bucket + '/builds/gravityflow_<%= grunt.getPluginVersion() %>.zip',
-							'mrkdwn_in': ["pretext", "text", "fields"],
-							'fields': [
-								{
-									'title': 'Version',
-									'value': grunt.getPluginVersion(false),
-									'short': true
-								},
-								{
-									'title': 'Commit ID',
-									"value": '<https://github.com/gravityflow/gravityflow/commit/' + commitId + '|' + commitId.substring(0, 7) + '>',
-									'short': true
-								}
-							],
-							'image_url': 'http://my-website.com/path/to/image.jpg',
-							'thumb_url': 'http://example.com/path/to/thumb.png'
-						}
-					],
-					unfurl_links: true,
-					unfurl_media: true,
-					icon_url: 'https://avatars3.githubusercontent.com/u/12782633?v=3&s=200'
-				}
-			}
-		},
+	    http: {
+		    slack_notification: {
+			    options: {
+				    method: 'POST',
+				    url: config.slack.url,
+				    form: {
+					    payload: JSON.stringify( { 'attachments' : [
+							    {
+								    'text' : 'New Build for Gravity Flow v' + grunt.getPluginVersion(false),
+								    'mrkdwn_in': ["pretext", "text", "fields"],
+								    'fallback': 'New Gravity Flow Build.',
+								    'color': '#36a64f',
+								    'pretext': '',
+								    'title': 'Download',
+								    'title_link': 'https://s3.amazonaws.com/' + config.s3UploadZip.bucket + '/builds/gravityflow_<%= grunt.getPluginVersion() %>.zip',
+								    'fields': [
+									    {
+										    'title': 'Version',
+										    'value': grunt.getPluginVersion( false ),
+										    'short': true
+									    },
+									    {
+										    'title': 'Commit ID',
+										    'value': '<https://github.com/gravityflow/gravityflow/commit/' + commitId + '|' + commitId.substring( 0, 7 ) + '>',
+										    'short': true
+									    }
+								    ],
+							    }
+						    ] } )
+				    }
+			    }
+		    },
+	    },
 
 		replace: {
 			dist: {

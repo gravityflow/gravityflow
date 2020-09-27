@@ -6197,6 +6197,17 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @param array $menu The current WP Dashboard Menu.
 		 */		
 		public function show_inbox_count( $menu ) {
+
+			/**
+			 * Allows the gravityflow inbox count display to be enabled or disabled
+			 *
+			 * @param bool show Whether to show inbox count.
+			 */			
+			$show = apply_filters( 'gravityflow_inbox_count_display', true );
+			if ( ! $show ) {
+				return $menu;
+			}
+
 			$custom_labels = get_option( 'gravityflow_app_settings_labels', array() );
 			$custom_navigation_labels = rgar( $custom_labels, 'navigation' );
 			$custom_workflow_label = rgar( $custom_navigation_labels, 'workflow' );

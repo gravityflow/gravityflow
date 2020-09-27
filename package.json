@@ -12,6 +12,7 @@
     "grunt-contrib-cssmin": "^0.12.2",
     "grunt-contrib-uglify": "^3.3.0",
     "grunt-dropbox": "https://github.com/stevehenty/grunt-dropbox/tarball/master",
+    "grunt-http": "^2.3.3",
     "grunt-md5sum": "^2.0.1",
     "grunt-potomo": "^3.5.0",
     "grunt-shell": "^1.1.1",
