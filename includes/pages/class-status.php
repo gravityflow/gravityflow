@@ -697,10 +697,12 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 					var filterFormId = $form_select.val();
 					var $entry_filters = $('#entry_filters');
 					if (filterFormId) {
-						$entry_filters.gfFilterUI(gformFieldFilters[filterFormId], gformInitFilter, false);
-						if ($('.gform-filter-field').val() === '') {
-							$('.gform-filter-operator').hide();
-							$('.gform-filter-value').hide();
+						if (typeof gformFieldFilters[filterFormId] !== 'undefined') {
+							$entry_filters.gfFilterUI(gformFieldFilters[filterFormId], gformInitFilter, false);
+							if ($('.gform-filter-field').val() === '') {
+								$('.gform-filter-operator').hide();
+								$('.gform-filter-value').hide();
+							}
 						}
 					}
 					$form_select.change(function () {
