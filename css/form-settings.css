@@ -248,7 +248,7 @@ div.gform-field-filter {
     display: flex;
 }
 
-select.gform-filter-field, select.gform-filter-operator, select.gform-filter-value {
+select.gform-filter-field, select.gform-filter-operator, input.gform-filter-value {
     height: auto;
     min-height: 100%;
     position: relative;
