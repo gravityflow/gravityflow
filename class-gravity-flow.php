@@ -6737,33 +6737,19 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		/**
 		 * Determines if background automatic updates are disabled.
 		 *
-		 * Currently WordPress won't ask Gravity Flow to update if background updates are disabled.
-		 * Let's double check anyway.
+		 * @since 2.6 Added the enabled param.
+		 *
+		 * @param bool|null $enabled Indicates if auto updates are enabled.
 		 *
 		 * @return bool
 		 */
-		public function is_auto_update_disabled() {
+		public function is_auto_update_disabled( $enabled = null ) {
+			global $wp_version;
 
-			// WordPress background updates are disabled if you don't want file changes.
-			if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
-				return true;
+			if ( is_null( $enabled ) || version_compare( $wp_version, '5.5', '<' ) ) {
+				$enabled = $this->get_app_setting( 'background_updates' );
 			}
 
-			if ( defined( 'WP_INSTALLING' ) ) {
-				return true;
-			}
-
-			$wp_updates_disabled = defined( 'AUTOMATIC_UPDATER_DISABLED' ) && AUTOMATIC_UPDATER_DISABLED;
-
-			$wp_updates_disabled = apply_filters( 'automatic_updater_disabled', $wp_updates_disabled );
-
-			if ( $wp_updates_disabled ) {
-				$this->log_debug( __METHOD__ . '() - Background updates are disabled in WordPress.' );
-				return true;
-			}
-
-			// Now check Gravity Flow Background Update Settings.
-			$enabled = $this->get_app_setting( 'background_updates' );
 			$this->log_debug( __METHOD__ . ' - $enabled: ' . var_export( $enabled, true ) );
 
 			$disabled = apply_filters( 'gravityflow_disable_auto_update', ! $enabled );
