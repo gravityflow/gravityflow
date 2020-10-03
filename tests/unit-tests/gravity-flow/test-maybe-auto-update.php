@@ -12,15 +12,11 @@ class Tests_Gravity_Flow_Maybe_Auto_Update extends GF_UnitTestCase {
 	}
 
 	public function test_wrong_slug() {
-		$item       = $this->_get_item();
-		$item->slug = 'wrong';
-		$this->assertSame( 'test', $this->_get_plugin()->maybe_auto_update( 'test', $item ) );
+		$this->assertSame( 'test', $this->_get_plugin()->maybe_auto_update( 'test', $this->_get_item( array( 'slug' => 'wrong' ) ) ) );
 	}
 
 	public function test_updates_disabled() {
-		$item       = $this->_get_item();
-		$item->slug = 'gravityflow';
-		$this->assertFalse( $this->_get_plugin()->maybe_auto_update( true, $item ) );
+		$this->assertFalse( $this->_get_plugin()->maybe_auto_update( true, $this->_get_item( array( 'slug' => 'gravityflow' ) ) ) );
 	}
 
 	/**
@@ -34,9 +30,10 @@ class Tests_Gravity_Flow_Maybe_Auto_Update extends GF_UnitTestCase {
 		$plugin           = $this->_get_plugin( false );
 		$plugin->_version = $current_version;
 
-		$item              = $this->_get_item();
-		$item->slug        = 'gravityflow';
-		$item->new_version = $new_version;
+		$item = $this->_get_item( array(
+			'slug'        => 'gravityflow',
+			'new_version' => $new_version,
+		) );
 
 		$this->assertSame( $expected, $plugin->maybe_auto_update( true, $item ) );
 	}
@@ -57,14 +54,23 @@ class Tests_Gravity_Flow_Maybe_Auto_Update extends GF_UnitTestCase {
 			array( '1.0', '1.1', false ),
 			array( '1.2.3', '1.3', false ),
 			array( '1.2.3.4', '2.0', false ),
+			array( '1.2.4-dev-abc123', '2.1', false ),
 			// Do update to minors.
 			array( '1.2.3', '1.2.4', true ),
 			array( '1.2.3.4', '1.2.4', true ),
+			array( '1.2.4', '1.2.40', true ),
+			// Do update pre-release versions to the final release.
+			array( '1.2.4-dev-abc123', '1.2.4', true ),
+			array( '1.2-dev-abc123', '1.2', true ),
+			array( '2.5-beta-1', '2.5-beta-2', true ),
+			array( '2.5-beta-1', '2.5', true ),
+			array( '2.5-rc-1', '2.5-rc-2', true ),
+			array( '2.5-rc-2', '2.5', true ),
 		);
 	}
 
-	public function _get_item() {
-		return new stdClass();
+	public function _get_item( $item = array() ) {
+		return (object) $item;
 	}
 
 	/**
