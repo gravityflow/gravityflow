@@ -64,7 +64,7 @@ class Tests_Gravity_Flow_Maybe_Auto_Update extends GF_UnitTestCase {
 	}
 
 	public function _get_item() {
-		return new Basic_Object();
+		return new stdClass();
 	}
 
 	/**
