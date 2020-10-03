@@ -1,2 +1,0 @@
-- Fix an issue with Step Assignees on User Input Step causing a Fatal Error.
-- Added filter 'gravityflow_inbox_count_display' for customization of the Gravity Flow Inbox. The Inbox count value can be disabled using it.

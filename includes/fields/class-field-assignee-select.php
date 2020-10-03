@@ -24,6 +24,15 @@ class Gravity_Flow_Field_Assignee_Select extends GF_Field_Select {
 	public $type = 'workflow_assignee_select';
 
 	/**
+	 * Returns the assignee field's icon.
+	 *
+	 * @return string
+	 */
+	public function get_form_editor_field_icon() {
+		return 'dashicons-businessman';
+	}
+
+	/**
 	 * Indicates if this field type can be used when configuring conditional logic rules.
 	 *
 	 * @return bool

@@ -1,8 +1,8 @@
 === Gravity Flow ===
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
-Requires at least: 4.4
-Tested up to: 5.5
+Requires at least: 5.2
+Tested up to: 5.5.1
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,13 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 2.6 =
+- Added support for Gravity Forms 2.5.
+- Added filter 'gravityflow_inbox_count_display' to allow the inbox count to be hidden in the WordPress admin menu.
+- Fixed an issue with Step Assignees on User Input Step causing a Fatal Error.
+
+
 
 = 2.5.12 =
 - Added the red bubble inbox count display on the WP Dashboard Workflow menu item.

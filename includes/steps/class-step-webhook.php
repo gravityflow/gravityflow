@@ -231,7 +231,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'class' => 'fieldwidth-1 fieldheight-1 merge-tag-support',
 					'save_callback' => array( $this, 'save_callback_raw_body' ),
 				);
-			} elseif ( $this->get_setting( 'body' ) == 'select' ) {
+			} elseif ( $this->get_setting( 'body' ) == 'select' || $this->get_setting( 'body' ) == '' ) {
 
 				$settings['fields'][] = array(
 					'name'          => 'format',

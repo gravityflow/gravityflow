@@ -278,21 +278,9 @@ class Gravity_Flow_Entry_Detail {
 				class="gf_admin_page_formid">ID: <?php echo absint( $form['id'] ); ?></span>
 		</h2>
 
-		<?php GFCommon::display_admin_message(); ?>
+		<?php GFCommon::display_admin_message();
 
-		<div id="gf_form_toolbar">
-			<ul id="gf_form_toolbar_links">
-
-				<?php
-
-				$menu_items = gravity_flow()->get_toolbar_menu_items();
-
-				echo GFForms::format_toolbar_menu_items( $menu_items );
-
-				?>
-			</ul>
-		</div>
-		<?php
+		gravity_flow()->toolbar();
 	}
 
 	/**

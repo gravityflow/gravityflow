@@ -208,7 +208,6 @@ class Gravity_Flow_Common_Step_Settings {
 				'class' => 'fieldwidth-1 merge-tag-support mt-hide_all_fields mt-position-right ui-autocomplete-input',
 				'label' => __( 'Subject', 'gravityflow' ),
 				'type'  => 'text',
-
 			),
 			array(
 				'name'          => $prefix . '_notification_message',
@@ -457,13 +456,18 @@ class Gravity_Flow_Common_Step_Settings {
 			'name'     => 'instructions',
 			'label'    => __( 'Instructions', 'gravityflow' ),
 			'type'     => 'checkbox_and_textarea',
+			'callback' => gravity_flow()->is_gravityforms_supported( '2.5-beta-1' ) ? null : array( gravity_flow(), 'legacy_settings_checkbox_and_textarea' ),
+			'validation_callback' => gravity_flow()->is_gravityforms_supported( '2.5-beta-1' ) ? null : array( gravity_flow(), 'legacy_validate_checkbox_and_textarea_settings' ),
 			'tooltip'  => esc_html__( 'Activate this setting to display instructions to the user for the current step.', 'gravityflow' ),
 			'checkbox' => array(
 				'label' => esc_html__( 'Display instructions', 'gravityflow' ),
+				'default_value' => 0,
+				'name' => 'instructionsEnable',
 			),
 			'textarea' => array(
 				'use_editor'    => true,
 				'default_value' => $default_value,
+				'name' => 'instructionsValue',
 			),
 		);
 	}
@@ -498,13 +502,17 @@ class Gravity_Flow_Common_Step_Settings {
 			'name'     => 'confirmation_message',
 			'label'    => __( 'Confirmation Message', 'gravityflow' ),
 			'type'     => 'checkbox_and_textarea',
+			'callback' => gravity_flow()->is_gravityforms_supported( '2.5-beta-1' ) ? null : array( gravity_flow(), 'legacy_settings_checkbox_and_textarea' ),
+			'validation_callback' => gravity_flow()->is_gravityforms_supported( '2.5-beta-1' ) ? null : array( gravity_flow(), 'legacy_validate_checkbox_and_textarea_settings' ),
 			'tooltip'  => esc_html__( 'Activate this setting to display a custom confirmation message to the assignee for the current step.', 'gravityflow' ),
 			'checkbox' => array(
 				'label' => esc_html__( 'Display a custom confirmation message', 'gravityflow' ),
+				'name' => 'confirmation_messageEnable',
 			),
 			'textarea' => array(
 				'use_editor'    => true,
 				'default_value' => $default_value,
+				'name' => 'confirmation_messageValue',
 			),
 		);
 	}

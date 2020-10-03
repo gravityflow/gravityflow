@@ -359,20 +359,7 @@ class Gravity_Flow_Step_Update_User extends Gravity_Flow_Step {
 	 * @return array
 	 */
 	public function get_roles_as_choices() {
-
-		$choices = array();
-
-		$roles = array_reverse( get_editable_roles() );
-
-		foreach ( $roles as $role => $details ) {
-			$name      = translate_user_role( $details['name'] );
-			$choices[] = array(
-				'label' => $name,
-				'value' => $role,
-			);
-		}
-
-		return $choices;
+		return Gravity_Flow_Common::get_roles_as_choices( false, true, false );
 	}
 
 	/**

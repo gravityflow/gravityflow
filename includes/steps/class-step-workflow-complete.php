@@ -88,6 +88,7 @@ class Gravity_Flow_Step_Workflow_Complete extends Gravity_Flow_Step {
 					'name'     => 'instructions',
 					'label'    => __( 'Complete Message', 'gravityflow' ),
 					'type'     => 'checkbox_and_textarea',
+					'callback' => gravity_flow()->is_gravityforms_supported( '2.5-beta-1' ) ? null : array( gravity_flow(), 'legacy_settings_checkbox_and_textarea' ),
 					'tooltip'  => esc_html__( 'Enable this setting to display a message to the form submitter when the workflow is complete.', 'gravityflow' ),
 					'checkbox' => array(
 						'label' => esc_html__( 'Display a message to the form submitter when the workflow is complete.', 'gravityflow' ),

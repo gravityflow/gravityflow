@@ -12,14 +12,14 @@
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
-GFForms::include_feed_addon_framework();
+GFForms::include_addon_framework();
 
 /**
- * Class Gravity_Flow_Feed_Extension
+ * Class Gravity_Flow_Extension
  *
  * @since 1.0
  */
-abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
+abstract class Gravity_Flow_Extension extends GFAddOn {
 
 	/**
 	 * The item name used by Easy Digital Downloads.
@@ -117,9 +117,7 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 		if ( $this->license_key ) {
 			$app_settings = $this->app_settings_fields();
-			$fields = ! empty( $app_settings[0]['fields'] ) ? $app_settings[0]['fields'] : array();
-			if ( is_array( $fields ) && count( $fields ) == 1 ) {
-				// This extension only has a license key setting but the license key is already set to we don't need the settings tab;
+			if ( empty( $app_settings ) ) {
 				return $settings_tabs;
 			}
 		}
@@ -151,43 +149,26 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 		<?php
 
 		if ( $this->maybe_uninstall() ) {
-
-			printf(
-				'<div class="alert success">%s</div>',
-				sprintf(
-					esc_html__( '%s has been successfully uninstalled. It can be re-activated from the %splugins page%s.', 'gravityforms' ),
-					$this->_title,
-					'<a href="plugins.php">',
-					'</a>'
-				)
-			);
-
+			?>
+			<div class="push-alert-gold" style="border-left: 1px solid #E6DB55; border-right: 1px solid #E6DB55;">
+				<?php printf( esc_html_x( '%s has been successfully uninstalled. It can be re-activated from the %splugins page%s.', 'Displayed on the settings page after uninstalling a Gravity Flow extension.', 'gravityflow' ), esc_html( $this->_title ), "<a href='plugins.php'>", '</a>' ); ?>
+			</div>
+			<?php
 		} else {
+			// Saves settings page if save button was pressed.
+			$this->maybe_save_app_settings();
 
-			// Get fields.
+			// Reads main add-on settings.
+			$settings = $this->get_app_settings();
+			$this->set_settings( $settings );
+
+			// Reading add-on fields.
 			$sections = $this->app_settings_fields();
-			if ( ! empty( $sections ) ) {
-				$sections = $this->prepare_settings_sections( $sections, 'app_settings' );
 
-				// Initialize new settings renderer.
-				$renderer = new Rocketgenius\Gravity_Forms\Settings(
-					array(
-						'capability'     => $this->_capabilities_app_settings,
-						'fields'         => $sections,
-						'header'         => array(
-							'icon'  => $this->app_settings_icon(),
-							'title' => $this->app_settings_title(),
-						),
-						'initial_values' => $this->get_app_settings(),
-						'save_callback'  => array( $this, 'update_app_settings' ),
-					)
-				);
+			GFCommon::display_admin_message();
 
-				// Save renderer to instance.
-				$this->set_settings_renderer( $renderer );
-
-				$this->get_settings_renderer()->render();
-			}
+			// Rendering settings based on fields and current settings.
+			$this->render_settings( $sections );
 
 			$this->render_uninstall();
 
@@ -280,15 +261,9 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 		$license_data = $this->check_license( $value );
 
-		$valid = null;
-		if ( empty( $license_data ) || $license_data->license == 'invalid' ) {
-			$valid = false;
-		} elseif ( $license_data->license == 'valid' ) {
-			$valid = true;
-		}
+		$valid = $license_data && $license_data->license == 'valid' ? true : false;
 
 		return $valid;
-
 	}
 
 	/**
@@ -377,7 +352,8 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	}
 
 	/**
-	 * Add the failed requirements error message.
+	 * Prevent the failed requirements page being added to the Forms > Settings area.
+	 * Add the settings link to the installed plugins page.
 	 *
 	 * @since 1.7.1-dev
 	 */
@@ -570,4 +546,5 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 
 		return $is_extension_settings;
 	}
+
 }

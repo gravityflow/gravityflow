@@ -65,7 +65,7 @@
 			}
 		};
 
-		var $stepType = $('input[name=_gform_setting_step_type]:checked');
+		var $stepType = $('input[name=_gaddon_setting_step_type]:checked');
 		var selectedStepType = $stepType.val();
 
 		var $statusExpiration = $('#status_expiration');
@@ -78,10 +78,10 @@
 
 		setSubSettings();
 
-		var selectedType = $("input[name=_gform_setting_type]:checked");
+		var selectedType = $("input[name=_gaddon_setting_type]:checked");
 		toggleType(selectedType.val());
 
-		$('#gform_setting_type input[type=radio]').change(function () {
+		$('#gaddon-setting-row-type input[type=radio]').change(function () {
 			toggleType(this.value);
 		});
 
@@ -189,7 +189,7 @@
 
 		// Workflow Notification
 
-		$('#gform_setting_workflow_notification_type input[type=radio]').click(function () {
+		$('#gaddon-setting-row-workflow_notification_type input[type=radio]').click(function () {
 			toggleWorkflowNotificationType(this.value);
 		});
 
@@ -246,7 +246,7 @@
 				toggleNotificationTabSettings(this.checked, type);
 			});
 
-			$('#gform-setting-tab-field-' + type + '_notification_type input[type=radio]').click(function () {
+			$('#gaddon-setting-tab-field-' + type + '_notification_type input[type=radio]').click(function () {
 				toggleNotificationTabSettings(true, type);
 			});
 
@@ -367,23 +367,23 @@
 	});
 
 	function toggleNotificationTabSettings(enabled, notificationType) {
-		var $NotificationTypeSetting = $('#gform-setting-tab-field-' + notificationType + '_notification_type');
+		var $NotificationTypeSetting = $('#gaddon-setting-tab-field-' + notificationType + '_notification_type');
 		$NotificationTypeSetting.toggle(enabled);
 		if (enabled) {
 			var selected = $NotificationTypeSetting.find('input[type=radio]:checked').val();
 			toggleNotificationTabFields(selected, notificationType);
-			$('#gform-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-checked').show();
-			$('#gform-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-unchecked').hide();
+			$('#gaddon-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-checked').show();
+			$('#gaddon-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-unchecked').hide();
 		} else {
 			toggleNotificationTabFields('off', notificationType);
-			$('#gform-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-checked').hide();
-			$('#gform-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-unchecked').show();
+			$('#gaddon-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-checked').hide();
+			$('#gaddon-setting-tab-tab_' + notificationType + '_notification i.gravityflow-tab-unchecked').show();
 		}
 	}
 
 	function toggleNotificationTabFields(showType, notificationType) {
 		var fields = ['users', 'routing', 'from_name', 'from_email', 'reply_to', 'cc', 'bcc', 'subject', 'message', 'autoformat', 'resend', 'gpdf'],
-			prefix = '#gform-setting-tab-field-' + notificationType + '_notification_';
+			prefix = '#gaddon-setting-tab-field-' + notificationType + '_notification_';
 
 		$.each(fields, function (i, field) {
 			$(prefix + field).hide();
@@ -404,7 +404,7 @@
 
 	function toggleWorkflowNotificationType(showType) {
 		var fields = {
-			select: ['workflow_notification_users_', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_cc', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat', 'workflow_notification_gpdf'],
+			select: ['workflow_notification_users\\[\\]', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_cc', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat', 'workflow_notification_gpdf'],
 			routing: ['workflow_notification_routing', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_cc', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat', 'workflow_notification_gpdf']
 		};
 		toggleFields(fields, showType, false);
@@ -412,7 +412,7 @@
 
 	function toggleType(showType) {
 		var fields = {
-			select: ['assignees_', 'editable_fields_', 'conditional_logic_editable_fields_enabled'],
+			select: ['assignees\\[\\]', 'editable_fields\\[\\]', 'conditional_logic_editable_fields_enabled'],
 			routing: ['routing', 'conditional_logic_editable_fields_enabled']
 		};
 
@@ -420,7 +420,7 @@
 	}
 
 	function toggleFields(fields, showType, isTab) {
-		var prefix = isTab ? '#gform-setting-tab-field-' : '#gform_setting_';
+		var prefix = isTab ? '#gaddon-setting-tab-field-' : '#gaddon-setting-row-';
 		$.each(fields, function (type, activeFields) {
 			$.each(activeFields, function (i, activeField) {
 				$(prefix + activeField).hide();
@@ -437,7 +437,7 @@
 	}
 
 	function toggleWorkflowNotificationSettings(enabled) {
-		var $workflowNotificationType = $('#gform_setting_workflow_notification_type');
+		var $workflowNotificationType = $('#gaddon-setting-row-workflow_notification_type');
 		$workflowNotificationType.toggle(enabled);
 		if (enabled) {
 			var selected = $workflowNotificationType.find('input[type=radio]:checked').val();
@@ -450,7 +450,7 @@
 	function setSubSettings() {
 		var subSettings = [
 			'routing',
-			'assignees_',
+			'assignees\\[\\]',
 			'assignee_notification_from_name',
 			'assignee_notification_from_email',
 			'assignee_notification_reply_to',
@@ -462,20 +462,20 @@
 			'resend_assignee_email',
 			'assignee_notification_gpdf',
 			'rejection_notification_type',
-			'rejection_notification_users_',
+			'rejection_notification_users\\[\\]',
 			'rejection_notification_user_field',
 			'rejection_notification_routing',
 			'rejection_notification_message',
 			'rejection_notification_autoformat',
 			'approval_notification_type',
-			'approval_notification_users_',
+			'approval_notification_users\\[\\]',
 			'approval_notification_user_field',
 			'approval_notification_routing',
 			'approval_notification_message',
 			'approval_notification_autoformat',
 
 			'workflow_notification_type',
-			'workflow_notification_users_',
+			'workflow_notification_users\\[\\]',
 			'workflow_notification_user_field',
 			'workflow_notification_routing',
 			'workflow_notification_from_name',
@@ -487,15 +487,15 @@
 			'workflow_notification_message',
 			'workflow_notification_autoformat',
 
-			'assignees',
-			'editable_fields_',
+			'assignees\\[\\]',
+			'editable_fields\\[\\]',
 			'routing',
 			'assignee_notification_message',
 			'workflow_notification_gpdf'
 
 		];
 		for (var i = 0; i < subSettings.length; i++) {
-			$('#gform_setting_' + subSettings[i]).addClass('gravityflow_sub_setting');
+			$('#gaddon-setting-row-' + subSettings[i]).addClass('gravityflow_sub_setting');
 		}
 	}
 
@@ -513,13 +513,13 @@
 	function addCommonMergeTags(mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option) {
 
 		var supportedElementIds = [
-			'_gform_setting_workflow_notification_message',
-			'_gform_setting_assignee_notification_message',
-			'_gform_setting_approval_notification_message',
-			'_gform_setting_rejection_notification_message',
-			'_gform_setting_revert_notification_message',
-			'_gform_setting_complete_notification_message',
-			'_gform_setting_in_progress_notification_message',
+			'_gaddon_setting_workflow_notification_message',
+			'_gaddon_setting_assignee_notification_message',
+			'_gaddon_setting_approval_notification_message',
+			'_gaddon_setting_rejection_notification_message',
+			'_gaddon_setting_revert_notification_message',
+			'_gaddon_setting_complete_notification_message',
+			'_gaddon_setting_in_progress_notification_message',
 		];
 
 		if (supportedElementIds.indexOf(elementId) < 0) {
@@ -550,7 +550,7 @@
 
 	function addAprovalMergeTags(mergeTags, elementId, hideAllFields, excludeFieldTypes, isPrepop, option) {
 		var supportedElementIds = [
-			'_gform_setting_assignee_notification_message',
+			'_gaddon_setting_assignee_notification_message',
 		];
 
 		if (supportedElementIds.indexOf(elementId) < 0) {
@@ -584,7 +584,7 @@
 		if (feedId > 0) {
 			var url = ajaxurl + '?action=gravityflow_feed_message&fid=' + feedId + '&id=' + gravityflow_form_settings_js_strings['formId'];
 			$.get(url, function (response) {
-				var $heading = $('#gform-settings-save');
+				var $heading = $('#save_button');
 				$heading.before(response);
 			});
 		}

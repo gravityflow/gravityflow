@@ -2,12 +2,15 @@
 
     $(document).ready(function () {
 
+        $('.colspanchange').attr('colspan',4);
+
         if ( $('table.wp-list-table tbody tr').length == 1 ) {
             return;
         }
 
         var hasStartStep = gravityflow_feed_list_strings.hasStartStep,
-            hasCompleteStep = gravityflow_feed_list_strings.hasCompleteStep;
+            hasCompleteStep = gravityflow_feed_list_strings.hasCompleteStep,
+            formId = gravityflow_feed_list_strings.formId;
 
         $.each( $('.wp-list-table tbody tr'), function() { 
             $( this ).css( 'border-left', '5px solid ' + $(this).find('.step_highlight_color').css( 'background-color' ) );
@@ -53,7 +56,7 @@
                     var data = {
                         action: 'gravityflow_save_feed_order',
                         feed_ids: feedIds,
-                        form_id: form.id
+                        form_id: formId
                     };
 
                     $.post( ajaxurl, data)

@@ -646,12 +646,12 @@ class Gravity_Flow_Entry_Editor {
 			if ( rgblank( $display_value ) ) {
 				$display_value = '&nbsp;';
 			}
-			$display_value = sprintf( '<div class="gravityflow-field-value">%s<div>', $display_value );
+			$display_value = sprintf( '<div class="gravityflow-field-value">%s</div>', $display_value );
 		} else {
 			if ( empty( $display_value ) || $display_value === '0' ) {
 				$display_value = '';
 			} else {
-				$display_value = sprintf( '<div class="gravityflow-field-value">%s<div>', $display_value );
+				$display_value = sprintf( '<div class="gravityflow-field-value">%s</div>', $display_value );
 			}
 		}
 
