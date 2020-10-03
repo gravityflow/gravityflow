@@ -80,6 +80,7 @@ class Tests_Gravity_Flow_Maybe_Auto_Update extends GF_UnitTestCase {
 	 */
 	public function _get_plugin( $updates_disabled = true ) {
 		$plugin = $this->getMockBuilder( 'Gravity_Flow' )
+		               ->disableOriginalConstructor()
 		               ->setMethods( array( 'is_auto_update_disabled' ) )
 		               ->getMock();
 		$plugin->method( 'is_auto_update_disabled' )->willReturn( $updates_disabled );
