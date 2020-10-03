@@ -6705,33 +6705,26 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @return bool
 		 */
 		public function maybe_auto_update( $update, $item ) {
-			if ( isset( $item->slug ) && $item->slug == 'gravityflow' ) {
-
-				$this->log_debug( __METHOD__ . '() - Starting auto-update for gravityflow.' );
-
-				$auto_update_disabled = self::is_auto_update_disabled();
-				$this->log_debug( __METHOD__ . '() - $auto_update_disabled: ' . var_export( $auto_update_disabled, true ) );
-
-				if ( $auto_update_disabled || version_compare( $this->_version, $item->new_version, '=>' ) ) {
-					$this->log_debug( __METHOD__ . '() - Aborting update.' );
-					return false;
-				}
-
-				$current_major = implode( '.', array_slice( preg_split( '/[.-]/', $this->_version ), 0, 1 ) );
-				$new_major     = implode( '.', array_slice( preg_split( '/[.-]/', $item->new_version ), 0, 1 ) );
-
-				$current_branch = implode( '.', array_slice( preg_split( '/[.-]/', $this->_version ), 0, 2 ) );
-				$new_branch     = implode( '.', array_slice( preg_split( '/[.-]/', $item->new_version ), 0, 2 ) );
-
-				if ( $current_major == $new_major && $current_branch == $new_branch ) {
-					$this->log_debug( __METHOD__ . '() - OK to update.' );
-					return true;
-				}
-
-				$this->log_debug( __METHOD__ . '() - Skipping - not current branch.' );
+			if ( ! isset( $item->slug ) || $item->slug !== 'gravityflow' ) {
+				return $update;
 			}
 
-			return $update;
+			if ( $this->is_auto_update_disabled( $update ) ) {
+				$this->log_debug( __METHOD__ . '() - Aborting; auto updates disabled.' );
+
+				return false;
+			}
+
+
+			if ( ! $this->should_update_to_version( $item->new_version ) ) {
+				$this->log_debug( __METHOD__ . sprintf( '() - Aborting; auto update from %s to %s is not supported.', $this->_version, $item->new_version ) );
+
+				return false;
+			}
+
+			$this->log_debug( __METHOD__ . sprintf( '() - OK to update from %s to %s.', $this->_version, $item->new_version ) );
+
+			return true;
 		}
 
 		/**
@@ -6761,6 +6754,26 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			}
 
 			return $disabled;
+		}
+
+		/**
+		 * Determines if the current version should update to the offered version.
+		 *
+		 * @since 2.6
+		 *
+		 * @param string $offered_ver The version number to be compared against the installed version number.
+		 *
+		 * @return bool
+		 */
+		public function should_update_to_version( $offered_ver ) {
+			if ( version_compare( $this->_version, $offered_ver, '>=' ) ) {
+				return false;
+			}
+
+			$current_branch = implode( '.', array_slice( preg_split( '/[.-]/', $this->_version ), 0, 2 ) );
+			$new_branch     = implode( '.', array_slice( preg_split( '/[.-]/', $offered_ver ), 0, 2 ) );
+
+			return $current_branch == $new_branch;
 		}
 
 		/**
