@@ -15,6 +15,10 @@ class Tests_Gravity_Flow_Maybe_Auto_Update extends GF_UnitTestCase {
 		$this->assertSame( 'test', $this->_get_plugin()->maybe_auto_update( 'test', $this->_get_item( array( 'slug' => 'wrong' ) ) ) );
 	}
 
+	public function test_null() {
+		$this->assertNull( $this->_get_plugin()->maybe_auto_update( null, $this->_get_item( array( 'slug' => 'gravityflow-gravityflow' ) ) ) );
+	}
+
 	public function test_updates_disabled() {
 		$this->assertFalse( $this->_get_plugin()->maybe_auto_update( true, $this->_get_item( array( 'slug' => 'gravityflow-gravityflow' ) ) ) );
 	}
