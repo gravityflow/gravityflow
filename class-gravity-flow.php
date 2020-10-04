@@ -6986,7 +6986,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			 *
 			 * @param bool $allowed Indicates if Gravity Flow should update to major versions automatically. Default is true.
 			 */
-			if ( apply_filters( 'gravityflow_major_version_updates_allowed', true ) ) {
+			if ( apply_filters( 'gravityflow_major_version_auto_updates_allowed', true ) ) {
 				return true;
 			}
 

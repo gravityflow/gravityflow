@@ -32,9 +32,9 @@ class Tests_Gravity_Flow_Should_Update_To_Version extends GF_UnitTestCase {
 	 */
 	public function test_version_compare( $current_version, $new_version, $expected ) {
 		$this->plugin->_version = $current_version;
-		add_filter( 'gravityflow_major_version_updates_allowed', array( $this->ma, 'filter' ) );
+		add_filter( 'gravityflow_major_version_auto_updates_allowed', array( $this->ma, 'filter' ) );
 		$result = $this->plugin->should_update_to_version( $new_version );
-		remove_filter( 'gravityflow_major_version_updates_allowed', array( $this->ma, 'filter' ) );
+		remove_filter( 'gravityflow_major_version_auto_updates_allowed', array( $this->ma, 'filter' ) );
 
 		$this->assertSame( $expected, $result );
 		$this->assertEmpty( $this->ma->get_events() );
@@ -66,15 +66,15 @@ class Tests_Gravity_Flow_Should_Update_To_Version extends GF_UnitTestCase {
 	public function test_branch_check( $current_version, $new_version, $expected ) {
 		$this->plugin->_version = $current_version;
 		$this->ma->set_return_value( false );
-		add_filter( 'gravityflow_major_version_updates_allowed', array( $this->ma, 'return_value' ) );
+		add_filter( 'gravityflow_major_version_auto_updates_allowed', array( $this->ma, 'return_value' ) );
 		$result = $this->plugin->should_update_to_version( $new_version );
-		remove_filter( 'gravityflow_major_version_updates_allowed', array( $this->ma, 'return_value' ) );
+		remove_filter( 'gravityflow_major_version_auto_updates_allowed', array( $this->ma, 'return_value' ) );
 
 		$this->assertSame( $expected, $result );
 		$this->assertEquals( array(
 			array(
 				'filter' => 'return_value',
-				'tag'    => 'gravityflow_major_version_updates_allowed',
+				'tag'    => 'gravityflow_major_version_auto_updates_allowed',
 				'args'   => array( true ),
 			),
 		), $this->ma->get_events() );
