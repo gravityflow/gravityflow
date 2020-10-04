@@ -6979,6 +6979,17 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				return false;
 			}
 
+			/**
+			 * If major version updates are allowed we don't need to compare the branch version numbers.
+			 *
+			 * @since 2.6
+			 *
+			 * @param bool $allowed Indicates if Gravity Flow should update to major versions automatically. Default is true.
+			 */
+			if ( apply_filters( 'gravityflow_major_version_updates_allowed', true ) ) {
+				return true;
+			}
+
 			$current_branch = implode( '.', array_slice( preg_split( '/[.-]/', $this->_version ), 0, 2 ) );
 			$new_branch     = implode( '.', array_slice( preg_split( '/[.-]/', $offered_ver ), 0, 2 ) );
 
