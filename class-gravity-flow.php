@@ -6914,7 +6914,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @return bool
 		 */
 		public function maybe_auto_update( $update, $item ) {
-			if ( ! isset( $item->slug ) || $item->slug !== 'gravityflow' ) {
+			if ( ! isset( $item->slug ) || $item->slug !== 'gravityflow-gravityflow' ) {
 				return $update;
 			}
 

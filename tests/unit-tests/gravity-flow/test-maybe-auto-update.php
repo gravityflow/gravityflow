@@ -16,7 +16,7 @@ class Tests_Gravity_Flow_Maybe_Auto_Update extends GF_UnitTestCase {
 	}
 
 	public function test_updates_disabled() {
-		$this->assertFalse( $this->_get_plugin()->maybe_auto_update( true, $this->_get_item( array( 'slug' => 'gravityflow' ) ) ) );
+		$this->assertFalse( $this->_get_plugin()->maybe_auto_update( true, $this->_get_item( array( 'slug' => 'gravityflow-gravityflow' ) ) ) );
 	}
 
 	public function test_should_update_true() {
@@ -24,7 +24,7 @@ class Tests_Gravity_Flow_Maybe_Auto_Update extends GF_UnitTestCase {
 		$plugin->method( 'should_update_to_version' )->willReturn( true );
 
 		$item = $this->_get_item( array(
-			'slug'        => 'gravityflow',
+			'slug'        => 'gravityflow-gravityflow',
 			'new_version' => 'the number',
 		) );
 
@@ -36,7 +36,7 @@ class Tests_Gravity_Flow_Maybe_Auto_Update extends GF_UnitTestCase {
 		$plugin->method( 'should_update_to_version' )->willReturn( false );
 
 		$item = $this->_get_item( array(
-			'slug'        => 'gravityflow',
+			'slug'        => 'gravityflow-gravityflow',
 			'new_version' => 'number',
 		) );
 
