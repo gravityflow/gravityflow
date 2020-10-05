@@ -6204,7 +6204,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			 *
 			 * @param bool show Whether to show inbox count.
 			 */			
-			$show = apply_filters( 'gravityflow_inbox_count_display', true );
+			$show = apply_filters( 'gravityflow_inbox_count_display', false );
 			if ( ! $show ) {
 				return $menu;
 			}
