@@ -1,1 +1,2 @@
 - Updated Inbox count to be disabled by default, can be enabled with the filter 'gravityflow_inbox_count_display'.
+- Fixed an issue where the front-end workflow was showing stuck on same step for email based assignee.
