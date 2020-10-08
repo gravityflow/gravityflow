@@ -5666,6 +5666,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					if ( ( $next_step && $next_step->is_assignee( $current_user_assignee_key ) ) || $args['check_permissions'] == false || $this->current_user_can_any( 'gravityflow_status_view_all' ) ) {
 						$step = $next_step;
 					} else {
+						$step = false;
 						$args['display_instructions'] = false;
 					}
 					$args['check_permissions'] = false;
