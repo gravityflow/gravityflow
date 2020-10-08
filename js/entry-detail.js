@@ -19,7 +19,9 @@
 }(window.GravityFlowEntryDetail = window.GravityFlowEntryDetail || {}, jQuery));
 
 function closePrint () {
-    document.body.removeChild( this.__container__ );
+    if (window.navigator.userAgent.indexOf('Mozilla') == -1) {
+        document.body.removeChild( this.__container__ );
+    }
 }
 
 function setPrint () {
