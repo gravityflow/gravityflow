@@ -710,7 +710,7 @@ class Gravity_Flow_Entry_Detail {
 
 		<table cellspacing="0" class="widefat fixed entry-detail-view <?php echo esc_attr( $step_class ) ?>">
 			<thead>
-			<tr class="entry-view-section-break">
+			<tr class="entry-view-row">
 				<th id="details">
 					<?php
 					$title = sprintf( '%s : %s %s', esc_html( $form['title'] ), __( 'Entry # ', 'gravityflow' ), absint( $entry['id'] ) );
@@ -760,7 +760,7 @@ class Gravity_Flow_Entry_Detail {
 	public static function entry_editor( $form, $entry, $current_step, $display_empty_fields ) {
 		?>
 		<tbody>
-			<tr class="entry-view-section-break">
+			<tr class="entry-view-row">
 				<td colspan="2">
 					<?php
 					require_once( 'class-entry-editor.php' );
@@ -816,10 +816,10 @@ class Gravity_Flow_Entry_Detail {
 
 		ob_start();
 		?>
-		<tr class="entry-view-section-break">
+		<tr class="entry-view-row">
 			<td colspan="2" class="gravityflow-order-summary"><?php echo $order_summary_label; ?></td>
 		</tr>
-		<tr class="entry-view-section-break">
+		<tr class="entry-view-row">
 			<td colspan="2" class="entry-view-field-value lastrow">
 				<?php self::products_summary( $form, $entry, $products ) ?>
 			</td>
@@ -895,7 +895,7 @@ class Gravity_Flow_Entry_Detail {
 						$count ++;
 						$is_last = $count >= $field_count ? true : false;
 						?>
-						<tr class="entry-view-section-break">
+						<tr class="entry-view-row">
 							<td colspan="2"
 							    class="entry-view-section-break<?php echo $is_last ? ' lastrow' : '' ?>"><?php echo esc_html( $field->label ) ?></td>
 						</tr>
@@ -915,7 +915,7 @@ class Gravity_Flow_Entry_Detail {
 						$content = GFCommon::replace_variables( $field->content, $form, $entry, false, true, false, 'html' );
 						$content = do_shortcode( $content );
 						?>
-						<tr class="entry-view-section-break">
+						<tr class="entry-view-row">
 							<td colspan="2" class="entry-view-field-value"><?php echo $content ?></td>
 						</tr>
 						<?php
@@ -943,10 +943,10 @@ class Gravity_Flow_Entry_Detail {
 						$display_value = empty( $display_value ) && $display_value !== '0' ? '&nbsp;' : $display_value;
 
 						$content = '
-                                <tr class="entry-view-section-break">
+                                <tr class="entry-view-row">
                                     <td colspan="2" class="entry-view-field-name">' . esc_html( self::get_label( $field ) ) . '</td>
                                 </tr>
-                                <tr class="entry-view-section-break">
+                                <tr class="entry-view-row">
                                     <td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
                                 </tr>';
 
@@ -1114,7 +1114,7 @@ class Gravity_Flow_Entry_Detail {
 					continue;
 				}
 				?>
-				<tr class="entry-view-section-break">
+				<tr class="entry-view-row">
 					<td>
 						<div class="product_name"><?php echo esc_html( $product['name'] ); ?></div>
 						<ul class="product_options">
@@ -1150,7 +1150,7 @@ class Gravity_Flow_Entry_Detail {
 			<?php
 			if ( ! empty( $products['shipping']['name'] ) ) {
 				?>
-				<tr class="entry-view-section-break">
+				<tr class="entry-view-row">
 					<td colspan="2" rowspan="2" class="emptycell">&nbsp;</td>
 					<td class="textright shipping"><?php echo esc_html( $products['shipping']['name'] ); ?></td>
 					<td class="shipping_amount"><?php echo GFCommon::to_money( $products['shipping']['price'], $entry['currency'] ) ?>&nbsp;</td>
@@ -1158,7 +1158,7 @@ class Gravity_Flow_Entry_Detail {
 				<?php
 			}
 			?>
-			<tr class="entry-view-section-break">
+			<tr class="entry-view-row">
 				<?php
 				if ( empty( $products['shipping']['name'] ) ) {
 					?>
