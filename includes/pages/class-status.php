@@ -1210,6 +1210,16 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			}
 		}
 
+		/**
+		 * Allows the sortability of columns to be filtered for the status table.
+		 *
+		 * @since 2.6.1
+		 *
+		 * @param array         $columns The columns to be sorted
+		 * @param WP_List_Table $this    The current WP_List_Table object.
+		 */
+		$sortable_columns = apply_filters( 'gravityflow_sort_columns_status_table', $sortable_columns, $this );
+
 		return $sortable_columns;
 	}
 
@@ -1242,9 +1252,9 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$columns['workflow_final_status'] = esc_html__( 'Status', 'gravityflow' );
 		}
 
-        if ( ! empty( $args['form-id'] ) && ! is_array( $args['form-id'] ) ) {
-	        $columns = Gravity_Flow_Common::get_field_columns( $columns, rgar( $args, 'form-id' ), $this->field_ids );
-        }
+		if ( ! empty( $args['form-id'] ) && ! is_array( $args['form-id'] ) ) {
+			$columns = Gravity_Flow_Common::get_field_columns( $columns, rgar( $args, 'form-id' ), $this->field_ids );
+		}
 
 		if ( $step_id = $this->get_filter_step_id() ) {
 			unset( $columns['workflow_step'] );
