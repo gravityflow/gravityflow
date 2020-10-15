@@ -55,7 +55,7 @@
 }(window.GravityFlowStatusList = window.GravityFlowStatusList || {}, jQuery));
 
 function closePrint () {
-    document.body.removeChild(this.__container__);
+    document.body.removeChild(this.contentWindow.__container__);
 }
 
 function setPrint () {
