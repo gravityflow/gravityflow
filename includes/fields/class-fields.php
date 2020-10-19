@@ -158,13 +158,28 @@ class Gravity_Flow_Fields {
 
 		$role_field = array(
 			'name'     => 'gravityflow_users_role_filter',
+			'type'     => 'select',
 			'choices'  => array_merge( $choices, Gravity_Flow_Common::get_roles_as_choices( false ) ),
 			'onchange' => "SetFieldProperty('gravityflowUsersRoleFilter',this.value);",
 		);
 
+		$prefix = 'gaddon';
+
+		if ( gravity_flow()->is_gravityforms_supported( '2.5-beta-1' ) ) {
+
+			if ( ! gravity_flow()->get_settings_renderer() ) {
+				// Set a dummy renderer.
+				$renderer = new Rocketgenius\Gravity_Forms\Settings();
+				gravity_flow()->set_settings_renderer( $renderer );
+			}
+
+			$prefix = 'gform';
+
+		}
+
 		$html = gravity_flow()->settings_select( $role_field, false );
 
-		echo str_replace( sprintf( 'name="_gaddon_setting_%s"', esc_attr( $role_field['name'] ) ), '', $html );
+		echo str_replace( sprintf( 'name="_%s_setting_%s"', $prefix, esc_attr( $role_field['name'] ) ), '', $html );
 	}
 
 	/**

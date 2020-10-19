@@ -213,6 +213,8 @@ if ( class_exists( 'GFForms' ) ) {
 
 			add_action( 'gform_after_update_entry', array( $this, 'filter_after_update_entry' ), 10, 2 );
 
+			add_filter( 'gform_form_settings_menu', array( $this, 'filter_form_settings_menu' ), 10, 1 );
+
 			$this->add_delayed_payment_support(
 				array(
 					'option_label' => esc_html__( 'Start the Workflow once payment has been received.', 'gravityflow' ),
@@ -612,6 +614,8 @@ PRIMARY KEY  (id)
 
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
+			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? '-legacy' : '';
+
 			$nonce = wp_create_nonce( 'wp_rest' );
 
 			$scripts = array(
@@ -692,7 +696,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_form_settings_js',
-					'src'     => $this->get_base_url() . "/js/form-settings{$min}.js",
+					'src'     => $this->get_base_url() . "/js/form-settings{$legacy}{$min}.js",
 					'deps'    => array( 'jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'gform_datepicker_init', 'gf_routing_setting' ),
 					'version' => $this->_version,
 					'enqueue' => array(
@@ -727,6 +731,7 @@ PRIMARY KEY  (id)
 					'strings' => array(
 						'hasStartStep'    => $has_start_step,
 						'hasCompleteStep' => $has_complete_step,
+						'formId'          => $form_id,
 					),
 				),
 				array(
@@ -988,9 +993,12 @@ PRIMARY KEY  (id)
 		 * @return string
 		 */
 		public function feed_list_title() {
-			$url = add_query_arg( array( 'fid' => '0' ) );
-			$url = esc_url( $url );
-			return esc_html__( 'Workflow Steps', 'gravityflow' ) . " <a class='add-new-h2' href='{$url}'>" . __( 'Add New' , 'gravityflow' ) . '</a>';
+			$url            = add_query_arg( array( 'fid' => '0' ) );
+			$url            = esc_url( $url );
+			$legacy         = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? '-legacy' : '';
+			$add_new_button = $legacy ? " <a class='add-new-h2' href='{$url}'>" . __( 'Add New', 'gravityflow' ) . '</a>' : '';
+
+			return esc_html__( 'Workflow Steps', 'gravityflow' ) . $add_new_button;
 		}
 
 		/**
@@ -1001,6 +1009,8 @@ PRIMARY KEY  (id)
 		public function styles() {
 
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+
+			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? '-legacy' : '';
 
 			$styles = array(
 				array(
@@ -1098,7 +1108,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_form_settings',
-					'src'     => $this->get_base_url() . "/css/form-settings{$min}.css",
+					'src'     => $this->get_base_url() . "/css/form-settings{$legacy}{$min}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
@@ -1110,10 +1120,7 @@ PRIMARY KEY  (id)
 					'src'     => $this->get_base_url() . "/css/settings{$min}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
-						array( 'query' => 'page=gravityflow_settings&view=_empty_' ),
-						array( 'query' => 'page=gravityflow_settings&view=settings' ),
-						array( 'query' => 'page=gravityflow_settings&view=labels' ),
-						array( 'query' => 'page=gravityflow_settings&view=connected_apps' ),
+						array( 'query' => 'page=gravityflow_settings' ),
 					),
 				),
 				array(
@@ -1516,6 +1523,7 @@ PRIMARY KEY  (id)
 						'tooltip'        => esc_html__( "Build the conditional logic that should be applied to this workflow before it's allowed to be processed. If an entry does not meet the conditions then the workflow will not be processed.", 'gravityflow' ),
 						'label'          => esc_html__( 'Workflow Condition', 'gravityflow' ),
 						'type'           => 'feed_condition',
+						'callback'       => array( $this, 'settings_feed_condition' ),
 						'checkbox_label' => esc_html__( 'Enable Condition for this workflow', 'gravityflow' ),
 						'instructions'   => esc_html__( 'Process this workflow if', 'gravityflow' ),
 					),
@@ -1557,9 +1565,9 @@ PRIMARY KEY  (id)
 			} elseif ( ! $is_complete_step ) {
 				$standard_fields = array(
 					array(
-						'name'     => 'step_highlight',
+						'name'     => 'highlight',
 						'label'    => esc_html__( 'Highlight', 'gravityflow' ),
-						'type'     => 'step_highlight',
+						'type'     => 'highlight',
 						'required' => false,
 						'tooltip'  => esc_html__( 'Highlighted steps will stand out in both the workflow inbox and the step list. Use highlighting to bring attention to important tasks and to help organise complex workflows.', 'gravityflow' ),
 					),
@@ -1568,6 +1576,7 @@ PRIMARY KEY  (id)
 						'tooltip'        => esc_html__( "Build the conditional logic that should be applied to this step before it's allowed to be processed. If an entry does not meet the conditions of this step it will fall on to the next step in the list.", 'gravityflow' ),
 						'label'          => esc_html__( 'Condition', 'gravityflow' ),
 						'type'           => 'feed_condition',
+						'callback'       => array( $this, 'settings_feed_condition' ),
 						'checkbox_label' => esc_html__( 'Enable Condition for this step', 'gravityflow' ),
 						'instructions'   => esc_html__( 'Perform this step if', 'gravityflow' ),
 					),
@@ -1585,6 +1594,9 @@ PRIMARY KEY  (id)
 
 			foreach ( $step_classes as $step_class ) {
 				$type = $step_class->get_type();
+				if ( $step_type !== $type ) {
+					continue;
+				}
 				$step_settings = $step_class->get_settings();
 				$step_settings['id'] = 'gravityflow-step-settings-' . $type;
 				$step_settings['class'] = 'gravityflow-step-settings';
@@ -1680,11 +1692,7 @@ PRIMARY KEY  (id)
 
 			if ( $current_step_id ) {
 				$current_step = $this->get_step( $current_step_id );
-				if ( empty( $current_step ) ) {
-					$warning = esc_html__( 'This step type is missing.', 'gravityflow' );
-				} elseif ( ! $current_step->is_supported() ) {
-					$warning = esc_html__( 'The plugin required by this step type is missing.', 'gravityflow' );
-				} else {
+				if ( ! empty( $current_step ) ) {
 					$entry_count = $current_step->entry_count();
 				}
 			}
@@ -1703,9 +1711,9 @@ PRIMARY KEY  (id)
 
 		/**
 		 * Sets the _assignee_settings_md5 class property on feed validation, if there are entries on this step.
-         *
-         * @since 2.5     Add new checks for step required capabilities.
-         * @since unknown
+		 *
+		 * @since 1.0
+		 * @since 2.5     Add new checks for step required capabilities.
 		 *
 		 * @param array  $field         The field properties.
 		 * @param string $field_setting The field value.
@@ -2214,18 +2222,23 @@ PRIMARY KEY  (id)
 		 * Renders and initializes a radio field or a collection of radio fields based on the $field array.
 		 * Images/icons are used in place of the HTML radio buttons.
 		 *
+		 * @since 1.0
+		 * @since 2.5.12   Change from protected to public for Gravity Forms 2.5.
+		 *
 		 * @param array $field Field array containing the configuration options of this field.
 		 * @param bool  $echo  True to echo the output to the screen, false to simply return the contents as a string.
 		 *
 		 * @return string Returns the markup for the radio buttons.
 		 */
-		protected function settings_radio_image( $field, $echo = true ) {
+		public function settings_radio_image( $field, $echo = true ) {
 
 			$field['type'] = 'radio'; // Making sure type is set to radio.
 
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+
 			$selected_value   = $this->get_setting( $field['name'], rgar( $field, 'default_value' ) );
 			$field_attributes = $this->get_field_attributes( $field );
-			$horizontal       = rgar( $field, 'horizontal' ) ? ' gaddon-setting-inline' : '';
+			$horizontal       = rgar( $field, 'horizontal' ) ? " {$settings_prefix}-setting-inline" : '';
 			$html             = '';
 			if ( is_array( $field['choices'] ) ) {
 				foreach ( $field['choices'] as $i => $choice ) {
@@ -2250,12 +2263,14 @@ PRIMARY KEY  (id)
 						$icon = $icon_url;
 					}
 
+					$input_name = "_{$settings_prefix}_setting_" . esc_attr( $field['name'] );
+
 					$html .= '
-	                        <div id="gaddon-setting-radio-choice-' . $choice['id'] . '" class="gaddon-setting-radio' . $div_class . $horizontal . '">
+	                        <div id="' . $settings_prefix . '-setting-radio-choice-' . $choice['id'] . '" class="' . $settings_prefix . '-setting-radio' . $div_class . $horizontal . '">
 	                        <input
 	                                id = "' . esc_attr( $choice['id'] ) . '"
 	                                type = "radio" ' .
-					         'name="_gaddon_setting_' . esc_attr( $field['name'] ) . '" ' .
+					         'name="' . $input_name . '" ' .
 					         'value="' . $radio_value . '" ' .
 					         implode( ' ', $choice_attributes ) . ' ' .
 					         $checked .
@@ -2282,31 +2297,37 @@ PRIMARY KEY  (id)
 		/**
 		 * Renders the HTML for the schedule setting.
 		 *
+		 * @since 1.0
+		 * @since 2.5.12    Added the $echo param.
+		 *
 		 * @param array $field The field properties.
+		 * @param bool  $echo  Whether to output the setting.
+		 *
+		 * @return string
 		 */
-		public function settings_schedule( $field ) {
+		public function settings_schedule( $field, $echo = true ) {
 
 			$form = $this->get_current_form();
 
 			$checkbox_label = isset( $field['checkbox_label'] ) ? $field['checkbox_label'] : esc_html__( 'Schedule this step', 'gravityflow' );
 
 			$scheduled = array(
-				'name' => 'scheduled',
-				'type' => 'checkbox',
+				'name'    => 'scheduled',
+				'type'    => 'checkbox',
 				'choices' => array(
 					array(
 						'label' => $checkbox_label,
-						'name' => 'scheduled',
+						'name'  => 'scheduled',
 					),
 				),
 			);
 
 			$schedule_type = array(
-				'name' => 'schedule_type',
-				'type' => 'radio',
-				'horizontal' => true,
+				'name'          => 'schedule_type',
+				'type'          => 'radio',
+				'horizontal'    => true,
 				'default_value' => 'delay',
-				'choices' => array(
+				'choices'       => array(
 					array(
 						'label' => esc_html__( 'Delay', 'gravityflow' ),
 						'value' => 'delay',
@@ -2335,32 +2356,35 @@ PRIMARY KEY  (id)
 			}
 
 			$schedule_date_fields = array(
-				'name' => 'schedule_date_field',
-				'label' => esc_html__( 'Schedule Date Field', 'gravityflow' ),
+				'name'    => 'schedule_date_field',
+				'label'   => esc_html__( 'Schedule Date Field', 'gravityflow' ),
+				'style'   => 'width:auto',
 				'choices' => $date_field_choices,
 			);
 
 			$schedule_date = array(
-				'id' => 'schedule_date',
-				'name' => 'schedule_date',
+				'id'          => 'schedule_date',
+				'name'        => 'schedule_date',
 				'placeholder' => 'yyyy-mm-dd',
-				'class' => 'datepicker datepicker_with_icon ymd_dash',
-				'label' => esc_html__( 'Schedule', 'gravityflow' ),
-				'type' => 'text',
+				'class'       => 'datepicker datepicker_with_icon ymd_dash',
+				'label'       => esc_html__( 'Schedule', 'gravityflow' ),
+				'type'        => 'text',
 			);
 
 			$delay_offset_field = array(
-				'name' => 'schedule_delay_offset',
+				'name'  => 'schedule_delay_offset',
 				'class' => 'small-text',
+				'style' => 'width:auto',
 				'label' => esc_html__( 'Schedule', 'gravityflow' ),
-				'type' => 'text',
+				'type'  => 'text',
 			);
 
 			$unit_field = array(
-				'name' => 'schedule_delay_unit',
-				'label' => esc_html__( 'Schedule', 'gravityflow' ),
+				'name'          => 'schedule_delay_unit',
+				'label'         => esc_html__( 'Schedule', 'gravityflow' ),
 				'default_value' => 'hours',
-				'choices' => array(
+				'style'         => 'width:auto',
+				'choices'       => array(
 					array(
 						'label' => esc_html__( 'Minute(s)', 'gravityflow' ),
 						'value' => 'minutes',
@@ -2380,14 +2404,15 @@ PRIMARY KEY  (id)
 				),
 			);
 
-			$this->settings_checkbox( $scheduled );
+			$html = $this->settings_checkbox( $scheduled, false );
 
-			$enabled = $this->get_setting( 'scheduled', false );
-			$schedule_type_setting = $this->get_setting( 'schedule_type', 'delay' );
-			$schedule_style = $enabled ? '' : 'style="display:none;"';
-			$schedule_date_style = ( $schedule_type_setting == 'date' ) ? '' : 'style="display:none;"';
-			$schedule_delay_style = ( $schedule_type_setting == 'delay' ) ? '' : 'style="display:none;"';
+			$enabled                    = $this->get_setting( 'scheduled', false );
+			$schedule_type_setting      = $this->get_setting( 'schedule_type', 'delay' );
+			$schedule_style             = $enabled ? '' : 'style="display:none;"';
+			$schedule_date_style        = ( $schedule_type_setting == 'date' ) ? '' : 'style="display:none;"';
+			$schedule_delay_style       = ( $schedule_type_setting == 'delay' ) ? '' : 'style="display:none;"';
 			$schedule_date_fields_style = ( $schedule_type_setting == 'date_field' ) ? '' : 'style="display:none;"';
+			ob_start();
 			?>
 			<div class="gravityflow-schedule-settings" <?php echo $schedule_style ?> >
 				<div class="gravityflow-schedule-type-container">
@@ -2412,16 +2437,17 @@ PRIMARY KEY  (id)
 					/* translators: 1. textbox input for the number of days/weeks etc. 2. select input with options for minutes/hours/days/weeks 3. select input before/after 4. select input with list of date fields */
 					$date_field_label = isset( $field['date_field_label'] ) ?  $field['delay_label'] : esc_html__( 'Start this step %1$s %2$s %3$s %4$s', 'gravityflow' );
 
-					$delay_offset_field['name'] = 'schedule_date_field_offset';
+					$delay_offset_field['name']          = 'schedule_date_field_offset';
 					$delay_offset_field['default_value'] = '0';
 
 					$unit_field['name'] = 'schedule_date_field_offset_unit';
 					echo '&nbsp;';
 					$before_after_field = array(
-						'name' => 'schedule_date_field_before_after',
-						'label' => esc_html__( 'Schedule', 'gravityflow' ),
+						'name'          => 'schedule_date_field_before_after',
+						'label'         => esc_html__( 'Schedule', 'gravityflow' ),
 						'default_value' => 'after',
-						'choices' => array(
+						'style'         => 'width:auto',
+						'choices'       => array(
 							array(
 								'label' => esc_html__( 'after', 'gravityflow' ),
 								'value' => 'after',
@@ -2462,26 +2488,37 @@ PRIMARY KEY  (id)
 			</script>
 			<?php
 
+			$html .= trim( ob_get_clean() );
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
 		}
 
 		/**
 		 * Renders the HTML for the due date setting.
 		 *
 		 * @since 2.5
+		 * @since 2.5.12 Added the $echo param.
 		 *
 		 * @param array $field The field properties.
+		 * @param bool  $echo  Whether to output the setting.
+		 *
+		 * @return string
 		 */
-		public function settings_due_date( $field ) {
+		public function settings_due_date( $field, $echo = true ) {
 
 			$form = $this->get_current_form();
 
 			$due_date = array(
-				'name' => 'due_date',
-				'type' => 'checkbox',
+				'name'    => 'due_date',
+				'type'    => 'checkbox',
 				'choices' => array(
 					array(
 						'label' => esc_html__( 'Schedule due date', 'gravityflow' ),
-						'name' => 'due_date',
+						'name'  => 'due_date',
 					),
 				),
 			);
@@ -2538,18 +2575,19 @@ PRIMARY KEY  (id)
 
 			$delay_offset_field = array(
 				'name'      => 'due_date_delay_offset',
-				'class'     => 'small-text',
+				'style'     => 'width:auto',
 				'required'  => true,
 				'label'     => esc_html__( 'Due Date', 'gravityflow' ),
 				'type'      => 'text',
 			);
 
 			$unit_field = array(
-				'name' => 'due_date_delay_unit',
-				'label' => esc_html__( 'Due Date', 'gravityflow' ),
+				'name'          => 'due_date_delay_unit',
+				'label'         => esc_html__( 'Due Date', 'gravityflow' ),
 				'default_value' => 'hours',
+				'style'         => 'width:auto',
 				'required'      => true,
-				'choices' => array(
+				'choices'       => array(
 					array(
 						'label' => esc_html__( 'Minute(s)', 'gravityflow' ),
 						'value' => 'minutes',
@@ -2586,15 +2624,16 @@ PRIMARY KEY  (id)
 				'required'      => true,
 			);
 
-			$this->settings_checkbox( $due_date );
+			$html = $this->settings_checkbox( $due_date, false );
 
-			$enabled = $this->get_setting( 'due_date', false );
-			$due_date_type_setting = $this->get_setting( 'due_date_type', 'delay' );
-			$due_date_style = $enabled ? '' : 'style="display:none;"';
-			$due_date_date_style = ( $due_date_type_setting == 'date' ) ? '' : 'style="display:none;"';
-			$due_date_delay_style = ( $due_date_type_setting == 'delay' ) ? '' : 'style="display:none;"';
+			$enabled                    = $this->get_setting( 'due_date', false );
+			$due_date_type_setting      = $this->get_setting( 'due_date_type', 'delay' );
+			$due_date_style             = $enabled ? '' : 'style="display:none;"';
+			$due_date_date_style        = ( $due_date_type_setting == 'date' ) ? '' : 'style="display:none;"';
+			$due_date_delay_style       = ( $due_date_type_setting == 'delay' ) ? '' : 'style="display:none;"';
 			$due_date_date_fields_style = ( $due_date_type_setting == 'date_field' ) ? '' : 'style="display:none;"';
 
+			ob_start();
 			?>
 			<div class="gravityflow-due-date-settings" <?php echo $due_date_style; ?> >
 				<div class="gravityflow-due-date-type-container" class="gravityflow-sub-setting">
@@ -2622,17 +2661,18 @@ PRIMARY KEY  (id)
 					<?php
 					esc_html_e( 'Due date for this step', 'gravityflow' );
 					echo '&nbsp;';
-					$delay_offset_field['name'] = 'due_date_date_field_offset';
+					$delay_offset_field['name']          = 'due_date_date_field_offset';
 					$delay_offset_field['default_value'] = '0';
 					$this->settings_text( $delay_offset_field );
 					$unit_field['name'] = 'due_date_date_field_offset_unit';
 					$this->settings_select( $unit_field );
 					echo '&nbsp;';
 					$before_after_field = array(
-						'name' => 'due_date_date_field_before_after',
-						'label' => esc_html__( 'Due Date', 'gravityflow' ),
+						'name'          => 'due_date_date_field_before_after',
+						'label'         => esc_html__( 'Due Date', 'gravityflow' ),
+						'style'         => 'width:auto',
 						'default_value' => 'after',
-						'choices' => array(
+						'choices'       => array(
 							array(
 								'label' => esc_html__( 'after', 'gravityflow' ),
 								'value' => 'after',
@@ -2653,7 +2693,7 @@ PRIMARY KEY  (id)
 					<?php
 
 					$due_date_highlight_type_setting = $this->get_setting( 'due_date_highlight_type', 'color' );
-					$due_date_highlight_color_style = ( $due_date_highlight_type_setting == 'color' ) ? '' : 'style="display:none;"';
+					$due_date_highlight_color_style  = ( $due_date_highlight_type_setting == 'color' ) ? '' : 'style="display:none;"';
 					?>
 					<div class="gravityflow-due-date-highlight-type-container">
 						<?php $this->settings_hidden( $due_date_highlight_type ); ?>
@@ -2691,34 +2731,49 @@ PRIMARY KEY  (id)
 				})(jQuery);
 			</script>
 			<?php
+
+			$html .= trim( ob_get_clean() );
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
 		}
 
 		/**
 		 * Renders the HTML for the expiration setting.
 		 *
-		 * @param array $field The field properties.
+		 *
+		 * @since 1.0
+		 * @since 2.5.12    Added the $echo param.
+		 *
+		 * @param array $field  The field properties.
+		 * @param bool  $echo   Whether to output the setting.
+		 *
+		 * @return string
 		 */
-		public function settings_expiration( $field ) {
+		public function settings_expiration( $field, $echo = true ) {
 
 			$form = $this->get_current_form();
 
 			$expiration = array(
-				'name' => 'expiration',
-				'type' => 'checkbox',
+				'name'    => 'expiration',
+				'type'    => 'checkbox',
 				'choices' => array(
 					array(
 						'label' => esc_html__( 'Schedule expiration', 'gravityflow' ),
-						'name' => 'expiration',
+						'name'  => 'expiration',
 					),
 				),
 			);
 
 			$expiration_type = array(
-				'name' => 'expiration_type',
-				'type' => 'radio',
-				'horizontal' => true,
+				'name'          => 'expiration_type',
+				'type'          => 'radio',
+				'horizontal'    => true,
 				'default_value' => 'delay',
-				'choices' => array(
+				'choices'       => array(
 					array(
 						'label' => esc_html__( 'Delay', 'gravityflow' ),
 						'value' => 'delay',
@@ -2747,32 +2802,34 @@ PRIMARY KEY  (id)
 			}
 
 			$expiration_date_fields = array(
-				'name' => 'expiration_date_field',
-				'label' => esc_html__( 'Expiration Date Field', 'gravityflow' ),
+				'name'    => 'expiration_date_field',
+				'label'   => esc_html__( 'Expiration Date Field', 'gravityflow' ),
 				'choices' => $date_field_choices,
 			);
 
 			$expiration_date = array(
-				'id' => 'expiration_date',
-				'name' => 'expiration_date',
+				'id'          => 'expiration_date',
+				'name'        => 'expiration_date',
 				'placeholder' => 'yyyy-mm-dd',
-				'class' => 'datepicker datepicker_with_icon ymd_dash',
-				'label' => esc_html__( 'Expiration', 'gravityflow' ),
-				'type' => 'text',
+				'class'       => 'datepicker datepicker_with_icon ymd_dash',
+				'label'       => esc_html__( 'Expiration', 'gravityflow' ),
+				'type'        => 'text',
 			);
 
 			$delay_offset_field = array(
-				'name' => 'expiration_delay_offset',
+				'name'  => 'expiration_delay_offset',
 				'class' => 'small-text',
+				'style' => 'width:auto',
 				'label' => esc_html__( 'Expiration', 'gravityflow' ),
-				'type' => 'text',
+				'type'  => 'text',
 			);
 
 			$unit_field = array(
-				'name' => 'expiration_delay_unit',
-				'label' => esc_html__( 'Expiration', 'gravityflow' ),
+				'name'          => 'expiration_delay_unit',
+				'label'         => esc_html__( 'Expiration', 'gravityflow' ),
 				'default_value' => 'hours',
-				'choices' => array(
+				'style'         => 'width:auto',
+				'choices'       => array(
 					array(
 						'label' => esc_html__( 'Minute(s)', 'gravityflow' ),
 						'value' => 'minutes',
@@ -2792,15 +2849,16 @@ PRIMARY KEY  (id)
 				),
 			);
 
-			$this->settings_checkbox( $expiration );
+			$html = $this->settings_checkbox( $expiration, false );
 
-			$enabled = $this->get_setting( 'expiration', false );
-			$expiration_type_setting = $this->get_setting( 'expiration_type', 'delay' );
-			$expiration_style = $enabled ? '' : 'style="display:none;"';
-			$expiration_date_style = ( $expiration_type_setting == 'date' ) ? '' : 'style="display:none;"';
-			$expiration_delay_style = ( $expiration_type_setting == 'delay' ) ? '' : 'style="display:none;"';
+			$enabled                      = $this->get_setting( 'expiration', false );
+			$expiration_type_setting      = $this->get_setting( 'expiration_type', 'delay' );
+			$expiration_style             = $enabled ? '' : 'style="display:none;"';
+			$expiration_date_style        = ( $expiration_type_setting == 'date' ) ? '' : 'style="display:none;"';
+			$expiration_delay_style       = ( $expiration_type_setting == 'delay' ) ? '' : 'style="display:none;"';
 			$expiration_date_fields_style = ( $expiration_type_setting == 'date_field' ) ? '' : 'style="display:none;"';
 
+			ob_start();
 			?>
 			<div class="gravityflow-expiration-settings" <?php echo $expiration_style ?> >
 				<div class="gravityflow-expiration-type-container" class="gravityflow-sub-setting">
@@ -2828,17 +2886,17 @@ PRIMARY KEY  (id)
 					<?php
 					esc_html_e( 'Expire this step', 'gravityflow' );
 					echo '&nbsp;';
-					$delay_offset_field['name'] = 'expiration_date_field_offset';
+					$delay_offset_field['name']          = 'expiration_date_field_offset';
 					$delay_offset_field['default_value'] = '0';
 					$this->settings_text( $delay_offset_field );
 					$unit_field['name'] = 'expiration_date_field_offset_unit';
 					$this->settings_select( $unit_field );
 					echo '&nbsp;';
 					$before_after_field = array(
-						'name' => 'expiration_date_field_before_after',
-						'label' => esc_html__( 'Expiration', 'gravityflow' ),
+						'name'          => 'expiration_date_field_before_after',
+						'label'         => esc_html__( 'Expiration', 'gravityflow' ),
 						'default_value' => 'after',
-						'choices' => array(
+						'choices'       => array(
 							array(
 								'label' => esc_html__( 'after', 'gravityflow' ),
 								'value' => 'after',
@@ -2861,9 +2919,9 @@ PRIMARY KEY  (id)
 						esc_html_e( 'Status after expiration', 'gravityflow' );
 						echo ': ';
 						$status_choices_field = array(
-							'name' => 'status_expiration',
-							'label' => esc_html__( 'Expiration Status', 'gravityflow' ),
-							'type' => 'select',
+							'name'    => 'status_expiration',
+							'label'   => esc_html__( 'Expiration Status', 'gravityflow' ),
+							'type'    => 'select',
 							'choices' => $status_choices,
 						);
 						$this->settings_select( $status_choices_field );
@@ -2907,6 +2965,14 @@ PRIMARY KEY  (id)
 				})(jQuery);
 			</script>
 			<?php
+
+			$html .= trim( ob_get_clean() );
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
 		}
 
 		/**
@@ -2915,15 +2981,22 @@ PRIMARY KEY  (id)
 		 * The container will be displayed or hidden depending on the value of the step_highlight checkbox field.
 		 *
 		 * @since 1.9.2
+		 * @since 2.6   Renamed from settings_step_highlight_settings to support Gravity Forms 2.5
 		 *
 		 * @param array $field The field properties.
+		 * @param bool  $echo  Whether to output the setting.
 		 *
 		 * @return string
 		 */
-		public function settings_step_highlight( $field ) {
+		public function settings_highlight( $field, $echo = true ) {
 			$field = $this->prepare_settings_step_highlight( $field );
 
-			return $this->settings_step_highlight_container( $field );
+			$html = $this->settings_step_highlight_container( $field, false );
+
+			if ( $echo ) {
+				echo $html;
+			}
+			return $html;
 		}
 
 		/**
@@ -2936,37 +3009,38 @@ PRIMARY KEY  (id)
 		 * @return array
 		 */
 		public function prepare_settings_step_highlight( $field ) {
-			unset( $field['settings'] );
+			$settings = array();
 
-			$step_highlight = array(
-				'name'     => 'step_highlight',
-				'type'     => 'checkbox',
-				'choices'  => array(
+			$step_highlight             = array(
+				'name'    => 'step_highlight',
+				'type'    => 'checkbox',
+				'choices' => array(
 					array(
-						'label'         => esc_html__( 'Highlight this step', 'gravityflow' ),
-						'name'          => 'step_highlight',
+						'label' => esc_html__( 'Highlight this step', 'gravityflow' ),
+						'name'  => 'step_highlight',
 					),
 				),
 			);
-			$field['settings']['step_highlight'] = $step_highlight;
+			$settings['step_highlight'] = $step_highlight;
 
-			$step_highlight_type = array(
-				'name'           => 'step_highlight_type',
-				'type'           => 'hidden',
-				'default_value'  => 'color',
-				'required'       => true,
+			$step_highlight_type             = array(
+				'name'          => 'step_highlight_type',
+				'type'          => 'hidden',
+				'default_value' => 'color',
+				'required'      => true,
 			);
-			$field['settings']['step_highlight_type'] = $step_highlight_type;
+			$settings['step_highlight_type'] = $step_highlight_type;
 
-			$step_highlight_color = array(
-				'name'                => 'step_highlight_color',
-				'id'                  => 'step_highlight_color',
-				'class'               => 'small-text',
-				'label'               => esc_html__( 'Color', 'gravityflow' ),
-				'type'                => 'text',
-				'default_value'       => '#dd3333',
+			$step_highlight_color             = array(
+				'name'          => 'step_highlight_color',
+				'id'            => 'step_highlight_color',
+				'class'         => 'small-text',
+				'label'         => esc_html__( 'Color', 'gravityflow' ),
+				'type'          => 'text',
+				'default_value' => '#dd3333',
 			);
-			$field['settings']['step_highlight_color'] = $step_highlight_color;
+			$settings['step_highlight_color'] = $step_highlight_color;
+			$field['settings']                = $settings;
 
 			return $field;
 		}
@@ -2977,24 +3051,28 @@ PRIMARY KEY  (id)
 		 * The container will be displayed or hidden depending on the value of the step_highlight checkbox field.
 		 *
 		 * @since 1.9.2
+		 * @since 2.5.12    Added the $echo param.
 		 *
 		 * @param array $field The field properties.
+		 * @param bool  $echo  Whether to output the setting.
 		 *
 		 * @return string|void
 		 */
-		public function settings_step_highlight_container( $field ) {
+		public function settings_step_highlight_container( $field, $echo = true ) {
 			$step_settings = rgar( $field, 'settings' );
 
 			if ( empty( $step_settings ) ) {
 				return '';
 			}
 
-			$this->settings_checkbox( $step_settings['step_highlight'] );
+			$html = $this->settings_checkbox( $step_settings['step_highlight'], false );
 
-			$enabled = $this->get_setting( 'step_highlight', false );
-			$step_highlight_style = $enabled ? '' : 'style="display:none;"';
+			$enabled                     = $this->get_setting( 'step_highlight', false );
+			$step_highlight_style        = $enabled ? '' : 'style="display:none;"';
 			$step_highlight_type_setting = $this->get_setting( 'step_highlight_type', 'color' );
-			$step_highlight_color_style = ( $step_highlight_type_setting == 'color' ) ? '' : 'style="display:none;"';
+			$step_highlight_color_style  = ( $step_highlight_type_setting == 'color' ) ? '' : 'style="display:none;"';
+
+			ob_start();
 			?>
 			<div class="gravityflow-step-highlight-settings" <?php echo $step_highlight_style; ?> >
 				<div class="gravityflow-step-highlight-type-container">
@@ -3018,20 +3096,33 @@ PRIMARY KEY  (id)
 			</script>
 			<?php
 
-			return;
+			$html .= trim( ob_get_clean() );
+
+			if ( $echo ) {
+				echo $html;
+			}
+			return $html;
 		}
 
 		/**
 		 * Renders the tabs setting.
 		 *
+		 * @since 1.0
+		 * @since 2.5.12    Added the $echo param.
+		 *
 		 * @param array $tabs_field The field properties.
+		 * @param bool  $echo       Whether to output the setting.
+		 *
+		 * @return string
 		 */
-		public function settings_tabs( $tabs_field ) {
+		public function settings_tabs( $tabs_field, $echo = true ) {
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+			ob_start();
 			printf( '<div id="tabs-%s">', $tabs_field['name'] );
 			echo '<ul>';
 			foreach ( $tabs_field['tabs'] as $i => $tab ) {
 				$id = isset( $tab['id'] ) ? $tab['id'] : $tab['name'];
-				printf( '<li id="gaddon-setting-tab-%s">', $id );
+				printf( '<li id="%s-setting-tab-%s">', $settings_prefix, $id );
 				printf( '<a href="#tabs-%d"><span style="display:inline-block;width:10px;margin-right:5px"><i class="fa fa-check-square-o gravityflow-tab-checked" style="display:none;"></i><i class="fa fa-square-o gravityflow-tab-unchecked"></i></span>%s</a>', $i, $tab['label'] );
 				echo '</li>';
 			}
@@ -3041,13 +3132,13 @@ PRIMARY KEY  (id)
 				foreach ( $tab['fields'] as $field ) {
 					$func = array( $this, 'settings_' . $field['type'] );
 					if ( is_callable( $func ) ) {
-						$id = isset( $field['id'] ) ? $field['id'] : $field['name'];
+						$id      = isset( $field['id'] ) ? $field['id'] : $field['name'];
 						$tooltip = '';
 						if ( isset( $field['tooltip'] ) ) {
 							$tooltip_class = isset( $field['tooltip_class'] ) ? $field['tooltip_class'] : '';
-							$tooltip = gform_tooltip( $field['tooltip'], $tooltip_class, true );
+							$tooltip       = gform_tooltip( $field['tooltip'], $tooltip_class, true );
 						}
-						printf( '<div id="gaddon-setting-tab-field-%s" class="gravityflow-tab-field"><div class="gravityflow-tab-field-label">%s %s</div>', $id, $field['label'], $tooltip );
+						printf( '<div id="%s-setting-tab-field-%s" class="gravityflow-tab-field"><div class="gravityflow-tab-field-label">%s %s</div>', $settings_prefix, $id, $field['label'], $tooltip );
 						call_user_func( $func, $field );
 						echo '</div>';
 					}
@@ -3062,6 +3153,13 @@ PRIMARY KEY  (id)
 				})(jQuery);
 			</script>
 			<?php
+
+			$html = trim( ob_get_clean() );
+
+			if ( $echo ) {
+				echo $html;
+			}
+			return $html;
 		}
 
 		/**
@@ -3199,15 +3297,16 @@ PRIMARY KEY  (id)
 		 *
 		 * The text field will be hidden or displayed depending on the value of the checkbox.
 		 *
-		 * @since 1.5.1 Updated to use Gravity_Flow::settings_checkbox_and_container()
 		 * @since unknown
+		 * @since 1.5.1 Updated to use Gravity_Flow::settings_checkbox_and_container()
+		 * @since 2.6   Renamed method with legacy prefix to support Gravity Forms 2.5 Settings API.
 		 *
 		 * @param array $field The field properties.
 		 * @param bool  $echo  Indicates if the HTML should be echoed.
 		 *
 		 * @return string
 		 */
-		public function settings_checkbox_and_textarea( $field, $echo = true ) {
+		public function legacy_settings_checkbox_and_textarea( $field, $echo = true ) {
 			$field = $this->prepare_settings_checkbox_and_textarea( $field );
 
 			return $this->settings_checkbox_and_container( $field, $echo );
@@ -3244,15 +3343,19 @@ PRIMARY KEY  (id)
 		/**
 		 * Validate the combined checkbox and textarea setting.
 		 *
-		 * @param array $field    The field properties.
-		 * @param array $settings The settings to be potentially saved.
+		 * @since unknown
+		 * @since 2.6   Renamed method with legacy prefix to support Gravity Forms 2.5 Settings API.
+		 *
+		 * @param array $field  The field properties.
+		 * @param array $value  The setting value to be potentially saved.
 		 */
-		public function validate_checkbox_and_textarea_settings( $field, $settings ) {
+		public function legacy_validate_checkbox_and_textarea_settings( $field, $value ) {
+
 			$field = $this->prepare_settings_checkbox_and_textarea( $field );
 
 			$checkbox_field = $field['checkbox'];
 			$textarea_field = $field['settings']['textarea'];
-
+			$settings       = $this->get_posted_settings();
 			$this->validate_checkbox_settings( $checkbox_field, $settings );
 			$this->validate_textarea_settings( $textarea_field, $settings );
 		}
@@ -3263,11 +3366,12 @@ PRIMARY KEY  (id)
 		 * Validate the sub-settings are of appropriate type and required status.
 		 *
 		 * @since 1.9.2
+		 * @since 2.6   Renamed from validate_step_highlight_settings to support Gravity Forms 2.5
 		 *
 		 * @param array $field    The field properties.
 		 * @param array $settings The settings to be potentially saved.
 		 */
-		public function validate_step_highlight_settings( $field, $settings ) {
+		public function validate_highlight_settings( $field, $settings ) {
 			$field = $this->prepare_settings_step_highlight( $field );
 
 			$checkbox_field = $field['settings']['step_highlight'];
@@ -3298,56 +3402,105 @@ PRIMARY KEY  (id)
 		/**
 		 * Renders the HTML for the visual editor setting.
 		 *
+		 * @since 1.0
+		 * @since 2.5.12 Added the $echo param.
+		 *
 		 * @param array $field The field properties.
+		 * @param bool  $echo   Whether to output the setting.
+		 *
+		 * @return string
 		 */
-		public function settings_visual_editor( $field ) {
+		public function settings_visual_editor( $field, $echo = true ) {
 
 			$default_value = rgar( $field, 'value' ) ? rgar( $field, 'value' ) : rgar( $field, 'default_value' );
 			$value         = $this->get_setting( $field['name'], $default_value );
-			$id            = '_gaddon_setting_' . $field['name'];
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+			$id            = "_{$settings_prefix}_setting_" . $field['name'];
+
+			ob_start();
+
 			echo "<span class='mt-{$id}'></span>";
 			wp_editor( $value, $id, array(
 				'autop'        => false,
 				'editor_class' => 'merge-tag-support mt-wp_editor mt-manual_position mt-position-right',
 			) );
+
+			$html = trim( ob_get_clean() );
+
+			if ( $echo ) {
+				echo $html;
+			}
+			return $html;
 		}
 
 		/**
 		 * Renders the HTML for the routing setting.
+		 *
+		 * @since 1.0
+		 * @since 2.5.12 Added the $field and $echo params.
+		 *
+		 * @param array $field The field properties.
+		 * @param bool  $echo   Whether to output the setting.
+		 *
+		 * @return string
 		 */
-		public function settings_routing() {
-			echo '<div id="gform_routing_setting" class="gravityflow-routing" data-field_name="_gaddon_setting_routing" data-field_id="routing" ></div>';
-			$field['name'] = 'routing';
+		public function settings_routing( $field, $echo = true ) {
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+			$html            = '<div id="gform_routing_setting" class="gravityflow-routing" data-field_name="_' . $settings_prefix . '_setting_routing" data-field_id="routing" ></div>';
+			$field['name']   = 'routing';
 
-			$this->settings_hidden( $field );
+			$html .= $this->settings_hidden( $field, false );
+
+			if ( $echo ) {
+				echo $html;
+			}
+			return $html;
 		}
 
 		/**
 		 * Renders the HTML for the user routing setting.
 		 *
+		 * @since 1.0
+		 * @since 2.5.12 Added the $echo param.
+		 *
 		 * @param array $field The field properties.
+		 * @param bool  $echo  Whether to output the setting.
+		 *
+		 * @return string
 		 */
-		public function settings_user_routing( $field ) {
+		public function settings_user_routing( $field, $echo = true ) {
 			$name = $field['name'];
+
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+
 			$id = isset( $field['id'] ) ?  $field['id'] : 'gform_user_routing_setting_' . $name;
 
-			$html  = '<div class="gravityflow-user-routing" id="' . $id . '" data-field_name="_gaddon_setting_' . $name . 'user_routing" data-field_id="' . $name . '" ></div>';
+			$html  = '<div class="gravityflow-user-routing" id="' . $id . '" data-field_name="_' . $settings_prefix . '_setting_' . $name . 'user_routing" data-field_id="' . $name . '" ></div>';
 			$html .= ( $name === 'workflow_notification_routing' ) ? '' : rgar( $field, 'description' );
 			$html .= $this->settings_hidden( $field, false );
 
-			echo $html;
+			if ( $echo ) {
+				echo $html;
+			}
+			return $html;
 		}
 
 		/**
 		 * Renders the HTML for the step selector setting.
 		 *
+		 * @since 1.0
+		 * @since 2.5.12 Added the $echo param.
+		 *
 		 * @param array $field The field properties.
+		 * @param bool  $echo  Whether to output the setting.
+		 *
+		 * @return string
 		 */
-		public function settings_step_selector( $field ) {
-			$form = $this->get_current_form();
+		public function settings_step_selector( $field, $echo = true ) {
+			$form    = $this->get_current_form();
 			$feed_id = $this->get_current_feed_id();
 			$form_id = absint( $form['id'] );
-			$steps = $this->get_steps( $form_id );
+			$steps   = $this->get_steps( $form_id );
 
 			$step_choices   = array();
 			$step_choices[] = array( 'label' => esc_html__( 'Workflow Complete', 'gravityflow' ), 'value' => 'complete' );
@@ -3368,16 +3521,27 @@ PRIMARY KEY  (id)
 				'choices'       => $step_choices,
 			);
 
-			$this->settings_select( $step_selector_field );
+			$html = $this->settings_select( $step_selector_field, false );
+
+			if ( $echo ) {
+				echo $html;
+			}
+			return $html;
 		}
 
 		/**
 		 * Renders the HTML for the editable fields setting.
 		 *
+		 * @since 1.0
+		 * @since 2.5.12 Added the $echo param.
+		 *
 		 * @param array $field The field properties.
+		 * @param bool  $echo  Whether to output the setting.
+		 *
+		 * @return string
 		 */
-		public function settings_editable_fields( $field ) {
-			$form = $this->get_current_form();
+		public function settings_editable_fields( $field, $echo = true ) {
+			$form    = $this->get_current_form();
 			$choices = array();
 			if ( isset( $form['fields'] ) && is_array( $form['fields'] ) ) {
 				foreach ( $form['fields'] as $form_field ) {
@@ -3389,16 +3553,34 @@ PRIMARY KEY  (id)
 			}
 			$field['choices'] = $choices;
 
-			$this->settings_select( $field );
+			$html = $this->settings_select( $field, false );
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
 		}
 
 		/**
 		 * Displays the setting HTML.
 		 *
-		 * @param array $field The setting properties.
+		 * @since 1.0
+		 * @since 2.5.12 Added the $echo param.
+		 *
+		 * @param array $field The field properties.
+		 * @param bool  $echo  Whether to output the setting.
+		 *
+		 * @return mixed
 		 */
-		public function settings_html( $field ) {
-			echo $field['html'];
+		public function settings_html( $field, $echo = true ) {
+			$html = $field['html'];
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
 		}
 
 		/**
@@ -3471,11 +3653,11 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$html .= $this->settings_hidden( $hidden_field, false );
 
 			if ( rgar( $field, 'show_sorting_options' ) ) {
-				$html .= '<br />' . esc_html__( 'Sort by field') . '&nbsp;';
+				$html               .= '<br />' . esc_html__( 'Sort by field' ) . '&nbsp;';
 				$sort_field_choices = array();
-				foreach( $filter_settings as $filter_setting ) {
-				    if ( $filter_setting['key'] === '0' ) {
-				        continue;
+				foreach ( $filter_settings as $filter_setting ) {
+					if ( $filter_setting['key'] === '0' ) {
+						continue;
 					}
 
 					$filter_key = $filter_setting['key'] === 'entry_id' ? 'id' : $filter_setting['key'];
@@ -3484,33 +3666,33 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 						'value' => $filter_key,
 						'label' => $filter_setting['text'],
 					);
-                }
+				}
 
-                $sort_field = array(
-                        'name' => $field['name'] . 'sort_key',
-                        'default_value' => 'entry_id',
-                        'choices' => $sort_field_choices,
-                );
+				$sort_field = array(
+					'name'          => $field['name'] . 'sort_key',
+					'default_value' => 'entry_id',
+					'choices'       => $sort_field_choices,
+				);
 
-				$html .= $this->settings_select( $sort_field, false );
-				$html .= '&nbsp;';
+				$html            .= $this->settings_select( $sort_field, false );
+				$html            .= '&nbsp;';
 				$direction_field = array(
-				        'name' => $field['name'] . 'sort_direction',
-				        'default_value' => 'DESC',
-                        'choices' => array(
-                            array(
-                                'value' => 'ASC',
-                                'label' => 'ASC',
-                            ),
-	                        array(
-		                        'value' => 'DESC',
-		                        'label' => 'DESC',
-	                        ),
-                        )
-                );
+					'name'          => $field['name'] . 'sort_direction',
+					'default_value' => 'DESC',
+					'choices'       => array(
+						array(
+							'value' => 'ASC',
+							'label' => 'ASC',
+						),
+						array(
+							'value' => 'DESC',
+							'label' => 'DESC',
+						),
+					),
+				);
 
 				$html .= $this->settings_select( $direction_field, false );
-            }
+			}
 
 			if ( $echo ) {
 				echo $html;
@@ -3552,7 +3734,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			if ( empty( $step ) || ! $step->is_supported() ) {
 
-				return '<span class="validation_error"><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . $step_label . '  ' . esc_html__( '(missing)', 'gravityflow' ) . '</span>';
+				return '<span><i class="fa fa-exclamation-triangle gf_invalid"></i> ' . $step_label . '  ' . esc_html__( '(missing)', 'gravityflow' ) . '</span>';
 			}
 
 			$icon_url  = $step->get_icon_url();
@@ -4890,7 +5072,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			}
 
 			if ( ! GFCommon::is_valid_email( $value ) ) {
-				$this->set_field_error( array( 'name' => 'from_email' ), esc_html__( 'Please enter a valid email address.', 'gravityflow' ) );
+				$this->set_field_error( $field, esc_html__( 'Please enter a valid email address.', 'gravityflow' ) );
 				return;
 			}
 
@@ -4915,7 +5097,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			}
 
 			if ( $error_message ) {
-				$this->set_field_error( array( 'name' => 'from_email' ), $error_message );
+				$this->set_field_error( $field, $error_message );
 			}
 
 		}
@@ -5054,18 +5236,22 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */
 		public function settings_wp_dropdown_pages( $field, $echo = true ) {
 
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+
 			$args = array(
 				'selected'         => $this->get_setting( $field['name'] ),
-				'echo'             => $echo,
-				'name'             => '_gaddon_setting_' . esc_attr( $field['name'] ),
-				'class'            => 'gaddon-setting gaddon-select',
+				'echo'             => false,
+				'name'             => "_{$settings_prefix}_setting_" . esc_attr( $field['name'] ),
+				'class'            => "{$settings_prefix}-setting gaddon-select",
 				'show_option_none' => esc_html__( 'Select page', 'gravityflow' ),
 			);
 
 			$html = wp_dropdown_pages( $args );
 
+			if ( $echo ) {
+				echo $html;
+			}
 			return $html;
-
 		}
 
 		/**
@@ -5207,8 +5393,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		/**
 		 * Renders the submit page.
 		 *
-		 * @since 2.6 Added the $form_ids parameter.
-		 * @since unknown
+		 * @since  unknown
+		 * @since  2.6   Added the $form_ids parameter.
 		 *
 		 * @param bool       $admin_ui Whether to display the admin UI.
 		 * @param null|array $form_ids An array of form IDs.
@@ -5219,7 +5405,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			<div class="gravityflow_wrap gf_entry_wrap gravityflow_workflow_wrap gravityflow_workflow_submit">
 				<?php if ( $admin_ui ) :	?>
 					<h2 class="gf_admin_page_title">
-						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravity-flow-icon-cropped.svg" style="margin-right:5px;"/>
+						<img width="45" height="22" src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravity-flow-icon-black.svg" style="margin-right:5px;"/>
 
 						<span><?php esc_html_e( 'Submit a Workflow Form', 'gravityflow' ); ?></span>
 
@@ -5653,10 +5839,13 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * Renders the admin side toolbar.
 		 */
 		public function toolbar() {
+
+			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? true : false;
+
 			?>
 
-			<div id="gf_form_toolbar">
-				<ul id="gf_form_toolbar_links">
+			<div id="<?php echo $legacy ? 'gf_form_toolbar': 'gform-form-toolbar'; ?>">
+				<ul id="<?php echo $legacy ? 'gf_form_toolbar_links': 'gform-form-toolbar__menu'; ?>">
 
 					<?php
 
@@ -5982,6 +6171,26 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		}
 
 		/**
+		 * Target for the gform_form_settings_menu hook.
+		 * Updated workflow icon.
+		 *
+		 * @since 2.5.13
+		 *
+		 * @param array $menu_items The form settings menu items.
+		 *
+		 * @return array
+		 */
+		function filter_form_settings_menu( $menu_items ) {
+			foreach ( $menu_items as &$menu_item ) {
+				if ( $menu_item['name'] == 'gravityflow' ) {
+					$menu_item['icon'] = esc_url( gravity_flow()->get_base_url() ) . '/images/gravity-flow-icon-cropped_gray.svg';
+				}
+			}
+
+			return $menu_items;
+		}
+
+		/**
 		 * Add inbox notification count to Workflow Menu.
 		 *
 		 * @since 2.5.12
@@ -5995,7 +6204,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			 *
 			 * @param bool show Whether to show inbox count.
 			 */			
-			$show = apply_filters( 'gravityflow_inbox_count_display', true );
+			$show = apply_filters( 'gravityflow_inbox_count_display', false );
 			if ( ! $show ) {
 				return $menu;
 			}
@@ -6705,65 +6914,44 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @return bool
 		 */
 		public function maybe_auto_update( $update, $item ) {
-			if ( isset( $item->slug ) && $item->slug == 'gravityflow' ) {
-
-				$this->log_debug( __METHOD__ . '() - Starting auto-update for gravityflow.' );
-
-				$auto_update_disabled = self::is_auto_update_disabled();
-				$this->log_debug( __METHOD__ . '() - $auto_update_disabled: ' . var_export( $auto_update_disabled, true ) );
-
-				if ( $auto_update_disabled || version_compare( $this->_version, $item->new_version, '=>' ) ) {
-					$this->log_debug( __METHOD__ . '() - Aborting update.' );
-					return false;
-				}
-
-				$current_major = implode( '.', array_slice( preg_split( '/[.-]/', $this->_version ), 0, 1 ) );
-				$new_major     = implode( '.', array_slice( preg_split( '/[.-]/', $item->new_version ), 0, 1 ) );
-
-				$current_branch = implode( '.', array_slice( preg_split( '/[.-]/', $this->_version ), 0, 2 ) );
-				$new_branch     = implode( '.', array_slice( preg_split( '/[.-]/', $item->new_version ), 0, 2 ) );
-
-				if ( $current_major == $new_major && $current_branch == $new_branch ) {
-					$this->log_debug( __METHOD__ . '() - OK to update.' );
-					return true;
-				}
-
-				$this->log_debug( __METHOD__ . '() - Skipping - not current branch.' );
+			if ( ! isset( $item->slug ) || $item->slug !== 'gravityflow-gravityflow' || is_null( $update ) ) {
+				return $update;
 			}
 
-			return $update;
+			if ( $this->is_auto_update_disabled( $update ) ) {
+				$this->log_debug( __METHOD__ . '() - Aborting; auto updates disabled.' );
+
+				return false;
+			}
+
+
+			if ( ! $this->should_update_to_version( $item->new_version ) ) {
+				$this->log_debug( __METHOD__ . sprintf( '() - Aborting; auto update from %s to %s is not supported.', $this->_version, $item->new_version ) );
+
+				return false;
+			}
+
+			$this->log_debug( __METHOD__ . sprintf( '() - OK to update from %s to %s.', $this->_version, $item->new_version ) );
+
+			return true;
 		}
 
 		/**
 		 * Determines if background automatic updates are disabled.
 		 *
-		 * Currently WordPress won't ask Gravity Flow to update if background updates are disabled.
-		 * Let's double check anyway.
+		 * @since 2.6 Added the enabled param.
+		 *
+		 * @param bool|null $enabled Indicates if auto updates are enabled.
 		 *
 		 * @return bool
 		 */
-		public function is_auto_update_disabled() {
+		public function is_auto_update_disabled( $enabled = null ) {
+			global $wp_version;
 
-			// WordPress background updates are disabled if you don't want file changes.
-			if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
-				return true;
+			if ( is_null( $enabled ) || version_compare( $wp_version, '5.5', '<' ) ) {
+				$enabled = $this->get_app_setting( 'background_updates' );
 			}
 
-			if ( defined( 'WP_INSTALLING' ) ) {
-				return true;
-			}
-
-			$wp_updates_disabled = defined( 'AUTOMATIC_UPDATER_DISABLED' ) && AUTOMATIC_UPDATER_DISABLED;
-
-			$wp_updates_disabled = apply_filters( 'automatic_updater_disabled', $wp_updates_disabled );
-
-			if ( $wp_updates_disabled ) {
-				$this->log_debug( __METHOD__ . '() - Background updates are disabled in WordPress.' );
-				return true;
-			}
-
-			// Now check Gravity Flow Background Update Settings.
-			$enabled = $this->get_app_setting( 'background_updates' );
 			$this->log_debug( __METHOD__ . ' - $enabled: ' . var_export( $enabled, true ) );
 
 			$disabled = apply_filters( 'gravityflow_disable_auto_update', ! $enabled );
@@ -6775,6 +6963,37 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			}
 
 			return $disabled;
+		}
+
+		/**
+		 * Determines if the current version should update to the offered version.
+		 *
+		 * @since 2.6
+		 *
+		 * @param string $offered_ver The version number to be compared against the installed version number.
+		 *
+		 * @return bool
+		 */
+		public function should_update_to_version( $offered_ver ) {
+			if ( version_compare( $this->_version, $offered_ver, '>=' ) ) {
+				return false;
+			}
+
+			/**
+			 * If major version updates are allowed we don't need to compare the branch version numbers.
+			 *
+			 * @since 2.6
+			 *
+			 * @param bool $allowed Indicates if Gravity Flow should update to major versions automatically. Default is true.
+			 */
+			if ( apply_filters( 'gravityflow_major_version_auto_updates_allowed', true ) ) {
+				return true;
+			}
+
+			$current_branch = implode( '.', array_slice( preg_split( '/[.-]/', $this->_version ), 0, 2 ) );
+			$new_branch     = implode( '.', array_slice( preg_split( '/[.-]/', $offered_ver ), 0, 2 ) );
+
+			return $current_branch == $new_branch;
 		}
 
 		/**
@@ -8194,14 +8413,14 @@ AND m.meta_value='queued'";
 		/**
 		 * Renders the display fields setting.
 		 */
-		public function settings_display_fields() {
+		public function settings_display_fields( $field, $echo = true ) {
 			$mode_field = array(
-				'name'     => 'display_fields_mode',
-				'label'    => '',
-				'type'     => 'select',
+				'name'          => 'display_fields_mode',
+				'label'         => '',
+				'type'          => 'select',
 				'default_value' => 'all_fields',
-				'onchange' => 'jQuery(this).siblings(".gravityflow_display_fields_selected_container").toggle(this.value != "all_fields");',
-				'choices' => array(
+				'onchange'      => 'jQuery(this).parent().parent().find(".gravityflow_display_fields_selected_container").toggle(this.value != "all_fields");',
+				'choices'       => array(
 					array(
 						'label' => __( 'Display all fields', 'gravityflow' ),
 						'value' => 'all_fields',
@@ -8230,8 +8449,11 @@ AND m.meta_value='queued'";
 				if ( in_array( $field->type, array( 'page', 'section', 'captcha' ) ) ) {
 					continue;
 				}
-				$fields_as_choices[] = array( 'label' => $field->get_field_label( false, null ), 'value' => $field->id );
-				$has_product_field = GFCommon::is_product_field( $field->type ) ? true : $has_product_field;
+				$fields_as_choices[] = array(
+					'label' => $field->get_field_label( false, null ),
+					'value' => $field->id,
+				);
+				$has_product_field   = GFCommon::is_product_field( $field->type ) ? true : $has_product_field;
 			}
 
 			/**
@@ -8243,7 +8465,7 @@ AND m.meta_value='queued'";
 			 *
 			 * @since 2.0.1
 			 */
-			$feed = $this->get_current_feed();
+			$feed              = $this->get_current_feed();
 			$fields_as_choices = apply_filters( 'gravityflow_display_field_choices', $fields_as_choices, $form, $feed );
 
 			$mode_value = $this->get_setting( 'display_fields_mode', 'all_fields' );
@@ -8253,32 +8475,39 @@ AND m.meta_value='queued'";
 				'label'    => __( 'Except', 'gravityflow' ),
 				'type'     => 'select',
 				'multiple' => 'multiple',
-				'class' => 'gravityflow-multiselect-ui',
-				'choices' => $fields_as_choices,
+				'class'    => 'gravityflow-multiselect-ui',
+				'choices'  => $fields_as_choices,
 			);
-			$this->settings_select( $mode_field );
+
+			$html  = $this->settings_select( $mode_field, false );
 			$style = $mode_value == 'all_fields' ? 'style="display:none;"' : '';
-			echo '<div class="gravityflow_display_fields_selected_container" ' . $style . '>';
-			$this->settings_select( $multiselect_field );
-			echo '</div>';
+			$html  .= '<div class="gravityflow_display_fields_selected_container" ' . $style . '>';
+			$html  .= $this->settings_select( $multiselect_field, false );
+			$html  .= '</div>';
 
 			if ( $has_product_field ) {
-
 				$display_summary_field = array(
-					'name' => 'display_order_summary',
-					'type' => 'checkbox',
+					'name'    => 'display_order_summary',
+					'type'    => 'checkbox',
 					'choices' => array(
 						array(
-							'label' => esc_html__( 'Order Summary', 'gravityflow' ),
-							'name' => 'display_order_summary',
+							'label'         => esc_html__( 'Order Summary', 'gravityflow' ),
+							'name'          => 'display_order_summary',
 							'default_value' => '1',
 						),
 					),
 				);
-				echo '<div style="margin-top:5px;">';
-				$this->settings_checkbox( $display_summary_field );
-				echo '</div>';
+
+				$html .= '<div style="margin-top:5px;">';
+				$html .= $this->settings_checkbox( $display_summary_field, false );
+				$html .= '</div>';
 			}
+
+			if ( $echo ) {
+				echo $html;
+			}
+
+			return $html;
 		}
 
 		/**
@@ -8295,7 +8524,16 @@ AND m.meta_value='queued'";
 			$entry_meta  = array_merge( $this->get_feed_condition_entry_meta(), $this->get_feed_condition_entry_properties() );
 			$find        = 'var feedCondition';
 			$replacement = sprintf( 'var entry_meta = %s; %s', json_encode( $entry_meta ), $find );
-			$html        = str_replace( $find, $replacement, parent::settings_feed_condition( $field, false ) );
+
+			if ( $this->is_gravityforms_supported( '2.5-beta-1' ) ) {
+				$renderer  = $this->get_settings_renderer();
+				$field     = new \Rocketgenius\Gravity_Forms\Settings\Fields\Conditional_Logic( $field, $renderer );
+				$base_html = $field->markup();
+			} else {
+				$base_html = parent::settings_feed_condition( $field, false );
+			}
+
+			$html = str_replace( $find, $replacement, $base_html );
 
 			if ( $echo ) {
 				echo $html;
@@ -8922,13 +9160,16 @@ AND m.meta_value='queued'";
 		 * @param string $message     The message to be displayed above the page title.
 		 */
 		public function app_tab_page_header( $tabs, $current_tab, $title, $message = '' ) {
+			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? true : false;
 
-			// Print admin styles.
-			wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
+			if ( $legacy ) {
 
-			?>
+				// Print admin styles.
+				wp_print_styles( array( 'jquery-ui-styles', 'gform_admin' ) );
 
-			<div class="gravityflow_wrap <?php echo GFCommon::get_browser_class() ?>">
+				?>
+
+				<div class="gravityflow_wrap <?php echo GFCommon::get_browser_class() ?>">
 
 				<?php if ( $message ) { ?>
 					<div id="message" class="updated"><p><?php echo $message; ?></p></div>
@@ -8937,29 +9178,97 @@ AND m.meta_value='queued'";
 				<h2><?php echo esc_html( $title ) ?></h2>
 
 				<div id="gform_tab_group" class="gform_tab_group vertical_tabs">
-					<ul id="gform_tabs" class="gform_tabs">
-						<?php
-						foreach ( $tabs as $tab ) {
-							if ( isset( $tab['permission'] ) && ! $this->current_user_can_any( $tab['permission'] ) ) {
-								continue;
-							}
-							$label = isset( $tab['label'] ) ? $tab['label'] : $tab['name'];
-							?>
-							<li <?php echo urlencode( $current_tab ) == $tab['name'] ? "class='active'" : '' ?>>
-								<a href="<?php echo esc_url( add_query_arg( array(
-									'page' => 'gravityflow_settings',
-									'view' => $tab['name'],
-								), admin_url( 'admin.php' ) ) ); ?>"><?php echo esc_html( $label ) ?></a>
-							</li>
-							<?php
+				<ul id="gform_tabs" class="gform_tabs">
+					<?php
+					foreach ( $tabs as $tab ) {
+						if ( isset( $tab['permission'] ) && ! $this->current_user_can_any( $tab['permission'] ) ) {
+							continue;
 						}
+						$label = isset( $tab['label'] ) ? $tab['label'] : $tab['name'];
 						?>
-					</ul>
+						<li <?php echo urlencode( $current_tab ) == $tab['name'] ? "class='active'" : '' ?>>
+							<a href="<?php echo esc_url( add_query_arg( array(
+								'page' => 'gravityflow_settings',
+								'view' => $tab['name'],
+							), admin_url( 'admin.php' ) ) ); ?>"><?php echo esc_html( $label ) ?></a>
+						</li>
+						<?php
+					}
+					?>
+				</ul>
 
-					<div id="gform_tab_container" class="gform_tab_container">
-						<div class="gform_tab_content" id="tab_<?php esc_attr_e( $current_tab ); ?>">
+				<div id="gform_tab_container" class="gform_tab_container">
+				<div class="gform_tab_content" id="tab_<?php esc_attr_e( $current_tab ); ?>">
 
-		<?php
+				<?php
+				return;
+			}
+
+			wp_print_styles( array( 'jquery-ui-styles', 'gform_admin', 'gform_settings' ) );
+
+			?>
+
+		<div class="wrap <?php echo GFCommon::get_browser_class() ?>">
+
+			<header class="<?php echo esc_attr( $this->get_slug() ); ?>-app-settings-header">
+				<div class="<?php echo esc_attr( $this->get_slug() ); ?>-app-settings__wrapper">
+					<img width="300"
+					     src="<?php echo esc_url( gravity_flow()->get_base_url() ); ?>/images/gravity-flow-logo.svg"/>
+					<div class="gform-settings-header_buttons">
+						<?php echo apply_filters( 'gform_settings_header_buttons', '' ); ?>
+					</div>
+				</div>
+			</header>
+
+			<?php if ( $message ) { ?>
+				<div id="message" class="updated"><p><?php echo $message; ?></p></div>
+			<?php } ?>
+
+			<div class="gform-settings__wrapper">
+
+			<nav class="gform-settings__navigation">
+				<?php
+				foreach ( $tabs as $tab ) {
+
+					// Check for capabilities.
+					if ( isset( $tab['permission'] ) && ! $this->current_user_can_any( $tab['permission'] ) ) {
+						continue;
+					}
+
+					// Prepare tab label, URL.
+					$label = isset( $tab['label'] ) ? $tab['label'] : $tab['name'];
+					$url   = add_query_arg( array(
+						'page' => 'gravityflow_settings',
+						'view' => $tab['name'],
+					), admin_url( 'admin.php' ) );
+
+					// Get tab icon.
+					$icon_markup = '<i class="dashicons dashicons-admin-generic"></i>';
+					if ( strpos( rgar( $tab, 'icon' ), '<svg' ) !== false ) {
+						$icon_markup = $tab['icon'];
+					} else if ( filter_var( rgar( $tab, 'icon' ), FILTER_VALIDATE_URL ) ) {
+						$icon_markup = sprintf( '<img src="%s" />', esc_attr( $tab['icon'] ) );
+					} else if ( strpos( rgar( $tab, 'icon' ), 'fa' ) === 0 ) {
+						$icon_markup = sprintf( '<i class="fa %s"></i>', esc_attr( $tab['icon'] ) );
+					} else if ( strpos( rgar( $tab, 'icon' ), 'dashicons' ) === 0 ) {
+						$icon_markup = sprintf( '<i class="dashicons %s"></i>', esc_attr( $tab['icon'] ) );
+					}
+
+					printf(
+						'<a href="%s"%s><span class="icon">%s</span> <span class="label">%s</span></a>',
+						esc_url( $url ),
+						$current_tab === $tab['name'] ? ' class="active"' : '',
+						$icon_markup,
+						esc_html( $label )
+					);
+				}
+				?>
+			</nav>
+
+		<div class="gform-settings__content" id="tab_<?php echo esc_attr( $current_tab ); ?>">
+
+			<?php
+
 		}
 
 		/**
@@ -8999,12 +9308,14 @@ AND m.meta_value='queued'";
 				return;
 			}
 
-			$is_saving_license_key = isset( $_POST['_gaddon_setting_license_key'] ) && isset( $_POST['_gravityflow_save_settings_nonce'] );
+			$settings_prefix = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? 'gaddon' : 'gform';
+
+			$is_saving_license_key = isset( $_POST[ "_{$settings_prefix}_setting_license_key" ] ) && isset( $_POST['_gravityflow_save_settings_nonce'] );
 
 			$license_details = false;
 
 			if ( $is_saving_license_key ) {
-				$posted_license_key = sanitize_text_field( rgpost( '_gaddon_setting_license_key' ) );
+				$posted_license_key = sanitize_text_field( rgpost( "_{$settings_prefix}_setting_license_key" ) );
 				if ( wp_verify_nonce( $_POST['_gravityflow_save_settings_nonce'], 'gravityflow_save_settings' ) ) {
 					$license_details = $posted_license_key ? $this->activate_license( $posted_license_key ) : false;
 				}

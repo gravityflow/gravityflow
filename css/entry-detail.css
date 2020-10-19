@@ -2,6 +2,7 @@
     text-align:right;
 }
 
+
 .gravityflow-hidden-field {
     visibility: hidden;
     position: absolute;
@@ -336,7 +337,9 @@ table.entry-detail-view td.detail-view{
 }
 
 .gfield.gravityflow-display-field label.gfield_label,
-.gfield.gravityflow-editable-field:not(.green-background):not(.gfield_error) label.gfield_label{
+.gfield.gravityflow-display-field legend.gfield_label,
+.gfield.gravityflow-editable-field:not(.green-background):not(.gfield_error) label.gfield_label,
+.gfield.gravityflow-editable-field:not(.green-background):not(.gfield_error) legend.gfield_label{
     background-color: #EAF2FA;
     border-top: 1px solid #DFDFDF;
     border-bottom: 1px solid #FFF;
@@ -344,6 +347,16 @@ table.entry-detail-view td.detail-view{
     padding: 7px;
     width:100%;
     margin:0;
+}
+
+.gfield.gravityflow-editable-field legend.gfield_label {
+    float:left;
+    margin-bottom: .5em;
+    width:100%;
+}
+
+.gfield.gravityflow-editable-field legend.gfield_label + div {
+    clear:both;
 }
 
 .gravityflow-editable-field.gfield.green-background label.gfield_label{
@@ -440,4 +453,8 @@ table#gravityflow-inbox tbody tr{
     .rtl table.entry-detail-view th, .rtl table.entry-detail-notes th {
         text-align: right;
     }
+}
+
+th > #gentry_display_empty_fields + label[for='gentry_display_empty_fields'] {
+    font-size: 12px;
 }

@@ -13,26 +13,26 @@
     width:190px;
 }
 
-.mt-_gform_setting_workflow_notification_message,
-.gravityflow-tab-field span[class^="mt-_gform_setting_"] {
+.mt-_gaddon_setting_workflow_notification_message,
+.gravityflow-tab-field span[class^="mt-_gaddon_setting_"] {
     float: right;
     position: relative;
     right: 15px;
     top: 90px;
 }
 
-.rtl .mt-_gform_setting_workflow_notification_message,
-.rtl .gravityflow-tab-field span[class^="mt-_gform_setting_"] {
+.rtl .mt-_gaddon_setting_workflow_notification_message,
+.rtl .gravityflow-tab-field span[class^="mt-_gaddon_setting_"] {
     float: left;
     left: 15px;
 }
 
-#wp-_gform_setting_workflow_notification_message-wrap,
+#wp-_gaddon_setting_workflow_notification_message-wrap,
 .gravityflow-tab-field div.wp-editor-wrap {
     margin-right: 15px;
 }
 
-.rtl #wp-_gform_setting_workflow_notification_message-wrap,
+.rtl #wp-_gaddon_setting_workflow_notification_message-wrap,
 .rtl .gravityflow-tab-field div.wp-editor-wrap {
     margin-left: 15px;
     margin-right: 0;
@@ -59,22 +59,27 @@ table.gforms_form_settings th{
     padding-left: 0!important;
 }
 
-.gravityflow_sub_setting{
+table.gforms_form_settings tr.gravityflow_sub_setting th{
     border-left: 1px dashed #dfdfdf;
     padding-left: 10px!important;
+}
+
+table.gforms_form_settings tr.gravityflow_sub_setting td{
     padding-left: 10px;
 }
 
-
-.rtl .gforms_form_settings{
+.rtl table.gforms_form_settings th{
     border-right: 0;
     padding-right: 0!important;
 }
 
-.rtl .gravityflow_sub_setting{
+.rtl table.gforms_form_settings tr.gravityflow_sub_setting th{
     border-right: 1px dashed #dfdfdf;
     padding-right: 10px!important;
     padding-left: 0 !important;
+}
+
+.rtl table.gforms_form_settings tr.gravityflow_sub_setting td{
     padding-right: 10px;
     padding-left: 0;
 }
@@ -122,20 +127,27 @@ table.gform-routings tr.gform-routing-row td .repeater-buttons{
 	min-width: 200px;
 }
 
+#gaddon-setting-row-step_type td label{
+	display:inline-block;
+    margin-bottom: 5px;
+    color:black;
+    height:85px;
+}
+
 .gravityflow-schedule-type-container{
     margin:5px 0 5px 0;
 }
 
-#gform_setting_step_type input:checked + label > span{
+tr#gaddon-setting-row-step_type input:checked + label > span{
     -webkit-filter: none;
     -moz-filter: none;
     filter: none;
 }
-#gform_setting_step_type input:checked + label {
+tr#gaddon-setting-row-step_type input:checked + label {
     background-color:white;
     border: 1px solid #CCCCCC;
 }
-#gform_setting_step_type label > span {
+tr#gaddon-setting-row-step_type label > span {
     background-repeat:no-repeat;
     display:inline-block;
     -webkit-transition: all 100ms ease-in;
@@ -150,42 +162,37 @@ table.gform-routings tr.gform-routing-row td .repeater-buttons{
     cursor:default!important;
 }
 
-#gform_setting_step_type input:not([disabled]):not([checked]) + label > span:hover{
+tr#gaddon-setting-row-step_type input:not([disabled]):not([checked]) + label > span:hover{
     -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
     -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
     filter: brightness(1.2) grayscale(.5) opacity(.9);
 }
 
-#gform_setting_step_type input{
+tr#gaddon-setting-row-step_type input{
     display:none;
 }
-#gform_setting_step_type div.gform-setting-radio label > span{
+tr#gaddon-setting-row-step_type label > span{
     padding-top:5px;
     width:130px;
     height:65px;
 }
 
-#gform_setting_step_type label > span > img{
+tr#gaddon-setting-row-step_type label > span > img{
     height:32px;
     margin:5px;
     vertical-align:middle;
 }
 
-#gform_setting_step_type div.gform-setting-radio label{
+tr#gaddon-setting-row-step_type label{
     border:1px solid #EEEEEE;
     background-color:#F9F9F9;
-    display:inline-block;
-    margin-bottom: 5px;
-    color:black;
-    height:85px;
 }
 
-#gform_setting_step_type .gform-setting-radio{
+tr#gaddon-setting-row-step_type .gaddon-setting-radio{
     text-align:center;
-    display:inline-block;
 }
 
-#gform_setting_step_type label > span > i {
+tr#gaddon-setting-row-step_type label > span > i {
     height:32px;
     display:inline-block;
     font-size:2.5em;
@@ -232,14 +239,4 @@ table.gform-routings tr.gform-routing-row td .repeater-buttons{
 
 #instructionsContainer{
     margin: 10px 0 10px 0;
-}
-
- .gform-settings__wrapper .wp-picker-container .wp-color-result.button {
-    padding: 0 0 0 30px;
-    border: 1px solid silver;
-    border-radius: 3px;
-}
-
-#schedule_date {
-    width: 120px !important;
 }
