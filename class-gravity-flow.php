@@ -1678,6 +1678,10 @@ PRIMARY KEY  (id)
 				),
 			);
 
+			if ( version_compare( GFForms::$version, '2.5-dev-1', '>=' ) ) {
+                $this->save_feed_validation_callback( $settings['fields'], '' );
+            }
+
 			return $settings;
 		}
 
