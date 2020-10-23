@@ -1131,6 +1131,8 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	public function save_entry( $form, &$entry, $editable_fields ) {
 	    global $wpdb;
 
+		remove_action( 'gform_after_update_entry', array( GV_Entry_Revisions::get_instance(), 'gform_after_update_entry' ), -100 );
+		
 		$this->log_debug( __METHOD__ . '(): Saving entry.' );
 
 		$is_new_lead = $entry == null;
