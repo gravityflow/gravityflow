@@ -4933,6 +4933,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				);
 			}
 
+			$settings[] = $this->get_app_settings_fields_features();
 			$settings[] = $this->get_app_settings_fields_emails();
 			$settings[] = $this->get_app_settings_fields_pages();
 			$settings[] = $this->get_app_settings_fields_security();
@@ -4956,6 +4957,29 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			return $settings;
 
+		}
+
+		public function get_app_settings_fields_features() {
+
+			$settings = array(
+				'title'  => esc_html__( 'Features', 'gravityflow' ),
+				'fields' => array(
+					array(
+						'name'          => 'workflow_inbox_count',
+						'label'         => esc_html__( 'Workflow Inbox Count', 'gravityflow' ),
+						'tooltip' => __( 'Set this to ON to display the inbox count next to the Workflow menu. Warning: For many inbox entries, enabling this may affect the site performance.' , 'gravityflow' ),
+						'type'          => 'radio',
+						'horizontal' => true,
+						'default_value' => false,
+						'choices' => array(
+							array( 'label' => __( 'On', 'gravityflow' ), 'value' => true ),
+							array( 'label' => __( 'Off', 'gravityflow' ), 'value' => false ),
+						),
+					),
+				),
+			);
+
+			return $settings;
 		}
 
 		/**
@@ -6199,13 +6223,15 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */		
 		public function show_inbox_count( $menu ) {
 
+			$settings = $this->get_app_settings();
+
 			/**
 			 * Allows the gravityflow inbox count display to be enabled or disabled
 			 *
 			 * @param bool show Whether to show inbox count.
 			 */			
 			$show = apply_filters( 'gravityflow_inbox_count_display', false );
-			if ( ! $show ) {
+			if ( ! $show && ! $settings['workflow_inbox_count'] ) {
 				return $menu;
 			}
 
