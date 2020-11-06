@@ -8552,6 +8552,13 @@ AND m.meta_value='queued'";
 		public function get_feed_condition_entry_meta() {
 			$step_id    = absint( rgget( 'fid' ) );
 			$form_id    = absint( rgget( 'id' ) );
+			
+			if ( isset( $_POST['workflow_parent_entry_id'] ) ) {
+				$parent_entry_id = absint( rgpost( 'workflow_parent_entry_id' ) );
+				$parent_entry    = GFAPI::get_entry( $parent_entry_id );
+				$form_id = $parent_entry['form_id'];
+			}
+			
 			$entry_meta = GFFormsModel::get_entry_meta( $form_id );
 
 			unset( $entry_meta['workflow_final_status'], $entry_meta['workflow_step'], $entry_meta[ 'workflow_step_status_' . $step_id ] );
