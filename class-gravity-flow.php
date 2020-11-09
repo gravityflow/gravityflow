@@ -8378,7 +8378,7 @@ AND m.meta_value='queued'";
 		 * @param array $form  The form for this entry.
 		 */
 		public function action_gform_post_add_entry( $entry, $form ) {
-			if ( is_wp_error( $entry ) || ! empty( $entry['partial_entry_id'] ) ) {
+			if ( is_wp_error( $entry ) || ! empty( $entry['partial_entry_id'] ) || rgar( $entry, 'status' ) !== 'active' ) {
 				return;
 			}
 

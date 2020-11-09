@@ -6,3 +6,4 @@
 - Fixed an issue with the print button on workflow details page.
 - Fixed an issue with the print button on front-end pages.
 - Fix JS errors with multiple status shortcodes on the same page.
+- Fixed an issue where workflow steps are processed for entry revisions created by GravityView Entry Revisions.
