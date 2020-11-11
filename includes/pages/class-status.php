@@ -1138,7 +1138,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		 * @param int    $entry_id    The Entry ID.
 		 * @param array  $item        The entry array.
 		 */
-		return apply_filters( 'gravityflow_entry_url_status_table', $value, $entry['form_id'], $entry['id'], $entry );
+		return apply_filters( 'gravityflow_entry_url_status_table', $entry_url, $entry['form_id'], $entry['id'], $entry );
 	}
 
 	/**
