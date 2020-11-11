@@ -2,6 +2,5 @@
 - Added filter 'gravityflow_inbox_count_display' for customization of the Gravity Flow Inbox. The Inbox count value can be disabled using it.
 - Added filter gravityflow_sort_columns_status_table to allow custom columns defined in gravityflow_field_value_status_table to be sorted
 - Updated Inbox count to be disabled by default, can be enabled with the filter 'gravityflow_inbox_count_display'.
-- Fixed an issue with the print button on workflow details page.
-- Fixed an issue with the print button on front-end pages.
+- Fixed an issue with the print button on workflow details page and on front-end pages.
 - Fix JS errors with multiple status shortcodes on the same page.
