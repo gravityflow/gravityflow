@@ -1127,7 +1127,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	 * @return string
 	 */
 	public function get_entry_url( $entry ) {
-		return sprintf( '%s&id=%d&lid=%d', $this->detail_base_url, $entry['form_id'], $entry['id'] );
+		$entry_url = sprintf( '%s&id=%d&lid=%d', $this->detail_base_url, $entry['form_id'], $entry['id'] );
+		/**
+		 * Allows the entry url to be filtered in the status table.
+		 *
+		 * @since 2.6.1
+		 *
+		 * @param string $entry_url   The url to be linked to.
+		 * @param int    $form_id     The Form ID.
+		 * @param int    $entry_id    The Entry ID.
+		 * @param array  $item        The entry array.
+		 */
+		return apply_filters( 'gravityflow_entry_url_status_table', $value, $entry['form_id'], $entry['id'], $entry );
 	}
 
 	/**
