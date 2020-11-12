@@ -19,6 +19,7 @@
     position: relative;
     right: 15px;
     top: 90px;
+    z-index: 1;
 }
 
 .rtl .mt-_gform_setting_workflow_notification_message,
