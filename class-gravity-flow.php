@@ -8528,7 +8528,7 @@ AND m.meta_value='queued'";
 
 			if ( $this->is_gravityforms_supported( '2.5-beta-1' ) ) {
 				$renderer  = $this->get_settings_renderer();
-				$field     = new \Rocketgenius\Gravity_Forms\Settings\Fields\Conditional_Logic( $field, $renderer );
+				$field     = new \Gravity_Forms\Gravity_Forms\Settings\Fields\Conditional_Logic( $field, $renderer );
 				$base_html = $field->markup();
 			} else {
 				$base_html = parent::settings_feed_condition( $field, false );
