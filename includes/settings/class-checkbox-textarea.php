@@ -1,6 +1,6 @@
 <?php
 
-namespace Gravity_Flow\Settings\Fields;
+namespace Gravity_Flow\Gravity_Flow\Settings\Fields;
 
 use Gravity_Forms\Gravity_Forms\Settings\Fields;
 
@@ -154,4 +154,4 @@ class Checkbox_And_Textarea extends \Gravity_Forms\Gravity_Forms\Settings\Fields
 
 }
 
-Fields::register( 'checkbox_and_textarea', '\Gravity_Flow\Settings\Fields\Checkbox_and_Textarea' );
+Fields::register( 'checkbox_and_textarea', '\Gravity_Flow\Gravity_Flow\Settings\Fields\Checkbox_and_Textarea' );
