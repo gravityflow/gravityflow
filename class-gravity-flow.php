@@ -8710,9 +8710,8 @@ AND m.meta_value='queued'";
 				return true;
 			}
 
-			$form_id         = $form['id'];
-			$step_id         = $this->get_current_feed_id();			
-			$entry_meta      = array_merge( $this->get_feed_condition_entry_meta( $form_id, $step_id ), $this->get_feed_condition_entry_properties() );
+			$form_id         = $form['id'];			
+			$entry_meta      = array_merge( $this->get_feed_condition_entry_meta( $form_id ), $this->get_feed_condition_entry_properties() );
 			$entry_meta_keys = array_keys( $entry_meta );
 			$match_count     = 0;
 
