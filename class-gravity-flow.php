@@ -8521,7 +8521,9 @@ AND m.meta_value='queued'";
 		 * @return string
 		 */
 		public function settings_feed_condition( $field, $echo = true ) {
-			$entry_meta  = array_merge( $this->get_feed_condition_entry_meta(), $this->get_feed_condition_entry_properties() );
+			$form_id     = absint( rgget( 'id' ) );
+			$step_id     = $this->get_current_feed_id();
+			$entry_meta  = array_merge( $this->get_feed_condition_entry_meta( $form_id, $step_id ), $this->get_feed_condition_entry_properties() );
 			$find        = 'var feedCondition';
 			$replacement = sprintf( 'var entry_meta = %s; %s', json_encode( $entry_meta ), $find );
 
@@ -8545,20 +8547,14 @@ AND m.meta_value='queued'";
 		/**
 		 * Get the entry meta for use with the feed_condition setting.
 		 *
-		 * @since 1.7.1-dev
+		 * @since 2.6
+		 *
+		 * @param int $form_id The form ID.
+		 * @param int $step_id The step ID.		 
 		 *
 		 * @return array
 		 */
-		public function get_feed_condition_entry_meta() {
-			$step_id    = absint( rgget( 'fid' ) );
-			$form_id    = absint( rgget( 'id' ) );
-			
-			if ( isset( $_POST['workflow_parent_entry_id'] ) ) {
-				$parent_entry_id = absint( rgpost( 'workflow_parent_entry_id' ) );
-				$parent_entry    = GFAPI::get_entry( $parent_entry_id );
-				$form_id = $parent_entry['form_id'];
-			}
-			
+		public function get_feed_condition_entry_meta( $form_id, $step_id ) {
 			$entry_meta = GFFormsModel::get_entry_meta( $form_id );
 
 			unset( $entry_meta['workflow_final_status'], $entry_meta['workflow_step'], $entry_meta[ 'workflow_step_status_' . $step_id ] );
@@ -8713,7 +8709,9 @@ AND m.meta_value='queued'";
 				return true;
 			}
 
-			$entry_meta      = array_merge( $this->get_feed_condition_entry_meta(), $this->get_feed_condition_entry_properties() );
+			$form_id         = $form['id'];
+			$step_id         = $this->get_current_feed_id();			
+			$entry_meta      = array_merge( $this->get_feed_condition_entry_meta( $form_id, $step_id ), $this->get_feed_condition_entry_properties() );
 			$entry_meta_keys = array_keys( $entry_meta );
 			$match_count     = 0;
 
