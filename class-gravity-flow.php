@@ -8547,7 +8547,8 @@ AND m.meta_value='queued'";
 		/**
 		 * Get the entry meta for use with the feed_condition setting.
 		 *
-		 * @since 2.6
+		 * @since 1.7.1-dev
+		 * @since 2.6.1     Added parameters for form_id and step_id.
 		 *
 		 * @param int $form_id The form ID.
 		 * @param int $step_id The step ID.		 
