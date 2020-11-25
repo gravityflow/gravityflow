@@ -8555,7 +8555,7 @@ AND m.meta_value='queued'";
 		 *
 		 * @return array
 		 */
-		public function get_feed_condition_entry_meta( $form_id, $step_id ) {
+		public function get_feed_condition_entry_meta( $form_id = 0, $step_id = 0 ) {
 			$entry_meta = GFFormsModel::get_entry_meta( $form_id );
 
 			unset( $entry_meta['workflow_final_status'], $entry_meta['workflow_step'], $entry_meta[ 'workflow_step_status_' . $step_id ] );
