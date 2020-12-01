@@ -1679,6 +1679,7 @@ PRIMARY KEY  (id)
 			);
 
 			add_action( 'gform_post_save_feed_settings', array( $this, 'post_save_feed_settings'), 10, 4 );
+			do_action( 'gform_post_save_feed_settings', $result, $form_id, $settings, $this );
 			
 			return $settings;
 		}
@@ -1772,6 +1773,9 @@ PRIMARY KEY  (id)
 		 * @param GFAddOn $addon 	The current instance of the GFAddOn object.
 		 */		
 		public function post_save_feed_settings( $feed_id, $form_id, $settings, $addon ) {
+
+			if ( get_class( $addon ) != 'Gravity_Flow' )
+				return;
 			
 			$current_step_id = $this->get_current_feed_id();
 			$entry_count = 0;
