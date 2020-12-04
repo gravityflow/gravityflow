@@ -263,6 +263,8 @@ if ( class_exists( 'GFForms' ) ) {
 			}
 
 			add_action( 'admin_notices', array( $this, 'action_admin_notices' ) );
+			
+			add_action( 'gform_post_save_feed_settings', array( $this, 'post_save_feed_settings'), 10, 4 );
 		}
 
 		/**
@@ -1667,7 +1669,6 @@ PRIMARY KEY  (id)
 					array(
 						'id'       => 'save_button',
 						'type'     => 'save',
-						'validation_callback' => array( $this, 'save_feed_validation_callback' ),
 						'name' => 'save_button',
 						'value'    => __( 'Update Step Settings', 'gravityflow' ),
 						'messages' => array(
@@ -1678,7 +1679,6 @@ PRIMARY KEY  (id)
 				),
 			);
 
-			add_action( 'gform_post_save_feed_settings', array( $this, 'post_save_feed_settings'), 10, 4 );
 			do_action( 'gform_post_save_feed_settings', $result, $form_id, $settings, $this );
 			
 			return $settings;
