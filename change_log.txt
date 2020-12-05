@@ -1,11 +1,12 @@
 - Added filter 'gravityflow_inbox_count_display' for customization of the Gravity Flow Inbox. The Inbox count value can be disabled using it.
 - Added filter gravityflow_sort_columns_status_table to allow custom columns defined in gravityflow_field_value_status_table to be sorted
+- Added filter gravityflow_sort_criteria_status to allow initial sort order on status page load to be defined.
 - Updated Inbox count to be disabled by default, can be enabled with the filter 'gravityflow_inbox_count_display'.
 - Fixed an issue where the front-end workflow was showing stuck on same step for email based assignee.
 - Fixed an issue with Step Assignees on User Input Step causing a Fatal Error.
 - Fixed an issue with the print button on workflow details page.
 - Fixed an issue with the print button on front-end pages.
-- Fix JS errors with multiple status shortcodes on the same page.
+- Fixed JS errors with multiple status shortcodes on the same page.
 - Fixed an issue where workflow steps are processed for entry revisions created by GravityView Entry Revisions.
 - Fixed an issue with the print button on workflow details page and on front-end pages.
 - Fixed an issue with Step Condition on Form Submission Step. The entry meta of child form was fetched to process the condition, instead of parent form.

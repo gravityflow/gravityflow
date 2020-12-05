@@ -1738,6 +1738,17 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$sorting = array( 'key' => $orderby, 'direction' => $order );
 
 		/**
+		 * Allows sorting to be adjusted to define which order entries are displayed in status table.
+		 *
+		 * Return an array of field IDs or meta keys with direction to define sort order for GFAPI::get_entries.
+		 *
+		 * @since 2.6.1
+		 *
+		 * @param array   $sorting The sorting criteria
+		 */
+		$sorting = apply_filters( 'gravityflow_sort_criteria_status', $sorting );
+
+		/**
 		 * Allows form id(s) to be adjusted to define which forms' entries are displayed in status table.
 		 * 
 		 * Return an array of form ids for use with GFAPI.
