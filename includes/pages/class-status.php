@@ -1136,7 +1136,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		 * @param string $entry_url   The url to be linked to.
 		 * @param int    $form_id     The Form ID.
 		 * @param int    $entry_id    The Entry ID.
-		 * @param array  $item        The entry array.
+		 * @param array  $entry       The entry array.
 		 */
 		return apply_filters( 'gravityflow_entry_url_status_table', $entry_url, $entry['form_id'], $entry['id'], $entry );
 	}
