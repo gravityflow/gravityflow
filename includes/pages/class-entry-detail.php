@@ -43,6 +43,7 @@ class Gravity_Flow_Entry_Detail {
 		$show_timeline                = (bool) $args['timeline'];
 		$display_instructions         = (bool) $args['display_instructions'];
 		$sidebar                      = (bool) $args['sidebar'];
+		$disable_workflow_update      = (bool) $args['disable_workflow_update'];
 
 		self::include_scripts();
 
@@ -97,7 +98,7 @@ class Gravity_Flow_Entry_Detail {
 
 								if ( $current_step ) {
 									$can_update = self::can_update( $current_step );
-									if ( $can_update ) {
+									if ( $can_update && ! $disable_workflow_update ) {
 										$editable_fields = $can_update ? $current_step->get_editable_fields() : array();
 										$instructions_step = $current_step;
 									} else {
@@ -116,7 +117,7 @@ class Gravity_Flow_Entry_Detail {
 
 								do_action( 'gravityflow_entry_detail', $form, $entry, $current_step );
 
-								if ( ! $sidebar ) {
+								if ( ! $sidebar && ! $disable_workflow_update ) {
 									gravity_flow()->workflow_entry_detail_status_box( $form, $entry, $current_step, $args );
 									self::print_button( $entry, $show_timeline, $check_view_entry_permissions );
 								}
@@ -126,7 +127,7 @@ class Gravity_Flow_Entry_Detail {
 							<div id="postbox-container-1" class="postbox-container">
 
 							<?php
-							if ( $sidebar ) {
+							if ( $sidebar && ! $disable_workflow_update ) {
 								gravity_flow()->workflow_entry_detail_status_box( $form, $entry, $current_step, $args );
 								self::print_button( $entry, $show_timeline, $check_view_entry_permissions );
 							}
