@@ -4967,13 +4967,16 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					array(
 						'name'          => 'workflow_inbox_count',
 						'label'         => esc_html__( 'Workflow Inbox Count', 'gravityflow' ),
-						'tooltip' => __( 'Set this to ON to display the inbox count next to the Workflow menu. Warning: For many inbox entries, enabling this may affect the site performance.' , 'gravityflow' ),
-						'type'          => 'radio',
-						'horizontal' => true,
+						'tooltip' 		=> __( 'Set this to ON to display the inbox count next to the Workflow menu. Warning: For many inbox entries, enabling this may affect the site performance.' , 'gravityflow' ),
+						'type'          => 'checkbox',
+						'horizontal' 	=> true,
 						'default_value' => false,
 						'choices' => array(
-							array( 'label' => __( 'On', 'gravityflow' ), 'value' => true ),
-							array( 'label' => __( 'Off', 'gravityflow' ), 'value' => false ),
+							array(
+								'label' => __( 'Enable', 'gravityflow' ),
+								'name'  => 'workflow_inbox_count',
+								'value' => true,
+							),
 						),
 					),
 				),
