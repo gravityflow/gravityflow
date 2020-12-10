@@ -4959,6 +4959,13 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 		}
 
+		/**
+		 * Returns an array of feature settings to be displayed on the app settings page.
+		 *
+		 * @since 2.6.1
+		 *
+		 * @return array
+		 */		
 		public function get_app_settings_fields_features() {
 
 			$settings = array(
