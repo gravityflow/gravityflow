@@ -72,3 +72,9 @@ th.column-step_highlight, td.column-step_highlight {
 .gravityflow-routing {
     text-align: left;
 }
+
+span.icon > img {
+    height: 20px;
+    width: 20px;
+    transform: translateY(5%);
+}
