@@ -224,7 +224,7 @@ if ( class_exists( 'GFForms' ) ) {
 			add_filter( 'add_menu_classes', array( $this, 'show_inbox_count' ), 10 );
 
 			wp_register_style( 'gravityflow_dashicons', plugins_url( 'gravityflow/css/gravityflow-icon.css' ) );
-            wp_enqueue_style( 'gravityflow_dashicons' );
+            		wp_enqueue_style( 'gravityflow_dashicons' );
 
 			// GravityView Integration.
 			add_filter( 'gravityview/adv_filter/field_filters', array( $this, 'filter_gravityview_adv_filter_field_filters' ), 10, 2 );
