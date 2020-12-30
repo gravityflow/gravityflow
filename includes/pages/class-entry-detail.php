@@ -962,10 +962,21 @@ class Gravity_Flow_Entry_Detail {
 							$dom = new DOMDocument();
 
 							$dom->loadHTML( $all_html_values );
-							$all_li = $dom->getElementsByTagName( 'li' );
+							$input_tags = $dom->getElementsByTagName( 'input' );
 							$all_values = array();
-							foreach ( $all_li as $li ) {
-								$all_values[] = trim( $li->nodeValue );
+							foreach ( $input_tags as $input_tag ) {
+								if( is_object( $input_tag ) ) {
+									$value = '';
+									$name_object = $input_tag->attributes->getNamedItem( 'name' );
+									if( is_object( $name_object ) ) {
+										$value_object = $input_tag->attributes->getNamedItem( 'value' );
+										if( is_object( $value_object ) ) {
+											$value = $value_object->value;
+										}
+							
+										$all_values[] = $value;
+									}
+								}
 							}
 
 							$dom->loadHTML( $display_value );
