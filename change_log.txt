@@ -1,3 +1,4 @@
+- Added 'gravityflow_routing_values_markup' JS filter to allow filtering the markup rendered for the Conditional Routing's value field. Credit: Gravity Wiz
 - Added filter gravityflow_entry_url_status_table to allow the url in status page to be customized.
 - Added filter 'gravityflow_inbox_count_display' for customization of the Gravity Flow Inbox. The Inbox count value can be disabled using it.
 - Added filter gravityflow_sort_columns_status_table to allow custom columns defined in gravityflow_field_value_status_table to be sorted

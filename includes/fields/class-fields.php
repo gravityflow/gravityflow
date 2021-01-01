@@ -169,7 +169,7 @@ class Gravity_Flow_Fields {
 
 			if ( ! gravity_flow()->get_settings_renderer() ) {
 				// Set a dummy renderer.
-				$renderer = new Rocketgenius\Gravity_Forms\Settings();
+				$renderer = new Gravity_Forms\Gravity_Forms\Settings();
 				gravity_flow()->set_settings_renderer( $renderer );
 			}
 

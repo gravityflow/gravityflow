@@ -11,6 +11,7 @@ RUN apt-get update && \
             libssl-dev \
             libfreetype6-dev \
             libjpeg62-turbo-dev \
+            sudo less \
             zlib1g-dev \
             libssl-dev \
             libzip-dev \

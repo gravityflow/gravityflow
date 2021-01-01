@@ -218,9 +218,9 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 		if ( in_array( $this->get_setting( 'method' ), array( 'post', 'put', 'patch', '' ) ) ) {
 
 			if ( $this->get_setting( 'body' ) == 'raw' ) {
-				global $_gaddon_posted_settings;
+				$posted_settings = gravity_flow()->get_posted_settings();
 
-				if ( ! empty( $_gaddon_posted_settings ) ) {
+				if ( ! empty( $posted_settings ) ) {
 					$this->set_posted_raw_body_value();
 				}
 
@@ -228,6 +228,7 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 					'name'  => 'raw_body',
 					'label' => esc_html__( 'Raw Body', 'gravityflow' ),
 					'type'  => 'textarea',
+					'allow_html' => true,
 					'class' => 'fieldwidth-1 fieldheight-1 merge-tag-support',
 					'save_callback' => array( $this, 'save_callback_raw_body' ),
 				);
@@ -546,15 +547,30 @@ class Gravity_Flow_Step_Webhook extends Gravity_Flow_Step {
 	 * @return string the raw value
 	 */
 	protected function set_posted_raw_body_value() {
-		global $_gaddon_posted_settings;
 
-		$raw_value = rgpost( '_gaddon_setting_raw_body' );
+		if ( ! gravity_flow()->is_gravityforms_supported( '2.5-beta-1' ) ) {
+
+			global $_gaddon_posted_settings;
+			$raw_value = rgpost( '_gaddon_setting_raw_body' );
+
+			if ( ! current_user_can( 'unfiltered_html' ) ) {
+				$raw_value = wp_kses_post( $raw_value );
+			}
+
+			$_gaddon_posted_settings['raw_body'] = $raw_value;
+
+			return $raw_value;
+		}
+
+		global $_gf_settings_posted_values;
+
+		$raw_value = rgpost( '_gform_setting_raw_body' );
 
 		if ( ! current_user_can( 'unfiltered_html' ) ) {
 			$raw_value = wp_kses_post( $raw_value );
 		}
 
-		$_gaddon_posted_settings['raw_body'] = $raw_value;
+		$_gf_settings_posted_values['raw_body'] = $raw_value;
 
 		return $raw_value;
 	}
