@@ -182,7 +182,7 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 						'save_callback'  => array( $this, 'update_app_settings' ),
 					)
 				);
-				
+
 				// Save renderer to instance.
 				$this->set_settings_renderer( $renderer );
 
