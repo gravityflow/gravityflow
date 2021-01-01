@@ -1127,7 +1127,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 	 * @return string
 	 */
 	public function get_entry_url( $entry ) {
-		return sprintf( '%s&id=%d&lid=%d', $this->detail_base_url, $entry['form_id'], $entry['id'] );
+		$entry_url = sprintf( '%s&id=%d&lid=%d', $this->detail_base_url, $entry['form_id'], $entry['id'] );
+		/**
+		 * Allows the entry url to be filtered in the status table.
+		 *
+		 * @since 2.6.1
+		 *
+		 * @param string $entry_url   The url to be linked to.
+		 * @param int    $form_id     The Form ID.
+		 * @param int    $entry_id    The Entry ID.
+		 * @param array  $entry       The entry array.
+		 */
+		return apply_filters( 'gravityflow_entry_url_status_table', $entry_url, $entry['form_id'], $entry['id'], $entry );
 	}
 
 	/**
@@ -1736,6 +1747,17 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		$total_count = 0;
 
 		$sorting = array( 'key' => $orderby, 'direction' => $order );
+
+		/**
+		 * Allows sorting to be adjusted to define which order entries are displayed in status table.
+		 *
+		 * Return an array of field IDs or meta keys with direction to define sort order for GFAPI::get_entries.
+		 *
+		 * @since 2.6.1
+		 *
+		 * @param array   $sorting The sorting criteria
+		 */
+		$sorting = apply_filters( 'gravityflow_sort_criteria_status', $sorting );
 
 		/**
 		 * Allows form id(s) to be adjusted to define which forms' entries are displayed in status table.

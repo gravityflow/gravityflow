@@ -1,0 +1,136 @@
+name: PHPUnit Tests
+
+on:
+  push:
+    branches:
+      - '**'
+
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  # Sets up and runs the unit tests.
+  #
+  # Performs the following steps:
+  # - Sets up the database. This is not a service because services are currently not supported by act see https://github.com/nektos/act/issues/173
+  # - Checks out the repository.
+  # - Sets up PHP.
+  # - Installs the appropriate version of PHPUnit for the current version of PHP.
+  # - Clones Gravity Forms and installs the tests.
+  # - Runs the tests.
+  unit-tests:
+    name: PHP ${{ matrix.php }} - WP ${{ matrix.wp }} - MySQL ${{ matrix.mysql }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        php: [ '7.4', '7.3', '7.2' ]
+        wp: [ 'latest','5.5', '5.4', '5.3' ]
+        os: [ubuntu-latest]
+        mysql: [ '5.7' ]
+        include:
+          - php: 5.6
+            wp: latest
+            os: ubuntu-16.04
+          - php: '7.4'
+            wp: latest
+            os: ubuntu-latest
+            mysql: '8.0'
+
+    steps:
+      - name: Setup Database
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql version: '5.7'
+          host port: 3800
+          container port: 3307
+          mysql database: 'wordpress_unit_tests'
+          mysql root password: 'root'
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, soap, gd, exif, iconv, imagick
+          coverage: none
+          tools: phpunit
+
+      - name: Install PHPUnit
+        run: |
+          # Install the specified version of PHPUnit depending on the PHP version. Installed global to avoid conflicts with composer.json.
+          echo "Install PHPUnit"
+          case ${{ matrix.php }} in
+            7.3|7.4|7.0|5.6|5.5|5.4|nightly)
+              # Use composer to install a compatible version of phpunit
+              composer global require "phpunit/phpunit:>4.0 <6 || ^7.0"
+              ;;
+            7.2)
+              echo "Using PHPUnit 6.0"
+              composer global require "phpunit/phpunit=6.0.*"
+              ;;
+            7.1)
+              echo "Using PHPUnit 5.7"
+              composer global require "phpunit/phpunit=5.7.*"
+              ;;
+            *)
+              echo "No PHPUnit version handling for PHP version ${{ matrix.php }}"
+              exit 1
+              ;;
+          esac
+
+      - name: Clone Gravity Forms and install the tests
+        env:
+          GHTOKEN: ${{ secrets.GHTOKEN }}
+        run: |
+          curl --version
+          git --version
+          svn --version
+          git clone https://"$GHTOKEN"@github.com/gravityforms/gravityforms.git $PWD/tmp/gravityforms
+          bash tests/bin/install.sh wordpress_unit_tests root root 127.0.0.1:3800 ${{ matrix.wp }}
+      - name: Run tests
+        run: |
+          # Export Composer's global bin dir to PATH:
+          composer config --list --global
+          export PATH=`composer config --list --global | grep '\[home\]' | { read a; echo "${a#* }/vendor/bin:$PATH"; }`
+          php --version
+          phpunit --version
+          phpunit
+
+      - name: Slack Failure Notification
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: danger
+          SLACK_ICON: https://github.com/gravityflow.png?size=48
+          SLACK_TITLE: Failed unit tests
+          SLACK_USERNAME: GitHub
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  success:
+    name: Trigger Extension Tests & Notify Slack
+    runs-on: ubuntu-latest
+    if: github.ref == 'ref/head/master'
+    needs: unit-tests
+    steps:
+      - name: Slack Success Notification
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_ICON: https://github.com/gravityflow.png?size=48
+          SLACK_TITLE: Unit tests Passed
+          SLACK_USERNAME: GitHub
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Trigger unit tests for Incoming Webhook
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: PHPUnit Tests
+          repo: gravityflow/gravityflowincomingwebhook
+          token: ${{ secrets.GHTOKEN }}
+      - name: Trigger unit tests for Form Connector
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: PHPUnit Tests
+          repo: gravityflow/gravityflowformconnector
+          token: ${{ secrets.GHTOKEN }}
