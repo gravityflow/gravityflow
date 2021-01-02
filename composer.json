@@ -30,7 +30,7 @@
     "codeception/util-universalframework": "^1.0",
     "squizlabs/php_codesniffer": "3.*",
     "vlucas/phpdotenv": "^2.5",
-    "dealerdirect/phpcodesniffer-composer-installer": "~0.5.0",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
     "wp-coding-standards/wpcs": "2.1.0"
   }
 }

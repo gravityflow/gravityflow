@@ -7,7 +7,7 @@
 	convertWarningsToExceptions="true"
 	>
 	<testsuites>
-		<testsuite>
+		<testsuite name="gravityflow">
 			<directory prefix="test-" suffix=".php">./tests/unit-tests</directory>
 		</testsuite>
 	</testsuites>

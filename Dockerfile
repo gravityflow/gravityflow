@@ -1,18 +1,23 @@
-FROM php:7.2-cli-stretch
+FROM php:7.4-cli
 
 MAINTAINER Steve Henty steve@gravityflow.io
+
 
 # Install required system packages
 RUN apt-get update && \
     apt-get -y install \
             git \
-            zlib1g-dev \
+            rsync \
             libssl-dev \
             libfreetype6-dev \
             libjpeg62-turbo-dev \
-            libpng-dev \
-            mysql-client \
             sudo less \
+            zlib1g-dev \
+            libssl-dev \
+            libzip-dev \
+            mariadb-client \
+            libpcre3 \
+            libpcre3-dev \
             zip unzip \
         --no-install-recommends && \
         apt-get clean && \
@@ -25,8 +30,9 @@ RUN docker-php-ext-install \
     zip
 
 RUN docker-php-ext-install -j$(nproc) iconv \
-        && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+        && docker-php-ext-configure gd --with-freetype --with-jpeg \
         && docker-php-ext-install -j$(nproc) gd
+
 
 # Add mysql driver required for wp-browser
 RUN docker-php-ext-install mysqli
@@ -39,8 +45,6 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN curl -sS https://getcomposer.org/installer | php -- \
         --filename=composer \
         --install-dir=/usr/local/bin
-RUN composer global require --optimize-autoloader \
-        "hirak/prestissimo"
 
 
 # Add WP-CLI
