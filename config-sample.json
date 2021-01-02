@@ -15,12 +15,7 @@
     "bucket" : "your bucket",
     "region" : "your region"
   },
-  "slackUpload" : {
-    "token" : "your token",
-    "channel" : "the channel"
-  },
-  "slackNotification" : {
-    "token" : "your token",
-    "channel" : "the channel"
+  "slack" : {
+    "url" : "your incoming webhook URL"
   }
 }

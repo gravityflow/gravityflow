@@ -263,6 +263,9 @@ if ( class_exists( 'GFForms' ) ) {
 			}
 
 			add_action( 'admin_notices', array( $this, 'action_admin_notices' ) );
+			
+			wp_register_style( 'gravityflow_dashicons', plugins_url( 'gravityflow/css/gravityflow-icon.css' ) );
+            		wp_enqueue_style( 'gravityflow_dashicons' );
 		}
 
 		/**
@@ -1565,9 +1568,9 @@ PRIMARY KEY  (id)
 			} elseif ( ! $is_complete_step ) {
 				$standard_fields = array(
 					array(
-						'name'     => 'step_highlight',
+						'name'     => 'highlight',
 						'label'    => esc_html__( 'Highlight', 'gravityflow' ),
-						'type'     => 'step_highlight',
+						'type'     => 'highlight',
 						'required' => false,
 						'tooltip'  => esc_html__( 'Highlighted steps will stand out in both the workflow inbox and the step list. Use highlighting to bring attention to important tasks and to help organise complex workflows.', 'gravityflow' ),
 					),
@@ -2981,14 +2984,14 @@ PRIMARY KEY  (id)
 		 * The container will be displayed or hidden depending on the value of the step_highlight checkbox field.
 		 *
 		 * @since 1.9.2
-		 * @since 2.5.12    Added the $echo param.
+		 * @since 2.6   Renamed from settings_step_highlight_settings to support Gravity Forms 2.5
 		 *
 		 * @param array $field The field properties.
 		 * @param bool  $echo  Whether to output the setting.
 		 *
 		 * @return string
 		 */
-		public function settings_step_highlight( $field, $echo = true ) {
+		public function settings_highlight( $field, $echo = true ) {
 			$field = $this->prepare_settings_step_highlight( $field );
 
 			$html = $this->settings_step_highlight_container( $field, false );
@@ -3366,11 +3369,12 @@ PRIMARY KEY  (id)
 		 * Validate the sub-settings are of appropriate type and required status.
 		 *
 		 * @since 1.9.2
+		 * @since 2.6   Renamed from validate_step_highlight_settings to support Gravity Forms 2.5
 		 *
 		 * @param array $field    The field properties.
 		 * @param array $settings The settings to be potentially saved.
 		 */
-		public function validate_step_highlight_settings( $field, $settings ) {
+		public function validate_highlight_settings( $field, $settings ) {
 			$field = $this->prepare_settings_step_highlight( $field );
 
 			$checkbox_field = $field['settings']['step_highlight'];
@@ -5392,8 +5396,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		/**
 		 * Renders the submit page.
 		 *
-		 * @since 2.6 Added the $form_ids parameter.
-		 * @since unknown
+		 * @since  unknown
+		 * @since  2.6   Added the $form_ids parameter.
 		 *
 		 * @param bool       $admin_ui Whether to display the admin UI.
 		 * @param null|array $form_ids An array of form IDs.
@@ -5665,6 +5669,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					if ( ( $next_step && $next_step->is_assignee( $current_user_assignee_key ) ) || $args['check_permissions'] == false || $this->current_user_can_any( 'gravityflow_status_view_all' ) ) {
 						$step = $next_step;
 					} else {
+						$step = false;
 						$args['display_instructions'] = false;
 					}
 					$args['check_permissions'] = false;
@@ -6182,7 +6187,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		function filter_form_settings_menu( $menu_items ) {
 			foreach ( $menu_items as &$menu_item ) {
 				if ( $menu_item['name'] == 'gravityflow' ) {
-					$menu_item['icon'] = esc_url( gravity_flow()->get_base_url() ) . '/images/gravity-flow-icon-cropped_gray.svg';
+					$menu_item['icon'] = 'dashicons-gravityflow-icon';
 				}
 			}
 
@@ -6203,7 +6208,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			 *
 			 * @param bool show Whether to show inbox count.
 			 */			
-			$show = apply_filters( 'gravityflow_inbox_count_display', true );
+			$show = apply_filters( 'gravityflow_inbox_count_display', false );
 			if ( ! $show ) {
 				return $menu;
 			}
@@ -6913,65 +6918,44 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @return bool
 		 */
 		public function maybe_auto_update( $update, $item ) {
-			if ( isset( $item->slug ) && $item->slug == 'gravityflow' ) {
-
-				$this->log_debug( __METHOD__ . '() - Starting auto-update for gravityflow.' );
-
-				$auto_update_disabled = self::is_auto_update_disabled();
-				$this->log_debug( __METHOD__ . '() - $auto_update_disabled: ' . var_export( $auto_update_disabled, true ) );
-
-				if ( $auto_update_disabled || version_compare( $this->_version, $item->new_version, '=>' ) ) {
-					$this->log_debug( __METHOD__ . '() - Aborting update.' );
-					return false;
-				}
-
-				$current_major = implode( '.', array_slice( preg_split( '/[.-]/', $this->_version ), 0, 1 ) );
-				$new_major     = implode( '.', array_slice( preg_split( '/[.-]/', $item->new_version ), 0, 1 ) );
-
-				$current_branch = implode( '.', array_slice( preg_split( '/[.-]/', $this->_version ), 0, 2 ) );
-				$new_branch     = implode( '.', array_slice( preg_split( '/[.-]/', $item->new_version ), 0, 2 ) );
-
-				if ( $current_major == $new_major && $current_branch == $new_branch ) {
-					$this->log_debug( __METHOD__ . '() - OK to update.' );
-					return true;
-				}
-
-				$this->log_debug( __METHOD__ . '() - Skipping - not current branch.' );
+			if ( ! isset( $item->slug ) || $item->slug !== 'gravityflow-gravityflow' || is_null( $update ) ) {
+				return $update;
 			}
 
-			return $update;
+			if ( $this->is_auto_update_disabled( $update ) ) {
+				$this->log_debug( __METHOD__ . '() - Aborting; auto updates disabled.' );
+
+				return false;
+			}
+
+
+			if ( ! $this->should_update_to_version( $item->new_version ) ) {
+				$this->log_debug( __METHOD__ . sprintf( '() - Aborting; auto update from %s to %s is not supported.', $this->_version, $item->new_version ) );
+
+				return false;
+			}
+
+			$this->log_debug( __METHOD__ . sprintf( '() - OK to update from %s to %s.', $this->_version, $item->new_version ) );
+
+			return true;
 		}
 
 		/**
 		 * Determines if background automatic updates are disabled.
 		 *
-		 * Currently WordPress won't ask Gravity Flow to update if background updates are disabled.
-		 * Let's double check anyway.
+		 * @since 2.6 Added the enabled param.
+		 *
+		 * @param bool|null $enabled Indicates if auto updates are enabled.
 		 *
 		 * @return bool
 		 */
-		public function is_auto_update_disabled() {
+		public function is_auto_update_disabled( $enabled = null ) {
+			global $wp_version;
 
-			// WordPress background updates are disabled if you don't want file changes.
-			if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
-				return true;
+			if ( is_null( $enabled ) || version_compare( $wp_version, '5.5', '<' ) ) {
+				$enabled = $this->get_app_setting( 'background_updates' );
 			}
 
-			if ( defined( 'WP_INSTALLING' ) ) {
-				return true;
-			}
-
-			$wp_updates_disabled = defined( 'AUTOMATIC_UPDATER_DISABLED' ) && AUTOMATIC_UPDATER_DISABLED;
-
-			$wp_updates_disabled = apply_filters( 'automatic_updater_disabled', $wp_updates_disabled );
-
-			if ( $wp_updates_disabled ) {
-				$this->log_debug( __METHOD__ . '() - Background updates are disabled in WordPress.' );
-				return true;
-			}
-
-			// Now check Gravity Flow Background Update Settings.
-			$enabled = $this->get_app_setting( 'background_updates' );
 			$this->log_debug( __METHOD__ . ' - $enabled: ' . var_export( $enabled, true ) );
 
 			$disabled = apply_filters( 'gravityflow_disable_auto_update', ! $enabled );
@@ -6983,6 +6967,37 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			}
 
 			return $disabled;
+		}
+
+		/**
+		 * Determines if the current version should update to the offered version.
+		 *
+		 * @since 2.6
+		 *
+		 * @param string $offered_ver The version number to be compared against the installed version number.
+		 *
+		 * @return bool
+		 */
+		public function should_update_to_version( $offered_ver ) {
+			if ( version_compare( $this->_version, $offered_ver, '>=' ) ) {
+				return false;
+			}
+
+			/**
+			 * If major version updates are allowed we don't need to compare the branch version numbers.
+			 *
+			 * @since 2.6
+			 *
+			 * @param bool $allowed Indicates if Gravity Flow should update to major versions automatically. Default is true.
+			 */
+			if ( apply_filters( 'gravityflow_major_version_auto_updates_allowed', true ) ) {
+				return true;
+			}
+
+			$current_branch = implode( '.', array_slice( preg_split( '/[.-]/', $this->_version ), 0, 2 ) );
+			$new_branch     = implode( '.', array_slice( preg_split( '/[.-]/', $offered_ver ), 0, 2 ) );
+
+			return $current_branch == $new_branch;
 		}
 
 		/**
@@ -8366,7 +8381,7 @@ AND m.meta_value='queued'";
 		 * @param array $form  The form for this entry.
 		 */
 		public function action_gform_post_add_entry( $entry, $form ) {
-			if ( is_wp_error( $entry ) || ! empty( $entry['partial_entry_id'] ) ) {
+			if ( is_wp_error( $entry ) || ! empty( $entry['partial_entry_id'] ) || rgar( $entry, 'status' ) !== 'active' ) {
 				return;
 			}
 
@@ -8510,13 +8525,15 @@ AND m.meta_value='queued'";
 		 * @return string
 		 */
 		public function settings_feed_condition( $field, $echo = true ) {
-			$entry_meta  = array_merge( $this->get_feed_condition_entry_meta(), $this->get_feed_condition_entry_properties() );
+			$form_id     = absint( rgget( 'id' ) );
+			$step_id     = $this->get_current_feed_id();
+			$entry_meta  = array_merge( $this->get_feed_condition_entry_meta( $form_id, $step_id ), $this->get_feed_condition_entry_properties() );
 			$find        = 'var feedCondition';
 			$replacement = sprintf( 'var entry_meta = %s; %s', json_encode( $entry_meta ), $find );
 
 			if ( $this->is_gravityforms_supported( '2.5-beta-1' ) ) {
 				$renderer  = $this->get_settings_renderer();
-				$field     = new \Rocketgenius\Gravity_Forms\Settings\Fields\Conditional_Logic( $field, $renderer );
+				$field     = new \Gravity_Forms\Gravity_Forms\Settings\Fields\Conditional_Logic( $field, $renderer );
 				$base_html = $field->markup();
 			} else {
 				$base_html = parent::settings_feed_condition( $field, false );
@@ -8535,12 +8552,14 @@ AND m.meta_value='queued'";
 		 * Get the entry meta for use with the feed_condition setting.
 		 *
 		 * @since 1.7.1-dev
+		 * @since 2.6.1     Added parameters for form_id and step_id.
+		 *
+		 * @param int $form_id The form ID.
+		 * @param int $step_id The step ID.		 
 		 *
 		 * @return array
 		 */
-		public function get_feed_condition_entry_meta() {
-			$step_id    = absint( rgget( 'fid' ) );
-			$form_id    = absint( rgget( 'id' ) );
+		public function get_feed_condition_entry_meta( $form_id = 0, $step_id = 0 ) {
 			$entry_meta = GFFormsModel::get_entry_meta( $form_id );
 
 			unset( $entry_meta['workflow_final_status'], $entry_meta['workflow_step'], $entry_meta[ 'workflow_step_status_' . $step_id ] );
@@ -8695,7 +8714,8 @@ AND m.meta_value='queued'";
 				return true;
 			}
 
-			$entry_meta      = array_merge( $this->get_feed_condition_entry_meta(), $this->get_feed_condition_entry_properties() );
+			$form_id         = $form['id'];			
+			$entry_meta      = array_merge( $this->get_feed_condition_entry_meta( $form_id ), $this->get_feed_condition_entry_properties() );
 			$entry_meta_keys = array_keys( $entry_meta );
 			$match_count     = 0;
 
