@@ -1767,6 +1767,8 @@ PRIMARY KEY  (id)
 		/**
 		 * Save feed settings on save.
 		 *
+		 * @since 2.6
+		 *
 		 * @param string  $feed_id 	The ID of the feed which was saved.
 		 * @param int 	  $form_id 	The current form ID associated with the feed.
 		 * @param array   $settings	An array containing the settings and mappings for the feed.
@@ -1774,8 +1776,7 @@ PRIMARY KEY  (id)
 		 */		
 		public function post_save_feed_settings( $feed_id, $form_id, $settings, $addon ) {
 
-			if ( get_class( $addon ) != 'Gravity_Flow' )
-				return;
+			if ( get_class( $addon ) != 'Gravity_Flow' ) return;
 			
 			$current_step_id = $this->get_current_feed_id();
 			$entry_count = 0;
@@ -1788,7 +1789,7 @@ PRIMARY KEY  (id)
 			if ( $current_step ) {
 				$required_capabilities = $current_step->get_required_capabilities();
 				// Checking ALL required capabilities, one by one.
-                // In this way, we can also match the "gform_full_access" cap with other Gravity Form or Gravity Flow caps.
+                		// In this way, we can also match the "gform_full_access" cap with other Gravity Form or Gravity Flow caps.
 				foreach ( $required_capabilities as $cap ) {
 					if ( ! $this->current_user_can_any( $cap ) ) {
 						GFCommon::add_error_message( esc_html__( "You don't have sufficient permissions to update the step settings.", 'gravityflow' ) );
