@@ -116,9 +116,14 @@ install_db() {
 	fi
 
 	# create database
-    if ! mysql -u"$DB_USER" --password="$DB_PASS" -e "use $DB_NAME"$EXTRA; then
-      mysqladmin CREATE $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA;
-    fi
+	if command -v mysql &> /dev/null
+  then
+      echo "Creating database"
+      if ! mysql -u"$DB_USER" --password="$DB_PASS" -e "use $DB_NAME"$EXTRA; then
+        mysqladmin CREATE $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA;
+      fi
+  fi
+
 }
 
 install_wp

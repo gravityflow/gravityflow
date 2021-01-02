@@ -1,8 +1,8 @@
 <?php
 
-namespace Gravity_Flow\Settings\Fields;
+namespace Gravity_Flow\Gravity_Flow\Settings\Fields;
 
-use Rocketgenius\Gravity_Forms\Settings\Fields;
+use Gravity_Forms\Gravity_Forms\Settings\Fields;
 
 defined( 'ABSPATH' ) || die();
 
@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || die();
 require_once \GFCommon::get_base_path() . '/includes/settings/class-fields.php';
 
 
-class Checkbox_And_Textarea extends \Rocketgenius\Gravity_Forms\Settings\Fields\Base {
+class Checkbox_And_Textarea extends \Gravity_Forms\Gravity_Forms\Settings\Fields\Base {
 
 	/**
 	 * Field type.
@@ -36,7 +36,7 @@ class Checkbox_And_Textarea extends \Rocketgenius\Gravity_Forms\Settings\Fields\
 	 * @since 2.6
 	 *
 	 * @param array                                $props    Field properties.
-	 * @param \Rocketgenius\Gravity_Forms\Settings $settings Settings instance.
+	 * @param \Gravity_Forms\Gravity_Forms\Settings $settings Settings instance.
 	 */
 	public function __construct( $props, $settings ) {
 
@@ -154,4 +154,4 @@ class Checkbox_And_Textarea extends \Rocketgenius\Gravity_Forms\Settings\Fields\
 
 }
 
-Fields::register( 'checkbox_and_textarea', '\Gravity_Flow\Settings\Fields\Checkbox_and_Textarea' );
+Fields::register( 'checkbox_and_textarea', '\Gravity_Flow\Gravity_Flow\Settings\Fields\Checkbox_and_Textarea' );

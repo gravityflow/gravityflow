@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gravity Flow\n"
 "Report-Msgid-Bugs-To: https://www.gravityflow.io\n"
-"POT-Creation-Date: 2020-06-14 18:50:55+00:00\n"
-"PO-Revision-Date: 2020-06-14 22:40+0000\n"
+"POT-Creation-Date: 2020-08-30 14:32:15+00:00\n"
+"PO-Revision-Date: 2020-08-30 22:38+0000\n"
 "Last-Translator: Transifex Bot <>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/gravityflow/gravityflow/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
@@ -28,260 +28,260 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Textdomain-Support: yes\n"
 
-#: class-gravity-flow.php:217
+#: class-gravity-flow.php:218
 msgid "Start the Workflow once payment has been received."
 msgstr "Start de workflow zodra betaling is ontvangen."
 
-#: class-gravity-flow.php:608 includes/assignees/class-assignee.php:536
+#: class-gravity-flow.php:630 includes/assignees/class-assignee.php:536
 #: includes/fields/class-field-user.php:83
 #: includes/steps/class-step-update-user.php:68
 msgid "User"
 msgstr "Gebruiker"
 
-#: class-gravity-flow.php:613 includes/assignees/class-assignee.php:530
+#: class-gravity-flow.php:635 includes/assignees/class-assignee.php:530
 #: includes/fields/class-field-role.php:82
 msgid "Role"
 msgstr "Rol"
 
-#: class-gravity-flow.php:618 includes/fields/class-field-discussion.php:93
+#: class-gravity-flow.php:640 includes/fields/class-field-discussion.php:93
 msgid "Discussion"
 msgstr "Discussie"
 
-#: class-gravity-flow.php:633
+#: class-gravity-flow.php:655
 msgid "Please fill in all required fields"
 msgstr "Vul alle vereiste velden in"
 
-#: class-gravity-flow.php:684
+#: class-gravity-flow.php:706
 msgid "Type to search"
 msgstr "Type om te zoeken"
 
-#: class-gravity-flow.php:938
+#: class-gravity-flow.php:960
 msgid "No results matched"
 msgstr "Geen resultaten komen overeen"
 
-#: class-gravity-flow.php:971
+#: class-gravity-flow.php:993
 msgid "Workflow Steps"
 msgstr "Workflow stappen"
 
-#: class-gravity-flow.php:971 includes/class-connected-apps.php:529
+#: class-gravity-flow.php:993 includes/class-connected-apps.php:529
 msgid "Add New"
 msgstr "Nieuwe toevoegen"
 
-#: class-gravity-flow.php:1124
+#: class-gravity-flow.php:1146
 msgid "Workflow Step Settings"
 msgstr "Workflow stap instellingen"
 
-#: class-gravity-flow.php:1232
+#: class-gravity-flow.php:1254
 #: includes/fields/class-field-assignee-select.php:189
 msgid "Users"
 msgstr "Gebruikers"
 
-#: class-gravity-flow.php:1236
+#: class-gravity-flow.php:1258
 #: includes/fields/class-field-assignee-select.php:207
 #: includes/steps/class-step-update-user.php:194
 #: includes/steps/class-step-update-user.php:212
 msgid "Roles"
 msgstr "Rollen"
 
-#: class-gravity-flow.php:1262
+#: class-gravity-flow.php:1284
 #: includes/fields/class-field-assignee-select.php:155
 msgid "User (Created by)"
 msgstr "Gebruiker (aangemaakt door)"
 
-#: class-gravity-flow.php:1269
+#: class-gravity-flow.php:1291
 #: includes/fields/class-field-assignee-select.php:227
 #: includes/pages/class-status.php:617
 msgid "Fields"
 msgstr "Velden"
 
-#: class-gravity-flow.php:1377
+#: class-gravity-flow.php:1399
 msgid "Step settings unavailable. The selected step type is not active."
 msgstr ""
 
-#: class-gravity-flow.php:1449 class-gravity-flow.php:3510
+#: class-gravity-flow.php:1471 class-gravity-flow.php:3532
 msgid "Step Type"
 msgstr "Type stap"
 
-#: class-gravity-flow.php:1460 includes/pages/class-activity.php:65
+#: class-gravity-flow.php:1482 includes/pages/class-activity.php:65
 #: includes/pages/class-activity.php:123 includes/pages/class-inbox.php:162
 #: includes/pages/class-reports.php:338 includes/pages/class-reports.php:683
 #: includes/pages/class-status.php:1238
 msgid "Step"
 msgstr "Stap"
 
-#: class-gravity-flow.php:1460
+#: class-gravity-flow.php:1482
 msgid "Step ID #"
 msgstr "Stap ID #"
 
-#: class-gravity-flow.php:1467 class-gravity-flow.php:1471
+#: class-gravity-flow.php:1489 class-gravity-flow.php:1493
 #: includes/pages/class-support.php:140
 #: includes/steps/class-common-step-settings.php:198
 #: includes/steps/class-step-webhook.php:187
 msgid "Name"
 msgstr "Naam"
 
-#: class-gravity-flow.php:1471
+#: class-gravity-flow.php:1493
 msgid "Enter a name to uniquely identify this step."
 msgstr "Vul een unieke naam in om deze stap te identificeren."
 
-#: class-gravity-flow.php:1475
+#: class-gravity-flow.php:1497
 msgid "Description"
 msgstr "Beschrijving"
 
 #. translators: 1: number textbox 2: units of time dropdown
-#: class-gravity-flow.php:1486
+#: class-gravity-flow.php:1508
 msgid ""
 "Start this workflow %1$s %2$s after the form submission or after the partial"
 " entry has been created or updated."
 msgstr "Start deze workflow %1$s%2$s na het indienen van het formulier of nadat de gedeeltelijke invoer is gemaakt of bijgewerkt."
 
 #. translators: 1: number textbox 2: units of time dropdown
-#: class-gravity-flow.php:1489
+#: class-gravity-flow.php:1511
 msgid "Start this workflow %1$s %2$s after the form submission."
 msgstr "Start deze workflow %1$s%2$s na het indienen van het formulier."
 
-#: class-gravity-flow.php:1494
+#: class-gravity-flow.php:1516
 msgid ""
 "Build the conditional logic that should be applied to this workflow before "
 "it's allowed to be processed. If an entry does not meet the conditions then "
 "the workflow will not be processed."
 msgstr "Maak de voorwaardelijke logica die moet worden toegepast op deze workflow, voordat deze mag worden verwerkt. Als een inzending niet aan de voorwaarden van deze stap voldoet zal het niet worden verwerkt."
 
-#: class-gravity-flow.php:1495
+#: class-gravity-flow.php:1517
 msgid "Workflow Condition"
 msgstr "Workflow conditie"
 
-#: class-gravity-flow.php:1497
+#: class-gravity-flow.php:1519
 msgid "Enable Condition for this workflow"
 msgstr "Voorwaarde instellen voor deze workflow"
 
-#: class-gravity-flow.php:1498
+#: class-gravity-flow.php:1520
 msgid "Process this workflow if"
 msgstr "Verwerk deze workflow als"
 
-#: class-gravity-flow.php:1502 class-gravity-flow.php:1530
+#: class-gravity-flow.php:1524 class-gravity-flow.php:1552
 msgid "Workflow Schedule"
 msgstr "Workflow schema"
 
-#: class-gravity-flow.php:1504
+#: class-gravity-flow.php:1526
 msgid "Schedule this workflow"
 msgstr "Workflow inplannen"
 
-#: class-gravity-flow.php:1505
+#: class-gravity-flow.php:1527
 msgid "Start this workflow on %s"
 msgstr "Deze workflow starten op %s"
 
-#: class-gravity-flow.php:1506
+#: class-gravity-flow.php:1528
 msgid "Start this workflow %1$s %2$s %3$s %4$s"
 msgstr "Start deze workflow %1$s%2$s%3$s%4$s"
 
-#: class-gravity-flow.php:1508
+#: class-gravity-flow.php:1530
 msgid ""
 "Scheduling the workflow will queue entries and prevent them from starting "
 "the workflow until the specified date or until the delay period has elapsed."
 msgstr "Als je de workflow inplant, worden items in de wachtrij geplaatst en wordt voorkomen dat ze de workflow starten tot de opgegeven datum of totdat de vertragingsperiode is verstreken."
 
-#: class-gravity-flow.php:1509 class-gravity-flow.php:1557
+#: class-gravity-flow.php:1531 class-gravity-flow.php:1579
 msgid ""
 "Note: the schedule setting requires the WordPress Cron which is included and"
 " enabled by default unless your host has deactivated it."
 msgstr "Opmerking: de planinstelling vereist de WordPress cron, welke standaard ingeschakeld is, tenzij je host het gedeactiveerd heeft."
 
-#: class-gravity-flow.php:1521 class-gravity-flow.php:1542
+#: class-gravity-flow.php:1543 class-gravity-flow.php:1564
 msgid ""
 "Highlighted steps will stand out in both the workflow inbox and the step "
 "list. Use highlighting to bring attention to important tasks and to help "
 "organise complex workflows."
 msgstr "Gemarkeerde stappen worden benadrukt in zowel de workflow inbox als de stappenlijst. Gebruik markering om aandacht te vestigen op belangrijke taken en om te helpen bij het organiseren van complexe workflows."
 
-#: class-gravity-flow.php:1539
+#: class-gravity-flow.php:1561
 msgid "Highlight"
 msgstr "Markeren"
 
-#: class-gravity-flow.php:1546
+#: class-gravity-flow.php:1568
 msgid ""
 "Build the conditional logic that should be applied to this step before it's "
 "allowed to be processed. If an entry does not meet the conditions of this "
 "step it will fall on to the next step in the list."
 msgstr "Maak de voorwaardelijke logica die moet worden toegepast voor deze stap, voordat deze mag worden verwerkt. Als een inzending niet aan de voorwaarden van deze stap voldoet, zal deze op de lijst van de volgende stap verschijnen."
 
-#: class-gravity-flow.php:1547
+#: class-gravity-flow.php:1569
 msgid "Condition"
 msgstr "Voorwaarde"
 
-#: class-gravity-flow.php:1549
+#: class-gravity-flow.php:1571
 msgid "Enable Condition for this step"
 msgstr "Voorwaarde voor deze stap inschakelen"
 
-#: class-gravity-flow.php:1550
+#: class-gravity-flow.php:1572
 msgid "Perform this step if"
 msgstr "Voer deze stap uit als"
 
-#: class-gravity-flow.php:1554 class-gravity-flow.php:2326
-#: class-gravity-flow.php:2333 class-gravity-flow.php:2339
-#: class-gravity-flow.php:2400
+#: class-gravity-flow.php:1576 class-gravity-flow.php:2348
+#: class-gravity-flow.php:2355 class-gravity-flow.php:2361
+#: class-gravity-flow.php:2422
 msgid "Schedule"
 msgstr "Plannen"
 
-#: class-gravity-flow.php:1556
+#: class-gravity-flow.php:1578
 msgid ""
 "Scheduling a step will queue entries and prevent them from starting this "
 "step until the specified date or until the delay period has elapsed."
 msgstr "Een stap plannen zet inzendingen in de wachtrij en voorkomt dat deze starten tot een specifieke datum of totdat een bepaalde periode voorbij is."
 
-#: class-gravity-flow.php:1582 class-gravity-flow.php:1586
+#: class-gravity-flow.php:1604 class-gravity-flow.php:1608
 msgid "Due date"
 msgstr "Opleveringsdatum"
 
-#: class-gravity-flow.php:1587
+#: class-gravity-flow.php:1609
 msgid ""
 "Enable the due date setting to allow entries to be highlighted when they "
 "have passed their due dates. An optional column can be set on the inbox / "
 "status pages too."
 msgstr "Schakel de instelling voor de vervaldatum in om toe te staan dat items worden gemarkeerd wanneer ze hun vervaldatums hebben overschreden. Een optionele kolom kan ook op de inbox / statuspagina's worden ingesteld."
 
-#: class-gravity-flow.php:1600 class-gravity-flow.php:7919
+#: class-gravity-flow.php:1622 class-gravity-flow.php:7990
 msgid "Expired"
 msgstr "Verlopen"
 
-#: class-gravity-flow.php:1604 class-gravity-flow.php:2738
-#: class-gravity-flow.php:2745 class-gravity-flow.php:2751
-#: class-gravity-flow.php:2817
+#: class-gravity-flow.php:1626 class-gravity-flow.php:2760
+#: class-gravity-flow.php:2767 class-gravity-flow.php:2773
+#: class-gravity-flow.php:2839
 msgid "Expiration"
 msgstr "Vervaldatum"
 
-#: class-gravity-flow.php:1605
+#: class-gravity-flow.php:1627
 msgid ""
 "Enable the expiration setting to allow this step to expire. Once expired, "
 "the entry will automatically proceed to the step configured in the Next Step"
 " setting(s) below."
 msgstr "Schakel de verval-instelling in om het mogelijk te maken om deze stap te laten verlopen. Zodra deze verlopen is, gaat de inzending automatisch naar de volgende stap zoals geconfigureerd in de instelling(en) hieronder."
 
-#: class-gravity-flow.php:1612
+#: class-gravity-flow.php:1634
 msgid "Next step if"
 msgstr "Volgende stap als"
 
-#: class-gravity-flow.php:1628
+#: class-gravity-flow.php:1650
 msgid "Step settings updated. %sBack to the list%s or %sAdd another step%s."
 msgstr "Stap instellingen bijgewerkt. %sTerug naar de lijst%s of %sVoeg een nieuwe stap toe%s."
 
-#: class-gravity-flow.php:1638
+#: class-gravity-flow.php:1660
 msgid "Update Step Settings"
 msgstr "Stap instellingen bijwerken"
 
-#: class-gravity-flow.php:1641
+#: class-gravity-flow.php:1663
 msgid "There was an error while saving the step settings"
 msgstr "Er was een fout bij het opslaan van de stap instellingen"
 
-#: class-gravity-flow.php:1662
+#: class-gravity-flow.php:1684
 msgid "This step type is missing."
 msgstr "Deze soort stap ontbreekt."
 
-#: class-gravity-flow.php:1664
+#: class-gravity-flow.php:1686
 msgid "The plugin required by this step type is missing."
 msgstr "De plugin vereist voor deze soort stap ontbreekt."
 
-#: class-gravity-flow.php:1671
+#: class-gravity-flow.php:1693
 msgid ""
 "There is %s entry currently on this step. This entry may be affected if the "
 "settings are changed."
@@ -291,18 +291,18 @@ msgid_plural ""
 msgstr[0] "Er is %s inzending in deze stap. Deze inzending kan mogelijks beïnvloedt worden als je de instellingen wijzigt."
 msgstr[1] "Er zijn %s inzendingen in deze stap. Deze inzendingen kunnen mogelijks beïnvloedt worden als je de instellingen wijzigt."
 
-#: class-gravity-flow.php:1709
+#: class-gravity-flow.php:1731
 msgid "You don't have sufficient permissions to update the step settings."
 msgstr "Je hebt onvoldoende rechten om de stapinstellingen bij te werken."
 
-#: class-gravity-flow.php:1752 includes/steps/class-step-workflow-start.php:39
+#: class-gravity-flow.php:1774 includes/steps/class-step-workflow-start.php:39
 #: includes/steps/class-step-workflow-start.php:92
 msgid "Start"
 msgstr "Start"
 
-#: class-gravity-flow.php:1776 class-gravity-flow.php:7910
-#: includes/steps/class-step-user-input.php:848
-#: includes/steps/class-step-user-input.php:944
+#: class-gravity-flow.php:1798 class-gravity-flow.php:7981
+#: includes/steps/class-step-user-input.php:847
+#: includes/steps/class-step-user-input.php:943
 #: includes/steps/class-step-workflow-complete.php:39
 #: includes/steps/class-step-workflow-complete.php:85
 #: includes/steps/class-step-workflow-start.php:75
@@ -310,57 +310,57 @@ msgstr "Start"
 msgid "Complete"
 msgstr "Voltooid"
 
-#: class-gravity-flow.php:2269
+#: class-gravity-flow.php:2291
 msgid "Schedule this step"
 msgstr "Plan deze stap"
 
-#: class-gravity-flow.php:2289 class-gravity-flow.php:2475
-#: class-gravity-flow.php:2701
+#: class-gravity-flow.php:2311 class-gravity-flow.php:2497
+#: class-gravity-flow.php:2723
 msgid "Delay"
 msgstr "Vertragen"
 
-#: class-gravity-flow.php:2293 class-gravity-flow.php:2479
-#: class-gravity-flow.php:2705 includes/pages/class-activity.php:60
+#: class-gravity-flow.php:2315 class-gravity-flow.php:2501
+#: class-gravity-flow.php:2727 includes/pages/class-activity.php:60
 #: includes/pages/class-activity.php:85 includes/pages/class-status.php:1229
 msgid "Date"
 msgstr "Datum"
 
-#: class-gravity-flow.php:2305 class-gravity-flow.php:2491
-#: class-gravity-flow.php:2717
+#: class-gravity-flow.php:2327 class-gravity-flow.php:2513
+#: class-gravity-flow.php:2739
 msgid "Date Field"
 msgstr "Datumveld"
 
-#: class-gravity-flow.php:2317
+#: class-gravity-flow.php:2339
 msgid "Schedule Date Field"
 msgstr "Datum plannen-veld"
 
-#: class-gravity-flow.php:2343 class-gravity-flow.php:2532
-#: class-gravity-flow.php:2755
+#: class-gravity-flow.php:2365 class-gravity-flow.php:2554
+#: class-gravity-flow.php:2777
 msgid "Minute(s)"
 msgstr "minu(u)t(en)"
 
-#: class-gravity-flow.php:2347 class-gravity-flow.php:2536
-#: class-gravity-flow.php:2759
+#: class-gravity-flow.php:2369 class-gravity-flow.php:2558
+#: class-gravity-flow.php:2781
 msgid "Hour(s)"
 msgstr "u(u)r(en)"
 
-#: class-gravity-flow.php:2351 class-gravity-flow.php:2540
-#: class-gravity-flow.php:2763
+#: class-gravity-flow.php:2373 class-gravity-flow.php:2562
+#: class-gravity-flow.php:2785
 msgid "Day(s)"
 msgstr "dag/dagen"
 
-#: class-gravity-flow.php:2355 class-gravity-flow.php:2544
-#: class-gravity-flow.php:2767
+#: class-gravity-flow.php:2377 class-gravity-flow.php:2566
+#: class-gravity-flow.php:2789
 msgid "Week(s)"
 msgstr "we(e)k(en)"
 
-#: class-gravity-flow.php:2376
+#: class-gravity-flow.php:2398
 msgid "Start this step on %s"
 msgstr "Start deze stap op %s"
 
 #. translators: 1. textbox input for the number of days/weeks etc. 2. select
 #. input with options for minutes/hours/days/weeks
-#: class-gravity-flow.php:2384
+#: class-gravity-flow.php:2406
 msgid "Start this step %1$s %2$s after the workflow step is triggered."
 msgstr "Start deze stap%1$s %2$s na de workflow stap is geactiveerd."
 
@@ -368,433 +368,433 @@ msgstr "Start deze stap%1$s %2$s na de workflow stap is geactiveerd."
 #. input with options for minutes/hours/days/weeks 3. select input
 #. before/after
 #. 4. select input with list of date fields
-#: class-gravity-flow.php:2391
+#: class-gravity-flow.php:2413
 msgid "Start this step %1$s %2$s %3$s %4$s"
 msgstr "Start deze stap %1$s%2$s%3$s%4$s"
 
-#: class-gravity-flow.php:2404 class-gravity-flow.php:2615
-#: class-gravity-flow.php:2821
+#: class-gravity-flow.php:2426 class-gravity-flow.php:2637
+#: class-gravity-flow.php:2843
 msgid "after"
 msgstr "nadat"
 
-#: class-gravity-flow.php:2408 class-gravity-flow.php:2619
-#: class-gravity-flow.php:2825
+#: class-gravity-flow.php:2430 class-gravity-flow.php:2641
+#: class-gravity-flow.php:2847
 msgid "before"
 msgstr "voordat"
 
-#: class-gravity-flow.php:2461
+#: class-gravity-flow.php:2483
 msgid "Schedule due date"
 msgstr "Vervaldatum inplannen"
 
-#: class-gravity-flow.php:2502
+#: class-gravity-flow.php:2524
 msgid "Due Date Field"
 msgstr "Vervaldag veld"
 
-#: class-gravity-flow.php:2511 class-gravity-flow.php:2521
-#: class-gravity-flow.php:2527 class-gravity-flow.php:2611
-#: class-gravity-flow.php:3964 includes/pages/class-inbox.php:173
+#: class-gravity-flow.php:2533 class-gravity-flow.php:2543
+#: class-gravity-flow.php:2549 class-gravity-flow.php:2633
+#: class-gravity-flow.php:3986 includes/pages/class-inbox.php:173
 #: includes/pages/class-status.php:1264
 msgid "Due Date"
 msgstr "Vervaldag"
 
-#: class-gravity-flow.php:2561 class-gravity-flow.php:2943
+#: class-gravity-flow.php:2583 class-gravity-flow.php:2965
 msgid "Color"
 msgstr "Kleur"
 
-#: class-gravity-flow.php:2583 class-gravity-flow.php:2591
+#: class-gravity-flow.php:2605 class-gravity-flow.php:2613
 msgid "This step has a due date on"
 msgstr "Deze stap vervalt op "
 
-#: class-gravity-flow.php:2596 class-gravity-flow.php:2802
+#: class-gravity-flow.php:2618 class-gravity-flow.php:2824
 msgid "after the workflow step has started."
 msgstr "na de workflow stap gestart is. "
 
-#: class-gravity-flow.php:2601
+#: class-gravity-flow.php:2623
 msgid "Due date for this step"
 msgstr "Vervaldag voor deze stap"
 
-#: class-gravity-flow.php:2688
+#: class-gravity-flow.php:2710
 msgid "Schedule expiration"
 msgstr "Plan vervaltijd"
 
-#: class-gravity-flow.php:2729
+#: class-gravity-flow.php:2751
 msgid "Expiration Date Field"
 msgstr "Vervaldatum-veld"
 
-#: class-gravity-flow.php:2789
+#: class-gravity-flow.php:2811
 msgid "This step expires on"
 msgstr "Deze stap verloopt op"
 
-#: class-gravity-flow.php:2797
+#: class-gravity-flow.php:2819
 msgid "This step will expire"
 msgstr "Deze stap zal verlopen op"
 
-#: class-gravity-flow.php:2807
+#: class-gravity-flow.php:2829
 msgid "Expire this step"
 msgstr "Laat deze stap vervallen"
 
-#: class-gravity-flow.php:2839
+#: class-gravity-flow.php:2861
 msgid "Status after expiration"
 msgstr "Status na vervaltijd"
 
-#: class-gravity-flow.php:2843
+#: class-gravity-flow.php:2865
 msgid "Expiration Status"
 msgstr "Status vervaltijd"
 
-#: class-gravity-flow.php:2853 class-gravity-flow.php:2857
+#: class-gravity-flow.php:2875 class-gravity-flow.php:2879
 msgid "Next Step if Expired"
 msgstr "Volgende stap na verlopen"
 
-#: class-gravity-flow.php:2924
+#: class-gravity-flow.php:2946
 msgid "Highlight this step"
 msgstr "Markeer deze stap"
 
-#: class-gravity-flow.php:3067
+#: class-gravity-flow.php:3089
 #: includes/integrations/class-partial-entries.php:120
 #: includes/steps/class-step-approval.php:288
 #: includes/steps/class-step-user-input.php:210
 msgid "Enable"
 msgstr "Inschakelen"
 
-#: class-gravity-flow.php:3271
+#: class-gravity-flow.php:3293
 msgid "You must provide a color value for the active highlight to apply."
 msgstr "Je moet een kleurwaarde voor de actieve markering opgeven om toe te passen."
 
-#: class-gravity-flow.php:3331 class-gravity-flow.php:5776
+#: class-gravity-flow.php:3353 class-gravity-flow.php:5800
 msgid "Workflow Complete"
 msgstr "Workflow voltooid"
 
-#: class-gravity-flow.php:3332
+#: class-gravity-flow.php:3354
 msgid "Next step in list"
 msgstr "Volgende stap in de lijst"
 
-#: class-gravity-flow.php:3411
+#: class-gravity-flow.php:3433
 msgid "Match {0} of the following criteria:"
 msgstr "Match {0} met de volgende criteria:"
 
-#: class-gravity-flow.php:3452
+#: class-gravity-flow.php:3474
 msgid "Sort by field"
 msgstr "Sorteer op veld"
 
-#: class-gravity-flow.php:3508
+#: class-gravity-flow.php:3530
 msgid "Step name"
 msgstr "Stap naam"
 
-#: class-gravity-flow.php:3515
+#: class-gravity-flow.php:3537
 msgid "Entries"
 msgstr "Inzendingen"
 
-#: class-gravity-flow.php:3533
+#: class-gravity-flow.php:3555
 msgid "(missing)"
 msgstr "(ontbrekend)"
 
-#: class-gravity-flow.php:3624 includes/class-connected-apps.php:865
+#: class-gravity-flow.php:3646 includes/class-connected-apps.php:865
 #: includes/steps/class-step-feed-slicedinvoices.php:232
 msgid "Edit"
 msgstr "Bewerken"
 
-#: class-gravity-flow.php:3625
+#: class-gravity-flow.php:3647
 msgid "Duplicate"
 msgstr "Dupliceer"
 
-#: class-gravity-flow.php:3626
+#: class-gravity-flow.php:3648
 msgid "WARNING: You are about to delete this item."
 msgstr "WAARSCHUWING: je staat op het punt om dit item te verwijderen."
 
-#: class-gravity-flow.php:3626
+#: class-gravity-flow.php:3648
 msgid "'Cancel' to stop, 'OK' to delete."
 msgstr "'Annuleren' om te stoppen, 'OK' om te verwijderen."
 
-#: class-gravity-flow.php:3626 includes/class-connected-apps.php:866
+#: class-gravity-flow.php:3648 includes/class-connected-apps.php:866
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: class-gravity-flow.php:3641
+#: class-gravity-flow.php:3663
 msgid "You don't have any steps configured. Let's go %screate one%s!"
 msgstr "U heeft nog geen stap ingesteld. %sMaak een stap%s!"
 
-#: class-gravity-flow.php:3692 includes/pages/class-status.php:1896
+#: class-gravity-flow.php:3714 includes/pages/class-status.php:1896
 #: includes/pages/class-status.php:1901
 msgid "Status:"
 msgstr "Status:"
 
-#: class-gravity-flow.php:3928 includes/pages/class-activity.php:62
+#: class-gravity-flow.php:3950 includes/pages/class-activity.php:62
 #: includes/pages/class-activity.php:95
 #: includes/steps/class-step-webhook.php:1065
 msgid "Entry ID"
 msgstr "Inzending ID"
 
-#: class-gravity-flow.php:3937 includes/pages/class-inbox.php:165
+#: class-gravity-flow.php:3959 includes/pages/class-inbox.php:165
 msgid "Submitted"
 msgstr "Toegevoegd"
 
-#: class-gravity-flow.php:3943
+#: class-gravity-flow.php:3965
 msgid "Last updated"
 msgstr "Laatst bijgewerkt"
 
-#: class-gravity-flow.php:3950
+#: class-gravity-flow.php:3972
 msgid "Submitted by"
 msgstr "Toegevoegd door"
 
-#: class-gravity-flow.php:3957 class-gravity-flow.php:4968
-#: class-gravity-flow.php:7876 includes/class-connected-apps.php:793
+#: class-gravity-flow.php:3979 class-gravity-flow.php:4990
+#: class-gravity-flow.php:7947 includes/class-connected-apps.php:793
 #: includes/pages/class-status.php:1242
 #: includes/steps/class-step-feed-slicedinvoices.php:227
 #: includes/wizard/steps/class-iw-step-pages.php:81
 msgid "Status"
 msgstr "Status"
 
-#: class-gravity-flow.php:3971 includes/pages/class-status.php:1021
+#: class-gravity-flow.php:3993 includes/pages/class-status.php:1021
 msgid "Expires"
 msgstr "Verloopt"
 
-#: class-gravity-flow.php:4017 includes/pages/class-status.php:1014
+#: class-gravity-flow.php:4039 includes/pages/class-status.php:1014
 #: includes/steps/class-step-approval.php:757
 #: includes/steps/class-step-partial-entry-submission.php:204
-#: includes/steps/class-step-user-input.php:850
+#: includes/steps/class-step-user-input.php:849
 msgid "Queued"
 msgstr "In de wachtrij"
 
-#: class-gravity-flow.php:4035
+#: class-gravity-flow.php:4057
 msgid "Scheduled"
 msgstr "Gepland"
 
-#: class-gravity-flow.php:4046 class-gravity-flow.php:4047
-#: class-gravity-flow.php:7048 class-gravity-flow.php:7050
+#: class-gravity-flow.php:4068 class-gravity-flow.php:4069
+#: class-gravity-flow.php:7119 class-gravity-flow.php:7121
 msgid "Step expired"
 msgstr "Stap is verlopen"
 
-#: class-gravity-flow.php:4051
+#: class-gravity-flow.php:4073
 msgid "Expired: refresh the page"
 msgstr "Verlopen: ververs deze pagina"
 
-#: class-gravity-flow.php:4068
+#: class-gravity-flow.php:4090
 msgid "Admin"
 msgstr "Beheerder"
 
-#: class-gravity-flow.php:4075
+#: class-gravity-flow.php:4097
 msgid "Select an action"
 msgstr "Selecteer een actie"
 
-#: class-gravity-flow.php:4078 includes/pages/class-status.php:493
+#: class-gravity-flow.php:4100 includes/pages/class-status.php:493
 msgid "Apply"
 msgstr "Toepassen"
 
-#: class-gravity-flow.php:4102
+#: class-gravity-flow.php:4124
 #: includes/merge-tags/class-merge-tag-workflow-cancel.php:60
 msgid "Cancel Workflow"
 msgstr "Workflow annuleren"
 
-#: class-gravity-flow.php:4106
+#: class-gravity-flow.php:4128
 msgid "Restart this step"
 msgstr "Deze stap opnieuw starten"
 
-#: class-gravity-flow.php:4115 includes/pages/class-status.php:398
+#: class-gravity-flow.php:4137 includes/pages/class-status.php:398
 msgid "Restart Workflow"
 msgstr "Workflow opnieuw starten"
 
-#: class-gravity-flow.php:4138
+#: class-gravity-flow.php:4160
 msgid "Send to step:"
 msgstr "Stuur naar stap:"
 
-#: class-gravity-flow.php:4178
+#: class-gravity-flow.php:4200
 msgid "Workflow complete"
 msgstr "Workflow voltooid"
 
-#: class-gravity-flow.php:4188
+#: class-gravity-flow.php:4210
 msgid "View"
 msgstr "Bekijken"
 
-#: class-gravity-flow.php:4414
+#: class-gravity-flow.php:4436
 msgid "General"
 msgstr "Algemeen"
 
-#: class-gravity-flow.php:4415 class-gravity-flow.php:7123
+#: class-gravity-flow.php:4437 class-gravity-flow.php:7194
 msgid "Gravity Flow Settings"
 msgstr "Gravity Flow instellingen"
 
-#: class-gravity-flow.php:4420 class-gravity-flow.php:4539
+#: class-gravity-flow.php:4442 class-gravity-flow.php:4561
 msgid "Labels"
 msgstr "Labels"
 
-#: class-gravity-flow.php:4425 includes/class-connected-apps.php:524
+#: class-gravity-flow.php:4447 includes/class-connected-apps.php:524
 msgid "Connected Apps"
 msgstr "Verbonden apps"
 
-#: class-gravity-flow.php:4440 class-gravity-flow.php:8825
+#: class-gravity-flow.php:4462 class-gravity-flow.php:8896
 msgid "Uninstall"
 msgstr "Verwijderen"
 
-#: class-gravity-flow.php:4505 class-gravity-flow.php:7907
-#: class-gravity-flow.php:8356
+#: class-gravity-flow.php:4527 class-gravity-flow.php:7978
+#: class-gravity-flow.php:8427
 #: includes/merge-tags/class-merge-tag-current-step.php:98
 #: includes/steps/class-step-partial-entry-submission.php:201
 #: includes/steps/class-step.php:329
 msgid "Pending"
 msgstr "In afwachting"
 
-#: class-gravity-flow.php:4506 class-gravity-flow.php:7922
-#: class-gravity-flow.php:8352
+#: class-gravity-flow.php:4528 class-gravity-flow.php:7993
+#: class-gravity-flow.php:8423
 msgid "Cancelled"
 msgstr "Geannuleerd"
 
-#: class-gravity-flow.php:4544
+#: class-gravity-flow.php:4566
 msgid "Navigation"
 msgstr "Navigatie"
 
-#: class-gravity-flow.php:4552
+#: class-gravity-flow.php:4574
 msgid "Status Labels"
 msgstr "Statuslabels"
 
-#: class-gravity-flow.php:4559
-#: includes/steps/class-step-feed-user-registration.php:141
-#: includes/steps/class-step-user-input.php:1030
+#: class-gravity-flow.php:4581
+#: includes/steps/class-step-feed-user-registration.php:148
+#: includes/steps/class-step-user-input.php:1029
 msgid "Update"
 msgstr "Bijwerken"
 
-#: class-gravity-flow.php:4583
+#: class-gravity-flow.php:4605
 msgid "Invalid token"
 msgstr "Ongeldige token"
 
-#: class-gravity-flow.php:4587
+#: class-gravity-flow.php:4609
 msgid "Token already expired"
 msgstr "Token is verlopen"
 
-#: class-gravity-flow.php:4595
+#: class-gravity-flow.php:4617
 msgid "Token revoked"
 msgstr "Token ingetrokken"
 
-#: class-gravity-flow.php:4599
+#: class-gravity-flow.php:4621
 msgid "Tools"
 msgstr "Gereedschap"
 
-#: class-gravity-flow.php:4615
+#: class-gravity-flow.php:4637
 msgid "Revoke a token"
 msgstr "Een token intrekken"
 
-#: class-gravity-flow.php:4621
+#: class-gravity-flow.php:4643
 msgid "Revoke"
 msgstr "Intrekken"
 
-#: class-gravity-flow.php:4676
+#: class-gravity-flow.php:4698
 msgid "Entries per page"
 msgstr "Inzendingen per pagina"
 
-#: class-gravity-flow.php:4704 includes/class-extension.php:411
+#: class-gravity-flow.php:4726 includes/class-extension.php:411
 #: includes/class-feed-extension.php:418
 msgid "Settings"
 msgstr "Instellingen"
 
-#: class-gravity-flow.php:4708 includes/class-extension.php:226
+#: class-gravity-flow.php:4730 includes/class-extension.php:226
 #: includes/class-feed-extension.php:228
 #: includes/wizard/steps/class-iw-step-license-key.php:100
 msgid "License Key"
 msgstr "Licentiesleutel"
 
-#: class-gravity-flow.php:4712 includes/class-extension.php:230
+#: class-gravity-flow.php:4734 includes/class-extension.php:230
 #: includes/class-feed-extension.php:232
 msgid "Invalid license"
 msgstr "Ongeldige licentie"
 
-#: class-gravity-flow.php:4718
+#: class-gravity-flow.php:4740
 #: includes/wizard/steps/class-iw-step-updates.php:111
-msgid "Background Updates"
-msgstr "Updates op de achtergrond"
+msgid "Automatic Updates"
+msgstr ""
 
-#: class-gravity-flow.php:4719
+#: class-gravity-flow.php:4741
 msgid ""
-"Set this to ON to allow Gravity Flow to download and install bug fixes and "
-"security updates automatically in the background. Requires a valid license "
-"key."
-msgstr "Zet dit op AAN om Gravity Flow toestemming te geven om automatisch bug fixes en veiligheidsupdates te downloaden en installeren op de achtergrond. Vereist een geldige licentiesleutel."
+"Set this to ON to allow WordPress to download and install Gravity Flow bug "
+"fixes and security updates automatically in the background. Requires a valid"
+" license key."
+msgstr ""
 
-#: class-gravity-flow.php:4724
+#: class-gravity-flow.php:4746
 msgid "On"
 msgstr "Aan"
 
-#: class-gravity-flow.php:4725
+#: class-gravity-flow.php:4747
 msgid "Off"
 msgstr "Uit"
 
-#: class-gravity-flow.php:4744
+#: class-gravity-flow.php:4766
 msgid "Update Settings"
 msgstr "Instellingen bijwerken"
 
-#: class-gravity-flow.php:4746
+#: class-gravity-flow.php:4768
 msgid "Settings updated successfully"
 msgstr "Instellingen zijn succesvol bijgewerkt"
 
-#: class-gravity-flow.php:4747
+#: class-gravity-flow.php:4769
 msgid "There was an error while saving the settings"
 msgstr "Er ging iets fout bij het opslaan van de instellingen"
 
-#: class-gravity-flow.php:4767
+#: class-gravity-flow.php:4789
 msgid "Workflow Emails"
 msgstr "Workflow e-mails"
 
-#: class-gravity-flow.php:4787
+#: class-gravity-flow.php:4809
 msgid "Email Service"
 msgstr "E-mailservice"
 
-#: class-gravity-flow.php:4788
+#: class-gravity-flow.php:4810
 msgid ""
 "Select which service should be used to send the workflow emails. WordPress "
 "uses the server hosting your site or an active SMTP plugin."
 msgstr "Selecteer welke service moet worden gebruikt om de workflow e-mails te verzenden. WordPress gebruikt de server die als host fungeert voor je site of een actieve SMTP plugin."
 
-#: class-gravity-flow.php:4799
+#: class-gravity-flow.php:4821
 #: includes/steps/class-common-step-settings.php:176
 msgid "From Name"
 msgstr "Van naam"
 
-#: class-gravity-flow.php:4800
+#: class-gravity-flow.php:4822
 msgid ""
 "The default From Name to be used when the From Name setting is not "
 "configured on the individual steps."
 msgstr "De standaard From-naam die moet worden gebruikt wanneer de Van naam instelling niet is geconfigureerd voor de afzonderlijke stappen."
 
-#: class-gravity-flow.php:4821
+#: class-gravity-flow.php:4843
 #: includes/steps/class-common-step-settings.php:182
 msgid "From Email"
 msgstr "Van e-mailadres"
 
-#: class-gravity-flow.php:4822
+#: class-gravity-flow.php:4844
 msgid ""
 "The default From Email to be used when the From Email setting is not "
 "configured on the individual steps."
 msgstr "Het standaard Van e-mailadres die moet worden gebruikt wanneer de Van e-mailadres instelling niet is geconfigureerd voor de afzonderlijke stappen."
 
-#: class-gravity-flow.php:4871
+#: class-gravity-flow.php:4893
 msgid "Please enter a valid email address."
 msgstr "Voer een geldig e-mailadres in."
 
-#: class-gravity-flow.php:4887
+#: class-gravity-flow.php:4909
 msgid ""
 "From Email domain must be an %1$sactive domain%3$s. You can learn more about"
 " verifying your domain in the %2$sMailgun documentation%3$s."
 msgstr "Van e-maildomein moet een %1$s actief domein%3$s zijn. Je kan meer informatie over het verifiëren van je domein in de %2$sMailgun-documentatie%3$s vinden."
 
-#: class-gravity-flow.php:4926
+#: class-gravity-flow.php:4948
 msgid "Published"
 msgstr "Gepubliceerd"
 
-#: class-gravity-flow.php:4937
+#: class-gravity-flow.php:4959
 msgid "No workflow steps have been added to any forms yet."
 msgstr "Er zijn nog geen workflow stappen toegevoegd aan een formulier."
 
-#: class-gravity-flow.php:4943
+#: class-gravity-flow.php:4965
 msgid "Published Workflow Forms"
 msgstr "Gepubliceerde workflow formulieren"
 
-#: class-gravity-flow.php:4944
+#: class-gravity-flow.php:4966
 msgid "Select the forms you wish to publish on the Submit page."
 msgstr "Selecteer de formulieren die je wilt publiceren op de Versturen-pagina."
 
-#: class-gravity-flow.php:4958
+#: class-gravity-flow.php:4980
 msgid "Default Pages"
 msgstr "Standaard pagina's"
 
-#: class-gravity-flow.php:4959
+#: class-gravity-flow.php:4981
 msgid ""
 "Select the pages which contain the following gravityflow shortcodes. For "
 "example, the inbox page selected below will be used when preparing merge "
@@ -802,464 +802,468 @@ msgid ""
 "specified."
 msgstr "Selecteer de pagina's die de volgende gravityflow shortcodes bevatten. Bijvoorbeeld, de inbox pagina die hieronder is geselecteerd, zal worden gebruikt bij het maken van de merge tags zoals {workflow_inbox_link}  wanneer het page_id-attribuut niet is gespecificeerd."
 
-#: class-gravity-flow.php:4963 class-gravity-flow.php:7874
+#: class-gravity-flow.php:4985 class-gravity-flow.php:7945
 #: includes/merge-tags/class-merge-tag-workflow-url.php:62
 #: includes/wizard/steps/class-iw-step-pages.php:61
 msgid "Inbox"
 msgstr "Inbox"
 
-#: class-gravity-flow.php:4973 class-gravity-flow.php:7875
-#: includes/steps/class-step-user-input.php:1005
-#: includes/steps/class-step-user-input.php:1030
+#: class-gravity-flow.php:4995 class-gravity-flow.php:7946
+#: includes/steps/class-step-user-input.php:1004
+#: includes/steps/class-step-user-input.php:1029
 #: includes/wizard/steps/class-iw-step-pages.php:97
 msgid "Submit"
 msgstr "Versturen"
 
-#: class-gravity-flow.php:4989
+#: class-gravity-flow.php:5011
 msgid "Security Options"
 msgstr "Beveilgingsopties"
 
-#: class-gravity-flow.php:4993
+#: class-gravity-flow.php:5015
 msgid "Shortcode Security"
 msgstr "Shortcode beveiliging"
 
-#: class-gravity-flow.php:4995
+#: class-gravity-flow.php:5017
 msgid ""
 "Important: Do not enable any of these settings unless all page editors are "
 "authorized."
 msgstr "Belangrijk: schakel geen van deze instellingen in tenzij alle pagina redacteurs geautoriseerd zijn."
 
-#: class-gravity-flow.php:4998
+#: class-gravity-flow.php:5020
 msgid ""
 "Allow the Status shortcode to display all entries to all registered users."
 msgstr "Toestaan dat de Status shortcode alle inzendingen voor alle geregistreerde gebruikers weergeeft."
 
-#: class-gravity-flow.php:5000
+#: class-gravity-flow.php:5022
 msgid ""
 "This setting allows the display_all attribute to be used in the shortcode."
 msgstr "Deze instelling laat het toe de display_all attribuut te gebruiken in de shortcode."
 
-#: class-gravity-flow.php:5003
+#: class-gravity-flow.php:5025
 msgid ""
 "Allow the Status shortcode to display all entries to all anonymous users."
 msgstr "Toestaan dat de Status shortcode alle inzendingen voor alle anonieme gebruikers weergeeft."
 
-#: class-gravity-flow.php:5005
+#: class-gravity-flow.php:5027
 msgid ""
 "This setting allows the allow_anonymous attribute to be used in the "
 "shortcode."
 msgstr "Met deze instelling kan het kenmerk allow_anonymous in de shortcode worden gebruikt."
 
-#: class-gravity-flow.php:5008
+#: class-gravity-flow.php:5030
 msgid "Allow the Inbox and Status shortcodes to display field values."
 msgstr "De inbox en status shortcodes toelaten om de veldwaarden te tonen."
 
-#: class-gravity-flow.php:5010
+#: class-gravity-flow.php:5032
 msgid "This setting allows the fields attribute to be used in the shortcode."
 msgstr "Met deze instelling kan het veld kenmerk worden gebruikt in de shortcode."
 
-#: class-gravity-flow.php:5013
+#: class-gravity-flow.php:5035
 msgid ""
 "Allow the Reports shortcode to display workflow reports to all registered "
 "and anonymous users."
 msgstr ""
 
-#: class-gravity-flow.php:5015
+#: class-gravity-flow.php:5037
 msgid ""
 "This setting allows the Reports shortcode to display workflow reports to all"
 " registered and anonymous users."
 msgstr ""
 
-#: class-gravity-flow.php:5040
+#: class-gravity-flow.php:5062
 msgid "Select page"
 msgstr "Selecteer pagina"
 
-#: class-gravity-flow.php:5202
+#: class-gravity-flow.php:5224
 #: includes/wizard/steps/class-iw-step-pages.php:211
 msgid "Submit a Workflow Form"
 msgstr "Verstuur een workflow formulier"
 
-#: class-gravity-flow.php:5269
+#: class-gravity-flow.php:5291
 msgid ""
 "Important: Gravity Flow (Development Version) is missing some important "
 "files that were not included in the installation package. Consult the "
 "readme.md file for further details."
 msgstr "Belangrijk: Gravity Flow (ontwikkelingsversie) mist enkele belangrijke bestanden die niet waren bijgevoegd in het installatiepakket. Raadpleeg het readme.md-bestand voor verdere details."
 
-#: class-gravity-flow.php:5332 class-gravity-flow.php:6248
+#: class-gravity-flow.php:5354 class-gravity-flow.php:6298
 #: includes/pages/class-entry-detail.php:167
 msgid "Return to list"
 msgstr "Ga terug naar de lijst"
 
-#: class-gravity-flow.php:5351
+#: class-gravity-flow.php:5373
 msgid "Oops! We could not locate your entry."
 msgstr "Oeps! We konden je inzending niet vinden."
 
-#: class-gravity-flow.php:5375 includes/steps/class-step-approval.php:1017
+#: class-gravity-flow.php:5397 includes/steps/class-step-approval.php:1017
 msgid "Error: incorrect entry."
 msgstr "Fout: onjuiste inzending."
 
-#: class-gravity-flow.php:5381
+#: class-gravity-flow.php:5403
 msgid "Workflow Cancelled"
 msgstr "Workflow geannuleerd"
 
-#: class-gravity-flow.php:5404
+#: class-gravity-flow.php:5426
 msgid "Error: This URL is no longer valid."
 msgstr "Fout: deze URL is niet langer geldig."
 
-#: class-gravity-flow.php:5473
+#: class-gravity-flow.php:5497
 #: includes/wizard/steps/class-iw-step-pages.php:209
 msgid "Workflow Inbox"
 msgstr "Workflow inbox"
 
-#: class-gravity-flow.php:5520
+#: class-gravity-flow.php:5544
 #: includes/wizard/steps/class-iw-step-pages.php:210
 msgid "Workflow Status"
 msgstr "Workflow status"
 
-#: class-gravity-flow.php:5565
+#: class-gravity-flow.php:5589
 msgid "Workflow Activity"
 msgstr "Workflow activiteit"
 
-#: class-gravity-flow.php:5611
+#: class-gravity-flow.php:5635
 msgid "Workflow Reports"
 msgstr "Workflow rapporten"
 
-#: class-gravity-flow.php:5663
+#: class-gravity-flow.php:5687
 msgid "Your inbox of pending tasks"
 msgstr "Je inbox met lopende taken"
 
-#: class-gravity-flow.php:5677
+#: class-gravity-flow.php:5701
 msgid "Submit a Workflow"
 msgstr "Verstuur een workflow"
 
-#: class-gravity-flow.php:5689
+#: class-gravity-flow.php:5713
 msgid "Your workflows"
 msgstr "Je workflows"
 
-#: class-gravity-flow.php:5700 class-gravity-flow.php:7878
+#: class-gravity-flow.php:5724 class-gravity-flow.php:7949
 msgid "Reports"
 msgstr "Rapporten"
 
-#: class-gravity-flow.php:5711 class-gravity-flow.php:7879
+#: class-gravity-flow.php:5735 class-gravity-flow.php:7950
 msgid "Activity"
 msgstr "Activiteit"
 
-#: class-gravity-flow.php:5742 includes/class-api.php:129
+#: class-gravity-flow.php:5766 includes/class-api.php:129
 msgid "Workflow cancelled."
 msgstr "Workflow geannuleerd."
 
-#: class-gravity-flow.php:5746 class-gravity-flow.php:5758
+#: class-gravity-flow.php:5770 class-gravity-flow.php:5782
 msgid "The entry does not currently have an active step."
 msgstr "Deze inzending heeft op dit moment geen actieve stap."
 
-#: class-gravity-flow.php:5755 includes/class-api.php:154
+#: class-gravity-flow.php:5779 includes/class-api.php:154
 msgid "Workflow Step restarted."
 msgstr "Workflow stap opnieuw gestart."
 
-#: class-gravity-flow.php:5766 includes/class-api.php:192
+#: class-gravity-flow.php:5790 includes/class-api.php:192
 #: includes/pages/class-status.php:2019
 msgid "Workflow restarted."
 msgstr "Workflow opnieuw gestart."
 
-#: class-gravity-flow.php:5776 includes/class-api.php:315
+#: class-gravity-flow.php:5800 includes/class-api.php:315
 msgid "Sent to step: %s"
 msgstr "Verzenden naar stap: : %s"
 
-#: class-gravity-flow.php:5802
+#: class-gravity-flow.php:5826
 msgid "Workflow: approved or rejected"
 msgstr "Workflow: goedgekeurd of afgewezen"
 
-#: class-gravity-flow.php:5803
+#: class-gravity-flow.php:5827
 msgid "Workflow: user input"
 msgstr "Workflow: gebruikersinvoer"
 
-#: class-gravity-flow.php:5804
+#: class-gravity-flow.php:5828
 msgid "Workflow: complete"
 msgstr "Workflow: voltooid"
 
-#: class-gravity-flow.php:5805
+#: class-gravity-flow.php:5829
 msgid "Workflow: cancelled"
 msgstr "Workflow: geannuleerd."
 
-#: class-gravity-flow.php:6811
+#: class-gravity-flow.php:6005
+msgid "%s %s"
+msgstr ""
+
+#: class-gravity-flow.php:6882
 msgid ""
 "Gravity Flow Steps imported. IMPORTANT: Check the assignees for each step. "
 "If the form was imported from a different installation with different user "
 "IDs then steps may need to be reassigned."
 msgstr "Gravity Flow stappen geïmporteerd. BELANGRIJK: controleer de toegewezen medewerkers bij elke stap. Als het formulier geïmporteerd was vanaf een belangrijke installatie met andere gebruiker ID's moeten stappen misschien opnieuw worden toegewezen."
 
-#: class-gravity-flow.php:7132
+#: class-gravity-flow.php:7203
 msgid ""
 "%sThis operation deletes ALL Gravity Flow settings%s. If you continue, you "
 "will NOT be able to retrieve these settings."
 msgstr "%sDeze actie verwijdert ALLE Gravity Flow instellingen%s. Als je doorgaat, kun je deze instellingen NIET meer herstellen."
 
-#: class-gravity-flow.php:7141
+#: class-gravity-flow.php:7212
 msgid ""
 "Warning! ALL Gravity Flow settings will be deleted. This cannot be undone. "
 "'OK' to delete, 'Cancel' to stop"
 msgstr "Waarschuwing! ALLE Gravity Flow instellingen zullen worden verwijderd. Dit kan niet ongedaan gemaakt worden. 'OK' om te verwijderen, 'Annuleren' om te stoppen."
 
-#: class-gravity-flow.php:7647
+#: class-gravity-flow.php:7718
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] "%d jaar"
 msgstr[1] "%d jaren"
 
-#: class-gravity-flow.php:7651
+#: class-gravity-flow.php:7722
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] "%d maand"
 msgstr[1] "%d maanden"
 
-#: class-gravity-flow.php:7655
+#: class-gravity-flow.php:7726
 msgid "%dd"
 msgstr "%dd"
 
-#: class-gravity-flow.php:7672
+#: class-gravity-flow.php:7743
 msgid "%dh"
 msgstr "%du"
 
-#: class-gravity-flow.php:7677
+#: class-gravity-flow.php:7748
 msgid "%dm"
 msgstr "%dm"
 
-#: class-gravity-flow.php:7681
+#: class-gravity-flow.php:7752
 msgid "%ds"
 msgstr "%ds"
 
-#: class-gravity-flow.php:7725
+#: class-gravity-flow.php:7796
 msgid "Every Fifteen Minutes"
 msgstr "Elke vijftien minuten"
 
-#: class-gravity-flow.php:7750 class-gravity-flow.php:7775
-#: class-gravity-flow.php:7811
+#: class-gravity-flow.php:7821 class-gravity-flow.php:7846
+#: class-gravity-flow.php:7882
 msgid "Not authorized"
 msgstr "Niet geautoriseerd"
 
-#: class-gravity-flow.php:7873 class-gravity-flow.php:8582
+#: class-gravity-flow.php:7944 class-gravity-flow.php:8653
 msgid "Workflow"
 msgstr "Workflow"
 
-#: class-gravity-flow.php:7877
+#: class-gravity-flow.php:7948
 msgid "Support"
 msgstr "Ondersteuning"
 
-#: class-gravity-flow.php:7913 includes/steps/class-step-approval.php:50
+#: class-gravity-flow.php:7984 includes/steps/class-step-approval.php:50
 #: includes/steps/class-step-approval.php:753
 msgid "Approved"
 msgstr "Goedgekeurd"
 
-#: class-gravity-flow.php:7916 includes/steps/class-step-approval.php:44
+#: class-gravity-flow.php:7987 includes/steps/class-step-approval.php:44
 #: includes/steps/class-step-approval.php:755
 msgid "Rejected"
 msgstr "Afgewezen"
 
-#: class-gravity-flow.php:7978
+#: class-gravity-flow.php:8049
 msgid "Oops! We couldn't find your lead. Please try again"
 msgstr "Oeps! We konden je lead niet vinden. Probeer het nogmaals."
 
-#: class-gravity-flow.php:8020 includes/pages/class-entry-detail.php:200
+#: class-gravity-flow.php:8091 includes/pages/class-entry-detail.php:200
 msgid "Would you like to delete this file? 'Cancel' to stop. 'OK' to delete"
 msgstr "Wil je dit bestand verwijderen? 'Annuleren' om te stoppen. 'OK' om te verwijderen"
 
-#: class-gravity-flow.php:8124
+#: class-gravity-flow.php:8195
 msgid "Display all fields"
 msgstr "Toon alle velden"
 
-#: class-gravity-flow.php:8128
+#: class-gravity-flow.php:8199
 msgid "Display all fields except selected"
 msgstr "Toon alle velden behalve de geselecteerde"
 
-#: class-gravity-flow.php:8132
+#: class-gravity-flow.php:8203
 msgid "Hide all fields except selected"
 msgstr "Verberg alle velden behalve de geselecteerde"
 
-#: class-gravity-flow.php:8171
+#: class-gravity-flow.php:8242
 msgid "Except"
 msgstr "Uitgezonderd"
 
-#: class-gravity-flow.php:8190
+#: class-gravity-flow.php:8261
 msgid "Order Summary"
 msgstr "Samenvatting bestelling"
 
-#: class-gravity-flow.php:8277 includes/class-common.php:88
+#: class-gravity-flow.php:8348 includes/class-common.php:88
 #: includes/steps/class-step-webhook.php:1067
 msgid "User IP"
 msgstr "Gebruiker IP"
 
-#: class-gravity-flow.php:8283
+#: class-gravity-flow.php:8354
 msgid "Source URL"
 msgstr "Bron URL"
 
-#: class-gravity-flow.php:8289 includes/class-common.php:94
+#: class-gravity-flow.php:8360 includes/class-common.php:94
 msgid "Payment Status"
 msgstr "Betalingsstatus"
 
-#: class-gravity-flow.php:8296 includes/class-common.php:103
+#: class-gravity-flow.php:8367 includes/class-common.php:103
 msgid "Payment Amount"
 msgstr "Betalingshoeveelheid"
 
-#: class-gravity-flow.php:8302 includes/class-common.php:97
+#: class-gravity-flow.php:8373 includes/class-common.php:97
 msgid "Transaction ID"
 msgstr "Transactie ID"
 
-#: class-gravity-flow.php:8308 includes/steps/class-step-webhook.php:1069
+#: class-gravity-flow.php:8379 includes/steps/class-step-webhook.php:1069
 msgid "Created By"
 msgstr "Aangemaakt door"
 
-#: class-gravity-flow.php:8332
+#: class-gravity-flow.php:8403
 msgid "Authorized"
 msgstr "Geautoriseerd"
 
-#: class-gravity-flow.php:8336
+#: class-gravity-flow.php:8407
 msgid "Paid"
 msgstr "Betaald"
 
-#: class-gravity-flow.php:8340
+#: class-gravity-flow.php:8411
 msgid "Processing"
 msgstr "Verwerken"
 
-#: class-gravity-flow.php:8344
+#: class-gravity-flow.php:8415
 msgid "Failed"
 msgstr "Mislukt"
 
-#: class-gravity-flow.php:8348
+#: class-gravity-flow.php:8419
 msgid "Active"
 msgstr "Actief"
 
-#: class-gravity-flow.php:8360
+#: class-gravity-flow.php:8431
 msgid "Refunded"
 msgstr "Terugbetaald"
 
-#: class-gravity-flow.php:8364
+#: class-gravity-flow.php:8435
 msgid "Voided"
 msgstr "Ongeldig"
 
-#: class-gravity-flow.php:8583
+#: class-gravity-flow.php:8654
 msgid "Entry Link"
 msgstr "Inzending-link"
 
-#: class-gravity-flow.php:8584
+#: class-gravity-flow.php:8655
 msgid "Entry URL"
 msgstr "Inzending URL"
 
-#: class-gravity-flow.php:8585
+#: class-gravity-flow.php:8656
 msgid "Inbox Link"
 msgstr "Inbox-link"
 
-#: class-gravity-flow.php:8586
+#: class-gravity-flow.php:8657
 msgid "Inbox URL"
 msgstr "Inbox-URL"
 
-#: class-gravity-flow.php:8587
+#: class-gravity-flow.php:8658
 msgid "Cancel Link"
 msgstr "Annuleren-link"
 
-#: class-gravity-flow.php:8588
+#: class-gravity-flow.php:8659
 msgid "Cancel URL"
 msgstr "Annuleren URL"
 
-#: class-gravity-flow.php:8589 includes/pages/class-inbox.php:412
+#: class-gravity-flow.php:8660 includes/pages/class-inbox.php:412
 #: includes/steps/class-step-approval.php:854
-#: includes/steps/class-step-user-input.php:1081
+#: includes/steps/class-step-user-input.php:1080
 #: includes/steps/class-step.php:2006
 msgid "Note"
 msgstr "Notitie"
 
-#: class-gravity-flow.php:8590 includes/pages/class-entry-detail.php:546
+#: class-gravity-flow.php:8661 includes/pages/class-entry-detail.php:546
 msgid "Timeline"
 msgstr "Tijdlijn"
 
-#: class-gravity-flow.php:8591 includes/fields/class-fields.php:103
+#: class-gravity-flow.php:8662 includes/fields/class-fields.php:103
 msgid "Assignees"
 msgstr "Toegewezen medewerkers"
 
-#: class-gravity-flow.php:8592
+#: class-gravity-flow.php:8663
 msgid "Approve Link"
 msgstr "Goedkeuren-link"
 
-#: class-gravity-flow.php:8593
+#: class-gravity-flow.php:8664
 msgid "Approve URL"
 msgstr "Goedkeuring URL"
 
-#: class-gravity-flow.php:8594
+#: class-gravity-flow.php:8665
 msgid "Approve Token"
 msgstr "Goedkeuren-token"
 
-#: class-gravity-flow.php:8595
+#: class-gravity-flow.php:8666
 msgid "Reject Link"
 msgstr "Afwijzen-link"
 
-#: class-gravity-flow.php:8596
+#: class-gravity-flow.php:8667
 msgid "Reject URL"
 msgstr "Afwijzen URL"
 
-#: class-gravity-flow.php:8597
+#: class-gravity-flow.php:8668
 msgid "Reject Token"
 msgstr "Afwijzen-token"
 
-#: class-gravity-flow.php:8644 includes/steps/class-step-update-user.php:78
+#: class-gravity-flow.php:8715 includes/steps/class-step-update-user.php:78
 msgid "Current User"
 msgstr "Huidige gebruiker"
 
-#: class-gravity-flow.php:8650
+#: class-gravity-flow.php:8721
 msgid "Workflow Assignee"
 msgstr "Workflow toegewezen medewerker"
 
-#: class-gravity-flow.php:8817
+#: class-gravity-flow.php:8888
 msgid "Entry Detail Admin Actions"
 msgstr "Beheerdersacties inzendingsdetails"
 
-#: class-gravity-flow.php:8820
+#: class-gravity-flow.php:8891
 msgid "View All"
 msgstr "Alles bekijken"
 
-#: class-gravity-flow.php:8821
+#: class-gravity-flow.php:8892
 msgid "Admin Actions"
 msgstr ""
 
-#: class-gravity-flow.php:8824
+#: class-gravity-flow.php:8895
 msgid "Manage Settings"
 msgstr "Instellingen beheren"
 
-#: class-gravity-flow.php:8826
+#: class-gravity-flow.php:8897
 msgid "Manage Form Steps"
 msgstr "Formulierstappen beheren"
 
 #. translators: %s is the title of the plugin
-#: class-gravity-flow.php:8967
+#: class-gravity-flow.php:9038
 msgid "Your %s license has expired."
 msgstr "Je licentie %s is vervallen."
 
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
-#: class-gravity-flow.php:8972 includes/class-extension.php:490
+#: class-gravity-flow.php:9043 includes/class-extension.php:490
 #: includes/class-feed-extension.php:497
 msgid "Your %s license is invalid."
 msgstr "Je licentie %s is ongeldig."
 
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
-#: class-gravity-flow.php:8976 includes/class-extension.php:494
+#: class-gravity-flow.php:9047 includes/class-extension.php:494
 #: includes/class-feed-extension.php:501
 msgid "Your %s license is inactive."
 msgstr "Je licentie %s is inactief."
 
 #. translators: %s is the title of the plugin
 #. translators: %s is the title of the Gravity Flow Extension
-#: class-gravity-flow.php:8986 includes/class-extension.php:504
+#: class-gravity-flow.php:9057 includes/class-extension.php:504
 #: includes/class-feed-extension.php:511
 msgid "Your %s license has not been activated."
 msgstr "Je licentie %s is nog niet geactiveerd."
 
-#: class-gravity-flow.php:8990 includes/class-extension.php:508
+#: class-gravity-flow.php:9061 includes/class-extension.php:508
 #: includes/class-feed-extension.php:515
 msgid "This means you're missing out on security fixes, updates and support."
 msgstr "Dit betekent dat je beveiligingsoplossingen, updates en ondersteuning mist."
 
-#: class-gravity-flow.php:8996 includes/class-extension.php:518
+#: class-gravity-flow.php:9067 includes/class-extension.php:518
 #: includes/class-feed-extension.php:525
 msgid "%sActivate your license%s or %sget a license here%s"
 msgstr "%sActiveer je licentie%s of %skoop hier een licentie%s"
@@ -1268,22 +1272,22 @@ msgstr "%sActiveer je licentie%s of %skoop hier een licentie%s"
 msgid "Gravity Flow"
 msgstr "Gravity Flow"
 
-#: includes/EDD_SL_Plugin_Updater.php:225
+#: includes/EDD_SL_Plugin_Updater.php:262
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
 msgstr "Er is een nieuwe versie van %1$s beschikbaar. %2$sBekijk versie %3$s details%4$s."
 
-#: includes/EDD_SL_Plugin_Updater.php:233
+#: includes/EDD_SL_Plugin_Updater.php:270
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s "
 "or %5$supdate now%6$s."
 msgstr "Er is een nieuwe versie van %1$s beschikbaar. %2$sBekijk details versie %3$s%4$s of %5$swerk nu bij%6$s."
 
-#: includes/EDD_SL_Plugin_Updater.php:474
+#: includes/EDD_SL_Plugin_Updater.php:514
 msgid "You do not have permission to install plugin updates"
 msgstr "U heeft geen toestemming om plugin updates te installeren"
 
-#: includes/EDD_SL_Plugin_Updater.php:474
+#: includes/EDD_SL_Plugin_Updater.php:514
 msgid "Error"
 msgstr "Fout"
 
@@ -2458,16 +2462,16 @@ msgid "Create Invoice (Sprout Invoices Add-on - Invoice Submissions)"
 msgstr "Factuur maken (Sprout facturatie add-on - factuur inzendingen)"
 
 #: includes/steps/class-step-feed-user-registration.php:55
-#: includes/steps/class-step-feed-user-registration.php:166
-#: includes/steps/class-step-feed-user-registration.php:191
+#: includes/steps/class-step-feed-user-registration.php:173
+#: includes/steps/class-step-feed-user-registration.php:198
 msgid "User Registration"
 msgstr "Gebruikersregistratie"
 
-#: includes/steps/class-step-feed-user-registration.php:141
+#: includes/steps/class-step-feed-user-registration.php:148
 msgid "Create"
 msgstr "Maken"
 
-#: includes/steps/class-step-feed-user-registration.php:222
+#: includes/steps/class-step-feed-user-registration.php:229
 msgid "User Registration feed processed: %s"
 msgstr "Feed gebruikersregistratie verwerkt: %s"
 
@@ -2900,24 +2904,24 @@ msgstr "Er was een probleem bij het bijwerken van de status geselecteerde gebrui
 msgid "Entry updated and marked complete."
 msgstr "Inzending bijgewerkt en als voltooid gemarkeerd."
 
-#: includes/steps/class-step-user-input.php:572
+#: includes/steps/class-step-user-input.php:571
 msgid "Entry updated - in progress."
 msgstr "Inzending bijgewerkt - in behandeling."
 
-#: includes/steps/class-step-user-input.php:675
-#: includes/steps/class-step-user-input.php:699
+#: includes/steps/class-step-user-input.php:674
+#: includes/steps/class-step-user-input.php:698
 msgid "This field is required."
 msgstr "Dit veld is vereist."
 
-#: includes/steps/class-step-user-input.php:844
+#: includes/steps/class-step-user-input.php:843
 msgid "Pending Input"
 msgstr "Wacht op bijdrage"
 
-#: includes/steps/class-step-user-input.php:934
+#: includes/steps/class-step-user-input.php:933
 msgid "In progress"
 msgstr "In behandeling"
 
-#: includes/steps/class-step-user-input.php:981
+#: includes/steps/class-step-user-input.php:980
 msgid "Save"
 msgstr "Opslaan"
 
@@ -3380,11 +3384,11 @@ msgstr "Accepteer de voorwaarden"
 
 #: includes/wizard/steps/class-iw-step-pages.php:38
 msgid ""
-"Users can access workflowws via the front-end of your site and/or from the "
+"Users can access workflows via the front-end of your site and/or from the "
 "built-in WordPress admin pages (Workflow menu). If you would like your users"
 " to access via the front-end of your site then you'll need to add some "
 "pages."
-msgstr "Gebruikers kunnen toegang krijgen tot workflows via de voorkant van de site en / of via de ingebouwde WordPress beheerderspagina's (workflow-menu). Als je wil dat je gebruikers toegang hebben via de front-end van je site, moet je enkele pagina's toevoegen."
+msgstr ""
 
 #. translators: 1. The opening link tag 2. the closing link tag
 #: includes/wizard/steps/class-iw-step-pages.php:41
@@ -3428,29 +3432,29 @@ msgstr "Workflow pagina's"
 
 #: includes/wizard/steps/class-iw-step-updates.php:35
 msgid ""
-"Gravity Flow will download important bug fixes, security enhancements and "
-"plugin updates automatically. Updates are extremely important to the "
-"security of your WordPress site."
-msgstr "Gravity Flow zal belangrijke bug fixes, veiligheidsverbeteringen en plugin updates automatisch downloaden. Updates zijn zeer belangrijk voor de beveiliging van je WordPress site."
+"WordPress will automatically install important Gravity Flow bug fixes, "
+"security enhancements and plugin updates. Updates are extremely important to"
+" the security of your site."
+msgstr ""
 
 #: includes/wizard/steps/class-iw-step-updates.php:41
 msgid ""
 "This feature is activated by default unless you opt to disable it below. We "
-"only recommend disabling background updates if you intend on managing "
-"updates manually. A valid license is required for background updates."
-msgstr "Deze functie is standaard geactiveerd, tenzij je het hieronder uitgeschakeld hebt. We raden je aan updates op de achtergrond alleen uit te schakelen als je van plan bent om updates handmatig te beheren. Een geldige licentie is vereist voor updates op de achtergrond."
+"only recommend disabling automatic updates if you intend on managing updates"
+" manually. A valid license is required for automatic updates."
+msgstr ""
 
 #: includes/wizard/steps/class-iw-step-updates.php:52
 msgid "Updates will only be available if you have entered a valid License Key"
 msgstr "Updates zijn enkel beschikbaar als je een geldige licentiesleutel hebt ingevoerd"
 
 #: includes/wizard/steps/class-iw-step-updates.php:61
-msgid "Keep background updates enabled"
-msgstr "Houd achtergrond updates ingeschakeld"
+msgid "Keep automatic updates enabled"
+msgstr ""
 
 #: includes/wizard/steps/class-iw-step-updates.php:67
-msgid "Turn off background updates"
-msgstr "Schakel achtergrond updates uit"
+msgid "Turn off automatic updates"
+msgstr ""
 
 #: includes/wizard/steps/class-iw-step-updates.php:73
 msgid "Are you sure?"
@@ -3458,11 +3462,11 @@ msgstr "Weet je het zeker?"
 
 #: includes/wizard/steps/class-iw-step-updates.php:76
 msgid ""
-"By disabling background updates your site may not get critical bug fixes and"
-" security enhancements. We only recommend doing this if you are experienced "
+"By disabling automatic updates your site may not get critical bug fixes and "
+"security enhancements. We only recommend doing this if you are experienced "
 "at managing a WordPress site and accept the risks involved in manually "
 "keeping your WordPress site updated."
-msgstr "Door updates op de achtergrond uit te schakelen, ontvangt je site misschien geen kritieke bug fixes en veiligheidsverbeteringen. We raden je dit alleen aan als je ervaren bent met het beheren van een WordPress site en de mogelijke risico's accepteert met het handmatig bijwerken van je WordPress site."
+msgstr ""
 
 #: includes/wizard/steps/class-iw-step-updates.php:81
 msgid "I Understand and Accept the Risk"

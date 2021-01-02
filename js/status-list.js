@@ -55,13 +55,14 @@
 }(window.GravityFlowStatusList = window.GravityFlowStatusList || {}, jQuery));
 
 function closePrint () {
-    document.body.removeChild(this.__container__);
+    var frames = document.getElementsByClassName("gravityflow-print-frame");
+    if (frames.length !== 0) {
+        frames[0].remove();
+    }
 }
 
 function setPrint () {
     this.contentWindow.__container__ = this;
-    this.contentWindow.onbeforeunload = closePrint;
-    this.contentWindow.onafterprint = closePrint;
     this.contentWindow.focus();
     var ms_ie = false;
     var ua = window.navigator.userAgent;
@@ -77,10 +78,13 @@ function setPrint () {
     } else {
         this.contentWindow.print();
     }
+	
+    setTimeout( closePrint, 100 );
 }
 
 function printPage (sURL) {
     var oHiddFrame = document.createElement("iframe");
+    oHiddFrame.classList.add("gravityflow-print-frame");
     oHiddFrame.onload = setPrint;
     oHiddFrame.style.visibility = "hidden";
     oHiddFrame.style.position = "fixed";

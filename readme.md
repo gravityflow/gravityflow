@@ -1,7 +1,7 @@
 Gravity Flow
 ==============================
 
-[![Build Status](https://travis-ci.org/gravityflow/gravityflow.svg?branch=master)](https://travis-ci.org/gravityflow/gravityflow)  [![CircleCI](https://circleci.com/gh/gravityflow/gravityflow.svg?style=svg)](https://circleci.com/gh/gravityflow/gravityflow)
+[![PHPUnit Tests](https://github.com/gravityflow/gravityflow/workflows/PHPUnit%20Tests/badge.svg?branch=master)](https://github.com/gravityflow/gravityflow/actions?query=branch%3Amaster+workflow%3A%22PHPUnit+Tests%22)  [![CircleCI](https://circleci.com/gh/gravityflow/gravityflow.svg?style=svg)](https://circleci.com/gh/gravityflow/gravityflow)
 
 Gravity Flow is a premium plugin for WordPress which provides Workflow automation for forms created in Gravity Forms.
 
