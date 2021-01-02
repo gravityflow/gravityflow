@@ -267,7 +267,7 @@ if ( class_exists( 'GFForms' ) ) {
 			add_action( 'gform_post_save_feed_settings', array( $this, 'post_save_feed_settings'), 10, 4 );
 
 			wp_register_style( 'gravityflow_dashicons', plugins_url( 'gravityflow/css/gravityflow-icon.css' ) );
-      wp_enqueue_style( 'gravityflow_dashicons' );
+			wp_enqueue_style( 'gravityflow_dashicons' );
 
 		}
 
