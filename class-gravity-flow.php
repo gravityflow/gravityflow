@@ -1717,7 +1717,7 @@ PRIMARY KEY  (id)
 		 *
 		 * @since 2.7
 		 *
-		 * @param $field        \Gravity_Forms\Gravity_Forms\Settings\Fields\Base|array Gravity Forms 2.4: array, 2.5: Setting API field
+		 * @param $field        \Gravity_Forms\Gravity_Forms\Settings\Fields\Base|array Gravity Forms 2.4: array, 2.5: Settings API field
 		 * @param $field_setting
 		 */
 		public function step_type_validation_callback( $field, $field_setting ) {
