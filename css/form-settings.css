@@ -246,12 +246,17 @@ table.gform-routings tr.gform-routing-row td .repeater-buttons{
 
 div.gform-field-filter {
     display: flex;
+    max-width: auto;
 }
 
 select.gform-filter-field, select.gform-filter-operator, input.gform-filter-value {
     height: auto;
     min-height: 100%;
     position: relative;
+}
+
+.gform-settings-panel__content select[name="mode"] {
+    width: 10%;
 }
 
 button.gform-add, button.gform-remove {
@@ -274,4 +279,8 @@ button.gform-add.add_field_choice {
 
 button.gform-remove.delete_field_choice {
     background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAxYTEgMSAwIDAxMS0xaDEwYTEgMSAwIDExMCAySDFhMSAxIDAgMDEtMS0xeiIgZmlsbD0iI0YxNUEyOSIvPjwvc3ZnPg==);
+}
+
+.gform-settings-panel__content select[name="_gform_setting_entry_filtersort_key"], .gform-settings-panel__content select[name="_gform_setting_entry_filtersort_direction"] {
+    width: auto;
 }
