@@ -1485,7 +1485,7 @@ PRIMARY KEY  (id)
 				'required'            => true,
 				'onchange'            => 'jQuery(this).parents("form").submit();',
 				'choices'             => $step_type_choices,
-				'validation_callback' => array( gravity_flow(), 'step_type_validation_callback' ),
+				'validation_callback' => array( $this, 'step_type_validation_callback' ),
 			);
 
 			$step_id = absint( rgget( 'fid' ) );
