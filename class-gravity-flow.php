@@ -263,8 +263,6 @@ if ( class_exists( 'GFForms' ) ) {
 			}
 
 			add_action( 'admin_notices', array( $this, 'action_admin_notices' ) );
-			
-			add_action( 'gform_post_save_feed_settings', array( $this, 'post_save_feed_settings'), 10, 4 );
 
 			wp_register_style( 'gravityflow_dashicons', plugins_url( 'gravityflow/css/gravityflow-icon.css' ) );
 			wp_enqueue_style( 'gravityflow_dashicons' );
@@ -1480,15 +1478,15 @@ PRIMARY KEY  (id)
 			$settings = array();
 
 			$step_type_setting = array(
-				'name'       => 'step_type',
-				'label'      => esc_html__( 'Step Type', 'gravityflow' ),
-				'type'       => 'radio_image',
-				'horizontal' => true,
-				'required'   => true,
-				'onchange'   => 'jQuery(this).parents("form").submit();',
-				'choices'    => $step_type_choices,
+				'name'                => 'step_type',
+				'label'               => esc_html__( 'Step Type', 'gravityflow' ),
+				'type'                => 'radio_image',
+				'horizontal'          => true,
+				'required'            => true,
+				'onchange'            => 'jQuery(this).parents("form").submit();',
+				'choices'             => $step_type_choices,
+				'validation_callback' => array( gravity_flow(), 'step_type_validation_callback' ),
 			);
-
 
 			$step_id = absint( rgget( 'fid' ) );
 
@@ -1683,8 +1681,6 @@ PRIMARY KEY  (id)
 				),
 			);
 
-			do_action( 'gform_post_save_feed_settings', $result, $form_id, $settings, $this );
-			
 			return $settings;
 		}
 
@@ -1719,8 +1715,64 @@ PRIMARY KEY  (id)
 		/**
 		 * Sets the _assignee_settings_md5 class property on feed validation, if there are entries on this step.
 		 *
+		 * @since 2.7
+		 *
+		 * @param $field        \Gravity_Forms\Gravity_Forms\Settings\Fields\Base|array Gravity Forms 2.4: array, 2.5: Setting API field
+		 * @param $field_setting
+		 */
+		public function step_type_validation_callback( $field, $field_setting ) {
+			$current_step_id = $this->get_current_feed_id();
+			$entry_count = 0;
+			$current_step = false;
+			if ( $current_step_id ) {
+				$current_step = $this->get_step( $current_step_id );
+				$entry_count = $current_step->entry_count();
+			}
+
+			if ( $current_step ) {
+				$required_capabilities = $current_step->get_required_capabilities();
+				// Checking ALL required capabilities, one by one.
+				// In this way, we can also match the "gform_full_access" cap with other Gravity Form or Gravity Flow caps.
+				foreach ( $required_capabilities as $cap ) {
+					if ( ! $this->current_user_can_any( $cap ) ) {
+						$error_message = esc_html__( "You don't have sufficient permissions to update the step settings.", 'gravityflow' );
+						GFCommon::add_error_message( $error_message );
+						if ( $this->is_gravityforms_supported( '2.5-beta-1' ) ) {
+							$field->set_error( $error_message );
+						} else {
+							$this->set_field_error( $field, $error_message );
+						}
+						return;
+					}
+				}
+			}
+
+			$assignee_settings = array();
+
+			if ( $entry_count > 0 && $current_step ) {
+				$assignee_settings['assignees'] = array();
+				$current_assignees = $current_step->get_assignees();
+				foreach ( $current_assignees as $current_assignee ) {
+					$assignee_settings['assignees'][] = $current_assignee->get_key();
+				}
+				if ( $current_step->get_type() == 'approval' ) {
+					$assignee_settings['unanimous_approval'] = $current_step->unanimous_approval;
+				}
+
+				$this->_assignee_settings_md5 = md5( serialize( $assignee_settings ) );
+			}
+		}
+
+		/**
+		 * Sets the _assignee_settings_md5 class property on feed validation, if there are entries on this step.
+		 * Also checks permissions.
+		 *
+		 *
+		 * @deprecated 2.7
+		 *
 		 * @since 1.0
-		 * @since 2.5     Add new checks for step required capabilities.
+		 * @since 2.5   Add new checks for step required capabilities.
+		 * @since 2.7   Unused
 		 *
 		 * @param array  $field         The field properties.
 		 * @param string $field_setting The field value.
@@ -1728,6 +1780,8 @@ PRIMARY KEY  (id)
 		 * @return bool
 		 */
 		public function save_feed_validation_callback( $field, $field_setting ) {
+
+			_deprecated_function( 'save_feed_validation_callback', '2.7', 'step_type_validation_callback' );
 
 			$current_step_id = $this->get_current_feed_id();
 			$entry_count = 0;
@@ -1767,57 +1821,6 @@ PRIMARY KEY  (id)
 
 			return true;
 		}
-
-		/**
-		 * Save feed settings on save.
-		 *
-		 * @since 2.6
-		 *
-		 * @param string  $feed_id 	The ID of the feed which was saved.
-		 * @param int 	  $form_id 	The current form ID associated with the feed.
-		 * @param array   $settings	An array containing the settings and mappings for the feed.
-		 * @param GFAddOn $addon 	The current instance of the GFAddOn object.
-		 */		
-		public function post_save_feed_settings( $feed_id, $form_id, $settings, $addon ) {
-
-			if ( get_class( $addon ) != 'Gravity_Flow' ) return;
-			
-			$current_step_id = $this->get_current_feed_id();
-			$entry_count = 0;
-			$current_step = false;
-			if ( $current_step_id ) {
-				$current_step = $this->get_step( $current_step_id );
-				$entry_count = $current_step->entry_count();
-			}
-
-			if ( $current_step ) {
-				$required_capabilities = $current_step->get_required_capabilities();
-				// Checking ALL required capabilities, one by one.
-                		// In this way, we can also match the "gform_full_access" cap with other Gravity Form or Gravity Flow caps.
-				foreach ( $required_capabilities as $cap ) {
-					if ( ! $this->current_user_can_any( $cap ) ) {
-						GFCommon::add_error_message( esc_html__( "You don't have sufficient permissions to update the step settings.", 'gravityflow' ) );
-
-						return;
-					}
-				}
-			}
-
-			$assignee_settings = array();
-			if ( $entry_count > 0 && $current_step ) {
-				$assignee_settings['assignees'] = array();
-				$current_assignees = $current_step->get_assignees();
-
-				foreach ( $current_assignees as $current_assignee ) {
-					$assignee_settings['assignees'][] = $current_assignee->get_key();
-				}
-				if ( $current_step->get_type() == 'approval' ) {
-					$assignee_settings['unanimous_approval'] = $current_step->unanimous_approval;
-				}
-				
-				$this->_assignee_settings_md5 = md5( serialize( $assignee_settings ) );
-			}
-		}		
 
 		/**
 		 * Saves the feed settings. Adds the feeds for the start and complete settings if they don't already exist when the first step is added.
