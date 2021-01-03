@@ -2417,9 +2417,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			$assignee_settings['assignees'][] = $assignee->get_key();
 		}
 
-		if ( $this->get_type() == 'approval' ) {
-			$assignee_settings['assignee_policy'] = $this->assignee_policy;
-		}
+		$assignee_settings['assignee_policy'] = $this->assignee_policy;
 
 		return md5( serialize( $assignee_settings ) );
 	}
