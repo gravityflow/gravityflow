@@ -4938,8 +4938,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			$settings[] = $this->get_app_settings_fields_emails();
 			$settings[] = $this->get_app_settings_fields_pages();
-			$settings[] = $this->get_app_settings_fields_published_forms();
 			$settings[] = $this->get_app_settings_fields_advanced();
+			$settings[] = $this->get_app_settings_fields_published_forms();
 
 			$settings[] = array(
 				'id'     => 'save_button',
