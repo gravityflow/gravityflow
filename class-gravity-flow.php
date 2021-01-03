@@ -4933,11 +4933,10 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				);
 			}
 
-			$settings[] = $this->get_app_settings_fields_features();
 			$settings[] = $this->get_app_settings_fields_emails();
 			$settings[] = $this->get_app_settings_fields_pages();
-			$settings[] = $this->get_app_settings_fields_security();
 			$settings[] = $this->get_app_settings_fields_published_forms();
+			$settings[] = $this->get_app_settings_fields_advanced();
 
 			$settings[] = array(
 				'id'     => 'save_button',
@@ -4965,24 +4964,52 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @since 2.6.1
 		 *
 		 * @return array
-		 */		
-		public function get_app_settings_fields_features() {
+		 */
+		public function get_app_settings_fields_advanced() {
 
 			$settings = array(
-				'title'  => esc_html__( 'Features', 'gravityflow' ),
+				'title'  => esc_html__( 'Advanced', 'gravityflow' ),
 				'fields' => array(
 					array(
 						'name'          => 'workflow_inbox_count',
 						'label'         => esc_html__( 'Workflow Inbox Count', 'gravityflow' ),
-						'tooltip' 		=> __( 'Set this to ON to display the inbox count next to the Workflow menu. Warning: For many inbox entries, enabling this may affect the site performance.' , 'gravityflow' ),
+						'tooltip' 		=> __( 'Enable this setting to display the inbox count next to the admin Workflow menu item in the WordPress menu. Warning: For users with a lot of entries, enabling this may affect the performance of the admin dashboard.' , 'gravityflow' ),
 						'type'          => 'checkbox',
 						'horizontal' 	=> true,
 						'default_value' => false,
 						'choices' => array(
 							array(
-								'label' => __( 'Enable', 'gravityflow' ),
+								'label' => __( 'Display the number of pending inbox entries in the WordPress menu.', 'gravityflow' ),
 								'name'  => 'workflow_inbox_count',
 								'value' => true,
+							),
+						),
+					),
+					array(
+						'name'  => 'shortcodes',
+						'label' => esc_html__( 'Shortcode Security', 'gravityflow' ),
+						'type'        => 'checkbox',
+						'description' => esc_html__( 'Important: Do not enable any of these settings unless all page editors are authorized.', 'gravityflow' ),
+						'choices'     => array(
+							array(
+								'label'   => esc_html__( 'Allow the Status shortcode to display all entries to all registered users.', 'gravityflow' ),
+								'name'    => 'allow_display_all_attribute',
+								'tooltip' => esc_html__( 'This setting allows the display_all attribute to be used in the shortcode.', 'gravityflow' ),
+							),
+							array(
+								'label'   => esc_html__( 'Allow the Status shortcode to display all entries to all anonymous users.', 'gravityflow' ),
+								'name'    => 'allow_allow_anonymous_attribute',
+								'tooltip' => esc_html__( 'This setting allows the allow_anonymous attribute to be used in the shortcode.', 'gravityflow' ),
+							),
+							array(
+								'label'   => esc_html__( 'Allow the Inbox and Status shortcodes to display field values.', 'gravityflow' ),
+								'name'    => 'allow_field_ids',
+								'tooltip' => esc_html__( 'This setting allows the fields attribute to be used in the shortcode.', 'gravityflow' ),
+							),
+							array(
+								'label'   => esc_html__( 'Allow the Reports shortcode to display workflow reports to all registered and anonymous users.', 'gravityflow' ),
+								'name'    => 'allow_display_reports',
+								'tooltip' => esc_html__( 'This setting allows the Reports shortcode to display workflow reports to all registered and anonymous users.', 'gravityflow' ),
 							),
 						),
 					),
@@ -5210,49 +5237,6 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 						'name'  => 'submit_page',
 						'label' => esc_html__( 'Submit', 'gravityflow' ),
 						'type'  => 'wp_dropdown_pages',
-					),
-				),
-			);
-		}
-
-		/**
-		 * Returns the Security Settings.
-		 *
-		 * @since 2.5
-		 *
-		 * @return array
-		 */
-		public function get_app_settings_fields_security() {
-			return array(
-				'title'       => esc_html__( 'Security Options', 'gravityflow' ),
-				'fields'      => array(
-					array(
-						'name'  => 'shortcodes',
-						'label' => esc_html__( 'Shortcode Security', 'gravityflow' ),
-						'type'        => 'checkbox',
-						'description' => esc_html__( 'Important: Do not enable any of these settings unless all page editors are authorized.', 'gravityflow' ),
-						'choices'     => array(
-							array(
-								'label'   => esc_html__( 'Allow the Status shortcode to display all entries to all registered users.', 'gravityflow' ),
-								'name'    => 'allow_display_all_attribute',
-								'tooltip' => esc_html__( 'This setting allows the display_all attribute to be used in the shortcode.', 'gravityflow' ),
-							),
-							array(
-								'label'   => esc_html__( 'Allow the Status shortcode to display all entries to all anonymous users.', 'gravityflow' ),
-								'name'    => 'allow_allow_anonymous_attribute',
-								'tooltip' => esc_html__( 'This setting allows the allow_anonymous attribute to be used in the shortcode.', 'gravityflow' ),
-							),
-							array(
-								'label'   => esc_html__( 'Allow the Inbox and Status shortcodes to display field values.', 'gravityflow' ),
-								'name'    => 'allow_field_ids',
-								'tooltip' => esc_html__( 'This setting allows the fields attribute to be used in the shortcode.', 'gravityflow' ),
-							),
-							array(
-								'label'   => esc_html__( 'Allow the Reports shortcode to display workflow reports to all registered and anonymous users.', 'gravityflow' ),
-								'name'    => 'allow_display_reports',
-								'tooltip' => esc_html__( 'This setting allows the Reports shortcode to display workflow reports to all registered and anonymous users.', 'gravityflow' ),
-							),
-						),
 					),
 				),
 			);
@@ -6234,15 +6218,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */		
 		public function show_inbox_count( $menu ) {
 
-			$settings = $this->get_app_settings();
+			$app_settings = $this->get_app_settings();
 
-			/**
-			 * Allows the gravityflow inbox count display to be enabled or disabled
-			 *
-			 * @param bool show Whether to show inbox count.
-			 */			
-			$show = apply_filters( 'gravityflow_inbox_count_display', false );
-			if ( ! $show && ! $settings['workflow_inbox_count'] ) {
+			if ( ! rgar( $app_settings, 'workflow_inbox_count' ) ) {
 				return $menu;
 			}
 
