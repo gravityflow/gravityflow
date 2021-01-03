@@ -19,6 +19,7 @@
     position: relative;
     right: 15px;
     top: 90px;
+    z-index: 1;
 }
 
 .rtl .mt-_gform_setting_workflow_notification_message,
@@ -242,4 +243,45 @@ table.gform-routings tr.gform-routing-row td .repeater-buttons{
 
 #schedule_date {
     width: 120px !important;
+}
+
+div.gform-field-filter {
+    display: flex;
+    max-width: auto;
+}
+
+select.gform-filter-field, select.gform-filter-operator, input.gform-filter-value {
+    height: auto;
+    min-height: 100%;
+    position: relative;
+}
+
+.gform-settings-panel__content select[name="mode"] {
+    width: 10%;
+}
+
+button.gform-add, button.gform-remove {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 49%;
+    border: 1px solid #D5D7E9;
+    box-shadow: 0 2px 2px rgba( 58, 58, 87, 0.0796 );
+    border-radius: 50%;
+    height: 1.25rem;
+    width: 1.25rem;
+    vertical-align: middle;
+    top: .3rem;
+    padding: 1px 7px;
+}
+
+button.gform-add.add_field_choice {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik02IDBhMSAxIDAgMDAtMSAxdjRIMWExIDEgMCAwMDAgMmg0djRhMSAxIDAgMTAyIDBWN2g0YTEgMSAwIDEwMC0ySDdWMWExIDEgMCAwMC0xLTF6IiBmaWxsPSIjRjE1QTI5Ii8+PC9zdmc+);
+}
+
+button.gform-remove.delete_field_choice {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAxYTEgMSAwIDAxMS0xaDEwYTEgMSAwIDExMCAySDFhMSAxIDAgMDEtMS0xeiIgZmlsbD0iI0YxNUEyOSIvPjwvc3ZnPg==);
+}
+
+.gform-settings-panel__content select[name="_gform_setting_entry_filtersort_key"], .gform-settings-panel__content select[name="_gform_setting_entry_filtersort_direction"] {
+    width: auto;
 }
