@@ -2397,4 +2397,31 @@ abstract class Gravity_Flow_Step extends stdClass {
 		return $is_assignee;
 	}
 
+	/**
+	 * Returns an MD5 hash of the assignees of the given step plus the assignee policy.
+	 *
+	 * @since 2.7
+	 *
+	 * @param $step
+	 *
+	 * @return string
+	 */
+	public function assignees_hash() {
+
+		$assignee_settings['assignees'] = array();
+
+		$assignees = $this->get_assignees();
+
+		foreach ( $assignees as $assignee ) {
+			/* @var Gravity_Flow_Assignee $assignee */
+			$assignee_settings['assignees'][] = $assignee->get_key();
+		}
+
+		if ( $this->get_type() == 'approval' ) {
+			$assignee_settings['assignee_policy'] = $this->assignee_policy;
+		}
+
+		return md5( serialize( $assignee_settings ) );
+	}
+
 }

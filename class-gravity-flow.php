@@ -1750,16 +1750,7 @@ PRIMARY KEY  (id)
 			$assignee_settings = array();
 
 			if ( $entry_count > 0 && $current_step ) {
-				$assignee_settings['assignees'] = array();
-				$current_assignees = $current_step->get_assignees();
-				foreach ( $current_assignees as $current_assignee ) {
-					$assignee_settings['assignees'][] = $current_assignee->get_key();
-				}
-				if ( $current_step->get_type() == 'approval' ) {
-					$assignee_settings['unanimous_approval'] = $current_step->unanimous_approval;
-				}
-
-				$this->_assignee_settings_md5 = md5( serialize( $assignee_settings ) );
+				$this->_assignee_settings_md5 = $current_step->assignees_hash();
 			}
 		}
 
@@ -1804,19 +1795,8 @@ PRIMARY KEY  (id)
 				}
 			}
 
-			$assignee_settings = array();
-
 			if ( $entry_count > 0 && $current_step ) {
-				$assignee_settings['assignees'] = array();
-				$current_assignees = $current_step->get_assignees();
-				foreach ( $current_assignees as $current_assignee ) {
-					$assignee_settings['assignees'][] = $current_assignee->get_key();
-				}
-				if ( $current_step->get_type() == 'approval' ) {
-					$assignee_settings['unanimous_approval'] = $current_step->unanimous_approval;
-				}
-
-				$this->_assignee_settings_md5 = md5( serialize( $assignee_settings ) );
+				$this->_assignee_settings_md5 = $this->assignees_hash( $current_step );
 			}
 
 			return true;
@@ -1912,16 +1892,8 @@ PRIMARY KEY  (id)
 			if ( empty( $current_step ) ) {
 				return $results;
 			}
-			$assignee_settings['assignees'] = array();
-			$assignees = $current_step->get_assignees();
-			foreach ( $assignees as $assignee ) {
-				/* @var Gravity_Flow_Assignee $assignee */
-				$assignee_settings['assignees'][] = $assignee->get_key();
-			}
-			if ( $current_step->get_type() == 'approval' ) {
-				$assignee_settings['unanimous_approval'] = $current_step->unanimous_approval;
-			}
-			$assignee_settings_md5 = md5( serialize( $assignee_settings ) );
+
+			$assignee_settings_md5 = $current_step->assignees_hash();
 			if ( isset( $this->_assignee_settings_md5 ) && $this->_assignee_settings_md5 !== $assignee_settings_md5 ) {
 				$results = $this->refresh_assignees();
 			}
@@ -1973,7 +1945,6 @@ PRIMARY KEY  (id)
 						$assignee->update_status( 'pending' );
 						$step->end_if_complete();
 						$results['added'][] = $assignee;
-						$updated = true;
 					}
 				}
 
@@ -1989,12 +1960,9 @@ PRIMARY KEY  (id)
 					$old_assignee->remove();
 					$old_assignee->log_event( 'removed' );
 					$results['removed'][] = $old_assignee;
-					$updated = true;
 				}
 
-				if ( $updated ) {
-					$this->process_workflow( $form, $entry_id );
-				}
+				$this->process_workflow( $form, $entry_id );
 			}
 
 			return $results;
