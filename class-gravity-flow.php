@@ -263,6 +263,9 @@ if ( class_exists( 'GFForms' ) ) {
 			}
 
 			add_action( 'admin_notices', array( $this, 'action_admin_notices' ) );
+			
+			wp_register_style( 'gravityflow_dashicons', plugins_url( 'gravityflow/css/gravityflow-icon.css' ) );
+            		wp_enqueue_style( 'gravityflow_dashicons' );
 		}
 
 		/**
@@ -6202,7 +6205,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		function filter_form_settings_menu( $menu_items ) {
 			foreach ( $menu_items as &$menu_item ) {
 				if ( $menu_item['name'] == 'gravityflow' ) {
-					$menu_item['icon'] = esc_url( gravity_flow()->get_base_url() ) . '/images/gravity-flow-icon-cropped_gray.svg';
+					$menu_item['icon'] = 'dashicons-gravityflow-icon';
 				}
 			}
 
@@ -8544,7 +8547,7 @@ AND m.meta_value='queued'";
 
 			if ( $this->is_gravityforms_supported( '2.5-beta-1' ) ) {
 				$renderer  = $this->get_settings_renderer();
-				$field     = new \Rocketgenius\Gravity_Forms\Settings\Fields\Conditional_Logic( $field, $renderer );
+				$field     = new \Gravity_Forms\Gravity_Forms\Settings\Fields\Conditional_Logic( $field, $renderer );
 				$base_html = $field->markup();
 			} else {
 				$base_html = parent::settings_feed_condition( $field, false );
