@@ -10,3 +10,4 @@
 - Fixed JS errors with multiple status shortcodes on the same page.
 - Fixed an issue where workflow steps are processed for entry revisions created by GravityView Entry Revisions.
 - Fixed an issue with Step Condition on Form Submission Step. The entry meta of child form was fetched to process the condition, instead of parent form.
+- Fixed an issue with reassignment when the assignee policy has changed.
