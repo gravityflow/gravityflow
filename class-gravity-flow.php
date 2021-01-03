@@ -1796,7 +1796,7 @@ PRIMARY KEY  (id)
 			}
 
 			if ( $entry_count > 0 && $current_step ) {
-				$this->_assignee_settings_md5 = $this->assignees_hash( $current_step );
+				$this->_assignee_settings_md5 = $current_step->assignees_hash();
 			}
 
 			return true;
