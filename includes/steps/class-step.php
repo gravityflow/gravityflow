@@ -2402,8 +2402,6 @@ abstract class Gravity_Flow_Step extends stdClass {
 	 *
 	 * @since 2.7
 	 *
-	 * @param $step
-	 *
 	 * @return string
 	 */
 	public function assignees_hash() {
