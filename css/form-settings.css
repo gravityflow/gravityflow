@@ -17,7 +17,7 @@
 .gravityflow-tab-field span[class^="mt-_gform_setting_"] {
     float: right;
     position: relative;
-    right: 15px;
+    right: -20px;
     top: 90px;
     z-index: 1;
 }
