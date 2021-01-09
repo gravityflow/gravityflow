@@ -169,7 +169,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 				$sections = $this->prepare_settings_sections( $sections, 'app_settings' );
 
 				// Initialize new settings renderer.
-				$renderer = new Gravity_Forms\Gravity_Forms\Settings(
+				$renderer = new Gravity_Forms\Gravity_Forms\Settings\Settings(
 					array(
 						'capability'     => $this->_capabilities_app_settings,
 						'fields'         => $sections,
