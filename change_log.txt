@@ -1,0 +1,1 @@
+- Fixed issue with 'any' mode selection on field filters with gravityflow_status_filter.
