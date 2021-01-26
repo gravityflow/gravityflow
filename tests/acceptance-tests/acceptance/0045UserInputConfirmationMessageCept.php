@@ -34,10 +34,7 @@ $I->waitForText( 'User Input (Pending Input)' );
 $I->see( 'User Input (Pending Input)' );
 $I->selectOption( 'input[name=input_1]', 'Yellow' );
 $I->fillField( 'textarea[name="input_2"]', 'Just an imagination' );
-$I->click( '#gravityflow_save_progress_button' );
-$I->waitForText( 'Entry updated - in progress.' );
-$I->see( 'Entry updated - in progress.' );
-$I->click( '#gravityflow_submit_button' );
+$I->click( '#gravityflow_update_button' );
 $I->waitForText( 'Entry updated and marked complete.', 10 );
 $I->see( 'Entry updated and marked complete.' );
 

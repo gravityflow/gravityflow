@@ -1839,7 +1839,12 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		if ( ! empty( $filter_args['field_filters'] ) ) {
 			$filters                                  = ! empty( $search_criteria['field_filters'] ) ? $search_criteria['field_filters'] : array();
 			$search_criteria['field_filters']         = array_merge( $filters, $filter_args['field_filters'] );
-			$search_criteria['field_filters']['mode'] = 'all';
+
+			if ( rgar( $filter_args['field_filters'], 'mode' ) == 'any' ) {
+				$search_criteria['field_filters']['mode'] = 'any';
+			} else {
+				$search_criteria['field_filters']['mode'] = 'all';
+			}
 		}
 
 		return $search_criteria;
