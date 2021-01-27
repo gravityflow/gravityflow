@@ -1,1 +1,1 @@
-- Fixed issue with 'any' mode selection on field filters with gravityflow_status_filter.
+- Fixed an issue that prevented use of gravityflow_status_filter with an 'any' mode selection from being applied correctly.
