@@ -942,30 +942,29 @@ class Gravity_Flow_Entry_Detail {
 
 						$display_value = empty( $display_value ) && $display_value !== '0' ? '&nbsp;' : $display_value;
 
-						if ( $field->get_input_type() == 'checkbox' && $display_value == '&nbsp;') {
+						if ( $field->get_input_type() == 'checkbox' && $display_value == '&nbsp;' ) {
 							$content = '
-																	<tr>
-																			<td colspan="2" class="entry-view-field-name">' . esc_html( self::get_label( $field ) ) . '</td>
-																	</tr>';
-						}
-						else {
+										<tr>
+											<td colspan="2" class="entry-view-field-name">' . esc_html( self::get_label( $field ) ) . '</td>
+										</tr>';
+						} else {
 							$content = '
-																	<tr>
-																			<td colspan="2" class="entry-view-field-name">' . esc_html( self::get_label( $field ) ) . '</td>
-																	</tr>
-																	<tr>
-																			<td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
-																	</tr>';
+										<tr>
+											<td colspan="2" class="entry-view-field-name">' . esc_html( self::get_label( $field ) ) . '</td>
+										</tr>
+										<tr>
+											<td colspan="2" class="entry-view-field-value' . $last_row . '">' . $display_value . '</td>
+										</tr>';
 						}
 						if ( $field->get_input_type() == 'checkbox' ) {
-							$all_html_values = $field->get_checkbox_choices( $value, '' );
-							$dom = new DOMDocument();
+							$all_html_values 	= $field->get_checkbox_choices( $value, '' );
+							$dom 				= new DOMDocument();
 
 							$dom->loadHTML( $all_html_values );
 							$input_tags = $dom->getElementsByTagName( 'input' );
 							$all_values = array();
 							foreach ( $input_tags as $input_tag ) {
-								if( is_object( $input_tag ) ) {
+								if ( is_object( $input_tag ) ) {
 									$value = '';
 									$name_object = $input_tag->attributes->getNamedItem( 'name' );
 									if( is_object( $name_object ) ) {
@@ -980,8 +979,8 @@ class Gravity_Flow_Entry_Detail {
 							}
 
 							$dom->loadHTML( $display_value );
-							$all_li = $dom->getElementsByTagName( 'li' );
-							$selected_values = array();
+							$all_li 			= $dom->getElementsByTagName( 'li' );
+							$selected_values 	= array();
 							foreach ( $all_li as $li ) {
 								$selected_values[] = trim( $li->nodeValue );
 							}
