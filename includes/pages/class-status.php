@@ -147,7 +147,6 @@ class Gravity_Flow_Status {
 			$query_args['gravityflow_export_nonce'] = wp_create_nonce( 'gravityflow_export_nonce' );
 			$filter_args_str                        = '&' . http_build_query( $query_args );
 			echo sprintf( '<br /><a class="gravityflow-export-status-button button" data-filter_args="%s">%s</a>', $filter_args_str, esc_html__( 'Export', 'gravityflow' ) );
-			echo sprintf( '<img class="gravityflow-spinner" src="%s" style="display:none;margin:5px"/>', GFCommon::get_base_url() . '/images/spinner.gif' );
 		}
 	}
 
