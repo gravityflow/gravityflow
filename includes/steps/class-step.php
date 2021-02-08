@@ -610,7 +610,7 @@ abstract class Gravity_Flow_Step extends stdClass {
 			 * @param int               $step_id    The ID of the step.
 			 * @param int               $entry_id   The entry of the step.
 			 * @param int               $form_id    The form of the step.
-			 * @param string            $status     The status when the step.
+			 * @param string            $status     The status when the step starts.
 			 * @param Gravity_Flow_Step $step       The step.
 			 */
 			do_action( 'gravityflow_step_start', $step_id, $entry_id, $this->get_form_id(), $this->get_status(), $this );
