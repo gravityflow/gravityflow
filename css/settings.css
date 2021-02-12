@@ -22,3 +22,7 @@ table.gravityflow-settings-labels th {
     max-width: 69.5rem;
     padding: 1.5rem;
 }
+
+#gravityflow-settings-labels-navigation, #gravityflow-settings-labels-status {
+    background: #F6F9FC;
+}
