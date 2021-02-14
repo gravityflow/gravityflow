@@ -1,1 +1,2 @@
+- Added action gravityflow_step_start for custom logic to perform when any step starts.
 - Fixed an issue that prevented use of gravityflow_status_filter with an 'any' mode selection from being applied correctly.
