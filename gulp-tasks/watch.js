@@ -46,7 +46,7 @@ module.exports = {
 				console.log( stats.toString( { colors: true } ) );
 				maybeReloadBrowserSync();
 			} ) )
-			.pipe( gulp.dest( `${ pkg.gravityflow.paths.js_src }admin/` ) );
+			.pipe( gulp.dest( pkg.gravityflow.paths.js_dist ) );
 	},
 	watchThemeJS() {
 		gulp.src( [
@@ -56,6 +56,6 @@ module.exports = {
 				console.log( stats.toString( { colors: true } ) );
 				maybeReloadBrowserSync();
 			} ) )
-			.pipe( gulp.dest( `${ pkg.gravityflow.paths.js_src }theme/` ) );
+			.pipe( gulp.dest( pkg.gravityflow.paths.js_dist ) );
 	},
 };

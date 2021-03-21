@@ -19,7 +19,7 @@ const compilePlugins = [
 	require( 'postcss-custom-media' ),
 	require( 'postcss-custom-properties' )( { preserve: false } ),
 	require( 'postcss-nested' ),
-	require( 'postcss-preset-env' )( { stage: 0, autoprefixer: { grid: true } } ),
+	require( 'postcss-preset-env' )( { env: 'admin', stage: 0, autoprefixer: { grid: true } } ),
 ];
 
 const compileTheme = [
@@ -34,7 +34,7 @@ const compileTheme = [
 	require( 'postcss-custom-media' ),
 	require( 'postcss-custom-properties' )( { preserve: false } ),
 	require( 'postcss-nested' ),
-	require( 'postcss-preset-env' )( { stage: 0, autoprefixer: { grid: true } } ),
+	require( 'postcss-preset-env' )( { env: 'theme', stage: 0, autoprefixer: { grid: true } } ),
 	require( 'postcss-rem-to-pixel' )( { propList: [ '*' ] } ),
 ];
 

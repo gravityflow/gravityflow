@@ -4,9 +4,6 @@ module.exports = {
 		[
 			'@babel/preset-env',
 			{
-				targets: {
-					browsers: ['>0.25%', 'not ie 11', 'not op_mini all'],
-				},
 				useBuiltIns: 'entry',
 				modules: false,
 				corejs: '3.1',
@@ -44,13 +41,6 @@ module.exports = {
 				[
 					'@babel/preset-env',
 					{
-						targets: {
-							browsers: [
-								'>0.25%',
-								'not ie 11',
-								'not op_mini all',
-							],
-						},
 						useBuiltIns: 'entry',
 						modules: 'commonjs',
 						corejs: '3.1',
