@@ -21,6 +21,9 @@ if ( class_exists( 'GFForms' ) ) {
 	 */
 	class Gravity_Flow extends GFFeedAddOn {
 
+		const VENDOR_JS_THEME = 'gravityflow_vendor_js_theme';
+		const VENDOR_JS_ADMIN = 'gravityflow_vendor_js_admin';
+
 		const THEME_JS  = 'gravityflow_theme_js';
 		const THEME_CSS = 'gravityflow_theme_css';
 
@@ -820,7 +823,8 @@ PRIMARY KEY  (id)
 
 			// Enqueue theme CSS and JS
 			wp_enqueue_style( self::THEME_CSS,  $this->get_base_url() . "/css/theme{$this->min()}.css", null, $this->_version );
-			wp_enqueue_script( self::THEME_JS, $this->get_base_url() . "/js/scripts-theme{$this->min()}.js", array(), $this->_version, true );
+			wp_enqueue_script( self::VENDOR_JS_THEME, $this->get_base_url() . "/js/vendor-theme{$this->min()}.js", array(), $this->_version, true );
+			wp_enqueue_script( self::THEME_JS, $this->get_base_url() . "/js/scripts-theme{$this->min()}.js", array( self::VENDOR_JS_THEME ), $this->_version, true );
 
 			if ( isset( $wp_query->posts ) && is_array( $wp_query->posts ) ) {
 				$shortcode_found = $this->look_for_shortcode();
@@ -7187,7 +7191,8 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			// Enqueue admin CSS and JS
 			wp_enqueue_style( self::ADMIN_CSS,  $this->get_base_url() . "/css/admin{$this->min()}.css", null, $this->_version );
-			wp_enqueue_script( self::ADMIN_JS, $this->get_base_url() . "/js/scripts-admin{$this->min()}.js", array(), $this->_version, true );
+			wp_enqueue_script( self::VENDOR_JS_ADMIN, $this->get_base_url() . "/js/vendor-admin{$this->min()}.js", array(), $this->_version, true );
+			wp_enqueue_script( self::ADMIN_JS, $this->get_base_url() . "/js/scripts-admin{$this->min()}.js", array( self::VENDOR_JS_ADMIN ), $this->_version, true );
 		}
 
 		/**
