@@ -9,12 +9,12 @@ module.exports = {
 	},
 	test() {
 		return gulp.src( './' )
-			.pipe( shell( 'yarn test' ) );
+			.pipe( shell( 'npm run test' ) );
 	},
 	scriptsThemeDev() {
 		const server = browserSync.get( 'Gravityflow Dev' );
 		return gulp.src( './' )
-			.pipe( shell( 'yarn js:theme:dev' ) )
+			.pipe( shell( 'npm run js:theme:dev' ) )
 			.on( 'finish', function() {
 				if ( server.active ) {
 					server.reload();
@@ -23,12 +23,12 @@ module.exports = {
 	},
 	scriptsThemeProd() {
 		return gulp.src( './' )
-			.pipe( shell( 'yarn js:theme:prod' ) );
+			.pipe( shell( 'npm run js:theme:prod' ) );
 	},
 	scriptsAdminDev() {
 		const server = browserSync.get( 'Gravityflow Dev' );
 		return gulp.src( './' )
-			.pipe( shell( 'yarn js:admin:dev' ) )
+			.pipe( shell( 'npm run js:admin:dev' ) )
 			.on( 'finish', function() {
 				if ( server.active ) {
 					server.reload();
@@ -37,6 +37,6 @@ module.exports = {
 	},
 	scriptsAdminProd() {
 		return gulp.src( './' )
-			.pipe( shell( 'yarn js:admin:prod' ) );
+			.pipe( shell( 'npm run js:admin:prod' ) );
 	},
 };

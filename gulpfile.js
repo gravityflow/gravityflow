@@ -1,18 +1,18 @@
-const gulp = require('gulp');
-const requireDir = require('require-dir');
-const tasks = requireDir('./gulp-tasks');
-const browserSync = require('browser-sync').create('Gravityflow Dev');
+const gulp = require( 'gulp' );
+const requireDir = require( 'require-dir' );
+const tasks = requireDir( './gulp-tasks' );
+const browserSync = require( 'browser-sync' ).create( 'Gravityflow Dev' );
 
-function module_exists(name) {
+function module_exists( name ) {
 	try {
-		return require.resolve(name);
-	} catch (e) {
+		return require.resolve( name );
+	} catch ( e ) {
 		return false;
 	}
 }
 
-const config = module_exists('./config.json')
-	? require('./config.json')
+const config = module_exists( './config.json' )
+	? require( './config.json' )
 	: {
 			proxy: 'gravity-forms.local',
 			certs_path: '',
@@ -109,10 +109,10 @@ const gulpTasks = [
  */
 
 function registerTasks() {
-	gulpTasks.forEach((task) => {
-		const parts = task.split(':');
-		gulp.task(task, tasks[parts[0]][parts[1]]);
-	});
+	gulpTasks.forEach( ( task ) => {
+		const parts = task.split( ':' );
+		gulp.task( task, tasks[ parts[ 0 ] ][ parts[ 1 ] ] );
+	} );
 }
 
 /**
@@ -121,9 +121,9 @@ function registerTasks() {
 
 registerTasks();
 
-const watchTasks = ['watch:main', 'watch:watchAdminJS', 'watch:watchThemeJS'];
+const watchTasks = [ 'watch:main', 'watch:watchAdminJS', 'watch:watchThemeJS' ];
 
-gulp.task('watch', gulp.parallel(watchTasks));
+gulp.task( 'watch', gulp.parallel( watchTasks ) );
 
 /**
  * Lints js and css, fixed common issues automatically.
@@ -148,13 +148,13 @@ gulp.task(
  * Tests js.
  */
 
-gulp.task('test', gulp.series(gulp.parallel('shell:test')));
+gulp.task( 'test', gulp.series( gulp.parallel( 'shell:test' ) ) );
 
 /**
  * Run linting and tests
  */
 
-gulp.task('validate', gulp.series(gulp.parallel('lint', 'test')));
+gulp.task( 'validate', gulp.series( gulp.parallel( 'lint', 'test' ) ) );
 
 /**
  * Takes a zip file from icomoon and injects it into the postcss, modifying the scss to pcss and handling all conversions/cleanup.
@@ -204,26 +204,26 @@ gulp.task(
 
 gulp.task(
 	'dev',
-	gulp.parallel(watchTasks, async function () {
-		browserSync.init({
+	gulp.parallel( watchTasks, async function () {
+		browserSync.init( {
 			watchTask: true,
 			debugInfo: true,
 			logConnections: true,
 			notify: true,
 			open: 'external',
 			host: config.proxy,
-			proxy: `https://${config.proxy}`,
+			proxy: `https://${ config.proxy }`,
 			https: {
-				key: `${config.certs_path}/${config.proxy}.key`,
-				cert: `${config.certs_path}/${config.proxy}.crt`,
+				key: `${ config.certs_path }/${ config.proxy }.key`,
+				cert: `${ config.certs_path }/${ config.proxy }.crt`,
 			},
 			ghostMode: {
 				scroll: true,
 				links: true,
 				forms: true,
 			},
-		});
-	})
+		} );
+	} )
 );
 
 /**
@@ -233,11 +233,10 @@ gulp.task(
 gulp.task(
 	'dist',
 	gulp.series(
-		gulp.parallel('lint', 'test'),
-		gulp.parallel('postcss:adminCss', 'postcss:themeCss'),
-		gulp.parallel('shell:scriptsThemeDev', 'shell:scriptsAdminDev'),
-		gulp.parallel('shell:scriptsAdminProd', 'shell:scriptsThemeProd')
+		gulp.parallel( 'lint', 'test' ),
+		gulp.parallel( 'postcss:adminCss', 'postcss:themeCss' ),
+		gulp.parallel( 'shell:scriptsThemeDev', 'shell:scriptsAdminDev' )
 	)
 );
 
-gulp.task('default', gulp.series('dist'));
+gulp.task( 'default', gulp.series( 'dist' ) );
