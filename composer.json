@@ -18,6 +18,11 @@
   "support": {
     "issues": "https://gravityflow.io"
   },
+  "config": {
+    "platform": {
+      "php": "5.6.1"
+    }
+  },
   "require-dev": {
     "phpunit/phpunit": ">4.0 <7",
     "lucatume/wp-browser": "^2.4",
@@ -32,5 +37,8 @@
     "vlucas/phpdotenv": "^2.5",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
     "wp-coding-standards/wpcs": "2.1.0"
+  },
+  "require": {
+    "league/container": "2.4.1"
   }
 }

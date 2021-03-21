@@ -37,6 +37,12 @@ define( 'GRAVITY_FLOW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 add_action( 'gform_loaded', array( 'Gravity_Flow_Bootstrap', 'load' ), 1 );
 
+require_once( 'gflow-autoloader.php' );
+require_once( 'vendor/autoload.php' );
+
+use Gravity_Flow\Gravity_Flow\Config\Services;
+use League\Container\Container;
+
 /**
  * Class Gravity_Flow_Bootstrap
  */
@@ -170,6 +176,7 @@ function gravity_flow() {
 }
 
 add_action( 'init', 'gravityflow_action_init', 0 );
+add_action( 'plugins_loaded', 'gflow_initialize_services' );
 
 /**
  * Initialize the EDD plugin updater or prepare the installation wizard.
@@ -256,4 +263,20 @@ function gravityflow_icon() {
 
 	$icon = sprintf( 'data:image/svg+xml;base64,%s', base64_encode( $svg_xml ) );
 	return $icon;
+}
+
+/**
+ * Set up Services and Containers
+ *
+ * @since 2.7.1
+ *
+ * @return void
+ */
+function gflow_initialize_services() {
+	$container = new Container();
+	$services  = new Services();
+	foreach ( $services->get() as $class ) {
+		$obj = new $class();
+		$container->addServiceProvider( $class );
+	}
 }
