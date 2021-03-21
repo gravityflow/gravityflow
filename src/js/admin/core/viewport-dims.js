@@ -13,7 +13,7 @@ const viewportDims = () => {
 	state.v_height = verge.viewportH();
 	state.v_width = verge.viewportW();
 
-	if (state.v_width >= MOBILE_BREAKPOINT) {
+	if ( state.v_width >= MOBILE_BREAKPOINT ) {
 		state.is_desktop = true;
 		state.is_mobile = false;
 	} else {

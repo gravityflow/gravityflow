@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { reqExample } from '../ducks';
 import Example from '../components';
 
-export function mapStateToProps({ example }) {
+export function mapStateToProps( { example } ) {
 	return {
 		...example,
 	};
 }
 
-export function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps( dispatch ) {
 	return bindActionCreators(
 		{
 			reqExample,
@@ -18,4 +18,4 @@ export function mapDispatchToProps(dispatch) {
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Example);
+export default connect( mapStateToProps, mapDispatchToProps )( Example );

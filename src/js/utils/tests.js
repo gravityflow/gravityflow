@@ -3,10 +3,10 @@
  * @description Some handy test for common issues.
  */
 
-const isJson = (str) => {
+const isJson = ( str ) => {
 	try {
-		JSON.parse(str);
-	} catch (e) {
+		JSON.parse( str );
+	} catch ( e ) {
 		return false;
 	}
 
@@ -19,25 +19,25 @@ const canLocalStore = () => {
 
 	try {
 		mod = new Date();
-		window.localStorage.setItem(mod, mod.toString());
+		window.localStorage.setItem( mod, mod.toString() );
 
-		result = window.localStorage.getItem(mod) === mod.toString();
-		window.localStorage.removeItem(mod);
+		result = window.localStorage.getItem( mod ) === mod.toString();
+		window.localStorage.removeItem( mod );
 		return result;
-	} catch (_error) {
+	} catch ( _error ) {
 		return result;
 	}
 };
 
-const android = /(android)/i.test(window.navigator.userAgent);
-const chrome = !!window.chrome;
+const android = /(android)/i.test( window.navigator.userAgent );
+const chrome = !! window.chrome;
 const firefox = typeof InstallTrigger !== 'undefined';
 const ie = /* @cc_on!@ */ false || document.documentMode || false;
-const edge = !ie && !!window.StyleMedia;
-const ios = !!window.navigator.userAgent.match(/(iPod|iPhone|iPad)/i);
-const iosMobile = !!window.navigator.userAgent.match(/(iPod|iPhone)/i);
+const edge = ! ie && !! window.StyleMedia;
+const ios = !! window.navigator.userAgent.match( /(iPod|iPhone|iPad)/i );
+const iosMobile = !! window.navigator.userAgent.match( /(iPod|iPhone)/i );
 const opera =
-	!!window.opera || window.navigator.userAgent.indexOf(' OPR/') >= 0;
+	!! window.opera || window.navigator.userAgent.indexOf( ' OPR/' ) >= 0;
 const safari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || !chrome && !opera && window.webkitAudioContext !== 'undefined'; // eslint-disable-line
 const os = window.navigator.platform;
 

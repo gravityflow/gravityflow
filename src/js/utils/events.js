@@ -5,31 +5,31 @@
 
 import _ from 'lodash';
 
-const on = (el, name, handler) => {
-	if (el.addEventListener) {
-		el.addEventListener(name, handler);
+const on = ( el, name, handler ) => {
+	if ( el.addEventListener ) {
+		el.addEventListener( name, handler );
 	} else {
-		el.attachEvent(`on${name}`, () => {
-			handler.call(el);
-		});
+		el.attachEvent( `on${ name }`, () => {
+			handler.call( el );
+		} );
 	}
 };
 
-const ready = (fn) => {
-	if (document.readyState !== 'loading') {
+const ready = ( fn ) => {
+	if ( document.readyState !== 'loading' ) {
 		fn();
-	} else if (document.addEventListener) {
-		document.addEventListener('DOMContentLoaded', fn);
+	} else if ( document.addEventListener ) {
+		document.addEventListener( 'DOMContentLoaded', fn );
 	} else {
-		document.attachEvent('onreadystatechange', () => {
-			if (document.readyState !== 'loading') {
+		document.attachEvent( 'onreadystatechange', () => {
+			if ( document.readyState !== 'loading' ) {
 				fn();
 			}
-		});
+		} );
 	}
 };
 
-const trigger = (opts) => {
+const trigger = ( opts ) => {
 	let event;
 	const options = _.assign(
 		{
@@ -41,21 +41,21 @@ const trigger = (opts) => {
 		opts
 	);
 
-	if (options.native) {
-		event = document.createEvent('HTMLEvents');
-		event.initEvent(options.event, true, false);
+	if ( options.native ) {
+		event = document.createEvent( 'HTMLEvents' );
+		event.initEvent( options.event, true, false );
 	} else {
 		try {
-			event = new window.CustomEvent(options.event, {
+			event = new window.CustomEvent( options.event, {
 				detail: options.data,
-			});
-		} catch (e) {
-			event = document.createEvent('CustomEvent');
-			event.initCustomEvent(options.event, true, true, options.data);
+			} );
+		} catch ( e ) {
+			event = document.createEvent( 'CustomEvent' );
+			event.initCustomEvent( options.event, true, true, options.data );
 		}
 	}
 
-	options.el.dispatchEvent(event);
+	options.el.dispatchEvent( event );
 };
 
 export { on, ready, trigger };

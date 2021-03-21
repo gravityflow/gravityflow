@@ -8,7 +8,7 @@
 
 import _ from 'lodash';
 
-const popup = (opts) => {
+const popup = ( opts ) => {
 	const options = Object.assign(
 		{
 			event: null,
@@ -30,15 +30,15 @@ const popup = (opts) => {
 		opts
 	);
 
-	if (options.event) {
+	if ( options.event ) {
 		options.event.preventDefault();
-		if (!options.url.length) {
+		if ( ! options.url.length ) {
 			options.url = options.event.currentTarget.href;
 		}
 	}
 
-	if (options.url.length) {
-		if (options.center) {
+	if ( options.url.length ) {
+		if ( options.center ) {
 			options.specs.top =
 				window.screen.height / 2 - options.specs.height / 2;
 			options.specs.left =
@@ -47,12 +47,12 @@ const popup = (opts) => {
 
 		const specs = [];
 
-		_.forEach(options.specs, (val, key) => {
-			const spec = `${key}=${val}`;
-			specs.push(spec);
-		});
+		_.forEach( options.specs, ( val, key ) => {
+			const spec = `${ key }=${ val }`;
+			specs.push( spec );
+		} );
 
-		window.open(options.url, options.name, specs.join());
+		window.open( options.url, options.name, specs.join() );
 	}
 };
 

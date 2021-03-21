@@ -11,13 +11,13 @@
  * @return {*} Node or false
  */
 
-export const addClass = (el, className = '') => {
+export const addClass = ( el, className = '' ) => {
 	const element = el;
-	if (!element) {
+	if ( ! element ) {
 		return false;
 	}
 
-	element.classList.add(className);
+	element.classList.add( className );
 	return element;
 };
 
@@ -29,12 +29,12 @@ export const addClass = (el, className = '') => {
  * @return {Array} Iterable array of dom nodes
  */
 
-export const getChildren = (el) => {
+export const getChildren = ( el ) => {
 	const children = [];
 	let i = el.children.length;
 	for (i; i--;) { // eslint-disable-line
-		if (el.children[i].nodeType !== 8) {
-			children.unshift(el.children[i]);
+		if ( el.children[ i ].nodeType !== 8 ) {
+			children.unshift( el.children[ i ] );
 		}
 	}
 
@@ -50,12 +50,12 @@ export const getChildren = (el) => {
  * @return {boolean}
  */
 
-export const hasClass = (el, className = '') => {
-	if (!el) {
+export const hasClass = ( el, className = '' ) => {
+	if ( ! el ) {
 		return false;
 	}
 
-	return el.classList.contains(className);
+	return el.classList.contains( className );
 };
 
 /**
@@ -66,13 +66,13 @@ export const hasClass = (el, className = '') => {
  * @return {*} returns false or el if passed
  */
 
-export const removeClass = (el, className) => {
+export const removeClass = ( el, className ) => {
 	const element = el;
-	if (!element) {
+	if ( ! element ) {
 		return false;
 	}
 
-	element.classList.remove(className);
+	element.classList.remove( className );
 	return element;
 };
 
@@ -83,10 +83,10 @@ export const removeClass = (el, className) => {
  * @param string
  */
 
-export const removeClassThatContains = (el, string = '') => {
-	for (let i = 0; i < el.classList.length; i++) {
-		if (el.classList.item(i).indexOf(string) !== -1) {
-			el.classList.remove(el.classList.item(i));
+export const removeClassThatContains = ( el, string = '' ) => {
+	for ( let i = 0; i < el.classList.length; i++ ) {
+		if ( el.classList.item( i ).indexOf( string ) !== -1 ) {
+			el.classList.remove( el.classList.item( i ) );
 		}
 	}
 };
@@ -100,8 +100,10 @@ export const removeClassThatContains = (el, string = '') => {
  * @param suffix optional suffix string
  */
 
-export const hasClassFromArray = (el, arr = [], prefix = '', suffix = '') =>
-	arr.some((c) => el.classList.contains(`${prefix}${c}${suffix}`));
+export const hasClassFromArray = ( el, arr = [], prefix = '', suffix = '' ) =>
+	arr.some( ( c ) =>
+		el.classList.contains( `${ prefix }${ c }${ suffix }` )
+	);
 
 /**
  * Highly efficient function to convert a nodelist into a standard array. Allows you to run Array.forEach
@@ -110,7 +112,7 @@ export const hasClassFromArray = (el, arr = [], prefix = '', suffix = '') =>
  * @return {Array} Of converted elements
  */
 
-export const convertElements = (elements = []) => {
+export const convertElements = ( elements = [] ) => {
 	const converted = [];
 	let i = elements.length;
 	for (i; i--; converted.unshift(elements[i])); // eslint-disable-line
@@ -134,10 +136,10 @@ export const getNodes = (
 	node = document,
 	custom = false
 ) => {
-	const selectorString = custom ? selector : `[data-js="${selector}"]`;
-	let nodes = node.querySelectorAll(selectorString);
-	if (convert) {
-		nodes = convertElements(nodes);
+	const selectorString = custom ? selector : `[data-js="${ selector }"]`;
+	let nodes = node.querySelectorAll( selectorString );
+	if ( convert ) {
+		nodes = convertElements( nodes );
 	}
 	return nodes;
 };
@@ -150,8 +152,8 @@ export const getNodes = (
  * @param name chunk name
  */
 
-export const shouldLoadChunk = (name = '') => {
-	const node = document.querySelectorAll(`[data-load-chunk-${name}]`);
+export const shouldLoadChunk = ( name = '' ) => {
+	const node = document.querySelectorAll( `[data-load-chunk-${ name }]` );
 	return node.length > 0;
 };
 
@@ -163,7 +165,7 @@ export const shouldLoadChunk = (name = '') => {
  * @return {*}
  */
 
-export const closest = (el, selector) => {
+export const closest = ( el, selector ) => {
 	let matchesFn;
 	let parent;
 
@@ -173,18 +175,18 @@ export const closest = (el, selector) => {
 		'mozMatchesSelector',
 		'msMatchesSelector',
 		'oMatchesSelector',
-	].some((fn) => {
-		if (typeof document.body[fn] === 'function') {
+	].some( ( fn ) => {
+		if ( typeof document.body[ fn ] === 'function' ) {
 			matchesFn = fn;
 			return true;
 		}
 		/* istanbul ignore next */
 		return false;
-	});
+	} );
 
-	while (el) {
+	while ( el ) {
 		parent = el.parentElement;
-		if (parent && parent[matchesFn](selector)) {
+		if ( parent && parent[ matchesFn ]( selector ) ) {
 			return parent;
 		}
 
@@ -200,7 +202,7 @@ export const closest = (el, selector) => {
  * @param newNode {Element|NodeList}
  * @param referenceNode {Element|NodeList}
  */
-export const insertAfter = (newNode, referenceNode) => {
+export const insertAfter = ( newNode, referenceNode ) => {
 	referenceNode.parentNode.insertBefore(
 		newNode,
 		referenceNode.nextElementSibling
@@ -214,8 +216,8 @@ export const insertAfter = (newNode, referenceNode) => {
  * @param referenceNode {Element|NodeList}
  */
 
-export const insertBefore = (newNode, referenceNode) => {
-	referenceNode.parentNode.insertBefore(newNode, referenceNode);
+export const insertBefore = ( newNode, referenceNode ) => {
+	referenceNode.parentNode.insertBefore( newNode, referenceNode );
 };
 
 /**
@@ -225,8 +227,8 @@ export const insertBefore = (newNode, referenceNode) => {
  * @param attrs
  */
 
-export const setAttributes = (el, attrs) => {
-	for (const key in attrs) {
-		el.setAttribute(key, attrs[key]);
+export const setAttributes = ( el, attrs ) => {
+	for ( const key in attrs ) {
+		el.setAttribute( key, attrs[ key ] );
 	}
 };

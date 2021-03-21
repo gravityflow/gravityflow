@@ -21,7 +21,7 @@ import { on, ready } from 'utils/events';
  */
 
 const bindEvents = () => {
-	on(window, 'resize', _.debounce(resize, 200, false));
+	on( window, 'resize', _.debounce( resize, 200, false ) );
 };
 
 /**
@@ -53,7 +53,7 @@ const init = () => {
  */
 
 const domReady = () => {
-	ready(init);
+	ready( init );
 };
 
 export default domReady;

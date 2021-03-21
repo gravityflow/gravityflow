@@ -4,7 +4,7 @@ import Example from './Example/containers';
 import styles from './app.pcss';
 
 const App = () => (
-	<div className={styles.main}>
+	<div className={ styles.main }>
 		<Example />
 	</div>
 );

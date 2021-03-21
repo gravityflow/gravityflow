@@ -4,7 +4,7 @@
  * @description scrollTo allows equalized or duration based scrolling of the body to a supplied $target with options.
  */
 
-const scrollTo = (opts) => {
+const scrollTo = ( opts ) => {
 	const options = Object.assign(
 		{
 			auto: false,
@@ -21,22 +21,22 @@ const scrollTo = (opts) => {
 	let position;
 	let htmlPosition;
 
-	if (options.$target.length) {
+	if ( options.$target.length ) {
 		position = options.$target.offset().top + options.offset;
 
-		if (options.auto) {
-			htmlPosition = $('html').scrollTop();
+		if ( options.auto ) {
+			htmlPosition = $( 'html' ).scrollTop();
 
-			if (position > htmlPosition) {
+			if ( position > htmlPosition ) {
 				options.duration =
-					(position - htmlPosition) / options.auto_coefficent;
+					( position - htmlPosition ) / options.auto_coefficent;
 			} else {
 				options.duration =
-					(htmlPosition - position) / options.auto_coefficent;
+					( htmlPosition - position ) / options.auto_coefficent;
 			}
 		}
 
-		$('html, body').animate(
+		$( 'html, body' ).animate(
 			{ scrollTop: position },
 			options.duration,
 			options.easing,

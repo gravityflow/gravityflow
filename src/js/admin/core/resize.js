@@ -12,7 +12,7 @@ const resize = () => {
 
 	viewportDims();
 
-	trigger({ event: 'gravityflow/resize_executed', native: false });
+	trigger( { event: 'gravityflow/resize_executed', native: false } );
 };
 
 export default resize;

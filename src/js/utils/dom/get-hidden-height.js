@@ -4,7 +4,7 @@
  * @description gets the height of hidden objects.
  */
 
-const getHiddenHeight = (el) => {
+const getHiddenHeight = ( el ) => {
 	const width = el.clientWidth;
 	const element = el;
 
@@ -12,7 +12,7 @@ const getHiddenHeight = (el) => {
 	element.style.height = 'auto';
 	element.style.maxHeight = 'none';
 	element.style.position = 'fixed';
-	element.style.width = `${width}px`;
+	element.style.width = `${ width }px`;
 
 	const tHeight = element.offsetHeight;
 

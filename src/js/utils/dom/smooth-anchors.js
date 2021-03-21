@@ -5,33 +5,33 @@
 import * as tools from '../tools';
 import scrollTo from '../dom/scroll-to';
 
-const handleAnchorClick = (e) => {
-	const target = document.getElementById(e.target.hash.substring(1));
-	if (!target) {
+const handleAnchorClick = ( e ) => {
+	const target = document.getElementById( e.target.hash.substring( 1 ) );
+	if ( ! target ) {
 		return;
 	}
 
 	e.preventDefault();
 
-	window.history.pushState(null, null, e.target.hash);
+	window.history.pushState( null, null, e.target.hash );
 
-	scrollTo({
+	scrollTo( {
 		offset: -150,
 		duration: 300,
-		$target: $(target),
-	});
+		$target: $( target ),
+	} );
 };
 
 const bindEvents = () => {
 	const anchorLinks = tools.convertElements(
-		document.querySelectorAll('a[href^="#"]:not([href="#"])')
+		document.querySelectorAll( 'a[href^="#"]:not([href="#"])' )
 	);
-	if (!anchorLinks.length) {
+	if ( ! anchorLinks.length ) {
 		return;
 	}
 
-	anchorLinks.forEach((link) =>
-		link.addEventListener('click', handleAnchorClick)
+	anchorLinks.forEach( ( link ) =>
+		link.addEventListener( 'click', handleAnchorClick )
 	);
 };
 

@@ -5,15 +5,7 @@ module.exports = {
 			'@babel/preset-env',
 			{
 				targets: {
-					browsers: [
-						'Chrome 60',
-						'Firefox 54',
-						'Safari 8',
-						'ie 11',
-						'Edge 14',
-						'Android 4.4',
-						'ios 9',
-					],
+					browsers: ['>0.25%', 'not ie 11', 'not op_mini all'],
 				},
 				useBuiltIns: 'entry',
 				modules: false,
@@ -24,8 +16,9 @@ module.exports = {
 	plugins: [
 		'lodash',
 		[
-			'module-resolver', {
-				root: [ '.' ],
+			'module-resolver',
+			{
+				root: ['.'],
 				alias: {
 					apps: './src/js/apps',
 					config: './src/js/admin/config',
@@ -53,13 +46,9 @@ module.exports = {
 					{
 						targets: {
 							browsers: [
-								'Chrome 60',
-								'Firefox 54',
-								'Safari 8',
-								'ie 11',
-								'Edge 14',
-								'Android 4.4',
-								'ios 9',
+								'>0.25%',
+								'not ie 11',
+								'not op_mini all',
 							],
 						},
 						useBuiltIns: 'entry',
@@ -68,9 +57,7 @@ module.exports = {
 					},
 				],
 			],
-			plugins: [
-				'istanbul',
-			],
+			plugins: ['istanbul'],
 		},
 	},
 };

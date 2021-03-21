@@ -16,7 +16,7 @@ export default class Example extends Component {
 
 	componentDidMount() {
 		const { data, reqExample } = this.props;
-		if (!data.length) {
+		if ( ! data.length ) {
 			reqExample();
 		}
 	}
@@ -24,13 +24,14 @@ export default class Example extends Component {
 	render() {
 		const { isLoading, data } = this.props;
 
-		if (isLoading) {
+		if ( isLoading ) {
 			return <Loading />;
 		}
 
 		return (
 			<div>
-				Hello from Example, here&lsquo;s your note: &ldquo;{data.title}
+				Hello from Example, here&lsquo;s your note: &ldquo;
+				{ data.title }
 				&ldquo;
 			</div>
 		);

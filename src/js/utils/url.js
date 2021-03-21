@@ -19,17 +19,17 @@ let url;
  * @private
  */
 
-const getFilterString = (value, remove = false, urlKey) => {
+const getFilterString = ( value, remove = false, urlKey ) => {
 	query = queryToJson();
-	const values = {}.hasOwnProperty.call(query, urlKey)
-		? query[urlKey].split(',')
+	const values = {}.hasOwnProperty.call( query, urlKey )
+		? query[ urlKey ].split( ',' )
 		: [];
-	if (remove) {
-		_.pull(values, value);
+	if ( remove ) {
+		_.pull( values, value );
 	} else {
-		values.push(value);
+		values.push( value );
 	}
-	return _.uniq(values).join(',');
+	return _.uniq( values ).join( ',' );
 };
 
 /**
@@ -39,9 +39,9 @@ const getFilterString = (value, remove = false, urlKey) => {
  */
 
 const updateUrl = () => {
-	if (window.history) {
+	if ( window.history ) {
 		query = queryToJson();
-		window.history.pushState(query, '', url);
+		window.history.pushState( query, '', url );
 	}
 };
 
@@ -51,8 +51,8 @@ const updateUrl = () => {
  * @param {string} value the term id.
  */
 
-const addFilter = (value, key) => {
-	url = updateQueryVar(key, getFilterString(value, false, key));
+const addFilter = ( value, key ) => {
+	url = updateQueryVar( key, getFilterString( value, false, key ) );
 	updateUrl();
 };
 
@@ -62,9 +62,9 @@ const addFilter = (value, key) => {
  * @param {string} value the term id.
  */
 
-const removeFilter = (value, key) => {
-	const values = getFilterString(value, true, key);
-	url = values.length ? updateQueryVar(key, values) : updateQueryVar(key);
+const removeFilter = ( value, key ) => {
+	const values = getFilterString( value, true, key );
+	url = values.length ? updateQueryVar( key, values ) : updateQueryVar( key );
 	updateUrl();
 };
 
@@ -74,7 +74,7 @@ const removeFilter = (value, key) => {
  */
 
 const removeAll = () => {
-	url = url ? url.split('?')[0] : window.location.href.split('?')[0];
+	url = url ? url.split( '?' )[ 0 ] : window.location.href.split( '?' )[ 0 ];
 	updateUrl();
 };
 

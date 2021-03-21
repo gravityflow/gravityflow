@@ -31,7 +31,7 @@ import viewportDims from './viewport-dims';
  */
 
 const bindEvents = () => {
-	on(window, 'resize', _.debounce(resize, 200, false));
+	on( window, 'resize', _.debounce( resize, 200, false ) );
 };
 
 /**
@@ -76,7 +76,7 @@ const init = () => {
  */
 
 const domReady = () => {
-	ready(init);
+	ready( init );
 };
 
 export default domReady;

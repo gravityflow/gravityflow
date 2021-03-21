@@ -3,7 +3,7 @@ import * as tests from '../tests';
 const browser = tests.browserTests();
 let scroll = 0;
 const scroller =
-	browser.ie || browser.firefox || (browser.chrome && !browser.edge)
+	browser.ie || browser.firefox || ( browser.chrome && ! browser.edge )
 		? document.documentElement
 		: document.body;
 
@@ -18,7 +18,7 @@ const lock = () => {
 	scroll = scroller.scrollTop;
 
 	style.position = 'fixed';
-	style.marginTop = `-${scroll}px`;
+	style.marginTop = `-${ scroll }px`;
 };
 
 /**

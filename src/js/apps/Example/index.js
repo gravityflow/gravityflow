@@ -10,13 +10,13 @@ import { mainSaga, childSagas } from './sagas';
 
 // @EXAMPLE_REACT_APP
 
-const store = configureStore(reducers, mainSaga, childSagas);
+const store = configureStore( reducers, mainSaga, childSagas );
 
 render(
-	<Provider store={store}>
+	<Provider store={ store }>
 		<App />
 	</Provider>,
-	tools.getNodes('example-app')[0]
+	tools.getNodes( 'example-app' )[ 0 ]
 );
 
-console.info('GravityFlow Admin: Rendered example app.');
+console.info( 'GravityFlow Admin: Rendered example app.' );

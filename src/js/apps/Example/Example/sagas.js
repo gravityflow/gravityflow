@@ -5,11 +5,11 @@ import { fetchExample } from './api';
 
 export function* exampleSaga() {
 	try {
-		yield delay(2000); // we'll add a little delay to extend the ui example
-		const response = yield call(fetchExample); // we execute the call to fetch
-		yield put(recExample({ data: response })); // if good we we execute the receive example action
-	} catch (e) {
-		yield put(errExample(e));
+		yield delay( 2000 ); // we'll add a little delay to extend the ui example
+		const response = yield call( fetchExample ); // we execute the call to fetch
+		yield put( recExample( { data: response } ) ); // if good we we execute the receive example action
+	} catch ( e ) {
+		yield put( errExample( e ) );
 	}
 }
 
@@ -22,7 +22,7 @@ export function* exampleSaga() {
  */
 
 export default function* Example() {
-	yield* controller({
-		[reqExample]: exampleSaga,
-	});
+	yield* controller( {
+		[ reqExample ]: exampleSaga,
+	} );
 }
