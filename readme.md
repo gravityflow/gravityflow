@@ -19,11 +19,11 @@ To enable script debug mode just add the following line to your wp-config.php fi
 define( 'SCRIPT_DEBUG', true );
 
 ## Local Development
-To work with the css files, you will need to get setup to use [Gulp](https://gulpjs.com/) and [PostCSS](https://postcss.org/). Follow these steps:
+To work with the css and new js files, you will need to get setup to use [Gulp](https://gulpjs.com/) and [PostCSS](https://postcss.org/). Follow these steps:
 
 * If you don't already have it installed, we recommend a Node Version Manager, eg [nvm](https://github.com/nvm-sh/nvm), or its [Windows equivalent](https://github.com/coreybutler/nvm-windows).
 * Next check the `.nvmrc` file in the root of the repository and `nvm install X.XX.X` that version.
-* Moving forward every time you wish to work with PostCSS you should `nvm use` in this repo one time to make sure you are on the right version, nvm will use that rc file for that command.
+* Moving forward every time you wish to work with files in the src directory you should `nvm use` in this repo one time to make sure you are on the right version, nvm will use that rc file for that command.
 * On your first install of the correct node version, you will need to run this command one time only: `npm install gulp-cli -g`
 * Restart your terminal after running that.
 * Now run `npm install` at root of the repository. This will install your node modules.
