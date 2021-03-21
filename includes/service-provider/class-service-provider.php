@@ -8,8 +8,15 @@ use League\Container\ServiceProvider\BootableServiceProviderInterface;
 abstract class Service_Provider extends AbstractServiceProvider implements BootableServiceProviderInterface {
 
 	/**
-	 * No-op boot method by default.
+	 * No-op hooks method by default.
 	 */
-	public function boot() {}
+	public function hooks() {}
+
+	/**
+	 * Simply calls our custom hooks method.
+	 */
+	public function boot() {
+		$this->hooks();
+	}
 
 }
