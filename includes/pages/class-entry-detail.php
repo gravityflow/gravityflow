@@ -772,15 +772,17 @@ class Gravity_Flow_Entry_Detail {
 	 * @param Gravity_Flow_Step $current_step The step this entry is currently on.
 	 */
 	public static function maybe_show_products_summary( $form, $entry, $current_step ) {
-		$summary_enabled = true;
-		if ( $current_step ) {
-			$meta = $current_step->get_feed_meta();
-			if ( isset( $meta['display_order_summary'] ) && ! $current_step->display_order_summary ) {
-				$summary_enabled = false;
+		if ( ! $current_step ) {
+			$complete_step = gravity_flow()->get_workflow_complete_step( $form['id'] );
+			if ( ! $complete_step ) {
+				return;
 			}
+			
+			$current_step = $complete_step;
 		}
 
-		if ( ! $summary_enabled ) {
+		$meta = $current_step->get_feed_meta();
+		if ( isset( $meta['display_order_summary'] ) && ! $current_step->display_order_summary ) {
 			return;
 		}
 
