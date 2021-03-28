@@ -240,10 +240,10 @@ class Gravity_Flow_Connected_Apps {
 				$current_app['consumer_secret'] = sanitize_text_field( $_POST['consumer_secret'] );
 				$this->setup_oauth1_client( $current_app );
 				$test_url                 = trailingslashit( $current_app['api_url'] ) . 'wp-json/gf/v2/forms/';
-				$headers['Authorization'] = $this->oauth1_client->get_full_request_header( $test_url, 'OPTIONS' );
+				$headers['Authorization'] = $this->oauth1_client->get_full_request_header( $test_url, 'HEAD' );
 				$options                  = array(
 					'headers' => $headers,
-					'method'  => 'OPTIONS',
+					'method'  => 'HEAD',
 				);
 
 				$response = wp_remote_request( $test_url, $options );
