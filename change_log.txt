@@ -3,3 +3,4 @@
 - Updated the Status Page to use a CSS Loading Spinner to replace the deprecated Spinner Gif from Gravity Forms Core.
 - Updated the Assignee Email Message Textarea to improve support for the TinyMCE Editor from Gravity Forms 2.5
 - Fixed an issue that causes Icons in the Timeline View to display at the wrong size in Gravity Forms 2.5.
+- Fixed an issue that causes Gravity Forms OAuth1 connected apps to fail verification.
