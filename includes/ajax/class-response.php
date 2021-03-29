@@ -15,12 +15,12 @@ class Response {
 	}
 
 	public function response() {
-		if ( $code === 200 ) {
-			$this->return_strategy->success( $data );
+		if ( $this->code === 200 ) {
+			$this->return_strategy->success( $this->data );
 			return;
 		}
 
-		$this->return_strategy->error( $data, $code );
+		$this->return_strategy->error( $this->data, $this->code );
 	}
 
 }

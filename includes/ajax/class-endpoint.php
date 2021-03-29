@@ -6,20 +6,21 @@ abstract class Endpoint {
 
 	protected $response_factory;
 
-	protected $data = array();
+	protected $config;
+
+	protected $data          = array();
 	protected $required_args = array();
 	protected $optional_args = array();
 
 	public function __construct( Config $config, Response_Factory $factory ) {
 		$this->response_factory = $factory;
+		$this->config           = $config;
 
 		foreach ( $config->args() as $arg ) {
-			$name = $arg['name'];
-
-			if ( $arg['required'] ) {
-				$this->required_args[ $name ] = $arg;
+			if ( $arg->is_required() ) {
+				$this->required_args[ $arg->name() ] = $arg;
 			} else {
-				$this->optional_args[ $name ] = $arg;
+				$this->optional_args[ $arg->name() ] = $arg;
 			}
 		}
 	}
@@ -36,7 +37,7 @@ abstract class Endpoint {
 		}
 
 		foreach ( $this->optional_args as $oname => $config ) {
-			if ( ! isset( $posted_values[ $oname ] ) ) {
+			if ( ! isset( $posted_values[ $oname ] ) && is_null( $config->default_value() ) ) {
 				continue;
 			}
 
@@ -46,14 +47,27 @@ abstract class Endpoint {
 		return $this->handle();
 	}
 
-	protected function add_values_to_data( $name, $config ) {
-		$value = $_POST[ $rname ];
+	protected function add_values_to_data( $name, Argument $config ) {
+		$value = isset( $_POST[ $name ] ) ? $_POST[ $name ] : $config->default_value();
+		$value = $config->sanitize( $value );
 
-		if ( is_callable( $config['sanitization'] ) ) {
-			$value = call_user_func( $config['sanitization'], $value );
-		}
+		$this->data[ $name ] = $value;
+	}
 
-		$this->data[ $oname ] = $value;
+	protected function data( $name ) {
+		return isset( $this->data[ $name ] ) ? $this->data[ $name ] : null;
+	}
+
+	public function is_public() {
+		return $this->config->is_public();
+	}
+
+	public function name() {
+		return $this->config->name();
+	}
+
+	public function nonce() {
+		return wp_create_nonce( $this->name );
 	}
 
 	abstract protected function handle();

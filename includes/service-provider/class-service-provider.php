@@ -10,12 +10,24 @@ abstract class Service_Provider extends AbstractServiceProvider implements Boota
 	/**
 	 * No-op hooks method by default.
 	 */
-	public function hooks() {}
+	public function hooks() {
+	}
+
+	protected function has_hooks() {
+		$reflector = new \ReflectionMethod( $this, 'hooks' );
+
+		return $reflector->getDeclaringClass()->getName() !== self::class;
+	}
 
 	/**
 	 * Simply calls our custom hooks method.
 	 */
 	public function boot() {
+		if ( ! $this->has_hooks() ) {
+			return;
+		}
+
+		$this->register();
 		$this->hooks();
 	}
 
