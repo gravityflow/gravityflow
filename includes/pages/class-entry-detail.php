@@ -774,13 +774,11 @@ class Gravity_Flow_Entry_Detail {
 	public static function maybe_show_products_summary( $form, $entry, $current_step ) {
 		$summary_enabled = true;
 		$complete_step = gravity_flow()->get_workflow_complete_step( $form['id'] );
-		if ( ! $current_step && $complete_step ) {
-			$current_step = $complete_step;
-		}
+		$processing_step = ( ! $current_step && $complete_step ) ? $complete_step : $current_step;
 
-		if ( $current_step ) {
-			$meta = $current_step->get_feed_meta();
-			if ( isset( $meta['display_order_summary'] ) && ! $current_step->display_order_summary ) {
+		if ( $processing_step ) {
+			$meta = $processing_step->get_feed_meta();
+			if ( isset( $meta['display_order_summary'] ) && ! $processing_step->display_order_summary ) {
 				$summary_enabled = false;
 			}
 		}
