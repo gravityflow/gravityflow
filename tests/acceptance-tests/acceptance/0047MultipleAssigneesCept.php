@@ -1,13 +1,13 @@
 <?php
 /*
- * Purpose: Test that hidden fields work on Workflow Completion
+ * Purpose: Test for Multiple Assignees on a Workflow Step
  */
 
 // @group new-tests
 
 $I = new AcceptanceTester( $scenario );
 
-$I->wantTo( 'Test that hidden fields work on Workflow Completion' );
+$I->wantTo( 'Test for Multiple Assignees on a Workflow Step' );
 
 // Submit the form
 $I->amOnPage( '/0047-multiple-assignees' );
