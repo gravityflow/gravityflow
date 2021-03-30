@@ -736,6 +736,7 @@ PRIMARY KEY  (id)
 						'hasStartStep'    => $has_start_step,
 						'hasCompleteStep' => $has_complete_step,
 						'formId'          => $form_id,
+						'nonce'           => wp_create_nonce( 'gravityflow_feed_list' ),
 					),
 				),
 				array(
@@ -2077,6 +2078,12 @@ PRIMARY KEY  (id)
 		 * Ajax handler for the request to save the custom feed order.
 		 */
 		public function ajax_save_feed_order() {
+			if ( rgpost( 'action' ) !== 'gravityflow_save_feed_order' ) {
+				return;
+			}
+
+			check_ajax_referer( 'gravityflow_feed_list', 'nonce' );
+
 			$feed_ids = rgpost( 'feed_ids' );
 			$form_id  = absint( rgpost( 'form_id' ) );
 			foreach ( $feed_ids as &$feed_id ) {
