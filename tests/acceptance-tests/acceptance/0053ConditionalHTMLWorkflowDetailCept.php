@@ -5,7 +5,6 @@
 
 // @group step-approval
 // @group new-tests
-// @group lol-tests
 
 $I = new AcceptanceTester( $scenario );
 
