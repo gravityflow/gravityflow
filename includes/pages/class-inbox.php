@@ -45,7 +45,7 @@ class Gravity_Flow_Inbox {
 			$columns = self::get_columns( $args );
 			?>
 
-			<table id="gravityflow-inbox" class="widefat gravityflow-inbox" data-js="gflow-inbox" cellspacing="0" style="border:0px;">
+			<table id="gravityflow-inbox" class="widefat gravityflow-inbox" cellspacing="0" style="border:0px;">
 
 				<?php
 				self::display_table_head( $columns );
