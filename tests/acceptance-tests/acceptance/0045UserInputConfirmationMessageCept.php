@@ -1,6 +1,6 @@
 <?php
 /*
- * Purpose: Test the save progress types
+ * Purpose: Test that merge tag on User Input Step evaluates with the updated values
  */
 
 // @group merge-tags
@@ -8,7 +8,7 @@
 
 $I = new AcceptanceTester( $scenario );
 
-$I->wantTo( 'Test the save progress types for user input step' );
+$I->wantTo( 'Test that merge tag on User Input Step evaluates with the updated values' );
 
 // Submit the form
 $I->amOnPage( '/0045-user-input-confirmation-message' );
@@ -34,14 +34,13 @@ $I->waitForText( 'User Input (Pending Input)' );
 $I->see( 'User Input (Pending Input)' );
 $I->selectOption( 'input[name=input_1]', 'Yellow' );
 $I->fillField( 'textarea[name="input_2"]', 'Just an imagination' );
-$I->click( '#gravityflow_save_progress_button' );
-$I->waitForText( 'Entry updated - in progress.' );
-$I->see( 'Entry updated - in progress.' );
-$I->click( '#gravityflow_submit_button' );
+$I->click( '#gravityflow_update_button' );
 $I->waitForText( 'Entry updated and marked complete.', 10 );
 $I->see( 'Entry updated and marked complete.' );
 
-// Complete
+// Complete, check result of Merge Tag
 $I->waitForText( 'Status: Complete' );
+$I->dontSee( 'The sky color is Blue.' );
 $I->see( 'The sky color is Yellow.' );
-$I->see( 'Reason: Just an imagination.' );
+$I->dontSee( 'Reason: Ozone tints the light of the sun' );
+$I->see( 'Reason: Just an imagination.' );  

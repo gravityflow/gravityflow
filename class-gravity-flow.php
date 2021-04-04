@@ -744,6 +744,7 @@ PRIMARY KEY  (id)
 						'hasStartStep'    => $has_start_step,
 						'hasCompleteStep' => $has_complete_step,
 						'formId'          => $form_id,
+						'nonce'           => wp_create_nonce( 'gravityflow_feed_list' ),
 					),
 				),
 				array(
@@ -2096,6 +2097,12 @@ PRIMARY KEY  (id)
 		 * Ajax handler for the request to save the custom feed order.
 		 */
 		public function ajax_save_feed_order() {
+			if ( rgpost( 'action' ) !== 'gravityflow_save_feed_order' ) {
+				return;
+			}
+
+			check_ajax_referer( 'gravityflow_feed_list', 'nonce' );
+
 			$feed_ids = rgpost( 'feed_ids' );
 			$form_id  = absint( rgpost( 'form_id' ) );
 			foreach ( $feed_ids as &$feed_id ) {
@@ -3642,9 +3649,15 @@ PRIMARY KEY  (id)
 		 * @return string
 		 */
 		public function settings_entry_filter( $field, $echo = true ) {
-			$form = ! empty( $field['form_id'] ) ? GFFormsModel::get_form_meta( $field['form_id'] ) : $this->get_current_form();
-			$filter_settings      = GFCommon::get_field_filter_settings( $form );
+			if ( ! empty( $field['filter_settings'] ) ) {
+				$filter_settings = $field['filter_settings'];
+			} else {
+				$form            = ! empty( $field['form_id'] ) ? GFFormsModel::get_form_meta( $field['form_id'] ) : $this->get_current_form();
+				$filter_settings = GFCommon::get_field_filter_settings( $form );
+			}
+
 			$filter_settings_json = json_encode( $filter_settings );
+
 			$value = $this->get_setting( $field['name'] );
 			if ( ! $value ) {
 				$value = array(
