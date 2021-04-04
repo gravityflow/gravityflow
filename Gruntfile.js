@@ -109,6 +109,9 @@ module.exports = function(grunt) {
                     '!js/scripts-theme.js',
                     '!js/vendor-theme.js',
                     '!js/vendor-admin.js',
+                    '!js/common-*.*.js',
+                    '!js/admin-*.*.js',
+                    '!js/theme-*.*.js',
                 ]
             }
         },
