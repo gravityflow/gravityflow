@@ -201,6 +201,7 @@
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2",
     "webpack-merge-and-include-globally": "^2.1.20",
-    "webpack-stream": "^6.1.2"
+    "webpack-stream": "^6.1.2",
+    "webpack-watch-files-plugin": "^1.1.0"
   }
 }

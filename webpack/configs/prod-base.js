@@ -8,9 +8,7 @@ const merge = require( 'webpack-merge' );
  * Internal Dependencies
  */
 const base = require( './base.js' );
-const sc = require( '../optimization/split-chunks' );
 const minimizer = require( '../optimization/minimizer' );
-const splitChunks = process.env.NODE_ENV === 'themeprod' ? sc.scTheme : sc.scAdmin;
 
 module.exports = merge.strategy( {
 	plugins: 'append',
@@ -31,7 +29,6 @@ module.exports = merge.strategy( {
 		} ),
 	],
 	optimization: {
-		splitChunks,
 		noEmitOnErrors: true, // NoEmitOnErrorsPlugin
 		concatenateModules: true, //ModuleConcatenationPlugin
 		minimizer,

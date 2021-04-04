@@ -19,4 +19,4 @@ render(
 	tools.getNodes( 'example-app' )[ 0 ]
 );
 
-console.info( 'GravityFlow Admin: Rendered example app.' );
+console.info( 'Gravity Flow Admin: Rendered example app.' );

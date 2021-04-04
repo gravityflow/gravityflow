@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Loading from 'common/Loading';
+import Loading from 'app-common/Loading';
 
 export default class Example extends Component {
 	static propTypes = {

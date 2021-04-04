@@ -15,11 +15,12 @@ module.exports = {
 		[
 			'module-resolver',
 			{
-				root: ['.'],
+				root: [ '.' ],
 				alias: {
 					apps: './src/js/apps',
+					'app-common': './src/js/apps/common',
 					config: './src/js/admin/config',
-					common: './src/js/apps/common',
+					common: './src/js/common',
 					Example: './src/js/apps/Example',
 					pcss: './src/css/admin',
 					utils: './src/js/utils',

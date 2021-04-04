@@ -15,7 +15,7 @@ const config = module_exists( './config.json' )
 	? require( './config.json' )
 	: {
 			proxy: 'gravity-forms.local',
-			certs_path: '',
+			certsPath: '',
 	  };
 
 /**
@@ -99,8 +99,8 @@ const gulpTasks = [
 	/* Watch Tasks (THESE MUST BE LAST) */
 
 	'watch:main', // watch all fe assets and run appropriate routines
-	'watch:watchAdminJS', // watch all fe assets for admin and theme and run appropriate routines
-	'watch:watchThemeJS', // watch all fe assets for admin and theme and run appropriate routines
+	'watch:watchAdminJS', // watch admin js and run appropriate webpack tasks
+	'watch:watchThemeJS', // watch theme js and run appropriate webpack tasks
 ];
 
 /**
@@ -199,7 +199,7 @@ gulp.task(
 );
 
 /**
- * Watches all css and php for bundle, runs tasks and reloads browser using browsersync.
+ * Watches all css and js, runs tasks and reloads browser using browsersync.
  */
 
 gulp.task(
@@ -214,8 +214,8 @@ gulp.task(
 			host: config.proxy,
 			proxy: `https://${ config.proxy }`,
 			https: {
-				key: `${ config.certs_path }/${ config.proxy }.key`,
-				cert: `${ config.certs_path }/${ config.proxy }.crt`,
+				key: `${ config.certsPath }/${ config.proxy }.key`,
+				cert: `${ config.certsPath }/${ config.proxy }.crt`,
 			},
 			ghostMode: {
 				scroll: true,

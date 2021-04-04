@@ -1,6 +1,6 @@
 {
   "proxy": "gravityforms.local",
-  "certs_path": "/Users/USERNAME/Library/Application Support/Local/run/router/nginx/certs",
+  "certsPath": "/Users/USERNAME/Library/Application Support/Local/run/router/nginx/certs",
   "pluginPath": "/wp-content/plugins/gravityflow/",
   "dropbox" : {
     "access_token" : "your token",

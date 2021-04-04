@@ -18,8 +18,6 @@ webpackAdminDevConfig.module.rules = watchRules;
 webpackThemeDevConfig.module.rules = watchRules;
 webpackAdminDevConfig.plugins = watchPlugins.admin;
 webpackThemeDevConfig.plugins = watchPlugins.theme;
-delete webpackAdminDevConfig.output.ecmaVersion;
-delete webpackThemeDevConfig.output.ecmaVersion;
 
 function maybeReloadBrowserSync() {
 	const server = browserSync.get( 'Gravityflow Dev' );

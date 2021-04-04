@@ -21,6 +21,7 @@ define( 'SCRIPT_DEBUG', true );
 ## Local Development
 To work with the css and new js files, you will need to get setup to use [Gulp](https://gulpjs.com/) and [PostCSS](https://postcss.org/). Follow these steps:
 
+* Important: if you are on Apple M1 Chips for now you must use a [Rosetta terminal](https://osxdaily.com/2020/11/18/how-run-homebrew-x86-terminal-apple-silicon-mac/)
 * If you don't already have it installed, we recommend a Node Version Manager, eg [nvm](https://github.com/nvm-sh/nvm), or its [Windows equivalent](https://github.com/coreybutler/nvm-windows).
 * Next check the `.nvmrc` file in the root of the repository and `nvm install X.XX.X` that version.
 * Moving forward every time you wish to work with files in the src directory you should `nvm use` in this repo one time to make sure you are on the right version, nvm will use that rc file for that command.

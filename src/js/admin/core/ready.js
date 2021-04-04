@@ -15,6 +15,8 @@ import viewportDims from './viewport-dims';
 
 import { on, ready } from 'utils/events';
 
+import common from 'common';
+
 /**
  * @function bindEvents
  * @description Bind global event listeners here,
@@ -42,8 +44,12 @@ const init = () => {
 
 	bindEvents();
 
+	// initialize modules
+
+	common();
+
 	console.info(
-		'GravityFlow Admin: Initialized all javascript that targeted document ready.'
+		'Gravity Flow Admin: Initialized all javascript that targeted document ready.'
 	);
 };
 

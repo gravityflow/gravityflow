@@ -13,13 +13,18 @@ const devBase = require( './configs/dev-base.js' );
 const pkg = require( '../package.json' );
 const entry = require( './entry/admin' );
 const externals = require( './externals/admin' );
+const sc = require( './optimization/split-chunks' );
 const config = require( './config' );
 
 module.exports = merge.strategy( {
+	optimization: 'append',
 	plugins: 'append',
 } )( devBase, {
 	entry,
 	externals,
+	optimization: {
+		splitChunks: sc.scAdmin,
+	},
 	output: {
 		path: resolve( `${ __dirname }/../`, pkg.gravityflow.paths.js_dist ),
 		publicPath: `${config.pluginPath}${ pkg.gravityflow.paths.js_dist }`,
