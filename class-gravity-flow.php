@@ -736,6 +736,7 @@ PRIMARY KEY  (id)
 						'hasStartStep'    => $has_start_step,
 						'hasCompleteStep' => $has_complete_step,
 						'formId'          => $form_id,
+						'nonce'           => wp_create_nonce( 'gravityflow_feed_list' ),
 					),
 				),
 				array(
@@ -2077,6 +2078,12 @@ PRIMARY KEY  (id)
 		 * Ajax handler for the request to save the custom feed order.
 		 */
 		public function ajax_save_feed_order() {
+			if ( rgpost( 'action' ) !== 'gravityflow_save_feed_order' ) {
+				return;
+			}
+
+			check_ajax_referer( 'gravityflow_feed_list', 'nonce' );
+
 			$feed_ids = rgpost( 'feed_ids' );
 			$form_id  = absint( rgpost( 'form_id' ) );
 			foreach ( $feed_ids as &$feed_id ) {
@@ -3167,7 +3174,7 @@ PRIMARY KEY  (id)
 							$tooltip_class = isset( $field['tooltip_class'] ) ? $field['tooltip_class'] : '';
 							$tooltip       = gform_tooltip( $field['tooltip'], $tooltip_class, true );
 						}
-						printf( '<div id="%s-setting-tab-field-%s" class="gravityflow-tab-field"><div class="gravityflow-tab-field-label">%s %s</div>', $settings_prefix, $id, $field['label'], $tooltip );
+						printf( '<div id="%s-setting-tab-field-%s" class="gform-settings-field gform-settings-field__%s gravityflow-tab-field"><div class="gravityflow-tab-field-label">%s %s</div>', $settings_prefix, $id, $field['type'], $field['label'], $tooltip );
 						call_user_func( $func, $field );
 						echo '</div>';
 					}
@@ -5704,7 +5711,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$entry = GFAPI::get_entry( $entry_id ); // Refresh entry.
 
 					$feedback = GFCommon::replace_variables( $feedback, $form, $entry, false, true, true, 'html' );
-					
+
 					if ( substr( $feedback, 0, 3 ) !== '<p>' ) {
 						$feedback = sprintf( '<p>%s</p>', $feedback );
 					}
@@ -5898,8 +5905,14 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 			?>
 
-			<div id="<?php echo $legacy ? 'gf_form_toolbar': 'gform-form-toolbar'; ?>">
-				<ul id="<?php echo $legacy ? 'gf_form_toolbar_links': 'gform-form-toolbar__menu'; ?>">
+			<div
+				id="<?php echo $legacy ? 'gf_form_toolbar': 'gform-form-toolbar'; ?>"
+				class="gform-form-toolbar"
+			>
+				<ul
+					id="<?php echo $legacy ? 'gf_form_toolbar_links': 'gform-form-toolbar__menu'; ?>"
+					class="gform-form-toolbar__menu"
+				>
 
 					<?php
 
@@ -6248,9 +6261,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * Add inbox notification count to Workflow Menu.
 		 *
 		 * @since 2.5.12
-		 * 
+		 *
 		 * @param array $menu The current WP Dashboard Menu.
-		 */		
+		 */
 		public function show_inbox_count( $menu ) {
 
 			$app_settings = $this->get_app_settings();
@@ -6263,7 +6276,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$custom_navigation_labels = rgar( $custom_labels, 'navigation' );
 			$custom_workflow_label = rgar( $custom_navigation_labels, 'workflow' );
 			$workflow_label = $custom_workflow_label ? $custom_workflow_label : 'Workflow';
-	
+
 			$workflow_menu_pos = -1;
 			foreach ( $menu as $menuitem ) {
 				if ( $menuitem[0] == $workflow_label ) {
@@ -6828,11 +6841,11 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 
 		/**
 		 * Return the inbox entries count from transient.
-		 * 
+		 *
 		 * @since 2.5.12
-		 * 
+		 *
 		 * @return int
-		 */		
+		 */
 		public function get_inbox_count() {
 			$count_value = get_transient( 'gflow_inbox_count_' . get_current_user_id()  );
 			if ( $count_value === false ) {
@@ -7435,7 +7448,7 @@ AND m.meta_value='queued'";
 										 * Return zero to deactivate the repeat reminder.
 										 *
 										 * @deprecated 2.5.3 - Fix typo of gravityflow_assignee_eamil_reminder_repeat_days (email)
-										 * 
+										 *
 										 * @param int                   $repeat_days The number of days between each reminder.
 										 * @param array                 $form        The current form.
 										 * @param array                 $entry       The current entry.
@@ -8601,7 +8614,7 @@ AND m.meta_value='queued'";
 		 * @since 2.6.1     Added parameters for form_id and step_id.
 		 *
 		 * @param int $form_id The form ID.
-		 * @param int $step_id The step ID.		 
+		 * @param int $step_id The step ID.
 		 *
 		 * @return array
 		 */
@@ -8760,7 +8773,7 @@ AND m.meta_value='queued'";
 				return true;
 			}
 
-			$form_id         = $form['id'];			
+			$form_id         = $form['id'];
 			$entry_meta      = array_merge( $this->get_feed_condition_entry_meta( $form_id ), $this->get_feed_condition_entry_properties() );
 			$entry_meta_keys = array_keys( $entry_meta );
 			$match_count     = 0;
@@ -8769,7 +8782,7 @@ AND m.meta_value='queued'";
 				foreach ( $logic['rules'] as $rule ) {
 
 					$rule['value'] = GFCommon::replace_variables( $rule['value'], $form, $entry, false, false, false, 'text' );
-					
+
 					if ( in_array( $rule['fieldId'], $entry_meta_keys ) ) {
 						$is_value_match = GFFormsModel::is_value_match( rgar( $entry, $rule['fieldId'] ), $rule['value'], $rule['operator'], null, $rule, $form );
 					} else {

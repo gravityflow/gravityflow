@@ -290,7 +290,7 @@
     }
 }
 
-.gravityflow-note-avatar span > i {
+.gravityflow-note-avatar span > i.fa {
 	width:65px;
 	height:65px;
 	display:inline-block;
