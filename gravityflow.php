@@ -206,6 +206,8 @@ function gravityflow_action_init() {
 		// Add a Gravity Flow menu item
 		add_action( 'admin_menu', 'gravityflow_create_menu_item' );
 	}
+
+	add_action( 'init', 'Gravity_Flow_init_t15s' );
 }
 
 /**
@@ -256,4 +258,23 @@ function gravityflow_icon() {
 
 	$icon = sprintf( 'data:image/svg+xml;base64,%s', base64_encode( $svg_xml ) );
 	return $icon;
+}
+
+/** 
+ * Download and install translations from TranslationPress
+ * 
+ * @since 2.7.1
+*/
+function Gravity_Flow_init_t15s() {
+
+	if ( ! class_exists( 'Gravity_Flow_Language_Packs' ) ) {
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-translationspress.php' );
+	}
+
+	$t15s_updater = new Gravity_Flow_Language_Packs(
+		'plugin',
+		'gravityflow',
+		'https://packages.translationspress.com/gravityflow/packages.json'
+	);
+	$project = $t15s_updater->add_project();
 }
