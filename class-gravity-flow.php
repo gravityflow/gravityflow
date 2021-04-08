@@ -3630,9 +3630,15 @@ PRIMARY KEY  (id)
 		 * @return string
 		 */
 		public function settings_entry_filter( $field, $echo = true ) {
-			$form = ! empty( $field['form_id'] ) ? GFFormsModel::get_form_meta( $field['form_id'] ) : $this->get_current_form();
-			$filter_settings      = GFCommon::get_field_filter_settings( $form );
+			if ( ! empty( $field['filter_settings'] ) ) {
+				$filter_settings = $field['filter_settings'];
+			} else {
+				$form            = ! empty( $field['form_id'] ) ? GFFormsModel::get_form_meta( $field['form_id'] ) : $this->get_current_form();
+				$filter_settings = GFCommon::get_field_filter_settings( $form );
+			}
+
 			$filter_settings_json = json_encode( $filter_settings );
+
 			$value = $this->get_setting( $field['name'] );
 			if ( ! $value ) {
 				$value = array(
