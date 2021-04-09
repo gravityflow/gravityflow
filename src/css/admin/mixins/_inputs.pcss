@@ -1,0 +1,28 @@
+/*
+ * Mixins: Inputs
+ * Added to keep settings area in sync with components used elsewhere.
+ * Not to be used more unless absolutely necessary.
+ */
+
+@define-mixin inputHover {
+	box-shadow: var(--bs-input-hover);
+	color: var(--c-text);
+}
+
+@define-mixin inputFocus {
+	border: 1px solid var(--c-primary-light);
+	box-shadow: var(--bs-input-focus);
+	color: var(--c-text);
+}
+
+@define-mixin select {
+	background: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%239092B2%22%2F%3E%3C%2Fsvg%3E") no-repeat right 0.6rem top 55%;
+	background-color: var(--c-white);
+	background-size: 1rem 1rem;
+	font-size: 0.8125rem;
+	line-height: 1.6875rem;
+	max-height: 2.25rem;
+	min-height: 2.25rem;
+	padding: 0 2rem 0 0.8125rem;
+	width: 100%;
+}

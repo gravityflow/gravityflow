@@ -427,15 +427,15 @@ class Gravity_Flow_Common {
 		$display_fields_mode = $current_step ? $current_step->display_fields_mode : 'all_fields';
 
 		if ( $field->type !== 'section' ) {
-			if ( $display_fields_mode !== 'all_fields' ) {
+			if ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
+				$display_field = false;
+			} elseif ( $display_fields_mode !== 'all_fields' ) {
 				$display_fields_selected = $current_step && is_array( $current_step->display_fields_selected ) ? $current_step->display_fields_selected : array();
 				$is_selected_field          = in_array( $field->id, $display_fields_selected );
 
 				if ( ! $is_selected_field && $display_fields_mode === 'selected_fields' || $is_selected_field && $display_fields_mode === 'all_fields_except' ) {
 					$display_field = false;
 				}
-			} elseif ( GFFormsModel::is_field_hidden( $form, $field, array(), $entry ) || $is_product_field ) {
-				$display_field = false;
 			}
 		}
 

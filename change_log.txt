@@ -1,4 +1,9 @@
 - Added action gravityflow_step_start for custom logic to perform when any step starts.
-- Fixed an issue that prevented use of gravityflow_status_filter with an 'any' mode selection from being applied correctly.
+- Fixed an issue with step ordering that causes a conflict with other add-ons that support feed ordering.
+- Fixed an issue that prevents the use of gravityflow_status_filter with an 'any' mode selection from being applied correctly.
+- Fixed an issue that causes Icons in the Timeline View to display at the wrong size in Gravity Forms 2.5.
 - Updated the Status Page to use a CSS Loading Spinner to replace the deprecated Spinner Gif from Gravity Forms Core.
 - Updated the Assignee Email Message Textarea to improve support for the TinyMCE Editor from Gravity Forms 2.5
+- Fixed an issue that causes Order Summary to display on Complete Step even when the setting was disabled.
+- Fixed the entry filter setting to support the filters being passed in the field config which improves Form Connector extension remote site scenarios.
+- Fixed an issue with HTML fields conditional logic that affected their display on Workflow Detail page for completed workflows.

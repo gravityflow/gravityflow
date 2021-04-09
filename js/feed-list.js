@@ -10,7 +10,8 @@
 
         var hasStartStep = gravityflow_feed_list_strings.hasStartStep,
             hasCompleteStep = gravityflow_feed_list_strings.hasCompleteStep,
-            formId = gravityflow_feed_list_strings.formId;
+            formId = gravityflow_feed_list_strings.formId,
+            nonce = gravityflow_feed_list_strings.nonce;
 
         $.each( $('.wp-list-table tbody tr'), function() { 
             $( this ).css( 'border-left', '5px solid ' + $(this).find('.step_highlight_color').css( 'background-color' ) );
@@ -56,7 +57,8 @@
                     var data = {
                         action: 'gravityflow_save_feed_order',
                         feed_ids: feedIds,
-                        form_id: formId
+                        form_id: formId,
+                        nonce: nonce
                     };
 
                     $.post( ajaxurl, data)
