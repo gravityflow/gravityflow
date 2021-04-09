@@ -6,3 +6,4 @@
 - Updated the Assignee Email Message Textarea to improve support for the TinyMCE Editor from Gravity Forms 2.5
 - Fixed an issue that causes Order Summary to display on Complete Step even when the setting was disabled.
 - Fixed the entry filter setting to support the filters being passed in the field config which improves Form Connector extension remote site scenarios.
+- Fixed an issue with HTML fields conditional logic that affected their display on Workflow Detail page for completed workflows.
