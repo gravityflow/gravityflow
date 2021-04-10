@@ -9,3 +9,4 @@
 - Fixed an issue with HTML fields conditional logic that affected their display on Workflow Detail page for completed workflows.
 - Fixed the background on Workflow Labels Settings page with Gravity Forms 2.5.
 - Fixed an issue with the display of the Update button on the Workflow Labels Settings page with Gravity Forms 2.5.
+ 
