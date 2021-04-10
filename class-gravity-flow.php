@@ -9443,7 +9443,7 @@ AND m.meta_value='queued'";
 
 				$primary_button_link = admin_url( 'admin.php?page=gravityflow_settings' );
 
-				$message = sprintf( '<img src="%s" style="vertical-align:text-bottom;margin-right:5px;"/>', GFCommon::get_base_url() . '/images/exclamation.png' );
+				$message = '';
 
 				switch ( $license_status ) {
 					case 'expired':
