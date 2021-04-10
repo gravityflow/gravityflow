@@ -21,6 +21,15 @@ if ( class_exists( 'GFForms' ) ) {
 	 */
 	class Gravity_Flow extends GFFeedAddOn {
 
+		const VENDOR_JS_THEME = 'gravityflow_vendor_js_theme';
+		const VENDOR_JS_ADMIN = 'gravityflow_vendor_js_admin';
+
+		const THEME_JS  = 'gravityflow_theme_js';
+		const THEME_CSS = 'gravityflow_theme_css';
+
+		const ADMIN_JS  = 'gravityflow_admin_js';
+		const ADMIN_CSS = 'gravityflow_admin_css';
+
 		/**
 		 * The instance of this class.
 		 *
@@ -616,7 +625,6 @@ PRIMARY KEY  (id)
 
 			$users = $this->is_form_settings( 'gravityflow' ) ? $this->get_users_as_choices() : array();
 
-			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
 			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? '-legacy' : '';
 
@@ -625,7 +633,7 @@ PRIMARY KEY  (id)
 			$scripts = array(
 				array(
 					'handle'   => 'gravityflow_form_editor_js',
-					'src'      => $this->get_base_url() . "/js/form-editor{$min}.js",
+					'src'      => $this->get_base_url() . "/js/form-editor{$this->min()}.js",
 					'version'  => $this->_version,
 					'enqueue'  => array(
 						array(
@@ -665,7 +673,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_multi_select',
-					'src'     => $this->get_base_url() . "/js/multi-select{$min}.js",
+					'src'     => $this->get_base_url() . "/js/multi-select{$this->min()}.js",
 					'deps'    => array( 'jquery' ),
 					'version' => $this->_version,
 					'enqueue' => array(
@@ -675,7 +683,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_quicksearch',
-					'src'     => $this->get_base_url() . "/js/quicksearch{$min}.js",
+					'src'     => $this->get_base_url() . "/js/quicksearch{$this->min()}.js",
 					'deps'    => array( 'jquery' ),
 					'version' => $this->_version,
 					'enqueue' => array(
@@ -685,7 +693,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gf_routing_setting',
-					'src'     => $this->get_base_url() . "/js/routing-setting{$min}.js",
+					'src'     => $this->get_base_url() . "/js/routing-setting{$this->min()}.js",
 					'deps'    => array( 'jquery' ),
 					'version' => $this->_version,
 					'enqueue' => array(
@@ -700,7 +708,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_form_settings_js',
-					'src'     => $this->get_base_url() . "/js/form-settings{$legacy}{$min}.js",
+					'src'     => $this->get_base_url() . "/js/form-settings{$legacy}{$this->min()}.js",
 					'deps'    => array( 'jquery', 'jquery-ui-core', 'jquery-ui-tabs', 'jquery-ui-datepicker', 'gform_datepicker_init', 'gf_routing_setting' ),
 					'version' => $this->_version,
 					'enqueue' => array(
@@ -716,7 +724,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gform_field_filter',
-					'src'     => GFCommon::get_base_url() . "/js/routing-setting{$min}.js",
+					'src'     => GFCommon::get_base_url() . "/js/routing-setting{$this->min()}.js",
 					'deps'    => array( 'jquery', 'gform_datepicker_init' ),
 					'version' => $this->_version,
 					'enqueue' => array(
@@ -726,7 +734,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_feed_list',
-					'src'     => $this->get_base_url() . "/js/feed-list{$min}.js",
+					'src'     => $this->get_base_url() . "/js/feed-list{$this->min()}.js",
 					'deps'    => array( 'jquery', 'jquery-ui-sortable', 'wp-color-picker' ),
 					'version' => $this->_version,
 					'enqueue' => array(
@@ -741,7 +749,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_entry_detail',
-					'src'     => $this->get_base_url() . "/js/entry-detail{$min}.js",
+					'src'     => $this->get_base_url() . "/js/entry-detail{$this->min()}.js",
 					'version' => $this->_version,
 					'deps'    => array( 'jquery', 'sack' ),
 					'enqueue' => array(
@@ -751,7 +759,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_status_list',
-					'src'     => $this->get_base_url() . "/js/status-list{$min}.js",
+					'src'     => $this->get_base_url() . "/js/status-list{$this->min()}.js",
 					'deps'    => array( 'jquery', 'gform_field_filter' ),
 					'version' => $this->_version,
 					'enqueue' => array(
@@ -771,7 +779,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_reports',
-					'src'     => $this->get_base_url() . "/js/reports{$min}.js",
+					'src'     => $this->get_base_url() . "/js/reports{$this->min()}.js",
 					'version' => $this->_version,
 					'deps'    => array( 'jquery', 'google_charts' ),
 					'enqueue' => array(
@@ -780,7 +788,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle' => 'gravityflow_inbox',
-					'src' => $this->get_base_url() . "/js/inbox{$min}.js",
+					'src' => $this->get_base_url() . "/js/inbox{$this->min()}.js",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array(
@@ -798,31 +806,44 @@ PRIMARY KEY  (id)
 		}
 
 		/**
+		 * Get the correct script suffix depending on SCRIPT_DEBUg state.
+		 *
+		 * @return string
+		 */
+		private function min() {
+			return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+		}
+
+		/**
 		 * Target for the wp_enqueue_scripts hook.
 		 *
 		 * Enqueues the required front-end scripts when the shortcode is found in the post content.
 		 */
 		public function enqueue_frontend_scripts() {
 			global $wp_query;
+
+			// Enqueue theme CSS and JS
+			wp_enqueue_style( self::THEME_CSS,  $this->get_base_url() . "/css/theme{$this->min()}.css", null, $this->_version );
+			wp_enqueue_script( self::VENDOR_JS_THEME, $this->get_base_url() . "/js/vendor-theme{$this->min()}.js", array(), $this->_version, true );
+			wp_enqueue_script( self::THEME_JS, $this->get_base_url() . "/js/scripts-theme{$this->min()}.js", array( self::VENDOR_JS_THEME ), $this->_version, true );
+
 			if ( isset( $wp_query->posts ) && is_array( $wp_query->posts ) ) {
 				$shortcode_found = $this->look_for_shortcode();
 
-
 				if ( $shortcode_found ) {
 					$this->enqueue_form_scripts();
-					$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 					$nonce = wp_create_nonce( 'wp_rest' );
-					wp_enqueue_script( 'sack', "/wp-includes/js/tw-sack$min.js", array(), '1.6.1' );
-					wp_enqueue_script( 'gravityflow_entry_detail', $this->get_base_url() . "/js/entry-detail{$min}.js", array( 'jquery', 'sack' ), $this->_version );
-					wp_enqueue_script( 'gravityflow_status_list', $this->get_base_url() . "/js/status-list{$min}.js",  array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'gform_datepicker_init' ), $this->_version );
-					wp_enqueue_script( 'gform_field_filter', GFCommon::get_base_url() . "/js/gf_field_filter{$min}.js",  array( 'jquery', 'gform_datepicker_init' ), $this->_version );
-					wp_enqueue_script( 'gravityflow_frontend', $this->get_base_url() . "/js/frontend{$min}.js",  array(), $this->_version );
-					wp_enqueue_script( 'gravityflow_inbox', $this->get_base_url() . "/js/inbox{$min}.js",  array(), $this->_version );
+					wp_enqueue_script( 'sack', "/wp-includes/js/tw-sack$this->min.js", array(), '1.6.1' );
+					wp_enqueue_script( 'gravityflow_entry_detail', $this->get_base_url() . "/js/entry-detail{$this->min()}.js", array( 'jquery', 'sack' ), $this->_version );
+					wp_enqueue_script( 'gravityflow_status_list', $this->get_base_url() . "/js/status-list{$this->min()}.js",  array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'gform_datepicker_init' ), $this->_version );
+					wp_enqueue_script( 'gform_field_filter', GFCommon::get_base_url() . "/js/gf_field_filter{$this->min()}.js",  array( 'jquery', 'gform_datepicker_init' ), $this->_version );
+					wp_enqueue_script( 'gravityflow_frontend', $this->get_base_url() . "/js/frontend{$this->min()}.js",  array(), $this->_version );
+					wp_enqueue_script( 'gravityflow_inbox', $this->get_base_url() . "/js/inbox{$this->min()}.js",  array(), $this->_version );
 
-					wp_enqueue_style( 'gform_admin',  GFCommon::get_base_url() . "/css/admin{$min}.css", null, $this->_version );
-					wp_enqueue_style( 'gravityflow_entry_detail',  $this->get_base_url() . "/css/entry-detail{$min}.css", null, $this->_version );
-					wp_enqueue_style( 'gravityflow_frontend_css', $this->get_base_url() . "/css/frontend{$min}.css", null, $this->_version );
-					wp_enqueue_style( 'gravityflow_status', $this->get_base_url() . "/css/status{$min}.css", null, $this->_version );
+					wp_enqueue_style( 'gform_admin',  GFCommon::get_base_url() . "/css/admin{$this->min()}.css", null, $this->_version );
+					wp_enqueue_style( 'gravityflow_entry_detail',  $this->get_base_url() . "/css/entry-detail{$this->min()}.css", null, $this->_version );
+					wp_enqueue_style( 'gravityflow_frontend_css', $this->get_base_url() . "/css/frontend{$this->min()}.css", null, $this->_version );
+					wp_enqueue_style( 'gravityflow_status', $this->get_base_url() . "/css/status{$this->min()}.css", null, $this->_version );
 					wp_localize_script( 'gravityflow_status_list', 'gravityflow_status_list_strings', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 					wp_localize_script( 'gravityflow_inbox', 'gravityflow_inbox_strings', array( 'restUrl' => esc_url_raw( rest_url() ), 'nonce' => $nonce ) );
 
@@ -1013,14 +1034,12 @@ PRIMARY KEY  (id)
 		 */
 		public function styles() {
 
-			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
-
 			$legacy = version_compare( GFForms::$version, '2.5-dev-1', '<' ) ? '-legacy' : '';
 
 			$styles = array(
 				array(
 					'handle'  => 'gform_admin',
-					'src'     => GFCommon::get_base_url() . "/css/admin{$min}.css",
+					'src'     => GFCommon::get_base_url() . "/css/admin{$this->min()}.css",
 					'version' => GFForms::$version,
 					'enqueue' => array(
 						array(
@@ -1042,7 +1061,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_inbox',
-					'src'     => $this->get_base_url() . "/css/inbox{$min}.css",
+					'src'     => $this->get_base_url() . "/css/inbox{$this->min()}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array(
@@ -1052,7 +1071,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_entry_detail',
-					'src'     => $this->get_base_url() . "/css/entry-detail{$min}.css",
+					'src'     => $this->get_base_url() . "/css/entry-detail{$this->min()}.css",
 					'version' => $this->_version,
 					'deps' => array( 'gform_admin' ),
 					'enqueue' => array(
@@ -1063,7 +1082,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_submit',
-					'src'     => $this->get_base_url() . "/css/submit{$min}.css",
+					'src'     => $this->get_base_url() . "/css/submit{$this->min()}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array(
@@ -1073,7 +1092,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_status',
-					'src'     => $this->get_base_url() . "/css/status{$min}.css",
+					'src'     => $this->get_base_url() . "/css/status{$this->min()}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array(
@@ -1083,7 +1102,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_activity',
-					'src'     => $this->get_base_url() . "/css/activity{$min}.css",
+					'src'     => $this->get_base_url() . "/css/activity{$this->min()}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array(
@@ -1093,7 +1112,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_feed_list',
-					'src'     => $this->get_base_url() . "/css/feed-list{$min}.css",
+					'src'     => $this->get_base_url() . "/css/feed-list{$this->min()}.css",
 					'version' => $this->_version,
 					'deps' => array( 'wp-color-picker' ),
 					'enqueue' => array(
@@ -1104,7 +1123,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_multi_select_css',
-					'src'     => $this->get_base_url() . "/css/multi-select{$min}.css",
+					'src'     => $this->get_base_url() . "/css/multi-select{$this->min()}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
@@ -1113,7 +1132,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_form_settings',
-					'src'     => $this->get_base_url() . "/css/form-settings{$legacy}{$min}.css",
+					'src'     => $this->get_base_url() . "/css/form-settings{$legacy}{$this->min()}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array( 'query' => 'page=gf_edit_forms&view=settings&subview=gravityflow&fid=_notempty_' ),
@@ -1122,7 +1141,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_settings',
-					'src'     => $this->get_base_url() . "/css/settings{$min}.css",
+					'src'     => $this->get_base_url() . "/css/settings{$this->min()}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array( 'query' => 'page=gravityflow_settings' ),
@@ -1130,7 +1149,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_discussion_field',
-					'src'     => $this->get_base_url() . "/css/discussion-field{$min}.css",
+					'src'     => $this->get_base_url() . "/css/discussion-field{$this->min()}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array( 'field_types' => array( 'workflow_discussion' ) ),
@@ -1138,7 +1157,7 @@ PRIMARY KEY  (id)
 				),
 				array(
 					'handle'  => 'gravityflow_dashicons',
-					'src'     => $this->get_base_url() . "/css/dashicons{$min}.css",
+					'src'     => $this->get_base_url() . "/css/dashicons{$this->min()}.css",
 					'version' => $this->_version,
 					'enqueue' => array(
 						array( 'query' => 'page=roles&action=edit' ),
@@ -6769,10 +6788,9 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @return string
 		 */
 		public function get_shortcode_reports_page( $a ) {
-			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
 			wp_enqueue_script( 'google_charts', 'https://www.gstatic.com/charts/loader.js',  array(), $this->_version );
-			wp_enqueue_script( 'gravityflow_reports', $this->get_base_url() . "/js/reports{$min}.js",  array( 'jquery', 'google_charts' ), $this->_version );
+			wp_enqueue_script( 'gravityflow_reports', $this->get_base_url() . "/js/reports{$this->min()}.js",  array( 'jquery', 'google_charts' ), $this->_version );
 
 			$app_settings  = $this->get_app_settings();
 			$allow_reports = rgar( $app_settings, 'allow_display_reports' );
@@ -7183,6 +7201,11 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 */
 		public function action_admin_enqueue_scripts() {
 			$this->maybe_enqueue_form_scripts();
+
+			// Enqueue admin CSS and JS
+			wp_enqueue_style( self::ADMIN_CSS,  $this->get_base_url() . "/css/admin{$this->min()}.css", null, $this->_version );
+			wp_enqueue_script( self::VENDOR_JS_ADMIN, $this->get_base_url() . "/js/vendor-admin{$this->min()}.js", array(), $this->_version, true );
+			wp_enqueue_script( self::ADMIN_JS, $this->get_base_url() . "/js/scripts-admin{$this->min()}.js", array( self::VENDOR_JS_ADMIN ), $this->_version, true );
 		}
 
 		/**
