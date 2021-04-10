@@ -23,6 +23,6 @@ table.gravityflow-settings-labels th {
     padding: 1.5rem;
 }
 
-input#gravityflow-labels-update {
+#gravityflow-labels-update {
     background: #3E7DA6;
 }
