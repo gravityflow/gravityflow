@@ -602,6 +602,19 @@ abstract class Gravity_Flow_Step extends stdClass {
 
 			$this->log_event( 'started' );
 
+			/**
+			 * Allows custom logic to be added when the step is started.
+			 *
+			 * @since 2.7.1
+			 *
+			 * @param int               $step_id    The ID of the step.
+			 * @param int               $entry_id   The entry of the step.
+			 * @param int               $form_id    The form of the step.
+			 * @param string            $status     The status when the step starts.
+			 * @param Gravity_Flow_Step $step       The step.
+			 */
+			do_action( 'gravityflow_step_start', $step_id, $entry_id, $this->get_form_id(), $this->get_status(), $this );
+
 			$complete = $this->process();
 
 			$log_is_complete = $complete ? 'yes' : 'no';
@@ -1900,6 +1913,17 @@ abstract class Gravity_Flow_Step extends stdClass {
 			gform_update_meta( $entry_id, 'workflow_current_status_timestamp', time() );
 		}
 
+		/**
+		 * Allows custom logic to be added when the step is started.
+		 *
+		 * @since 1.3.0.10
+		 *
+		 * @param int               $step_id    The ID of the completed step.
+		 * @param int               $entry_id   The entry of the completed step.
+		 * @param int               $form_id    The form of the completed step.
+		 * @param string            $status     The status when the step completed.
+		 * @param Gravity_Flow_Step $step       The completed step.
+		 */
 		do_action( 'gravityflow_step_complete', $step_id, $entry_id, $this->get_form_id(), $status, $this );
 		$this->log_debug( __METHOD__ . '() - ending step ' . $step_id );
 		$this->log_event( 'ended', $status, $duration );

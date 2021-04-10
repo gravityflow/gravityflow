@@ -212,7 +212,8 @@ class Gravity_Flow_Common_Step_Settings {
 			array(
 				'name'          => $prefix . '_notification_message',
 				'label'         => __( 'Message', 'gravityflow' ),
-				'type'          => 'visual_editor',
+				'type'          => 'textarea',
+				'use_editor'    => true,
 				'default_value' => rgar( $config, 'default_message' ),
 			),
 			array(

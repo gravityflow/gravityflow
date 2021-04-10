@@ -26,9 +26,8 @@
         $('.gravityflow-export-status-button').click(function(){
             var $this = $(this);
             $this.addClass('button-disabled');
+            $this.addClass('loading');
             filters = $this.data('filter_args');
-            var s = $this.next('.spinner');
-            $this.next('.gravityflow-spinner').show();
             processExport();
         });
 
@@ -44,8 +43,7 @@
                 } else {
                     alert(data.message);
                 }
-                $('.gravityflow-export-status-button.button-disabled').next('.gravityflow-spinner').hide();
-                $('.gravityflow-export-status-button.button-disabled').removeClass('button-disabled');
+                $('.gravityflow-export-status-button.button-disabled').removeClass('button-disabled').removeClass('loading');
             });
         }
     });

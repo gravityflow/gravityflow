@@ -33,9 +33,6 @@ if ! $(wp-su core is-installed); then
 
     wp-su core install --url=wordpress --title=tests --admin_user=admin --admin_email=test@test.com
 
-    # The development version of Gravity Flow requires SCRIPT_DEBUG
-    wp-su core config --dbhost=mysql --dbname=wordpress --dbuser=root --dbpass=wordpress --extra-php="define( 'SCRIPT_DEBUG', true );" --force
-
 fi
 
 if [ -z ${GITHUB_TOKEN} ]; then
