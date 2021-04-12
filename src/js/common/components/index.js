@@ -7,7 +7,7 @@
 import * as tools from 'utils/tools';
 
 const el = {
-	inbox: tools.getNodes( 'gflow-inbox' ),
+	inbox: tools.getNodes( 'gflow-inbox' )[ 0 ],
 };
 
 /**
