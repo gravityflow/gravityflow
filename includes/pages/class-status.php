@@ -1459,6 +1459,8 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$form_ids = $this->get_workflow_form_ids();
 		}
 
+		$form_ids = apply_filters( 'gravityflow_form_ids_status', $form_ids, $this->get_search_criteria() );
+
 		$results            = new stdClass();
 		$results->total     = 0;
 		$results->pending   = 0;
