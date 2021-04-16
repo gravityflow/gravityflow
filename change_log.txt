@@ -1,0 +1,1 @@
+- Fixed an issue where the File Upload field generates a validation error when progress is saved on the User Input Step.
