@@ -238,20 +238,21 @@ class Gravity_Flow_Connected_Apps {
 			if ( rgpost( 'consumer_key' ) !== rgar( $current_app, 'consumer_key' ) || rgpost( 'consumer_secret' ) !== rgar( $current_app, 'consumer_secret' ) ) {
 				$current_app['consumer_key']    = sanitize_text_field( $_POST['consumer_key'] );
 				$current_app['consumer_secret'] = sanitize_text_field( $_POST['consumer_secret'] );
-				$this->setup_oauth1_client( $current_app );
-				$test_url                 = trailingslashit( $current_app['api_url'] ) . 'wp-json/gf/v2/forms/';
-				$headers['Authorization'] = $this->oauth1_client->get_full_request_header( $test_url, 'OPTIONS' );
-				$options                  = array(
-					'headers' => $headers,
-					'method'  => 'OPTIONS',
-				);
+				$current_app['status']          = 'Not Verified';
 
-				$response = wp_remote_request( $test_url, $options );
+				if ( $this->setup_oauth1_client( $current_app ) ) {
+					$test_url                 = trailingslashit( $current_app['api_url'] ) . 'wp-json/gf/v2/forms/';
+					$headers['Authorization'] = $this->oauth1_client->get_full_request_header( $test_url, 'HEAD' );
+					$options                  = array(
+						'headers' => $headers,
+						'method'  => 'HEAD',
+					);
 
-				if ( ! is_wp_error( $response ) && isset( $response['response']['code'] ) && $response['response']['code'] == 200 ) {
-					$current_app['status'] = 'Verified';
-				} else {
-					$current_app['status'] = 'Not Verified';
+					$response = wp_remote_request( $test_url, $options );
+
+					if ( ! is_wp_error( $response ) && isset( $response['response']['code'] ) && $response['response']['code'] == 200 ) {
+						$current_app['status'] = 'Verified';
+					}
 				}
 
 				$reauth = true;
@@ -346,6 +347,8 @@ class Gravity_Flow_Connected_Apps {
 	 * Configure and construct oauth1 client.
 	 *
 	 * @param array|null $app
+	 *
+	 * @return bool
 	 */
 	function setup_oauth1_client( $app = null ) {
 		try {
@@ -366,11 +369,15 @@ class Gravity_Flow_Connected_Apps {
 				$app['api_url']
 			);
 
+			return true;
+
 		} catch ( Exception $e ) {
 			gravity_flow()->log_debug( __METHOD__ . '() - Exception caught ' . $e->getMessage() );
 			$url = remove_query_arg( array( 'oauth_token', 'oauth_verifier', 'wp_scope' ) );
 			$url = esc_url_raw( $url );
 			wp_safe_redirect( $url );
+
+			return false;
 		}
 	}
 
