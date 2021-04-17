@@ -1,0 +1,13 @@
+vendor/**
+webpack/**
+gulp-tasks/**
+src/js/**/*.pcss
+wp-content/plugins/gravityflow/src/css/**/*.pcss
+node_modules/**
+**/node_modules
+__snapshots__
+__coverage__
+__mocks__
+__mockData__
+webpack.config.js
+!.eslintrc

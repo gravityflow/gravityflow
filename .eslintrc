@@ -1,0 +1,59 @@
+{
+  "extends": [
+    "plugin:@wordpress/eslint-plugin/recommended"
+  ],
+  "parser": "babel-eslint",
+  "env": {
+    "jest": true
+  },
+  "globals": {
+    "shallow": false,
+    "mount": false,
+    "render": false,
+    "jsdom": false,
+    "jquery": true,
+    "$": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "rules": {
+    "linebreak-style": 0,
+    "no-console": 0,
+    "max-len": 0,
+    "import/no-unresolved": 0,
+    "valid-jsdoc": 0,
+    "no-useless-escape": 0,
+    "camelcase": 0,
+    "no-unused-expressions": 0,
+    "jsdoc/check-property-names": 0,
+    "jsdoc/require-property": 0,
+    "jsdoc/require-property-description": 0,
+    "jsdoc/require-property-name": 0,
+    "jsdoc/require-property-type": 0,
+    "jsdoc/require-param-type": 0,
+    "@wordpress/no-global-event-listener": 0,
+    "react/no-danger": 0,
+    "react/jsx-no-undef": [2,
+      {
+        "allowGlobals": true
+      }
+    ]
+  },
+  "settings": {
+    "import/ignore": [
+      "node_modules",
+      "\\.(html|json|properties)$"
+    ],
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack/configs/base.js"
+      }
+    },
+    "react": {
+      "version": "detect"
+    }
+  }
+}

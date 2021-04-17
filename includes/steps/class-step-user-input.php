@@ -669,7 +669,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 
 				if ( $field->get_input_type() == 'fileupload' ) {
 
-					if ( $field->isRequired && $submission_is_empty && rgempty( $field->id, $saved_entry ) ) {
+					if ( $field->isRequired && $submission_is_empty && rgempty( $field->id, $saved_entry ) && rgpost( 'gravityflow_status' ) == 'complete' ) {
 						$field->failed_validation  = true;
 						$field->validation_message = empty( $field->errorMessage ) ? esc_html__( 'This field is required.', 'gravityflow' ) : $field->errorMessage;
 						$valid                     = false;

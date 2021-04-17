@@ -1,6 +1,3 @@
-- Added action gravityflow_step_start for custom logic to perform when any step starts.
-- Fixed an issue that prevented use of gravityflow_status_filter with an 'any' mode selection from being applied correctly.
-- Updated the Status Page to use a CSS Loading Spinner to replace the deprecated Spinner Gif from Gravity Forms Core.
-- Updated the Assignee Email Message Textarea to improve support for the TinyMCE Editor from Gravity Forms 2.5
-- Fixed an issue that causes Icons in the Timeline View to display at the wrong size in Gravity Forms 2.5.
 - Fixed an issue that causes Gravity Forms OAuth1 connected apps to fail verification.
+- Fixed an issue where the File Upload field generates a validation error when progress is saved on the User Input Step.
+- Fixed an issue when the filter gravityflow_form_ids_status in use with the filter gravityflow_status_filter fetches invalid counters for the Status Page.
