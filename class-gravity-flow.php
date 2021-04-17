@@ -833,7 +833,7 @@ PRIMARY KEY  (id)
 				if ( $shortcode_found ) {
 					$this->enqueue_form_scripts();
 					$nonce = wp_create_nonce( 'wp_rest' );
-					wp_enqueue_script( 'sack', "/wp-includes/js/tw-sack$this->min.js", array(), '1.6.1' );
+					wp_enqueue_script( 'sack', "/wp-includes/js/tw-sack{$this->min()}.js", array(), '1.6.1' );
 					wp_enqueue_script( 'gravityflow_entry_detail', $this->get_base_url() . "/js/entry-detail{$this->min()}.js", array( 'jquery', 'sack' ), $this->_version );
 					wp_enqueue_script( 'gravityflow_status_list', $this->get_base_url() . "/js/status-list{$this->min()}.js",  array( 'jquery', 'jquery-ui-core', 'jquery-ui-datepicker', 'gform_datepicker_init' ), $this->_version );
 					wp_enqueue_script( 'gform_field_filter', GFCommon::get_base_url() . "/js/gf_field_filter{$this->min()}.js",  array( 'jquery', 'gform_datepicker_init' ), $this->_version );
