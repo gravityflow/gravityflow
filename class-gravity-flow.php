@@ -3142,7 +3142,7 @@ PRIMARY KEY  (id)
 			<script>
 				(function($) {
 					$( '#step_highlight' ).click(function(){
-						$('.gravityflow-step-highlight-settings').slideToggle();
+						$('.gravityflow-step-highlight-settings').toggle();
 					});
 					$(document).ready(function () {
 						$("#step_highlight_color").wpColorPicker();
@@ -3430,10 +3430,14 @@ PRIMARY KEY  (id)
 			$field = $this->prepare_settings_step_highlight( $field );
 
 			$checkbox_field = $field['settings']['step_highlight'];
-			$this->validate_checkbox_settings( $checkbox_field, $settings );
+			$renderer  = $this->get_settings_renderer();
+			$cb_field     = new \Gravity_Forms\Gravity_Forms\Settings\Fields\Checkbox( $checkbox_field, $renderer );
+			$cb_field->do_validation( $settings[ 'step_highlight'] );
 
 			$color_field = $field['settings']['step_highlight_color'];
-			$this->validate_text_settings( $color_field, $settings );
+			$text_field     = new \Gravity_Forms\Gravity_Forms\Settings\Fields\Text( $color_field, $renderer );
+			$text_field->do_validation( $settings[ 'step_highlight_color'] );
+
 			$this->validate_step_highlight_color_settings( $color_field, $settings );
 
 		}
