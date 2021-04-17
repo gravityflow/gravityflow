@@ -285,3 +285,9 @@ button.gform-remove.delete_field_choice {
 .gform-settings-panel__content select[name="_gform_setting_entry_filtersort_key"], .gform-settings-panel__content select[name="_gform_setting_entry_filtersort_direction"] {
     width: auto;
 }
+
+.gform-settings__wrapper .button.wp-picker-clear,
+.gform-settings__wrapper .button.wp-color-result {
+    height:1.8em;
+}
+
