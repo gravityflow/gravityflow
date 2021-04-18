@@ -3427,8 +3427,18 @@ PRIMARY KEY  (id)
 		 * @param array $settings The settings to be potentially saved.
 		 */
 		public function validate_highlight_settings( $field, $settings ) {
-			$field = $this->prepare_settings_step_highlight( $field );
 
+			if ( ! $this->is_gravityforms_supported( '2.5-beta-1' ) ) {
+				$field = $this->prepare_settings_step_highlight( $field );
+				$checkbox_field = $field['settings']['step_highlight'];
+				$this->validate_checkbox_settings( $checkbox_field, $settings );
+				$color_field = $field['settings']['step_highlight_color'];
+				$this->validate_text_settings( $color_field, $settings );
+				$this->validate_step_highlight_color_settings( $color_field, $settings );
+				return;
+			}
+
+			$field = $this->prepare_settings_step_highlight( $field );
 			$checkbox_field = $field['settings']['step_highlight'];
 			$renderer  = $this->get_settings_renderer();
 			$cb_field     = new \Gravity_Forms\Gravity_Forms\Settings\Fields\Checkbox( $checkbox_field, $renderer );
@@ -3437,9 +3447,7 @@ PRIMARY KEY  (id)
 			$color_field = $field['settings']['step_highlight_color'];
 			$text_field     = new \Gravity_Forms\Gravity_Forms\Settings\Fields\Text( $color_field, $renderer );
 			$text_field->do_validation( $settings[ 'step_highlight_color'] );
-
 			$this->validate_step_highlight_color_settings( $color_field, $settings );
-
 		}
 
 		/**
