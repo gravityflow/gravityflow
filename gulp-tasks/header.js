@@ -5,7 +5,8 @@ const pkg = require( '../package.json' );
 module.exports = {
 	adminIconsStyle() {
 		return gulp.src( `${ pkg.gravityflow.paths.css_src }admin/base/_icons.pcss` )
-			.pipe( header( `/* -----------------------------------------------------------------------------
+			.pipe( header( `/* stylelint-disable */
+/* -----------------------------------------------------------------------------
  *
  * Admin Font Icons (via IcoMoon)
  *
@@ -18,7 +19,8 @@ module.exports = {
 	},
 	adminIconsVariables() {
 		return gulp.src( `${ pkg.gravityflow.paths.css_src }admin/variables/_icons.pcss` )
-			.pipe( header( `/* -----------------------------------------------------------------------------
+			.pipe( header( `/* stylelint-disable */
+/* -----------------------------------------------------------------------------
  *
  * Variables: Admin Icons (via IcoMoon)
  *

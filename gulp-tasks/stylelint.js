@@ -15,6 +15,18 @@ module.exports = {
 			} ) )
 			.pipe( gulp.dest( `${ pkg.gravityflow.paths.css_src }admin/` ) );
 	},
+	common() {
+		return gulp.src( [
+			`${ pkg.gravityflow.paths.css_src }common/**/*.pcss`,
+		] )
+			.pipe( stylelint( {
+				fix: true,
+				reporters: [
+					{ formatter: 'string', console: true },
+				],
+			} ) )
+			.pipe( gulp.dest( `${ pkg.gravityflow.paths.css_src }common/` ) );
+	},
 	theme() {
 		return gulp.src( [
 			`${ pkg.gravityflow.paths.css_src }theme/**/*.pcss`,

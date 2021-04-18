@@ -41,35 +41,11 @@ class Gravity_Flow_Inbox {
 		$total_count = 0;
 		$entries     = Gravity_Flow_API::get_inbox_entries( $args, $total_count );
 
-		if ( sizeof( $entries ) > 0 ) {
-			$columns = self::get_columns( $args );
-			?>
+		if ( sizeof( $entries ) > 0 ) { ?>
 
-			<table id="gravityflow-inbox" class="widefat gravityflow-inbox" cellspacing="0" style="border:0px;">
+			<div class="gflow-inbox gflow-grid"><div class="ag-theme-alpine" data-js="gflow-inbox"></div></div>
 
-				<?php
-				self::display_table_head( $columns );
-				?>
-
-				<tbody class="list:user user-list">
-				<?php
-				foreach ( $entries as $entry ) {
-					self::display_entry_row( $args, $entry, $columns );
-				}
-				?>
-				</tbody>
-			</table>
-
-			<?php
-			$page_size = (int) rgar( Gravity_Flow_API::get_inbox_paging( $args ), 'page_size', 20 );
-
-			if ( $total_count > $page_size ) {
-				echo '<br />';
-				echo '<div class="excess_entries_indicator">';
-				printf( '(Showing %d of %d)', $page_size, absint( $total_count ) );
-				echo '</div>';
-			}
-		} else {
+		<?php } else {
 			?>
 			<div id="gravityflow-no-pending-tasks-container">
 				<div id="gravityflow-no-pending-tasks-content">

@@ -1,9 +1,9 @@
 @define-mixin list-columns $colcount {
 	display: grid;
+	grid-column-gap: 2rem;
 	-ms-grid-columns: (1fr) [ $colcount ];
 	grid-template-columns: repeat($colcount, 1fr);
 	grid-template-rows: repeat(auto-fill, auto);
-	grid-column-gap: 2rem;
 }
 
 @define-mixin list-columns-vertical $colcount {
