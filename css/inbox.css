@@ -63,7 +63,7 @@ table#gravityflow-inbox td a {
     transform: translateY(-50%);
 }
 
-i.gravityflow-inbox-check {
+.gf_entry_wrap i.gravityflow-inbox-check {
     font-size: 5em;
 }
 

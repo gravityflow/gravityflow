@@ -2,7 +2,7 @@
 Contributors: stevehenty
 Tags: workflow, approvals, gravity forms
 Requires at least: 5.2
-Tested up to: 5.6
+Tested up to: 5.7.1
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,7 +33,7 @@ Twitter: [Gravity Flow](https://twitter.com/GravityFlow_io)
 
 1. [Purchase and install Gravity Forms](https://gravityflow.io/out/gravityforms)
 2. Wordpress 4.2+
-3. Gravity Forms 2.3+
+3. Gravity Forms 2.4+
 
 
 = Support =
@@ -54,6 +54,27 @@ https://gravityflow.io/contact/
 Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.io/out/gravityforms).
 
 == ChangeLog ==
+
+= 2.7.2 =
+- Fixed deprecation warnings when saving steps on Gravity Forms 2.5.
+- Fixed an issue that causes Gravity Forms OAuth1 connected apps to fail verification.
+- Fixed an issue where the File Upload field generates a validation error when progress is saved on the User Input Step.
+- Fixed an issue when the filter gravityflow_form_ids_status in use with the filter gravityflow_status_filter fetches invalid counters for the Status Page.
+
+
+= 2.7.1 =
+- Added action gravityflow_step_start for custom logic to perform when any step starts.
+- Fixed an issue with step ordering that causes a conflict with other add-ons that support feed ordering.
+- Fixed an issue that prevents the use of gravityflow_status_filter with an 'any' mode selection from being applied correctly.
+- Fixed an issue that causes Icons in the Timeline View to display at the wrong size in Gravity Forms 2.5.
+- Fixed an issue that causes Order Summary to display on Complete Step even when the setting was disabled.
+- Fixed the entry filter setting to support the filters being passed in the field config which improves Form Connector extension remote site scenarios.
+- Fixed an issue with HTML fields conditional logic that affected their display on Workflow Detail page for completed workflows.
+- Fixed the background on Workflow Labels Settings page with Gravity Forms 2.5.
+- Fixed an issue with the display of the Update button on the Workflow Labels Settings page with Gravity Forms 2.5.
+- Updated the Status Page to use a CSS Loading Spinner to replace the deprecated Spinner Gif from Gravity Forms Core.
+- Updated the Assignee Email Message Textarea to improve support for the TinyMCE Editor from Gravity Forms 2.5
+
 
 = 2.7 =
 - Added support for Gravity Forms 2.5-beta-3.

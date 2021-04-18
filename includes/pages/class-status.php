@@ -1459,6 +1459,18 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 			$form_ids = $this->get_workflow_form_ids();
 		}
 
+		/**
+		* Allows form id(s) to be adjusted to define which forms' entries are displayed in status table.
+		*
+		* Return an array of form ids for use with GFAPI.
+		*
+		* @since 2.2.3
+		*
+		* @param array   $form_ids        The form ids
+		* @param array   $search_criteria The search criteria
+		*/
+		$form_ids = apply_filters( 'gravityflow_form_ids_status', $form_ids, $this->get_search_criteria() );
+
 		$results            = new stdClass();
 		$results->total     = 0;
 		$results->pending   = 0;
@@ -1763,7 +1775,7 @@ class Gravity_Flow_Status_Table extends WP_List_Table {
 		 * 
 		 * Return an array of form ids for use with GFAPI.
 		 *
-		 * @since 2.2.2-dev
+		 * @since 2.2.3
 		 * 
 		 * @param array   $form_ids       The form ids
 		 * @param array   $search_criteria The search criteria
