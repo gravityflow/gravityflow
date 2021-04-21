@@ -693,35 +693,52 @@ class Gravity_Flow_Step_Approval extends Gravity_Flow_Step {
 	 * @return bool
 	 */
 	public function validate_note_mode( $new_status, $note ) {
+		$note = trim( $note );
+
+		$valid = true;
+
 		switch ( $this->note_mode ) {
 			case 'required':
-				return ! empty( $note );
+				if ( empty( $note ) ) {
+					$valid = false;
+				}
+				break;
 
 			case 'required_if_approved':
 				if ( $new_status == 'approved' && empty( $note ) ) {
-					return false;
+					$valid = false;
 				}
 				break;
 
 			case 'required_if_rejected':
 				if ( $new_status == 'rejected' && empty( $note ) ) {
-					return false;
+					$valid = false;
 				}
 				break;
 
 			case 'required_if_reverted':
 				if ( $new_status == 'revert' && empty( $note ) ) {
-					return false;
+					$valid = false;
 				}
 				break;
 
 			case 'required_if_reverted_or_rejected':
 				if ( ( $new_status == 'revert' || $new_status == 'rejected' ) && empty( $note ) ) {
-					return false;
+					$valid = false;
 				}
 		}
 
-		return true;
+		/**
+		 * Allows modification of note validity.
+		 *
+		 * @param bool              $valid         Indicates if the note is valid.
+		 * @param string            $note          The submitted note.
+		 * @param string            $new_status    The new status for the current step.
+		 * @param Gravity_Flow_Step $this          The current workflow step.
+		 */		
+		$valid = apply_filters( 'gravityflow_note_valid', $valid, $note, $new_status, $this );
+
+		return $valid;
 	}
 
 	/**

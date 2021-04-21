@@ -1,0 +1,2 @@
+- Fixed an issue where a blank note could be submitted with whitespaces, even if it is required.
+- Added the gravityflow_note_valid filter to customize note validity for Approval and User Input steps.

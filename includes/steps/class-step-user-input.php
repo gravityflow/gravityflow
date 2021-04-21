@@ -616,23 +616,40 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 	 * @return bool
 	 */
 	public function validate_note_mode( $new_status, $note ) {
+		$note = trim( $note );
+
+		$valid = true;
+
 		switch ( $this->note_mode ) {
 			case 'required' :
-				return ! empty( $note );
+				if ( empty( $note ) ) {
+					$valid = false;
+				}
+				break;
 
 			case 'required_if_in_progress' :
 				if ( $new_status == 'in_progress' && empty( $note ) ) {
-					return false;
+					$valid = false;
 				};
 				break;
 
 			case 'required_if_complete' :
 				if ( $new_status == 'complete' && empty( $note ) ) {
-					return false;
+					$valid = false;
 				};
 		}
 
-		return true;
+		/**
+		 * Allows modification of note validity.
+		 *
+		 * @param bool              $valid         Indicates if the note is valid.
+		 * @param string            $note          The submitted note.
+		 * @param string            $new_status    The new status for the current step.
+		 * @param Gravity_Flow_Step $this          The current workflow step.
+		 */			
+		$valid = apply_filters( 'gravityflow_note_valid', $valid, $note, $new_status, $this );
+
+		return $valid;
 	}
 
 	/**
