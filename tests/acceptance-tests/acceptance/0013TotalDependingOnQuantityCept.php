@@ -24,7 +24,7 @@ $I->fillField( 'input[name="input_6"]', '1' );
 
 $I->scrollTo( [ 'css' => '.gfield_shipping' ], 20, 50 );
 $I->selectOption( 'input[name="input_7"]', 'Third Choice' );
-$I->see( '$24.00' );
+$I->seeSanitizedNumberInField( 'input[name="input_8"]', '24.00' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 $I->click( 'Submit' );
 $I->waitForText( 'Thanks for contacting us! We will get in touch with you shortly.', 3 );

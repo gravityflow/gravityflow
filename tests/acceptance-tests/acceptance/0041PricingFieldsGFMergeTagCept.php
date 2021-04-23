@@ -16,7 +16,7 @@ $I->fillField( 'input[name="input_4"]', '100' );
 $I->selectOption( 'select[name="input_10"]', 'Third Option' );
 
 $I->scrollTo( [ 'css' => '.gform_footer' ] );
-$I->assertSame( '340', $I->grabValueFrom( 'input[name="input_14"]' ) );
+$I->seeSanitizedNumberInField( 'input[name="input_14"]', '340.00' );
 
 // Grab the form id, we'll need it for the merge tag tests.
 $form_id = $I->grabValueFrom( 'input[name="gform_submit"]' );
@@ -98,4 +98,4 @@ $I->assertSame( '$10.00', $I->executeJS( $script, [ '{:13}' ] ) );
 // Total.
 $I->seeElementInDOM( "#field_{$form_id}_14 input" );
 $I->See( 'Total', "#field_{$form_id}_14" );
-$I->assertSame( '340', $I->executeJS( $script, [ '{:14}' ] ) );
+$I->assertSame( '$340.00', $I->executeJS( $script, [ '{:14}' ] ) );
