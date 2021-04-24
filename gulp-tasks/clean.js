@@ -17,6 +17,16 @@ module.exports = {
 			'gflow-icons-admin*.zip',
 		] );
 	},
+	js() {
+		return del( [
+			`${ pkg.gravityflow.paths.js_dist }common-*.*.js`,
+			`${ pkg.gravityflow.paths.js_dist }admin-*.*.js`,
+			`${ pkg.gravityflow.paths.js_dist }theme-*.*.js`,
+			`${ pkg.gravityflow.paths.js_dist }common-*.*.min.js`,
+			`${ pkg.gravityflow.paths.js_dist }admin-*.*.min.js`,
+			`${ pkg.gravityflow.paths.js_dist }theme-*.*.min.js`,
+		] );
+	},
 	themeIconsStart() {
 		return del( getIconPaths( 'theme' ) );
 	},

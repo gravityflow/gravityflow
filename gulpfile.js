@@ -43,6 +43,7 @@ const gulpTasks = [
 
 	'clean:adminIconsStart', // delete all files related to admin icons in pcss, in prep for reinjection
 	'clean:adminIconsEnd', // delete admin icon zip
+	'clean:js', // clean chunks javascript
 	'clean:themeIconsStart', // delete all files related to theme icons in pcss, in prep for reinjection
 	'clean:themeIconsEnd', // delete theme icon zip
 
@@ -94,6 +95,7 @@ const gulpTasks = [
 
 	'stylelint:admin', // lints and fixes the admin pcss
 	'stylelint:theme', // lints and fixes the theme pcss
+	'stylelint:common', // lints and fixes the common pcss modules
 	'stylelint:apps', // lints and fixes the apps pcss modules
 
 	/* Watch Tasks (THESE MUST BE LAST) */
@@ -138,6 +140,7 @@ gulp.task(
 			'eslint:utils',
 			'eslint:admin',
 			'stylelint:admin',
+			'stylelint:common',
 			'stylelint:theme',
 			'stylelint:apps'
 		)
@@ -234,7 +237,7 @@ gulp.task(
 	'dist',
 	gulp.series(
 		gulp.parallel( 'lint', 'test' ),
-		gulp.parallel( 'postcss:adminCss', 'postcss:themeCss' ),
+		gulp.parallel( 'clean:js', 'postcss:adminCss', 'postcss:themeCss' ),
 		gulp.parallel( 'shell:scriptsThemeDev', 'shell:scriptsAdminDev' )
 	)
 );
