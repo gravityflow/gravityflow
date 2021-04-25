@@ -7,6 +7,8 @@ use \GFAPI;
 
 class Task {
 
+	private static $forms = array();
+
 	/**
 	 * @var Gravity_Flow_API $api
 	 */
@@ -20,19 +22,6 @@ class Task {
 	public function __construct( Gravity_Flow_API $api, GFAPI $gf_api ) {
 		$this->api    = $api;
 		$this->gf_api = $gf_api;
-	}
-
-	public function get_table_header_defs( $args = array() ) {
-		$headers = array();
-
-		foreach ( $this->get_table_columns( $args ) as $name => $label ) {
-			$headers[] = array(
-				'headerName' => $label,
-				'field'      => $name,
-			);
-		}
-
-		return $headers;
 	}
 
 	private function parse_args( $args ) {
@@ -94,6 +83,19 @@ class Task {
 		 * @param array $args The array of args for this inbox table.
 		 */
 		return apply_filters( 'gravityflow_columns_inbox_table', $columns, $args );
+	}
+
+	public function get_table_header_defs( $args = array() ) {
+		$headers = array();
+
+		foreach ( $this->get_table_columns( $args ) as $name => $label ) {
+			$headers[] = array(
+				'headerName' => $label,
+				'field'      => $name,
+			);
+		}
+
+		return $headers;
 	}
 
 	/**
@@ -219,6 +221,7 @@ class Task {
 	 */
 	private function get_defaults() {
 		$field_ids = apply_filters( 'gravityflow_inbox_fields', array() );
+
 		$filter    = apply_filters( 'gravityflow_inbox_filter', array(
 			'form_id'    => 0,
 			'start_date' => '',
@@ -262,9 +265,19 @@ class Task {
 		return $tasks;
 	}
 
+	private function get_form( $form_id ) {
+		if ( isset( self::$forms[ $form_id ] ) ) {
+			return self::$forms[ $form_id ];
+		}
+
+		self::$forms[ $form_id ] = $this->gf_api::get_form( $form_id );
+
+		return self::$forms[ $form_id ];
+	}
+
 	private function get_data_for_row( $args, $entry, $columns ) {
 		$data      = array();
-		$form      = $this->gf_api::get_form( $entry['form_id'] );
+		$form      = $this->get_form( $entry['form_id'] );
 		$url_entry = esc_url_raw( sprintf( '%s&id=%d&lid=%d', $args['detail_base_url'], $entry['form_id'], $entry['id'] ) );
 		$link      = "<a href='%s'>%s</a>";
 
