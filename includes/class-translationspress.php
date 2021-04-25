@@ -3,8 +3,6 @@
  * Main T15S library.
  *
  * @since 2.7.3
- *
- * @package WP_Translations\T15S_registry
  */
 
 use DateTime;
@@ -31,70 +29,77 @@ class Gravity_Flow_Language_Packs {
 			add_action( 'init', array( $this, 'register_clean_translations_cache' ), 9999 );
 		}
 
-		/**
-		 * Short-circuits translations API requests for private projects.
-		 */
-		add_filter(
-			'translations_api',
-			function ( $result, $requested_type, $args ) {
-				if ( $this->type . 's' === $requested_type && $this->slug === $args['slug'] ) {
-					return $this->get_translations( $this->type, $args['slug'], $this->api_url );
-				}
+		add_filter( 'translations_api', array( $this, 'translations_api' ), 10, 3 );
+		add_filter( 'site_transient_update_' . $this->type . 's', array( $this, 'site_transient_update_plugins' ) );
+	}
 
-				return $result;
-			},
-			10,
-			3
-		);
+	/**
+	 * Short-circuits translations API requests for private projects.
+	 *
+	 * @since 2.7.3
+	 *
+	 * @param bool|array $result         The result object. Default false.
+	 * @param string     $requested_type The type of translations being requested.
+	 * @param object     $args           Translation API arguments.
+	 * @return bool|array
+	 */
+	public function translations_api( $result, $requested_type, $args ) {
+		if ( $this->type . 's' === $requested_type && $this->slug === $args['slug'] ) {
+			return $this->get_translations( $this->type, $args['slug'], $this->api_url );
+		}
 
-		/**
-		 * Filters the translations transients to include the private plugin or theme.
-		 *
-		 * @see wp_get_translation_updates()
-		 */
-		add_filter(
-			'site_transient_update_' . $this->type . 's',
-			function ( $value ) {
-				if ( ! $value ) {
-					$value = new \stdClass();
-				}
+		return $result;
+	}
 
-				if ( ! isset( $value->translations ) ) {
-					$value->translations = [];
-				}
+	/**
+	 * Filters the translations transients to include the private plugin or theme.
+	 *
+	 * @see wp_get_translation_updates()
+	 *
+	 * @since 2.7.3
+	 *
+	 * @param bool|array $value The transient value.
+	 */
+	public function site_transient_update_plugins( $value ) {
+		if ( ! $value ) {
+			$value = new \stdClass();
+		}
 
-				$all_translations = $this->get_translations( $this->type, $this->slug, $this->api_url );
-				$plugin_name = $this->slug;
-				$translations = $all_translations->$plugin_name[$this->slug];
+		if ( ! isset( $value->translations ) ) {
+			$value->translations = [];
+		}
 
-				if ( ! isset( $translations['translations'] ) ) {
-					return $value;
-				}
+		$all_translations = $this->get_translations( $this->type, $this->slug, $this->api_url );
+		$plugin_name = $this->slug;
+		$translations = $all_translations->$plugin_name[$this->slug];
 
-				$installed_translations = wp_get_installed_translations( $this->type . 's' );
+		if ( ! isset( $translations['translations'] ) ) {
+			return $value;
+		}
 
-				foreach ( (array) $translations['translations'] as $translation ) {
-					if ( in_array( $translation['language'], get_available_languages() ) ) {
-						if ( isset( $installed_translations[ $this->slug ][ $translation['language'] ] ) && $translation['updated'] ) {
-							$local  = new DateTime( $installed_translations[ $this->slug ][ $translation['language'] ]['PO-Revision-Date'] );
-							$remote = new DateTime( $translation['updated'] );
+		$installed_translations = wp_get_installed_translations( $this->type . 's' );
 
-							if ( $local >= $remote ) {
-								continue;
-							}
-						}
+		foreach ( (array) $translations['translations'] as $translation ) {
+			if ( in_array( $translation['language'], get_available_languages() ) ) {
+				if ( isset( $installed_translations[ $this->slug ][ $translation['language'] ] ) && $translation['updated'] ) {
+					$local  = new DateTime( $installed_translations[ $this->slug ][ $translation['language'] ]['PO-Revision-Date'] );
+					$remote = new DateTime( $translation['updated'] );
 
-						$translation['type'] = $this->type;
-						$translation['slug'] = $this->slug;
-
-						$value->translations[] = $translation;
+					if ( $local >= $remote ) {
+						continue;
 					}
 				}
 
-				return $value;
+				$translation['type'] = $this->type;
+				$translation['slug'] = $this->slug;
+
+				$value->translations[] = $translation;
 			}
-		);
+		}
+
+		return $value;
 	}
+
 
 	/**
 	 * Registers actions for clearing translation caches.
