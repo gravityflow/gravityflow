@@ -2,7 +2,7 @@
 /**
  * Main T15S library.
  *
- * @since 2.7.1
+ * @since 2.7.3
  *
  * @package WP_Translations\T15S_registry
  */
@@ -20,7 +20,7 @@ class Gravity_Flow_Language_Packs {
 	/**
 	 * Adds a new project to load translations for.
 	 *
-	 * @since 2.7.1
+	 * @since 2.7.3
 	 *
 	 * @param string $this->type    Project type. Either plugin or theme.
 	 * @param string $this->slug    Project directory slug.
@@ -64,7 +64,8 @@ class Gravity_Flow_Language_Packs {
 				}
 
 				$all_translations = $this->get_translations( $this->type, $this->slug, $this->api_url );
-				$translations = $all_translations->gravityflow['gravityflow'];
+				$plugin_name = $this->slug;
+				$translations = $all_translations->$plugin_name[$this->slug];
 
 				if ( ! isset( $translations['translations'] ) ) {
 					return $value;
@@ -98,7 +99,7 @@ class Gravity_Flow_Language_Packs {
 	/**
 	 * Registers actions for clearing translation caches.
 	 *
-	 * @since 2.7.1
+	 * @since 2.7.3
 	 */
 	public function register_clean_translations_cache() {
 		$clear_plugin_translations = function() {
@@ -118,7 +119,7 @@ class Gravity_Flow_Language_Packs {
 	/**
 	 * Clears existing translation cache for a given type.
 	 *
-	 * @since 2.7.1
+	 * @since 2.7.3
 	 *
 	 * @param string $this->type Project type. Either plugin or theme.
 	 */
@@ -147,7 +148,7 @@ class Gravity_Flow_Language_Packs {
 	/**
 	 * Gets the translations for a given project.
 	 *
-	 * @since 2.7.1
+	 * @since 2.7.3
 	 *
 	 * @param string $this->type Project type. Either plugin or theme.
 	 * @param string $this->slug Project directory slug.

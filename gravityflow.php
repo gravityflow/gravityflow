@@ -207,7 +207,7 @@ function gravityflow_action_init() {
 		add_action( 'admin_menu', 'gravityflow_create_menu_item' );
 	}
 
-	add_action( 'init', 'Gravity_Flow_init_t15s' );
+	Gravity_Flow_init_t15s();
 }
 
 /**
@@ -263,7 +263,7 @@ function gravityflow_icon() {
 /** 
  * Download and install translations from TranslationPress
  * 
- * @since 2.7.1
+ * @since 2.7.3
 */
 function Gravity_Flow_init_t15s() {
 
@@ -271,10 +271,19 @@ function Gravity_Flow_init_t15s() {
 		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-translationspress.php' );
 	}
 
-	$t15s_updater = new Gravity_Flow_Language_Packs(
-		'plugin',
-		'gravityflow',
-		'https://packages.translationspress.com/gravityflow/packages.json'
-	);
+	$core_plugin = 'gravityflow';
+	$api_url = 'https://packages.translationspress.com/gravityflow/packages.json';
+
+	$t15s_updater = new Gravity_Flow_Language_Packs( 'plugin', $core_plugin, $api_url );
 	$project = $t15s_updater->add_project();
+
+	$all_plugins = get_option( 'active_plugins' ); 
+	foreach( $all_plugins as $key => $value ) {
+		$string = explode( '/', $value );
+		$plugin_extension = $string[0];
+		if ( substr( $plugin_extension, 0, strlen( $core_plugin ) ) == $core_plugin && $plugin_extension != $core_plugin ) {
+			$t15s_updater_extension = new Gravity_Flow_Language_Packs( 'plugin', $plugin_extension, $api_url );
+			$project = $t15s_updater_extension->add_project();
+		}
+	}
 }
