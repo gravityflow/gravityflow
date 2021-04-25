@@ -4,8 +4,8 @@ namespace Gravity_Flow\Gravity_Flow\Inbox;
 
 use Gravity_Flow\Gravity_Flow\Ajax\Ajax_Service_Provider;
 use Gravity_Flow\Gravity_Flow\Ajax\Response_Factory;
-use Gravity_Flow\Gravity_Flow\Inbox\Endpoints\Get_Items\Config;
-use Gravity_Flow\Gravity_Flow\Inbox\Endpoints\Get_Items\Endpoint;
+use Gravity_Flow\Gravity_Flow\Inbox\Endpoints\Get_Items\Config as Get_Items_Config;
+use Gravity_Flow\Gravity_Flow\Inbox\Endpoints\Get_Items\Endpoint as Get_Items_Endpoint;
 use Gravity_Flow\Gravity_Flow\Service_Provider\Service_Provider;
 
 class Inbox_Service_Provider extends Service_Provider {
@@ -26,9 +26,9 @@ class Inbox_Service_Provider extends Service_Provider {
 		$container = $this->getContainer();
 
 		$container->add( self::GET_ITEMS_ENDPOINT, function () use ( $container ) {
-			$config = new Config();
+			$config = new Get_Items_Config();
 
-			return new Endpoint( $config, $container->get( Ajax_Service_Provider::RESPONSE_FACTORY ) );
+			return new Get_Items_Endpoint( $config, $container->get( Ajax_Service_Provider::RESPONSE_FACTORY ) );
 		} );
 	}
 

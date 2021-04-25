@@ -50,6 +50,42 @@ class Gravity_Flow_JS_Config {
 			'hmr_dev'      => defined( 'HMR_DEV' ) && HMR_DEV === true ? 1 : 0,
 		);
 
+		if ( true ) {
+			$config['grid_options'] = array(
+				'columnDefs' => array(
+					array(
+						'headerName' => 'Make',
+						'field'      => 'make',
+					),
+					array(
+						'headerName' => 'Model',
+						'field'      => 'model',
+					),
+					array(
+						'headerName' => 'Price',
+						'field'      => 'price',
+					),
+				),
+				'rowData'    => array(
+					array(
+						'make'  => 'Toyota',
+						'model' => 'Celica',
+						'price' => 35000,
+					),
+					array(
+						'make'  => 'Ford',
+						'model' => 'Mondeo',
+						'price' => 32000,
+					),
+					array(
+						'make'  => 'Porsche',
+						'model' => 'Boxter',
+						'price' => 76000,
+					),
+				),
+			);
+		}
+
 		/**
 		 * Allows third-party code to modify the config array sent to both admin and theme JS.
 		 *
