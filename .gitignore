@@ -22,6 +22,7 @@ tests/acceptance-tests/_support/_generated/
 reports/
 tmp/
 vendor/
+!src/css/common/vendor/
 
 .svn/
 .DS_Store
