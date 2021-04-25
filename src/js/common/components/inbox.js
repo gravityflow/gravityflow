@@ -8,8 +8,13 @@ import { Grid } from 'ag-grid-community';
 
 const el = {};
 const instances = {};
-
-const gridOptions = window.gflow_config.grid_options || {};
+const options = {
+	animateRows: true,
+	pagination: true,
+	paginationPageSize: 10,
+};
+const data = window?.gflow_config?.grid_options || {};
+const gridOptions = Object.assign( {}, data, options );
 
 const initializeGrid = () => {
 	instances.grid = new Grid( el.container, gridOptions );

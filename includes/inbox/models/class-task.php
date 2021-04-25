@@ -92,6 +92,9 @@ class Task {
 			$headers[] = array(
 				'headerName' => $label,
 				'field'      => $name,
+				'sortable'   => true,
+				'filter'     => 'agTextColumnFilter',
+				'flex'       => 1,
 			);
 		}
 
