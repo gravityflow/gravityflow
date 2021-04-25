@@ -111,7 +111,6 @@ class Gravity_Flow_Bootstrap {
 		self::include_steps();
 		self::include_fields();
 		self::include_merge_tags();
-		self::include_configs();
 
 		GFAddOn::register( 'Gravity_Flow' );
 		do_action( 'gravityflow_loaded' );
@@ -159,14 +158,6 @@ class Gravity_Flow_Bootstrap {
 		foreach ( glob( dirname( __FILE__ ) . '/includes/merge-tags/class-merge-tag-*.php' ) as $gravity_flow_filename ) {
 			require_once( $gravity_flow_filename );
 		}
-	}
-
-	/**
-	 * Includes and initializes the Config class.
-	 */
-	public static function include_configs() {
-		require_once 'includes/config/class-js-config.php';
-		$config = new Gravity_Flow_JS_Config();
 	}
 
 }

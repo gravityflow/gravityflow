@@ -6,16 +6,21 @@ use Gravity_Flow\Gravity_Flow\Ajax\Ajax_Service_Provider;
 use Gravity_Flow\Gravity_Flow\Ajax\Response_Factory;
 use Gravity_Flow\Gravity_Flow\Inbox\Endpoints\Get_Items\Config as Get_Items_Config;
 use Gravity_Flow\Gravity_Flow\Inbox\Endpoints\Get_Items\Endpoint as Get_Items_Endpoint;
+use Gravity_Flow\Gravity_Flow\Inbox\Models\Task;
 use Gravity_Flow\Gravity_Flow\Service_Provider\Service_Provider;
+use Gravity_Flow\Gravity_Flow\Util\Util_Service_Provider;
+use \Gravity_Flow_API;
 
 class Inbox_Service_Provider extends Service_Provider {
 
 	const AJAX_PREFIX = 'gflow_inbox_';
 
 	const GET_ITEMS_ENDPOINT = 'get_items_endpoint';
+	const TASK_MODEL         = 'task_model';
 
 	protected $provides = array(
 		self::GET_ITEMS_ENDPOINT,
+		self::TASK_MODEL,
 	);
 
 	protected $endpoints = array(
@@ -29,6 +34,10 @@ class Inbox_Service_Provider extends Service_Provider {
 			$config = new Get_Items_Config();
 
 			return new Get_Items_Endpoint( $config, $container->get( Ajax_Service_Provider::RESPONSE_FACTORY ) );
+		} );
+
+		$container->add( self::TASK_MODEL, function () use ( $container ) {
+			return new Task( $container->get( Util_Service_Provider::GFLOW_API ), $container->get( Util_Service_Provider::GF_API ) );
 		} );
 	}
 
@@ -44,5 +53,21 @@ class Inbox_Service_Provider extends Service_Provider {
 				add_action( 'wp_ajax_nopriv_' . self::AJAX_PREFIX . $endpoint->name(), array( $endpoint, 'delegate' ) );
 			}
 		}
+
+		$container = $this->getContainer();
+
+		add_filter( 'gravityflow_js_config_shared', function ( $config ) use ( $container ) {
+			/**
+			 * @var Task $tasks
+			 */
+			$tasks = $container->get( self::TASK_MODEL );
+
+			$config['grid_options'] = array(
+				'columnDefs' => $tasks->get_table_header_defs(),
+				'rowData'    => $tasks->get_inbox_tasks( array() ),
+			);
+
+			return $config;
+		}, 10, 1 );
 	}
 }

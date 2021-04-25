@@ -1,5 +1,9 @@
 <?php
 
+namespace Gravity_Flow\Gravity_Flow\Config;
+
+use \Gravity_Flow;
+
 /**
  * Class Gravity_Flow_JS_Config
  *
@@ -7,12 +11,7 @@
  *
  * @since 2.7.1-dev
  */
-class Gravity_Flow_JS_Config {
-
-	public function __construct() {
-		add_action( 'admin_enqueue_scripts', array( $this, 'localize_admin_config' ), 999 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'localize_theme_config' ), 999 );
-	}
+class JS_Config {
 
 	/**
 	 * Localize admin config object to the scripts-admin.js file.
@@ -49,42 +48,6 @@ class Gravity_Flow_JS_Config {
 			'script_debug' => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? 1 : 0,
 			'hmr_dev'      => defined( 'HMR_DEV' ) && HMR_DEV === true ? 1 : 0,
 		);
-
-		if ( true ) {
-			$config['grid_options'] = array(
-				'columnDefs' => array(
-					array(
-						'headerName' => 'Make',
-						'field'      => 'make',
-					),
-					array(
-						'headerName' => 'Model',
-						'field'      => 'model',
-					),
-					array(
-						'headerName' => 'Price',
-						'field'      => 'price',
-					),
-				),
-				'rowData'    => array(
-					array(
-						'make'  => 'Toyota',
-						'model' => 'Celica',
-						'price' => 35000,
-					),
-					array(
-						'make'  => 'Ford',
-						'model' => 'Mondeo',
-						'price' => 32000,
-					),
-					array(
-						'make'  => 'Porsche',
-						'model' => 'Boxter',
-						'price' => 76000,
-					),
-				),
-			);
-		}
 
 		/**
 		 * Allows third-party code to modify the config array sent to both admin and theme JS.

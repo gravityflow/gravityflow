@@ -42,16 +42,14 @@ class Gravity_Flow_Inbox {
 		$entries     = Gravity_Flow_API::get_inbox_entries( $args, $total_count );
 
 		?>
-		<div data-js="gflow-inbox"></div>
 
-		<?php
-		return;
-		if ( sizeof( $entries ) > 0 ) { ?>
+		<?php if ( sizeof( $entries ) > 0 ) : ?>
 
-			<div class="gflow-inbox gflow-grid"><div class="ag-theme-alpine" data-js="gflow-inbox"></div></div>
+			<div class="gflow-inbox gflow-grid">
+				<div class="ag-theme-alpine" data-js="gflow-inbox"></div>
+			</div>
 
-		<?php } else {
-			?>
+		<?php else: ?>
 			<div id="gravityflow-no-pending-tasks-container">
 				<div id="gravityflow-no-pending-tasks-content">
 					<i class="fa fa-check-circle-o gravityflow-inbox-check"></i>
@@ -60,8 +58,7 @@ class Gravity_Flow_Inbox {
 				</div>
 
 			</div>
-		<?php
-		}
+		<?php endif;
 	}
 
 	/**
