@@ -233,6 +233,12 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 		if ( ! $this->current_user_can_uninstall() ) {
 			return;
 		}
+
+		if ( rgget('page') == 'gf_settings' ) {
+			GFAddOn::render_uninstall();
+			return;
+		}
+
 		$icon        = array( 'icon' => $this->get_menu_icon() );
 		$icon_markup = GFCommon::get_icon_markup( $icon, 'dashicon-admin-generic' );
 		$url         = add_query_arg( array( 'view' => $this->get_slug() ), admin_url( 'admin.php?page=gravityflow_settings' ) );
