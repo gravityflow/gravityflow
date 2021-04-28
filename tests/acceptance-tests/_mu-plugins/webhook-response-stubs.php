@@ -49,7 +49,7 @@ function webhook_response_test_results( $preempt, $request, $url ) {
 				'headers'  => array( 'content_type' => 'application/json'),
 				'body'     => json_encode( array(
 					'fvQuestion'  => 'customQuestion200',
-					'fvAnswer'    => 'customAnswer200',
+					'fvAnswer'    => '200',
 					'fvRationale' => 'customRationale200',
 					'fvPreference' => 'Very Important',
 				)),
