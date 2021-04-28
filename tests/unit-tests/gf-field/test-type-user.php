@@ -37,7 +37,7 @@ class Tests_Gravity_Flow_Field_User extends GF_Field_UnitTestCase {
 		$this->field->validate( $value, array() );
 
 		if ( $is_valid ) {
-			$this->assertObjectNotHasAttribute( 'failed_validation', $this->field );
+			$this->assertEmpty( $this->field->failed_validation );
 			$this->assertObjectNotHasAttribute( 'validation_message', $this->field );
 		} else {
 			$this->assertTrue( $this->field->failed_validation );
