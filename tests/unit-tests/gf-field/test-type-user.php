@@ -10,13 +10,7 @@ class Tests_Gravity_Flow_Field_User extends GF_Field_UnitTestCase {
 	protected function _field_properties() {
 		return array(
 			'type'    => 'workflow_user',
-			'choices' => array(
-				array( 'text' => 'user1', 'value' => 'user_id|1' ),
-				array( 'text' => 'user2', 'value' => 'user_id|2' ),
-				array( 'text' => 'user3', 'value' => 'user_id|3' ),
-				array( 'text' => 'user4', 'value' => 'user_id|4' ),
-				array( 'text' => 'user5', 'value' => 'user_id|5' ),
-			),
+			'choices' => array( '1', '2', '3', '4', '5' ),
 		);
 	}
 
@@ -37,7 +31,7 @@ class Tests_Gravity_Flow_Field_User extends GF_Field_UnitTestCase {
 		$this->field->validate( $value, array() );
 
 		if ( $is_valid ) {
-			$this->assertEmpty( $this->field->failed_validation );
+			$this->assertObjectNotHasAttribute( 'failed_validation' );
 			$this->assertObjectNotHasAttribute( 'validation_message', $this->field );
 		} else {
 			$this->assertTrue( $this->field->failed_validation );
