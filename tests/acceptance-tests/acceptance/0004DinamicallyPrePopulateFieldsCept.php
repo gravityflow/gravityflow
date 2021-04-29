@@ -17,7 +17,7 @@ $I->waitForText( 'Dynamically Pre Populate Fields', 3 );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
 $I->selectOption( 'input[name="input_3.1"]', 'First Option' );
 $I->selectOption( 'input[name="input_3.2"]', 'Second Option' );
-$I->see( '$320.00' );
+$I->seeSanitizedNumberInField( 'input[name="input_5"]', '320.00' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 
 // Next page

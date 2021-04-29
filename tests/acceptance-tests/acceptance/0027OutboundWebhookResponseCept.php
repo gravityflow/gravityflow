@@ -48,7 +48,7 @@ $I->click( 'Submit' );
 $I->waitForText( 'https://unit-test-webhook.com/200-0027. RESPONSE: 202 Accepted (Success)', 5 );
 $I->see( 'https://unit-test-webhook.com/200-0027. RESPONSE: 202 Accepted (Success)' );
 $I->seeInField('#input_27_1', 'customQuestion200');
-$I->seeInField('#input_27_3', 'customAnswer200');
+$I->seeInField('#input_27_3', '200');
 $I->seeInField('#input_27_2', 'customRationale200' );
 $I->fillField( 'Question', 'Codeception Question' );
 $I->fillField( 'Answer', '42' );

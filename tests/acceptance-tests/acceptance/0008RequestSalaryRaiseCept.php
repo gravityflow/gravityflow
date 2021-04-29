@@ -16,16 +16,7 @@ $I->amOnPage( '/0008-request-salary-raise' );
 
 $I->waitForText( 'Request Salary Raise', 3 );
 $I->scrollTo( [ 'css' => '.gform_title' ], 20, 50 ); // needed for chromedriver
-$I->fillField( 'input[name=input_1]', '20%' );
 $I->selectOption( 'select[name=input_2]', 'Third Choice' );
-$I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
-$I->click( 'Submit' );
-
-// Check number field error
-$I->waitForElement( 'div.validation_error', 3 );
-$I->seeElement( 'div.validation_error' );
-
-// fill number field with correct values
 $I->fillField( 'input[name=input_1]', '1234' );
 $I->scrollTo( [ 'css' => 'input[type=submit]' ], 20, 50 ); // needed for chromedriver
 $I->click( 'Submit' );
