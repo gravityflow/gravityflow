@@ -21,26 +21,6 @@ class Tests_Gravity_Flow_Field_Multi_User extends GF_Field_UnitTestCase {
 	}
 
 	/**
-	 * Creates a requireLogin form for tests.
-	 */
-	public function setUp() {
-		GF_UnitTestCase::setUp();
-
-		$this->form_id = $this->factory->form->create( array( 'requireLogin' => true ) );
-
-		$settings = wp_parse_args( $this->_field_properties(), array(
-			'id'      => 1,
-			'formId'  => $this->form_id,
-			'label'   => 'Test Label',
-			'type'    => 'test',
-			'choices' => null,
-			'inputs'  => null,
-		) );
-
-		$this->field = GF_Fields::create( $settings );
-	}
-
-	/**
 	 * @covers       Gravity_Flow_Field_Multi_User::validate
 	 *
 	 * @dataProvider data_provider_validate
@@ -54,6 +34,8 @@ class Tests_Gravity_Flow_Field_Multi_User extends GF_Field_UnitTestCase {
 			$this->field->errorMessage = $message;
 		}
 
+		$this->ma->set_return_value( $this->field->choices );
+		add_filter( 'gravityflow_user_field', array( $this->ma, 'return_value') );
 		$this->field->validate( $value, array() );
 
 		if ( $is_valid ) {
