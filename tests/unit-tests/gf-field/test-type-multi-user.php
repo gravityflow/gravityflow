@@ -21,6 +21,26 @@ class Tests_Gravity_Flow_Field_Multi_User extends GF_Field_UnitTestCase {
 	}
 
 	/**
+	 * Creates a requireLogin form for tests.
+	 */
+	public function setUp() {
+		GF_UnitTestCase::setUp();
+
+		$this->form_id = $this->factory->form->create( array( 'requireLogin' => true ) );
+
+		$settings = wp_parse_args( $this->_field_properties(), array(
+			'id'      => 1,
+			'formId'  => $this->form_id,
+			'label'   => 'Test Label',
+			'type'    => 'test',
+			'choices' => null,
+			'inputs'  => null,
+		) );
+
+		$this->field = GF_Fields::create( $settings );
+	}
+
+	/**
 	 * @covers       Gravity_Flow_Field_Multi_User::validate
 	 *
 	 * @dataProvider data_provider_validate
