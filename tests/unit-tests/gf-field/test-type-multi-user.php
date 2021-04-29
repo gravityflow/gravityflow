@@ -11,11 +11,11 @@ class Tests_Gravity_Flow_Field_Multi_User extends GF_Field_UnitTestCase {
 		return array(
 			'type'    => 'workflow_multi_user',
 			'choices' => array(
-				array( 'text' => 'user1', 'value' => '1' ),
-				array( 'text' => 'user2', 'value' => '2' ),
-				array( 'text' => 'user3', 'value' => '3' ),
 				array( 'text' => 'user4', 'value' => '4' ),
 				array( 'text' => 'user5', 'value' => '5' ),
+				array( 'text' => 'user6', 'value' => '6' ),
+				array( 'text' => 'user7', 'value' => '7' ),
+				array( 'text' => 'user8', 'value' => '8' ),
 			),
 		);
 	}
