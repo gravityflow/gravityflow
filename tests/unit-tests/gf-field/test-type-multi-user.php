@@ -10,7 +10,13 @@ class Tests_Gravity_Flow_Field_Multi_User extends GF_Field_UnitTestCase {
 	protected function _field_properties() {
 		return array(
 			'type'    => 'workflow_multi_user',
-			'choices' => array( '1', '2', '3', '4', '5' ),
+			'choices' => array(
+				array( 'text' => 'user1', 'value' => 'user_id|1' ),
+				array( 'text' => 'user2', 'value' => 'user_id|2' ),
+				array( 'text' => 'user3', 'value' => 'user_id|3' ),
+				array( 'text' => 'user4', 'value' => 'user_id|4' ),
+				array( 'text' => 'user5', 'value' => 'user_id|5' ),		
+			),
 		);
 	}
 
