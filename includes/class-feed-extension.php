@@ -237,7 +237,7 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 			return;
 		}
 
-		if ( rgget('page') == 'gf_settings' ) {
+		if ( rgget( 'page' ) == 'gf_settings' ) {
 			GFAddOn::render_uninstall();
 			return;
 		}

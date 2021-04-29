@@ -234,7 +234,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 			return;
 		}
 
-		if ( rgget('page') == 'gf_settings' ) {
+		if ( rgget( 'page' ) == 'gf_settings' ) {
 			GFAddOn::render_uninstall();
 			return;
 		}
