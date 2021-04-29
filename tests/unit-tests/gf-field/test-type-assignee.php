@@ -23,9 +23,7 @@ class Tests_Gravity_Flow_Field_Assignee_Select extends GF_Field_UnitTestCase {
 			'choices'                            => array(
 				array( 'text' => 'user1', 'value' => 'user_id|1' ),
 				array( 'text' => 'user2', 'value' => 'user_id|2' ),
-				array( 'text' => 'user3', 'value' => 'user_id|3' ),
-				array( 'text' => 'user4', 'value' => 'user_id|4' ),
-				array( 'text' => 'user5', 'value' => 'user_id|5' ),				
+				array( 'text' => 'user3', 'value' => 'user_id|3' ),		
 				array( 'text' => 'Administrator', 'value' => 'role|administrator' ),
 				array( 'text' => 'Subscriber', 'value' => 'role|subscriber' ),
 				array( 'text' => 'User (Created by)', 'value' => 'entry|created_by' ),
