@@ -317,7 +317,8 @@ if ( class_exists( 'GFForms' ) ) {
 		 * @return string
 		 */
 		public function get_short_title() {
-			return $this->translate_navigation_label( 'workflow' );
+			$is_gravityforms_uninstall = rgget( 'page' ) == 'gf_settings' && rgget( 'subview' ) == 'uninstall';
+			return $is_gravityforms_uninstall ? $this->_title : $this->translate_navigation_label( 'workflow' );
 		}
 
 		/**

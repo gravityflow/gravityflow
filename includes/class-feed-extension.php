@@ -87,6 +87,11 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 		add_action( 'admin_notices', array( $this, 'action_admin_notices' ) );
 	}
 
+	public function get_short_title() {
+		$is_gravityforms_uninstall = rgget( 'page' ) == 'gf_settings' && rgget( 'subview' ) == 'uninstall';
+		return $is_gravityforms_uninstall ? 'Gravity Flow ' . $this->_short_title : $this->_short_title;
+	}
+
 	/**
 	 * Add the extension capabilities to the Gravity Flow group in Members.
 	 *
