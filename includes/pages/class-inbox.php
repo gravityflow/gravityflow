@@ -49,6 +49,16 @@ class Gravity_Flow_Inbox {
 				<div class="ag-theme-alpine" data-js="gflow-inbox"></div>
 			</div>
 
+			<div class="gflow-inbox-debug">
+				<h3>Debug</h3>
+				<div>
+					<h4>Refresh Inbox</h4>
+					<div>
+						<button data-js="refresh_inbox">Refresh</button>
+					</div>
+				</div>
+			</div>
+
 		<?php else: ?>
 			<div id="gravityflow-no-pending-tasks-container">
 				<div id="gravityflow-no-pending-tasks-content">

@@ -2,19 +2,24 @@
 
 namespace Gravity_Flow\Gravity_Flow\Ajax;
 
+use Gravity_Flow\Gravity_Flow\Models\Model;
+
 abstract class Endpoint {
 
 	protected $response_factory;
 
 	protected $config;
 
+	protected $model;
+
 	protected $data          = array();
 	protected $required_args = array();
 	protected $optional_args = array();
 
-	public function __construct( Config $config, Response_Factory $factory ) {
+	public function __construct( Config $config, Response_Factory $factory, Model $model ) {
 		$this->response_factory = $factory;
 		$this->config           = $config;
+		$this->model            = $model;
 
 		foreach ( $config->args() as $arg ) {
 			if ( $arg->is_required() ) {

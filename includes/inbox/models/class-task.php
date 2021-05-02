@@ -2,10 +2,11 @@
 
 namespace Gravity_Flow\Gravity_Flow\Inbox\Models;
 
+use Gravity_Flow\Gravity_Flow\Models\Model;
 use \Gravity_Flow_API;
 use \GFAPI;
 
-class Task {
+class Task implements Model {
 
 	private static $forms = array();
 
@@ -92,6 +93,8 @@ class Task {
 			$headers[] = array(
 				'headerName' => $label,
 				'field'      => $name,
+				'sortable'   => true,
+				'filter'     => true,
 			);
 		}
 
@@ -222,7 +225,7 @@ class Task {
 	private function get_defaults() {
 		$field_ids = apply_filters( 'gravityflow_inbox_fields', array() );
 
-		$filter    = apply_filters( 'gravityflow_inbox_filter', array(
+		$filter = apply_filters( 'gravityflow_inbox_filter', array(
 			'form_id'    => 0,
 			'start_date' => '',
 			'end_date'   => '',
