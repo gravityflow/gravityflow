@@ -94,7 +94,8 @@ class Task implements Model {
 				'headerName' => $label,
 				'field'      => $name,
 				'sortable'   => true,
-				'filter'     => true,
+				'filter'     => 'agTextColumnFilter',
+				'flex'       => 1,
 			);
 		}
 
