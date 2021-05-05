@@ -158,6 +158,7 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 				'label' => esc_html__( 'Feeds', 'gravityflow' ),
 				'type'  => 'html',
 				'html'  => sprintf(
+					// Translators: 1. Opening <a> tag for link to Zapier, 2. Closing <a> tag.
 					esc_html__( 'The selected form doesn\'t have any feeds. %1$sCreate a zap%2$s on zapier.com or select a different form.', 'gravityflow' ),
 					'<a href="' . esc_url( 'https://zapier.com/apps/gravity-forms/integrations' ) . '" target="_blank">',
 					'</a>'
