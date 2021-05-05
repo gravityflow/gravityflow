@@ -140,10 +140,12 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 
 			if ( ! empty( $zap_id ) ) {
 				$choice['tooltip'] = sprintf(
-					esc_html__( '%1$sView zap (%2$s)%3$s on zapier.com', 'gravityflow' ),
+					// Translators: 1. Opening <a> tag for link to zap overview, 2. Closing <a> tag, 3. Opening <a> tag for link to zap editor, 4. The zap ID.
+					esc_html__( '%1$sView%2$s or %3$sedit%2$s zap (%4$s) on zapier.com', 'gravityflow' ),
+					'<a href="' . esc_url( 'https://zapier.com/app/zap/' . $zap_id ) . '" target="_blank">',
+					'</a>',
 					'<a href="' . esc_url( 'https://zapier.com/app/editor/' . $zap_id ) . '" target="_blank">',
-					$zap_id,
-					'</a>'
+					$zap_id
 				);
 			}
 
