@@ -229,7 +229,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	}
 
 	/**
-	 * Override the settings button on Gravity Forms uninstall to point to Gravity Flow settings page
+	 * Render the uninstall button on Gravity Forms uninstall page to correctly point for Gravity Flow Extensions
 	 *
 	 * @since 2.7.3
 	 */
