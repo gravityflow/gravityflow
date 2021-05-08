@@ -841,7 +841,7 @@ PRIMARY KEY  (id)
 					wp_enqueue_script( 'gravityflow_inbox', $this->get_base_url() . "/js/inbox{$this->min()}.js",  array(), $this->_version );
 
 					wp_enqueue_style( 'gform_admin',  GFCommon::get_base_url() . "/css/admin{$this->min()}.css", null, $this->_version );
-					wp_enqueue_style( 'gform_fontawesome',  GFCommon::get_base_url() . "/css/font-awesome{$this->min()}.css", null, $this->_version );
+					wp_enqueue_style( 'gform_font_awesome',  GFCommon::get_base_url() . "/css/font-awesome{$this->min()}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_entry_detail',  $this->get_base_url() . "/css/entry-detail{$this->min()}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_frontend_css', $this->get_base_url() . "/css/frontend{$this->min()}.css", null, $this->_version );
 					wp_enqueue_style( 'gravityflow_status', $this->get_base_url() . "/css/status{$this->min()}.css", null, $this->_version );
