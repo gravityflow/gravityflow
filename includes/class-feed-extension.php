@@ -232,7 +232,7 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	}
 
 	/**
-	 * Override the settings button on Gravity Forms uninstall to point to Gravity Flow settings page
+	 * Render the uninstall button on Gravity Forms uninstall page to correctly point for Gravity Flow Feed Extensions
 	 *
 	 * @since 2.7.3
 	 */
