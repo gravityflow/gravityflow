@@ -32,25 +32,19 @@ const config = module_exists( './config.json' )
 const gulpTasks = [
 	/* Copy tasks */
 
-	'copy:adminIconsFonts', // copy fonts for admin icons from dev folder to fonts directory
-	'copy:adminIconsStyles', // copy styles for admin icons to pcss shared dir
-	'copy:adminIconsVariables', // copy variables for admin icons to theme pcss variables dir
-	'copy:themeIconsFonts', // copy fonts for theme icons from dev folder to fonts directory
-	'copy:themeIconsStyles', // copy styles for theme icons to pcss shared dir
-	'copy:themeIconsVariables', // copy variables for theme icons to theme pcss variables dir
+	'copy:commonIconsFonts', // copy fonts for admin icons from dev folder to fonts directory
+	'copy:commonIconsStyles', // copy styles for admin icons to pcss shared dir
+	'copy:commonIconsVariables', // copy variables for admin icons to theme pcss variables dir
 
 	/* Clean tasks */
 
-	'clean:adminIconsStart', // delete all files related to admin icons in pcss, in prep for reinjection
-	'clean:adminIconsEnd', // delete admin icon zip
+	'clean:commonIconsStart', // delete all files related to icons in pcss, in prep for reinjection
+	'clean:commonIconsEnd', // delete admin icon zip
 	'clean:js', // clean chunks javascript
-	'clean:themeIconsStart', // delete all files related to theme icons in pcss, in prep for reinjection
-	'clean:themeIconsEnd', // delete theme icon zip
 
 	/* Decompress tasks */
 
-	'decompress:adminIcons', // extract icomoon admin kit to dev directory
-	'decompress:themeIcons', // extract icomoon theme kit to dev directory
+	'decompress:icons', // extract icomoon admin kit to dev directory
 
 	/* Eslint tasks */
 
@@ -61,15 +55,12 @@ const gulpTasks = [
 
 	/* Footer tasks */
 
-	'footer:adminIconsVariables', // just adds a closing } to the admin icons variables file during the icons import transform tasks
-	'footer:themeIconsVariables', // just adds a closing } to the theme icons variables file during the icons import transform tasks
+	'footer:commonIconsVariables', // just adds a closing } to the admin icons variables file during the icons import transform tasks
 
 	/* Header tasks */
 
-	'header:adminIconsStyle', // sets the header for the admin icons style file in base during the icons import transform tasks
-	'header:adminIconsVariables', // sets the header for the admin icons style file in vars during the icons import transform tasks
-	'header:themeIconsStyle', // sets the header for the theme icons style file in base during the icons import transform tasks
-	'header:themeIconsVariables', // sets the header for the theme icons style file in vars during the icons import transform tasks
+	'header:commonIconsStyle', // sets the header for the admin icons style file in base during the icons import transform tasks
+	'header:commonIconsVariables', // sets the header for the admin icons style file in vars during the icons import transform tasks
 
 	/* Postcss tasks */
 
@@ -78,10 +69,8 @@ const gulpTasks = [
 
 	/* Replace tasks */
 
-	'replace:adminIconsStyle', // runs regex to replace and convert scss to pcss compatible with our systems in the icons task
-	'replace:adminIconsVariables', // runs regex to replace and convert scss to pcss compatible with our systems in the icons task
-	'replace:themeIconsStyle', // runs regex to replace and convert scss to pcss compatible with our systems in the icons task
-	'replace:themeIconsVariables', // runs regex to replace and convert scss to pcss compatible with our systems in the icons task
+	'replace:commonIconsStyle', // runs regex to replace and convert scss to pcss compatible with our systems in the icons task
+	'replace:commonIconsVariables', // runs regex to replace and convert scss to pcss compatible with our systems in the icons task
 
 	/* Shell tasks */
 
@@ -164,38 +153,19 @@ gulp.task( 'validate', gulp.series( gulp.parallel( 'lint', 'test' ) ) );
  */
 
 gulp.task(
-	'icons:admin',
+	'icons',
 	gulp.series(
-		'clean:adminIconsStart',
-		'decompress:adminIcons',
-		'copy:adminIconsFonts',
-		'copy:adminIconsStyles',
-		'copy:adminIconsVariables',
-		'replace:adminIconsStyle',
-		'replace:adminIconsVariables',
-		'header:adminIconsStyle',
-		'header:adminIconsVariables',
-		'footer:adminIconsVariables',
-		'clean:adminIconsEnd',
-		'postcss:adminCss',
-		'postcss:themeCss'
-	)
-);
-
-gulp.task(
-	'icons:theme',
-	gulp.series(
-		'clean:themeIconsStart',
-		'decompress:themeIcons',
-		'copy:themeIconsFonts',
-		'copy:themeIconsStyles',
-		'copy:themeIconsVariables',
-		'replace:themeIconsStyle',
-		'replace:themeIconsVariables',
-		'header:themeIconsStyle',
-		'header:themeIconsVariables',
-		'footer:themeIconsVariables',
-		'clean:themeIconsEnd',
+		'clean:commonIconsStart',
+		'decompress:icons',
+		'copy:commonIconsFonts',
+		'copy:commonIconsStyles',
+		'copy:commonIconsVariables',
+		'replace:commonIconsStyle',
+		'replace:commonIconsVariables',
+		'header:commonIconsStyle',
+		'header:commonIconsVariables',
+		'footer:commonIconsVariables',
+		'clean:commonIconsEnd',
 		'postcss:adminCss',
 		'postcss:themeCss'
 	)

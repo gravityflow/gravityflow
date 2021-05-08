@@ -17,54 +17,52 @@ const data = window?.gflow_config?.grid_options || {};
 const gridOptions = Object.assign( {}, data, options );
 
 const initializeGrid = () => {
-	gridOptions.getRowNodeId = ( data ) => {
-		return parseInt( data.id );
+	gridOptions.getRowNodeId = ( node ) => {
+		return parseInt( node.id );
 	};
 
 	instances.grid = new Grid( el.container, gridOptions );
 };
 
 const getIdsFromModel = () => {
-	let ids = [];
-
-	gridOptions.api.forEachNode((node) => ids.push(node.data.id) );
-
+	const ids = [];
+	gridOptions.api.forEachNode( ( node ) => ids.push( node.data.id ) );
 	return ids;
 };
 
 const refreshGrid = async () => {
-	const current_ids = getIdsFromModel();
-	const formData = new FormData();
+	const formData = new window.FormData();
 
-	current_ids.forEach((item) => formData.append( 'current_ids[]', item ) );
+	getIdsFromModel().forEach( ( item ) =>
+		formData.append( 'current_ids[]', item )
+	);
 
-	const response = await fetch(
+	const response = await window.fetch(
 		'/wp-admin/admin-ajax.php?action=gflow_inbox_refresh_inbox_items',
 		{
 			method: 'post',
-			body: formData
+			body: formData,
 		}
 	);
 
-	const data = await response.json();
+	const items = await response.json();
 
-	gridOptions.api.applyTransaction(data);
+	gridOptions.api.applyTransaction( items );
 };
 
-const addEventListeners = () => {
+const bindEvents = () => {
 	const refreshButton = document.querySelector( '[data-js="refresh_inbox"]' );
-	refreshButton.addEventListener( 'click', function( e ) {
+	refreshButton.addEventListener( 'click', function ( e ) {
 		e.preventDefault();
 		refreshGrid();
-	});
+	} );
 };
 
 const init = ( container ) => {
 	el.container = container;
 
+	bindEvents();
 	initializeGrid();
-
-	addEventListeners();
 
 	console.info( 'Gravity Flow Common: Initialized inbox component.' );
 };

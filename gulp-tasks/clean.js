@@ -1,7 +1,7 @@
 const del = require( 'del' );
 const pkg = require( '../package.json' );
 
-const getIconPaths = ( target = 'admin' ) => ([
+const getIconPaths = ( target = 'common' ) => ([
 	`${ pkg.gravityflow.paths.root }/dev/icons/${ target }`,
 	`${ pkg.gravityflow.paths.fonts }gform-icons-${ target }.*`,
 	`${ pkg.gravityflow.paths.css_src }${ target }/base/_icons.pcss`,
@@ -9,12 +9,12 @@ const getIconPaths = ( target = 'admin' ) => ([
 ]);
 
 module.exports = {
-	adminIconsStart() {
+	commonIconsStart() {
 		return del( getIconPaths() );
 	},
-	adminIconsEnd() {
+	commonIconsEnd() {
 		return del( [
-			'gflow-icons-admin*.zip',
+			'gflow-icons-common*.zip',
 		] );
 	},
 	js() {
@@ -25,14 +25,6 @@ module.exports = {
 			`${ pkg.gravityflow.paths.js_dist }common-*.*.min.js`,
 			`${ pkg.gravityflow.paths.js_dist }admin-*.*.min.js`,
 			`${ pkg.gravityflow.paths.js_dist }theme-*.*.min.js`,
-		] );
-	},
-	themeIconsStart() {
-		return del( getIconPaths( 'theme' ) );
-	},
-	themeIconsEnd() {
-		return del( [
-			'gflow-icons-theme*.zip',
 		] );
 	},
 };
