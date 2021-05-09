@@ -90,6 +90,9 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	/**
 	 * Returns the feed extension short title.
 	 *
+	 * @since 2.7.3 Updated to return Gravity Flow appended with the short title for Uninstall Page
+	 * @since unknown
+	 *  
 	 * @return string
 	 */	
 	public function get_short_title() {
