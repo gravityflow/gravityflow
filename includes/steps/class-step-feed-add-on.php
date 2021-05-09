@@ -78,52 +78,53 @@ abstract class Gravity_Flow_Step_Feed_Add_On extends Gravity_Flow_Step {
 	 * @return array
 	 */
 	public function get_settings() {
-		$fields = array();
-
 		if ( ! $this->is_supported() ) {
-			return $fields;
+			return array();
 		}
 
-		$feeds = $this->get_feeds();
+		return array(
+			'title'  => $this->get_label(),
+			'fields' => array( $this->get_feeds_setting() ),
+		);
+	}
 
-		$feed_choices = array();
+	/**
+	 * Returns the feeds setting.
+	 *
+	 * @since 2.7.3
+	 *
+	 * @return array
+	 */
+	protected function get_feeds_setting() {
+		$feeds   = $this->get_feeds();
+		$choices = array();
+
 		foreach ( $feeds as $feed ) {
 			if ( $feed['is_active'] ) {
-				$label = $this->get_feed_label( $feed );
-
-				$feed_choices[] = array(
-					'label' => $label,
+				$choices[] = array(
+					'label' => $this->get_feed_label( $feed ),
 					'name'  => 'feed_' . $feed['id'],
 				);
 			}
 		}
 
-		if ( ! empty( $feed_choices ) ) {
-			$fields[] = array(
-				'name'     => 'feeds',
-				'required' => true,
-				'label'    => esc_html__( 'Feeds', 'gravityflow' ),
-				'type'     => 'checkbox',
-				'choices'  => $feed_choices,
-			);
-		}
-
-		if ( empty( $fields ) ) {
-			$html     = esc_html__( "You don't have any feeds set up.", 'gravityflow' );
-			$fields[] = array(
+		if ( empty( $choices ) ) {
+			return array(
 				'name'  => 'no_feeds',
 				'label' => esc_html__( 'Feeds', 'gravityflow' ),
 				'type'  => 'html',
-				'html'  => $html,
+				'html'  => esc_html__( "You don't have any feeds set up.", 'gravityflow' ),
 			);
 		}
 
 		return array(
-			'title'  => $this->get_label(),
-			'fields' => $fields,
+			'name'     => 'feeds',
+			'required' => true,
+			'label'    => esc_html__( 'Feeds', 'gravityflow' ),
+			'type'     => 'checkbox',
+			'choices'  => $choices,
 		);
 	}
-
 
 	/**
 	 * Processes this step.

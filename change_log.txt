@@ -1,3 +1,5 @@
 - Fixed Font Awesome not loading for shortcodes which causes the quick actions for inbox to not be visible.
+- Added the Form setting to the Zapier step enabling multiple forms to use the same Zap.
 - Fixed an issue where a blank note could be submitted with whitespaces, even if it is required.
 - Added the gravityflow_note_valid filter to customize note validity for Approval and User Input steps.
+- Fixed an issue where uninstall for extensions on Gravity Forms Settings is not loading the correct page.

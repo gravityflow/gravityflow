@@ -69,19 +69,134 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 	}
 
 	/**
+	 * Returns the settings for this step.
+	 *
+	 * @since 2.7.3
+	 *
+	 * @return array
+	 */
+	public function get_settings() {
+		$settings = parent::get_settings();
+
+		if ( empty( $settings ) ) {
+			return $settings;
+		}
+
+		$form_setting = array(
+			'name'          => 'zapier_form',
+			'label'         => esc_html__( 'Form', 'gravityflow' ),
+			'type'          => 'select',
+			'tooltip'       => esc_html__( 'Select the form which has the Zapier feed(s) to be processed by this step.', 'gravityflow' ),
+			'default_value' => '',
+			'choices'       => array(
+				array(
+					'label' => esc_html__( 'This Form', 'gravityflow' ),
+					'value' => '',
+				),
+			),
+			'onchange'      => "jQuery(this).closest('form').submit();",
+		);
+
+		$forms = GFFormsModel::get_forms( true );
+
+		foreach ( $forms as $form ) {
+			if ( $this->get_form_id() == $form->id ) {
+				continue;
+			}
+
+			$form_setting['choices'][] = array(
+				'label' => esc_html( $form->title ),
+				'value' => absint( $form->id ),
+			);
+		}
+
+		array_unshift( $settings['fields'], $form_setting );
+
+		return $settings;
+	}
+
+	/**
+	 * Customizes the feeds setting.
+	 *
+	 * @since 2.7.3
+	 *
+	 * @return array
+	 */
+	protected function get_feeds_setting() {
+		$feeds   = $this->get_feeds();
+		$choices = array();
+
+		foreach ( $feeds as $feed ) {
+			if ( empty( $feed['is_active'] ) ) {
+				continue;
+			}
+
+			$choice = array(
+				'label' => $this->get_feed_label( $feed ),
+				'name'  => 'feed_' . $feed['id'],
+			);
+
+			$zap_id = absint( rgar( $feed['meta'], 'zapID' ) );
+
+			if ( ! empty( $zap_id ) ) {
+				$choice['tooltip'] = sprintf(
+					// Translators: 1. Opening <a> tag for link to zap overview, 2. Closing <a> tag, 3. Opening <a> tag for link to zap editor, 4. The zap ID.
+					esc_html__( '%1$sView%2$s or %3$sedit%2$s zap (%4$s) on zapier.com', 'gravityflow' ),
+					'<a href="' . esc_url( 'https://zapier.com/app/zap/' . $zap_id ) . '" target="_blank">',
+					'</a>',
+					'<a href="' . esc_url( 'https://zapier.com/app/editor/' . $zap_id ) . '" target="_blank">',
+					$zap_id
+				);
+			}
+
+			$choices[] = $choice;
+		}
+
+		if ( empty( $choices ) ) {
+			return array(
+				'name'  => 'no_feeds',
+				'label' => esc_html__( 'Feeds', 'gravityflow' ),
+				'type'  => 'html',
+				'html'  => sprintf(
+					// Translators: 1. Opening <a> tag for link to Zapier, 2. Closing <a> tag.
+					esc_html__( 'The selected form doesn\'t have any feeds. %1$sCreate a zap%2$s on zapier.com or select a different form.', 'gravityflow' ),
+					'<a href="' . esc_url( 'https://zapier.com/apps/gravity-forms/integrations' ) . '" target="_blank">',
+					'</a>'
+				),
+			);
+		}
+
+		return array(
+			'name'     => 'feeds',
+			'required' => true,
+			'label'    => esc_html__( 'Feeds', 'gravityflow' ),
+			'type'     => 'checkbox',
+			'choices'  => $choices,
+		);
+	}
+
+	/**
 	 * Returns the feeds for the add-on.
 	 *
 	 * @since 1.0.0
 	 * @since 2.5.10 Updated to support Zapier v4.0
+	 * @since 2.7.3  Updated to support processing feeds from other forms.
 	 *
 	 * @return array
 	 */
 	public function get_feeds() {
-		if ( class_exists( 'GFZapierData' ) ) {
-			return GFZapierData::get_feed_by_form( $this->get_form_id() );
+		$form_id = $this->get_setting( 'zapier_form' );
+		if ( empty( $form_id ) ) {
+			$form_id = $this->get_form_id();
 		}
 
-		return parent::get_feeds();
+		if ( class_exists( 'GFZapierData' ) ) {
+			return GFZapierData::get_feed_by_form( $form_id );
+		} elseif ( function_exists( 'gf_zapier' ) ) {
+			return gf_zapier()->get_feeds( $form_id );
+		}
+
+		return array();
 	}
 
 	/**
@@ -181,24 +296,6 @@ class Gravity_Flow_Step_Feed_Zapier extends Gravity_Flow_Step_Feed_Add_On {
 		}
 
 		return parent::get_feed_add_on_class_name();
-	}
-
-	/**
-	 * Determines if this step type is supported.
-	 *
-	 * @since 2.5.10
-	 *
-	 * @return bool
-	 */
-	public function is_supported() {
-		$is_supported = parent::is_supported();
-
-		if ( $is_supported && class_exists( 'GF_Zapier' ) && gravity_flow()->is_form_settings() ) {
-			// Zapier v4.0 feed config is only available if a feed already exists for the form.
-			$is_supported = gf_zapier()->has_feed( $this->get_form_id() );
-		}
-
-		return $is_supported;
 	}
 
 	/**
