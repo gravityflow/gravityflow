@@ -3,7 +3,7 @@
  * Gravity Flow integration with the Gravity Forms Partial Entries Add-On.
  *
  * @package     GravityFlow
- * @copyright   Copyright (c) 2015-2019, Steven Henty S.L.
+ * @copyright   Copyright (c) 2015-2021, Steven Henty S.L.
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
