@@ -109,27 +109,38 @@ class Gravity_Flow_Partial_Entries {
 	 * @return array
 	 */
 	public function maybe_filter_feed_settings_fields( $feed_settings_fields, $add_on ) {
+		$field = array(
+			'name'  => 'enable_workflow',
+			'label' => gravity_flow()->translate_navigation_label( 'workflow' ),
+		);
 
-		$feed_settings_fields = $add_on->add_field_after( 'warning_message', array(
-			array(
-				'name'       => 'enable_workflow',
-				'label'      => gravity_flow()->translate_navigation_label( 'workflow' ),
-				'type'       => 'checkbox',
-				'choices'    => array(
+		$field['tooltip'] = sprintf( esc_html__( 'Start %s processing when the partial entry is saved.', 'gravityflow' ), strtolower( $field['label'] ) );
+
+		if ( ! $add_on->is_gravityforms_supported( '2.5-rc-2' ) ) {
+			$field['type']       = 'checkbox';
+			$field['choices']    = array(
+				array(
+					'label' => esc_html__( 'Enable', 'gravityflow' ),
+					'name'  => 'enable_workflow',
+				),
+			);
+			$field['dependency'] = array(
+				'field'  => 'enable',
+				'values' => array( 1 ),
+			);
+		} else {
+			$field['type']       = 'toggle';
+			$field['dependency'] = array(
+				'live'   => true,
+				'fields' => array(
 					array(
-						'label' => esc_html__( 'Enable', 'gravityflow' ),
-						'name'  => 'enable_workflow',
+						'field' => 'enable_partial',
 					),
 				),
-				'dependency' => array(
-					'field'  => 'enable',
-					'values' => array( 1 ),
-				),
-			)
-		), $feed_settings_fields );
+			);
+		}
 
-
-		return $feed_settings_fields;
+		return $add_on->add_field_after( 'warning_message', array( $field ), $feed_settings_fields );
 	}
 
 	/**
