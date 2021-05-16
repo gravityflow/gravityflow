@@ -29,7 +29,6 @@ class Inbox_Service_Provider extends Service_Provider {
 
 	protected $endpoints = array(
 		self::GET_ITEMS_ENDPOINT,
-		self::REFRESH_ITEMS_ENDPOINT,
 	);
 
 	public function register() {
@@ -53,19 +52,19 @@ class Inbox_Service_Provider extends Service_Provider {
 	}
 
 	public function hooks() {
-		foreach ( $this->endpoints as $ep_name ) {
-			/**
-			 * @var \Gravity_Flow\Gravity_Flow\Ajax\Endpoint $endpoint
-			 */
-			$endpoint = $this->getContainer()->get( $ep_name );
-			add_action( 'wp_ajax_' . self::AJAX_PREFIX . $endpoint->name(), array( $endpoint, 'delegate' ) );
-
-			if ( $endpoint->is_public() ) {
-				add_action( 'wp_ajax_nopriv_' . self::AJAX_PREFIX . $endpoint->name(), array( $endpoint, 'delegate' ) );
-			}
-		}
-
 		$container = $this->getContainer();
+		$endpoints = $this->endpoints;
+
+		add_action( 'rest_api_init', function () use ( $container, $endpoints ) {
+			foreach ( $endpoints as $ep_name ) {
+				/**
+				 * @var \Gravity_Flow\Gravity_Flow\Ajax\Endpoint $endpoint
+				 */
+				$endpoint = $container->get( $ep_name );
+
+				$endpoint->register_routes();
+			}
+		} );
 
 		add_filter( 'gravityflow_js_config_shared', function ( $config ) use ( $container ) {
 			/**
@@ -78,7 +77,23 @@ class Inbox_Service_Provider extends Service_Provider {
 				'rowData'    => $tasks->get_inbox_tasks( array() ),
 			);
 
+
+			$config['current_user_token'] = $this->get_user_token();
+
 			return $config;
 		}, 10, 1 );
+	}
+
+	protected function get_user_token() {
+		$user = wp_get_current_user();
+
+		$assignee = new \Gravity_Flow_Assignee(
+			array(
+				'id'   => get_current_user_id(),
+				'user' => $user,
+				'type' => 'user_id'
+			) );
+
+		return gravity_flow()->generate_access_token( $assignee );
 	}
 }

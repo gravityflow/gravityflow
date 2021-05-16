@@ -6,7 +6,7 @@ abstract class Config {
 
 	protected $name = '';
 
-	protected $is_public = false;
+	protected $method = 'GET';
 
 	public function __construct() {
 		if ( empty( $this->name ) ) {
@@ -18,13 +18,13 @@ abstract class Config {
 		return $this->name;
 	}
 
-	public function is_public() {
-		return $this->is_public;
+	public function method() {
+		return array( $this->method );
 	}
 
 	/**
 	 * @return Argument[]
 	 */
-	abstract protected function args();
+	abstract public function args();
 
 }

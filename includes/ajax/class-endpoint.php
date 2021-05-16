@@ -3,8 +3,11 @@
 namespace Gravity_Flow\Gravity_Flow\Ajax;
 
 use Gravity_Flow\Gravity_Flow\Models\Model;
+use \WP_REST_Controller;
 
-abstract class Endpoint {
+abstract class Endpoint extends WP_REST_Controller {
+
+	const NAMESPACE = 'gf/v2';
 
 	protected $response_factory;
 
@@ -20,61 +23,40 @@ abstract class Endpoint {
 		$this->response_factory = $factory;
 		$this->config           = $config;
 		$this->model            = $model;
-
-		foreach ( $config->args() as $arg ) {
-			if ( $arg->is_required() ) {
-				$this->required_args[ $arg->name() ] = $arg;
-			} else {
-				$this->optional_args[ $arg->name() ] = $arg;
-			}
-		}
 	}
 
-	public function delegate() {
-		$posted_values = $_POST;
+	public function register_routes() {
+		register_rest_route( self::NAMESPACE, '/' . $this->config->name(), array(
+			array(
+				'methods'             => $this->config->method(),
+				'callback'            => array( $this, 'handle' ),
+				'permission_callback' => array( $this, 'get_items_permissions_check' ),
+				'args'                => $this->get_args(),
+			),
+		) );
+	}
 
-		foreach ( $this->required_args as $rname => $config ) {
-			if ( ! isset( $posted_values[ $rname ] ) ) {
-				return new \WP_Error( 'Required argument ' . $rname . ' not set.' );
-			}
+	public function get_items_permissions_check( $request ) {
+		return true;
+	}
 
-			$this->add_values_to_data( $rname, $config );
-		}
+	public function get_args() {
+		$args = array();
 
-		foreach ( $this->optional_args as $oname => $config ) {
-			if ( ! isset( $posted_values[ $oname ] ) && is_null( $config->default_value() ) ) {
-				continue;
-			}
-
-			$this->add_values_to_data( $oname, $config );
+		if ( empty( $this->config->args() ) ) {
+			return $args;
 		}
 
-		return $this->handle();
+		foreach ( $this->config->args() as $arg ) {
+			/**
+			 * @var Argument $arg .
+			 */
+			$args[ $arg->name() ] = $arg->to_array();
+		}
+
+		return $args;
 	}
 
-	protected function add_values_to_data( $name, Argument $config ) {
-		$value = isset( $_POST[ $name ] ) ? $_POST[ $name ] : $config->default_value();
-		$value = $config->sanitize( $value );
-
-		$this->data[ $name ] = $value;
-	}
-
-	protected function data( $name ) {
-		return isset( $this->data[ $name ] ) ? $this->data[ $name ] : null;
-	}
-
-	public function is_public() {
-		return $this->config->is_public();
-	}
-
-	public function name() {
-		return $this->config->name();
-	}
-
-	public function nonce() {
-		return wp_create_nonce( $this->name );
-	}
-
-	abstract protected function handle();
+	abstract public function handle( $request );
 
 }
