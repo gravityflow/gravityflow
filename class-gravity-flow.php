@@ -7827,7 +7827,7 @@ AND m.meta_value='queued'";
 			}
 
 			$body_json = base64_decode( $body_64_probably_url_decoded );
-			if ( empty( $body_json ) ) {
+			if ( empty( $body_json ) || empty( json_decode( $body_json, true ) ) ) {
 				$body_json = base64_decode( urldecode( $body_64_probably_url_decoded ) );
 				if ( empty( $body_json ) ) {
 					$this->log_debug( __METHOD__ . '(): empty body_json; returning false.' );
@@ -7880,6 +7880,10 @@ AND m.meta_value='queued'";
 			}
 
 			if ( empty( $token ) ) {
+				$token = rgpost( 'gflow_access_token' );
+			}
+
+			if ( empty( $token ) ) {
 				$token = rgar( $_COOKIE, 'gflow_access_token' );
 			}
 
@@ -7925,6 +7929,10 @@ AND m.meta_value='queued'";
 				$this->log_debug( __METHOD__ . '(): base64_decode result empty; returning false.' );
 
 				return false;
+			}
+
+			if ( empty( json_decode( $body_json, true ) ) ) {
+				$body_json = base64_decode( urldecode( $body_64 ) );
 			}
 
 			return json_decode( $body_json, true );

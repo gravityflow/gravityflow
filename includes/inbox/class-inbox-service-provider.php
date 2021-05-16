@@ -29,6 +29,7 @@ class Inbox_Service_Provider extends Service_Provider {
 
 	protected $endpoints = array(
 		self::GET_ITEMS_ENDPOINT,
+		self::REFRESH_ITEMS_ENDPOINT,
 	);
 
 	public function register() {

@@ -37,9 +37,10 @@ const refreshGrid = async () => {
 	const formData = new FormData();
 
 	current_ids.forEach((item) => formData.append( 'current_ids[]', item ) );
+	formData.append( 'gflow_access_token', window?.gflow_config?.current_user_token || null );
 
 	const response = await fetch(
-		'/wp-admin/admin-ajax.php?action=gflow_inbox_refresh_inbox_items',
+		'/wp-json/gf/v2/refresh_inbox_items',
 		{
 			method: 'post',
 			body: formData

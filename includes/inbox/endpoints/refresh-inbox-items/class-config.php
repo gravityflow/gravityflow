@@ -9,14 +9,19 @@ class Config extends Ajax_Config {
 
 	const SEARCH_ARGS = 'search_args';
 	const CURRENT_IDS = 'current_ids';
+	const TOKEN       = 'gflow_access_token';
 
-	protected $name      = 'refresh_inbox_items';
-	protected $is_public = true;
+	protected $name = 'refresh_inbox_items';
+
+	public function method() {
+		return 'POST';
+	}
 
 	public function args() {
 		return array(
 			$this->search_args(),
 			$this->current_ids(),
+			$this->token_args(),
 		);
 	}
 
@@ -31,8 +36,14 @@ class Config extends Ajax_Config {
 	public function current_ids() {
 		return new Argument(
 			self::CURRENT_IDS,
-			false,
-			array()
+			true,
+		);
+	}
+
+	public function token_args() {
+		return new Argument(
+			self::TOKEN,
+			true,
 		);
 	}
 }
