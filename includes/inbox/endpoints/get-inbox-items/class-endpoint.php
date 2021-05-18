@@ -6,12 +6,12 @@ use Gravity_Flow\Gravity_Flow\Ajax\Endpoint as Ajax_Endpoint;
 
 class Endpoint extends Ajax_Endpoint {
 
-	public function handle() {
-		$data = $this->model->get_inbox_tasks( $this->data( Config::SEARCH_ARGS ) );
+	public function handle( $request ) {
+		$args  = $request->get_param( Config::SEARCH_ARGS );
 
-		$response = $this->response_factory->create( $data, 200 );
+		$data = $this->model->get_inbox_tasks( $args );
 
-		return $response->response();
+		return $this->response_factory->create( $data, 200 );
 	}
 
 }

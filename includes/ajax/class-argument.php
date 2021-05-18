@@ -12,11 +12,14 @@ class Argument {
 
 	private $sanitization;
 
-	public function __construct( $name, $required = false, $default = null, callable $sanitization = null ) {
+	private $validation;
+
+	public function __construct( $name, $required = false, $default = null, callable $sanitization = null, callable $validation = null ) {
 		$this->name         = $name;
 		$this->required     = $required;
 		$this->default      = $default;
 		$this->sanitization = $sanitization;
+		$this->validation   = $validation;
 	}
 
 	public function name() {
@@ -31,15 +34,20 @@ class Argument {
 		return $this->default;
 	}
 
-	public function sanitize( $value ) {
-		if ( ! $this->should_sanitize() ) {
-			return $value;
+	public function to_array() {
+		$data = array(
+			'default'  => $this->default_value(),
+			'required' => $this->is_required(),
+		);
+
+		if ( ! empty( $this->sanitization ) ) {
+			$data['sanitize_callback'] = $this->sanitization;
 		}
 
-		return call_user_func( $this->sanitization, $value );
-	}
+		if ( ! empty( $this->validation ) ) {
+			$data['validate_callback'] = $this->validation;
+		}
 
-	private function should_sanitize() {
-		return ! is_null( $this->sanitization );
+		return $data;
 	}
 }

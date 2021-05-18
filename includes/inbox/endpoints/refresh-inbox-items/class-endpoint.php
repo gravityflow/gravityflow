@@ -6,11 +6,9 @@ use Gravity_Flow\Gravity_Flow\Ajax\Endpoint as Ajax_Endpoint;
 
 class Endpoint extends Ajax_Endpoint {
 
-	public function handle() {
-		set_current_user( 1 );
-
-		$tasks = $this->model->get_inbox_tasks( $this->data( Config::SEARCH_ARGS ) );
-		$ids   = $this->data( config::CURRENT_IDS );
+	public function handle( $request ) {
+		$tasks = $this->model->get_inbox_tasks( $request->get_param( Config::SEARCH_ARGS ) );
+		$ids   = $request->get_param( Config::CURRENT_IDS );
 
 		$data = array(
 			'add'    => $this->added( $tasks, $ids ),
@@ -18,9 +16,7 @@ class Endpoint extends Ajax_Endpoint {
 			'update' => $this->updated( $tasks, $ids ),
 		);
 
-		$response = $this->response_factory->create( $data, 200 );
-
-		return $response->response();
+		return $this->response_factory->create( $data, 200 );
 	}
 
 	private function added( $tasks, $ids ) {

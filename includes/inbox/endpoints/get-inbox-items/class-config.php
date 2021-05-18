@@ -8,13 +8,14 @@ use Gravity_Flow\Gravity_Flow\Ajax\Config as Ajax_Config;
 class Config extends Ajax_Config {
 
 	const SEARCH_ARGS = 'search_args';
+	const TOKEN       = 'gflow_access_token';
 
-	protected $name      = 'get_inbox_items';
-	protected $is_public = true;
+	protected $name = 'get_inbox_items';
 
 	public function args() {
 		return array(
 			$this->search_args(),
+			$this->token_args(),
 		);
 	}
 
@@ -22,7 +23,14 @@ class Config extends Ajax_Config {
 		return new Argument(
 			self::SEARCH_ARGS,
 			false,
-			array()
+			array(),
+		);
+	}
+
+	public function token_args() {
+		return new Argument(
+			self::TOKEN,
+			true,
 		);
 	}
 }
