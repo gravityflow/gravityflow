@@ -17,55 +17,52 @@ const data = window?.gflow_config?.grid_options || {};
 const gridOptions = Object.assign( {}, data, options );
 
 const initializeGrid = () => {
-	gridOptions.getRowNodeId = ( data ) => {
-		return parseInt( data.id );
+	gridOptions.getRowNodeId = ( row ) => {
+		return parseInt( row.id );
 	};
 
 	instances.grid = new Grid( el.container, gridOptions );
 };
 
 const getIdsFromModel = () => {
-	let ids = [];
-
-	gridOptions.api.forEachNode((node) => ids.push(node.data.id) );
-
+	const ids = [];
+	gridOptions.api.forEachNode( ( node ) => ids.push( node.data.id ) );
 	return ids;
 };
 
 const refreshGrid = async () => {
 	const current_ids = getIdsFromModel();
-	const formData = new FormData();
+	const formData = new window.FormData();
 
-	current_ids.forEach((item) => formData.append( 'current_ids[]', item ) );
-	formData.append( 'gflow_access_token', window?.gflow_config?.current_user_token || null );
-
-	const response = await fetch(
-		'/wp-json/gf/v2/refresh_inbox_items',
-		{
-			method: 'post',
-			body: formData
-		}
+	current_ids.forEach( ( item ) => formData.append( 'current_ids[]', item ) );
+	formData.append(
+		'gflow_access_token',
+		window?.gflow_config?.current_user_token || null
 	);
 
-	const data = await response.json();
+	const response = await window.fetch( '/wp-json/gf/v2/refresh_inbox_items', {
+		method: 'post',
+		body: formData,
+	} );
 
-	gridOptions.api.applyTransaction(data);
+	const responseJson = await response.json();
+
+	gridOptions.api.applyTransaction( responseJson );
 };
 
-const addEventListeners = () => {
+const bindEvents = () => {
 	const refreshButton = document.querySelector( '[data-js="refresh_inbox"]' );
-	refreshButton.addEventListener( 'click', function( e ) {
+	refreshButton.addEventListener( 'click', function ( e ) {
 		e.preventDefault();
 		refreshGrid();
-	});
+	} );
 };
 
 const init = ( container ) => {
 	el.container = container;
 
 	initializeGrid();
-
-	addEventListeners();
+	bindEvents();
 
 	console.info( 'Gravity Flow Common: Initialized inbox component.' );
 };

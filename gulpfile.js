@@ -50,6 +50,7 @@ const gulpTasks = [
 
 	'eslint:theme', // lint the theme js according to the products lint rules, uses fix to auto correct common issues
 	'eslint:apps', // lint the apps js according to the products lint rules, uses fix to auto correct common issues
+	'eslint:common', // lint the apps js according to the products lint rules, uses fix to auto correct common issues
 	'eslint:utils', // lint the utils js according to the products lint rules, uses fix to auto correct common issues
 	'eslint:admin', // lint the admin js according to the products lint rules, uses fix to auto correct common issues
 
@@ -126,6 +127,7 @@ gulp.task(
 		gulp.parallel(
 			'eslint:theme',
 			'eslint:apps',
+			'eslint:common',
 			'eslint:utils',
 			'eslint:admin',
 			'stylelint:admin',

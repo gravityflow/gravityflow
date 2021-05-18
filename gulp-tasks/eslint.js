@@ -27,6 +27,11 @@ module.exports = {
 			`${ pkg.gravityflow.paths.js_src }apps/**/*.js`,
 		], `${pkg.gravityflow.paths.js_src}apps/` );
 	},
+	common() {
+		return lint( [
+			`${ pkg.gravityflow.paths.js_src }common/**/*.js`,
+		], `${pkg.gravityflow.paths.js_src}common/` );
+	},
 	utils() {
 		return lint( [
 			`${ pkg.gravityflow.paths.js_src }utils/**/*`,
