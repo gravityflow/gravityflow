@@ -100,6 +100,22 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
  *
  * ----------------------------------------------------------------------------- */
 
+/* Box Shadow */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables: Box Shadow
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* Transitions */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables: Transitions
+ *
+ * ----------------------------------------------------------------------------- */
+
 /* Typography */
 
 /* -----------------------------------------------------------------------------
@@ -6460,26 +6476,343 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		background-color: #2196f3;
 	}
 
+/*
+	 * Base styles, shared by all buttons
+	 */
+
+.gform-admin .gform-button {
+		align-items: center;
+		border: 1px solid transparent;
+		border-radius: 3px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+		cursor: pointer;
+		display: inline-flex;
+		font-family: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, oxygen-sans, ubuntu, cantarell, "Helvetica Neue", sans-serif;
+		font-size: 14px;
+		font-weight: 500;
+		line-height: 23.2px;
+		padding: 9px 18px;
+		text-decoration: none;
+		transition: transform 300ms ease, box-shadow 300ms ease, background-color 300ms ease;
+		white-space: nowrap;
+	}
+
+.gform-admin .gform-button:focus {
+			box-shadow: 0 0 0 2px var(--c-focus);
+			outline: none;
+		}
+
+.gform-admin .gform-button:disabled {
+			pointer-events: none;
+		}
+
+.gform-admin .gform-button.gform-button--circular {
+			border-radius: 100%;
+			justify-content: center;
+			padding: 0;
+		}
+
+/*
+	 * Style variants
+	 */
+
+.gform-admin .gform-button--primary {
+		background: var(--c-gravity-blue);
+		border-color: var(--c-gravity-blue);
+		color: #fff;
+	}
+
+.gform-admin .gform-button--primary:hover,
+		.gform-admin .gform-button--primary:active {
+			background: var(--c-primary-light);
+		}
+
+.gform-admin .gform-button--primary:disabled {
+			background: var(--c-gravity-blue);
+			color: #639cc1;
+		}
+
+.gform-admin .gform-button--secondary {
+		background: #fff;
+		border-color: var(--c-gravity-blue);
+		color: var(--c-gravity-blue);
+	}
+
+.gform-admin .gform-button--secondary:hover,
+		.gform-admin .gform-button--secondary:active {
+			border-color: var(--c-primary-light);
+			color: var(--c-primary-light);
+		}
+
+.gform-admin .gform-button--secondary:disabled {
+			border-color: var(--c-blue-haze);
+			color: var(--c-blue-haze);
+		}
+
+.gform-admin .gform-button--white {
+		background: #fff;
+		border-color: var(--c-snuff);
+		color: var(--c-port);
+	}
+
+.gform-admin .gform-button--white:hover,
+		.gform-admin .gform-button--white:active {
+			background: var(--c-light-blue);
+			border-color: var(--c-snuff);
+			color: var(--c-port);
+		}
+
+.gform-admin .gform-button--white:focus {
+			background: #fff;
+			border-color: var(--c-blue-haze);
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 2px var(--c-white-lilac);
+			color: var(--c-port);
+		}
+
+.gform-admin .gform-button--white:disabled {
+			border-color: var(--c-blue-haze);
+			color: var(--c-blue-haze);
+		}
+
+.gform-admin .gform-button--white .gform-button__icon {
+			color: var(--c-comet);
+		}
+
+/*
+	 * Size variants
+	 */
+
+.gform-admin .gform-button--size-xs {
+		font-size: 12px;
+		line-height: 16px;
+		padding: 7px 11px;
+	}
+
+.gform-admin .gform-button--size-xs .gform-button__icon {
+			font-size: 14px;
+		}
+
+.gform-admin .gform-button--size-sm {
+		line-height: 16px;
+		padding: 9px 13px;
+	}
+
+.gform-admin .gform-button--size-sm .gform-button__icon {
+			font-size: 14px;
+		}
+
+.gform-admin .gform-button--size-l {
+		font-size: 16px;
+		line-height: 24px;
+	}
+
+.gform-admin .gform-button--size-l .gform-button__icon {
+			font-size: 20px;
+		}
+
+.gform-admin .gform-button--size-xl {
+		font-size: 16px;
+		line-height: 24px;
+		padding: 13px 25px;
+	}
+
+.gform-admin .gform-button--size-xl .gform-button__icon {
+			font-size: 20px;
+		}
+
+/*
+	 * Icon variants
+	 */
+
+.gform-admin .gform-button__icon {
+		font-size: 18px;
+		position: relative;
+		top: -1px;
+	}
+
+.gform-admin .gform-button--icon-leading .gform-button__icon {
+			margin-right: 8px;
+		}
+
+.gform-admin .gform-button--icon-leading.gform-button--size-xs .gform-button__icon {
+				margin-right: 6px;
+			}
+
+.gform-admin .gform-button--icon-leading.gform-button--size-sm .gform-button__icon {
+				margin-right: 6px;
+			}
+
+.gform-admin .gform-button--icon-leading.gform-button--size-l .gform-button__icon {
+				margin-right: 10px;
+			}
+
+.gform-admin .gform-button--icon-leading.gform-button--size-xl .gform-button__icon {
+				margin-right: 12px;
+			}
+
+.gform-admin .gform-button--icon-trailing .gform-button__icon {
+			margin-left: 8px;
+		}
+
+.gform-admin .gform-button--icon-trailing.gform-button--size-xs .gform-button__icon {
+				margin-left: 6px;
+			}
+
+.gform-admin .gform-button--icon-trailing.gform-button--size-sm .gform-button__icon {
+				margin-left: 6px;
+			}
+
+.gform-admin .gform-button--icon-trailing.gform-button--size-l .gform-button__icon {
+				margin-left: 10px;
+			}
+
+.gform-admin .gform-button--icon-trailing.gform-button--size-xl .gform-button__icon {
+				margin-left: 12px;
+			}
+
+/*
+	 * Rounded variants
+	 */
+
+.gform-admin .gform-button--round {
+		border-radius: 19px;
+	}
+
+.gform-admin .gform-button--round.gform-button--size-xs {
+			border-radius: 15px;
+		}
+
+.gform-admin .gform-button--round.gform-button--size-sm {
+			border-radius: 17px;
+		}
+
+.gform-admin .gform-button--round.gform-button--size-l {
+			border-radius: 21px;
+		}
+
+.gform-admin .gform-button--round.gform-button--size-xl {
+			border-radius: 25px;
+		}
+
+/*
+	 * Circular variants
+	 */
+
+.gform-admin .gform-button--circular {
+		height: 38px;
+		width: 38px;
+	}
+
+.gform-admin .gform-button--circular .gform-button__icon {
+			font-size: 22px;
+		}
+
+.gform-admin .gform-button--circular.gform-button--size-xs {
+			height: 30px;
+			width: 30px;
+		}
+
+.gform-admin .gform-button--circular.gform-button--size-xs .gform-button__icon {
+				font-size: 18px;
+			}
+
+.gform-admin .gform-button--circular.gform-button--size-sm {
+			height: 34px;
+			width: 34px;
+		}
+
+.gform-admin .gform-button--circular.gform-button--size-sm .gform-button__icon {
+				font-size: 20px;
+			}
+
+.gform-admin .gform-button--circular.gform-button--size-l {
+			height: 42px;
+			width: 42px;
+		}
+
+.gform-admin .gform-button--circular.gform-button--size-l .gform-button__icon {
+				font-size: 28px;
+			}
+
+.gform-admin .gform-button--circular.gform-button--size-xl {
+			height: 50px;
+			width: 50px;
+		}
+
+.gform-admin .gform-button--circular.gform-button--size-xl .gform-button__icon {
+				font-size: 32px;
+			}
+
 .gform-flyout {
 	background: #fff;
+	bottom: 0;
+	box-shadow:
+		0 0 1px rgba(18, 25, 97, 0.24),
+		0 24px 24px rgba(18, 25, 97, 0.03),
+		0 2px 2px rgba(18, 25, 97, 0.03),
+		0 4px 4px rgba(18, 25, 97, 0.03),
+		0 8px 8px rgba(18, 25, 97, 0.03),
+		0 16px 16px rgba(18, 25, 97, 0.03);
+	box-sizing: border-box;
 	display: none;
-	height: 100%;
+	flex-direction: column;
+	opacity: 0;
+	padding-top: 20px;
+	position: absolute;
 	top: 0;
-	width: 50%;
-	z-index: 5;
+	width: calc(100vw - 270px);
+	z-index: 10;
 }
 
-.gform-flyout.gform-flyout--open {
-		display: block;
+@media (--viewport-wpadmin) {
+
+.gform-flyout {
+		width: calc(100vw - 306px)
+}
 	}
+
+@media (--viewport-full) {
+
+.gform-flyout {
+		width: calc(100vw - 530px)
+}
+	}
+
+@media (--viewport-xlarge) {
+
+.gform-flyout {
+		width: 650px
+}
+	}
+
+@media (--viewport-full) {
+
+.folded.sticky-menu .gform-flyout {
+			width: calc(100vw - 406px)
+	}
+		}
+
+@media (--viewport-xlarge) {
+
+.folded.sticky-menu .gform-flyout {
+			width: auto
+	}
+		}
 
 .gform-flyout.gform-flyout--fixed {
 		position: fixed;
 	}
 
 .admin-bar .gform-flyout.gform-flyout--fixed {
-			top: 32px;
+			top: 46px;
 		}
+
+@media (--viewport-wpadmin) {
+
+.admin-bar .gform-flyout.gform-flyout--fixed {
+				top: 32px
+		}
+			}
 
 .gform-flyout.gform-flyout--absolute {
 		position: absolute;
@@ -6488,6 +6821,76 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gform-flyout.gform-flyout--right {
 		right: 0;
 	}
+
+.gform-flyout.gform-flyout--right.gform-flyout--fixed {
+			right: calc(260px - 100vw);
+		}
+
+@media (--viewport-wpadmin) {
+
+.gform-flyout.gform-flyout--right.gform-flyout--fixed {
+				right: calc(296px - 100vw)
+		}
+			}
+
+@media (--viewport-full) {
+
+.gform-flyout.gform-flyout--right.gform-flyout--fixed {
+				right: calc(520px - 100vw)
+		}
+			}
+
+@media (--viewport-xlarge) {
+
+.gform-flyout.gform-flyout--right.gform-flyout--fixed {
+				right: -660px
+		}
+			}
+
+.gform-flyout.anim-in-ready {
+		display: flex;
+		transform: translateX(-98%) translateX(-10px);
+	}
+
+.gform-flyout.anim-in-ready.anim-in-active {
+		opacity: 1;
+		transform: translateX(-100%) translateX(-10px);
+		transition: opacity 190ms ease-in-out, transform 190ms ease-in-out;
+	}
+
+.gform-flyout.anim-out-ready {
+		display: flex;
+		opacity: 1;
+		transform: translateX(-100%) translateX(-10px);
+		transition: opacity 190ms ease-in-out, transform 190ms ease-in-out;
+	}
+
+.gform-flyout.anim-out-ready.anim-out-active {
+		opacity: 0;
+		transform: translateX(-98%) translateX(-10px);
+	}
+
+.gform-flyout .gform-flyout__close.gform-button--size-xs {
+		border: 1px solid var(--c-snuff);
+		display: flex;
+		font-size: 20px;
+		height: 26px;
+		position: absolute;
+		right: 25px;
+		top: 15px;
+		transition: border-color 200ms ease-in-out, box-shadow 200ms ease-in-out;
+		width: 26px;
+		z-index: 5;
+	}
+
+.gform-flyout .gform-flyout__close.gform-button--size-xs:hover,
+		.gform-flyout .gform-flyout__close.gform-button--size-xs:focus {
+			border-color: var(--c-gravity-blue);
+		}
+
+.gform-flyout .gform-flyout__close.gform-button--size-xs .gform-button__icon {
+			font-size: 22px;
+		}
 
 .gflow-grid {
 	position: relative;

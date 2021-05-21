@@ -14,10 +14,12 @@ export const flyoutContainer = (
 	`
 	<article id="${ id }" class="${ wrapperClasses } gform-flyout--${ direction } gform-flyout--${ position }">
 		<button 
-			class="${ closeButtonClasses }" 
+			class="${ closeButtonClasses } gform-button gform-button--secondary gform-button--circular gform-button--size-xs"
 			data-js="gform-flyout-close" 
 			title="Close this flyout"
-		></button>
+		>
+			<i class="gform-button__icon gflow-icon gflow-icon--delete"></i>
+		</button>
 		${ content }
 	</article>
 	`; // todo: needs i18n

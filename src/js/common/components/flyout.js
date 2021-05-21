@@ -11,6 +11,7 @@ export default class Flyout {
 		Object.assign(
 			this,
 			{
+				animationDelay: 215, // total runtime of close animation. must be synced with css
 				closeButtonClasses: 'gform-flyout__close', // classes for the close button
 				content: '', // the html content
 				direction: 'right', // direction to fly in from, left or right
@@ -41,24 +42,43 @@ export default class Flyout {
 		}
 	}
 
-	init() {
-		this.render();
-		this.bindEvents();
-	}
-
-	bindEvents() {
-		this.flyoutElement.addEventListener( 'keydown', this.handleKeyEvents );
-		this.closeElement.addEventListener( 'click', this.closeFlyout );
-		tools
-			.getNodes( this.triggers, true, document, true )
-			.forEach( ( trigger ) =>
-				trigger.addEventListener( 'click', this.handleTriggerClick )
-			);
+	showFlyout() {
+		this.flyoutElement.classList.add( 'anim-in-ready' );
+		window.setTimeout( () => {
+			this.flyoutElement.classList.add( 'anim-in-active' );
+		}, 25 );
 	}
 
 	closeFlyout = () => {
-		this.flyoutElement.classList.remove( 'gform-flyout--open' );
-		this.triggerElement.focus();
+		if ( ! this.flyoutElement.classList.contains( 'anim-in-active' ) ) {
+			return;
+		}
+
+		this.flyoutElement.classList.remove( 'anim-in-ready' );
+		this.flyoutElement.classList.remove( 'anim-in-active' );
+		this.flyoutElement.classList.add( 'anim-out-ready' );
+
+		window.setTimeout( () => {
+			this.flyoutElement.classList.add( 'anim-out-active' );
+		}, 25 );
+
+		window.setTimeout( () => {
+			this.flyoutElement.classList.remove( 'anim-out-ready' );
+			this.flyoutElement.classList.remove( 'anim-out-active' );
+		}, this.animationDelay );
+
+		this.state.open = false;
+	};
+
+	maybeCloseFlyout = ( e ) => {
+		if ( e.detail?.activeId === this.id ) {
+			return;
+		}
+
+		this.flyoutElement.classList.remove( 'anim-in-ready' );
+		this.flyoutElement.classList.remove( 'anim-in-active' );
+		this.flyoutElement.classList.remove( 'anim-out-ready' );
+		this.flyoutElement.classList.remove( 'anim-out-active' );
 		this.state.open = false;
 	};
 
@@ -68,13 +88,14 @@ export default class Flyout {
 	handleTriggerClick = ( e ) => {
 		this.triggerElement = e.target;
 		if ( this.state.open ) {
-			this.flyoutElement.classList.remove( 'gform-flyout--open' );
+			this.closeFlyout();
 			this.triggerElement.focus();
+			this.state.open = false;
 		} else {
-			this.flyoutElement.classList.add( 'gform-flyout--open' );
+			this.showFlyout();
 			this.closeElement.focus();
+			this.state.open = true;
 		}
-		this.state.open = ! this.state.open;
 	};
 
 	render() {
@@ -108,5 +129,25 @@ export default class Flyout {
 		console.info(
 			`Gravity Flow Common: Initialized flyout component on ${ this.target }.`
 		);
+	}
+
+	bindEvents() {
+		this.flyoutElement.addEventListener( 'keydown', this.handleKeyEvents );
+		this.closeElement.addEventListener( 'click', this.closeFlyout );
+		tools
+			.getNodes( this.triggers, true, document, true )
+			.forEach( ( trigger ) =>
+				trigger.addEventListener( 'click', this.handleTriggerClick )
+			);
+
+		document.addEventListener(
+			'gform/close-flyouts',
+			this.maybeCloseFlyout
+		);
+	}
+
+	init() {
+		this.render();
+		this.bindEvents();
 	}
 }
