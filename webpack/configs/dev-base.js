@@ -17,7 +17,7 @@ module.exports = merge.strategy( {
 	output: {
 		filename: '[name].js',
 		chunkFilename: '[name].[chunkhash].js',
-		chunkLoadingGlobal: 'gravityflow',
+		uniqueName: 'gravityflow',
 	},
 	devtool: 'eval-source-map',
 	plugins: [
