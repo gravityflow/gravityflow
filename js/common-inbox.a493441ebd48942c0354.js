@@ -6,7 +6,7 @@
  * or disable the default devtool with "devtool: false".
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
-(self["webpackChunkgravityflow"] = self["webpackChunkgravityflow"] || []).push([["common-inbox"],{
+(self["gravityflow"] = self["gravityflow"] || []).push([["common-inbox"],{
 
 /***/ "./src/js/common/components/inbox.js":
 /*!*******************************************************!*\
