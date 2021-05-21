@@ -1,0 +1,28 @@
+.gform-flyout {
+	background: var(--c-white);
+	display: none;
+	height: 100%;
+	top: 0;
+	width: 50%;
+	z-index: 5;
+
+	&.gform-flyout--open {
+		display: block;
+	}
+
+	&.gform-flyout--fixed {
+		position: fixed;
+
+		.admin-bar & {
+			top: 32px;
+		}
+	}
+
+	&.gform-flyout--absolute {
+		position: absolute;
+	}
+
+	&.gform-flyout--right {
+		right: 0;
+	}
+}

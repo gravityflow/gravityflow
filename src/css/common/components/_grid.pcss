@@ -1,0 +1,57 @@
+.gflow-grid {
+	position: relative;
+}
+
+.gflow-grid__button {
+	background: none;
+	border: 0;
+	color: var(--c-port);
+	margin: 0;
+	padding: 0;
+	transition: var(--tr-hover);
+
+	&:hover,
+	&:focus,
+	&:active {
+		color: var(--c-gravity-blue);
+		outline: 0;
+	}
+}
+
+.gflow-grid__button--settings {
+	align-items: center;
+	cursor: pointer;
+	display: flex;
+	font-size: 24px;
+	height: 40px;
+	justify-content: center;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 40px;
+	z-index: 2;
+}
+
+.ag-cell-label-container {
+
+	> [ref="eMenu"] {
+
+		.ag-icon-menu {
+			font-family: var(--t-font-family-common-icons);
+
+			&::before {
+				content: var(--gflow-icon--settings);
+			}
+		}
+	}
+}
+
+.ag-header-row {
+
+	> div:last-of-type {
+
+		.ag-icon-menu {
+			margin-right: 30px;
+		}
+	}
+}

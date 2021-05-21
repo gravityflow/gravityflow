@@ -6453,6 +6453,81 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		background-color: #2196f3;
 	}
 
+.gform-flyout {
+	background: #fff;
+	display: none;
+	height: 100%;
+	top: 0;
+	width: 50%;
+	z-index: 5;
+}
+
+.gform-flyout.gform-flyout--open {
+		display: block;
+	}
+
+.gform-flyout.gform-flyout--fixed {
+		position: fixed;
+	}
+
+.admin-bar .gform-flyout.gform-flyout--fixed {
+			top: 32px;
+		}
+
+.gform-flyout.gform-flyout--absolute {
+		position: absolute;
+	}
+
+.gform-flyout.gform-flyout--right {
+		right: 0;
+	}
+
+.gflow-grid {
+	position: relative;
+}
+
+.gflow-grid__button {
+	background: none;
+	border: 0;
+	color: #242748;
+	margin: 0;
+	padding: 0;
+	transition: all 0.15s ease;
+}
+
+.gflow-grid__button:hover,
+	.gflow-grid__button:focus,
+	.gflow-grid__button:active {
+		color: #3e7da6;
+		outline: 0;
+	}
+
+.gflow-grid__button--settings {
+	align-items: center;
+	cursor: pointer;
+	display: flex;
+	font-size: 24px;
+	height: 40px;
+	justify-content: center;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 40px;
+	z-index: 2;
+}
+
+.ag-cell-label-container > [ref="eMenu"] .ag-icon-menu {
+			font-family: "gflow-icons-common";
+		}
+
+.ag-cell-label-container > [ref="eMenu"] .ag-icon-menu::before {
+				content: "\e986";
+			}
+
+.ag-header-row > div:last-of-type .ag-icon-menu {
+			margin-right: 30px;
+		}
+
 .gflow-inbox {
 	padding: 0;
 	width: 100%;

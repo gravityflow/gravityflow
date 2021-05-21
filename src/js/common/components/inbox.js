@@ -6,6 +6,9 @@
 
 import { Grid } from 'ag-grid-community';
 
+import Flyout from './flyout';
+import * as gridTemplates from 'templates/components/grid';
+
 const el = {};
 const instances = {};
 const options = {
@@ -22,6 +25,24 @@ const initializeGrid = () => {
 	};
 
 	instances.grid = new Grid( el.container, gridOptions );
+};
+
+/**
+ * @function initializeSettings
+ * @description Inject the settings trigger and instantiate the flyout
+ */
+
+const initializeSettings = () => {
+	el.container.insertAdjacentHTML(
+		'afterbegin',
+		gridTemplates.settingToggle(
+			'inbox-settings',
+			'Toggle settings for this table'
+		)
+	);
+	instances.settingsFlyout = new Flyout( {
+		triggers: '[data-js="inbox-settings"]',
+	} );
 };
 
 const getIdsFromModel = () => {
@@ -62,6 +83,7 @@ const init = ( container ) => {
 	el.container = container;
 
 	initializeGrid();
+	initializeSettings();
 	bindEvents();
 
 	console.info( 'Gravity Flow Common: Initialized inbox component.' );

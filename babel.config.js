@@ -23,6 +23,7 @@ module.exports = {
 					common: './src/js/common',
 					Example: './src/js/apps/Example',
 					pcss: './src/css/admin',
+					templates: './src/js/templates',
 					utils: './src/js/utils',
 				},
 			},
