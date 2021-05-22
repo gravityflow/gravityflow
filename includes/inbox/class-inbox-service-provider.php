@@ -50,8 +50,8 @@ class Inbox_Service_Provider extends Service_Provider {
 				self::FETCH_ENABLED    => 1,
 				self::FETCH_INTERVAL   => 30,
 				self::ITEMS_PER_PAGE   => 20,
-				self::DEFAULT_SORT_COL => 0,
-				self::DEFAULT_SORT_COL => 'ASC',
+				self::DEFAULT_SORT_COL => 'id',
+				self::DEFAULT_SORT_DIR => 'asc',
 			);
 		} );
 
@@ -104,9 +104,11 @@ class Inbox_Service_Provider extends Service_Provider {
 				'paginationPageSize' => (int) $this->get_pref( self::ITEMS_PER_PAGE ),
 			);
 
-			$config['current_user_token']   = $this->get_user_token();
-			$config[ self::FETCH_ENABLED ]  = (bool) $this->get_pref( self::FETCH_ENABLED );
-			$config[ self::FETCH_INTERVAL ] = (int) $this->get_pref( self::FETCH_INTERVAL );
+			$config['current_user_token']     = $this->get_user_token();
+			$config[ self::FETCH_ENABLED ]    = (bool) $this->get_pref( self::FETCH_ENABLED );
+			$config[ self::FETCH_INTERVAL ]   = (int) $this->get_pref( self::FETCH_INTERVAL );
+			$config[ self::DEFAULT_SORT_COL ] = $this->get_pref( self::DEFAULT_SORT_COL );
+			$config[ self::DEFAULT_SORT_DIR ] = $this->get_pref( self::DEFAULT_SORT_DIR );
 
 			return $config;
 		}, 10, 1 );
