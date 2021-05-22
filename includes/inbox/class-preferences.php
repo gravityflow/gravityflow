@@ -4,11 +4,11 @@ namespace Gravity_Flow\Gravity_Flow\Inbox;
 
 class Preferences {
 
-	public function get_setting( $key, $id, $default ) {
-		$value = $this->get_setting_from_user( $key );
+	public function get_setting( $key, $id, $view = 'inbox', $default ) {
+		$value = $this->get_setting_from_user( $key, $id );
 
-		if ( $value === false ) {
-			$value = $this->get_setting_from_view( $key );
+		if ( $value !== false && $value !== 0 && empty( $value ) ) {
+			$value = $this->get_setting_from_view( $key, $view );
 		}
 
 		if ( $value === false ) {
