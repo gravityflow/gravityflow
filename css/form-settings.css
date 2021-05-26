@@ -250,7 +250,7 @@ div.gform-field-filter {
     max-width: auto;
 }
 
-select.gform-filter-field, select.gform-filter-operator, input.gform-filter-value {
+select.gform-filter-field, select.gform-filter-operator, input.gform-filter-value, select.gform-filter-value {
     height: auto;
     min-height: 100%;
     position: relative;
