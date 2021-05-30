@@ -11,3 +11,6 @@ modules:
         - WPLoader
         - WPWebDriver
         - Asserts
+extensions:
+    enabled:
+        - Codeception\Extension\Recorder
