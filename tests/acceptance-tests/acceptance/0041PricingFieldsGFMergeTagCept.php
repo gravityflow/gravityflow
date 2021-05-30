@@ -98,4 +98,4 @@ $I->assertSame( '$10.00', $I->executeJS( $script, [ '{:13}' ] ) );
 // Total.
 $I->seeElementInDOM( "#field_{$form_id}_14 input" );
 $I->See( 'Total', "#field_{$form_id}_14" );
-$I->assertSame( '$340.00', $I->executeJS( $script, [ '{:14}' ] ) );
+$I->assertSame( '340', $I->executeJS( $script, [ '{:14}' ] ) );
