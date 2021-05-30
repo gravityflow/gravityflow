@@ -34,3 +34,6 @@ modules:
             domain: wordpress
             plugins: ['gravityforms/gravityforms.php', 'gravityformscoupons/coupons.php', 'gravityflow/gravityflow.php']
             activatePlugins: ['gravityforms/gravityforms.php', 'gravityformscoupons/coupons.php', 'gravityflow/gravityflow.php']
+extensions:
+    enabled:
+        - Codeception\Extension\Recorder
