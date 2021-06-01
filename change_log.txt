@@ -1,0 +1,1 @@
+- Fixed an issue with Gravity Forms 2.5 not displaying the green triangle next to the Editable fields on User Input Workflow Step.
