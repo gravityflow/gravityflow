@@ -12,11 +12,10 @@ import * as gridTemplates from 'templates/components/grid';
 const el = {};
 const instances = {};
 const options = {
-	animateRows: true,
-	pagination: true,
-	paginationPageSize: 10,
+	animateRows: false,
 };
 const data = window?.gflow_config?.grid_options || {};
+const config = window?.gflow_config || {};
 const gridOptions = Object.assign( {}, data, options );
 
 const initializeGrid = () => {
@@ -25,6 +24,28 @@ const initializeGrid = () => {
 	};
 
 	instances.grid = new Grid( el.container, gridOptions );
+
+	const sortCol = config?.default_sort_col || 'none';
+	const sortDir = config?.default_sort_dir || 'asc';
+
+	if ( sortCol === 'none' ) {
+		return;
+	}
+
+	const gridCol = gridOptions.columnApi.getColumn( sortCol );
+
+	if ( ! gridCol ) {
+		return;
+	}
+
+	gridOptions.columnApi.applyColumnState( {
+		state: [
+			{
+				colId: sortCol,
+				sort: sortDir,
+			},
+		],
+	} );
 };
 
 /**

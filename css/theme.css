@@ -6764,35 +6764,35 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	z-index: 10;
 }
 
-@media (--viewport-wpadmin) {
+@media (min-width: 783px) {
 
 .gform-flyout {
 		width: calc(100vw - 306px)
 }
 	}
 
-@media (--viewport-full) {
+@media (min-width: 960px) {
 
 .gform-flyout {
 		width: calc(100vw - 530px)
 }
 	}
 
-@media (--viewport-xlarge) {
+@media (min-width: 1260px) {
 
 .gform-flyout {
 		width: 650px
 }
 	}
 
-@media (--viewport-full) {
+@media (min-width: 960px) {
 
 .folded.sticky-menu .gform-flyout {
 			width: calc(100vw - 406px)
 	}
 		}
 
-@media (--viewport-xlarge) {
+@media (min-width: 1260px) {
 
 .folded.sticky-menu .gform-flyout {
 			width: auto
@@ -6807,7 +6807,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 			top: 46px;
 		}
 
-@media (--viewport-wpadmin) {
+@media (min-width: 783px) {
 
 .admin-bar .gform-flyout.gform-flyout--fixed {
 				top: 32px
@@ -6826,21 +6826,21 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 			right: calc(260px - 100vw);
 		}
 
-@media (--viewport-wpadmin) {
+@media (min-width: 783px) {
 
 .gform-flyout.gform-flyout--right.gform-flyout--fixed {
 				right: calc(296px - 100vw)
 		}
 			}
 
-@media (--viewport-full) {
+@media (min-width: 960px) {
 
 .gform-flyout.gform-flyout--right.gform-flyout--fixed {
 				right: calc(520px - 100vw)
 		}
 			}
 
-@media (--viewport-xlarge) {
+@media (min-width: 1260px) {
 
 .gform-flyout.gform-flyout--right.gform-flyout--fixed {
 				right: -660px

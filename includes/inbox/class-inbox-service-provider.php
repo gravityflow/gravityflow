@@ -20,11 +20,21 @@ class Inbox_Service_Provider extends Service_Provider {
 	const GET_ITEMS_ENDPOINT     = 'get_items_endpoint';
 	const REFRESH_ITEMS_ENDPOINT = 'refresh_items_endpoint';
 
-	const TASK_MODEL = 'task_model';
+	const TASK_MODEL   = 'task_model';
+	const DEFAULTS_MAP = 'defaults_map';
+	const PREF_FETCHER = 'pref_fetcher';
+
+	const FETCH_ENABLED    = 'fetch_enabled';
+	const FETCH_INTERVAL   = 'fetch_interval';
+	const ITEMS_PER_PAGE   = 'items_per_page';
+	const DEFAULT_SORT_COL = 'default_sort_col';
+	const DEFAULT_SORT_DIR = 'default_sort_dir';
 
 	protected $provides = array(
 		self::GET_ITEMS_ENDPOINT,
 		self::TASK_MODEL,
+		self::DEFAULTS_MAP,
+		self::PREF_FETCHER,
 	);
 
 	protected $endpoints = array(
@@ -34,6 +44,20 @@ class Inbox_Service_Provider extends Service_Provider {
 
 	public function register() {
 		$container = $this->getContainer();
+
+		$container->add( self::DEFAULTS_MAP, function () {
+			return array(
+				self::FETCH_ENABLED    => 1,
+				self::FETCH_INTERVAL   => 30,
+				self::ITEMS_PER_PAGE   => 20,
+				self::DEFAULT_SORT_COL => 'id',
+				self::DEFAULT_SORT_DIR => 'asc',
+			);
+		} );
+
+		$container->add( self::PREF_FETCHER, function () {
+			return new Preferences();
+		} );
 
 		$container->add( self::TASK_MODEL, function () use ( $container ) {
 			return new Task( $container->get( Util_Service_Provider::GFLOW_API ), $container->get( Util_Service_Provider::GF_API ) );
@@ -74,15 +98,43 @@ class Inbox_Service_Provider extends Service_Provider {
 			$tasks = $container->get( self::TASK_MODEL );
 
 			$config['grid_options'] = array(
-				'columnDefs' => $tasks->get_table_header_defs(),
-				'rowData'    => $tasks->get_inbox_tasks( array() ),
+				'columnDefs'         => $tasks->get_table_header_defs(),
+				'rowData'            => $tasks->get_inbox_tasks( array() ),
+				'pagination'         => true,
+				'paginationPageSize' => (int) $this->get_pref( self::ITEMS_PER_PAGE ),
 			);
 
-
-			$config['current_user_token'] = $this->get_user_token();
+			$config['current_user_token']     = $this->get_user_token();
+			$config[ self::FETCH_ENABLED ]    = (bool) $this->get_pref( self::FETCH_ENABLED );
+			$config[ self::FETCH_INTERVAL ]   = (int) $this->get_pref( self::FETCH_INTERVAL );
+			$config[ self::DEFAULT_SORT_COL ] = $this->get_pref( self::DEFAULT_SORT_COL );
+			$config[ self::DEFAULT_SORT_DIR ] = $this->get_pref( self::DEFAULT_SORT_DIR );
 
 			return $config;
 		}, 10, 1 );
+	}
+
+	protected function get_pref( $pref_name ) {
+		$container = $this->getContainer();
+		$user_id   = get_current_user_id();
+		$view      = 'inbox';
+
+		/**
+		 * @var array $defaults_map
+		 */
+		$defaults_map = $container->get( self::DEFAULTS_MAP );
+
+		/**
+		 * @var Preferences $prefs
+		 */
+		$prefs = $container->get( self::PREF_FETCHER );
+
+		return $prefs->get_setting(
+			$pref_name,
+			$user_id,
+			$view,
+			$defaults_map[ $pref_name ]
+		);
 	}
 
 	protected function get_user_token() {

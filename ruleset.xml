@@ -5,9 +5,13 @@
     <exclude-pattern>*/tests/*</exclude-pattern>
 
     <description>Gravity Flow rules for PHP CodeSniffer</description>
-    <rule ref="WordPress">
+
+    <rule ref="rgcodestandards" >
+        <exclude name="PEAR.Functions.FunctionCallSignature" />
+        <exclude name="PEAR.Functions.FunctionCallSignature" />
         <exclude name="WordPress.PHP.YodaConditions" />
     </rule>
+
 
     <config name="minimum_supported_wp_version" value="4.8"/>
 
