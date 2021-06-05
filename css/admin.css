@@ -6736,6 +6736,89 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 				font-size: 2rem;
 			}
 
+/*
+* Toggles in settings and field editor.
+*
+* Used in admin.css.
+*/
+
+.gform-field__toggle {
+	transition-duration: 0.2s;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gform-field__toggle input[type="checkbox"]:focus + .gform-field__toggle-container {
+				border-color: #3e7da6;
+			}
+
+.gform-field__toggle input[type="checkbox"]:disabled {
+			display: none;
+		}
+
+.gform-field__toggle input[type="checkbox"]:disabled + .gform-field__toggle-container {
+				cursor: not-allowed;
+				opacity: 0.4;
+				pointer-events: none;
+			}
+
+.gform-field__toggle input[type="checkbox"]:checked + .gform-field__toggle-container {
+				background: #3e7da6;
+			}
+
+.gform-field__toggle input[type="checkbox"]:checked + .gform-field__toggle-container .gform-field__toggle-switch {
+					background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yLjY2NjcgNC4zOTA1TDYuODYxOS4xOTUzYS42NjY3LjY2NjcgMCAwMS45NDI4Ljk0MjhsLTUuMTM4IDUuMTM4TC4xOTUzIDMuODA0N2EuNjY2Ny42NjY3IDAgMDEuOTQyOC0uOTQyOGwxLjUyODYgMS41Mjg2eiIgZmlsbD0iIzNFN0RBNiIvPjwvc3ZnPg==);
+					background-size: 0.5rem;
+					left: 1.5rem;
+				}
+
+.gform-field__toggle input[type="checkbox"]:checked:focus + .gform-field__toggle-container {
+					border: 2px solid #bed8ed;
+				}
+
+.gform-field__toggle input[type="checkbox"]:not(:disabled) {
+			opacity: 0 !important;
+			position: absolute;
+			z-index: 3;
+		}
+
+.gform-field__toggle .gform-field__toggle-switch {
+		background: #fff center no-repeat url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjQ3NDkgMi41MjUxYS41ODMzLjU4MzMgMCAwMDAgLjgyNUw0LjEyNDggNWwtMS42NSAxLjY1YS41ODMzLjU4MzMgMCAxMC44MjUuODI0OWwxLjY1LTEuNjUgMS42NDk5IDEuNjVhLjU4MzMuNTgzMyAwIDEwLjgyNS0uODI1TDUuNzc0NiA1bDEuNjUtMS42NWEuNTgzMy41ODMzIDAgMTAtLjgyNS0uODI0OWwtMS42NSAxLjY1LTEuNjQ5OS0xLjY1YS41ODMzLjU4MzMgMCAwMC0uODI1IDB6IiBmaWxsPSIjOTA5MkIyIi8+PC9zdmc+);
+		background-size: 0.625rem;
+		border-radius: 50%;
+		box-shadow: 0 1px 4px rgba(24, 24, 72, 0.123698);
+		display: block;
+		height: 1.125rem;
+		left: 0;
+		position: relative;
+		transition: all 0.25s ease;
+		transition-duration: 0.2s;
+		transition-property: background, left;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		width: 1.125rem;
+	}
+
+html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-field__toggle-container .gform-field__toggle-switch {
+					left: -1.5rem;
+				}
+
+.gform-field__toggle-container {
+	background: #9092b2;
+	border: 2px solid transparent;
+	border-radius: 15px;
+	box-shadow: inset 0 1px 2px rgba(90, 97, 105, 0.15);
+	cursor: pointer;
+	display: inline-block;
+	height: 1.125rem;
+	margin-right: 0.5rem;
+	padding: 0.1275rem;
+	position: relative;
+	transition: all 0.25s ease;
+	transition-duration: 0.2s;
+	transition-property: background-color, border-color, color, fill, stroke;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.1, 1);
+	width: 2.625rem;
+}
+
 .gform-flyout {
 	background: #fff;
 	bottom: 0;
@@ -6885,6 +6968,55 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 			font-size: 1.375rem;
 		}
 
+.gform-flyout__head {
+	padding: 0 1.5625rem 1.25rem;
+	position: relative;
+}
+
+.gform-flyout__head::after {
+		background: #ecedf8;
+		bottom: 0;
+		content: "";
+		height: 0.0625rem;
+		left: 0;
+		position: absolute;
+		width: 100%;
+	}
+
+.gform-flyout__title {
+	font-size: 0.8125rem;
+	font-weight: 500;
+	line-height: 18px;
+	margin-bottom: 12px;
+}
+
+.gform-flyout__desc {
+	font-size: 0.8125rem;
+	padding-right: 1.125rem;
+}
+
+.gform-flyout__body {
+	font-size: 0.8125rem;
+	overflow-y: auto;
+	padding: 1.25rem 1.5625rem;
+}
+
+.gform-flyout__setting-label {
+	display: block;
+	font-size: 0.8125rem;
+	font-weight: 500;
+	margin-bottom: 0.75rem;
+}
+
+.gform-flyout__setting-desc {
+	display: block;
+	margin: 0.3125rem 0 0.75rem;
+}
+
+.gform-flyout__setting {
+	margin-bottom: 1.5rem;
+}
+
 .gflow-grid {
 	position: relative;
 }
@@ -6935,5 +7067,9 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	padding: 0;
 	width: 100%;
 }
+
+.gform-flyout--inbox-settings .gform-flyout__setting--poll-freq {
+		width: 6.25rem;
+	}
 
 /*# sourceMappingURL=admin.css.map */

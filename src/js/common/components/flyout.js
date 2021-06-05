@@ -14,6 +14,7 @@ export default class Flyout {
 				animationDelay: 215, // total runtime of close animation. must be synced with css
 				closeButtonClasses: 'gform-flyout__close', // classes for the close button
 				content: '', // the html content
+				description: '', // the optional description for the flyout
 				direction: 'right', // direction to fly in from, left or right
 				id: uniqueId( 'flyout' ), // id for the flyout
 				insertPosition: 'beforeend', // insert position relative to target
@@ -23,6 +24,7 @@ export default class Flyout {
 				position: 'fixed', // fixed or absolute positioning
 				renderOnInit: true, // render on initialization?
 				target: 'body', // the selector to append the flyout to
+				title: '', // the optional title for the flyout
 				triggers: '[data-js="gform-trigger-flyout"]', // the selector[s] of the trigger that shows it
 				wrapperClasses: 'gform-flyout', // additional classes for the wrapper
 			},
@@ -83,7 +85,12 @@ export default class Flyout {
 	};
 
 	handleKeyEvents = ( e ) =>
-		focusLoop( e, this.triggerElement, this.flyoutElement );
+		focusLoop(
+			e,
+			this.triggerElement,
+			this.flyoutElement,
+			this.closeFlyout
+		);
 
 	handleTriggerClick = ( e ) => {
 		this.triggerElement = e.target;
@@ -113,8 +120,10 @@ export default class Flyout {
 				this.id,
 				this.closeButtonClasses,
 				this.content,
+				this.description,
 				this.direction,
 				this.position,
+				this.title,
 				this.wrapperClasses
 			)
 		);

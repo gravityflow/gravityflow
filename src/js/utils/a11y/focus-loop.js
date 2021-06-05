@@ -7,9 +7,15 @@ import * as tools from 'utils/tools';
  * @param {KeyboardEvent} e
  * @param {HTMLElement} trigger
  * @param {HTMLElement} container
+ * @param {Function} onEscape
  */
 
-export default function focusLoop( e = {}, trigger = null, container = null ) {
+export default function focusLoop(
+	e = {},
+	trigger = null,
+	container = null,
+	onEscape = () => {}
+) {
 	if ( ! container || ! trigger ) {
 		console.error(
 			'You need to pass a container and trigger node to focusLoop.'
@@ -19,6 +25,7 @@ export default function focusLoop( e = {}, trigger = null, container = null ) {
 	// esc key, refocus the settings trigger in the editor preview for the active field
 	if ( e.keyCode === 27 ) {
 		trigger.focus();
+		onEscape();
 		return;
 	}
 	// not tab key, exit

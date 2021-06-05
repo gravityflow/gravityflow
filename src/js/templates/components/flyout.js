@@ -7,8 +7,10 @@ export const flyoutContainer = (
 	id = '',
 	closeButtonClasses = '',
 	content = '',
+	description = '',
 	direction = '',
 	position = '',
+	title = '',
 	wrapperClasses = ''
 ) =>
 	`
@@ -20,6 +22,10 @@ export const flyoutContainer = (
 		>
 			<i class="gform-button__icon gflow-icon gflow-icon--delete"></i>
 		</button>
-		${ content }
+		${ title || description ? '<header class="gform-flyout__head">' : '' }
+		${ title ? `<div class="gform-flyout__title">${ title }</div>` : '' }
+		${ description ? `<div class="gform-flyout__desc">${ description }</div>` : '' }
+		${ title || description ? '</header>' : '' }
+		<div class="gform-flyout__body">${ content }</div>
 	</article>
 	`; // todo: needs i18n

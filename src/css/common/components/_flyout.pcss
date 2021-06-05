@@ -122,3 +122,52 @@
 		}
 	}
 }
+
+.gform-flyout__head {
+	padding: 0 1.5625rem 1.25rem;
+	position: relative;
+
+	&::after {
+		background: var(--c-white-lilac);
+		bottom: 0;
+		content: "";
+		height: 0.0625rem;
+		left: 0;
+		position: absolute;
+		width: 100%;
+	}
+}
+
+.gform-flyout__title {
+	font-size: var(--t-font-size-base);
+	font-weight: var(--t-font-weight-medium);
+	line-height: 18px;
+	margin-bottom: 12px;
+}
+
+.gform-flyout__desc {
+	font-size: var(--t-font-size-base);
+	padding-right: 1.125rem;
+}
+
+.gform-flyout__body {
+	font-size: var(--t-font-size-base);
+	overflow-y: auto;
+	padding: 1.25rem 1.5625rem;
+}
+
+.gform-flyout__setting-label {
+	display: block;
+	font-size: var(--t-font-size-base);
+	font-weight: var(--t-font-weight-medium);
+	margin-bottom: 0.75rem;
+}
+
+.gform-flyout__setting-desc {
+	display: block;
+	margin: 0.3125rem 0 0.75rem;
+}
+
+.gform-flyout__setting {
+	margin-bottom: 1.5rem;
+}

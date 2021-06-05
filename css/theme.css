@@ -6743,6 +6743,89 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 				font-size: 32px;
 			}
 
+/*
+* Toggles in settings and field editor.
+*
+* Used in admin.css.
+*/
+
+.gform-field__toggle {
+	transition-duration: 0.2s;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gform-field__toggle input[type="checkbox"]:focus + .gform-field__toggle-container {
+				border-color: var(--c-gravity-blue);
+			}
+
+.gform-field__toggle input[type="checkbox"]:disabled {
+			display: none;
+		}
+
+.gform-field__toggle input[type="checkbox"]:disabled + .gform-field__toggle-container {
+				cursor: not-allowed;
+				opacity: 0.4;
+				pointer-events: none;
+			}
+
+.gform-field__toggle input[type="checkbox"]:checked + .gform-field__toggle-container {
+				background: var(--c-gravity-blue);
+			}
+
+.gform-field__toggle input[type="checkbox"]:checked + .gform-field__toggle-container .gform-field__toggle-switch {
+					background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yLjY2NjcgNC4zOTA1TDYuODYxOS4xOTUzYS42NjY3LjY2NjcgMCAwMS45NDI4Ljk0MjhsLTUuMTM4IDUuMTM4TC4xOTUzIDMuODA0N2EuNjY2Ny42NjY3IDAgMDEuOTQyOC0uOTQyOGwxLjUyODYgMS41Mjg2eiIgZmlsbD0iIzNFN0RBNiIvPjwvc3ZnPg==);
+					background-size: 8px;
+					left: 24px;
+				}
+
+.gform-field__toggle input[type="checkbox"]:checked:focus + .gform-field__toggle-container {
+					border: 2px solid var(--c-spindle);
+				}
+
+.gform-field__toggle input[type="checkbox"]:not(:disabled) {
+			opacity: 0 !important;
+			position: absolute;
+			z-index: 3;
+		}
+
+.gform-field__toggle .gform-field__toggle-switch {
+		background: #fff center no-repeat url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjQ3NDkgMi41MjUxYS41ODMzLjU4MzMgMCAwMDAgLjgyNUw0LjEyNDggNWwtMS42NSAxLjY1YS41ODMzLjU4MzMgMCAxMC44MjUuODI0OWwxLjY1LTEuNjUgMS42NDk5IDEuNjVhLjU4MzMuNTgzMyAwIDEwLjgyNS0uODI1TDUuNzc0NiA1bDEuNjUtMS42NWEuNTgzMy41ODMzIDAgMTAtLjgyNS0uODI0OWwtMS42NSAxLjY1LTEuNjQ5OS0xLjY1YS41ODMzLjU4MzMgMCAwMC0uODI1IDB6IiBmaWxsPSIjOTA5MkIyIi8+PC9zdmc+);
+		background-size: 10px;
+		border-radius: 50%;
+		box-shadow: 0 1px 4px rgba(24, 24, 72, 0.123698);
+		display: block;
+		height: 18px;
+		left: 0;
+		position: relative;
+		transition: all 0.25s ease;
+		transition-duration: 0.2s;
+		transition-property: background, left;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		width: 18px;
+	}
+
+html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-field__toggle-container .gform-field__toggle-switch {
+					left: -24px;
+				}
+
+.gform-field__toggle-container {
+	background: var(--c-border);
+	border: 2px solid transparent;
+	border-radius: 15px;
+	box-shadow: inset 0 1px 2px rgba(90, 97, 105, 0.15);
+	cursor: pointer;
+	display: inline-block;
+	height: 18px;
+	margin-right: 8px;
+	padding: 2.04px;
+	position: relative;
+	transition: all 0.25s ease;
+	transition-duration: 0.2s;
+	transition-property: background-color, border-color, color, fill, stroke;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.1, 1);
+	width: 42px;
+}
+
 .gform-flyout {
 	background: #fff;
 	bottom: 0;
@@ -6764,35 +6847,35 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	z-index: 10;
 }
 
-@media (min-width: 783px) {
+@media (--viewport-wpadmin) {
 
 .gform-flyout {
 		width: calc(100vw - 306px)
 }
 	}
 
-@media (min-width: 960px) {
+@media (--viewport-full) {
 
 .gform-flyout {
 		width: calc(100vw - 530px)
 }
 	}
 
-@media (min-width: 1260px) {
+@media (--viewport-xlarge) {
 
 .gform-flyout {
 		width: 650px
 }
 	}
 
-@media (min-width: 960px) {
+@media (--viewport-full) {
 
 .folded.sticky-menu .gform-flyout {
 			width: calc(100vw - 406px)
 	}
 		}
 
-@media (min-width: 1260px) {
+@media (--viewport-xlarge) {
 
 .folded.sticky-menu .gform-flyout {
 			width: auto
@@ -6807,7 +6890,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 			top: 46px;
 		}
 
-@media (min-width: 783px) {
+@media (--viewport-wpadmin) {
 
 .admin-bar .gform-flyout.gform-flyout--fixed {
 				top: 32px
@@ -6826,21 +6909,21 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 			right: calc(260px - 100vw);
 		}
 
-@media (min-width: 783px) {
+@media (--viewport-wpadmin) {
 
 .gform-flyout.gform-flyout--right.gform-flyout--fixed {
 				right: calc(296px - 100vw)
 		}
 			}
 
-@media (min-width: 960px) {
+@media (--viewport-full) {
 
 .gform-flyout.gform-flyout--right.gform-flyout--fixed {
 				right: calc(520px - 100vw)
 		}
 			}
 
-@media (min-width: 1260px) {
+@media (--viewport-xlarge) {
 
 .gform-flyout.gform-flyout--right.gform-flyout--fixed {
 				right: -660px
@@ -6892,6 +6975,55 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 			font-size: 22px;
 		}
 
+.gform-flyout__head {
+	padding: 0 25px 20px;
+	position: relative;
+}
+
+.gform-flyout__head::after {
+		background: var(--c-white-lilac);
+		bottom: 0;
+		content: "";
+		height: 1px;
+		left: 0;
+		position: absolute;
+		width: 100%;
+	}
+
+.gform-flyout__title {
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 18px;
+	margin-bottom: 12px;
+}
+
+.gform-flyout__desc {
+	font-size: 13px;
+	padding-right: 18px;
+}
+
+.gform-flyout__body {
+	font-size: 13px;
+	overflow-y: auto;
+	padding: 20px 25px;
+}
+
+.gform-flyout__setting-label {
+	display: block;
+	font-size: 13px;
+	font-weight: 500;
+	margin-bottom: 12px;
+}
+
+.gform-flyout__setting-desc {
+	display: block;
+	margin: 5px 0 12px;
+}
+
+.gform-flyout__setting {
+	margin-bottom: 24px;
+}
+
 .gflow-grid {
 	position: relative;
 }
@@ -6942,5 +7074,9 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	padding: 0;
 	width: 100%;
 }
+
+.gform-flyout--inbox-settings .gform-flyout__setting--poll-freq {
+		width: 100px;
+	}
 
 /*# sourceMappingURL=theme.css.map */

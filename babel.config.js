@@ -24,6 +24,7 @@ module.exports = {
 					Example: './src/js/apps/Example',
 					pcss: './src/css/admin',
 					templates: './src/js/templates',
+					theme: './src/js/theme',
 					utils: './src/js/utils',
 				},
 			},
