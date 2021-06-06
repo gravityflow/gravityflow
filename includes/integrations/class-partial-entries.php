@@ -104,6 +104,7 @@ class Gravity_Flow_Partial_Entries {
 
 		add_action( 'gform_partialentries_post_entry_saved', array( $this, 'maybe_trigger_workflow' ), 10, 2 );
 		add_action( 'gform_partialentries_post_entry_updated', array( $this, 'maybe_trigger_workflow' ), 10, 2 );
+		add_action( 'gform_entry_created', array( $this, 'remove_filter_entry_pre_update' ), 5 );
 		add_action( 'gravityflow_step_complete', array( $this, 'action_step_complete' ), 10, 5 );
 	}
 
@@ -574,7 +575,7 @@ class Gravity_Flow_Partial_Entries {
 	 *
 	 * @since 2.7.4
 	 */
-	private function remove_filter_entry_pre_update() {
+	public function remove_filter_entry_pre_update() {
 		remove_filter( 'gform_entry_pre_update', array( $this, 'maybe_filter_entry_pre_update' ) );
 	}
 
