@@ -250,7 +250,7 @@ div.gform-field-filter {
     max-width: auto;
 }
 
-select.gform-filter-field, select.gform-filter-operator, input.gform-filter-value {
+select.gform-filter-field, select.gform-filter-operator, input.gform-filter-value, select.gform-filter-value {
     height: auto;
     min-height: 100%;
     position: relative;
@@ -272,14 +272,6 @@ button.gform-add, button.gform-remove {
     vertical-align: middle;
     top: .3rem;
     padding: 1px 7px;
-}
-
-button.gform-add.add_field_choice {
-    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik02IDBhMSAxIDAgMDAtMSAxdjRIMWExIDEgMCAwMDAgMmg0djRhMSAxIDAgMTAyIDBWN2g0YTEgMSAwIDEwMC0ySDdWMWExIDEgMCAwMC0xLTF6IiBmaWxsPSIjRjE1QTI5Ii8+PC9zdmc+);
-}
-
-button.gform-remove.delete_field_choice {
-    background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMCAxYTEgMSAwIDAxMS0xaDEwYTEgMSAwIDExMCAySDFhMSAxIDAgMDEtMS0xeiIgZmlsbD0iI0YxNUEyOSIvPjwvc3ZnPg==);
 }
 
 .gform-settings-panel__content select[name="_gform_setting_entry_filtersort_key"], .gform-settings-panel__content select[name="_gform_setting_entry_filtersort_direction"] {

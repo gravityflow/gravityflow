@@ -55,6 +55,14 @@ Gravity Flow will work with any license of [Gravity Forms](https://gravityflow.i
 
 == ChangeLog ==
 
+= 2.7.3 =
+- Added the Form setting to the Zapier step enabling multiple forms to use the same Zap.
+- Added the gravityflow_note_valid filter to customize note validation for Approval and User Input steps.
+- Fixed Font Awesome not loading for shortcodes which causes the quick actions for inbox to not be visible.
+- Fixed an issue where a blank note could be submitted with whitespaces, even if it is required.
+- Fixed an issue where uninstall for extensions on Gravity Forms Settings is not loading the correct page.
+
+
 = 2.7.2 =
 - Fixed deprecation warnings when saving steps on Gravity Forms 2.5.
 - Fixed an issue that causes Gravity Forms OAuth1 connected apps to fail verification.
