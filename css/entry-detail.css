@@ -337,9 +337,9 @@ table.entry-detail-view td.detail-view{
 }
 
 .gfield.gravityflow-display-field .gfield_label,
-.gfield.gravityflow-display-field legend.gfield_label,
+.gfield.gravityflow-display-field .gfield_label,
 .gfield.gravityflow-editable-field:not(.green-background):not(.gfield_error) .gfield_label,
-.gfield.gravityflow-editable-field:not(.green-background):not(.gfield_error) legend.gfield_label{
+.gfield.gravityflow-editable-field:not(.green-background):not(.gfield_error) .gfield_label{
     background-color: #EAF2FA;
     border-top: 1px solid #DFDFDF;
     border-bottom: 1px solid #FFF;
@@ -349,13 +349,13 @@ table.entry-detail-view td.detail-view{
     margin:0;
 }
 
-.gfield.gravityflow-editable-field legend.gfield_label {
+.gfield.gravityflow-editable-field .gfield_label {
     float:left;
     margin-bottom: .5em;
     width:100%;
 }
 
-.gfield.gravityflow-editable-field legend.gfield_label + div {
+.gfield.gravityflow-editable-field .gfield_label + div {
     clear:both;
 }
 
