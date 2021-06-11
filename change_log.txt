@@ -1,0 +1,1 @@
+- Added CSS classes to the Workflow Status Box.

@@ -425,6 +425,10 @@ span.gf_admin_page_formid {
     border-bottom: 1px solid #eee;
 }
 
+.gravityflow-status-box-field {
+      line-height: 2;
+}
+
 /* Step Highlight */
 table#gravityflow-inbox tbody tr{
     border-left-width: 3px;
