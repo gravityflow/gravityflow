@@ -68,6 +68,8 @@ const initializeSettings = () => {
 		content: inboxTemplates.settings(),
 		description:
 			'Control Inbox settings such as push notifications, update frequency and more.',
+		position: 'absolute',
+		target: '.gflow-inbox.gflow-grid',
 		title: 'Inbox Settings',
 		triggers: '[data-js="inbox-settings"]',
 		wrapperClasses: 'gform-flyout gform-flyout--inbox-settings',
