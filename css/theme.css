@@ -31,64 +31,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
  *
  * ----------------------------------------------------------------------------- */
 
-/* Box Shadows */
-
-/* -----------------------------------------------------------------------------
- *
- * Variables: Box Shadow
- *
- * ----------------------------------------------------------------------------- */
-
-/* Transitions */
-
-/* -----------------------------------------------------------------------------
- *
- * Variables: Transitions
- *
- * ----------------------------------------------------------------------------- */
-
-/* Typography */
-
-/* -----------------------------------------------------------------------------
- *
- * Variables: Typography
- *
- * ----------------------------------------------------------------------------- */
-
-:root {
-
-	/* Font Weights */
-
-	/* Font Sizes */
-
-	/* Line Heights */
-}
-
-/* -----------------------------------------------------------------------------
- *
- * Mixins
- *
- * This file is just a clearing-house.
- * Make partials (start with an underscore) elsewhere for actual code.
- *
- * ----------------------------------------------------------------------------- */
-
 /* Icons */
-
-/* -----------------------------------------------------------------------------
- *
- * Mixins: Icons
- *
- * ----------------------------------------------------------------------------- */
-
-/* -----------------------------------------------------------------------------
- *
- * Variables
- *
- * This file is just a clearing-house.
- * Make partials (start with an underscore) elsewhere for actual code.
- *
- * ----------------------------------------------------------------------------- */
 
 /* stylelint-disable */
 
@@ -99,6 +42,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
  * This file is generated using the `gulp icons` task. Do not edit it directly.
  *
  * ----------------------------------------------------------------------------- */
+
+/* AG Grid */
+
+/* Media Queries */
+
+/* both on theme and in admin the point at which admin bar swaps desktop/mobile */
 
 /* Box Shadow */
 
@@ -143,6 +92,73 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
  * Make partials (start with an underscore) elsewhere for actual code.
  *
  * ----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Mixins: Icons
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables
+ *
+ * This file is just a clearing-house.
+ * Make partials (start with an underscore) elsewhere for actual code.
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* Colors */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables: Color
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* Box Shadows */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables: Box Shadow
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* Transitions */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables: Transitions
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* Typography */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables: Typography
+ *
+ * ----------------------------------------------------------------------------- */
+
+:root {
+
+	/* Font Weights */
+
+	/* Font Sizes */
+
+	/* Line Heights */
+}
+
+/* -----------------------------------------------------------------------------
+ *
+ * Mixins
+ *
+ * This file is just a clearing-house.
+ * Make partials (start with an underscore) elsewhere for actual code.
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* Icons */
 
 /* -----------------------------------------------------------------------------
  *
@@ -712,17 +728,17 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-unselectable {
-		-moz-user-select: none;
 		-webkit-user-select: none;
-		-ms-user-select: none;
-		user-select: none;
+		   -moz-user-select: none;
+		    -ms-user-select: none;
+		        user-select: none;
 	}
 
 .gflow-grid .ag-selectable {
-		-moz-user-select: text;
 		-webkit-user-select: text;
-		-ms-user-select: text;
-		user-select: text;
+		   -moz-user-select: text;
+		    -ms-user-select: text;
+		        user-select: text;
 	}
 
 .gflow-grid .ag-tab {
@@ -770,6 +786,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-root-wrapper.ag-layout-normal {
 		height: 100%;
+		min-height: 500px;
 	}
 
 .gflow-grid .ag-watermark {
@@ -3037,7 +3054,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	.gflow-grid .ag-theme-alpine input[class^="ag-"][type="date"],
 	.gflow-grid .ag-theme-alpine input[class^="ag-"][type="datetime-local"],
 	.gflow-grid .ag-theme-alpine textarea[class^="ag-"] {
-		border-color: #babfc7;
+		border-color: #ecedf8;
 		border-style: solid;
 		border-width: 1px;
 		color: inherit;
@@ -3180,7 +3197,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rich-select {
-		background-color: #f8f8f8;
+		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rich-select-list {
@@ -3306,7 +3323,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-angle-select-parent-circle {
 		background-color: #fff;
-		border: solid 1px #babfc7;
+		border: solid 1px #ecedf8;
 		border-radius: 12px;
 		height: 24px;
 		width: 24px;
@@ -3324,7 +3341,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-picker-field-wrapper {
-		border: 1px solid  #babfc7;
+		border: 1px solid  #ecedf8;
 		border-radius: 5px;
 	}
 
@@ -3390,7 +3407,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-spectrum-slider {
-		background-color: #f8f8f8;
+		background-color: #fff;
 		border-radius: 13px;
 		box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
 		height: 13px;
@@ -3412,7 +3429,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine.ag-dnd-ghost {
 		background: #fff;
-		border: solid 1px #babfc7;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
 		color: #181d1f;
@@ -3442,7 +3459,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-dialog {
-		border: solid 1px #babfc7;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 	}
 
@@ -3451,8 +3468,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-panel-title-bar {
-		background-color: #f8f8f8;
-		border-bottom: solid 1px #babfc7;
+		background-color: #fff;
+		border-bottom: solid 1px #ecedf8;
 		color: #181d1f;
 		height: 48px;
 		padding: 6px 18px;
@@ -3467,8 +3484,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-tooltip {
-		background-color: #f8f8f8;
-		border: solid 1px #babfc7;
+		background-color: #fff;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		color: #181d1f;
 		padding: 6px;
@@ -3639,7 +3656,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-root-wrapper {
-		border: solid 1px #babfc7;
+		border: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-row > .ag-cell-wrapper.ag-row-group-indent-1 {
@@ -4175,15 +4192,15 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-row-odd {
-		background-color: #fcfcfc;
+		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-horizontal-left-spacer:not(.ag-scroller-corner) {
-		border-right: solid 1px #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-horizontal-right-spacer:not(.ag-scroller-corner) {
-		border-left: solid 1px #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-row-hover {
@@ -4226,8 +4243,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell-inline-editing {
-		background-color: #f8f8f8;
-		border: solid 1px #babfc7;
+		background-color: #fff;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
 		height: 42px;
@@ -4235,8 +4252,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-popup-editor {
-		background-color: #f8f8f8;
-		border: solid 1px #babfc7;
+		background-color: #fff;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
 		padding: 0;
@@ -4265,7 +4282,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-overlay-loading-center {
 		background: #fff;
-		border: solid 1px #babfc7;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
 		padding: 6px;
@@ -4320,11 +4337,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-floating-top {
-		border-bottom: solid 1px #babfc7;
+		border-bottom: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-floating-bottom {
-		border-top: solid 1px #babfc7;
+		border-top: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-cell {
@@ -4344,11 +4361,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell.ag-cell-first-right-pinned:not(.ag-cell-range-left):not(.ag-cell-range-single-cell) {
-		border-left: solid 1px #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell.ag-cell-last-left-pinned:not(.ag-cell-range-right):not(.ag-cell-range-single-cell) {
-		border-right: solid 1px #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-row-selected {
@@ -4485,7 +4502,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-menu {
 		background: #fff;
-		border: solid 1px #babfc7;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
 		padding: 0;
@@ -4501,7 +4518,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-menu-separator-part::after {
-		border-top: solid 1px #babfc7;
+		border-top: solid 1px #ecedf8;
 		content: "";
 		display: block;
 	}
@@ -4601,7 +4618,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-separator {
-		border-top: solid 1px #babfc7;
+		border-top: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-condition-operator {
@@ -4712,7 +4729,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-tool-panel-wrapper {
-		background-color: #f8f8f8;
+		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-side-buttons {
@@ -4766,12 +4783,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-left,
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-right {
-		border-right: solid 1px #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-left .ag-tool-panel-wrapper,
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-right .ag-tool-panel-wrapper {
-		border-left: solid 1px #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-left .ag-side-button-button,
@@ -4787,12 +4804,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-left,
 	.gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-right {
-		border-left: solid 1px #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-left .ag-tool-panel-wrapper,
 	.gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-right .ag-tool-panel-wrapper {
-		border-right: solid 1px #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-left .ag-side-button-button,
@@ -5027,8 +5044,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-toolpanel-instance-filter {
-		border-bottom: solid 1px #babfc7;
-		border-top: solid 1px #babfc7;
+		border-bottom: solid 1px #ecedf8;
+		border-top: solid 1px #ecedf8;
 		margin-top: 6px;
 	}
 
@@ -5093,8 +5110,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header {
-		background-color: #f8f8f8;
-		border-bottom: solid 1px #babfc7;
+		background-color: #fff;
+		border-bottom: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header-row {
@@ -5103,11 +5120,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-pinned-right-header {
-		border-left: solid 1px #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-pinned-left-header {
-		border-right: solid 1px #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-header-cell:not(.ag-right-aligned-header) .ag-header-label-icon {
@@ -5189,7 +5206,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-header-row:not(:first-child) .ag-header-cell,
 	.gflow-grid .ag-theme-alpine .ag-header-row:not(:first-child) .ag-header-group-cell.ag-header-group-cell-with-group {
-		border-top: solid 1px #babfc7;
+		border-top: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header-cell-resize {
@@ -5246,7 +5263,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-loading {
-		background-color: #f8f8f8;
+		background-color: #fff;
 		height: 100%;
 		padding: 12px 12px;
 		position: absolute;
@@ -5255,7 +5272,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-paging-panel {
-		border-top: 1px solid #babfc7;
+		border-top: 1px solid #ecedf8;
 		color: #181d1f;
 		height: 48px;
 	}
@@ -5296,7 +5313,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-status-bar {
-		border-top: solid 1px #babfc7;
+		border-top: solid 1px #ecedf8;
 		color: rgba(24, 29, 31, 0.5);
 		line-height: 1.5;
 		padding-left: 24px;
@@ -5344,8 +5361,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-horizontal {
-		background-color: #f8f8f8;
-		border-bottom: solid 1px #babfc7;
+		background-color: #fff;
+		border-bottom: solid 1px #ecedf8;
 		color: #181d1f;
 		height: 42px;
 	}
@@ -5359,11 +5376,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-column-drop-horizontal-half-width:not(:last-child) {
-		border-right: solid 1px #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-column-drop-horizontal-half-width:not(:last-child) {
-		border-left: solid 1px #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-horizontal-cell-separator {
@@ -5421,7 +5438,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-select-agg-func-popup {
 		background: #fff;
-		border: solid 1px #babfc7;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
 		height: 105px;
@@ -5552,15 +5569,15 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-chart-menu-panel {
-		background-color: #f8f8f8;
+		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-chart-menu-panel {
-		border-left: solid 1px #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-chart-menu-panel {
-		border-right: solid 1px #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-date-time-list-page-title {
@@ -5772,7 +5789,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]::-webkit-slider-runnable-track {
-		background-color: #babfc7;
+		background-color: #ecedf8;
 		border-radius: 3px;
 		height: 3px;
 		margin: 0;
@@ -5781,7 +5798,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]::-moz-range-track {
-		background-color: #babfc7;
+		background-color: #ecedf8;
 		border-radius: 3px;
 		height: 3px;
 		margin: 0;
@@ -5790,7 +5807,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]::-ms-track {
-		background-color: #babfc7;
+		background-color: #ecedf8;
 		border-radius: 3px;
 		color: transparent;
 		height: 3px;
@@ -5879,7 +5896,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-pinned-right-header .ag-header-row::after,
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-pinned-left-header .ag-header-row::before {
-		background-color: #babfc7;
+		background-color: #ecedf8;
 		content: "";
 		height: calc(100% - 20px);
 		position: absolute;
@@ -5940,17 +5957,17 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-menu {
-		background-color: #f8f8f8;
+		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-menu-header {
-		background-color: #f8f8f8;
+		background-color: #fff;
 		min-width: 240px;
 		padding-top: 1px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-tabs-header {
-		border-bottom: solid 1px #babfc7;
+		border-bottom: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-charts-settings-group-title-bar,
@@ -5989,7 +6006,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-charts-format-sub-level-group {
-		border-left: dashed 1px #babfc7;
+		border-left: dashed 1px #ecedf8;
 		margin-bottom: 12px;
 		padding-left: 6px;
 	}
@@ -6063,7 +6080,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-vertical-empty-message {
 		align-items: center;
-		border: dashed 1px #babfc7;
+		border: dashed 1px #ecedf8;
 		display: flex;
 		margin: 12px;
 		padding: 12px;
@@ -6132,9 +6149,9 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-toolpanel-instance-filter {
-		background-color: #f8f8f8;
+		background-color: #fff;
 		border: none;
-		border-left: dashed 1px #babfc7;
+		border-left: dashed 1px #ecedf8;
 		margin-left: 8px;
 		margin-right: 12px;
 		padding-left: 8px;
@@ -6182,7 +6199,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gform-admin .gform-button:focus {
-			box-shadow: 0 0 0 2px var(--c-focus);
+			box-shadow: 0 0 0 2px #bed8ed;
 			outline: none;
 		}
 
@@ -6201,65 +6218,65 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	 */
 
 .gform-admin .gform-button--primary {
-		background: var(--c-gravity-blue);
-		border-color: var(--c-gravity-blue);
+		background: #3e7da6;
+		border-color: #3e7da6;
 		color: #fff;
 	}
 
 .gform-admin .gform-button--primary:hover,
 		.gform-admin .gform-button--primary:active {
-			background: var(--c-primary-light);
+			background: #3985b7;
 		}
 
 .gform-admin .gform-button--primary:disabled {
-			background: var(--c-gravity-blue);
+			background: #3e7da6;
 			color: #639cc1;
 		}
 
 .gform-admin .gform-button--secondary {
 		background: #fff;
-		border-color: var(--c-gravity-blue);
-		color: var(--c-gravity-blue);
+		border-color: #3e7da6;
+		color: #3e7da6;
 	}
 
 .gform-admin .gform-button--secondary:hover,
 		.gform-admin .gform-button--secondary:active {
-			border-color: var(--c-primary-light);
-			color: var(--c-primary-light);
+			border-color: #3985b7;
+			color: #3985b7;
 		}
 
 .gform-admin .gform-button--secondary:disabled {
-			border-color: var(--c-blue-haze);
-			color: var(--c-blue-haze);
+			border-color: #c3c5db;
+			color: #c3c5db;
 		}
 
 .gform-admin .gform-button--white {
 		background: #fff;
-		border-color: var(--c-snuff);
-		color: var(--c-port);
+		border-color: #d5d7e9;
+		color: #242748;
 	}
 
 .gform-admin .gform-button--white:hover,
 		.gform-admin .gform-button--white:active {
-			background: var(--c-light-blue);
-			border-color: var(--c-snuff);
-			color: var(--c-port);
+			background: #f6f9fc;
+			border-color: #d5d7e9;
+			color: #242748;
 		}
 
 .gform-admin .gform-button--white:focus {
 			background: #fff;
-			border-color: var(--c-blue-haze);
-			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 2px var(--c-white-lilac);
-			color: var(--c-port);
+			border-color: #c3c5db;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 2px #ecedf8;
+			color: #242748;
 		}
 
 .gform-admin .gform-button--white:disabled {
-			border-color: var(--c-blue-haze);
-			color: var(--c-blue-haze);
+			border-color: #c3c5db;
+			color: #c3c5db;
 		}
 
 .gform-admin .gform-button--white .gform-button__icon {
-			color: var(--c-comet);
+			color: #5b5e80;
 		}
 
 /*
@@ -6439,7 +6456,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 }
 
 .gform-field__toggle input[type="checkbox"]:focus + .gform-field__toggle-container {
-				border-color: var(--c-gravity-blue);
+				border-color: #3e7da6;
 			}
 
 .gform-field__toggle input[type="checkbox"]:disabled {
@@ -6453,7 +6470,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 			}
 
 .gform-field__toggle input[type="checkbox"]:checked + .gform-field__toggle-container {
-				background: var(--c-gravity-blue);
+				background: #3e7da6;
 			}
 
 .gform-field__toggle input[type="checkbox"]:checked + .gform-field__toggle-container .gform-field__toggle-switch {
@@ -6463,7 +6480,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 				}
 
 .gform-field__toggle input[type="checkbox"]:checked:focus + .gform-field__toggle-container {
-					border: 2px solid var(--c-spindle);
+					border: 2px solid #bed8ed;
 				}
 
 .gform-field__toggle input[type="checkbox"]:not(:disabled) {
@@ -6493,7 +6510,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 				}
 
 .gform-field__toggle-container {
-	background: var(--c-border);
+	background: #9092b2;
 	border: 2px solid transparent;
 	border-radius: 15px;
 	box-shadow: inset 0 1px 2px rgba(90, 97, 105, 0.15);
@@ -6634,7 +6651,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 	}
 
 .gform-flyout .gform-flyout__close.gform-button--size-xs {
-		border: 1px solid var(--c-snuff);
+		border: 1px solid #d5d7e9;
 		display: flex;
 		font-size: 20px;
 		height: 26px;
@@ -6648,7 +6665,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 
 .gform-flyout .gform-flyout__close.gform-button--size-xs:hover,
 		.gform-flyout .gform-flyout__close.gform-button--size-xs:focus {
-			border-color: var(--c-gravity-blue);
+			border-color: #3e7da6;
 		}
 
 .gform-flyout .gform-flyout__close.gform-button--size-xs .gform-button__icon {
@@ -6661,7 +6678,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 }
 
 .gform-flyout__head::after {
-		background: var(--c-white-lilac);
+		background: #ecedf8;
 		bottom: 0;
 		content: "";
 		height: 1px;
@@ -6708,10 +6725,22 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 	position: relative;
 }
 
+.gflow-grid .ag-cell-label-container > [ref="eMenu"] .ag-icon-menu {
+				font-family: "gflow-icons-common";
+			}
+
+.gflow-grid .ag-cell-label-container > [ref="eMenu"] .ag-icon-menu::before {
+					content: "\e986";
+				}
+
+.gflow-grid .ag-header-row > div:last-of-type .ag-icon-menu {
+				margin-right: 30px;
+			}
+
 .gflow-grid__button {
 	background: none;
 	border: 0;
-	color: var(--c-port);
+	color: #242748;
 	margin: 0;
 	padding: 0;
 	transition: all 0.15s ease;
@@ -6720,7 +6749,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 .gflow-grid__button:hover,
 	.gflow-grid__button:focus,
 	.gflow-grid__button:active {
-		color: var(--c-gravity-blue);
+		color: #3e7da6;
 		outline: 0;
 	}
 
@@ -6738,17 +6767,18 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 	z-index: 2;
 }
 
-.ag-cell-label-container > [ref="eMenu"] .ag-icon-menu {
-			font-family: "gflow-icons-common";
-		}
-
-.ag-cell-label-container > [ref="eMenu"] .ag-icon-menu::before {
-				content: "\e986";
-			}
-
-.ag-header-row > div:last-of-type .ag-icon-menu {
-			margin-right: 30px;
-		}
+/* -----------------------------------------------------------------------------
+ *
+ * Grids
+ *
+ * This directory contains custom css specific to each of the grids
+ * (inbox, status etc).
+ * Shared css goes in the _grid.pcss file found in common/components
+ *
+ * This file is just a clearing-house.
+ * Make partials (start with an underscore) elsewhere for actual code.
+ *
+ * ----------------------------------------------------------------------------- */
 
 .gflow-inbox {
 	padding: 0;

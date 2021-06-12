@@ -8,9 +8,9 @@ import { Grid } from 'ag-grid-community';
 import delegate from 'delegate';
 import gflowConfig from 'gflow-config';
 
-import Flyout from './flyout';
+import Flyout from 'common/components/flyout';
 import * as gridTemplates from 'templates/components/grid';
-import * as inboxTemplates from 'templates/components/inbox';
+import * as inboxTemplates from 'templates/grids/inbox';
 
 const el = {};
 const instances = {};
@@ -66,8 +66,6 @@ const initializeSettings = () => {
 	);
 	instances.settingsFlyout = new Flyout( {
 		content: inboxTemplates.settings(),
-		description:
-			'Control Inbox settings such as push notifications, update frequency and more.',
 		position: 'absolute',
 		target: '.gflow-inbox.gflow-grid',
 		title: 'Inbox Settings',
@@ -91,6 +89,8 @@ const refreshGrid = async () => {
 		'gflow_access_token',
 		window?.gflow_config?.current_user_token || null
 	);
+
+	console.log( formData );
 
 	const response = await window.fetch( '/wp-json/gf/v2/refresh_inbox_items', {
 		method: 'post',

@@ -45,6 +45,7 @@ export default class Flyout {
 	}
 
 	showFlyout() {
+		this.onOpen();
 		this.flyoutElement.classList.add( 'anim-in-ready' );
 		window.setTimeout( () => {
 			this.flyoutElement.classList.add( 'anim-in-active' );
@@ -70,6 +71,7 @@ export default class Flyout {
 		}, this.animationDelay );
 
 		this.state.open = false;
+		this.onClose();
 	};
 
 	maybeCloseFlyout = ( e ) => {
