@@ -1,1 +1,2 @@
 - Fixed an issue with the entry filter setting where the settings are not saved for the Update Fields step.
+- Fixed an issue where the values of administrative fields are lost when partial entries are updated by the Partial Entries Add-On. Requires Partial Entries Add-On v1.6.1 or greater.
