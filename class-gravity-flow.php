@@ -3710,7 +3710,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
             	    v = $(this).find('.gform-filter-value').val();
                 filters.push({field : f, operator: o, value: v });
             });
-            var input = filterSetting.find('input.gaddon-hidden'),
+            var input = filterSetting.find('input[type=hidden]'),
                 mode = filterSetting.find('select[name=mode]').val(),
                 val = {
                     mode : mode,
@@ -3721,6 +3721,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
         $('#setting-entry-filter-{$name}').on('change', 'select[name=mode]', setFilterValue);
 	    $('#setting-entry-filter-{$name}').on('change', '.gform-filter-operator', setFilterValue);
 	    $('#setting-entry-filter-{$name}').on('change blur', '.gform-filter-value', setFilterValue);
+	    $('#setting-entry-filter-{$name}').on('DOMSubtreeModified', setFilterValue);
     });
 })(jQuery);
 </script>";
