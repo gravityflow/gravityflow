@@ -256,6 +256,11 @@ select.gform-filter-field, select.gform-filter-operator, input.gform-filter-valu
     position: relative;
 }
 
+#gform-no-filters{
+    align-items: flex-start!important;
+    height:40px;
+}
+
 .gform-settings-panel__content select[name="mode"] {
     width: 10%;
 }
