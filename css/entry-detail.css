@@ -10,13 +10,13 @@
 }
 
 /* The little triangle indicator */
-.gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label {
+.gravityflow-editable-field.green-triangle:not(.gfield_error) .gfield_label {
     width:100%;
     position: relative;
 }
 
-.gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::before,
-.gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::after {
+.gravityflow-editable-field.green-triangle:not(.gfield_error) .gfield_label::before,
+.gravityflow-editable-field.green-triangle:not(.gfield_error) .gfield_label::after {
     content: '';
     position: absolute;
     top: 0;
@@ -25,31 +25,31 @@
     border-style: solid;
 }
 
-.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::before,
-.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::after {
+.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) .gfield_label::before,
+.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) .gfield_label::after {
     left: auto;
     right: 0;
 }
 
-.gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::before {
+.gravityflow-editable-field.green-triangle:not(.gfield_error) .gfield_label::before {
     border-width: 0.4em;
     border-left-color: #ccc;
     border-top-color: #ccc;
 }
 
-.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::before {
+.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) .gfield_label::before {
     border-left-color: transparent;
     border-right-color: #ccc;
 }
 
-.gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::after {
+.gravityflow-editable-field.green-triangle:not(.gfield_error) .gfield_label::after {
     border-radius: 0.1em;
     border-width: 0.4em;
     border-left-color: #0c0;
     border-top-color: #0c0;
 }
 
-.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) label.gfield_label::after {
+.rtl .gravityflow-editable-field.green-triangle:not(.gfield_error) .gfield_label::after {
     border-left-color: transparent;
     border-right-color: #0c0;
 }
@@ -336,10 +336,10 @@ table.entry-detail-view td.detail-view{
     list-style-type: disc;
 }
 
-.gfield.gravityflow-display-field label.gfield_label,
-.gfield.gravityflow-display-field legend.gfield_label,
-.gfield.gravityflow-editable-field:not(.green-background):not(.gfield_error) label.gfield_label,
-.gfield.gravityflow-editable-field:not(.green-background):not(.gfield_error) legend.gfield_label{
+.gfield.gravityflow-display-field .gfield_label,
+.gfield.gravityflow-display-field .gfield_label,
+.gfield.gravityflow-editable-field:not(.green-background):not(.gfield_error) .gfield_label,
+.gfield.gravityflow-editable-field:not(.green-background):not(.gfield_error) .gfield_label{
     background-color: #EAF2FA;
     border-top: 1px solid #DFDFDF;
     border-bottom: 1px solid #FFF;
@@ -349,17 +349,17 @@ table.entry-detail-view td.detail-view{
     margin:0;
 }
 
-.gfield.gravityflow-editable-field legend.gfield_label {
+.gfield.gravityflow-editable-field .gfield_label {
     float:left;
     margin-bottom: .5em;
     width:100%;
 }
 
-.gfield.gravityflow-editable-field legend.gfield_label + div {
+.gfield.gravityflow-editable-field .gfield_label + div {
     clear:both;
 }
 
-.gravityflow-editable-field.gfield.green-background label.gfield_label{
+.gravityflow-editable-field.gfield.green-background .gfield_label{
     border: 0;
     margin: 0;
     padding: 0;
