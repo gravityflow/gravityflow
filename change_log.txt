@@ -1,3 +1,4 @@
 - Fixed an issue with the entry filter setting where the settings are not saved for the Update Fields step.
 - Fixed an issue where the values of administrative fields are lost when partial entries are updated by the Partial Entries Add-On. Requires Partial Entries Add-On v1.6.1 or greater.
 - Fixed an issue with Gravity Forms 2.5 not displaying the green triangle next to the Editable fields on User Input Workflow Step.
+- Added CSS classes to the Workflow Status Box.
