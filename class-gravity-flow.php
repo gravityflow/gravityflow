@@ -4204,7 +4204,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				$entry_id_link = '<a href="' . admin_url( 'admin.php?page=gf_entries&view=entry&id=' . absint( $form['id'] ) . '&lid=' . absint( $entry['id'] ) ) . '">' . $entry_id . '</a>';
 			}
 
-			printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-entry-id">%s: %s</div>', esc_html__( 'Entry ID', 'gravityflow' ), $entry_id_link );
+			printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-entry-id"><span class="gravityflow-status-box-field-label">%s: </span><span class="gravityflow-status-box-field-value">%s</span></div>', esc_html__( 'Entry ID', 'gravityflow' ), $entry_id_link );
 
 			/**
 			 * Allows the format for dates within the entry detail workflow info box to be modified.
@@ -4213,38 +4213,38 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			 */
 			$date_format = apply_filters( 'gravityflow_date_format_entry_detail', '' );
 			$date_created = Gravity_Flow_Common::format_date( $entry['date_created'], $date_format, false, true );
-			printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-submitted-time">%s: %s</div>', esc_html__( 'Submitted', 'gravityflow' ), esc_html( $date_created ) );
+			printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-submitted-time"><span class="gravityflow-status-box-field-label">%s: </span><span class="gravityflow-status-box-field-value">%s</span></div>', esc_html__( 'Submitted', 'gravityflow' ), esc_html( $date_created ) );
 
 			if ( ! empty( $entry['workflow_timestamp'] ) ) {
 				$last_updated = Gravity_Flow_Common::format_date( $entry['workflow_timestamp'], $date_format, false, true );
 				if ( $date_created != $last_updated ) {
-					esc_html_e( '<div class="gravityflow-status-box-field gravityflow-status-box-field-last-updated">Last updated</div>', 'gravityflow' ); ?>: <?php echo esc_html( $last_updated );
+					printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-last-updated"><span class="gravityflow-status-box-field-label">%s: </span><span class="gravityflow-status-box-field-value">%s</span></div>', esc_html__( 'Last updated', 'gravityflow' ), esc_html( $last_updated ) );
 				}
 			}
 
 			if ( ! empty( $entry['created_by'] ) && $usermeta = get_userdata( $entry['created_by'] ) ) {
-				printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-submitted">%s: %s</div>', esc_html__( 'Submitted by', 'gravityflow' ), esc_html( $usermeta->display_name ) );
+				printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-submitted"><span class="gravityflow-status-box-field-label">%s: </span><span class="gravityflow-status-box-field-value">%s</span></div>', esc_html__( 'Submitted by', 'gravityflow' ), esc_html( $usermeta->display_name ) );
 			}
 
 			$workflow_status = gform_get_meta( $entry['id'], 'workflow_final_status' );
 
 			if ( ! empty( $workflow_status ) ) {
 				$workflow_status_label = $this->translate_status_label( $workflow_status );
-				printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-status">%s: %s</div>', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
+				printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-status"><span class="gravityflow-status-box-field-label">%s: </span><span class="gravityflow-status-box-field-value">%s</span></div>', esc_html__( 'Status', 'gravityflow' ), $workflow_status_label );
 			}
 
 			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
 			     && $current_step->supports_due_date() && $current_step->due_date
 			) {
 				$gflow_due_date_date = Gravity_Flow_Common::format_date( $current_step->get_due_date_timestamp(), $date_format, false, false );
-				printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-due-date">%s: %s</div>', esc_html__( 'Due Date', 'gravityflow' ), $gflow_due_date_date );
+				printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-due-date"><span class="gravityflow-status-box-field-label">%s: </span><span class="gravityflow-status-box-field-value">%s</span></div>', esc_html__( 'Due Date', 'gravityflow' ), $gflow_due_date_date );
 			}
 
 			if ( false !== $current_step && $current_step instanceof Gravity_Flow_Step
 			     && $current_step->supports_expiration() && $current_step->expiration
 			) {
 				$glfow_date = Gravity_Flow_Common::format_date( $current_step->get_expiration_timestamp(), $date_format, false, true );
-				printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-expires">%s: %s</div>', esc_html__( 'Expires', 'gravityflow' ), $glfow_date );
+				printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-expires"><span class="gravityflow-status-box-field-label">%s: </span><span class="gravityflow-status-box-field-value">%s</span></div>', esc_html__( 'Expires', 'gravityflow' ), $glfow_date );
 			}
 
 			/**
