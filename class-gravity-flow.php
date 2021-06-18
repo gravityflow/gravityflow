@@ -9590,5 +9590,77 @@ AND m.meta_value='queued'";
 			}
 		}
 
+		/**
+		 * Renders the app settings uninstall tab.
+		 */
+		public function app_settings_uninstall_tab() {
+
+			if ( $this->maybe_uninstall() ) {
+				GFAddOn::app_settings_uninstall_tab();
+			} else {
+				if ( $this->current_user_can_uninstall() ) {
+					?>
+
+					<div class="gform-settings-panel">
+						<header class="gform-settings-panel__header">
+							<h4 class="gform-settings-panel__title"><?php esc_html_e( 'Uninstall Gravity Flow', 'gravityforms' ); ?></h4>
+						</header>
+						<div class="gform-settings-panel__content">
+							<p class="alert error">
+							<?php echo $this->uninstall_warning_message() ?>
+							</p>
+							<form action="" method="post">
+								<?php
+									if ( GFCommon::current_user_can_uninstall() ) {
+
+										wp_nonce_field( 'gform_uninstall', 'gform_uninstall_nonce' );
+
+										$uninstall_button = '<input type="submit" name="uninstall" value="' . sprintf( esc_attr__( 'Uninstall %s', 'gravityforms' ), $this->get_short_title() ) . '" class="button" onclick="return confirm(\'' . esc_js( $this->uninstall_confirm_message() ) . '\');" onkeypress="return confirm(\'' . esc_js( $this->uninstall_confirm_message() ) . '\');"/>';
+										echo $uninstall_button;
+
+									}
+								?>
+							</form>
+						</div>
+					</div>
+					<?php
+
+					self::uninstall_extensions();
+				}
+			}
+		}
+
+		/**
+		 * Returns an array of installed addons and handles uninstallation from the settings page.
+		 *
+		 * @since  2.5
+		 * @return array
+		 *
+		 */
+		private static function uninstall_extensions() {
+
+			$installed_extensions = GFAddOn::get_registered_addons();
+			$installed_extensions = array_filter( $installed_extensions, function( $extension ) {
+				return substr( $extension, 0, 12 ) === 'Gravity_Flow';
+			});
+
+			// Uninstall the addon and remove it from the list of installed addons on page reload.
+			if ( rgpost( 'uninstall_addon' ) ) {
+				check_admin_referer( 'uninstall', 'gf_addon_uninstall' );
+
+				foreach ( $installed_extensions as $key => $addon ) {
+					$addon = call_user_func( array( $addon, 'get_instance' ) );
+					$title  = $addon->get_short_title();
+					if ( $_POST['addon'] == $title ) {
+						unset( $installed_extensions[ $key ] );
+						$addon->uninstall_addon();
+						return GFAddOn::addons_for_uninstall( $installed_extensions );
+					}
+				}
+			}
+
+			GFAddOn::addons_for_uninstall( $installed_extensions );
+
+		}
 	}
 }
