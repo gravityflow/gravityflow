@@ -99,6 +99,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
  *
  * ----------------------------------------------------------------------------- */
 
+/*
+ * Mixins: Inputs
+ * Added to keep settings area in sync with components used elsewhere.
+ * Not to be used more unless absolutely necessary.
+ */
+
 /* -----------------------------------------------------------------------------
  *
  * Variables
@@ -2792,7 +2798,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 }
 
 .gflow-grid .ag-theme-alpine {
-		color: #181d1f;
+		color: #242748;
 		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 		font-size: 13px;
 		-webkit-font-smoothing: antialiased;
@@ -2950,9 +2956,20 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		content: "\f127";
 	}
 
-.gflow-grid .ag-theme-alpine .ag-icon-small-down::before {
-		content: "\f128";
+.gflow-grid .ag-theme-alpine .ag-icon-small-down {
+		font-family: "gflow-icons-common" !important;
+		font-style: normal;
+		font-feature-settings: normal;
+		font-variant: normal;
+		font-weight: normal;
+		line-height: 1;
+		speak: none;
+		text-transform: none;
 	}
+
+.gflow-grid .ag-theme-alpine .ag-icon-small-down::before {
+			content: "\e911";
+		}
 
 .gflow-grid .ag-theme-alpine .ag-icon-small-left::before {
 		content: "\f129";
@@ -3054,12 +3071,19 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	.gflow-grid .ag-theme-alpine input[class^="ag-"][type="date"],
 	.gflow-grid .ag-theme-alpine input[class^="ag-"][type="datetime-local"],
 	.gflow-grid .ag-theme-alpine textarea[class^="ag-"] {
-		border-color: #ecedf8;
-		border-style: solid;
-		border-width: 1px;
-		color: inherit;
-		font-size: inherit;
-		line-height: inherit;
+		-webkit-appearance: none;
+		background: #fff;
+		border: 1px solid #c3c5db;
+		border-radius: 3px;
+		box-shadow: 0 0 0 transparent;
+		box-sizing: border-box;
+		color: #242748;
+		font-family: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, oxygen-sans, ubuntu, cantarell, "Helvetica Neue", sans-serif;
+		font-size: 13px;
+		line-height: 2;
+		outline: none;
+		padding: 4px 12px;
+		transition: box-shadow 0.15s ease, background-color 0.15s ease;
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"]:not([type]):disabled,
@@ -3081,8 +3105,9 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	.gflow-grid .ag-theme-alpine input[class^="ag-"][type="date"]:focus,
 	.gflow-grid .ag-theme-alpine input[class^="ag-"][type="datetime-local"]:focus,
 	.gflow-grid .ag-theme-alpine textarea[class^="ag-"]:focus {
-		border-color: rgba(33, 150, 243, 0.4);
-		box-shadow: 0 0 2px 1.6px rgba(33, 150, 243, 0.4);
+		border: 1px solid #3985b7;
+		box-shadow: 0 2px 1.08px rgba(28, 31, 63, 0.0634624), 0 0 0 2px #bed8ed;
+		color: #242748;
 		outline: none;
 	}
 
@@ -3106,7 +3131,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-drag-handle {
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-list-item,
@@ -3134,6 +3159,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-select-list {
 		background-color: #fff;
+		border: 1px solid #c3c5db;
+		border-top: 0;
+		border-bottom-left-radius: 3px;
+		border-bottom-right-radius: 3px;
+		margin-top: -2px;
 		overflow-x: hidden;
 		overflow-y: auto;
 	}
@@ -3169,7 +3199,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gflow-grid .ag-theme-alpine .ag-select .ag-picker-field-wrapper {
 		background-color: #fff;
 		cursor: default;
-		min-height: 24px;
+		min-height: 36px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-select.ag-disabled .ag-picker-field-wrapper:focus {
@@ -3177,7 +3207,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-select:not(.ag-cell-editor) {
-		height: 24px;
+		height: 36px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-select .ag-picker-field-display {
@@ -3234,7 +3264,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	.gflow-grid .ag-theme-alpine .ag-selection-checkbox,
 	.gflow-grid .ag-theme-alpine .ag-group-expanded,
 	.gflow-grid .ag-theme-alpine .ag-group-contracted {
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-row-drag,
@@ -3264,7 +3294,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-group-title-bar-icon {
-		color: #181d1f;
+		color: #242748;
 		cursor: pointer;
 		flex: none;
 	}
@@ -3330,7 +3360,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-angle-select-child-circle {
-		background-color: #181d1f;
+		background-color: #242748;
 		border-radius: 3px;
 		height: 6px;
 		left: 12px;
@@ -3341,17 +3371,19 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-picker-field-wrapper {
-		border: 1px solid  #ecedf8;
-		border-radius: 5px;
+		border: 1px solid #c3c5db;
+		border-radius: 3px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-picker-field-wrapper:focus {
-		box-shadow: 0 0 2px 1.6px rgba(33, 150, 243, 0.4);
+		border: 1px solid #3985b7;
+		box-shadow: 0 2px 1.08px rgba(28, 31, 63, 0.0634624), 0 0 0 2px #bed8ed;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-picker-field-button {
 		background-color: #fff;
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-dialog.ag-color-dialog {
@@ -3432,7 +3464,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
-		color: #181d1f;
+		color: #242748;
 		height: 48px !important;
 		line-height: 48px;
 		margin: 0;
@@ -3444,12 +3476,19 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-dnd-ghost-icon {
-		color: #181d1f;
+		color: #242748;
 		margin-right: 6px;
 	}
 
-.gflow-grid .ag-theme-alpine .ag-popup-child:not(.ag-tooltip-custom) {
-		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
+.gflow-grid .ag-theme-alpine .ag-popup .ag-popup-child:not(.ag-tooltip-custom):not(.ag-select-list) {
+		border: 0;
+		box-shadow: 0 0 1px rgba(18, 25, 97, 0.24),
+		0 24px 24px rgba(18, 25, 97, 0.03),
+		0 2px 2px rgba(18, 25, 97, 0.03),
+		0 4px 4px rgba(18, 25, 97, 0.03),
+		0 8px 8px rgba(18, 25, 97, 0.03),
+		0 16px 16px rgba(18, 25, 97, 0.03);
+		margin: 5px 0 0 -170px;
 	}
 
 .gflow-grid .ag-dragging-range-handle .ag-theme-alpine .ag-dialog,
@@ -3470,7 +3509,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gflow-grid .ag-theme-alpine .ag-panel-title-bar {
 		background-color: #fff;
 		border-bottom: solid 1px #ecedf8;
-		color: #181d1f;
+		color: #242748;
 		height: 48px;
 		padding: 6px 18px;
 	}
@@ -3487,7 +3526,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		background-color: #fff;
 		border: solid 1px #ecedf8;
 		border-radius: 3px;
-		color: #181d1f;
+		color: #242748;
 		padding: 6px;
 		transition: opacity 1s;
 	}
@@ -4165,7 +4204,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		border-bottom-style: solid;
 		border-color: #dde2eb;
 		border-width: 1px;
-		color: #181d1f;
+		color: #242748;
 		height: 42px;
 	}
 
@@ -4614,7 +4653,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-menu-header {
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-separator {
@@ -4733,7 +4772,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-side-buttons {
-		color: #181d1f;
+		color: #242748;
 		overflow: hidden;
 		padding-top: 24px;
 		position: relative;
@@ -5106,7 +5145,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-column-group-icons,
 	.gflow-grid .ag-theme-alpine .ag-column-select-header-icon {
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header {
@@ -5115,7 +5154,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header-row {
-		color: #181d1f;
+		color: #242748;
 		height: 48px;
 	}
 
@@ -5189,7 +5228,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header-icon {
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header-expand-icon {
@@ -5273,7 +5312,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-paging-panel {
 		border-top: 1px solid #ecedf8;
-		color: #181d1f;
+		color: #242748;
 		height: 48px;
 	}
 
@@ -5321,7 +5360,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-status-name-value-value {
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-status-bar-center {
@@ -5347,7 +5386,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-cell-button {
-		color: #181d1f;
+		color: #242748;
 		margin: 0 3px;
 		min-width: 24px;
 	}
@@ -5363,7 +5402,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gflow-grid .ag-theme-alpine .ag-column-drop-horizontal {
 		background-color: #fff;
 		border-bottom: solid 1px #ecedf8;
-		color: #181d1f;
+		color: #242748;
 		height: 42px;
 	}
 
@@ -5384,7 +5423,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-horizontal-cell-separator {
-		color: #181d1f;
+		color: #242748;
 		margin: 0 6px;
 	}
 
@@ -5462,7 +5501,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-chart-menu-icon {
 		border-radius: 3px;
-		color: #181d1f;
+		color: #242748;
 		cursor: pointer;
 		font-size: 24px;
 		height: 24px;
@@ -5509,7 +5548,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-chart-settings-card-item {
-		background: #181d1f;
+		background: #242748;
 		border-radius: 4px;
 		height: 8px;
 		width: 8px;
@@ -5772,7 +5811,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-radio-button-input-wrapper.ag-checked::after {
-		color: #2196f3;
+		color: #3e7da6;
 		content: "\f125";
 		left: 0;
 		pointer-events: none;
@@ -5890,7 +5929,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	.gflow-grid .ag-theme-alpine .ag-header-row,
 	.gflow-grid .ag-theme-alpine .ag-panel-title-bar-title,
 	.gflow-grid .ag-theme-alpine .ag-multi-filter-group-title-bar {
-		color: #181d1f;
+		color: #242748;
 		font-weight: 700;
 	}
 
@@ -5913,7 +5952,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-row {
-		font-size: 14px;
+		font-size: 13px;
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"]:not([type]),
@@ -6087,7 +6126,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-empty-message {
-		color: #181d1f;
+		color: #242748;
 		opacity: 0.75;
 	}
 
@@ -6530,8 +6569,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 .gform-flyout {
 	background: #fff;
 	bottom: 0;
-	box-shadow:
-		0 0 1px rgba(18, 25, 97, 0.24),
+	box-shadow: 0 0 1px rgba(18, 25, 97, 0.24),
 		0 24px 24px rgba(18, 25, 97, 0.03),
 		0 2px 2px rgba(18, 25, 97, 0.03),
 		0 4px 4px rgba(18, 25, 97, 0.03),

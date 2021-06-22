@@ -36,7 +36,7 @@ module.exports = {
 
 		gulp.watch( [
 			`${ pkg.gravityflow.paths.css_src }common/**/*.pcss`,
-		], gulp.parallel( ['postcss:adminCss', 'postcss:themeCss'] ) );
+		], gulp.parallel( 'postcss:adminCss', 'postcss:themeCss' ) );
 
 		gulp.watch( [
 			`${ pkg.gravityflow.paths.css_src }theme/**/*.pcss`,
