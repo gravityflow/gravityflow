@@ -25,8 +25,19 @@ const globalOptions = {
 const data = gflowConfig?.grids || {};
 const config = gflowConfig || {};
 
-let gridId;
-
+/**
+ * @function intComparator
+ *
+ * Integer Comparator
+ *
+ * @param {Object}  args[0] The current column object.
+ * @param {string}  args[1] The first value to compare.
+ * @param {RowNode} args[2] The node representing the first row.
+ * @param {RowNode} args[3] The node representing the second row.
+ * @param {bool}    args[4] Whether the current sort is inverted.
+ *
+ * @returns {number}
+ */
 const intComparator = ( ...args ) => {
 	const value1 = args[ 3 ].data[ args[ 0 ].sortKey ] ?? args[ 1 ];
 	const value2 = args[ 4 ].data[ args[ 0 ].sortKey ] ?? args[ 2 ];
@@ -45,7 +56,7 @@ const applyColumnComparator = ( column ) => {
 };
 
 const initializeGrid = ( grid ) => {
-	gridId = grid.dataset.gridId || INBOX_DEFAULT_ID;
+	const gridId = grid.dataset.gridId || INBOX_DEFAULT_ID;
 
 	if ( ! data[ gridId ]?.grid_options ) {
 		console.error( `Cant find inbox options for grid id: ${ gridId }` );
