@@ -66,6 +66,7 @@ const initializeGrid = ( grid ) => {
 	} );
 
 	instances.grids[ gridId ] = new Grid( grid, gridOptions );
+	initializeSettings( grid, gridId );
 
 	const sortCol = config?.default_sort_col || 'none';
 	const sortDir = config?.default_sort_dir || 'asc';
@@ -88,8 +89,6 @@ const initializeGrid = ( grid ) => {
 			},
 		],
 	} );
-
-	initializeSettings( grid, gridId );
 };
 
 /**
@@ -105,6 +104,7 @@ const initializeSettings = ( grid, gridId ) => {
 			'Toggle settings for this table' // todo: needs i18n
 		)
 	);
+
 	instances.flyouts[ gridId ] = new Flyout( {
 		content: inboxTemplates.settings(),
 		position: 'absolute',
