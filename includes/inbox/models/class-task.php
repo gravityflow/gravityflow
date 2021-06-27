@@ -137,6 +137,7 @@ class Task implements Model {
 				'sortable'    => true,
 				'compareType' => 'string',
 				'sortKey'     => $name,
+				'resizable'   => true,
 			);
 
 			$values = isset( $map[ $name ] ) ? $map[ $name ] : array();
