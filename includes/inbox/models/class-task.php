@@ -8,6 +8,10 @@ use \GFAPI;
 
 class Task implements Model {
 
+	const WIDTH_SMALL = 50;
+	const WIDTH_MED   = 100;
+	const WIDTH_WIDE  = 200;
+
 	private static $forms = array();
 
 	/**
@@ -86,17 +90,70 @@ class Task implements Model {
 		return apply_filters( 'gravityflow_columns_inbox_table', $columns, $args );
 	}
 
+	private function column_config_map() {
+		$map = array(
+			'id'            => array(
+				'compareType' => 'int',
+				'minWidth'    => self::WIDTH_SMALL,
+			),
+			'actions'       => array(
+				'minWidth' => self::WIDTH_SMALL,
+			),
+			'form_title'    => array(
+				'minWidth' => self::WIDTH_WIDE,
+			),
+			'created_by'    => array(
+				'minWidth' => self::WIDTH_MED,
+			),
+			'workflow_step' => array(
+				'minWidth' => self::WIDTH_SMALL,
+			),
+			'date_created'  => array(
+				'sortKey'     => 'date_created_timestamp',
+				'compareType' => 'date',
+			),
+			'last_updated'  => array(
+				'sortKey'     => 'last_updated_timestamp',
+				'compareType' => 'date',
+			),
+			'due_date'      => array(
+				'sortKey'     => 'due_date_timestamp',
+				'compareType' => 'date',
+			),
+		);
+
+		return apply_filters( 'gflow_column_config_map', $map );
+	}
+
+	private function apply_config_to_columns( $columns ) {
+		$map = $this->column_config_map();
+
+		array_walk( $columns, function ( &$data, $name ) use ( $map ) {
+			$defaults = array(
+				'headerName'  => $data,
+				'field'       => $name,
+				'filter'      => 'agTextColumnFilter',
+				'minWidth'    => self::WIDTH_MED,
+				'sortable'    => true,
+				'compareType' => 'string',
+				'sortKey'     => $name,
+			);
+
+			$values = isset( $map[ $name ] ) ? $map[ $name ] : array();
+
+			$data = wp_parse_args( $values, $defaults );
+		} );
+
+		return $columns;
+	}
+
 	public function get_table_header_defs( $args = array() ) {
 		$headers = array();
+		$columns = $this->get_table_columns( $args );
+		$columns = $this->apply_config_to_columns( $columns );
 
-		foreach ( $this->get_table_columns( $args ) as $name => $label ) {
-			$headers[] = array(
-				'headerName' => $label,
-				'field'      => $name,
-				'sortable'   => true,
-				'filter'     => 'agTextColumnFilter',
-				'flex'       => 1,
-			);
+		foreach ( $columns as $name => $data ) {
+			$headers[] = $data;
 		}
 
 		return $headers;
