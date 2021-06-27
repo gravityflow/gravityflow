@@ -25,19 +25,45 @@ const globalOptions = {
 const data = gflowConfig?.grids || {};
 const config = gflowConfig || {};
 
+let gridId;
+
+const intComparator = ( ...args ) => {
+	const value1 = args[ 3 ].data[ args[ 0 ].sortKey ] ?? args[ 1 ];
+	const value2 = args[ 4 ].data[ args[ 0 ].sortKey ] ?? args[ 2 ];
+
+	return Math.sign( parseInt( value1 ) - parseInt( value2 ) );
+};
+
+const applyColumnComparator = ( column ) => {
+	if ( column.compareType === 'string' ) {
+		return column;
+	}
+
+	column.comparator = intComparator.bind( null, column );
+
+	return column;
+};
+
 const initializeGrid = ( grid ) => {
-	const gridId = grid.dataset.gridId || INBOX_DEFAULT_ID;
+	gridId = grid.dataset.gridId || INBOX_DEFAULT_ID;
+
 	if ( ! data[ gridId ]?.grid_options ) {
 		console.error( `Cant find inbox options for grid id: ${ gridId }` );
 	}
+
 	const gridOptions = Object.assign(
 		{},
 		data[ gridId ].grid_options,
 		globalOptions
 	);
+
 	gridOptions.getRowNodeId = ( row ) => {
 		return parseInt( row.id );
 	};
+
+	gridOptions.columnDefs.forEach( ( column, index ) => {
+		gridOptions.columnDefs[ index ] = applyColumnComparator( column );
+	} );
 
 	instances.grids[ gridId ] = new Grid( grid, gridOptions );
 
