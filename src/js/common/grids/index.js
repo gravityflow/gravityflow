@@ -7,7 +7,7 @@
 import * as tools from 'utils/tools';
 
 const el = {
-	inbox: tools.getNodes( 'gflow-inbox' )[ 0 ],
+	inboxes: tools.getNodes( 'gflow-inbox', true ),
 };
 
 /**
@@ -16,10 +16,10 @@ const el = {
  */
 
 const init = () => {
-	if ( el.inbox ) {
+	if ( el.inboxes.length ) {
 		import( './inbox' /* webpackChunkName:"common-inbox" */ ).then(
 			( module ) => {
-				module.default( el.inbox );
+				module.default( el.inboxes );
 			}
 		);
 	}

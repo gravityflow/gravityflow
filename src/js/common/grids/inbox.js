@@ -10,24 +10,36 @@ import gflowConfig from 'gflow-config';
 import request from 'utils/request';
 
 import Flyout from 'common/components/flyout';
+import { INBOX_DEFAULT_ID } from 'common/config/constants';
 import * as gridTemplates from 'templates/components/grid';
 import * as inboxTemplates from 'templates/grids/inbox';
 
 const el = {};
-const instances = {};
-const options = {
+const instances = {
+	grids: {},
+	flyouts: {},
+};
+const globalOptions = {
 	animateRows: false,
 };
-const data = gflowConfig?.grid_options || {};
+const data = gflowConfig?.grids || {};
 const config = gflowConfig || {};
-const gridOptions = Object.assign( {}, data, options );
 
-const initializeGrid = () => {
+const initializeGrid = ( grid ) => {
+	const gridId = grid.dataset.gridId || INBOX_DEFAULT_ID;
+	if ( ! data[ gridId ]?.grid_options ) {
+		console.error( `Cant find inbox options for grid id: ${ gridId }` );
+	}
+	const gridOptions = Object.assign(
+		{},
+		data[ gridId ].grid_options,
+		globalOptions
+	);
 	gridOptions.getRowNodeId = ( row ) => {
 		return parseInt( row.id );
 	};
 
-	instances.grid = new Grid( el.container, gridOptions );
+	instances.grids[ gridId ] = new Grid( grid, gridOptions );
 
 	const sortCol = config?.default_sort_col || 'none';
 	const sortDir = config?.default_sort_dir || 'asc';
@@ -50,6 +62,8 @@ const initializeGrid = () => {
 			},
 		],
 	} );
+
+	initializeSettings( grid, gridId );
 };
 
 /**
@@ -57,15 +71,15 @@ const initializeGrid = () => {
  * @description Inject the settings trigger and instantiate the flyout
  */
 
-const initializeSettings = () => {
-	el.container.insertAdjacentHTML(
+const initializeSettings = ( grid, gridId ) => {
+	grid.insertAdjacentHTML(
 		'afterbegin',
 		gridTemplates.settingToggle(
 			'inbox-settings',
 			'Toggle settings for this table' // todo: needs i18n
 		)
 	);
-	instances.settingsFlyout = new Flyout( {
+	instances.flyouts[ gridId ] = new Flyout( {
 		content: inboxTemplates.settings(),
 		position: 'absolute',
 		target: '.gflow-inbox.gflow-grid',
@@ -77,7 +91,9 @@ const initializeSettings = () => {
 
 const getIdsFromModel = () => {
 	const ids = [];
-	gridOptions.api.forEachNode( ( node ) => ids.push( node.data.id ) );
+	data[ INBOX_DEFAULT_ID ].grid_options.api.forEachNode( ( node ) =>
+		ids.push( node.data.id )
+	);
 	return ids;
 };
 
@@ -100,7 +116,7 @@ const refreshGrid = async () => {
 
 	const responseJson = await response.json();
 
-	gridOptions.api.applyTransaction( responseJson );
+	data[ INBOX_DEFAULT_ID ].grid_options.api.applyTransaction( responseJson );
 };
 
 /**
@@ -113,6 +129,15 @@ const handleSettingsChange = ( e ) => {
 	console.log( e.delegateTarget.name );
 };
 
+/**
+ * @function initializeGrids
+ * @description Iterate over all found grids and initialize.
+ */
+
+const initializeGrids = () => {
+	el.containers.forEach( ( grid ) => initializeGrid( grid ) );
+};
+
 const bindEvents = () => {
 	const refreshButton = document.querySelector( '[data-js="refresh_inbox"]' );
 	refreshButton.addEventListener( 'click', function ( e ) {
@@ -121,21 +146,20 @@ const bindEvents = () => {
 	} );
 
 	delegate(
-		instances.settingsFlyout.flyoutElement,
+		document.body,
 		'[data-js="inbox-setting"]',
 		'change',
 		handleSettingsChange
 	);
 };
 
-const init = ( container ) => {
-	el.container = container;
+const init = ( containers ) => {
+	el.containers = containers;
 
-	initializeGrid();
-	initializeSettings();
+	initializeGrids();
 	bindEvents();
 
-	console.info( 'Gravity Flow Common: Initialized inbox component.' );
+	console.info( 'Gravity Flow Common: Initialized inbox components.' );
 };
 
 export default init;
