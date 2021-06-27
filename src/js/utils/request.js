@@ -1,11 +1,12 @@
 import config from 'gflow-config';
+import { PATH_MAP } from 'common/config/request';
 import { is, omit, startsWith, isEmpty } from 'ramda';
 import objectToFormData from 'utils/data/object-to-form-data';
 import { stringify } from 'query-string';
 import stripTags from 'underscore.string/stripTags';
 import trim from 'underscore.string/trim';
 import unescapeHTML from 'underscore.string/unescapeHTML';
-import { template, pickBy, identity } from 'lodash';
+import { pickBy, identity } from 'lodash';
 
 /**
  * The request module abstracts away most of the pain of dealing with raw fetch.
@@ -14,36 +15,6 @@ import { template, pickBy, identity } from 'lodash';
  * When you need query args appended for a get, pass them as "params" in your options object
  * When you want to POST set method: 'POST' and if passing json body set json: { data } in your options
  */
-
-/**
- * Get your endpoints safely here first with optional chaining
- */
-
-const endpoints = {
-	example: {
-		path: config?.example?.api?.base_path,
-		nonce: config?.example?.api?.nonce,
-	},
-};
-
-/**
- * Now map them to action names and add templates as needed
- */
-
-const PATH_MAP = {
-	example: {
-		// Add product to a project
-		// example:
-		// request('example', { method: 'POST', restParams: { project_id: int }, json: { space: int, items: [{ post_id: int, configuration: '', quantity: int }] }}).then(data => console.log(data))
-		// Accepted properties in the JSON body are
-		// space (the (optional) ID of the selected space within the project) and
-		// items, an array of example items.
-		endpoint: template(
-			`${ endpoints.example.path }/<%= project_id %>/items`
-		),
-		nonce: endpoints.example.nonce,
-	},
-};
 
 // reasonably generic post (or get)
 // pathKey must be one of PATH_MAP

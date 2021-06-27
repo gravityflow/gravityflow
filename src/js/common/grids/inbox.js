@@ -7,6 +7,7 @@
 import { Grid } from 'ag-grid-community';
 import delegate from 'delegate';
 import gflowConfig from 'gflow-config';
+import request from 'utils/request';
 
 import Flyout from 'common/components/flyout';
 import * as gridTemplates from 'templates/components/grid';
@@ -90,7 +91,7 @@ const refreshGrid = async () => {
 		window?.gflow_config?.current_user_token || null
 	);
 
-	console.log( formData );
+	console.log( request );
 
 	const response = await window.fetch( '/wp-json/gf/v2/refresh_inbox_items', {
 		method: 'post',
