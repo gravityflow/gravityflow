@@ -240,6 +240,17 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	}
 
 	/**
+	 * Returns the uninstall message for Gravity Flow Feed Extension on Gravity Forms Uninstall Page. Override this function on feed extension classes for custom uninstall message.
+	 * 
+	 * @since 2.7.4
+	 * 
+	 * @return string
+	 */
+	public function extension_uninstall_message() {
+		return esc_html__( 'This operation deletes ALL %s settings.', 'gravityforms' );
+	}
+
+	/**
 	 * Render the uninstall button on Gravity Forms uninstall page to correctly point for Gravity Flow Feed Extensions
 	 *
 	 * @since 2.7.3
@@ -247,6 +258,33 @@ abstract class Gravity_Flow_Feed_Extension extends GFFeedAddOn {
 	public function render_settings_button() {
 
 		if ( ! $this->current_user_can_uninstall() ) {
+			return;
+		}
+
+		if ( rgget( 'page' ) == 'gf_settings' && rgget( 'subview' ) == 'uninstall' ) {
+			$icon        = array( 'icon' => $this->get_menu_icon() );
+			$icon_markup = GFCommon::get_icon_markup( $icon, 'dashicon-admin-generic' );
+
+			?>
+			<form action="" method="post" class="gform-settings-panel gform-settings-panel__addon-uninstall">
+				<?php wp_nonce_field( 'uninstall', 'gf_addon_uninstall' ); ?>
+				<div class="gform-settings-panel__content">
+					<div class="addon-logo dashicons"><?php echo $icon_markup; ?></div>
+					<div class="addon-uninstall-text">
+						<h4 class="gform-settings-panel__title"><?php printf( esc_html__( '%s', 'gravityforms' ), $this->get_short_title() ) ?></h4>
+						<div><?php printf( $this->extension_uninstall_message(), $this->get_short_title() ) ?></div>
+					</div>
+					<div class="addon-uninstall-button">
+						<input id="addon" name="addon" type="hidden" value="<?php echo $this->get_short_title(); ?>">
+						<button type="submit" aria-label="<?php printf( esc_html__( 'Uninstall %s', 'gravityforms'), $this->get_short_title() ); ?>" name="uninstall_addon" value="uninstall" class="button uninstall-addon red" onclick="return confirm('<?php echo esc_js( $this->uninstall_confirm_message() ); ?>');" onkeypress="return confirm('<?php echo esc_js( $this->uninstall_confirm_message() ); ?>');">
+							<i class="dashicons dashicons-trash"></i>
+							<?php esc_attr_e( 'Uninstall', 'gravityforms' ); ?>
+						</button>
+					</div>
+				</div>
+			</form>
+			<?php
+
 			return;
 		}
 
