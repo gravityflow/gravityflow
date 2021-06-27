@@ -28,15 +28,15 @@ const config = gflowConfig || {};
 /**
  * @function intComparator
  *
- * Integer Comparator
+ * @param {...*} args The args sent to this method, which are
+ *                    {String}  The current column object.
+ *                    {String}  The first value to compare.
+ *                    {String}  The second value to compare.
+ *                    {Object}  The node representing the first row.
+ *                    {Object}  The node representing the second row.
+ *                    {Boolean} Whether the current sort is inverted.
  *
- * @param {Object}  args[0] The current column object.
- * @param {string}  args[1] The first value to compare.
- * @param {RowNode} args[2] The node representing the first row.
- * @param {RowNode} args[3] The node representing the second row.
- * @param {bool}    args[4] Whether the current sort is inverted.
- *
- * @returns {number}
+ * @return {number} Either -1, 0, or 1.
  */
 const intComparator = ( ...args ) => {
 	const value1 = args[ 3 ].data[ args[ 0 ].sortKey ] ?? args[ 1 ];

@@ -945,6 +945,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-center-cols-container {
 		display: block;
+		min-width: 100%;
 	}
 
 .gflow-grid .ag-layout-print .ag-center-cols-clipper {
@@ -1883,6 +1884,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gflow-grid .ag-paging-page-summary-panel {
 		align-items: center;
 		display: flex;
+	}
+
+.gflow-grid .ag-paging-row-summary-panel {
+		left: 0;
+		position: absolute;
 	}
 
 .gflow-grid .ag-paging-button {
