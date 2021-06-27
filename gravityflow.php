@@ -38,7 +38,7 @@ define( 'GRAVITY_FLOW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 add_action( 'gform_loaded', array( 'Gravity_Flow_Bootstrap', 'load' ), 1 );
 
 require_once( 'gflow-autoloader.php' );
-require_once( 'vendor/autoload.php' );
+require_once( dirname( __FILE__ ) . '/vendor/autoload.php' );
 
 use Gravity_Flow\Gravity_Flow\Config\Services;
 use League\Container\Container;

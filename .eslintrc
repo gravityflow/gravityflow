@@ -35,6 +35,7 @@
     "jsdoc/require-property-type": 0,
     "jsdoc/require-param-type": 0,
     "@wordpress/no-global-event-listener": 0,
+    "@wordpress/no-global-active-element": 0,
     "react/no-danger": 0,
     "react/jsx-no-undef": [2,
       {

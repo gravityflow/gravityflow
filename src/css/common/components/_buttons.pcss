@@ -1,0 +1,299 @@
+.gform-admin {
+
+	/*
+	 * Base styles, shared by all buttons
+	 */
+
+	.gform-button {
+		align-items: center;
+		border: 1px solid transparent;
+		border-radius: 3px;
+		box-shadow: var(--bs-button);
+		cursor: pointer;
+		display: inline-flex;
+		font-family: var(--t-font-family-base);
+		font-size: var(--t-font-size-label);
+		font-weight: var(--t-font-weight-medium);
+		line-height: 1.45rem;
+		padding: 0.5625rem 1.125rem;
+		text-decoration: none;
+		transition: var(--tr-button);
+		white-space: nowrap;
+
+		&:focus {
+			box-shadow: 0 0 0 2px var(--c-focus);
+			outline: none;
+		}
+
+		&:disabled {
+			pointer-events: none;
+		}
+
+		&.gform-button--circular {
+			border-radius: 100%;
+			justify-content: center;
+			padding: 0;
+		}
+	}
+
+	/*
+	 * Style variants
+	 */
+
+	.gform-button--primary {
+		background: var(--c-gravity-blue);
+		border-color: var(--c-gravity-blue);
+		color: var(--c-white);
+
+		&:hover,
+		&:active {
+			background: var(--c-primary-light);
+		}
+
+		&:disabled {
+			background: var(--c-gravity-blue);
+			color: var(--c-button-disabled);
+		}
+	}
+
+	.gform-button--secondary {
+		background: var(--c-white);
+		border-color: var(--c-gravity-blue);
+		color: var(--c-gravity-blue);
+
+		&:hover,
+		&:active {
+			border-color: var(--c-primary-light);
+			color: var(--c-primary-light);
+		}
+
+		&:disabled {
+			border-color: var(--c-blue-haze);
+			color: var(--c-blue-haze);
+		}
+	}
+
+	.gform-button--white {
+		background: var(--c-white);
+		border-color: var(--c-snuff);
+		color: var(--c-port);
+
+		&:hover,
+		&:active {
+			background: var(--c-light-blue);
+			border-color: var(--c-snuff);
+			color: var(--c-port);
+		}
+
+		&:focus {
+			background: var(--c-white);
+			border-color: var(--c-blue-haze);
+			box-shadow: var(--bs-focus-sm);
+			color: var(--c-port);
+		}
+
+		&:disabled {
+			border-color: var(--c-blue-haze);
+			color: var(--c-blue-haze);
+		}
+
+		.gform-button__icon {
+			color: var(--c-comet);
+		}
+	}
+
+	/*
+	 * Size variants
+	 */
+
+	.gform-button--size-xs {
+		font-size: var(--t-font-size-small);
+		line-height: 1rem;
+		padding: 0.4375rem 0.6875rem;
+
+		.gform-button__icon {
+			font-size: 0.875rem;
+		}
+	}
+
+	.gform-button--size-sm {
+		line-height: 1rem;
+		padding: 0.5625rem 0.8125rem;
+
+		.gform-button__icon {
+			font-size: 0.875rem;
+		}
+	}
+
+	.gform-button--size-l {
+		font-size: 1rem;
+		line-height: 1.5rem;
+
+		.gform-button__icon {
+			font-size: 1.25rem;
+		}
+	}
+
+	.gform-button--size-xl {
+		font-size: 1rem;
+		line-height: 1.5rem;
+		padding: 0.8125rem 1.5625rem;
+
+		.gform-button__icon {
+			font-size: 1.25rem;
+		}
+	}
+
+	/*
+	 * Icon variants
+	 */
+
+	.gform-button__icon {
+		font-size: 1.125rem;
+		position: relative;
+		top: -0.0625rem;
+	}
+
+	.gform-button--icon-leading {
+
+		.gform-button__icon {
+			margin-right: 0.5rem;
+		}
+
+		&.gform-button--size-xs {
+
+			.gform-button__icon {
+				margin-right: 0.375rem;
+			}
+		}
+
+		&.gform-button--size-sm {
+
+			.gform-button__icon {
+				margin-right: 0.375rem;
+			}
+		}
+
+		&.gform-button--size-l {
+
+			.gform-button__icon {
+				margin-right: 0.625rem;
+			}
+		}
+
+		&.gform-button--size-xl {
+
+			.gform-button__icon {
+				margin-right: 0.75rem;
+			}
+		}
+	}
+
+	.gform-button--icon-trailing {
+
+		.gform-button__icon {
+			margin-left: 0.5rem;
+		}
+
+		&.gform-button--size-xs {
+
+			.gform-button__icon {
+				margin-left: 0.375rem;
+			}
+		}
+
+		&.gform-button--size-sm {
+
+			.gform-button__icon {
+				margin-left: 0.375rem;
+			}
+		}
+
+		&.gform-button--size-l {
+
+			.gform-button__icon {
+				margin-left: 0.625rem;
+			}
+		}
+
+		&.gform-button--size-xl {
+
+			.gform-button__icon {
+				margin-left: 0.75rem;
+			}
+		}
+	}
+
+	/*
+	 * Rounded variants
+	 */
+
+	.gform-button--round {
+		border-radius: 1.1875rem;
+
+		&.gform-button--size-xs {
+			border-radius: 0.9375rem;
+		}
+
+		&.gform-button--size-sm {
+			border-radius: 1.0625rem;
+		}
+
+		&.gform-button--size-l {
+			border-radius: 1.3125rem;
+		}
+
+		&.gform-button--size-xl {
+			border-radius: 1.5625rem;
+		}
+	}
+
+	/*
+	 * Circular variants
+	 */
+
+	.gform-button--circular {
+		height: 2.375rem;
+		width: 2.375rem;
+
+		.gform-button__icon {
+			font-size: 1.375rem;
+		}
+
+		&.gform-button--size-xs {
+			height: 1.875rem;
+			width: 1.875rem;
+
+			.gform-button__icon {
+				font-size: 1.125rem;
+			}
+		}
+
+		&.gform-button--size-sm {
+			height: 2.125rem;
+			width: 2.125rem;
+
+			.gform-button__icon {
+				font-size: 1.25rem;
+			}
+		}
+
+		&.gform-button--size-l {
+			height: 2.625rem;
+			width: 2.625rem;
+
+			.gform-button__icon {
+				font-size: 1.75rem;
+			}
+		}
+
+		&.gform-button--size-xl {
+			height: 3.125rem;
+			width: 3.125rem;
+
+			.gform-button__icon {
+				font-size: 2rem;
+			}
+		}
+	}
+}

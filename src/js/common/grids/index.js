@@ -1,7 +1,7 @@
 /**
- * Components
+ * Grids
  *
- * Initializes all common components
+ * Initializes all grids, eg inbox, status etc.
  */
 
 import * as tools from 'utils/tools';
@@ -24,7 +24,7 @@ const init = () => {
 		);
 	}
 
-	console.info( 'Gravity Flow Common: Initialized all common components.' );
+	console.info( 'Gravity Flow Common: Initialized all common grids.' );
 };
 
 export default init;

@@ -1,7 +1,8 @@
-import { retrieve } from 'app-common/api';
+import request from 'utils/request';
 
 export function fetchExample() {
-	return retrieve( 'https://jsonplaceholder.typicode.com', 'example', {
+	return request( 'example', {
+		baseUrl: 'https://jsonplaceholder.typicode.com',
 		method: 'GET',
 	} );
 }

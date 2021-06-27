@@ -31,6 +31,97 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
  *
  * ----------------------------------------------------------------------------- */
 
+/* Icons */
+
+/* stylelint-disable */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables: Admin Icons (via IcoMoon)
+ *
+ * This file is generated using the `gulp icons` task. Do not edit it directly.
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* AG Grid */
+
+/* Media Queries */
+
+/* both on theme and in admin the point at which admin bar swaps desktop/mobile */
+
+/* Box Shadow */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables: Box Shadow
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* Transitions */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables: Transitions
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* Typography */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables: Typography
+ *
+ * ----------------------------------------------------------------------------- */
+
+:root {
+
+	/* Font Families */
+
+	/* Font Weights */
+
+	/* Font Sizes */
+
+	/* Line Heights */
+}
+
+/* -----------------------------------------------------------------------------
+ *
+ * Mixins
+ *
+ * This file is just a clearing-house.
+ * Make partials (start with an underscore) elsewhere for actual code.
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Mixins: Icons
+ *
+ * ----------------------------------------------------------------------------- */
+
+/*
+ * Mixins: Inputs
+ * Added to keep settings area in sync with components used elsewhere.
+ * Not to be used more unless absolutely necessary.
+ */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables
+ *
+ * This file is just a clearing-house.
+ * Make partials (start with an underscore) elsewhere for actual code.
+ *
+ * ----------------------------------------------------------------------------- */
+
+/* Colors */
+
+/* -----------------------------------------------------------------------------
+ *
+ * Variables: Color
+ *
+ * ----------------------------------------------------------------------------- */
+
 /* Box Shadows */
 
 /* -----------------------------------------------------------------------------
@@ -74,59 +165,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
  * ----------------------------------------------------------------------------- */
 
 /* Icons */
-
-/* -----------------------------------------------------------------------------
- *
- * Mixins: Icons
- *
- * ----------------------------------------------------------------------------- */
-
-/* -----------------------------------------------------------------------------
- *
- * Variables
- *
- * This file is just a clearing-house.
- * Make partials (start with an underscore) elsewhere for actual code.
- *
- * ----------------------------------------------------------------------------- */
-
-/* stylelint-disable */
-
-/* -----------------------------------------------------------------------------
- *
- * Variables: Admin Icons (via IcoMoon)
- *
- * This file is generated using the `gulp icons` task. Do not edit it directly.
- *
- * ----------------------------------------------------------------------------- */
-
-/* Typography */
-
-/* -----------------------------------------------------------------------------
- *
- * Variables: Typography
- *
- * ----------------------------------------------------------------------------- */
-
-:root {
-
-	/* Font Families */
-
-	/* Font Weights */
-
-	/* Font Sizes */
-
-	/* Line Heights */
-}
-
-/* -----------------------------------------------------------------------------
- *
- * Mixins
- *
- * This file is just a clearing-house.
- * Make partials (start with an underscore) elsewhere for actual code.
- *
- * ----------------------------------------------------------------------------- */
 
 /* -----------------------------------------------------------------------------
  *
@@ -696,17 +734,17 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-unselectable {
-		-moz-user-select: none;
 		-webkit-user-select: none;
-		-ms-user-select: none;
-		user-select: none;
+		   -moz-user-select: none;
+		    -ms-user-select: none;
+		        user-select: none;
 	}
 
 .gflow-grid .ag-selectable {
-		-moz-user-select: text;
 		-webkit-user-select: text;
-		-ms-user-select: text;
-		user-select: text;
+		   -moz-user-select: text;
+		    -ms-user-select: text;
+		        user-select: text;
 	}
 
 .gflow-grid .ag-tab {
@@ -754,6 +792,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-root-wrapper.ag-layout-normal {
 		height: 100%;
+		min-height: 500px;
 	}
 
 .gflow-grid .ag-watermark {
@@ -2759,8 +2798,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 }
 
 .gflow-grid .ag-theme-alpine {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 		font-size: 13px;
 		-webkit-font-smoothing: antialiased;
@@ -2918,9 +2956,20 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		content: "\f127";
 	}
 
-.gflow-grid .ag-theme-alpine .ag-icon-small-down::before {
-		content: "\f128";
+.gflow-grid .ag-theme-alpine .ag-icon-small-down {
+		font-family: "gflow-icons-common" !important;
+		font-style: normal;
+		font-feature-settings: normal;
+		font-variant: normal;
+		font-weight: normal;
+		line-height: 1;
+		speak: none;
+		text-transform: none;
 	}
+
+.gflow-grid .ag-theme-alpine .ag-icon-small-down::before {
+			content: "\e911";
+		}
 
 .gflow-grid .ag-theme-alpine .ag-icon-small-left::before {
 		content: "\f129";
@@ -2968,7 +3017,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-root-wrapper {
 		background-color: #fff;
-		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine [class^="ag-"],
@@ -3008,13 +3056,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"] {
 		background-color: #fff;
-		background-color: #fff;
 		margin: 0;
 	}
 
 .gflow-grid .ag-theme-alpine textarea[class^="ag-"],
 	.gflow-grid .ag-theme-alpine select[class^="ag-"] {
-		background-color: #fff;
 		background-color: #fff;
 	}
 
@@ -3025,13 +3071,19 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	.gflow-grid .ag-theme-alpine input[class^="ag-"][type="date"],
 	.gflow-grid .ag-theme-alpine input[class^="ag-"][type="datetime-local"],
 	.gflow-grid .ag-theme-alpine textarea[class^="ag-"] {
-		border-color: #babfc7;
-		border-color: #babfc7;
-		border-style: solid;
-		border-width: 1px;
-		color: inherit;
-		font-size: inherit;
-		line-height: inherit;
+		-webkit-appearance: none;
+		background: #fff;
+		border: 1px solid #c3c5db;
+		border-radius: 3px;
+		box-shadow: 0 0 0 transparent;
+		box-sizing: border-box;
+		color: #242748;
+		font-family: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, oxygen-sans, ubuntu, cantarell, "Helvetica Neue", sans-serif;
+		font-size: 13px;
+		line-height: 2;
+		outline: none;
+		padding: 4px 12px;
+		transition: box-shadow 0.15s ease, background-color 0.15s ease;
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"]:not([type]):disabled,
@@ -3042,10 +3094,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	.gflow-grid .ag-theme-alpine input[class^="ag-"][type="datetime-local"]:disabled,
 	.gflow-grid .ag-theme-alpine textarea[class^="ag-"]:disabled {
 		background-color: #f1f2f4;
-		background-color: #f1f2f4;
 		border-color: rgba(186, 191, 199, 0.3);
-		border-color: rgba(186, 191, 199, 0.3);
-		color: rgba(24, 29, 31, 0.5);
 		color: rgba(24, 29, 31, 0.5);
 	}
 
@@ -3056,9 +3105,9 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	.gflow-grid .ag-theme-alpine input[class^="ag-"][type="date"]:focus,
 	.gflow-grid .ag-theme-alpine input[class^="ag-"][type="datetime-local"]:focus,
 	.gflow-grid .ag-theme-alpine textarea[class^="ag-"]:focus {
-		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
-		box-shadow: 0 0 2px 1.6px rgba(33, 150, 243, 0.4);
+		border: 1px solid #3985b7;
+		box-shadow: 0 2px 1.08px rgba(28, 31, 63, 0.0634624), 0 0 0 2px #bed8ed;
+		color: #242748;
 		outline: none;
 	}
 
@@ -3082,8 +3131,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-drag-handle {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-list-item,
@@ -3099,7 +3147,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		background-color: transparent;
 		border: 1px solid;
 		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
 		content: "";
 		display: block;
 		height: calc(100% - 8px);
@@ -3112,7 +3159,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-select-list {
 		background-color: #fff;
-		background-color: #fff;
+		border: 1px solid #c3c5db;
+		border-top: 0;
+		border-bottom-left-radius: 3px;
+		border-bottom-right-radius: 3px;
+		margin-top: -2px;
 		overflow-x: hidden;
 		overflow-y: auto;
 	}
@@ -3126,7 +3177,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-list-item.ag-active-item {
-		background-color: rgba(33, 150, 243, 0.1);
 		background-color: rgba(33, 150, 243, 0.1);
 	}
 
@@ -3148,9 +3198,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-select .ag-picker-field-wrapper {
 		background-color: #fff;
-		background-color: #fff;
 		cursor: default;
-		min-height: 24px;
+		min-height: 36px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-select.ag-disabled .ag-picker-field-wrapper:focus {
@@ -3158,7 +3207,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-select:not(.ag-cell-editor) {
-		height: 24px;
+		height: 36px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-select .ag-picker-field-display {
@@ -3178,8 +3227,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rich-select {
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
+		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rich-select-list {
@@ -3190,7 +3238,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-rich-select-value {
 		border-bottom: solid 1px;
-		border-bottom-color: #dde2eb;
 		border-bottom-color: #dde2eb;
 		height: 42px;
 		padding: 0 6px 0 18px;
@@ -3203,7 +3250,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-rich-select-virtual-list-item:hover {
 		background-color: rgba(33, 150, 243, 0.1);
-		background-color: rgba(33, 150, 243, 0.1);
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rich-select-row {
@@ -3212,15 +3258,13 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-rich-select-row-selected {
 		background-color: rgba(33, 150, 243, 0.3);
-		background-color: rgba(33, 150, 243, 0.3);
 	}
 
 .gflow-grid .ag-theme-alpine .ag-row-drag,
 	.gflow-grid .ag-theme-alpine .ag-selection-checkbox,
 	.gflow-grid .ag-theme-alpine .ag-group-expanded,
 	.gflow-grid .ag-theme-alpine .ag-group-contracted {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-row-drag,
@@ -3250,8 +3294,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-group-title-bar-icon {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		cursor: pointer;
 		flex: none;
 	}
@@ -3265,7 +3308,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-group-title-bar {
-		background-color: #fff;
 		background-color: #fff;
 		padding: 6px;
 	}
@@ -3311,18 +3353,14 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-angle-select-parent-circle {
 		background-color: #fff;
-		background-color: #fff;
-		border: solid 1px;
-		border-color: #babfc7;
-		border-color: #babfc7;
+		border: solid 1px #ecedf8;
 		border-radius: 12px;
 		height: 24px;
 		width: 24px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-angle-select-child-circle {
-		background-color: #181d1f;
-		background-color: #181d1f;
+		background-color: #242748;
 		border-radius: 3px;
 		height: 6px;
 		left: 12px;
@@ -3333,21 +3371,19 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-picker-field-wrapper {
-		border: 1px solid;
-		border-color: #babfc7;
-		border-color: #babfc7;
-		border-radius: 5px;
+		border: 1px solid #c3c5db;
+		border-radius: 3px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-picker-field-wrapper:focus {
-		box-shadow: 0 0 2px 1.6px rgba(33, 150, 243, 0.4);
+		border: 1px solid #3985b7;
+		box-shadow: 0 2px 1.08px rgba(28, 31, 63, 0.0634624), 0 0 0 2px #bed8ed;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-picker-field-button {
 		background-color: #fff;
-		background-color: #fff;
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-dialog.ag-color-dialog {
@@ -3403,7 +3439,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-spectrum-slider {
-		background-color: #f8f8f8;
+		background-color: #fff;
 		border-radius: 13px;
 		box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
 		height: 13px;
@@ -3425,22 +3461,14 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine.ag-dnd-ghost {
 		background: #fff;
-		background: #fff;
-		border: solid 1px;
-		border: solid 1px;
-		border-color: #babfc7;
-		border-color: #babfc7;
-		border-color: #dde2eb;
-		border-color: #dde2eb;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		height: 48px !important;
 		line-height: 48px;
 		margin: 0;
 		overflow: hidden;
-		padding: 6px;
 		padding: 0 12px;
 		text-overflow: ellipsis;
 		transform: translateY(12px);
@@ -3448,13 +3476,19 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-dnd-ghost-icon {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		margin-right: 6px;
 	}
 
-.gflow-grid .ag-theme-alpine .ag-popup-child:not(.ag-tooltip-custom) {
-		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
+.gflow-grid .ag-theme-alpine .ag-popup .ag-popup-child:not(.ag-tooltip-custom):not(.ag-select-list) {
+		border: 0;
+		box-shadow: 0 0 1px rgba(18, 25, 97, 0.24),
+		0 24px 24px rgba(18, 25, 97, 0.03),
+		0 2px 2px rgba(18, 25, 97, 0.03),
+		0 4px 4px rgba(18, 25, 97, 0.03),
+		0 8px 8px rgba(18, 25, 97, 0.03),
+		0 16px 16px rgba(18, 25, 97, 0.03);
+		margin: 5px 0 0 -170px;
 	}
 
 .gflow-grid .ag-dragging-range-handle .ag-theme-alpine .ag-dialog,
@@ -3464,25 +3498,18 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-dialog {
-		border: solid 1px;
-		border-color: #babfc7;
-		border-color: #babfc7;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-panel {
 		background-color: #fff;
-		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-panel-title-bar {
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
-		border-bottom: solid 1px;
-		border-bottom-color: #babfc7;
-		border-bottom-color: #babfc7;
-		color: #181d1f;
-		color: #181d1f;
+		background-color: #fff;
+		border-bottom: solid 1px #ecedf8;
+		color: #242748;
 		height: 48px;
 		padding: 6px 18px;
 	}
@@ -3496,14 +3523,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-tooltip {
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
-		border: solid 1px;
-		border-color: #babfc7;
-		border-color: #babfc7;
+		background-color: #fff;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		padding: 6px;
 		transition: opacity 1s;
 	}
@@ -3594,9 +3617,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-keyboard-focus .ag-column-select-header-icon:focus::after {
 		background-color: transparent;
-		border: 1px solid;
-		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
+		border: 1px solid rgba(33, 150, 243, 0.4);
 		content: "";
 		display: block;
 		height: calc(100% - 0px);
@@ -3635,9 +3656,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-keyboard-focus .ag-column-select-virtual-list-item:focus::after {
 		background-color: transparent;
-		border: 1px solid;
-		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
+		border: 1px solid rgba(33, 150, 243, 0.4);
 		content: "";
 		display: block;
 		height: calc(100% - 2px);
@@ -3655,7 +3674,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-column-select-column-readonly,
 	.gflow-grid .ag-theme-alpine .ag-column-select-column-group-readonly {
-		color: rgba(24, 29, 31, 0.5);
 		color: rgba(24, 29, 31, 0.5);
 		pointer-events: none;
 	}
@@ -3677,9 +3695,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-root-wrapper {
-		border: solid 1px;
-		border-color: #babfc7;
-		border-color: #babfc7;
+		border: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-row > .ag-cell-wrapper.ag-row-group-indent-1 {
@@ -4152,11 +4168,9 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-value-change-delta-up {
 		color: #43a047;
-		color: #43a047;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-value-change-delta-down {
-		color: #e53935;
 		color: #e53935;
 	}
 
@@ -4170,12 +4184,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-value-change-value-highlight {
 		background-color: rgba(22, 160, 133, 0.5);
-		background-color: rgba(22, 160, 133, 0.5);
 		transition: background-color 0.1s;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell-data-changed {
-		background-color: rgba(22, 160, 133, 0.5) !important;
 		background-color: rgba(22, 160, 133, 0.5) !important;
 	}
 
@@ -4185,24 +4197,19 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-cell-highlight {
 		background-color: #2196f3 !important;
-		background-color: #2196f3 !important;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-row {
 		background-color: #fff;
-		background-color: #fff;
 		border-bottom-style: solid;
 		border-color: #dde2eb;
-		border-color: #dde2eb;
 		border-width: 1px;
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		height: 42px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-row-highlight-above::after,
 	.gflow-grid .ag-theme-alpine .ag-row-highlight-below::after {
-		background-color: #2196f3;
 		background-color: #2196f3;
 		content: "";
 		height: 1px;
@@ -4224,24 +4231,18 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-row-odd {
-		background-color: #fcfcfc;
-		background-color: #fcfcfc;
+		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-horizontal-left-spacer:not(.ag-scroller-corner) {
-		border-right: solid 1px;
-		border-right-color: #babfc7;
-		border-right-color: #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-horizontal-right-spacer:not(.ag-scroller-corner) {
-		border-left: solid 1px;
-		border-left-color: #babfc7;
-		border-left-color: #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-row-hover {
-		background-color: rgba(33, 150, 243, 0.1);
 		background-color: rgba(33, 150, 243, 0.1);
 	}
 
@@ -4281,31 +4282,19 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell-inline-editing {
-		background: #fff;
-		background: #fff;
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
-		border: solid 1px;
-		border-color: #babfc7;
-		border-color: #babfc7;
+		background-color: #fff;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
 		height: 42px;
-		padding: 6px;
 		padding: 0;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-popup-editor {
-		background: #fff;
-		background: #fff;
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
-		border: solid 1px;
-		border-color: #babfc7;
-		border-color: #babfc7;
+		background-color: #fff;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
-		padding: 6px;
 		padding: 0;
 	}
 
@@ -4315,7 +4304,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-details-row {
-		background-color: #fff;
 		background-color: #fff;
 		padding: 30px;
 	}
@@ -4329,15 +4317,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-overlay-loading-wrapper {
 		background-color: rgba(255, 255, 255, 0.66);
-		background-color: rgba(255, 255, 255, 0.66);
 	}
 
 .gflow-grid .ag-theme-alpine .ag-overlay-loading-center {
 		background: #fff;
-		background: #fff;
-		border: solid 1px;
-		border-color: #babfc7;
-		border-color: #babfc7;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
 		padding: 6px;
@@ -4360,13 +4344,13 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-icon-loading {
 		-webkit-animation-duration: 1000ms;
-		animation-duration: 1000ms;
+		        animation-duration: 1000ms;
 		-webkit-animation-iteration-count: infinite;
-		animation-iteration-count: infinite;
+		        animation-iteration-count: infinite;
 		-webkit-animation-name: spin;
-		animation-name: spin;
+		        animation-name: spin;
 		-webkit-animation-timing-function: linear;
-		animation-timing-function: linear;
+		        animation-timing-function: linear;
 	}
 
 @-webkit-keyframes spin {
@@ -4392,15 +4376,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-floating-top {
-		border-bottom: solid 1px;
-		border-bottom-color: #babfc7;
-		border-bottom-color: #babfc7;
+		border-bottom: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-floating-bottom {
-		border-top: solid 1px;
-		border-top-color: #babfc7;
-		border-top-color: #babfc7;
+		border-top: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-cell {
@@ -4420,81 +4400,65 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell.ag-cell-first-right-pinned:not(.ag-cell-range-left):not(.ag-cell-range-single-cell) {
-		border-left: solid 1px;
-		border-left-color: #babfc7;
-		border-left-color: #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell.ag-cell-last-left-pinned:not(.ag-cell-range-right):not(.ag-cell-range-single-cell) {
-		border-right: solid 1px;
-		border-right-color: #babfc7;
-		border-right-color: #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-row-selected {
-		background-color: rgba(33, 150, 243, 0.3);
 		background-color: rgba(33, 150, 243, 0.3);
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell-range-selected:not(.ag-cell-focus),
 	.gflow-grid .ag-theme-alpine .ag-body-viewport:not(.ag-has-focus) .ag-cell-range-single-cell:not(.ag-cell-inline-editing) {
 		background-color: rgba(33, 150, 243, 0.2);
-		background-color: rgba(33, 150, 243, 0.2);
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell-range-selected:not(.ag-cell-focus).ag-cell-range-chart,
 	.gflow-grid .ag-theme-alpine .ag-body-viewport:not(.ag-has-focus) .ag-cell-range-single-cell:not(.ag-cell-inline-editing).ag-cell-range-chart {
-		background-color: rgba(0, 88, 255, 0.1) !important;
 		background-color: rgba(0, 88, 255, 0.1) !important;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell-range-selected:not(.ag-cell-focus).ag-cell-range-chart.ag-cell-range-chart-category,
 	.gflow-grid .ag-theme-alpine .ag-body-viewport:not(.ag-has-focus) .ag-cell-range-single-cell:not(.ag-cell-inline-editing).ag-cell-range-chart.ag-cell-range-chart-category {
 		background-color: rgba(0, 255, 132, 0.1) !important;
-		background-color: rgba(0, 255, 132, 0.1) !important;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell-range-selected-1:not(.ag-cell-focus),
 	.gflow-grid .ag-theme-alpine .ag-root:not(.ag-context-menu-open) .ag-body-viewport:not(.ag-has-focus) .ag-cell-range-selected-1:not(.ag-cell-inline-editing) {
-		background-color: rgba(33, 150, 243, 0.2);
 		background-color: rgba(33, 150, 243, 0.2);
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell-range-selected-2:not(.ag-cell-focus),
 	.gflow-grid .ag-theme-alpine .ag-body-viewport:not(.ag-has-focus) .ag-cell-range-selected-2 {
 		background-color: rgba(33, 150, 243, 0.36);
-		background-color: rgba(33, 150, 243, 0.36);
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell-range-selected-3:not(.ag-cell-focus),
 	.gflow-grid .ag-theme-alpine .ag-body-viewport:not(.ag-has-focus) .ag-cell-range-selected-3 {
-		background-color: rgba(33, 150, 243, 0.488);
 		background-color: rgba(33, 150, 243, 0.488);
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell-range-selected-4:not(.ag-cell-focus),
 	.gflow-grid .ag-theme-alpine .ag-body-viewport:not(.ag-has-focus) .ag-cell-range-selected-4 {
 		background-color: rgba(33, 150, 243, 0.5904);
-		background-color: rgba(33, 150, 243, 0.5904);
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell.ag-cell-range-selected:not(.ag-cell-range-single-cell).ag-cell-range-top {
-		border-top-color: #2196f3;
 		border-top-color: #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell.ag-cell-range-selected:not(.ag-cell-range-single-cell).ag-cell-range-right {
 		border-right-color: #2196f3;
-		border-right-color: #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell.ag-cell-range-selected:not(.ag-cell-range-single-cell).ag-cell-range-bottom {
 		border-bottom-color: #2196f3;
-		border-bottom-color: #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell.ag-cell-range-selected:not(.ag-cell-range-single-cell).ag-cell-range-left {
-		border-left-color: #2196f3;
 		border-left-color: #2196f3;
 	}
 
@@ -4508,58 +4472,44 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-has-focus .ag-full-width-row.ag-row-focus .ag-cell-wrapper.ag-row-group,
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-cell-range-single-cell,
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-cell-range-single-cell.ag-cell-range-handle {
-		border: 1px solid;
-		border-color: #2196f3;
-		border-color: #2196f3;
+		border: 1px solid #2196f3;
 		outline: medium none invert;
 		outline: initial;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell.ag-selection-fill-top,
 	.gflow-grid .ag-theme-alpine .ag-cell.ag-selection-fill-top.ag-cell-range-selected {
-		border-top: 1px dashed;
-		border-top-color: #2196f3;
-		border-top-color: #2196f3;
+		border-top: 1px dashed #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-cell.ag-selection-fill-right,
 	.gflow-grid .ag-theme-alpine .ag-ltr .ag-cell.ag-selection-fill-right.ag-cell-range-selected {
-		border-right: 1px dashed;
-		border-right-color: #2196f3;
-		border-right-color: #2196f3;
+		border-right: 1px dashed #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-cell.ag-selection-fill-right,
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-cell.ag-selection-fill-right.ag-cell-range-selected {
 		border-left: 1px dashed;
 		border-left-color: #2196f3;
-		border-left-color: #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-cell.ag-selection-fill-bottom,
 	.gflow-grid .ag-theme-alpine .ag-cell.ag-selection-fill-bottom.ag-cell-range-selected {
-		border-bottom: 1px dashed;
-		border-bottom-color: #2196f3;
-		border-bottom-color: #2196f3;
+		border-bottom: 1px dashed #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-cell.ag-selection-fill-left,
 	.gflow-grid .ag-theme-alpine .ag-ltr .ag-cell.ag-selection-fill-left.ag-cell-range-selected {
-		border-left: 1px dashed;
-		border-left-color: #2196f3;
-		border-left-color: #2196f3;
+		border-left: 1px dashed #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-cell.ag-selection-fill-left,
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-cell.ag-selection-fill-left.ag-cell-range-selected {
-		border-right: 1px dashed;
-		border-right-color: #2196f3;
-		border-right-color: #2196f3;
+		border-right: 1px dashed #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-fill-handle,
 	.gflow-grid .ag-theme-alpine .ag-range-handle {
-		background-color: #2196f3;
 		background-color: #2196f3;
 		bottom: -1px;
 		height: 6px;
@@ -4587,18 +4537,13 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-cell-inline-editing {
 		border-color: rgba(33, 150, 243, 0.4) !important;
-		border-color: rgba(33, 150, 243, 0.4) !important;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-menu {
 		background: #fff;
-		background: #fff;
-		border: solid 1px;
-		border-color: #babfc7;
-		border-color: #babfc7;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
-		padding: 6px;
 		padding: 0;
 	}
 
@@ -4612,16 +4557,13 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-menu-separator-part::after {
-		border-top: solid 1px;
-		border-top-color: #babfc7;
-		border-top-color: #babfc7;
+		border-top: solid 1px #ecedf8;
 		content: "";
 		display: block;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-menu-option-active,
 	.gflow-grid .ag-theme-alpine .ag-compact-menu-option-active {
-		background-color: rgba(33, 150, 243, 0.1);
 		background-color: rgba(33, 150, 243, 0.1);
 	}
 
@@ -4695,9 +4637,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-keyboard-focus .ag-tab:focus::after {
 		background-color: transparent;
-		border: 1px solid;
-		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
+		border: 1px solid rgba(33, 150, 243, 0.4);
 		content: "";
 		display: block;
 		height: calc(100% - 8px);
@@ -4710,18 +4650,14 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-tab-selected {
 		border-bottom-color: #2196f3;
-		border-bottom-color: #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-menu-header {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-separator {
-		border-top: solid 1px;
-		border-top-color: #babfc7;
-		border-top-color: #babfc7;
+		border-top: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-condition-operator {
@@ -4772,9 +4708,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-apply-panel {
-		border-top: solid 1px;
-		border-top-color: #dde2eb;
-		border-top-color: #dde2eb;
+		border-top: solid 1px #dde2eb;
 		padding: 12px 12px;
 	}
 
@@ -4818,9 +4752,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-keyboard-focus .ag-multi-filter-group-title-bar:focus::after {
 		background-color: transparent;
-		border: 1px solid;
-		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
+		border: 1px solid rgba(33, 150, 243, 0.4);
 		content: "";
 		display: block;
 		height: calc(100% - 8px);
@@ -4836,13 +4768,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-tool-panel-wrapper {
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
+		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-side-buttons {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		overflow: hidden;
 		padding-top: 24px;
 		position: relative;
@@ -4850,10 +4780,9 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine button.ag-side-button-button {
-		background: transparent;
+		background: transparent no-repeat;
 		background-position-x: center;
 		background-position-y: center;
-		background-repeat: no-repeat;
 		border: none;
 		color: inherit;
 		font-family: inherit;
@@ -4876,9 +4805,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-keyboard-focus .ag-side-button-button:focus::after {
 		background-color: transparent;
-		border: 1px solid;
-		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
+		border: 1px solid rgba(33, 150, 243, 0.4);
 		content: "";
 		display: block;
 		height: calc(100% - 8px);
@@ -4895,16 +4822,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-left,
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-right {
-		border-right: solid 1px;
-		border-right-color: #babfc7;
-		border-right-color: #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-left .ag-tool-panel-wrapper,
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-right .ag-tool-panel-wrapper {
-		border-left: solid 1px;
-		border-left-color: #babfc7;
-		border-left-color: #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-left .ag-side-button-button,
@@ -4916,21 +4839,16 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-left .ag-selected .ag-side-button-button,
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-right .ag-selected .ag-side-button-button {
 		border-right-color: #2196f3;
-		border-right-color: #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-left,
 	.gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-right {
-		border-left: solid 1px;
-		border-left-color: #babfc7;
-		border-left-color: #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-left .ag-tool-panel-wrapper,
 	.gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-right .ag-tool-panel-wrapper {
-		border-right: solid 1px;
-		border-right-color: #babfc7;
-		border-right-color: #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-left .ag-side-button-button,
@@ -4941,7 +4859,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-side-bar-left .ag-selected .ag-side-button-button,
 	.gflow-grid .ag-theme-alpine .ag-ltr .ag-side-bar-right .ag-selected .ag-side-button-button {
-		border-left-color: #2196f3;
 		border-left-color: #2196f3;
 	}
 
@@ -4965,9 +4882,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-keyboard-focus .ag-filter-toolpanel-header:focus::after {
 		background-color: transparent;
-		border: 1px solid;
-		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
+		border: 1px solid rgba(33, 150, 243, 0.4);
 		content: "";
 		display: block;
 		height: calc(100% - 8px);
@@ -5030,9 +4945,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-toolpanel-group-level-0 {
-		border-top: solid 1px;
-		border-top-color: #dde2eb;
-		border-top-color: #dde2eb;
+		border-top: solid 1px #dde2eb;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-filter-toolpanel-expand,
@@ -5170,12 +5083,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-toolpanel-instance-filter {
-		border-bottom: solid 1px;
-		border-bottom-color: #babfc7;
-		border-bottom-color: #babfc7;
-		border-top: solid 1px;
-		border-top-color: #babfc7;
-		border-top-color: #babfc7;
+		border-bottom: solid 1px #ecedf8;
+		border-top: solid 1px #ecedf8;
 		margin-top: 6px;
 	}
 
@@ -5211,9 +5120,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-keyboard-focus .ag-column-select-header:focus::after {
 		background-color: transparent;
-		border: 1px solid;
-		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
+		border: 1px solid rgba(33, 150, 243, 0.4);
 		content: "";
 		display: block;
 		height: calc(100% - 8px);
@@ -5226,52 +5133,37 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-column-select-header {
 		align-items: center;
-		border-bottom: solid 1px;
-		border-bottom-color: #dde2eb;
-		border-bottom-color: #dde2eb;
+		border-bottom: solid 1px #dde2eb;
 		height: 48px;
 		padding: 0 12px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-panel-column-select {
-		border-bottom: solid 1px;
-		border-bottom-color: #dde2eb;
-		border-bottom-color: #dde2eb;
-		border-top: solid 1px;
-		border-top-color: #dde2eb;
-		border-top-color: #dde2eb;
+		border-bottom: solid 1px #dde2eb;
+		border-top: solid 1px #dde2eb;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-group-icons,
 	.gflow-grid .ag-theme-alpine .ag-column-select-header-icon {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header {
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
-		border-bottom: solid 1px;
-		border-bottom-color: #babfc7;
-		border-bottom-color: #babfc7;
+		background-color: #fff;
+		border-bottom: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header-row {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		height: 48px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-pinned-right-header {
-		border-left: solid 1px;
-		border-left-color: #babfc7;
-		border-left-color: #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-pinned-left-header {
-		border-right: solid 1px;
-		border-right-color: #babfc7;
-		border-right-color: #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-header-cell:not(.ag-right-aligned-header) .ag-header-label-icon {
@@ -5299,7 +5191,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gflow-grid .ag-theme-alpine .ag-header-cell.ag-header-cell-moving,
 	.gflow-grid .ag-theme-alpine .ag-header-group-cell.ag-header-cell-moving {
 		background-color: #fff;
-		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-keyboard-focus .ag-header-cell:focus {
@@ -5308,9 +5199,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-keyboard-focus .ag-header-cell:focus::after {
 		background-color: transparent;
-		border: 1px solid;
-		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
+		border: 1px solid rgba(33, 150, 243, 0.4);
 		content: "";
 		display: block;
 		height: calc(100% - 8px);
@@ -5327,9 +5216,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-keyboard-focus .ag-header-group-cell:focus::after {
 		background-color: transparent;
-		border: 1px solid;
-		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
+		border: 1px solid rgba(33, 150, 243, 0.4);
 		content: "";
 		display: block;
 		height: calc(100% - 8px);
@@ -5341,8 +5228,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header-icon {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header-expand-icon {
@@ -5359,9 +5245,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-header-row:not(:first-child) .ag-header-cell,
 	.gflow-grid .ag-theme-alpine .ag-header-row:not(:first-child) .ag-header-group-cell.ag-header-group-cell-with-group {
-		border-top: solid 1px;
-		border-top-color: #babfc7;
-		border-top-color: #babfc7;
+		border-top: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header-cell-resize {
@@ -5370,7 +5254,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-header-cell-resize::after {
-		background-color: rgba(186, 191, 199, 0.5);
 		background-color: rgba(186, 191, 199, 0.5);
 		content: "";
 		display: block;
@@ -5404,8 +5287,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-floating-filter-button-button {
 		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
+		   -moz-appearance: none;
+		        appearance: none;
 		background: transparent;
 		border: none;
 		color: inherit;
@@ -5419,8 +5302,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-loading {
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
+		background-color: #fff;
 		height: 100%;
 		padding: 12px 12px;
 		position: absolute;
@@ -5429,11 +5311,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-paging-panel {
-		border-top: 1px solid;
-		border-top-color: #babfc7;
-		border-top-color: #babfc7;
-		color: #181d1f;
-		color: #181d1f;
+		border-top: 1px solid #ecedf8;
+		color: #242748;
 		height: 48px;
 	}
 
@@ -5447,7 +5326,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-paging-button.ag-disabled {
 		color: rgba(24, 29, 31, 0.5);
-		color: rgba(24, 29, 31, 0.5);
 		cursor: default;
 	}
 
@@ -5457,9 +5335,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-keyboard-focus .ag-paging-button:focus::after {
 		background-color: transparent;
-		border: 1px solid;
-		border-color: rgba(33, 150, 243, 0.4);
-		border-color: rgba(33, 150, 243, 0.4);
+		border: 1px solid rgba(33, 150, 243, 0.4);
 		content: "";
 		display: block;
 		height: calc(100% - 0px);
@@ -5476,10 +5352,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-status-bar {
-		border-top: solid 1px;
-		border-top-color: #babfc7;
-		border-top-color: #babfc7;
-		color: rgba(24, 29, 31, 0.5);
+		border-top: solid 1px #ecedf8;
 		color: rgba(24, 29, 31, 0.5);
 		line-height: 1.5;
 		padding-left: 24px;
@@ -5487,8 +5360,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-status-name-value-value {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-status-bar-center {
@@ -5504,7 +5376,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-cell {
 		background: rgba(24, 29, 31, 0.07);
-		background: rgba(24, 29, 31, 0.07);
 		border-radius: 24px;
 		height: 24px;
 		padding: 0 3px;
@@ -5515,8 +5386,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-cell-button {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		margin: 0 3px;
 		min-width: 24px;
 	}
@@ -5530,13 +5400,9 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-horizontal {
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
-		border-bottom: solid 1px;
-		border-bottom-color: #babfc7;
-		border-bottom-color: #babfc7;
-		color: #181d1f;
-		color: #181d1f;
+		background-color: #fff;
+		border-bottom: solid 1px #ecedf8;
+		color: #242748;
 		height: 42px;
 	}
 
@@ -5549,25 +5415,19 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-column-drop-horizontal-half-width:not(:last-child) {
-		border-right: solid 1px;
-		border-right-color: #babfc7;
-		border-right-color: #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-column-drop-horizontal-half-width:not(:last-child) {
-		border-left: solid 1px;
-		border-left-color: #babfc7;
-		border-left-color: #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-horizontal-cell-separator {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		margin: 0 6px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-horizontal-empty-message {
-		color: rgba(24, 29, 31, 0.5);
 		color: rgba(24, 29, 31, 0.5);
 	}
 
@@ -5590,9 +5450,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-vertical {
-		border-bottom: solid 1px;
-		border-bottom-color: #dde2eb;
-		border-bottom-color: #dde2eb;
+		border-bottom: solid 1px #dde2eb;
 		max-height: 150px;
 		min-height: 50px;
 	}
@@ -5609,7 +5467,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gflow-grid .ag-theme-alpine .ag-column-drop-vertical-empty-message {
 		bottom: 0;
 		color: rgba(24, 29, 31, 0.5);
-		color: rgba(24, 29, 31, 0.5);
 		left: 0;
 		margin-top: 6px;
 		overflow: hidden;
@@ -5620,16 +5477,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-select-agg-func-popup {
 		background: #fff;
-		background: #fff;
-		background: #fff;
-		background: #fff;
-		border: solid 1px;
-		border-color: #babfc7;
-		border-color: #babfc7;
+		border: solid 1px #ecedf8;
 		border-radius: 3px;
 		box-shadow: 0 1px 4px 1px rgba(186, 191, 199, 0.4);
 		height: 105px;
-		padding: 6px;
 		padding: 0;
 	}
 
@@ -5641,19 +5492,16 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-select-agg-func-virtual-list-item:hover {
 		background-color: rgba(33, 150, 243, 0.3);
-		background-color: rgba(33, 150, 243, 0.3);
 	}
 
 .gflow-grid .ag-theme-alpine .ag-chart-menu {
-		background: #fff;
 		background: #fff;
 		border-radius: 3px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-chart-menu-icon {
 		border-radius: 3px;
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		cursor: pointer;
 		font-size: 24px;
 		height: 24px;
@@ -5668,9 +5516,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-chart-mini-thumbnail {
-		border: 1px solid;
-		border-color: #dde2eb;
-		border-color: #dde2eb;
+		border: 1px solid #dde2eb;
 		border-radius: 5px;
 		margin: 5px;
 	}
@@ -5699,19 +5545,16 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-chart-mini-thumbnail.ag-selected {
 		border-color: #2196f3;
-		border-color: #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-chart-settings-card-item {
-		background: #181d1f;
-		background: #181d1f;
+		background: #242748;
 		border-radius: 4px;
 		height: 8px;
 		width: 8px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-chart-settings-card-item.ag-selected {
-		background-color: #2196f3;
 		background-color: #2196f3;
 	}
 
@@ -5722,9 +5565,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gflow-grid .ag-theme-alpine .ag-charts-settings-group-title-bar,
 	.gflow-grid .ag-theme-alpine .ag-charts-data-group-title-bar,
 	.gflow-grid .ag-theme-alpine .ag-charts-format-top-level-group-title-bar {
-		border-top: solid 1px;
-		border-top-color: #dde2eb;
-		border-top-color: #dde2eb;
+		border-top: solid 1px #dde2eb;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-charts-settings-group-container {
@@ -5732,8 +5573,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-charts-data-group-container {
-		padding: 12px 12px;
-		padding-bottom: 3px;
+		padding: 12px 12px 3px 12px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-charts-data-group-container > * {
@@ -5750,8 +5590,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-charts-format-sub-level-group-container {
-		padding: 12px 12px;
-		padding-bottom: 3px;
+		padding: 12px 12px 3px 12px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-charts-format-sub-level-group-container > * {
@@ -5769,20 +5608,15 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-chart-menu-panel {
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
+		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-chart-menu-panel {
-		border-left: solid 1px;
-		border-left-color: #babfc7;
-		border-left-color: #babfc7;
+		border-left: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-rtl .ag-chart-menu-panel {
-		border-right: solid 1px;
-		border-right-color: #babfc7;
-		border-right-color: #babfc7;
+		border-right: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-date-time-list-page-title {
@@ -5800,16 +5634,11 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-checkbox-input-wrapper {
 		background-color: #fff;
-		background-color: #fff;
 		border-radius: 3px;
 		display: inline-block;
 		flex: none;
 		font-family: "agGridAlpine";
 		font-size: 16px;
-
-		/* Better Font Rendering =========== */
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
 		font-style: normal;
 		font-feature-settings: normal;
 		font-variant: normal;
@@ -5847,7 +5676,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-checkbox-input-wrapper::after {
 		color: #999;
-		color: #999;
 		content: "\f108";
 		left: 0;
 		pointer-events: none;
@@ -5856,7 +5684,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-checkbox-input-wrapper.ag-checked::after {
-		color: #2196f3;
 		color: #2196f3;
 		content: "\f106";
 		left: 0;
@@ -5867,7 +5694,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-checkbox-input-wrapper.ag-indeterminate::after {
 		color: #999;
-		color: #999;
 		content: "\f107";
 		left: 0;
 		pointer-events: none;
@@ -5877,10 +5703,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-toggle-button-input-wrapper {
 		background-color: #999;
-		background-color: #999;
-		border: 1px solid;
-		border-color: #999;
-		border-color: #999;
+		border: 1px solid #999;
 		border-radius: 9px;
 		box-sizing: border-box;
 		flex: none;
@@ -5911,17 +5734,12 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-toggle-button-input-wrapper.ag-checked {
 		background-color: #2196f3;
-		background-color: #2196f3;
-		border-color: #2196f3;
 		border-color: #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-toggle-button-input-wrapper::before {
 		background-color: #fff;
-		background-color: #fff;
-		border: 1px solid;
-		border-color: #999;
-		border-color: #999;
+		border: 1px solid #999;
 		border-radius: 9px;
 		box-sizing: border-box;
 		content: " ";
@@ -5936,21 +5754,16 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-toggle-button-input-wrapper.ag-checked::before {
 		border-color: #2196f3;
-		border-color: #2196f3;
 		left: calc(100% - 18px);
 	}
 
 .gflow-grid .ag-theme-alpine .ag-radio-button-input-wrapper {
 		background-color: #fff;
-		background-color: #fff;
-		border-radius: 3px;
 		border-radius: 16px;
 		display: inline-block;
 		flex: none;
 		font-family: "agGridAlpine";
 		font-size: 16px;
-
-		/* Better Font Rendering =========== */
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		font-style: normal;
@@ -5990,7 +5803,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-radio-button-input-wrapper::after {
 		color: #999;
-		color: #999;
 		content: "\f124";
 		left: 0;
 		pointer-events: none;
@@ -5999,8 +5811,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-radio-button-input-wrapper.ag-checked::after {
-		color: #2196f3;
-		color: #2196f3;
+		color: #3e7da6;
 		content: "\f125";
 		left: 0;
 		pointer-events: none;
@@ -6017,9 +5828,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]::-webkit-slider-runnable-track {
-		background-color: #babfc7;
-		background-color: #babfc7;
-		border-radius: 3px;
+		background-color: #ecedf8;
 		border-radius: 3px;
 		height: 3px;
 		margin: 0;
@@ -6028,9 +5837,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]::-moz-range-track {
-		background-color: #babfc7;
-		background-color: #babfc7;
-		border-radius: 3px;
+		background-color: #ecedf8;
 		border-radius: 3px;
 		height: 3px;
 		margin: 0;
@@ -6039,25 +5846,18 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]::-ms-track {
-		background-color: #babfc7;
-		background-color: #babfc7;
-		border-radius: 3px;
+		background-color: #ecedf8;
 		border-radius: 3px;
 		color: transparent;
 		height: 3px;
 		margin: 0;
 		padding: 0;
-		width: 100%;
 		width: calc(100% - 2px);
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]::-webkit-slider-thumb {
-		-webkit-appearance: none;
 		background-color: #fff;
-		background-color: #fff;
-		border: 1px solid;
-		border-color: #999;
-		border-color: #999;
+		border: 1px solid #999;
 		border-radius: 16px;
 		height: 16px;
 		margin: 0;
@@ -6069,10 +5869,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]::-ms-thumb {
 		-webkit-appearance: none;
 		background-color: #fff;
-		background-color: #fff;
-		border: 1px solid;
-		border-color: #999;
-		border-color: #999;
+		border: 1px solid #999;
 		border-radius: 16px;
 		height: 16px;
 		margin: 0;
@@ -6083,10 +5880,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]::-moz-ag-range-thumb {
 		-webkit-appearance: none;
 		background-color: #fff;
-		background-color: #fff;
-		border: 1px solid;
-		border-color: #999;
-		border-color: #999;
+		border: 1px solid #999;
 		border-radius: 16px;
 		height: 16px;
 		margin: 0;
@@ -6100,34 +5894,28 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]:focus::-webkit-slider-thumb {
 		border-color: #2196f3;
-		border-color: #2196f3;
 		box-shadow: 0 0 2px 1.6px rgba(33, 150, 243, 0.4);
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]:focus::-ms-thumb {
-		border-color: #2196f3;
 		border-color: #2196f3;
 		box-shadow: 0 0 2px 1.6px rgba(33, 150, 243, 0.4);
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]:focus::-moz-ag-range-thumb {
 		border-color: #2196f3;
-		border-color: #2196f3;
 		box-shadow: 0 0 2px 1.6px rgba(33, 150, 243, 0.4);
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]:active::-webkit-slider-runnable-track {
 		background-color: rgba(33, 150, 243, 0.4);
-		background-color: rgba(33, 150, 243, 0.4);
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]:active::-moz-ag-range-track {
 		background-color: rgba(33, 150, 243, 0.4);
-		background-color: rgba(33, 150, 243, 0.4);
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"][type="range"]:active::-ms-track {
-		background-color: rgba(33, 150, 243, 0.4);
 		background-color: rgba(33, 150, 243, 0.4);
 	}
 
@@ -6141,15 +5929,13 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	.gflow-grid .ag-theme-alpine .ag-header-row,
 	.gflow-grid .ag-theme-alpine .ag-panel-title-bar-title,
 	.gflow-grid .ag-theme-alpine .ag-multi-filter-group-title-bar {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		font-weight: 700;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-pinned-right-header .ag-header-row::after,
 	.gflow-grid .ag-theme-alpine .ag-rtl .ag-pinned-left-header .ag-header-row::before {
-		background-color: #babfc7;
-		background-color: #babfc7;
+		background-color: #ecedf8;
 		content: "";
 		height: calc(100% - 20px);
 		position: absolute;
@@ -6166,7 +5952,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-row {
-		font-size: 14px;
+		font-size: 13px;
 	}
 
 .gflow-grid .ag-theme-alpine input[class^="ag-"]:not([type]),
@@ -6207,25 +5993,20 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-tab-selected {
 		color: #2196f3;
-		color: #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-menu {
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
+		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-menu-header {
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
+		background-color: #fff;
 		min-width: 240px;
 		padding-top: 1px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-tabs-header {
-		border-bottom: solid 1px;
-		border-bottom-color: #babfc7;
-		border-bottom-color: #babfc7;
+		border-bottom: solid 1px #ecedf8;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-charts-settings-group-title-bar,
@@ -6237,13 +6018,10 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-chart-mini-thumbnail {
 		background-color: #fff;
-		background-color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-chart-settings-nav-bar {
-		border-top: solid 1px;
-		border-top-color: #dde2eb;
-		border-top-color: #dde2eb;
+		border-top: solid 1px #dde2eb;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-ltr .ag-group-title-bar-icon {
@@ -6267,9 +6045,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-charts-format-sub-level-group {
-		border-left: dashed 1px;
-		border-left-color: #babfc7;
-		border-left-color: #babfc7;
+		border-left: dashed 1px #ecedf8;
 		margin-bottom: 12px;
 		padding-left: 6px;
 	}
@@ -6303,12 +6079,8 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		-webkit-appearance: none;
 		appearance: none;
 		background-color: #fff;
-		background-color: #fff;
-		border: 1px solid;
-		border-color: #2196f3;
-		border-color: #2196f3;
+		border: 1px solid #2196f3;
 		border-radius: 3px;
-		color: #2196f3;
 		color: #2196f3;
 		font-weight: 600;
 		padding: 6px 12px;
@@ -6316,26 +6088,18 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-standard-button:hover {
 		background-color: rgba(33, 150, 243, 0.1);
-		background-color: rgba(33, 150, 243, 0.1);
-		border-color: #2196f3;
 		border-color: #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-standard-button:active {
 		background-color: #2196f3;
-		background-color: #2196f3;
 		border-color: #2196f3;
-		border-color: #2196f3;
-		color: #fff;
 		color: #fff;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-standard-button:disabled {
 		background-color: #f1f2f4;
-		background-color: #f1f2f4;
 		border-color: rgba(186, 191, 199, 0.3);
-		border-color: rgba(186, 191, 199, 0.3);
-		color: rgba(24, 29, 31, 0.5);
 		color: rgba(24, 29, 31, 0.5);
 	}
 
@@ -6355,17 +6119,14 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-vertical-empty-message {
 		align-items: center;
-		border: dashed 1px;
-		border-color: #babfc7;
-		border-color: #babfc7;
+		border: dashed 1px #ecedf8;
 		display: flex;
 		margin: 12px;
 		padding: 12px;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-column-drop-empty-message {
-		color: #181d1f;
-		color: #181d1f;
+		color: #242748;
 		opacity: 0.75;
 	}
 
@@ -6406,7 +6167,6 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	.gflow-grid .ag-theme-alpine .ag-filter-toolpanel-expand:hover,
 	.gflow-grid .ag-theme-alpine .ag-chart-menu-icon:hover {
 		color: #2196f3;
-		color: #2196f3;
 	}
 
 .gflow-grid .ag-theme-alpine .ag-chart-settings-card-item.ag-not-selected:hover {
@@ -6428,12 +6188,9 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 	}
 
 .gflow-grid .ag-theme-alpine .ag-filter-toolpanel-instance-filter {
-		background-color: #f8f8f8;
-		background-color: #f8f8f8;
+		background-color: #fff;
 		border: none;
-		border-left: dashed 1px;
-		border-left-color: #babfc7;
-		border-left-color: #babfc7;
+		border-left: dashed 1px #ecedf8;
 		margin-left: 8px;
 		margin-right: 12px;
 		padding-left: 8px;
@@ -6457,12 +6214,617 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 
 .gflow-grid .ag-theme-alpine .ag-date-time-list-page-entry-is-current {
 		background-color: #2196f3;
-		background-color: #2196f3;
 	}
+
+/*
+	 * Base styles, shared by all buttons
+	 */
+
+.gform-admin .gform-button {
+		align-items: center;
+		border: 1px solid transparent;
+		border-radius: 3px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+		cursor: pointer;
+		display: inline-flex;
+		font-family: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, oxygen-sans, ubuntu, cantarell, "Helvetica Neue", sans-serif;
+		font-size: 14px;
+		font-weight: 500;
+		line-height: 23.2px;
+		padding: 9px 18px;
+		text-decoration: none;
+		transition: transform 300ms ease, box-shadow 300ms ease, background-color 300ms ease;
+		white-space: nowrap;
+	}
+
+.gform-admin .gform-button:focus {
+			box-shadow: 0 0 0 2px #bed8ed;
+			outline: none;
+		}
+
+.gform-admin .gform-button:disabled {
+			pointer-events: none;
+		}
+
+.gform-admin .gform-button.gform-button--circular {
+			border-radius: 100%;
+			justify-content: center;
+			padding: 0;
+		}
+
+/*
+	 * Style variants
+	 */
+
+.gform-admin .gform-button--primary {
+		background: #3e7da6;
+		border-color: #3e7da6;
+		color: #fff;
+	}
+
+.gform-admin .gform-button--primary:hover,
+		.gform-admin .gform-button--primary:active {
+			background: #3985b7;
+		}
+
+.gform-admin .gform-button--primary:disabled {
+			background: #3e7da6;
+			color: #639cc1;
+		}
+
+.gform-admin .gform-button--secondary {
+		background: #fff;
+		border-color: #3e7da6;
+		color: #3e7da6;
+	}
+
+.gform-admin .gform-button--secondary:hover,
+		.gform-admin .gform-button--secondary:active {
+			border-color: #3985b7;
+			color: #3985b7;
+		}
+
+.gform-admin .gform-button--secondary:disabled {
+			border-color: #c3c5db;
+			color: #c3c5db;
+		}
+
+.gform-admin .gform-button--white {
+		background: #fff;
+		border-color: #d5d7e9;
+		color: #242748;
+	}
+
+.gform-admin .gform-button--white:hover,
+		.gform-admin .gform-button--white:active {
+			background: #f6f9fc;
+			border-color: #d5d7e9;
+			color: #242748;
+		}
+
+.gform-admin .gform-button--white:focus {
+			background: #fff;
+			border-color: #c3c5db;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 2px #ecedf8;
+			color: #242748;
+		}
+
+.gform-admin .gform-button--white:disabled {
+			border-color: #c3c5db;
+			color: #c3c5db;
+		}
+
+.gform-admin .gform-button--white .gform-button__icon {
+			color: #5b5e80;
+		}
+
+/*
+	 * Size variants
+	 */
+
+.gform-admin .gform-button--size-xs {
+		font-size: 12px;
+		line-height: 16px;
+		padding: 7px 11px;
+	}
+
+.gform-admin .gform-button--size-xs .gform-button__icon {
+			font-size: 14px;
+		}
+
+.gform-admin .gform-button--size-sm {
+		line-height: 16px;
+		padding: 9px 13px;
+	}
+
+.gform-admin .gform-button--size-sm .gform-button__icon {
+			font-size: 14px;
+		}
+
+.gform-admin .gform-button--size-l {
+		font-size: 16px;
+		line-height: 24px;
+	}
+
+.gform-admin .gform-button--size-l .gform-button__icon {
+			font-size: 20px;
+		}
+
+.gform-admin .gform-button--size-xl {
+		font-size: 16px;
+		line-height: 24px;
+		padding: 13px 25px;
+	}
+
+.gform-admin .gform-button--size-xl .gform-button__icon {
+			font-size: 20px;
+		}
+
+/*
+	 * Icon variants
+	 */
+
+.gform-admin .gform-button__icon {
+		font-size: 18px;
+		position: relative;
+		top: -1px;
+	}
+
+.gform-admin .gform-button--icon-leading .gform-button__icon {
+			margin-right: 8px;
+		}
+
+.gform-admin .gform-button--icon-leading.gform-button--size-xs .gform-button__icon {
+				margin-right: 6px;
+			}
+
+.gform-admin .gform-button--icon-leading.gform-button--size-sm .gform-button__icon {
+				margin-right: 6px;
+			}
+
+.gform-admin .gform-button--icon-leading.gform-button--size-l .gform-button__icon {
+				margin-right: 10px;
+			}
+
+.gform-admin .gform-button--icon-leading.gform-button--size-xl .gform-button__icon {
+				margin-right: 12px;
+			}
+
+.gform-admin .gform-button--icon-trailing .gform-button__icon {
+			margin-left: 8px;
+		}
+
+.gform-admin .gform-button--icon-trailing.gform-button--size-xs .gform-button__icon {
+				margin-left: 6px;
+			}
+
+.gform-admin .gform-button--icon-trailing.gform-button--size-sm .gform-button__icon {
+				margin-left: 6px;
+			}
+
+.gform-admin .gform-button--icon-trailing.gform-button--size-l .gform-button__icon {
+				margin-left: 10px;
+			}
+
+.gform-admin .gform-button--icon-trailing.gform-button--size-xl .gform-button__icon {
+				margin-left: 12px;
+			}
+
+/*
+	 * Rounded variants
+	 */
+
+.gform-admin .gform-button--round {
+		border-radius: 19px;
+	}
+
+.gform-admin .gform-button--round.gform-button--size-xs {
+			border-radius: 15px;
+		}
+
+.gform-admin .gform-button--round.gform-button--size-sm {
+			border-radius: 17px;
+		}
+
+.gform-admin .gform-button--round.gform-button--size-l {
+			border-radius: 21px;
+		}
+
+.gform-admin .gform-button--round.gform-button--size-xl {
+			border-radius: 25px;
+		}
+
+/*
+	 * Circular variants
+	 */
+
+.gform-admin .gform-button--circular {
+		height: 38px;
+		width: 38px;
+	}
+
+.gform-admin .gform-button--circular .gform-button__icon {
+			font-size: 22px;
+		}
+
+.gform-admin .gform-button--circular.gform-button--size-xs {
+			height: 30px;
+			width: 30px;
+		}
+
+.gform-admin .gform-button--circular.gform-button--size-xs .gform-button__icon {
+				font-size: 18px;
+			}
+
+.gform-admin .gform-button--circular.gform-button--size-sm {
+			height: 34px;
+			width: 34px;
+		}
+
+.gform-admin .gform-button--circular.gform-button--size-sm .gform-button__icon {
+				font-size: 20px;
+			}
+
+.gform-admin .gform-button--circular.gform-button--size-l {
+			height: 42px;
+			width: 42px;
+		}
+
+.gform-admin .gform-button--circular.gform-button--size-l .gform-button__icon {
+				font-size: 28px;
+			}
+
+.gform-admin .gform-button--circular.gform-button--size-xl {
+			height: 50px;
+			width: 50px;
+		}
+
+.gform-admin .gform-button--circular.gform-button--size-xl .gform-button__icon {
+				font-size: 32px;
+			}
+
+/*
+* Toggles in settings and field editor.
+*
+* Used in admin.css.
+*/
+
+.gform-field__toggle {
+	transition-duration: 0.2s;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gform-field__toggle input[type="checkbox"]:focus + .gform-field__toggle-container {
+				border-color: #3e7da6;
+			}
+
+.gform-field__toggle input[type="checkbox"]:disabled {
+			display: none;
+		}
+
+.gform-field__toggle input[type="checkbox"]:disabled + .gform-field__toggle-container {
+				cursor: not-allowed;
+				opacity: 0.4;
+				pointer-events: none;
+			}
+
+.gform-field__toggle input[type="checkbox"]:checked + .gform-field__toggle-container {
+				background: #3e7da6;
+			}
+
+.gform-field__toggle input[type="checkbox"]:checked + .gform-field__toggle-container .gform-field__toggle-switch {
+					background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yLjY2NjcgNC4zOTA1TDYuODYxOS4xOTUzYS42NjY3LjY2NjcgMCAwMS45NDI4Ljk0MjhsLTUuMTM4IDUuMTM4TC4xOTUzIDMuODA0N2EuNjY2Ny42NjY3IDAgMDEuOTQyOC0uOTQyOGwxLjUyODYgMS41Mjg2eiIgZmlsbD0iIzNFN0RBNiIvPjwvc3ZnPg==);
+					background-size: 8px;
+					left: 24px;
+				}
+
+.gform-field__toggle input[type="checkbox"]:checked:focus + .gform-field__toggle-container {
+					border: 2px solid #bed8ed;
+				}
+
+.gform-field__toggle input[type="checkbox"]:not(:disabled) {
+			opacity: 0 !important;
+			position: absolute;
+			z-index: 3;
+		}
+
+.gform-field__toggle .gform-field__toggle-switch {
+		background: #fff center no-repeat url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjQ3NDkgMi41MjUxYS41ODMzLjU4MzMgMCAwMDAgLjgyNUw0LjEyNDggNWwtMS42NSAxLjY1YS41ODMzLjU4MzMgMCAxMC44MjUuODI0OWwxLjY1LTEuNjUgMS42NDk5IDEuNjVhLjU4MzMuNTgzMyAwIDEwLjgyNS0uODI1TDUuNzc0NiA1bDEuNjUtMS42NWEuNTgzMy41ODMzIDAgMTAtLjgyNS0uODI0OWwtMS42NSAxLjY1LTEuNjQ5OS0xLjY1YS41ODMzLjU4MzMgMCAwMC0uODI1IDB6IiBmaWxsPSIjOTA5MkIyIi8+PC9zdmc+);
+		background-size: 10px;
+		border-radius: 50%;
+		box-shadow: 0 1px 4px rgba(24, 24, 72, 0.123698);
+		display: block;
+		height: 18px;
+		left: 0;
+		position: relative;
+		transition: all 0.25s ease;
+		transition-duration: 0.2s;
+		transition-property: background, left;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		width: 18px;
+	}
+
+html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-field__toggle-container .gform-field__toggle-switch {
+					left: -24px;
+				}
+
+.gform-field__toggle-container {
+	background: #9092b2;
+	border: 2px solid transparent;
+	border-radius: 15px;
+	box-shadow: inset 0 1px 2px rgba(90, 97, 105, 0.15);
+	cursor: pointer;
+	display: inline-block;
+	height: 18px;
+	margin-right: 8px;
+	padding: 2.04px;
+	position: relative;
+	transition: all 0.25s ease;
+	transition-duration: 0.2s;
+	transition-property: background-color, border-color, color, fill, stroke;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.1, 1);
+	width: 42px;
+}
+
+.gform-flyout {
+	background: #fff;
+	bottom: 0;
+	box-shadow: 0 0 1px rgba(18, 25, 97, 0.24),
+		0 24px 24px rgba(18, 25, 97, 0.03),
+		0 2px 2px rgba(18, 25, 97, 0.03),
+		0 4px 4px rgba(18, 25, 97, 0.03),
+		0 8px 8px rgba(18, 25, 97, 0.03),
+		0 16px 16px rgba(18, 25, 97, 0.03);
+	box-sizing: border-box;
+	display: none;
+	flex-direction: column;
+	opacity: 0;
+	padding-top: 20px;
+	position: absolute;
+	top: 0;
+	width: calc(100vw - 25px);
+	z-index: 10;
+}
+
+@media (min-width: 783px) {
+
+.gform-flyout {
+		width: calc(100vw - 306px)
+}
+	}
+
+@media (min-width: 960px) {
+
+.gform-flyout {
+		width: calc(100vw - 530px)
+}
+	}
+
+@media (min-width: 1260px) {
+
+.gform-flyout {
+		width: 650px
+}
+	}
+
+@media (min-width: 960px) {
+
+.folded.sticky-menu .gform-flyout {
+			width: calc(100vw - 406px)
+	}
+		}
+
+@media (min-width: 1260px) {
+
+.folded.sticky-menu .gform-flyout {
+			width: auto
+	}
+		}
+
+.gform-flyout.gform-flyout--fixed {
+		position: fixed;
+	}
+
+.admin-bar .gform-flyout.gform-flyout--fixed {
+			top: 46px;
+		}
+
+@media (min-width: 783px) {
+
+.admin-bar .gform-flyout.gform-flyout--fixed {
+				top: 32px
+		}
+			}
+
+.gform-flyout.gform-flyout--absolute {
+		position: absolute;
+	}
+
+.gform-flyout.gform-flyout--right {
+		right: calc(15px - 100vw);
+	}
+
+@media (min-width: 783px) {
+
+.gform-flyout.gform-flyout--right {
+			right: calc(296px - 100vw)
+	}
+		}
+
+@media (min-width: 960px) {
+
+.gform-flyout.gform-flyout--right {
+			right: calc(520px - 100vw)
+	}
+		}
+
+@media (min-width: 1260px) {
+
+.gform-flyout.gform-flyout--right {
+			right: -660px
+	}
+		}
+
+.gform-flyout.anim-in-ready {
+		display: flex;
+		transform: translateX(-98%) translateX(-10px);
+	}
+
+.gform-flyout.anim-in-ready.anim-in-active {
+		opacity: 1;
+		transform: translateX(-100%) translateX(-10px);
+		transition: opacity 190ms ease-in-out, transform 190ms ease-in-out;
+	}
+
+.gform-flyout.anim-out-ready {
+		display: flex;
+		opacity: 1;
+		transform: translateX(-100%) translateX(-10px);
+		transition: opacity 190ms ease-in-out, transform 190ms ease-in-out;
+	}
+
+.gform-flyout.anim-out-ready.anim-out-active {
+		opacity: 0;
+		transform: translateX(-98%) translateX(-10px);
+	}
+
+.gform-flyout .gform-flyout__close.gform-button--size-xs {
+		border: 1px solid #d5d7e9;
+		display: flex;
+		font-size: 20px;
+		height: 26px;
+		position: absolute;
+		right: 25px;
+		top: 15px;
+		transition: border-color 200ms ease-in-out, box-shadow 200ms ease-in-out;
+		width: 26px;
+		z-index: 5;
+	}
+
+.gform-flyout .gform-flyout__close.gform-button--size-xs:hover,
+		.gform-flyout .gform-flyout__close.gform-button--size-xs:focus {
+			border-color: #3e7da6;
+		}
+
+.gform-flyout .gform-flyout__close.gform-button--size-xs .gform-button__icon {
+			font-size: 22px;
+		}
+
+.gform-flyout__head {
+	padding: 0 25px 20px;
+	position: relative;
+}
+
+.gform-flyout__head::after {
+		background: #ecedf8;
+		bottom: 0;
+		content: "";
+		height: 1px;
+		left: 0;
+		position: absolute;
+		width: 100%;
+	}
+
+.gform-flyout__title {
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 18px;
+	margin-bottom: 12px;
+}
+
+.gform-flyout__desc {
+	font-size: 13px;
+	padding-right: 18px;
+}
+
+.gform-flyout__body {
+	font-size: 13px;
+	overflow-y: auto;
+	padding: 20px 25px;
+}
+
+.gform-flyout__setting-label {
+	display: block;
+	font-size: 13px;
+	font-weight: 500;
+	margin-bottom: 12px;
+}
+
+.gform-flyout__setting-desc {
+	display: block;
+	margin: 5px 0 12px;
+}
+
+.gform-flyout__setting {
+	margin-bottom: 24px;
+}
+
+.gflow-grid {
+	position: relative;
+}
+
+.gflow-grid .ag-cell-label-container > [ref="eMenu"] .ag-icon-menu {
+				font-family: "gflow-icons-common";
+			}
+
+.gflow-grid .ag-cell-label-container > [ref="eMenu"] .ag-icon-menu::before {
+					content: "\e986";
+				}
+
+.gflow-grid .ag-header-row > div:last-of-type .ag-icon-menu {
+				margin-right: 30px;
+			}
+
+.gflow-grid__button {
+	background: none;
+	border: 0;
+	color: #242748;
+	margin: 0;
+	padding: 0;
+	transition: all 0.15s ease;
+}
+
+.gflow-grid__button:hover,
+	.gflow-grid__button:focus,
+	.gflow-grid__button:active {
+		color: #3e7da6;
+		outline: 0;
+	}
+
+.gflow-grid__button--settings {
+	align-items: center;
+	cursor: pointer;
+	display: flex;
+	font-size: 24px;
+	height: 40px;
+	justify-content: center;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 40px;
+	z-index: 2;
+}
+
+/* -----------------------------------------------------------------------------
+ *
+ * Grids
+ *
+ * This directory contains custom css specific to each of the grids
+ * (inbox, status etc).
+ * Shared css goes in the _grid.pcss file found in common/components
+ *
+ * This file is just a clearing-house.
+ * Make partials (start with an underscore) elsewhere for actual code.
+ *
+ * ----------------------------------------------------------------------------- */
 
 .gflow-inbox {
 	padding: 0;
 	width: 100%;
 }
+
+.gform-flyout--inbox-settings .gform-flyout__setting--poll-freq {
+		width: 100px;
+	}
 
 /*# sourceMappingURL=theme.css.map */

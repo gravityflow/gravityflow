@@ -4,7 +4,7 @@
  * Code shared between the theme and admin bundles.
  */
 
-import components from './components';
+import grids from './grids';
 
 /**
  * @function init
@@ -12,7 +12,7 @@ import components from './components';
  */
 
 const init = () => {
-	components();
+	grids();
 
 	console.info( 'Gravity Flow Common: Initialized all common scripts.' );
 };

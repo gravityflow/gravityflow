@@ -1,0 +1,109 @@
+/*
+* Toggles in settings and field editor.
+*
+* Used in admin.css.
+*/
+
+.gform-field__toggle {
+	transition-duration: 0.2s;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+	input[type="checkbox"] {
+
+		&:focus {
+
+			+ .gform-field__toggle-container {
+				border-color: var(--c-gravity-blue);
+			}
+
+		}
+
+		&:disabled {
+			display: none;
+
+			+ .gform-field__toggle-container {
+				cursor: not-allowed;
+				opacity: 0.4;
+				pointer-events: none;
+			}
+		}
+
+		&:checked {
+
+			+ .gform-field__toggle-container {
+				background: var(--c-gravity-blue);
+
+				.gform-field__toggle-switch {
+					background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0yLjY2NjcgNC4zOTA1TDYuODYxOS4xOTUzYS42NjY3LjY2NjcgMCAwMS45NDI4Ljk0MjhsLTUuMTM4IDUuMTM4TC4xOTUzIDMuODA0N2EuNjY2Ny42NjY3IDAgMDEuOTQyOC0uOTQyOGwxLjUyODYgMS41Mjg2eiIgZmlsbD0iIzNFN0RBNiIvPjwvc3ZnPg==);
+					background-size: 0.5rem;
+					left: 1.5rem;
+				}
+			}
+
+			&:focus {
+
+				+ .gform-field__toggle-container {
+					border: 2px solid var(--c-spindle);
+				}
+
+			}
+		}
+
+		&:not(:disabled) {
+			opacity: 0 !important;
+			position: absolute;
+			z-index: 3;
+		}
+	}
+
+	.gform-field__toggle-switch {
+		background: #fff center no-repeat url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjQ3NDkgMi41MjUxYS41ODMzLjU4MzMgMCAwMDAgLjgyNUw0LjEyNDggNWwtMS42NSAxLjY1YS41ODMzLjU4MzMgMCAxMC44MjUuODI0OWwxLjY1LTEuNjUgMS42NDk5IDEuNjVhLjU4MzMuNTgzMyAwIDEwLjgyNS0uODI1TDUuNzc0NiA1bDEuNjUtMS42NWEuNTgzMy41ODMzIDAgMTAtLjgyNS0uODI0OWwtMS42NSAxLjY1LTEuNjQ5OS0xLjY1YS41ODMzLjU4MzMgMCAwMC0uODI1IDB6IiBmaWxsPSIjOTA5MkIyIi8+PC9zdmc+);
+		background-size: 0.625rem;
+		border-radius: 50%;
+		box-shadow: 0 1px 4px rgba(24, 24, 72, 0.123698);
+		display: block;
+		height: 1.125rem;
+		left: 0;
+		position: relative;
+		transition: all 0.25s ease;
+		transition-duration: 0.2s;
+		transition-property: background, left;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		width: 1.125rem;
+	}
+}
+
+html[dir="rtl"] .gform-field__toggle {
+
+	input[type="checkbox"] {
+
+		&:checked {
+
+			+ .gform-field__toggle-container {
+
+				.gform-field__toggle-switch {
+					left: -1.5rem;
+				}
+			}
+		}
+	}
+
+}
+
+.gform-field__toggle-container {
+	background: var(--c-border);
+	border: 2px solid transparent;
+	border-radius: 15px;
+	box-shadow: inset 0 1px 2px rgba(90, 97, 105, 0.15);
+	cursor: pointer;
+	display: inline-block;
+	height: 1.125rem;
+	margin-right: 0.5rem;
+	padding: 0.1275rem;
+	position: relative;
+	transition: all 0.25s ease;
+	transition-duration: 0.2s;
+	transition-property: background-color, border-color, color, fill, stroke;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.1, 1);
+	width: 2.625rem;
+}

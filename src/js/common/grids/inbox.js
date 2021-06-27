@@ -5,14 +5,21 @@
  */
 
 import { Grid } from 'ag-grid-community';
+import delegate from 'delegate';
+import gflowConfig from 'gflow-config';
+import request from 'utils/request';
+
+import Flyout from 'common/components/flyout';
+import * as gridTemplates from 'templates/components/grid';
+import * as inboxTemplates from 'templates/grids/inbox';
 
 const el = {};
 const instances = {};
 const options = {
 	animateRows: false,
 };
-const data = window?.gflow_config?.grid_options || {};
-const config = window?.gflow_config || {};
+const data = gflowConfig?.grid_options || {};
+const config = gflowConfig || {};
 const gridOptions = Object.assign( {}, data, options );
 
 const initializeGrid = () => {
@@ -35,14 +42,37 @@ const initializeGrid = () => {
 		return;
 	}
 
-	gridOptions.columnApi.applyColumnState({
+	gridOptions.columnApi.applyColumnState( {
 		state: [
 			{
 				colId: sortCol,
 				sort: sortDir,
 			},
 		],
-	});
+	} );
+};
+
+/**
+ * @function initializeSettings
+ * @description Inject the settings trigger and instantiate the flyout
+ */
+
+const initializeSettings = () => {
+	el.container.insertAdjacentHTML(
+		'afterbegin',
+		gridTemplates.settingToggle(
+			'inbox-settings',
+			'Toggle settings for this table' // todo: needs i18n
+		)
+	);
+	instances.settingsFlyout = new Flyout( {
+		content: inboxTemplates.settings(),
+		position: 'absolute',
+		target: '.gflow-inbox.gflow-grid',
+		title: 'Inbox Settings',
+		triggers: '[data-js="inbox-settings"]',
+		wrapperClasses: 'gform-flyout gform-flyout--inbox-settings',
+	} );
 };
 
 const getIdsFromModel = () => {
@@ -61,6 +91,8 @@ const refreshGrid = async () => {
 		window?.gflow_config?.current_user_token || null
 	);
 
+	console.log( request );
+
 	const response = await window.fetch( '/wp-json/gf/v2/refresh_inbox_items', {
 		method: 'post',
 		body: formData,
@@ -71,18 +103,36 @@ const refreshGrid = async () => {
 	gridOptions.api.applyTransaction( responseJson );
 };
 
+/**
+ * @function handleSettingsChange
+ * @description Handle changes to the settings for the inbox
+ */
+
+const handleSettingsChange = ( e ) => {
+	// switch based on setting name to handle cases, name is also value stored and passed in on init from php in config
+	console.log( e.delegateTarget.name );
+};
+
 const bindEvents = () => {
 	const refreshButton = document.querySelector( '[data-js="refresh_inbox"]' );
 	refreshButton.addEventListener( 'click', function ( e ) {
 		e.preventDefault();
 		refreshGrid();
 	} );
+
+	delegate(
+		instances.settingsFlyout.flyoutElement,
+		'[data-js="inbox-setting"]',
+		'change',
+		handleSettingsChange
+	);
 };
 
 const init = ( container ) => {
 	el.container = container;
 
 	initializeGrid();
+	initializeSettings();
 	bindEvents();
 
 	console.info( 'Gravity Flow Common: Initialized inbox component.' );

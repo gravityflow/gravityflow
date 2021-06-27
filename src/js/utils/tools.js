@@ -42,6 +42,23 @@ export const getChildren = ( el ) => {
 };
 
 /**
+ * @function getFocusable
+ * @description Get focusable elements inside a container and return as an array.
+ *
+ * @param container the parent to search for focusable elements inside of
+ * @return {*[]}
+ */
+
+export const getFocusable = ( container = document ) => {
+	const focusable = convertElements(
+		container.querySelectorAll(
+			'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+		)
+	);
+	return focusable.filter( ( item ) => visible( item ) );
+};
+
+/**
  *
  * Test if a dom node has a class or returns false if el not defined
  *
@@ -231,4 +248,20 @@ export const setAttributes = ( el, attrs ) => {
 	for ( const key in attrs ) {
 		el.setAttribute( key, attrs[ key ] );
 	}
+};
+
+/**
+ * @function visible
+ * @description Determine if an element is visible in the dom.
+ *
+ * @param {HTMLElement} elem The element to check
+ * @return {boolean}
+ */
+
+export const visible = ( elem ) => {
+	return !! (
+		elem.offsetWidth ||
+		elem.offsetHeight ||
+		elem.getClientRects().length
+	);
 };

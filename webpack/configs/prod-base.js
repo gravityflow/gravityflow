@@ -19,6 +19,7 @@ module.exports = merge.strategy( {
 	output: {
 		filename: '[name].min.js',
 		chunkFilename: '[name].[chunkhash].min.js',
+		uniqueName: 'gravityflow',
 	},
 	plugins: [
 		new webpack.DefinePlugin( {
