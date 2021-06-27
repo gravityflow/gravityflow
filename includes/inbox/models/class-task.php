@@ -68,15 +68,19 @@ class Task implements Model {
 			$columns['workflow_step'] = __( 'Step', 'gravityflow' );
 		}
 
-		$columns['date_created'] = __( 'Submitted', 'gravityflow' );
-		$columns                 = \Gravity_Flow_Common::get_field_columns( $columns, $args['form_id'], $args['field_ids'] );
+		$columns['date_created']           = __( 'Submitted', 'gravityflow' );
+		$columns['date_created_timestamp'] = __( 'Submitted Timestamp', 'gravityflow' );
+
+		$columns = \Gravity_Flow_Common::get_field_columns( $columns, $args['form_id'], $args['field_ids'] );
 
 		if ( $args['last_updated'] ) {
-			$columns['last_updated'] = __( 'Last Updated', 'gravityflow' );
+			$columns['last_updated']           = __( 'Last Updated', 'gravityflow' );
+			$columns['last_updated_timestamp'] = __( 'Last Updated Timestamp', 'gravityflow' );
 		}
 
 		if ( $args['due_date'] ) {
-			$columns['due_date'] = __( 'Due Date', 'gravityflow' );
+			$columns['due_date']           = __( 'Due Date', 'gravityflow' );
+			$columns['due_date_timestamp'] = __( 'Due Date Timestamp', 'gravityflow' );
 		}
 
 		/**
@@ -92,33 +96,42 @@ class Task implements Model {
 
 	private function column_config_map() {
 		$map = array(
-			'id'            => array(
+			'id'                     => array(
 				'compareType' => 'int',
 				'minWidth'    => self::WIDTH_SMALL,
 			),
-			'actions'       => array(
+			'actions'                => array(
 				'minWidth' => self::WIDTH_SMALL,
 			),
-			'form_title'    => array(
+			'form_title'             => array(
 				'minWidth' => self::WIDTH_WIDE,
 			),
-			'created_by'    => array(
+			'created_by'             => array(
 				'minWidth' => self::WIDTH_MED,
 			),
-			'workflow_step' => array(
+			'workflow_step'          => array(
 				'minWidth' => self::WIDTH_SMALL,
 			),
-			'date_created'  => array(
+			'date_created'           => array(
 				'sortKey'     => 'date_created_timestamp',
 				'compareType' => 'date',
 			),
-			'last_updated'  => array(
+			'last_updated'           => array(
 				'sortKey'     => 'last_updated_timestamp',
 				'compareType' => 'date',
 			),
-			'due_date'      => array(
+			'due_date'               => array(
 				'sortKey'     => 'due_date_timestamp',
 				'compareType' => 'date',
+			),
+			'due_date_timestamp'     => array(
+				'display' => false,
+			),
+			'date_created_timestamp' => array(
+				'display' => false,
+			),
+			'last_updated_timestamp' => array(
+				'display' => false,
 			),
 		);
 
@@ -138,6 +151,7 @@ class Task implements Model {
 				'compareType' => 'string',
 				'sortKey'     => $name,
 				'resizable'   => true,
+				'display'     => true,
 			);
 
 			$values = isset( $map[ $name ] ) ? $map[ $name ] : array();
@@ -154,6 +168,10 @@ class Task implements Model {
 		$columns = $this->apply_config_to_columns( $columns );
 
 		foreach ( $columns as $name => $data ) {
+			if ( ! $data['display'] ) {
+				continue;
+			}
+
 			$headers[] = $data;
 		}
 
@@ -223,10 +241,18 @@ class Task implements Model {
 				$date_created = \Gravity_Flow_Common::format_date( $entry['date_created'], '', true, true );
 				$value        = $date_created;
 				break;
+			case 'date_created_timestamp':
+				$value = strtotime( $entry['date_created'] );
+				break;
+
 			case 'last_updated':
 				$last_updated = date( 'Y-m-d H:i:s', $entry['workflow_timestamp'] );
 				$value        = $entry['date_created'] != $last_updated ? \Gravity_Flow_Common::format_date( $last_updated, '', true, true ) : '-';
 				break;
+			case 'last_updated_timestamp':
+				$value = strtotime( $entry['workflow_timestamp'] );
+				break;
+
 			case 'workflow_step':
 				if ( isset( $entry['workflow_step'] ) ) {
 					$step = gravity_flow()->get_step( $entry['workflow_step'] );
@@ -260,6 +286,16 @@ class Task implements Model {
 					$value = '-';
 				}
 				break;
+			case 'due_date_timestamp':
+				$api  = new Gravity_Flow_API( $form['id'] );
+				$step = $api->get_current_step( $entry );
+				if ( $step && $step->due_date ) {
+					$value = strtotime( $step->get_due_date_timestamp() );
+				} else {
+					$value = 0;
+				}
+				break;
+
 			default:
 				$field = \GFFormsModel::get_field( $form, $id );
 
