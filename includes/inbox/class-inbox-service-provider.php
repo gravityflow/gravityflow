@@ -97,18 +97,20 @@ class Inbox_Service_Provider extends Service_Provider {
 			 */
 			$tasks = $container->get( self::TASK_MODEL );
 
-			$config['grid_options'] = array(
+			$grid_config['grid_options'] = array(
 				'columnDefs'         => $tasks->get_table_header_defs(),
 				'rowData'            => $tasks->get_inbox_tasks( array() ),
 				'pagination'         => true,
 				'paginationPageSize' => (int) $this->get_pref( self::ITEMS_PER_PAGE ),
 			);
 
-			$config['current_user_token']     = $this->get_user_token();
-			$config[ self::FETCH_ENABLED ]    = (bool) $this->get_pref( self::FETCH_ENABLED );
-			$config[ self::FETCH_INTERVAL ]   = (int) $this->get_pref( self::FETCH_INTERVAL );
-			$config[ self::DEFAULT_SORT_COL ] = $this->get_pref( self::DEFAULT_SORT_COL );
-			$config[ self::DEFAULT_SORT_DIR ] = $this->get_pref( self::DEFAULT_SORT_DIR );
+			$grid_config['current_user_token']     = $this->get_user_token();
+			$grid_config[ self::FETCH_ENABLED ]    = (bool) $this->get_pref( self::FETCH_ENABLED );
+			$grid_config[ self::FETCH_INTERVAL ]   = (int) $this->get_pref( self::FETCH_INTERVAL );
+			$grid_config[ self::DEFAULT_SORT_COL ] = $this->get_pref( self::DEFAULT_SORT_COL );
+			$grid_config[ self::DEFAULT_SORT_DIR ] = $this->get_pref( self::DEFAULT_SORT_DIR );
+
+			$config['grids']['inbox_default'] = $grid_config;
 
 			return $config;
 		}, 10, 1 );
