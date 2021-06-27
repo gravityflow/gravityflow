@@ -25,8 +25,6 @@ const globalOptions = {
 const data = gflowConfig?.grids || {};
 const config = gflowConfig || {};
 
-let gridId;
-
 const intComparator = ( ...args ) => {
 	const value1 = args[ 3 ].data[ args[ 0 ].sortKey ] ?? args[ 1 ];
 	const value2 = args[ 4 ].data[ args[ 0 ].sortKey ] ?? args[ 2 ];
@@ -45,7 +43,7 @@ const applyColumnComparator = ( column ) => {
 };
 
 const initializeGrid = ( grid ) => {
-	gridId = grid.dataset.gridId || INBOX_DEFAULT_ID;
+	const gridId = grid.dataset.gridId || INBOX_DEFAULT_ID;
 
 	if ( ! data[ gridId ]?.grid_options ) {
 		console.error( `Cant find inbox options for grid id: ${ gridId }` );
