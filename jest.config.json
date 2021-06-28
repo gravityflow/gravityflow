@@ -17,6 +17,9 @@
     "setupFiles": [
         "<rootDir>/tests/js/setup.js"
     ],
+    "setupFilesAfterEnv": [
+        "<rootDir>/tests/js/gflow-config.setup.js"
+    ],
     "roots": [
         "<rootDir>/tests/js"
     ],

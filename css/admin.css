@@ -3459,7 +3459,7 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
 		0 4px 4px rgba(18, 25, 97, 0.03),
 		0 8px 8px rgba(18, 25, 97, 0.03),
 		0 16px 16px rgba(18, 25, 97, 0.03);
-		margin: 5px 0 0 -170px;
+		margin: 5px 0 0 -160px;
 	}
 
 .gflow-grid .ag-dragging-range-handle .ag-theme-alpine .ag-dialog,
@@ -6771,7 +6771,7 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 	justify-content: center;
 	position: absolute;
 	right: 5px;
-	top: 5px;
+	top: 10px;
 	width: 40px;
 	z-index: 2;
 }
@@ -6797,6 +6797,22 @@ html[dir="rtl"] .gform-field__toggle input[type="checkbox"]:checked + .gform-fie
 .gform-flyout--inbox-settings .gform-flyout__setting--poll-freq {
 		width: 6.25rem;
 	}
+
+.gflow-grid__header {
+	align-items: center;
+	background: #fff;
+	border: 1px solid #ecedf8;
+	border-bottom: 0;
+	display: flex;
+	height: 60px;
+	padding: 0 18px;
+	width: 100%;
+}
+
+.gflow-inbox__search {
+	max-width: calc(100% - 50px);
+	width: 300px;
+}
 
 /* Admin */
 

@@ -46,7 +46,7 @@ class Gravity_Flow_Inbox {
 		<?php if ( sizeof( $entries ) > 0 ) : ?>
 
 			<div class="gflow-inbox gflow-grid">
-				<div class="ag-theme-alpine" data-js="gflow-inbox" data-js-grid-id="inbox_default"></div>
+				<div class="ag-theme-alpine" data-js="gflow-inbox" data-grid-id="inbox_default"></div>
 			</div>
 
 			<div class="gflow-inbox-debug">

@@ -7,6 +7,7 @@
  * @param {string} value
  * @param {string} classes
  * @param {string} jsAttribute
+ * @param {string} placeholder
  *
  * @return {string}
  */
@@ -17,7 +18,8 @@ export default function (
 	name = '',
 	value = '',
 	classes = 'gform-input',
-	jsAttribute = 'gform-input'
+	jsAttribute = 'gform-input',
+	placeholder = ''
 ) {
 	return `
 	<input 
@@ -25,8 +27,9 @@ export default function (
 		value="${ value }" 
 		type="${ type }" 
 		data-js="${ jsAttribute }"
-		${ id ? `id=${ id }` : '' }
-		${ name ? `name=${ name }` : '' }
+		${ placeholder ? `placeholder="${ placeholder }"` : '' }
+		${ id ? `id="${ id }"` : '' }
+		${ name ? `name="${ name }"` : '' }
 	/>
 	`;
 }

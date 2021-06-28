@@ -11,12 +11,14 @@ import request from 'utils/request';
 
 import Flyout from 'common/components/flyout';
 import { INBOX_DEFAULT_ID } from 'common/config/constants';
+import * as tools from 'utils/tools';
 import * as gridTemplates from 'templates/components/grid';
 import * as inboxTemplates from 'templates/grids/inbox';
 
 const el = {};
 const instances = {
 	grids: {},
+	gridOptions: {},
 	flyouts: {},
 };
 const globalOptions = {
@@ -27,6 +29,9 @@ const config = gflowConfig || {};
 
 /**
  * @function intComparator
+ * @description Function used by ag grid when sorting numeric columns
+ *
+ * @since 2.7.4
  *
  * @param {...*} args The args sent to this method, which are
  *                    {String}  The current column object.
@@ -45,6 +50,16 @@ const intComparator = ( ...args ) => {
 	return Math.sign( parseInt( value1 ) - parseInt( value2 ) );
 };
 
+/**
+ * @function applyColumnComparator
+ * @description Apply a comparator based on column type. String or int.
+ *
+ * @since 2.7.4
+ *
+ * @param {Object} column
+ * @return {*}
+ */
+
 const applyColumnComparator = ( column ) => {
 	if ( column.compareType === 'string' ) {
 		return column;
@@ -55,28 +70,64 @@ const applyColumnComparator = ( column ) => {
 	return column;
 };
 
-const initializeGrid = ( grid ) => {
-	const gridId = grid.dataset.gridId || INBOX_DEFAULT_ID;
+/**
+ * @function getGridId
+ * @description Gets the grid id used to match options to instances in the dom.
+ *
+ * @since 2.7.4
+ *
+ * @param {HTMLElement} grid The wrapping container the grid is injected to
+ * @return {string}
+ */
+
+export const getGridId = ( grid ) => grid.dataset.gridId || INBOX_DEFAULT_ID;
+
+/**
+ * @function getGridOptions
+ * @description Merges global options with the instance specific options for a grid instance.
+ *
+ * @since 2.7.4
+ *
+ * @param {string} gridId The unique identifier for the grid instance.
+ * @return {Object}
+ */
+
+export const getGridOptions = ( gridId = INBOX_DEFAULT_ID ) =>
+	Object.assign( {}, data[ gridId ].grid_options, globalOptions );
+
+/**
+ * @function initializeGrid
+ * @description Initializes an ag grid instance on the passed containing div.
+ *
+ * @since 2.7.4
+ *
+ * @param {HTMLElement} grid The grid container.
+ */
+
+export const initializeGrid = ( grid ) => {
+	const gridId = getGridId( grid );
 
 	if ( ! data[ gridId ]?.grid_options ) {
 		console.error( `Cant find inbox options for grid id: ${ gridId }` );
 	}
 
-	const gridOptions = Object.assign(
-		{},
-		data[ gridId ].grid_options,
-		globalOptions
-	);
+	instances.gridOptions[ gridId ] = getGridOptions( gridId );
 
-	gridOptions.getRowNodeId = ( row ) => {
+	instances.gridOptions[ gridId ].getRowNodeId = ( row ) => {
 		return parseInt( row.id );
 	};
 
-	gridOptions.columnDefs.forEach( ( column, index ) => {
-		gridOptions.columnDefs[ index ] = applyColumnComparator( column );
+	instances.gridOptions[ gridId ].columnDefs.forEach( ( column, index ) => {
+		instances.gridOptions[ gridId ].columnDefs[
+			index
+		] = applyColumnComparator( column );
 	} );
 
-	instances.grids[ gridId ] = new Grid( grid, gridOptions );
+	instances.grids[ gridId ] = new Grid(
+		grid,
+		instances.gridOptions[ gridId ]
+	);
+	initializeSearch( grid );
 	initializeSettings( grid, gridId );
 
 	const sortCol = config?.default_sort_col || 'none';
@@ -86,13 +137,15 @@ const initializeGrid = ( grid ) => {
 		return;
 	}
 
-	const gridCol = gridOptions.columnApi.getColumn( sortCol );
+	const gridCol = instances.gridOptions[ gridId ].columnApi.getColumn(
+		sortCol
+	);
 
 	if ( ! gridCol ) {
 		return;
 	}
 
-	gridOptions.columnApi.applyColumnState( {
+	instances.gridOptions[ gridId ].columnApi.applyColumnState( {
 		state: [
 			{
 				colId: sortCol,
@@ -124,6 +177,15 @@ const initializeSettings = ( grid, gridId ) => {
 		triggers: '[data-js="inbox-settings"]',
 		wrapperClasses: 'gform-flyout gform-flyout--inbox-settings',
 	} );
+};
+
+/**
+ * @function initializeSearch
+ * @description Inject the search input for the whole table instance.
+ */
+
+const initializeSearch = ( grid ) => {
+	grid.insertAdjacentHTML( 'afterbegin', inboxTemplates.header() );
 };
 
 const getIdsFromModel = () => {
@@ -167,6 +229,19 @@ const handleSettingsChange = ( e ) => {
 };
 
 /**
+ * @function applySearch
+ * @description Apply a search term to the grid.
+ */
+
+const applySearch = ( e ) => {
+	const input = e.delegateTarget;
+	const gridContainer = tools.closest( input, '[data-js="gflow-inbox"]' );
+	const gridId = getGridId( gridContainer );
+	instances.gridOptions[ gridId ].api.setQuickFilter( input.value );
+	console.log( 'hi' );
+};
+
+/**
  * @function initializeGrids
  * @description Iterate over all found grids and initialize.
  */
@@ -187,6 +262,13 @@ const bindEvents = () => {
 		'[data-js="inbox-setting"]',
 		'change',
 		handleSettingsChange
+	);
+
+	delegate(
+		document.body,
+		'[data-js="gflow-inbox-search"]',
+		'keyup',
+		applySearch
 	);
 };
 
