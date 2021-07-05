@@ -39,12 +39,12 @@ class Util_Service_Provider extends Service_Provider {
 	public function hooks() {
 		$container = $this->getContainer();
 
-		add_action( 'admin_enqueue_scripts', function () use ( $container ) {
+		add_action( 'admin_print_footer_scripts', function () use ( $container ) {
 			$container->get( self::JS_CONFIG )->localize_admin_config();
-		}, 999 );
+		}, -10 );
 
-		add_action( 'wp_enqueue_scripts', function () use ( $container ) {
+		add_action( 'wp_print_footer_scripts', function () use ( $container ) {
 			$container->get( self::JS_CONFIG )->localize_theme_config();
-		}, 999 );
+		}, -10 );
 	}
 }

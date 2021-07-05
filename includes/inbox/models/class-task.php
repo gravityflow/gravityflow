@@ -24,13 +24,15 @@ class Task implements Model {
 	 */
 	private $gf_api;
 
+	private $sc_args = array();
+
 	public function __construct( Gravity_Flow_API $api, GFAPI $gf_api ) {
 		$this->api    = $api;
 		$this->gf_api = $gf_api;
 	}
 
 	private function parse_args( $args ) {
-		$args = array_merge( $this->get_defaults(), $args );
+		$args = wp_parse_args( $args, $this->get_defaults() );
 
 		/**
 		 * Allow the inbox page arguments to be overridden.
@@ -38,6 +40,20 @@ class Task implements Model {
 		 * @param array $args The inbox page arguments.
 		 */
 		return apply_filters( 'gravityflow_inbox_args', $args );
+	}
+
+	public function add_args_for_shortcode( $args ) {
+		$sc_id                   = $this->get_shortcode_uuid( $args );
+		$this->sc_args[ $sc_id ] = $args;
+	}
+
+	public function get_args_for_shortcode( $id ) {
+		return isset( $this->sc_args[ $id ] ) ? $this->sc_args[ $id ] : array();
+	}
+
+	public function get_shortcode_uuid( $args ) {
+		// @todo update this to be dynamic once we support multiple shortcodes on one page.
+		return 'inbox_default';
 	}
 
 	public function get_table_columns( $args = array() ) {
@@ -144,7 +160,7 @@ class Task implements Model {
 		array_walk( $columns, function ( &$data, $name ) use ( $map ) {
 			$defaults = array(
 				'headerName'  => $data,
-				'field'       => $name,
+				'field'       => (string) $name,
 				'filter'      => 'agTextColumnFilter',
 				'minWidth'    => self::WIDTH_MED,
 				'sortable'    => true,

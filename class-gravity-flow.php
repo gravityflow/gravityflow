@@ -9,6 +9,11 @@
  * @since       1.0
  */
 
+use Gravity_Flow\Gravity_Flow\Inbox\Models\Task;
+use League\Container\Container;
+use Gravity_Flow\Gravity_Flow\Inbox\Inbox_Service_Provider;
+use Gravity_Flow\Gravity_Flow\Config\Services;
+
 // Make sure Gravity Forms is active and already loaded.
 if ( class_exists( 'GFForms' ) ) {
 
@@ -36,6 +41,13 @@ if ( class_exists( 'GFForms' ) ) {
 		 * @var null|Gravity_Flow
 		 */
 		private static $_instance = null;
+
+		/**
+		 * Our Service Container object.
+		 *
+		 * @var Container $container
+		 */
+		private $container;
 
 		/**
 		 * Defines the add-on version.
@@ -151,10 +163,32 @@ if ( class_exists( 'GFForms' ) ) {
 		 */
 		public static function get_instance() {
 			if ( self::$_instance == null ) {
-				self::$_instance = new Gravity_Flow();
+				$container           = self::gflow_initialize_services();
+				$instance            = new Gravity_Flow();
+				$instance->container = $container;
+
+				self::$_instance = $instance;
 			}
 
 			return self::$_instance;
+		}
+
+		/**
+		 * Set up Services and Containers
+		 *
+		 * @since 2.7.1
+		 *
+		 * @return Container
+		 */
+		public static function gflow_initialize_services() {
+			$container = new Container();
+			$services  = new Services();
+			foreach ( $services->get() as $class ) {
+				$obj = new $class();
+				$container->addServiceProvider( $class );
+			}
+
+			return $container;
 		}
 
 		/**
@@ -6676,6 +6710,12 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 				'context_key'      => $a['context_key'],
 				'due_date'         => $a['due_date'],
 			);
+
+			/**
+			 * @var Task $tasks
+			 */
+			$tasks = $this->container->get( Inbox_Service_Provider::TASK_MODEL );
+			$tasks->add_args_for_shortcode( $args );
 
 			ob_start();
 			$this->inbox_page( $args );

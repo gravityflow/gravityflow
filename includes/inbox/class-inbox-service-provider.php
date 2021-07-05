@@ -59,7 +59,7 @@ class Inbox_Service_Provider extends Service_Provider {
 			return new Preferences();
 		} );
 
-		$container->add( self::TASK_MODEL, function () use ( $container ) {
+		$container->share( self::TASK_MODEL, function () use ( $container ) {
 			return new Task( $container->get( Util_Service_Provider::GFLOW_API ), $container->get( Util_Service_Provider::GF_API ) );
 		} );
 
@@ -95,11 +95,12 @@ class Inbox_Service_Provider extends Service_Provider {
 			/**
 			 * @var Task $tasks
 			 */
-			$tasks = $container->get( self::TASK_MODEL );
+			$tasks   = $container->get( self::TASK_MODEL );
+			$sc_args = $tasks->get_args_for_shortcode( 'inbox_default' );
 
 			$grid_config['grid_options'] = array(
-				'columnDefs'         => $tasks->get_table_header_defs(),
-				'rowData'            => $tasks->get_inbox_tasks( array() ),
+				'columnDefs'         => $tasks->get_table_header_defs( $sc_args),
+				'rowData'            => $tasks->get_inbox_tasks( $sc_args ),
 				'pagination'         => true,
 				'paginationPageSize' => (int) $this->get_pref( self::ITEMS_PER_PAGE ),
 			);
