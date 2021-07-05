@@ -1,5 +1,4 @@
 composer.json
-composer.lock
 apigen.neon
 config.json
 config-sample.json
