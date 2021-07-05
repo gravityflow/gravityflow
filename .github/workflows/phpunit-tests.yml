@@ -92,6 +92,8 @@ jobs:
           bash tests/bin/install.sh wordpress_unit_tests root root 127.0.0.1:3800 ${{ matrix.wp }}
       - name: Run tests
         run: |
+          # Install composer deps
+          composer install
           # Export Composer's global bin dir to PATH:
           composer config --list --global
           export PATH=`composer config --list --global | grep '\[home\]' | { read a; echo "${a#* }/vendor/bin:$PATH"; }`
