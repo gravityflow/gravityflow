@@ -11,11 +11,11 @@ class Tests_Gravity_Flow_Field_User extends GF_Field_UnitTestCase {
 		return array(
 			'type'    => 'workflow_user',
 			'choices' => array(
-				array( 'text' => 'user1', 'value' => 'user_id|1' ),
-				array( 'text' => 'user2', 'value' => 'user_id|2' ),
-				array( 'text' => 'user3', 'value' => 'user_id|3' ),
-				array( 'text' => 'user4', 'value' => 'user_id|4' ),
-				array( 'text' => 'user5', 'value' => 'user_id|5' ),
+				array( 'text' => 'user1', 'value' => '1' ),
+				array( 'text' => 'user2', 'value' => '2' ),
+				array( 'text' => 'user3', 'value' => '3' ),
+				array( 'text' => 'user4', 'value' => '4' ),
+				array( 'text' => 'user5', 'value' => '5' ),
 			),
 		);
 	}
@@ -34,6 +34,8 @@ class Tests_Gravity_Flow_Field_User extends GF_Field_UnitTestCase {
 			$this->field->errorMessage = $message;
 		}
 
+		$this->ma->set_return_value( $this->field->choices );
+		add_filter( 'gravityflow_user_field', array( $this->ma, 'return_value' ) );
 		$this->field->validate( $value, array() );
 
 		if ( $is_valid ) {

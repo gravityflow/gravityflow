@@ -34,6 +34,8 @@ class Tests_Gravity_Flow_Field_Multi_User extends GF_Field_UnitTestCase {
 			$this->field->errorMessage = $message;
 		}
 
+		$this->ma->set_return_value( $this->field->choices );
+		add_filter( 'gravityflow_user_field', array( $this->ma, 'return_value' ) );
 		$this->field->validate( $value, array() );
 
 		if ( $is_valid ) {
