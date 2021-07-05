@@ -93,7 +93,7 @@ jobs:
       - name: Run tests
         run: |
           # Install composer deps
-          composer install
+          composer install --no-dev
           # Export Composer's global bin dir to PATH:
           composer config --list --global
           export PATH=`composer config --list --global | grep '\[home\]' | { read a; echo "${a#* }/vendor/bin:$PATH"; }`
