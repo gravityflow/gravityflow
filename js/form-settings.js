@@ -486,6 +486,7 @@
 			'workflow_notification_subject',
 			'workflow_notification_message',
 			'workflow_notification_autoformat',
+			'workflow_email_custom_file_name',
 
 			'assignees',
 			'editable_fields_',
