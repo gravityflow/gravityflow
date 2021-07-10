@@ -404,8 +404,8 @@
 
 	function toggleWorkflowNotificationType(showType) {
 		var fields = {
-			select: ['workflow_notification_users_', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_cc', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat', 'workflow_notification_gpdf'],
-			routing: ['workflow_notification_routing', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_cc', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat', 'workflow_notification_gpdf']
+			select: ['workflow_notification_users_', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_cc', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat', 'workflow_email_custom_file_name', 'workflow_notification_gpdf'],
+			routing: ['workflow_notification_routing', 'workflow_notification_from_name', 'workflow_notification_from_email', 'workflow_notification_reply_to', 'workflow_notification_cc', 'workflow_notification_bcc', 'workflow_notification_subject', 'workflow_notification_message', 'workflow_notification_autoformat', 'workflow_email_custom_file_name', 'workflow_notification_gpdf']
 		};
 		toggleFields(fields, showType, false);
 	}
