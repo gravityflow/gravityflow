@@ -22,7 +22,7 @@ import { pickBy, identity } from 'lodash';
 // then options should have a restParams key, which functions as a dictionary for the url template
 // can also have a params key, which is a dict of queryParams
 // you can also add other valid fetch options, to options (such as method and body)
-export default function request( pathKey, options = {} ) {
+export default async function request( pathKey, options = {} ) {
 	const defaultOptions = { method: 'GET', ...options };
 	const newOptions = omit( [ 'body' ], defaultOptions );
 
@@ -37,6 +37,7 @@ export default function request( pathKey, options = {} ) {
 			...newOptions.restParams,
 		} );
 	}
+	console.log( host );
 	let url = `${ host }${ path }`;
 
 	// encode as multipart/form-data

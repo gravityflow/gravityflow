@@ -207,16 +207,18 @@ const refreshGrid = async () => {
 		data[ defaultGridId ]?.current_user_token || null
 	);
 
-	console.log( request );
-
-	const response = await window.fetch( '/wp-json/gf/v2/refresh_inbox_items', {
-		method: 'post',
-		body: formData,
+	const response = await request( 'refresh_inbox_items', {
+		method: 'POST',
+		body: {
+			gflow_access_token:
+				data[ defaultGridId ]?.current_user_token || null,
+			current_ids,
+		},
 	} );
 
-	const responseJson = await response.json();
-
-	instances.gridOptions[ defaultGridId ].api.applyTransaction( responseJson );
+	instances.gridOptions[ defaultGridId ].api.applyTransaction(
+		response.data
+	);
 };
 
 /**

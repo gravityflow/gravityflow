@@ -36,6 +36,18 @@ abstract class Endpoint extends WP_REST_Controller {
 		) );
 	}
 
+	public function get_rest_param_string() {
+		return '';
+	}
+
+	public function get_base_route() {
+		return sprintf( '/%1$s/%2$s/%3$s', rest_get_url_prefix(), self::NAMESPACE, $this->config->name() );
+	}
+
+	public function get_name() {
+		return $this->config->name();
+	}
+
 	public function get_items_permissions_check( $request ) {
 		return true;
 	}

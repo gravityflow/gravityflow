@@ -91,31 +91,58 @@ class Inbox_Service_Provider extends Service_Provider {
 			}
 		} );
 
-		add_filter( 'gravityflow_js_config_shared', function ( $config ) use ( $container ) {
-			/**
-			 * @var Task $tasks
-			 */
-			$tasks   = $container->get( self::TASK_MODEL );
-			$sc_args = $tasks->get_args_for_shortcode();
-			$grid_id = $tasks->get_filter_key_for_args( $sc_args );
-
-			$grid_config['grid_options'] = array(
-				'columnDefs'         => $tasks->get_table_header_defs( $sc_args ),
-				'rowData'            => $tasks->get_inbox_tasks( $sc_args ),
-				'pagination'         => true,
-				'paginationPageSize' => (int) $this->get_pref( self::ITEMS_PER_PAGE ),
-			);
-
-			$grid_config['current_user_token']     = $this->get_user_token( $grid_id, $tasks );
-			$grid_config[ self::FETCH_ENABLED ]    = (bool) $this->get_pref( self::FETCH_ENABLED );
-			$grid_config[ self::FETCH_INTERVAL ]   = (int) $this->get_pref( self::FETCH_INTERVAL );
-			$grid_config[ self::DEFAULT_SORT_COL ] = $this->get_pref( self::DEFAULT_SORT_COL );
-			$grid_config[ self::DEFAULT_SORT_DIR ] = $this->get_pref( self::DEFAULT_SORT_DIR );
-
-			$config['grids'][ $grid_id ] = $grid_config;
+		add_filter( 'gravityflow_js_config_shared', function ( $config ) use ( $container, $endpoints ) {
+			$config['site_url']  = get_site_url();
+			$config['grids']     = $this->get_config_for_grids( $container );
+			$config['endpoints'] = $this->get_endpoints( $container, $endpoints );
 
 			return $config;
 		}, 10, 1 );
+	}
+
+	private function get_endpoints( $container, $endpoints ) {
+		$response = array();
+
+		foreach ( $endpoints as $ep_name ) {
+			/**
+			 * @var \Gravity_Flow\Gravity_Flow\Ajax\Endpoint $endpoint
+			 */
+			$endpoint = $container->get( $ep_name );
+
+			$response[ $endpoint->get_name() ] = array(
+				'path'        => $endpoint->get_base_route(),
+				'rest_params' => $endpoint->get_rest_param_string(),
+				'nonce'       => null,
+			);
+		}
+
+		return $response;
+	}
+
+	private function get_config_for_grids( $container ) {
+		/**
+		 * @var Task $tasks
+		 */
+		$tasks   = $container->get( self::TASK_MODEL );
+		$sc_args = $tasks->get_args_for_shortcode();
+		$grid_id = $tasks->get_filter_key_for_args( $sc_args );
+
+		$grid_config['grid_options'] = array(
+			'columnDefs'         => $tasks->get_table_header_defs( $sc_args ),
+			'rowData'            => $tasks->get_inbox_tasks( $sc_args ),
+			'pagination'         => true,
+			'paginationPageSize' => (int) $this->get_pref( self::ITEMS_PER_PAGE ),
+		);
+
+		$grid_config['current_user_token']     = $this->get_user_token( $grid_id, $tasks );
+		$grid_config[ self::FETCH_ENABLED ]    = (bool) $this->get_pref( self::FETCH_ENABLED );
+		$grid_config[ self::FETCH_INTERVAL ]   = (int) $this->get_pref( self::FETCH_INTERVAL );
+		$grid_config[ self::DEFAULT_SORT_COL ] = $this->get_pref( self::DEFAULT_SORT_COL );
+		$grid_config[ self::DEFAULT_SORT_DIR ] = $this->get_pref( self::DEFAULT_SORT_DIR );
+
+		return array(
+			$grid_id => $grid_config,
+		);
 	}
 
 	protected function get_pref( $pref_name ) {
