@@ -283,7 +283,7 @@ class Task implements Model {
 				$api  = new Gravity_Flow_API( $form['id'] );
 				$step = $api->get_current_step( $entry );
 				if ( $step ) {
-					$value = self::format_actions( $step );
+					$value = $this->format_actions( $step );
 				}
 				break;
 			case 'payment_status':
@@ -326,6 +326,53 @@ class Task implements Model {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Formats the actions for the action column.
+	 *
+	 * @param Gravity_Flow_Step $step The current step.
+	 *
+	 * @return string
+	 */
+	public static function format_actions( $step ) {
+		$html     = '';
+		$actions  = $step->get_actions();
+		$entry_id = $step->get_entry_id();
+
+		foreach ( $actions as $action ) {
+			$show_workflow_note_field = (bool) $action['show_note_field'];
+			$html                    .= sprintf( '<span id="gravityflow-action-%s-%d" data-entry_id="%d" data-action="%s" data-rest_base="%s"  data-note_field="%d" class="gravityflow-action" role="link">%s</span>', $action['key'], $entry_id, $entry_id, $action['key'], $step->get_rest_base(), $show_workflow_note_field, $action['icon'] );
+		}
+
+		if ( empty( $html ) ) {
+			return $html;
+		}
+
+		$html = sprintf(
+		'<div id="gravityflow-actions-%d" class="gravityflow-actions gravityflow-actions-locked">
+					<i class="gravityflow-actions-lock fa fa-lock" aria-hidden="true"></i>
+					<i class="gravityflow-actions-unlock fa fa-unlock-alt" aria-hidden="true"></i>
+					
+					%s
+					
+					<span class="gravityflow-actions-spinner">
+						<i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+					</span>
+		
+					<div class="gravityflow-actions-note-field-container" style="display: none;">
+						<label>%s:</label>
+						<div>
+							<textarea></textarea>
+						</div>
+					</div>
+				</div>',
+				$entry_id,
+				$html,
+				__( 'Note', 'gravityflow' )
+		);
+
+		return $html;
 	}
 
 	/**
