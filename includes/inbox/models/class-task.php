@@ -43,17 +43,16 @@ class Task implements Model {
 	}
 
 	public function add_args_for_shortcode( $args ) {
-		$sc_id                   = $this->get_shortcode_uuid( $args );
+		$sc_id                   = $this->get_filter_key_for_args( $args );
 		$this->sc_args[ $sc_id ] = $args;
 	}
 
-	public function get_args_for_shortcode( $id ) {
-		return isset( $this->sc_args[ $id ] ) ? $this->sc_args[ $id ] : array();
-	}
+	public function get_args_for_shortcode( $id = false ) {
+		if ( empty( $id ) ) {
+			$id = $this->get_filter_key_for_args( array() );
+		}
 
-	public function get_shortcode_uuid( $args ) {
-		// @todo update this to be dynamic once we support multiple shortcodes on one page.
-		return 'inbox_default';
+		return isset( $this->sc_args[ $id ] ) ? $this->sc_args[ $id ] : array();
 	}
 
 	public function get_table_columns( $args = array() ) {
@@ -357,6 +356,28 @@ class Task implements Model {
 			'step_highlight'       => true,
 		);
 
+	}
+
+	public function get_filter_key_for_args( $args ) {
+		return $this->api::get_inbox_filter_key( $args );
+	}
+
+	public function get_assignee_from_filter_key( $key ) {
+		$key   = str_replace( 'workflow_', '', $key );
+		$parts = explode( '_', $key );
+		$user  = false;
+
+		if ( $parts[0] === 'user_id' ) {
+			$user = get_user_by( 'id', $parts[1] );
+		}
+
+		return new \Gravity_Flow_Assignee(
+			array(
+				'id'   => $parts[1],
+				'user' => $user,
+				'type' => $parts[0],
+			)
+		);
 	}
 
 	public function get_inbox_tasks( $args ) {

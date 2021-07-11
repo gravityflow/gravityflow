@@ -40,13 +40,14 @@ class Gravity_Flow_Inbox {
 
 		$total_count = 0;
 		$entries     = Gravity_Flow_API::get_inbox_entries( $args, $total_count );
+		$grid_id     = Gravity_Flow_API::get_inbox_filter_key( $args );
 
 		?>
 
 		<?php if ( sizeof( $entries ) > 0 ) : ?>
 
 			<div class="gflow-inbox gflow-grid">
-				<div class="ag-theme-alpine" data-js="gflow-inbox" data-grid-id="inbox_default"></div>
+				<div class="ag-theme-alpine" data-js="gflow-inbox" data-grid-id="<?php echo $grid_id; ?>"></div>
 			</div>
 
 			<div class="gflow-inbox-debug">

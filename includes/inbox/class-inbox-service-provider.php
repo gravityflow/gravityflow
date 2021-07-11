@@ -96,22 +96,23 @@ class Inbox_Service_Provider extends Service_Provider {
 			 * @var Task $tasks
 			 */
 			$tasks   = $container->get( self::TASK_MODEL );
-			$sc_args = $tasks->get_args_for_shortcode( 'inbox_default' );
+			$sc_args = $tasks->get_args_for_shortcode();
+			$grid_id = $tasks->get_filter_key_for_args( $sc_args );
 
 			$grid_config['grid_options'] = array(
-				'columnDefs'         => $tasks->get_table_header_defs( $sc_args),
+				'columnDefs'         => $tasks->get_table_header_defs( $sc_args ),
 				'rowData'            => $tasks->get_inbox_tasks( $sc_args ),
 				'pagination'         => true,
 				'paginationPageSize' => (int) $this->get_pref( self::ITEMS_PER_PAGE ),
 			);
 
-			$grid_config['current_user_token']     = $this->get_user_token();
+			$grid_config['current_user_token']     = $this->get_user_token( $grid_id, $tasks );
 			$grid_config[ self::FETCH_ENABLED ]    = (bool) $this->get_pref( self::FETCH_ENABLED );
 			$grid_config[ self::FETCH_INTERVAL ]   = (int) $this->get_pref( self::FETCH_INTERVAL );
 			$grid_config[ self::DEFAULT_SORT_COL ] = $this->get_pref( self::DEFAULT_SORT_COL );
 			$grid_config[ self::DEFAULT_SORT_DIR ] = $this->get_pref( self::DEFAULT_SORT_DIR );
 
-			$config['grids']['inbox_default'] = $grid_config;
+			$config['grids'][ $grid_id ] = $grid_config;
 
 			return $config;
 		}, 10, 1 );
@@ -140,15 +141,8 @@ class Inbox_Service_Provider extends Service_Provider {
 		);
 	}
 
-	protected function get_user_token() {
-		$user = wp_get_current_user();
-
-		$assignee = new \Gravity_Flow_Assignee(
-			array(
-				'id'   => get_current_user_id(),
-				'user' => $user,
-				'type' => 'user_id'
-			) );
+	protected function get_user_token( $filter_key, $tasks ) {
+		$assignee = $tasks->get_assignee_from_filter_key( $filter_key );
 
 		return gravity_flow()->generate_access_token( $assignee );
 	}
