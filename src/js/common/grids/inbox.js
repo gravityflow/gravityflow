@@ -26,6 +26,7 @@ const globalOptions = {
 };
 const data = gflowConfig?.grids || {};
 const config = gflowConfig || {};
+const defaultGridId = Object.keys( data )[ 0 ] || INBOX_DEFAULT_ID;
 
 /**
  * @function intComparator
@@ -190,7 +191,7 @@ const initializeSearch = ( grid ) => {
 
 const getIdsFromModel = () => {
 	const ids = [];
-	data[ INBOX_DEFAULT_ID ].grid_options.api.forEachNode( ( node ) =>
+	instances.gridOptions[ defaultGridId ].api.forEachNode( ( node ) =>
 		ids.push( node.data.id )
 	);
 	return ids;
@@ -203,7 +204,7 @@ const refreshGrid = async () => {
 	current_ids.forEach( ( item ) => formData.append( 'current_ids[]', item ) );
 	formData.append(
 		'gflow_access_token',
-		window?.gflow_config?.current_user_token || null
+		data[ defaultGridId ]?.current_user_token || null
 	);
 
 	console.log( request );
@@ -215,7 +216,7 @@ const refreshGrid = async () => {
 
 	const responseJson = await response.json();
 
-	data[ INBOX_DEFAULT_ID ].grid_options.api.applyTransaction( responseJson );
+	instances.gridOptions[ defaultGridId ].api.applyTransaction( responseJson );
 };
 
 /**

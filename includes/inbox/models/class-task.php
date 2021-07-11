@@ -113,7 +113,8 @@ class Task implements Model {
 		$map = array(
 			'id'                     => array(
 				'compareType' => 'int',
-				'minWidth'    => self::WIDTH_SMALL,
+				'width'       => self::WIDTH_SMALL,
+				'resizable'   => false,
 			),
 			'actions'                => array(
 				'minWidth' => self::WIDTH_SMALL,
@@ -367,7 +368,11 @@ class Task implements Model {
 		$parts = explode( '_', $key );
 		$user  = false;
 
-		if ( $parts[0] === 'user_id' ) {
+		if ( $parts[0] === 'user' ) {
+			$parts = array(
+				'user_id',
+				end( $parts ),
+			);
 			$user = get_user_by( 'id', $parts[1] );
 		}
 
