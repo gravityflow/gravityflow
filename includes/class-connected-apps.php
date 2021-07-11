@@ -568,7 +568,6 @@ class Gravity_Flow_Connected_Apps {
 
 			?>
 			<div id='connected_apps_table_container'>
-				<p><?php esc_html_e( 'Note: Connected Apps can only be used in Outgoing Webhook steps.', 'gravityflow' ); ?></p>
 				<?php
 				$table->display();
 				?>
