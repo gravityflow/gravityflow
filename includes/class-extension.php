@@ -62,7 +62,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 		add_filter( 'gravityflow_menu_items', array( $this, 'menu_items' ) );
 		add_filter( 'gravityflow_toolbar_menu_items', array( $this, 'toolbar_menu_items' ) );
-		add_filter( 'gform_form_settings_menu', array( $this, 'filter_extension_form_settings_menu' ), 10, 1 )
+		add_filter( 'gform_form_settings_menu', array( $this, 'filter_extension_form_settings_menu' ), 10, 1 );
 	}
 
 	/**
