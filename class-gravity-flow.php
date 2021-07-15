@@ -9639,28 +9639,18 @@ AND m.meta_value='queued'";
 		 */
 		private static function uninstall_extensions() {
 
-			$installed_extensions = GFAddOn::get_registered_addons();
+			$installed_extensions = GFAddOn::get_registered_addons( true );
 			$installed_extensions = array_filter( $installed_extensions, function( $extension ) {
-				return substr( $extension, 0, 12 ) === 'Gravity_Flow';
+				return substr( $extension->get_slug(), 0, 11 ) === 'gravityflow';
 			});
 
-			// Uninstall the addon and remove it from the list of installed addons on page reload.
-			if ( rgpost( 'uninstall_addon' ) ) {
-				check_admin_referer( 'uninstall', 'gf_addon_uninstall' );
-
-				foreach ( $installed_extensions as $key => $addon ) {
-					$addon = call_user_func( array( $addon, 'get_instance' ) );
-					$title  = $addon->get_short_title();
-					if ( $_POST['addon'] == $title ) {
-						unset( $installed_extensions[ $key ] );
-						$addon->uninstall_addon();
-						return GFAddOn::addons_for_uninstall( $installed_extensions );
-					}
+			// Uninstall the extension and remove it from the list of installed addons on page reload.
+			if ( rgget( 'page' ) == 'gravityflow_settings' && rgget( 'view' ) == 'uninstall' ) {
+				foreach ( $installed_extensions as $extension ) {
+					$title  = $extension->get_short_title();
+					$extension->render_uninstall();
 				}
 			}
-
-			GFAddOn::addons_for_uninstall( $installed_extensions );
-
 		}
 	}
 }
