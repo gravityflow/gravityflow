@@ -62,6 +62,7 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 
 		add_filter( 'gravityflow_menu_items', array( $this, 'menu_items' ) );
 		add_filter( 'gravityflow_toolbar_menu_items', array( $this, 'toolbar_menu_items' ) );
+		add_filter( 'gform_form_settings_menu', array( $this, 'filter_extension_form_settings_menu' ), 10, 1 );
 	}
 
 	/**
@@ -418,6 +419,25 @@ abstract class Gravity_Flow_Extension extends GFAddOn {
 	public function toolbar_menu_items( $menu_items ) {
 		return $menu_items;
 	}
+
+	/**
+	 * Target for the gform_form_settings_menu hook.
+	 * Set default icon for extensions.
+	 *
+	 * @since 2.7.5
+	 *
+	 * @param array $menu_items The form settings menu items.
+	 *
+	 * @return array
+	 */	
+	function filter_extension_form_settings_menu( $menu_items ) {
+		foreach ( $menu_items as &$menu_item ) {
+			if ( strpos( $menu_item['name'], 'gravityflow' ) == 0 && empty( $menu_item['icon'] ) ) {
+				$menu_item['icon'] = 'gform-icon--cog';
+			}
+		}
+		return $menu_items;
+	}	
 
 	/**
 	 * Prevent the failed requirements page being added to the Forms > Settings area.
