@@ -205,9 +205,11 @@ class Gravity_Flow_Step_Partial_Entry_Submission extends Gravity_Flow_Step {
 		}
 		$display_step_status = (bool) $args['step_status'];
 		if ( $display_step_status ) : ?>
-			<h4>
-				<?php printf( '%s (%s)', $this->get_name(), $status ); ?>
-			</h4>
+			<div class="gravityflow-status-box-field gravityflow-status-box-field-step-status">
+				<h4>
+				<?php printf( '<span class="gravityflow-status-box-field-label">%s </span><span class="gravityflow-status-box-field-value">(%s)</span>', $this->get_name(), $status ); ?>
+				</h4>
+			</div>
 			<div>
 				<?php $this->workflow_detail_status_box_status(); ?>
 			</div>

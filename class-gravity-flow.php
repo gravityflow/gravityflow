@@ -4291,7 +4291,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 		 * @param Gravity_Flow_Step $current_step The current step for this entry.
 		 */
 		public function display_queued_step_details( $current_step ) {
-			printf( '<h4>%s (%s)</h4>', $current_step->get_name(), esc_html__( 'Queued', 'gravityflow' ) );
+			printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-step-name"><h4><span class="gravityflow-status-box-field-label">%s </span><span class="gravityflow-status-box-field-value">(%s)</span></h4></div>', $current_step->get_name(), esc_html__( 'Queued', 'gravityflow' ) );
 
 			$scheduled_timestamp = $current_step->get_schedule_timestamp();
 
@@ -4309,7 +4309,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 					$scheduled_date     = get_date_from_gmt( $scheduled_date_str );
 			}
 
-			printf( '<h4>%s: %s</h4>', esc_html__( 'Scheduled', 'gravityflow' ), $scheduled_date );
+			printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-scheduled-date"><h4><span class="gravityflow-status-box-field-label">%s: </span><span class="gravityflow-status-box-field-value">%s<span></h4></div>', esc_html__( 'Scheduled', 'gravityflow' ), $scheduled_date );
 		}
 
 		/**
@@ -4325,7 +4325,7 @@ jQuery('#setting-entry-filter-{$name}').gfFilterUI({$filter_settings_json}, {$va
 			$current_step->add_note( $note );
 			$this->process_workflow( $form, $entry_id );
 			$current_step = null;
-			printf( '<h4>%s</h4>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
+			printf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-expired-step"><h4>%s</h4></div>', esc_html__( 'Expired: refresh the page', 'gravityflow' ) );
 		}
 
 		/**

@@ -890,7 +890,7 @@ class Gravity_Flow_Step_User_Input extends Gravity_Flow_Step {
 			return;
 		}
 
-		echo sprintf( '<h4 style="margin-bottom:10px;">%s (%s)</h4>', $this->get_name(), $this->get_status_string() );
+		echo sprintf( '<div class="gravityflow-status-box-field gravityflow-status-box-field-step-status"><h4 style="margin-bottom:10px;"><span class="gravityflow-status-box-field-label">%s </span><span class="gravityflow-status-box-field-value">(%s)</span></h4></div>', $this->get_name(), $this->get_status_string() );
 
 		echo '<ul>';
 
