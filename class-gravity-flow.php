@@ -9646,10 +9646,19 @@ AND m.meta_value='queued'";
 
 			// Uninstall the extension and remove it from the list of installed addons on page reload.
 			if ( rgget( 'page' ) == 'gravityflow_settings' && rgget( 'view' ) == 'uninstall' ) {
+				?>
+				<div class="gform-addons-uninstall-panel">
+				<?php
 				foreach ( $installed_extensions as $extension ) {
+					if ( $extension->get_slug() == 'gravityflow' ) { 
+						continue;
+					}
 					$title  = $extension->get_short_title();
 					$extension->render_uninstall();
 				}
+				?>
+				</div>
+				<?php
 			}
 		}
 	}
